@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<suite name="pom">
+
+  <test name="Perform action against Topic Functionality">
+  
+    <classes>
+    <class name="Com.testcases.VerifyStartTopic_CategoryPermissions">
+    <methods>
+    <include name="VerifyPermisionforStartTopic_enabledStartTopicforRegisteredUsers"></include>
+    </methods>
+    </class>
+    
+      <class name="Com.testcases.FrontendaddNewTopic">
+        <methods>
+          <include name="addNewTopic"/>
+          <include name="addNewTopicBySelectingCategory"/>
+          <include name="postPriviewofNewTopic"/>
+          <include name="addNewTopicwithAttachment"/>
+        </methods>
+      </class>
+      
+      <class name="Com.testcases.PerformActionagainstTopic">
+      <methods>
+      <include name="EnableReplyTopicUserPermission_Backend"></include>
+      <include name="ReplyAgainstTopicwithoutattachment"></include>
+      <include name="ReplyAgainstTopicwithAttachFile"></include>
+      <include name="ReplyAgainstTopicwithInsertPhoto"></include>
+      <include name="deleteRepliedPost"></include>
+      <include name="EditRepliedPost"></include>
+      <include name="ShareRepliedPost_Facebook"></include>
+     
+      <exclude name="ShareRepliedPost_twitter"></exclude>
+      </methods>
+      
+      </class>
+      
+      
+      
+    </classes>
+  </test> 
+</suite> 

@@ -1,0 +1,9 @@
+<suite name="pom">
+  <test name="testcases">
+  <classes>
+  <class neme="testcases.loginmail"></class>
+   <class neme="testcases.Forceguestlogin"></class>
+    <class neme="testcases.loginbetap"></class>
+     </classes>
+  </test>
+  </suite>
