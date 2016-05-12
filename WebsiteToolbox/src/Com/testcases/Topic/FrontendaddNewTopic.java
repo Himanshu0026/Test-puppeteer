@@ -19,8 +19,8 @@ public class FrontendaddNewTopic extends baseClass {
 	String subject, message, category, filePath, picturePath;
 	int rowNum;
 
-	//@Test(priority=0)
-	public void addNewTopic() throws InterruptedException, AWTException, IOException {
+	@Test(priority=0)
+	public void addNewTopicwithHindiText() throws InterruptedException, AWTException, IOException {
 		AddNewTopicandReplyTopic newTopic = new AddNewTopicandReplyTopic();
 		rowNum = 1;
 		username=username("Topic", rowNum, 1);

@@ -258,6 +258,17 @@ public class AddNewTopicandReplyTopic extends baseClass{
 	@CacheLookup
 	public WebElement unLockOption;
 	
+	@FindBy(how=How.XPATH, using="//*[@id='imagesError']/span")
+	@CacheLookup
+	public WebElement errorMessage_insertPicture;
+	
+	@FindBy(xpath="//*[@class='alert alert-danger text-center']")
+	@CacheLookup
+	public WebElement ErrorMsgOnAddNewTopicpage;
+	
+	@FindBy(id="editable_subjuct")
+	@CacheLookup
+	public WebElement subject_floatingHeader;
 	
 	
 	

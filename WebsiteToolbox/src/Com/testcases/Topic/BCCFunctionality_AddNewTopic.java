@@ -19,12 +19,12 @@ public class BCCFunctionality_AddNewTopic extends baseClass{
 	
 	String username, password;
 	String subject, message, category,verifyMessage;
-	int rowNum=59;
+	int rowNum=30;
 
 	@BeforeClass
 	public void loginToApp() throws IOException, InterruptedException {
-		username=username("Topic", rowNum, 1);
-		password=password("Topic", rowNum, 2);
+		username=username("EditorActions", rowNum, 1);
+		password=password("EditorActions", rowNum, 2);
 		
 		Frontendlogin.loginToApp(username, password);
 
@@ -34,13 +34,13 @@ public class BCCFunctionality_AddNewTopic extends baseClass{
 	public void addNewTopicwithBold() throws IOException, InterruptedException{
 		AddNewTopicandReplyTopic topic=new AddNewTopicandReplyTopic();
 		int rowNum1=rowNum;
-		subject = readExcel("Topic").getRow(rowNum1).getCell(3)
+		subject = readExcel("EditorActions").getRow(rowNum1).getCell(3)
 				.getStringCellValue();
-		message = readExcel("Topic").getRow(rowNum1).getCell(4)
+		message = readExcel("EditorActions").getRow(rowNum1).getCell(4)
 				.getStringCellValue();
-		category = readExcel("Topic").getRow(rowNum1).getCell(5)
+		category = readExcel("EditorActions").getRow(rowNum1).getCell(5)
 				.getStringCellValue();
-		verifyMessage = readExcel("Topic").getRow(rowNum1).getCell(6)
+		verifyMessage = readExcel("EditorActions").getRow(rowNum1).getCell(6)
 				.getStringCellValue();
 		
 		FrontendaddNewTopic.gotoNewTopicpage();
@@ -58,13 +58,13 @@ public class BCCFunctionality_AddNewTopic extends baseClass{
 	public void addNewTopicwithItalic() throws IOException, InterruptedException{
 		AddNewTopicandReplyTopic topic=new AddNewTopicandReplyTopic();
 		int rowNum1=rowNum+1;
-		subject = readExcel("Topic").getRow(rowNum1).getCell(3)
+		subject = readExcel("EditorActions").getRow(rowNum1).getCell(3)
 				.getStringCellValue();
-		message = readExcel("Topic").getRow(rowNum1).getCell(4)
+		message = readExcel("EditorActions").getRow(rowNum1).getCell(4)
 				.getStringCellValue();
-		category = readExcel("Topic").getRow(rowNum1).getCell(5)
+		category = readExcel("EditorActions").getRow(rowNum1).getCell(5)
 				.getStringCellValue();
-		verifyMessage = readExcel("Topic").getRow(rowNum1).getCell(6)
+		verifyMessage = readExcel("EditorActions").getRow(rowNum1).getCell(6)
 				.getStringCellValue();
 		
 		FrontendaddNewTopic.gotoNewTopicpage();
@@ -82,13 +82,13 @@ public class BCCFunctionality_AddNewTopic extends baseClass{
 	public void addNewTopicwithUnderline() throws IOException, InterruptedException{
 		AddNewTopicandReplyTopic topic=new AddNewTopicandReplyTopic();
 		int rowNum1=rowNum+2;
-		subject = readExcel("Topic").getRow(rowNum1).getCell(3)
+		subject = readExcel("EditorActions").getRow(rowNum1).getCell(3)
 				.getStringCellValue();
-		message = readExcel("Topic").getRow(rowNum1).getCell(4)
+		message = readExcel("EditorActions").getRow(rowNum1).getCell(4)
 				.getStringCellValue();
-		category = readExcel("Topic").getRow(rowNum1).getCell(5)
+		category = readExcel("EditorActions").getRow(rowNum1).getCell(5)
 				.getStringCellValue();
-		verifyMessage = readExcel("Topic").getRow(rowNum1).getCell(6)
+		verifyMessage = readExcel("EditorActions").getRow(rowNum1).getCell(6)
 				.getStringCellValue();
 		
 		FrontendaddNewTopic.gotoNewTopicpage();
@@ -106,13 +106,13 @@ public class BCCFunctionality_AddNewTopic extends baseClass{
 	public void addNewTopicwithStrikethrough() throws IOException, InterruptedException{
 		AddNewTopicandReplyTopic topic=new AddNewTopicandReplyTopic();
 		int rowNum1=rowNum+3;
-		subject = readExcel("Topic").getRow(rowNum1).getCell(3)
+		subject = readExcel("EditorActions").getRow(rowNum1).getCell(3)
 				.getStringCellValue();
-		message = readExcel("Topic").getRow(rowNum1).getCell(4)
+		message = readExcel("EditorActions").getRow(rowNum1).getCell(4)
 				.getStringCellValue();
-		category = readExcel("Topic").getRow(rowNum1).getCell(5)
+		category = readExcel("EditorActions").getRow(rowNum1).getCell(5)
 				.getStringCellValue();
-		verifyMessage = readExcel("Topic").getRow(rowNum1).getCell(6)
+		verifyMessage = readExcel("EditorActions").getRow(rowNum1).getCell(6)
 				.getStringCellValue();
 		
 		FrontendaddNewTopic.gotoNewTopicpage();
@@ -130,13 +130,13 @@ public class BCCFunctionality_AddNewTopic extends baseClass{
 	public void addNewTopicwithSize() throws IOException, InterruptedException{
 		AddNewTopicandReplyTopic topic=new AddNewTopicandReplyTopic();
 		int rowNum1=rowNum+4;
-		subject = readExcel("Topic").getRow(rowNum1).getCell(3)
+		subject = readExcel("EditorActions").getRow(rowNum1).getCell(3)
 				.getStringCellValue();
-		message = readExcel("Topic").getRow(rowNum1).getCell(4)
+		message = readExcel("EditorActions").getRow(rowNum1).getCell(4)
 				.getStringCellValue();
-		category = readExcel("Topic").getRow(rowNum1).getCell(5)
+		category = readExcel("EditorActions").getRow(rowNum1).getCell(5)
 				.getStringCellValue();
-		verifyMessage = readExcel("Topic").getRow(rowNum1).getCell(6)
+		verifyMessage = readExcel("EditorActions").getRow(rowNum1).getCell(6)
 				.getStringCellValue();
 		
 		FrontendaddNewTopic.gotoNewTopicpage();
@@ -154,13 +154,13 @@ public class BCCFunctionality_AddNewTopic extends baseClass{
 	public void addNewTopicwithLink() throws IOException, InterruptedException{
 		AddNewTopicandReplyTopic topic=new AddNewTopicandReplyTopic();
 		int rowNum1=rowNum+5;
-		subject = readExcel("Topic").getRow(rowNum1).getCell(3)
+		subject = readExcel("EditorActions").getRow(rowNum1).getCell(3)
 				.getStringCellValue();
-		message = readExcel("Topic").getRow(rowNum1).getCell(4)
+		message = readExcel("EditorActions").getRow(rowNum1).getCell(4)
 				.getStringCellValue();
-		category = readExcel("Topic").getRow(rowNum1).getCell(5)
+		category = readExcel("EditorActions").getRow(rowNum1).getCell(5)
 				.getStringCellValue();
-		verifyMessage = readExcel("Topic").getRow(rowNum1).getCell(6)
+		verifyMessage = readExcel("EditorActions").getRow(rowNum1).getCell(6)
 				.getStringCellValue();
 		
 		FrontendaddNewTopic.gotoNewTopicpage();
