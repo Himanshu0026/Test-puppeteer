@@ -122,4 +122,29 @@ public UsersGroupPermissionspageObject(){
 	@FindBy(how=How.ID, using="change_username")
 	@CacheLookup
 	public WebElement  ChangeUsername_checkbox;
+	
+	//Album Permessions
+	
+	@FindBy(how=How.ID, using="create_albums")
+	@CacheLookup
+	public WebElement  CreateAlbums_checkbox;
+	
+	@FindBy(how=How.ID, using="view_others_albums")
+	@CacheLookup
+	public WebElement  ViewAlbums_checkbox;
+	
+	@FindBy(how=How.ID, using="moderate_albums")
+	@CacheLookup
+	public WebElement  ModerateAlbums_checkbox;
+	
+	@FindBy(how=How.ID, using="edit_albums")
+	@CacheLookup
+	public WebElement EditOwnImages_checkbox;
+	
+	@FindBy(how=How.ID, using="delete_albums")
+	@CacheLookup
+	public WebElement  DeleteOwnImages_checkbox;
+	
+	
+	
 }

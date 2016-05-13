@@ -160,14 +160,52 @@ public class AccountSettingsPageObjects extends baseClass {
 	@FindBy(how = How.ID, using = "tinymce")
 	@CacheLookup
 	public WebElement messagetextfield;
+	
+	//Album And Photo images 
 
-	@FindBy(how = How.XPATH, using = "html/body/div[3]/div[2]/div[1]/div/form/div[3]/div/span/a[1]/i")
+	@FindBy(how = How.XPATH, using = "//i[@class='glyphicon glyphicon-paperclip']")
 	@CacheLookup
 	public WebElement AttachFilesbutton;
 
-	@FindBy(how = How.XPATH, using = ".//*[@id='insert_image_dialog_']/i")
+	@FindBy(how = How.XPATH, using = "//i[@class='glyphicon glyphicon-camera']")
 	@CacheLookup
 	public WebElement AttachImageButton;
+
+	@FindBy(how = How.ID, using = "insertImage_pmsDialog")
+	@CacheLookup
+	public WebElement Browsebutton;
+
+	@FindBy(how = How.ID, using = "insert_image_btnpmsDialog")
+	@CacheLookup
+	public WebElement Insertbutton;
+
+	@FindBy(how = How.ID, using = "uploadphotos")
+	@CacheLookup
+	public WebElement AddPhotosButton;
+
+	@FindBy(how = How.ID, using = "publish")
+	@CacheLookup
+	public WebElement PostPhotosButton;
+
+	@FindBy(how = How.ID, using = "uploadfiles")
+	@CacheLookup
+	public WebElement AddmorePhotos;
+	
+	@FindBy(how = How.ID, using = "anchor_tab_new_topic_up")
+	@CacheLookup
+	public WebElement EditAlbumButton;
+	
+	@FindBy(how = How.ID, using = "delete_album")
+	@CacheLookup
+	public WebElement DeleteAlbumButton;
+	
+	
+
+	@FindBy(how = How.XPATH, using = "//li[@class='active']")
+	@CacheLookup
+	public WebElement AddAlbumsButton;
+	
+	
 
 	@FindBy(how = How.ID, using = "send_pmsg_button")
 	@CacheLookup
@@ -175,7 +213,7 @@ public class AccountSettingsPageObjects extends baseClass {
 
 	@FindBy(how = How.XPATH, using = "//div/a[@id='emailMember']")
 	@CacheLookup
-	public WebElement Email;
+	public WebElement EmailButton;
 
 	@FindBy(how = How.XPATH, using = ".//*[@id='email_subject']")
 	@CacheLookup
@@ -248,8 +286,7 @@ public class AccountSettingsPageObjects extends baseClass {
 	@FindBy(how = How.ID, using = "tinymce")
 	@CacheLookup
 	public WebElement EditSignatureText;
-	
-	
+
 	// sucessfulEditProfileSettings ExpectedMEssage
 
 	@FindBy(how = How.XPATH, using = "//div[@class='alert alert-success text-center']")
@@ -299,111 +336,103 @@ public class AccountSettingsPageObjects extends baseClass {
 	@CacheLookup
 	public WebElement ContinueButton;
 
-	//*****************Locator for followed content page ***************************//
-	
-		@FindBy(how = How.XPATH, using = "//button[@class='dropdown-toggle']")
-		@CacheLookup
-		public WebElement userAccountPanel;	
-	
-		@FindBy(how = How.XPATH, using = "//*[text()='Followed Content']")
-		@CacheLookup
-		public WebElement followedContent;
-		
-		@FindBy(how = How.ID, using = "unsubscribe")
-		@CacheLookup
-		public WebElement unFollow;
-		
-		@FindBy(how = How.XPATH, using = "//*[@value='Check All']")
-		@CacheLookup
-		public WebElement MainCheckbox;
-		
-		@FindBy(how = How.XPATH, using = "//*[@class='alert alert-info text-center no-space']")
-		@CacheLookup
-		public WebElement NoContentMsg;
-		
-		@FindBy(how = How.XPATH, using = "//*[@class='panel-heading']/ul/li[2]/a")
-		@CacheLookup
-		public WebElement CategoryTab;
-		
-		@FindBy(how = How.ID, using = "mass_forum_unsubscribe_btn")
-		@CacheLookup
-		public WebElement unFollow_category;
-		
-		
-		
-		// ************Locator for Profile page **********************//
-		@FindBy(how = How.ID, using = "Topics_Started")
-		@CacheLookup
-		public WebElement TopicStarted_tab;
-		
-		@FindBy(how = How.XPATH, using = "//*[@class='glyphicon glyphicon-right-arrow']")
-		@CacheLookup
-		public WebElement MoveIcon;
-		
-		
-	
-	//********************* Received private masages *******************************//
+	// *****************Locator for followed content page
+	// ***************************//
+
+	@FindBy(how = How.XPATH, using = "//button[@class='dropdown-toggle']")
+	@CacheLookup
+	public WebElement userAccountPanel;
+
+	@FindBy(how = How.XPATH, using = "//*[text()='Followed Content']")
+	@CacheLookup
+	public WebElement followedContent;
+
+	@FindBy(how = How.ID, using = "unsubscribe")
+	@CacheLookup
+	public WebElement unFollow;
+
+	@FindBy(how = How.XPATH, using = "//*[@value='Check All']")
+	@CacheLookup
+	public WebElement MainCheckbox;
+
+	@FindBy(how = How.XPATH, using = "//*[@class='alert alert-info text-center no-space']")
+	@CacheLookup
+	public WebElement NoContentMsg;
+
+	@FindBy(how = How.XPATH, using = "//*[@class='panel-heading']/ul/li[2]/a")
+	@CacheLookup
+	public WebElement CategoryTab;
+
+	@FindBy(how = How.ID, using = "mass_forum_unsubscribe_btn")
+	@CacheLookup
+	public WebElement unFollow_category;
+
+	// ************Locator for Profile page **********************//
+	@FindBy(how = How.ID, using = "Topics_Started")
+	@CacheLookup
+	public WebElement TopicStarted_tab;
+
+	@FindBy(how = How.XPATH, using = "//*[@class='glyphicon glyphicon-right-arrow']")
+	@CacheLookup
+	public WebElement MoveIcon;
+
+	// ********************* Received private masages
+	// *******************************//
 	@FindBy(how = How.ID, using = "epm")
 	@CacheLookup
 	public WebElement ReceivedprivatemsgsCheckBox;
-	
+
 	@FindBy(how = How.ID, using = "npm")
 	@CacheLookup
 	public WebElement EmailPrivateMessageNotifications;
-	
-	
-	//Edit profile page locaters
+
+	// Edit profile page locaters
 	@FindBy(how = How.ID, using = "inputname")
 	@CacheLookup
 	public WebElement Fullname;
-	
+
 	@FindBy(how = How.ID, using = "imType")
 	@CacheLookup
 	public WebElement InstantaniousMessageDropDown;
-	
+
 	@FindBy(how = How.ID, using = "imID")
 	@CacheLookup
 	public WebElement InstantaniousMessageText;
-	
+
 	@FindBy(how = How.ID, using = "birthDatepicker")
 	@CacheLookup
 	public WebElement Birthday;
-	
+
 	@FindBy(how = How.XPATH, using = ".//*[@id='signature']")
 	@CacheLookup
 	public WebElement Signature;
-	
+
 	@FindBy(how = How.XPATH, using = "//*[@id='edit_signature']/small")
 	@CacheLookup
 	public WebElement EditSignatureButton;
-	
-	//******************* Delete Account On memberspage **************************//
+
+	// ******************* Delete Account On memberspage
+	// **************************//
 	@FindBy(how = How.ID, using = "delUserAccount")
 	@CacheLookup
 	public WebElement DeleteAccount;
-	
-	//AccountSettings Tab
-	
+
+	// AccountSettings Tab
+
 	@FindBy(how = How.XPATH, using = "//a[@aria-controls='Account Settings']")
 	@CacheLookup
 	public WebElement AccountSettingsTab;
-	
-	//profile Edit Button 
-	
+
+	// profile Edit Button
+
 	@FindBy(how = How.ID, using = "anchor_tab_edit")
 	@CacheLookup
 	public WebElement ProfileEditButton;
 
-	//Memebers Search Text
-	
+	// Memebers Search Text
+
 	@FindBy(how = How.ID, using = "inline_search_box")
 	@CacheLookup
 	public WebElement MembersSearchText;
-
-	
-	
-	
-	
-	
 
 }
