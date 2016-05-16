@@ -19,9 +19,9 @@ import Com.testcases.Login.Frontendlogin;
 import Com.testcases.UserPermission.VerifyStartTopic_CategoryPermissions;
 
 public class PerformActionagainstTopic extends baseClass{
-	public String username, password, topicName, categoryName, message;
+	String username, password, topicName, categoryName, message;
 	int rowNum;
-	//@Test
+	@Test
 	public void EnableReplyTopicUserPermission_Backend() throws InterruptedException, IOException{
 		UsersGroupPermissionspageObject userPermission = new UsersGroupPermissionspageObject();
 		@SuppressWarnings("unused")
@@ -32,7 +32,7 @@ public class PerformActionagainstTopic extends baseClass{
 				userPermission.ReplyTopic_checkbox, true);
 	}
 	
-	//@Test(priority=0)
+	@Test(priority=0)
 	public void ReplyAgainstTopicwithoutattachment() throws InterruptedException, IOException{
 		rowNum=8;
 		AddNewTopicandReplyTopic newTopic = new AddNewTopicandReplyTopic();
@@ -273,6 +273,7 @@ public class PerformActionagainstTopic extends baseClass{
 		driver.navigate().to((String) Credential.get("FrontendURL"));
 		
 	}
+	
 	
 	
 	//Send "Delete", "Edit", "Share" in PerforAction string as parameter

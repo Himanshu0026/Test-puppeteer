@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Website Toolbox">
+
+	<test name="Add New Topic and Reply related functionality">
+	
+	<classes>
+	<!-- Add new topic and also verify post preview functionality while adding new topic -->
+	<class name="Com.testcases.Topic.FrontendaddNewTopic">
+		<methods>
+				<include name = "addNewTopicwithHindiText" />
+				<include name = "postPriviewofNewTopic" />
+				<include name = "VerifyPostPriviewOfGraphicsImages" />
+				<include name = "VerifyPostPriviewOfNongraphicsFile" />
+				<include name = "addNewTopicBySelectingCategory" />
+			</methods>	
+	</class>
+	
+	<class name = "Com.testcases.Topic.VerifyUploadAttachment_forumSettings">
+	<!-- Attach file and photo while adding new topic and verify attached file or photo on post page -->
+		<methods>
+				<include name = "DisableAttachmentCheckboxfromBackend" />
+				<include name = "VerifyuploadAttachmentOptiononAddNewTapicpage" />
+				<include name = "VerifyuploadAttachmentOptiononPostpage" />
+				<include name = "uploadandverifyDocumentfile" />
+				<include name = "uploadandverifyMultimediafile" />
+				<include name = "uploadandverifyArchivesfile" />
+				<include name = "uploadandverifyGraphicsfile" />
+				<include name = "VerifyErrormessagewhileUploadinginvalidFile" />
+				<include name = "insertandverifyInsertedGraphicsFile" />
+				<include name = "VerifyErrormessagewhileInsertinginvalidFile" />
+				<include name = "VerifyErrormessageWhileInsertinginvalidGraphicsFile" />
+				<include name = "InsertImagethroughWebURLandVerifyImage" />				
+			</methods>	
+	</class>
+	<!-- Verify inline attachment on post page after adding new topic with inline attachment
+	 and also verify delete file after deleting file -->
+	<class name="Com.testcases.Topic.VerifyInlineAttachment">
+		<methods>
+				<include name = "verifyInlineAttachment_graphicsFile" />
+				<include name = "verifyInlineAttachment_documentsFile" />
+				<include name = "verifyInlineAttachment_multimediaFile" />
+				<include name = "verifyInlineAttachment_archivesFile" />
+				<include name = "verifyInlineAttachment_multipleFile" />
+				<include name = "verifyDeletedAttachment" />
+			</methods>	
+	</class>
+	
+	<class name="Com.testcases.Topic.PerformActionagainstTopic">
+		<methods>
+			<include name = "EnableReplyTopicUserPermission_Backend"></include>
+			<include name = "ReplyAgainstTopicwithoutattachment"></include>
+			<include name = "ReplyAgainstTopicwithAttachFile" ></include>
+			<include name = "ReplyAgainstTopicwithInsertPhoto"></include>
+			<include name = "EditRepliedPost"></include>
+			<include name = "ShareRepliedPost_Facebook"></include>
+			<include name = "deleteRepliedPost"></include>
+	
+			<exclude name="ShareRepliedPost_twitter"></exclude>
+		</methods>
+	</class>
+	
+	</classes>
+	
+	</test>
+	
+	</suite>
+	
+	

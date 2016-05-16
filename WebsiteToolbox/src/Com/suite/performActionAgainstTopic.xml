@@ -11,29 +11,35 @@
     </methods>
     </class>
     
-      <class name="Com.testcases.FrontendaddNewTopic">
-        <methods>
-          <include name="addNewTopic"/>
-          <include name="addNewTopicBySelectingCategory"/>
-          <include name="postPriviewofNewTopic"/>
-          <include name="addNewTopicwithAttachment"/>
-        </methods>
-      </class>
+     <!-- Add new topic and also verify post preview functionality while adding new topic -->
+	<class name="Com.testcases.Topic.FrontendaddNewTopic">
+		<methods>
+			<include name = "addNewTopicwithHindiText" />
+			<include name = "postPriviewofNewTopic" />
+			<include name = "VerifyPostPriviewOfGraphicsImages" />
+			<include name = "addNewTopicBySelectingCategory" />
+			<include name = "addNewTopicwithAttachment" />
+		</methods>	
+	</class>
+	
+	<class>
+			<include name = "" />
+	
+	</class>
       
       <class name="Com.testcases.PerformActionagainstTopic">
-      <methods>
-      <include name="EnableReplyTopicUserPermission_Backend"></include>
-      <include name="ReplyAgainstTopicwithoutattachment"></include>
-      <include name="ReplyAgainstTopicwithAttachFile"></include>
-      <include name="ReplyAgainstTopicwithInsertPhoto"></include>
-      <include name="deleteRepliedPost"></include>
-      <include name="EditRepliedPost"></include>
-      <include name="ShareRepliedPost_Facebook"></include>
+      	<methods>
+      		<include name="EnableReplyTopicUserPermission_Backend"></include>
+     		<include name="ReplyAgainstTopicwithoutattachment"></include>
+      		<include name="ReplyAgainstTopicwithAttachFile"></include>
+      		<include name="ReplyAgainstTopicwithInsertPhoto"></include>
+      		<include name="deleteRepliedPost"></include>
+      		<include name="EditRepliedPost"></include>
+     		<include name="ShareRepliedPost_Facebook"></include>
      
-      <exclude name="ShareRepliedPost_twitter"></exclude>
+      		<exclude name="ShareRepliedPost_twitter"></exclude>
       </methods>
-      
-      </class>
+    </class>
       
       
       

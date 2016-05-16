@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Website Toolbox">
+
+	<test name="Smoke testing of the application">
+	
+	<classes>
+	<class name = "Com.testcases.registration.Frontregister">
+		<methods>
+			<include name = "NormalRegistration" />
+		</methods>	
+	</class>
+	<class name = "Com.testcases.Login.Frontendlogin">
+		<methods>
+			<include name = "loginwithvalidCredential" />
+		</methods>	
+	</class>
+	<class name = "Com.testcases.Topic.FrontendaddNewTopic">
+		<methods>
+			<include name = "addNewTopicBySelectingCategory" />
+		</methods>	
+	</class>
+	<class name = "Com.testcases.Topic.PerformActionagainstTopic">
+		<methods>
+			<include name = "ReplyAgainstTopicwithoutattachment" />
+			<include name = "editTopicandverifyit" />
+		</methods>	
+	</class>
+	
+	
+	
+	
+	
+	
+	
+	</classes>
+	
+	</test>
+	
+	</suite>
