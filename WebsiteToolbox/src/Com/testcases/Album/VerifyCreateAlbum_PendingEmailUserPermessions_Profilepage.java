@@ -23,9 +23,8 @@ public class VerifyCreateAlbum_PendingEmailUserPermessions_Profilepage extends
 	public VerifyCreateAlbum_PendingEmailUserPermessions_Profilepage()
 			throws IOException {
 
-		username = readExcel("Album").getRow(4).getCell(1).getStringCellValue();
-
-		password = readExcel("Album").getRow(4).getCell(2).getStringCellValue();
+		username=username("Album", 4, 1);
+		password=password("Album", 4, 2);
 
 		Filepath = readExcel("Album").getRow(4).getCell(3).getStringCellValue();
 
@@ -37,7 +36,7 @@ public class VerifyCreateAlbum_PendingEmailUserPermessions_Profilepage extends
 	// Disable Create Album settings from back end and verify Album on Profile
 	// page for pending Email Users
 
-	//@Test(priority = 0)
+	@Test(priority = 0)
 	public void VerifyDisableCreateAlbumsettingsfrombackend_verifyAlbumonProfileforPendingEmailUSers()
 			throws InterruptedException, IOException {
 		@SuppressWarnings("unused")
