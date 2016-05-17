@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
@@ -170,7 +171,7 @@ public class PerformActionagainstTopic extends baseClass{
 		String replyMessage_Id=PerformActionOnRepliedMessage(topicName, username, message, "Edit");
 		
 		driver.switchTo().frame(newTopic.EditpostMessageBody);
-		newTopic.messagetextfield.sendKeys(ModyfiedMessage);
+		newTopic.messagetextfield.sendKeys(" "+ModyfiedMessage);
 		driver.switchTo().defaultContent();
 		
 		//Save button while editing any replied message
@@ -274,6 +275,113 @@ public class PerformActionagainstTopic extends baseClass{
 		
 	}
 	
+	@Test
+	//Edit topic and verify message on post page
+	public void editTopicsMessageandverifyit() throws IOException, InterruptedException{
+		rowNum=15;
+		AddNewTopicandReplyTopic topic = new AddNewTopicandReplyTopic();
+		
+		username=username("Topic", rowNum, 1);
+		password=password("Topic", rowNum, 2);
+		categoryName = readExcel("Topic").getRow(rowNum).getCell(5).getStringCellValue();
+		topicName = readExcel("Topic").getRow(rowNum).getCell(3).getStringCellValue();
+		message = readExcel("Topic").getRow(rowNum).getCell(4).getStringCellValue();
+		String modifiedmessage = readExcel("Topic").getRow(rowNum).getCell(6).getStringCellValue();
+		
+		Frontendlogin.loginToApp(username, password);
+		Thread.sleep(3000);
+		FrontendaddNewTopic.selectCategory(categoryName);
+		topic.TopicInList(topicName).click();
+		
+		Actions action=new Actions(driver);
+		action.moveToElement(topic.VerifyPostedTopic).build().perform();
+		topic.dropdownOnfirstPost.click();
+		topic.EditOnfirstPost.click();
+		Thread.sleep(3000);
+	
+		driver.switchTo().frame(topic.EditpostMessageBody);
+		topic.messagetextfield.sendKeys(modifiedmessage);
+		driver.switchTo().defaultContent();
+		
+		Thread.sleep(2000);
+		topic.Modified_Savebutton.click();
+		Thread.sleep(3000);
+		
+		Assert.assertTrue(topic.VerifyPostedTopic.getText().contains(modifiedmessage));
+
+		Frontendlogin.logoutFromApp();
+		Thread.sleep(3000);
+		driver.navigate().to((String) Credential.get("FrontendURL"));
+	}
+	
+	//@Test
+		//Bug is there in this functionality, back arrow is not working after updating subject
+		//Edit topic and verify message on post page
+		public void EditTopicfromFloatingHeader() throws IOException, InterruptedException{
+			rowNum=16;
+			AddNewTopicandReplyTopic topic = new AddNewTopicandReplyTopic();
+			
+			username=username("Topic", rowNum, 1);
+			password=password("Topic", rowNum, 2);
+			categoryName = readExcel("Topic").getRow(rowNum).getCell(5).getStringCellValue();
+			topicName = readExcel("Topic").getRow(rowNum).getCell(3).getStringCellValue();
+			String topicName_modified = readExcel("Topic").getRow(rowNum).getCell(6).getStringCellValue();
+			
+			Frontendlogin.loginToApp(username, password);
+			Thread.sleep(3000);
+			FrontendaddNewTopic.selectCategory(categoryName);
+			topic.TopicInList(topicName).click();
+			Thread.sleep(2000);
+			//String[] topic_href=driver.getCurrentUrl().split((String) Credential.get("FrontendURL"));
+			mousehover(topic.EditTopic, topic.EditTopicPencilIcon);
+			
+			topic.EditTopicTextfield.clear();
+			topic.EditTopicTextfield.sendKeys(topicName_modified+Keys.ENTER);
+			Thread.sleep(3000);
+			topic.backArrowOnPost.click();
+			Thread.sleep(3000);
+			
+			Assert.assertTrue(verifyPresenceOfElement(By.xpath("//*[text()='"+topicName_modified+"']")));
+
+			Frontendlogin.logoutFromApp();
+			Thread.sleep(3000);
+			driver.navigate().to((String) Credential.get("FrontendURL"));
+		}
+	
+	@Test
+	//Delete topic and verify in the topic list
+	public void DeleteTopicandVerifyinList() throws IOException, InterruptedException{
+		rowNum=17;
+		AddNewTopicandReplyTopic topic = new AddNewTopicandReplyTopic();
+		
+		username=username("Topic", rowNum, 1);
+		password=password("Topic", rowNum, 2);
+		categoryName = readExcel("Topic").getRow(rowNum).getCell(5).getStringCellValue();
+		topicName = readExcel("Topic").getRow(rowNum).getCell(3).getStringCellValue();
+		message = readExcel("Topic").getRow(rowNum).getCell(4).getStringCellValue();
+		
+		Frontendlogin.loginToApp(username, password);
+		Thread.sleep(3000);
+		FrontendaddNewTopic.selectCategory(categoryName);
+		topic.TopicInList(topicName).click();
+		
+		Actions action=new Actions(driver);
+		action.moveToElement(topic.VerifyPostedTopic).build().perform();
+		topic.dropdownOnfirstPost.click();
+		topic.DeleteOnfirstPost.click();
+		Thread.sleep(3000);
+	
+		driver.switchTo().alert().accept();
+		Thread.sleep(3000);
+		
+		Assert.assertFalse(verifyPresenceOfElement(By.xpath("//*[text()='"+topicName+"']")));
+
+		Frontendlogin.logoutFromApp();
+		Thread.sleep(3000);
+		driver.navigate().to((String) Credential.get("FrontendURL"));
+	}
+	
+	
 	
 	
 	//Send "Delete", "Edit", "Share" in PerforAction string as parameter
@@ -281,7 +389,7 @@ public class PerformActionagainstTopic extends baseClass{
 		driver.findElement(By.xpath("//*[text()='"+topicName+"']")).click();
 		Thread.sleep(3000);
 		
-		WebElement UserMessage=driver.findElement(By.xpath("//a[text()='"+username+"']/following::span[contains(text(),'"+message+"')]/parent::span"));		
+		WebElement UserMessage=driver.findElement(By.xpath("//a[text()='"+username+"']/following::span[contains(text(),'"+message+"')]"));		
 		String UserMessage_id=UserMessage.getAttribute("id"); //This return id of UserMessage and then split it and get replied message number
 		String[] UserMessageNo=UserMessage_id.split("_");
 		WebElement dropdown=driver.findElement(By.xpath("//a[@id='posttoggle_"+UserMessageNo[2]+"']/i"));

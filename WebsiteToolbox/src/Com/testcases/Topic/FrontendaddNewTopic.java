@@ -42,10 +42,12 @@ public class FrontendaddNewTopic extends baseClass {
 		VerifyPostedMessage(message);
 		
 		Frontendlogin.logoutFromApp();
+		Thread.sleep(3000);
+		driver.navigate().to((String) Credential.get("FrontendURL"));
 
 	}
 
-	//@Test(priority=1)
+	@Test(priority=1)
 	public void postPriviewofNewTopic() throws InterruptedException, IOException {
 
 		AddNewTopicandReplyTopic newTopic = new AddNewTopicandReplyTopic();
@@ -72,6 +74,8 @@ public class FrontendaddNewTopic extends baseClass {
 		newTopic.Cancelbutton.click();
 
 		Frontendlogin.logoutFromApp();
+		Thread.sleep(3000);
+		driver.navigate().to((String) Credential.get("FrontendURL"));
 
 	}
 	
@@ -110,6 +114,8 @@ public class FrontendaddNewTopic extends baseClass {
 		VerifyPostedMessage(message);
 
 		Frontendlogin.logoutFromApp();
+		Thread.sleep(3000);
+		driver.navigate().to((String) Credential.get("FrontendURL"));
 	}
 	
 	@Test(priority=3)
@@ -124,17 +130,23 @@ public class FrontendaddNewTopic extends baseClass {
 		category = readExcel("Topic").getRow(rowNum).getCell(5).getStringCellValue();
 
 		Frontendlogin.loginToApp(username, password);
+		
+		selectCategory(category);
+		newTopic.StartnewTopicbutton.click();
+		newTopic.subject.sendKeys(subject);
+
+		driver.switchTo().frame(newTopic.messageBody);
+		newTopic.messagetextfield.sendKeys(message);
+		driver.switchTo().defaultContent();
+		Thread.sleep(2000);
+		newTopic.postNewTopicbutton.click();
 		Thread.sleep(3000);
 		
-		gotoNewTopicpage();
-
-		enterSubjectnMessage(subject, message, category);
-		newTopic.postNewTopicbutton.click();
-		
-		VerifyPostedMessage(message);
+		Assert.assertTrue(newTopic.VerifyPostedTopic.getText().contains(message));
 		
 		Frontendlogin.logoutFromApp();
-
+		Thread.sleep(3000);
+		driver.navigate().to((String) Credential.get("FrontendURL"));
 	}
 	
 	@Test(priority=4)
@@ -168,6 +180,8 @@ public class FrontendaddNewTopic extends baseClass {
 		newTopic.Cancelbutton.click();
 
 		Frontendlogin.logoutFromApp();
+		Thread.sleep(3000);
+		driver.navigate().to((String) Credential.get("FrontendURL"));
 
 	}
 	
@@ -201,6 +215,8 @@ public class FrontendaddNewTopic extends baseClass {
 		newTopic.Cancelbutton.click();
 
 		Frontendlogin.logoutFromApp();
+		Thread.sleep(3000);
+		driver.navigate().to((String) Credential.get("FrontendURL"));
 
 	}
 	
@@ -261,6 +277,7 @@ public class FrontendaddNewTopic extends baseClass {
 			driver.navigate().refresh();
 			try{driver.findElement(By.id("private_message_notification")).isDisplayed();
 			Frontendlogin.logoutFromApp();
+			Thread.sleep(2000);
 			driver.navigate().to((String) Credential.get("FrontendURL"));
 			}catch(Exception e){
 				e.getMessage();

@@ -122,6 +122,22 @@ public class AddNewTopicandReplyTopic extends baseClass{
 		@CacheLookup
 		public WebElement EditOnfirstPost;
 	
+	@FindBy(how=How.XPATH, using="//*[contains(@id,'delete_first_post')]")
+	@CacheLookup
+	public WebElement DeleteOnfirstPost;
+	
+	@FindBy(how=How.ID, using="editable_subjuct")
+	@CacheLookup
+	public WebElement EditTopic;
+	
+	@FindBy(how=How.ID, using="editTopic")
+	@CacheLookup
+	public WebElement EditTopicPencilIcon;
+	
+	@FindBy(how=How.XPATH, using="//*[@class='editable-input']/input")
+	@CacheLookup
+	public WebElement EditTopicTextfield;
+	
 	@FindBy(how=How.XPATH, using="//*[contains(@id,'posttoggle')]/i")
 	@CacheLookup
 	public WebElement dropdownOnfirstPost;
@@ -246,7 +262,7 @@ public class AddNewTopicandReplyTopic extends baseClass{
 	@CacheLookup
 	public WebElement DeleteAttachment;
 	
-	@FindBy(how=How.XPATH, using="//a/i[@class='glyphicon glyphicon-lock']")
+	@FindBy(how=How.XPATH, using="//*[@data-original-title='Lock/Un-lock']")
 	@CacheLookup
 	public WebElement LockIconinDropdown;
 	
@@ -257,6 +273,18 @@ public class AddNewTopicandReplyTopic extends baseClass{
 	@FindBy(how=How.ID, using="unlock")
 	@CacheLookup
 	public WebElement unLockOption;
+	
+	@FindBy(how=How.XPATH, using="//*[@data-original-title='Pin/Un-Pin']")
+	@CacheLookup
+	public WebElement PinIconinDropdown;
+	
+	@FindBy(how=How.ID, using="pin")
+	@CacheLookup
+	public WebElement PinOption;
+	
+	@FindBy(how=How.ID, using="unpin")
+	@CacheLookup
+	public WebElement unPinOption;
 	
 	@FindBy(how=How.XPATH, using="//*[@id='imagesError']/span")
 	@CacheLookup

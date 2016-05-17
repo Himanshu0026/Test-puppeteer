@@ -5,8 +5,11 @@
 
 	<test name="Smoke testing of the application">
 	
-	<classes>
-	<class name = "Com.testcases.registration.Frontregister">
+	 <classes>
+	  <!-- Enable or disable the default settings like Security , General, File Uploading settings, User Permission settings -->
+	  <class name = "Com.Utilities.setDefaultSettingbeforeStartExecutions"> </class>
+	 
+	 <class name = "Com.testcases.registration.Frontregister">
 		<methods>
 			<include name = "NormalRegistration" />
 		</methods>	
@@ -19,14 +22,22 @@
 	<class name = "Com.testcases.Topic.FrontendaddNewTopic">
 		<methods>
 			<include name = "addNewTopicBySelectingCategory" />
+			<include name = "postPriviewofNewTopic" />
 		</methods>	
 	</class>
 	<class name = "Com.testcases.Topic.PerformActionagainstTopic">
 		<methods>
+			<include name = "editTopicsMessageandverifyit" />
 			<include name = "ReplyAgainstTopicwithoutattachment" />
-			<include name = "editTopicandverifyit" />
+			<include name = "EditRepliedPost" />
+			<include name = "deleteRepliedPost" />
+			<include name ="EditTopicfromFloatingHeader" />
+			<include name = "DeleteTopicandVerifyinList" />
+			
 		</methods>	
 	</class>
+	
+	
 	
 	
 	

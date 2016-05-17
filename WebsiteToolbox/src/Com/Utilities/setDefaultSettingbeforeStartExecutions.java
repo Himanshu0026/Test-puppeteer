@@ -29,19 +29,25 @@ public class setDefaultSettingbeforeStartExecutions extends baseClass{
 		
 	}
 	
-	@Test(dependsOnMethods = { "loginToBackend" })
-	//method for disable force Guest Login settings from backend
-	public static void DisableForceGuestLogin() throws InterruptedException{
-
-		BackendSettingspageObjects backend=new BackendSettingspageObjects();
-		backend.settings.click();
+	@Test
+	public void changeSecuritySettings() throws InterruptedException{
+		BackendSettingspageObjects security=new BackendSettingspageObjects();
+		security.settings.click();
 		Thread.sleep(2000);
-		backend.SecuritySubMenu.click();
+		security.SecuritySubMenu.click();
 		Thread.sleep(3000);
-		
-		EnableorDisable_Checkbox(backend.ForceGuestLogin_checkbox, false);
+		EnableorDisable_Checkbox(security.ApproveNewRegistrations, true);
+		EnableorDisable_Checkbox(security.ForceGuestLogin_checkbox, false);
+		EnableorDisable_Checkbox(security.EmailAddressVerification, true);
+		selectElementfromDropdown(security.ApproveNewPosts, "Disabled");
+		Thread.sleep(2000);
+		EnableorDisable_Checkbox(security.EmailAddressVerification, true);
+		EnableorDisable_Checkbox(security.UsertouserEmailing, true);
+		EnableorDisable_Checkbox(security.NewRegistrations, true);
+		EnableorDisable_Checkbox(security.PasswordProtection, false);
+		EnableorDisable_Checkbox(security.ImageVerification, false);
 		Thread.sleep(3000);
-		backend.SaveButton.click();
+		security.SaveButton.click();
 		Thread.sleep(3000);
 		
 	}
@@ -63,15 +69,19 @@ public class setDefaultSettingbeforeStartExecutions extends baseClass{
 	
 	@Test(dependsOnMethods = { "loginToBackend" })
 	//method for enable Social Sharing checkbox from General Settings
-	public void enableSocialSharingSetting() throws InterruptedException{
-		BackendSettingspageObjects backend=new BackendSettingspageObjects();
-		backend.settings.click();
+	public void GeneralSettings() throws InterruptedException{
+		BackendSettingspageObjects general=new BackendSettingspageObjects();
+		general.settings.click();
 		Thread.sleep(2000);
-		backend.GeneralSubMenu.click();
+		general.GeneralSubMenu.click();
 		
-		EnableorDisable_Checkbox(backend.SocialSharing, true);
+		EnableorDisable_Checkbox(general.SocialSharing, true);
+		EnableorDisable_Checkbox(general.PhotoAlbums, true);
+		EnableorDisable_Checkbox(general.PrivateMessaging, true);
+		EnableorDisable_Checkbox(general.UserAccounts, true);
+		EnableorDisable_Checkbox(general.CalenderClick, true);
 		Thread.sleep(2000);
-		backend.SaveButton.click();
+		general.SaveButton.click();
 		Thread.sleep(3000);
 		
 	}
