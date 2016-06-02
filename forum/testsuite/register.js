@@ -26,7 +26,7 @@ casper.start(json['URL'], function() {
 */  
 
 casper.then(function() {
-	reusable.clickOnRegisterLink(casper, function(){
+	reusable.clickOnRegisterLink(casper, function() {
 		console.log("Successfully open register form.....");
 	});
 });
@@ -40,10 +40,9 @@ casper.wait(5000, function() {
 */  
 
 casper.then(function() {
-	reusable.registerToApp(json['userExists'].uname, json['userExists'].uemail, json['userExists'].upass, json['userExists'].usignature, casper, function(){
+	reusable.registerToApp(json['userExists'].uname, json['userExists'].uemail, json['userExists'].upass, json['userExists'].usignature, json['userExists'].birthday, casper, function(){
 		console.log("User has successfully register to application with valid username and password");
 	});
-
 });
 
 casper.wait(5000,function(){

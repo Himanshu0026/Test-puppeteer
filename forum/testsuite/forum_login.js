@@ -7,8 +7,9 @@ var casper = require('casper').create({
 	viewportSize: { width: 1024, height: 768 }
 });
 
-var json = require('../testdata/TestData.json');
+var json = require('../testdata/logindata.json');
 var reusable = require('ReusableFn.js');
+require('utils').dump(json);
 
 casper.start(json.url, function() {
 	this.echo("Title of the page :"+this.getTitle());
@@ -23,7 +24,27 @@ casper.then(function(){
 });
 
 casper.wait(7000, function() {
-	this.capture('Screenshots/login.png');
+	this.capture('ScreenShots/login.png');
+});
+
+casper.then(function(){
+	reusable.gotoNewTopicpage(casper,function(){
+		console.log("redirect to new topic");
+	});
+});
+
+casper.wait(7000, function(){
+	this.capture('ScreenShots/newTopic.png');
+});
+
+casper.then(function(){console.log("===================json.title : "+json.title+ " json.content : "+json.content +" json.category : "+json.category);
+	reusable.postTopicpage(json.title, json.content, json.category, casper, function(){
+		console.log("Topic Posted");
+	});
+});
+
+casper.wait(7000,function(){
+	this.capture("ScreenShots/postedTopic.png");
 });
 
 casper.then(function() {
