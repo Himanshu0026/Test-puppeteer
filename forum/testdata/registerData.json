@@ -1,0 +1,31 @@
+{
+    "URL": "http://beta3.websitetoolbox.com",
+	
+    "emptyUserName" : {
+        "uname" : "",
+        "uemail" : "test@wt.com",
+        "upass" : "1234",
+        "usignature" : "This is my signature"
+    },
+    
+    "emptyEmail" : {
+        "uname" : "test",
+        "uemail" : "",
+        "upass" : "1234",
+        "usignature" : "This is my signature"
+    },
+
+    "emptyPassword" : {
+        "uname" : "test",
+        "uemail" : "test@wt.com",
+        "upass" : "",
+        "usignature" : "This is my signature"
+    },
+    
+    "userExists" : {
+        "uname" : "test123",
+        "uemail" : "test23@wt.com",
+        "upass" : "1234",
+        "usignature" : "This is my signature"
+    }
+}
