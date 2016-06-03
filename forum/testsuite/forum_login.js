@@ -110,4 +110,19 @@ casper.then(function() {
 
 //****************************************************************************************
 
+casper.thenOpen(json['url']);
+casper.then(function(){
+	reusable.loginToApp(json['ValidEmail'].username, json['ValidEmail'].password, casper, function(){
+		console.log("User has been successfuly login to application");
+	});
+});
+
+casper.then(function() {
+	reusable.logoutFromApp(casper, function(){
+		console.log("Successfully logout from application");
+	});
+});
+
+//****************************************************************************************
+
 casper.run();
