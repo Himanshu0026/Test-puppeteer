@@ -100,3 +100,30 @@ exports.editToAccount = function(userName, password, email, driver, callback) {
 	driver.click('.editable-buttons');
 	return callback();
 };
+
+
+//method to forgot password
+exports.forgotPassword = function(username, Email, driver, callback) {
+	driver.fill('form[name="lost_pw_form"]', {
+		'member' : username,
+		'email' : Email	
+	}, true);
+	return callback();
+};
+
+//method to verify forgot password link
+exports.verifyForgotPasswordLink = function(driver, callback) {
+	driver.click('#td_tab_login');
+	driver.click('#anchor_tab_forget_password');
+	driver.wait(7000, function() {
+	if(driver.getTitle().indexOf("Lost Your Password?")>=0) {
+		console.log("Lost Your Password page is redirected");
+	}else{
+		console.log("Error occurred on forgot Password");
+		driver.capture("ScreenShots/ForgotPasswordError.png");
+	}
+	});
+	return callback();
+
+};
+
