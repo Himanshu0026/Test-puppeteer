@@ -11,6 +11,23 @@ driver.fill('form[name="frmLogin"]', {
 	return callback();
 };
 
+// method for click on user's icon
+exports.clickOnUserIcon = function(driver,callback) {
+	driver.click('.default-user');
+	return callback();
+};
+
+// method for click on user's edit profile
+exports.clickOnEditProfile = function(driver,callback) {
+	driver.click('a[href="/register/register?edit=1&userid=24440696"]');
+	return callback();
+};
+
+// method for click on user's account setting
+exports.clickOnAccountSetting = function(driver,callback) {
+	driver.click('a[href="/register?action=preferences&userid=24440696"]');
+	return callback();
+};
 
 //method for logout from application
 exports.logoutFromApp = function(driver, callback) {
@@ -56,5 +73,41 @@ exports.registerToApp = function(username, email, password, signature, birthday,
 	}, false); 
 	//driver.sendKeys('input[name=birthDatepicker]', birthday);
 	driver.click('form[action="/register/create_account"] button');
+	return callback();
+};
+
+// method for editing user's profile page
+exports.editToApp = function(fullName, name_private, imType, imID, usertitle, birthday, whoIsRobot, whoAreYou, signature, driver, callback){
+	driver.fill('form[action="/register"]', {
+			'name' : fullName,
+			'name_private' : name_private,
+			'field102611' : whoAreYou
+		}, false); 
+		driver.sendKeys('input[id="field102587_1"]', true);
+		driver.sendKeys('input[id="birthDatepicker"]', birthday);
+		driver.click('#imType');
+		driver.fill('form[action="/register"]',{
+			'imType' : imType,
+			'imID' : imID
+		},false);
+		driver.click('#change_user_title small');
+		driver.fill('form[action="/register"]',{
+			'usertitle' : usertitle
+		},false);
+		driver.click('.editable-buttons');
+		driver.click('#edit_signature small');
+		driver.fill('form[action="/register"]',{
+			'signature' : signature
+		},false);
+		//driver.click('.editable-buttons');
+		driver.click('form[action="/register"] button[name="submit"]');
+		return callback();
+};
+
+// method for validating user's edit profile page
+exports.validateEditing = function(driver,callback) {
+	driver.log('validating', 'error');
+	var status = driver.exists('#edit_signature small');
+	console.log("=============================" +status);
 	return callback();
 };

@@ -1,0 +1,22 @@
+{
+    "URL": "http://beta3.websitetoolbox.com",
+    
+    "userLogin" : {
+	"Uname" : "test123",
+	"upass" : "1234"
+    },
+    
+    "userEdit" : {
+	"fullName" : "Hotam Singh",
+	"name_private" : true,
+	"imType" : "Skype",
+	"imID" : "Hotam",
+	"usertitle" : "Hotam1234",
+	"birthday" : "04/15/1991",
+	"whoIsRobot" : true,
+	"whoAreYou" : "Human",
+        "signature" : ""
+	
+        
+    }
+}
