@@ -77,37 +77,26 @@ exports.registerToApp = function(username, email, password, signature, birthday,
 };
 
 // method for editing user's profile page
-exports.editToApp = function(fullName, name_private, imType, imID, usertitle, birthday, whoIsRobot, whoAreYou, signature, driver, callback){
+exports.editToApp = function(usertitle, whoIsRobot, whoAreYou, driver, callback){
 	driver.fill('form[action="/register"]', {
-			'name' : fullName,
-			'name_private' : name_private,
 			'field102611' : whoAreYou
 		}, false); 
 		driver.sendKeys('input[id="field102587_1"]', true);
-		driver.sendKeys('input[id="birthDatepicker"]', birthday);
-		driver.click('#imType');
-		driver.fill('form[action="/register"]',{
-			'imType' : imType,
-			'imID' : imID
-		},false);
 		driver.click('#change_user_title small');
 		driver.fill('form[action="/register"]',{
 			'usertitle' : usertitle
 		},false);
 		driver.click('.editable-buttons');
-		driver.click('#edit_signature small');
-		driver.fill('form[action="/register"]',{
-			'signature' : signature
-		},false);
-		//driver.click('.editable-buttons');
 		driver.click('form[action="/register"] button[name="submit"]');
 		return callback();
 };
 
-// method for validating user's edit profile page
-exports.validateEditing = function(driver,callback) {
-	driver.log('validating', 'error');
-	var status = driver.exists('#edit_signature small');
-	console.log("=============================" +status);
+//method for editing user's account setting.
+exports.editToAccount = function(userName, password, email, driver, callback) {
+	driver.click('#change_user_name small');
+	driver.fill('form[action="/register"]',{
+		'new_username' : userName
+	},false);
+	driver.click('.editable-buttons');
 	return callback();
 };

@@ -63,14 +63,8 @@ casper.wait(5000, function() {
 
 casper.then(function() {
 	//this.echo("ufullName : " +json['userEdit'].ufullName);
-	reusable.editToApp(json['userEdit'].fullName, json['userEdit'].name_private, json['userEdit'].imType, json['userEdit'].imID, json['userEdit'].usertitle, json['userEdit'].birthday, json['userEdit'].whoIsRobot, json['userEdit'].whoAreYou, json['userEdit'].signature, casper, function(){
+	reusable.editToApp(json['userEdit'].usertitle, json['userEdit'].whoIsRobot, json['userEdit'].whoAreYou, casper, function(){
 		console.log("values are successfully updated");
-	});
-});
-
-casper.then(function(){
-	reusable.validateEditing(casper, function(){
-		casper.log('values are successfully validated', 'error');	
 	});
 });
 
@@ -91,6 +85,21 @@ casper.then(function() {
 
 casper.wait(5000, function() {
 	this.capture('Screenshots/editProfile/userAccountSetting_form.png');
+});
+
+/*
+* Edit data on user's edit profile account setting.
+*/  
+
+casper.then(function() {
+	reusable.editToAccount(json['accountEdit'].userName, json['accountEdit'].password, json['accountEdit'].email, casper, function(){
+		console.log("values are successfully updated");
+	});
+});
+
+casper.wait(5000,function(){
+    this.capture('Screenshots/editProfile/editAccount.png');
+
 });
 
 /*
