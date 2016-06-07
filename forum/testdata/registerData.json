@@ -5,7 +5,8 @@
         "uname" : "",
         "uemail" : "test@wt.com",
         "upass" : "1234",
-        "usignature" : "This is my signature"
+        "usignature" : "This is my signature",
+        "birthday" : "20/05/1989"
     },
     
     "emptyEmail" : {
@@ -26,6 +27,7 @@
         "uname" : "test123",
         "uemail" : "test23@wt.com",
         "upass" : "1234",
-        "usignature" : "This is my signature"
+        "usignature" : "This is my signature",
+        "birthday" : "20/05/1989"
     }
 }
