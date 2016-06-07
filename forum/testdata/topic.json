@@ -1,0 +1,28 @@
+{
+	"url" : "http://automation.websitetoolbox.com/",
+
+	"newTopic" : {    
+		"username": "rajatk",
+		"password": "rk@123",
+		"title" : "ping",
+		"content" : "hey there..!!",
+		"category" : "General"
+	},
+	
+	"poll" : {
+		"pollQues" : "Are U Happy",
+		"publicCheckbox" : true,
+		"option1" : "YES",
+		"option2" : "NO",
+		"multiple" : false,
+		"timeoutFormat": 3
+	},
+
+	"replyTopic" : {
+		"content" : "This is rajat Kesharwani only test test"
+	},
+
+	"editTopic" : {
+		"content" : "This topic is edited"
+	}
+}
