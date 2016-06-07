@@ -36,6 +36,11 @@ exports.logoutFromApp = function(driver, callback) {
 	return callback();
 };
 
+exports.backToCategory = function(driver, callback) {
+	driver.click('a[href="/categories"]');
+	return callback();
+};
+
 //method to go to new Topic page
 exports.gotoNewTopicpage = function(driver, callback) {
 	driver.click('#links-nav');
@@ -130,16 +135,18 @@ exports.clickOnRegisterLink = function(driver, callback) {
 };
 
 // method for registration to application
-exports.registerToApp = function(username, email, password, signature, birthday, driver, callback) {
+exports.registerToApp = function(data, driver, callback) {
 	//driver.click('#td_tab_login');
 	driver.fill('form[action="/register/create_account"]', {
-		'member' : username,
-		'email': email,
-		'pw' : password,
-		'signature' : signature,
-		'input[name=birthDatepicker]' : birthday
-	}, false); 
-	//driver.sendKeys('input[name=birthDatepicker]', birthday);
+		'member' : data.uname,
+		'email': data.uemail,
+		'pw' : data.upass,
+		'name' : data.fullName,
+		'name_private' : true,
+		'imID' : data.imID,
+		'signature' : data.usignature
+	}, false);
+	driver.sendKeys("input#birthDatepicker", data.birthday);
 	driver.click('form[action="/register/create_account"] button');
 	return callback();
 };

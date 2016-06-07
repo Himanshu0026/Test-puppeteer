@@ -1,33 +1,124 @@
 {
-    "URL": "http://beta3.websitetoolbox.com",
+    "URL": "http://automation.websitetoolbox.com",
 	
-    "emptyUserName" : {
+    "invalidInfo" : [{
         "uname" : "",
-        "uemail" : "test@wt.com",
+        "uemail" : "blank_uname@wt.com",
         "upass" : "1234",
-        "usignature" : "This is my signature",
-        "birthday" : "20/05/1989"
+        "fullName" : "Blank Username",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank uname",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "Please enter a username." 
     },
     
-    "emptyEmail" : {
-        "uname" : "test",
+    {
+        "uname" : "blank_email",
         "uemail" : "",
         "upass" : "1234",
-        "usignature" : "This is my signature"
+        "fullName" : "Blank Email",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank email",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "Please enter your email address." 
     },
 
-    "emptyPassword" : {
-        "uname" : "test",
-        "uemail" : "test@wt.com",
+    {
+        "uname" : "blank_password",
+        "uemail" : "blank_password@wt.com",
         "upass" : "",
-        "usignature" : "This is my signature"
+        "fullName" : "Blank Password",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank_password",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "Please enter a password." 
     },
     
-    "userExists" : {
-        "uname" : "test123",
-        "uemail" : "test23@wt.com",
+    {
+        "uname" : "blank_fullname",
+        "uemail" : "blank_fullname@wt.com",
         "upass" : "1234",
-        "usignature" : "This is my signature",
-        "birthday" : "20/05/1989"
+        "fullName" : "",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank full name",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "Please enter user full name." 
+    },
+    
+    {
+        "uname" : "blank_imID",
+        "uemail" : "blank_imID@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank IM ID",
+        "imID" : "",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank im-id",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "Please enter your screen name." 
+    },
+    
+    {
+        "uname" : "blank_birthday",
+        "uemail" : "blank_birthday@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank Birthday",
+        "imID" : "Hello",
+        "birthday" : "",
+        "usignature" : "This is my signature blank birthday",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "Please enter birthday." 
+    },
+    
+    {
+        "uname" : "blank_signature",
+        "uemail" : "blank_signature@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank Signature",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank signature",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "Please enter birthday." 
+    },
+    
+    {
+        "uname" : "invalid_email",
+        "uemail" : "aaaaa",
+        "upass" : "1234",
+        "fullName" : "Invalid Email",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature invalid email",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "You entered an invalid email address." 
+    },
+    
+    {
+    	"uname" : "shipra",
+        "uemail" : "35@wt.com",
+        "upass" : "1234",
+        "fullName" : "18",
+        "imID" : "18",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature 18",
+        "namePrivate" : true,
+        "errorType" : "existWithName",
+        "expectedErrorMsg" : "'shipra' is already taken."
+    }],
+    
+    "validInfo" : {
+    	"uname" : "35",
+        "uemail" : "35@wt.com",
+        "upass" : "1234",
+        "fullName" : "18",
+        "imID" : "18",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature 18",
+        "namePrivate" : true,
+        "expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
     }
 }
