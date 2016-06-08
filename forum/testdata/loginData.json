@@ -10,7 +10,7 @@
      "InvalidPassowrd" : {
 	"username": "sangita",
 	"password": "sangita123",
-	"ExpectedErrorMessage" : "Error: The password you entered is incorrect"
+	"ExpectedErrorMessage" : "Error: The password you entered is incorrect."
 	},
 
     "InvalidUsername" : {
