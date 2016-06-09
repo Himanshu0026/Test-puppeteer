@@ -23,18 +23,41 @@ switch (testArg) {
 	casper.run();
         break;
     case "newtopic":
-        
+        var newTopic = require("./testsuite/newTopic.js");
+	newTopic.featureTest(casper);
+	casper.run();
         break;
     case "postreply":
-        
+        var postAReply = require("./testsuite/postAReply.js");
+	postAReply.featureTest(casper);
+	casper.run();
         break;
+    case "edittopic":
+	var editTopic = require("./testsuite/editTopic.js");
+	editTopic.featureTest(casper);
+	casper.run();
+	break;
+    case "deletetopic":
+	var deleteTopic = require("./testsuite/deleteTopic.js");
+	deleteTopic.featureTest(casper);
+	casper.run();
+	break;
+    case "poll":
+	var poll = require("./testsuite/poll.js");
+	poll.featureTest(casper);
+	casper.run();
+	break;
     default:
-        casper.echo("Options:");
-	casper.echo("	register");
-	casper.echo("	login");
-	casper.echo("	newtopic");
+        casper.echo("Options:\n");
+	casper.echo("	register\n");
+	casper.echo("	login\n");
+	casper.echo("	newtopic\n");
 	casper.echo("	postreply\n");
+	casper.echo("	edittopic\n");
+	casper.echo("	deletetopic\n");
+	casper.echo("	poll\n");
 	casper.echo("Relevant test data has to be fed in JSON format in files placed for each feature in '<current directory>/testData/'.");
 	casper.exit();
+
 };
 
