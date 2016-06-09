@@ -1,5 +1,5 @@
 var json = require('../testdata/loginData.json');
-var reusable = require('./ReusableFn.js');
+//var reusable = require('./ReusableFn.js');
 var config = require('../config/config.json');
 
 var forumLogin = module.exports = {};
@@ -18,7 +18,7 @@ forumLogin.featureTest = function(casper) {
 	});
 	casper.wait(5000);
 	casper.then(function() {
-	this.capture(screenShotsDir + "ErrorOnInvalidPassword.png");
+	this.capture(screenS`hotsDir + "ErrorOnInvalidPassword.png");
 	var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
 	this.echo(errorMessage.indexOf(json['InvalidPassowrd'].ExpectedErrorMessage));
 	    	this.echo(errorMessage.trim());
@@ -123,11 +123,11 @@ forumLogin.featureTest = function(casper) {
 
 // method for login to application
 forumLogin.loginToApp = function(username, password, driver,callback) {
-driver.click('#td_tab_login');
-driver.fill('form[name="frmLogin"]', {
-        'member': username,
-	'pw' : password
-    }, false); //incase of true, it will submit the form and for false, it will not submit form
+	driver.click('#td_tab_login');
+	driver.fill('form[name="frmLogin"]', {
+		'member': username,
+		'pw' : password
+	}, false); //incase of true, it will submit the form and for false, it will not submit form
 
         driver.click('form[name="frmLogin"] button');
 	return callback();
@@ -141,7 +141,3 @@ forumLogin.logoutFromApp = function(driver, callback) {
 };
 
 
-
-forumLogin.featureTest1 = function(casper) {
-
-};

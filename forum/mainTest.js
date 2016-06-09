@@ -1,26 +1,25 @@
 var config = require("./config/config.json");
 
-var casper = require('casper').create(config.app);
+casper.options.viewportSize = config.app.viewportSize;
+casper.options.verbose = config.app.verbose;
+casper.options.logLevel = config.app.loglevel;
 
-var testArg = "";
-if(casper.cli.args.length>0){
-	testArg = casper.cli.args[0];
-	casper.echo("Started testing for the feature: " + testArg +"\n");
+var feature = casper.cli.get('feature');
+if(feature){
+	casper.echo("Started testing for the feature: " + feature +"\n");
 }else{
 	casper.echo("It seems, you have not given any option.");
-	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
 }
 
-switch (testArg) {
+switch (feature) {
     case "login":
-        var forumLogin = require("./testsuite/forum_login.js");
-	forumLogin.featureTest(casper);
-	casper.run();
+        casper.test.begin('some test name', function(test) {
+		var forumLogin = require("./testsuite/forum_login.js");
+		forumLogin.featureTest(casper);
+	});
         break;
     case "register":
-        var forumRegister = require("./testsuite/register.js");
-	forumRegister.featureTest(casper);
-	casper.run();
+        
         break;
     case "newtopic":
         
@@ -29,6 +28,7 @@ switch (testArg) {
         
         break;
     default:
+	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
         casper.echo("Options:");
 	casper.echo("	register");
 	casper.echo("	login");
@@ -37,4 +37,6 @@ switch (testArg) {
 	casper.echo("Relevant test data has to be fed in JSON format in files placed for each feature in '<current directory>/testData/'.");
 	casper.exit();
 };
+
+
 

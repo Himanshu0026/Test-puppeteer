@@ -1,5 +1,5 @@
 {
-	"screenShotsLocation": "/home/hotam/project/Screenshots/",
+	"screenShotsLocation": "<home directory>/Screenshots/",
 	"url": "http://automation.websitetoolbox.com/",
 	"app": {	
 		"verbose" : true,

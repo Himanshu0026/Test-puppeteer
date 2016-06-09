@@ -74,15 +74,56 @@
     },
     
     {
-        "uname" : "blank_signature",
-        "uemail" : "blank_signature@wt.com",
+    	"uname" : "shipra",
+        "uemail" : "35asasa@wt.com",
         "upass" : "1234",
-        "fullName" : "Blank Signature",
-        "imID" : "Hello",
+        "fullName" : "18",
+        "imID" : "18",
         "birthday" : "04/12/1991",
-        "usignature" : "This is my signature blank signature",
+        "usignature" : "This is my signature 18",
         "namePrivate" : true,
-        "expectedErrorMsg" : "Please enter birthday." 
+        "errorType" : "existWithName",
+        "errorMsg1" : "Error: The username ",
+        "errorMsg2" : " has already been taken."
+    },
+    
+    {
+    	"uname" : "jhgsdgdg",
+        "uemail" : "18@wt.com",
+        "upass" : "1234",
+        "fullName" : "18",
+        "imID" : "18",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature 18",
+        "namePrivate" : true,
+        "errorType" : "existWithEmail",
+        "expectedErrorMsg" : "Error: It looks like you are already registered"
+    },
+    
+    {
+    	"uname" : "356",
+        "uemail" : "356@wt.com",
+        "upass" : "1234",
+        "fullName" : "18",
+        "imID" : "18",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature 18",
+        "namePrivate" : true,
+        "errorType" : "existWithUsernameAndEmail",
+        "expectedSuccessMsg" : "Error: It looks like you already have a forum account! A forum account for that username and email address combination already exists!"
+    },
+    
+    {
+    	"uname" : "35",
+        "uemail" : "35@wt.com",
+        "upass" : "1234",
+        "fullName" : "18",
+        "imID" : "18",
+        "birthday" : "06/29/2018",
+        "usignature" : "This is my signature 18",
+        "namePrivate" : true,
+        "errorType" : "invalidBirthday",
+        "expectedErrorMsg" : "Error: Valid years for your Birthday are from 1900 to 2016."
     },
     
     {
@@ -94,25 +135,13 @@
         "birthday" : "04/12/1991",
         "usignature" : "This is my signature invalid email",
         "namePrivate" : true,
+        "errorType" : "invalidEmail",
         "expectedErrorMsg" : "You entered an invalid email address." 
-    },
-    
-    {
-    	"uname" : "shipra",
-        "uemail" : "35@wt.com",
-        "upass" : "1234",
-        "fullName" : "18",
-        "imID" : "18",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature 18",
-        "namePrivate" : true,
-        "errorType" : "existWithName",
-        "expectedErrorMsg" : "'shipra' is already taken."
     }],
     
     "validInfo" : {
-    	"uname" : "35",
-        "uemail" : "35@wt.com",
+    	"uname" : "3560",
+        "uemail" : "3560@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",

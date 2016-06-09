@@ -29,10 +29,8 @@ exports.clickOnAccountSetting = function(driver,callback) {
 	return callback();
 };
 
-//method for logout from application
-exports.logoutFromApp = function(driver, callback) {
-	//driver.click('button.dropdown-toggle span span.username');
-	driver.click('a#logout.fb_logout');
+exports.backToCategory = function(driver, callback) {
+	driver.click('a[href="/categories"]');
 	return callback();
 };
 
@@ -122,30 +120,6 @@ console.log("###################################################################
 		return callback();
 };
 
-
-//method for clicking on register link
-exports.clickOnRegisterLink = function(driver, callback) {
-	driver.click('.pull-right a');
-	return callback();
-};
-
-// method for registration to application
-exports.registerToApp = function(data, driver, callback) {
-	//driver.click('#td_tab_login');
-	driver.fill('form[action="/register/create_account"]', {
-		'member' : data.uname,
-		'email': data.uemail,
-		'pw' : data.upass,
-		'name' : data.fullName,
-		'name_private' : true,
-		'imID' : data.imID,
-		'signature' : data.usignature
-	}, false);
-	driver.sendKeys("input#birthDatepicker", data.birthday);
-	driver.click('form[action="/register/create_account"] button');
-	return callback();
-};
-
 exports.gotoNewPollpage = function(driver, callback) {
 	driver.click('a[href="/post/printadd"]');
 	//driver.click('form[name="PostTopic"]');
@@ -200,7 +174,11 @@ exports.replyTopic = function(content, driver, callback){
 
 exports.checkPostReply = function(content, driver, callback){
 console.log("#############################################################################################################");
-	
+var elementId = driver.evaluate(function(){
+	var element = document.querySelectorAll("span[id^='post_message_']");
+	 var id = element[element.length-1].id;
+	return id;	
+});
 
 var contentMsg = driver.getElementInfo('div.post-body-content:nth-last-child(2)').text;
 
