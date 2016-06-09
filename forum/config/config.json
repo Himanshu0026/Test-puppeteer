@@ -1,6 +1,6 @@
 {
 	"screenShotsLocation": "/home/monika/screenshots/",
-	"url": "http://beta12.websitetoolbox.com/",
+	"url": "http://automation.websitetoolbox.com/",
 	"app": {	
 		"verbose" : true,
 	 	"logLevel" : "debug",

@@ -134,7 +134,7 @@ driver.fill('form[name="frmLogin"]', {
 };
 
 //method for logout from application
-logoutFromApp = function(driver, callback) {
+forumLogin.logoutFromApp = function(driver, callback) {
 	driver.click('button.dropdown-toggle span.caret');
 	driver.click('#logout');
 	return callback();

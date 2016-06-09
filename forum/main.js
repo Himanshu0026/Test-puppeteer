@@ -18,7 +18,9 @@ switch (testArg) {
 	casper.run();
         break;
     case "register":
-        
+        var forumRegister = require("./testsuite/register.js");
+	forumRegister.featureTest(casper);
+	casper.run();
         break;
     case "newtopic":
         
