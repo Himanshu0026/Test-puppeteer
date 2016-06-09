@@ -28,11 +28,17 @@ switch (testArg) {
     case "postreply":
         
         break;
+    case "editprofile":
+	var editProfile = require("./testsuite/editprofile.js");
+	editProfile.featureTest(casper);
+	casper.run();
+        break;
     default:
         casper.echo("Options:");
 	casper.echo("	register");
 	casper.echo("	login");
 	casper.echo("	newtopic");
+	casper.echo("	editprofile");
 	casper.echo("	postreply\n");
 	casper.echo("Relevant test data has to be fed in JSON format in files placed for each feature in '<current directory>/testData/'.");
 	casper.exit();

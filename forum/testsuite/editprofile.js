@@ -1,12 +1,17 @@
-var json = require('../testdata/editData.json');
-//var reusable = require('./ReusableFn.js');
+// This file is used for editing user's profile and account setting
+
 var forumLogin = require('./forum_login.js');
+var utils = require('./utils.js');
+var json = require('../testdata/editData.json');
+
+
 var config = require('../config/config.json');
 
 var editProfile = module.exports = {};
 
 editProfile.featureTest = function(casper) {
 	var screenShotsDir = config.screenShotsLocation + "editProfile/";
+	//Staring testing with configured URL
 	casper.start(config.url, function() {
 		this.echo("Title of the page : " +this.getTitle());
 	});
@@ -31,7 +36,7 @@ editProfile.featureTest = function(casper) {
 	*/
 
 	casper.then(function() {
-		clickOnUserIcon(casper, function() {
+		utils.clickOnElement(casper, '.default-user', function() {
 			casper.log("clicked on user's icon successfully ", 'info');
 		});
 	});
@@ -45,7 +50,8 @@ editProfile.featureTest = function(casper) {
 	*/
 
 	casper.then(function() {
-		clickOnEditProfile(casper, function() {
+		var element = 'a[href="/register/register?edit=1&userid=4533234"]';
+		utils.clickOnElement(casper, element, function() {
 			casper.log("clicked on user's edit profile link successfully", 'info');
 		});
 	});
@@ -89,7 +95,7 @@ editProfile.featureTest = function(casper) {
 	*/
 
 	casper.then(function() {
-		clickOnAccountSetting(casper, function() {
+		editProfile.clickOnAccountSetting(casper, function() {
 			casper.log("clicked on user's account settings linkb successfully", 'info');
 		});
 	});
@@ -103,7 +109,7 @@ editProfile.featureTest = function(casper) {
 	*/
 
 	casper.then(function() {
-		editAccountSetting(json['editAccountSettingWithoutEmail'].upass, json['editAccountSettingWithoutEmail'].email, casper, function() {
+		editProfile.editAccountSetting(json['editAccountSettingWithoutEmail'].upass, json['editAccountSettingWithoutEmail'].email, casper, function() {
 			casper.log("Email address is required", 'error');
 		});
 	});
@@ -117,7 +123,7 @@ editProfile.featureTest = function(casper) {
 	*/
 
 	casper.then(function() {
-		editAccountSetting(json['editAccountSettingWithInvalidEmail'].upass, json['editAccountSettingWithInvalidEmail'].email, casper, function() {
+		editProfile.editAccountSetting(json['editAccountSettingWithInvalidEmail'].upass, json['editAccountSettingWithInvalidEmail'].email, casper, function() {
 			casper.log("Email address is invalid", 'error');
 		});
 	});
@@ -131,7 +137,7 @@ editProfile.featureTest = function(casper) {
 	*/
 
 	casper.then(function() {
-		editAccountSetting(json['editAccountSetting'].upass, json['editAccountSetting'].email, casper, function() {
+		editProfile.editAccountSetting(json['editAccountSetting'].upass, json['editAccountSetting'].email, casper, function() {
 			casper.log("successfully updated account setting", 'info');
 		});
 	});
@@ -187,7 +193,7 @@ var clickOnEditProfile = function(driver,callback) {
 };
 
 // method for editing user's profile page
-var editToApp = function(birthday, driver, callback){
+editProfile.editToApp = function(birthday, driver, callback){
 	driver.sendKeys('input[id="birthDatepicker"]', birthday);
 	driver.click('form[action="/register"] button[name="submit"]');
 	return callback();
@@ -200,7 +206,7 @@ var clickOnAccountSetting = function(driver,callback) {
 };
 
 // method for editing user's account setting
-var editAccountSetting = function(password, email, driver, callback) {
+editProfile.editAccountSetting = function(password, email, driver, callback) {
 	driver.click('div#usrPwd .change-value');
 	driver.wait(5000, function() {
 		this.sendKeys('div.editable-input input[type="password"]', password);
@@ -222,7 +228,7 @@ var editAccountSetting = function(password, email, driver, callback) {
 };
 
 //method for deleting user's account
-var deleteAccount = function(driver, callback) {
+editProfile.deleteAccount = function(driver, callback) {
 	driver.click('#deleteAccountDialog');
 	driver.click('#deleteAccount');
 	return callback();

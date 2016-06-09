@@ -18,7 +18,7 @@ forumLogin.featureTest = function(casper) {
 	});
 	casper.wait(5000);
 	casper.then(function() {
-	this.capture(screenS`hotsDir + "ErrorOnInvalidPassword.png");
+	this.capture(screenShotsDir + "ErrorOnInvalidPassword.png");
 	var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
 	this.echo(errorMessage.indexOf(json['InvalidPassowrd'].ExpectedErrorMessage));
 	    	this.echo(errorMessage.trim());
