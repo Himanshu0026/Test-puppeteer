@@ -31,7 +31,7 @@ exports.clickOnAccountSetting = function(driver,callback) {
 
 //method for logout from application
 exports.logoutFromApp = function(driver, callback) {
-	driver.click('button.dropdown-toggle span span.username');
+	driver.click('button.dropdown-toggle span.caret');
 	driver.click('#logout');
 	return callback();
 };
