@@ -1,176 +1,205 @@
-//var casper = require('casper').create();
+/***********************Used For Fill Data On Register Page***************************/
 
-var casper = require('casper').create({
-	verbose: true,
-	logLevel: "debug",
-	viewportSize: {
-		width: 1024,
-		height: 768
-	}
-});
-
+var forumLogin = require('./forum_login.js');
 var json = require('../testdata/registerData.json');
-var reusable = require('ReusableFn.js');
-require('utils').dump(json);
+var config = require('../config/config.json');
 
-/*
-* Open URL And Get Title
-*/ 
 
-casper.start(json['URL'], function() {
-	this.echo("Title of the page : " +this.getTitle());
-});
+var forumRegister = module.exports = {};
+var screenShotsDir = config.screenShotsLocation + 'register/';
 
-/*
-* Click On 1st Register Link
-*/  
+forumRegister.featureTest = function(casper) {
 
-casper.then(function() {
-	reusable.clickOnRegisterLink(casper, function() {
-		console.log("Successfully open register form.....");
+	/*
+	* Open Forum URL And Get Title
+	*/ 
+
+	casper.start(json['URL'], function() {
+		this.log('Title of the page :' +this.getTitle(), 'info');
 	});
-});
+	
+	/*
+	* Click On Register Link
+	*/ 
 
-casper.wait(5000, function() {
-	this.capture('Screenshots/register_form.png');
-});
-
-/*
-* Fill Data On Registration Form
-*/  
-
-casper.then(function() {
-	this.eachThen(json['invalidInfo'], function(response) {
-		console.log("=========" +JSON.stringify(response.data)+ "=================" +response.data.uemail);
-		reusable.registerToApp(response.data, casper, function() {
-			if (response.data.uname == "") {
-				var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="member"]', 'data-original-title');
-				if(errorMessage == response.data.expectedErrorMsg) {
-					casper.echo("**Error message is verified when user try to login with blank username**");
-				} else {
-					console.log("**Error : Error Message Is Not Correct**");
-				}
-				casper.capture("Screenshots/Error_RegisterWithBlankUsername.png");
-			} else if (response.data.uemail == "") {
-				var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="email"]', 'data-original-title');
-				if(errorMessage == response.data.expectedErrorMsg) {
-					casper.echo("**Error message is verified when user try to login with blank email**");
-				} else {
-					console.log("**Error : Error Message Is Not Correct**");
-				}
-				casper.capture("Screenshots/Error_RegisterWithBlankEmail.png");
-			} else if (response.data.upass == "") {
-				var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="pw"]', 'data-original-title');
-				if(errorMessage == response.data.expectedErrorMsg) {
-					casper.echo("**Error message is verified when user try to login with blank password**");
-				} else {
-					console.log("**Error : Error Message Is Not Correct**");
-				}
-				casper.capture("Screenshots/Error_RegisterWithBlankPassword.png");
-			} else if (response.data.fullName == "") {
-				var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="name"]', 'data-original-title');
-				if(errorMessage == response.data.expectedErrorMsg) {
-					casper.echo("**Error message is verified when user try to login with blank fullname**");
-				} else {
-					console.log("**Error : Error Message Is Not Correct**");
-				}
-				casper.capture("Screenshots/Error_RegisterWithBlankFullName.png");
-			} else if (response.data.imID == "") {
-				var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
-				if(errorMessage == response.data.expectedErrorMsg) {
-					casper.echo("**Error message is verified when user try to login with blank im-ID**");
-				} else {
-					console.log("**Error : Error Message Is Not Correct**");
-				}
-				casper.capture("Screenshots/Error_RegisterWithBlankImID.png");
-			} else if (response.data.birthday == "") {
-				var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
-				if(errorMessage == response.data.expectedErrorMsg) {
-					casper.echo("**Error message is verified when user try to login with blank birth-date**");
-				} else {
-					console.log("**Error : Error Message Is Not Correct**");
-				}
-				casper.capture("Screenshots/Error_RegisterWithBlankBirthday.png");
-			} else if (response.data.usignature == "") {
-				var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="signature"]', 'data-original-title');
-				if(errorMessage == response.data.expectedErrorMsg) {
-					casper.echo("**Error message is verified when user try to login with blank signature**");
-				} else {
-					console.log("**Error : Error Message Is Not Correct**");
-				}
-				casper.capture("Screenshots/Error_RegisterWithBlankSignature.png");
-			} else if (response.data.errorType == "existWithName") {console.log("+++++++++existWithName+++++++");
-				var errorMessage = casper.getElementAttribute('form[name="PostTopic"] #userAvailStatus', 'data-original-title');
-				console.log("========errorMessage===============================" +errorMessage);
-				if(errorMessage == response.data.expectedErrorMsg) {
-					casper.echo("**Error message is verified when user try to login with existing username**");
-				} else {
-					console.log("**Error : Error Message Is Not Correct**");
-				}
-				casper.capture("Screenshots/Error_RegisterWithExistUsername.png");
-			} else {
-				var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="email"]', 'data-original-title');
-				if(errorMessage == response.data.expectedErrorMsg) {
-					casper.echo("**Error message is verified when user try to login with invalid email**");
-				} else {
-					console.log("**Error : Error Message Is Not Correct**");
-				}
-				casper.capture("Screenshots/Error_RegisterWithInvalidEmail.png");
-			}
+	casper.then(function() {
+		clickOnRegisterLink(casper, function() {
+			casper.log('Successfully open register form.....', 'info');
 		});
 	});
-});   
-
-casper.wait(5000,function(){
-	this.capture('Screenshots/register_submit.png');
-});
-
-
-casper.then(function() {
-	reusable.registerToApp(json['validInfo'], casper, function() {
-		console.log("Successfully registered on forum....");
+	
+	casper.wait(5000, function() {
+		this.capture(screenShotsDir + 'register_form.png');
 	});
-});
-
-casper.wait(5000,function(){
-	this.capture('Screenshots/register_submit.png');
-});
-
-casper.then(function() {
-	var message = this.fetchText('div.bmessage');
-	var successMsg = message.substring(0, message.indexOf('<'));
-	var expectedSuccessMsg = json['validInfo'].expectedSuccessMsg;
-	if(successMsg.trim() == expectedSuccessMsg.trim()) {
-		casper.echo("**Error message is verified when user successfully registered**");
-	} else {
-		console.log("**Error : Error Message Is Not Correct**");
-	}
-});
-
-casper.then(function() {
-	reusable.backToCategory(casper, function(){
-		console.log("Successfully back to category");
+	
+	/*
+	* Fill Blank/Invalid Data On Registration Form
+	*/ 
+	
+	casper.then(function() {
+		this.eachThen(json['invalidInfo'], function(response) {
+			casper.log('Response Data : ' +JSON.stringify(response.data), 'info');
+			var responseData = response.data;
+			registerToApp(response.data, casper, function() {
+				var errorMessage = '';
+				var msgTitle = '';
+				if (response.data.expectedErrorMsg)
+					var expectedErrorMsg = response.data.expectedErrorMsg;
+				if (response.data.uname == '') {
+					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="member"]', 'data-original-title');
+					msgTitle = 'BlankUsername';
+				} else if (response.data.uemail == '') {
+					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="email"]', 'data-original-title');
+					msgTitle = 'BlankEmail';
+				} else if (response.data.upass == '') {
+					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="pw"]', 'data-original-title');
+					msgTitle = 'BlankPassword';
+				} else if (response.data.fullName == '') {
+					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="name"]', 'data-original-title');
+					msgTitle = 'BlankFullname';
+				} else if (response.data.imID == '') {
+					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+					msgTitle = 'BlankIM_ID';
+				} else if (response.data.birthday == '') {
+					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
+					msgTitle = 'BlankBirthday';
+				} else if (response.data.errorType == 'existWithName') {
+					casper.wait('5000', function() {
+						errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
+						expectedErrorMsg = responseData.errorMsg1+ '"' +responseData.uname+ '"' +responseData.errorMsg2; 
+						msgTitle = 'ExistUsername';
+					});
+				} else if (response.data.errorType == 'existWithEmail') {
+					casper.wait('5000', function() {
+						errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
+						msgTitle = 'ExistEmail';
+					});
+				} else if (response.data.errorType == 'existWithUsernameAndEmail') {
+					casper.wait('5000', function() {
+						errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
+						msgTitle = 'ExistUsernameAndEmail';
+					});
+				} else if (response.data.errorType == 'invalidBirthday') {
+					casper.wait('5000', function() {
+						errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
+						msgTitle = 'InvalidBday';
+					});
+				} else if (response.data.errorType == 'invalidEmail') {
+					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="email"]', 'data-original-title');
+					msgTitle = 'InvalidEmail';
+				}
+				
+				casper.wait('3000', function() {
+					verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
+				});
+			});
+		});
+	});   
+	
+	/*
+	* Fill Valid Data On Registration Form
+	*/
+	
+	casper.then(function() {
+		registerToApp(json['validInfo'], casper, function() {
+			casper.log('Successfully registered on forum....', 'info');
+		});
 	});
-});
 
-casper.wait(5000, function() {
-	this.capture('Screenshots/backToCategory.png');
-});
+	casper.wait(5000,function(){
+		this.capture(screenShotsDir + 'register_submit.png');
+	});
+	
+	/*
+	* Verify For Email Verification Message
+	*/
+
+	casper.then(function() {
+		var pendingEmailStatus = this.exists('div.bmessage');
+		if (pendingEmailStatus) {
+			var message = this.fetchText('div.bmessage');
+			var successMsg = message.substring(0, message.indexOf('<'));
+			var expectedSuccessMsg = json['validInfo'].expectedSuccessMsg;
+			if(successMsg.trim() == expectedSuccessMsg.trim()) {
+				casper.log('**Error message is verified when user successfully registered**' , 'info');
+			} else {
+				casper.log('**Error : Error Message Is Not Correct**', 'info');
+			}
+			
+			this.then(function() {
+				backToCategory(casper, function(){
+					casper.log('Successfully back to category', 'info');
+				});
+			});
+			
+			this.wait(5000, function() {
+				casper.capture(screenShotsDir + 'backToCategory.png');
+			});
+		} 
+	});
+	
+	/*
+	* Click On Logout Link
+	*/
+	
+	casper.then(function() {
+		forumLogin.logoutFromApp(casper, function(){
+			casper.log('Successfully logout from application', 'info');
+		});
+			
+		this.wait(5000, function() {
+			casper.capture(screenShotsDir + 'logout.png');
+		});
+	});
+};
 
 /*
-* Click On Logout Link
+* Method For Clicking On Register Link
 */
 
-casper.then(function() {
-	reusable.logoutFromApp(casper, function(){
-		console.log("Successfully logout from application");
-	});
-});
+clickOnRegisterLink = function(driver, callback) {
+	driver.click('.pull-right a');
+	return callback();
+};
 
-casper.wait(5000, function() {
-	this.capture('Screenshots/logout.png');
-});
+/*
+* Method For Fill Data On Registration Form
+*/
 
-casper.run();
+registerToApp = function(data, driver, callback) {
+	driver.fill('form[action="/register/create_account"]', {
+		'member' : data.uname,
+		'email': data.uemail,
+		'pw' : data.upass,
+		'name' : data.fullName,
+		'name_private' : true,
+		'imID' : data.imID,
+		'signature' : data.usignature
+	}, false);
+	driver.sendKeys('input[name="birthDatepicker"]', data.birthday, {reset : true});
+	driver.click('form[action="/register/create_account"] button');
+	return callback();
+};
 
+/*
+* Method For Verify Error Message On Registration Form After Submitting Form
+*/
+
+verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver) {
+	if((errorMessage == expectedErrorMsg) || (errorMessage.indexOf(expectedErrorMsg) > -1)) {
+		driver.log('**Error message is verified when user try to register with ' +msgTitle, 'info');
+	} else {
+		driver.log("**Error : Error Message Is Not Correct**", 'info');
+	}
+	driver.capture(screenShotsDir + 'Error_RegisterWith' +msgTitle+ '.png');
+}
+
+/*
+* Call Method When User Will Click On "Back To Category" Link
+*/
+
+backToCategory = function(driver, callback) {
+	driver.click('a[href="/categories"]');
+	return callback();
+};
 
