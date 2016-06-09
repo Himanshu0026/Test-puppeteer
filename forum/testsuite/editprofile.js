@@ -1,4 +1,4 @@
-// This file is used for editing user's profile and account setting
+// This file is used for testing purpose for editing user's profile and account setting. Screenshots are taken for each step.
 
 var forumLogin = require('./forum_login.js');
 var utils = require('./utils.js');
@@ -11,7 +11,7 @@ var editProfile = module.exports = {};
 
 editProfile.featureTest = function(casper) {
 	var screenShotsDir = config.screenShotsLocation + "editProfile/";
-	//Staring testing with configured URL
+	// Staring testing with configured URL
 	casper.start(config.url, function() {
 		this.echo("Title of the page : " +this.getTitle());
 	});
@@ -27,6 +27,7 @@ editProfile.featureTest = function(casper) {
 		
 	});
 
+	// After click on log-in button, this methos is used for taking screenshot after loading the page
 	casper.wait(5000, function() {
 		this.capture(screenShotsDir+"loggedIn_user.png");
 	});
@@ -41,6 +42,7 @@ editProfile.featureTest = function(casper) {
 		});
 	});
 
+	// After click on user's icon, this methos is used for taking screenshot after a given specific time.
 	casper.wait(5000, function() {
 		this.capture(screenShotsDir+"userIcon.png");
 	});
@@ -56,12 +58,13 @@ editProfile.featureTest = function(casper) {
 		});
 	});
 
+	// After click on edit profile link, this methos is used for taking screenshot after loading the page
 	casper.wait(5000, function() {
 		this.capture(screenShotsDir+"useredit_form.png");
 	});
 
 	/*
-	* Edit data on user's edit profile with invalid data
+	* Edit data on user's edit profile with invalid data. Edit prfile page is changed after 	  implementation. This code is commented for backup.
 	*/  
 
 	/*casper.then(function() {
@@ -95,11 +98,13 @@ editProfile.featureTest = function(casper) {
 	*/
 
 	casper.then(function() {
-		editProfile.clickOnAccountSetting(casper, function() {
+		var element = 'a[href="/register?action=preferences&userid=4533234"]';
+		utils.clickOnElement(casper,element, function() {
 			casper.log("clicked on user's account settings linkb successfully", 'info');
 		});
 	});
 
+	// After click on account setting link, this methos is used for taking screenshot after loading the page
 	casper.wait(5000, function() {
 		this.capture(screenShotsDir+"userAccountSetting_form.png");
 	});
@@ -114,6 +119,7 @@ editProfile.featureTest = function(casper) {
 		});
 	});
 
+	// this method is used for taking screenshot after filling-up values in account setting page
 	casper.wait(5000, function() {
 		this.capture(screenShotsDir+"errorOnBlankEmail.png");
 	});
@@ -128,6 +134,7 @@ editProfile.featureTest = function(casper) {
 		});
 	});
 
+	// this method is used for taking screenshot after filling-up values in account setting page
 	casper.wait(5000, function() {
 		this.capture(screenShotsDir+"errorOnInvalidEmail.png");
 	});
@@ -142,12 +149,13 @@ editProfile.featureTest = function(casper) {
 		});
 	});
 
+	// this method is used for taking screenshot after filling-up values in account setting page
 	casper.wait(5000, function() {
 		this.capture(screenShotsDir+"updatedAccountSetting.png");
 	});
 
 	/*
-	* delete user's account
+	* delete user's account. This method is commented because of deletion of account every time
 	*/
 
 	/*casper.then(function() {
@@ -170,6 +178,7 @@ editProfile.featureTest = function(casper) {
 		});
 	});
 
+	// this method is used for taking screenshot after successfully logged-out from forum
 	casper.wait(5000, function() {
 		this.capture(screenShotsDir+"logout.png");
 	});
@@ -179,29 +188,10 @@ editProfile.featureTest = function(casper) {
 
 // method definitions are written here 
 
-
-// method to click on user's icon
-var clickOnUserIcon = function(driver,callback) {
-	driver.click('.default-user');
-	return callback();
-};
-
-// method to click on user's edit profile
-var clickOnEditProfile = function(driver,callback) {
-	driver.click('a[href="/register/register?edit=1&userid=4533234"]');
-	return callback();
-};
-
 // method for editing user's profile page
 editProfile.editToApp = function(birthday, driver, callback){
 	driver.sendKeys('input[id="birthDatepicker"]', birthday);
 	driver.click('form[action="/register"] button[name="submit"]');
-	return callback();
-};
-
-// method to click on user's account setting
-var clickOnAccountSetting = function(driver,callback) {
-	driver.click('a[href="/register?action=preferences&userid=4533234"]');
 	return callback();
 };
 
