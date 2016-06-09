@@ -111,17 +111,45 @@ forumRegister.featureTest = function(casper) {
 	});
 	
 	/*
-	* Click On Logout Link
+	* Verify For Email Verification Message
 	*/
 
+	casper.then(function() {
+		var pendingEmailStatus = this.exists('div.bmessage');
+		if (pendingEmailStatus) {
+			var message = this.fetchText('div.bmessage');
+			var successMsg = message.substring(0, message.indexOf('<'));
+			var expectedSuccessMsg = json['validInfo'].expectedSuccessMsg;
+			if(successMsg.trim() == expectedSuccessMsg.trim()) {
+				casper.log('**Error message is verified when user successfully registered**' , 'info');
+			} else {
+				casper.log('**Error : Error Message Is Not Correct**', 'info');
+			}
+			
+			this.then(function() {
+				backToCategory(casper, function(){
+					casper.log('Successfully back to category', 'info');
+				});
+			});
+			
+			this.wait(5000, function() {
+				casper.capture(screenShotsDir + 'backToCategory.png');
+			});
+		} 
+	});
+	
+	/*
+	* Click On Logout Link
+	*/
+	
 	casper.then(function() {
 		forumLogin.logoutFromApp(casper, function(){
 			casper.log('Successfully logout from application', 'info');
 		});
-	});
-
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'logout.png');
+			
+		this.wait(5000, function() {
+			casper.capture(screenShotsDir + 'logout.png');
+		});
 	});
 };
 
@@ -165,4 +193,13 @@ verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver) {
 	}
 	driver.capture(screenShotsDir + 'Error_RegisterWith' +msgTitle+ '.png');
 }
+
+/*
+* Call Method When User Will Click On "Back To Category" Link
+*/
+
+backToCategory = function(driver, callback) {
+	driver.click('a[href="/categories"]');
+	return callback();
+};
 
