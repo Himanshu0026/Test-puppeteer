@@ -38,5 +38,3 @@ switch (testArg) {
 	casper.exit();
 };
 
-
-

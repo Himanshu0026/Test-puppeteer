@@ -1,5 +1,5 @@
 {
-	"screenShotsLocation": "../screenshots/",
+	"screenShotsLocation": "<home directory>/Screenshots/",
 	"url": "http://automation.websitetoolbox.com/",
 	"app": {	
 		"verbose" : true,
