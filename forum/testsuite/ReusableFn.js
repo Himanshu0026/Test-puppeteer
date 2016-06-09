@@ -19,25 +19,20 @@ exports.clickOnUserIcon = function(driver,callback) {
 
 // method for click on user's edit profile
 exports.clickOnEditProfile = function(driver,callback) {
-	driver.click('a[href="/register/register?edit=1&userid=24440696"]');
+	driver.click('a[href="/register/register?edit=1&userid=4533234"]');
 	return callback();
 };
 
 // method for click on user's account setting
 exports.clickOnAccountSetting = function(driver,callback) {
-	driver.click('a[href="/register?action=preferences&userid=24440696"]');
+	driver.click('a[href="/register?action=preferences&userid=4533234"]');
 	return callback();
 };
 
 //method for logout from application
 exports.logoutFromApp = function(driver, callback) {
-	driver.click('button.dropdown-toggle span span.username');
-	driver.click('#logout');
-	return callback();
-};
-
-exports.backToCategory = function(driver, callback) {
-	driver.click('a[href="/categories"]');
+	//driver.click('button.dropdown-toggle span span.username');
+	driver.click('a#logout.fb_logout');
 	return callback();
 };
 
@@ -229,37 +224,38 @@ var contentMsg = driver.getElementInfo('div.post-body-content:nth-last-child(2)'
 };
 
 // method for editing user's profile page
-exports.editToApp = function(usertitle, whoIsRobot, whoAreYou, driver, callback){
-	driver.fill('form[action="/register"]', {
-			'field102611' : whoAreYou
-		}, false); 
-		driver.sendKeys('input[id="field102587_1"]', true);
-		driver.click('#change_user_title small');
-		driver.fill('form[action="/register"]',{
-			'usertitle' : usertitle
-		},false);
-		driver.click('.editable-buttons');
+exports.editToApp = function(birthday, driver, callback){
+		driver.sendKeys('input[id="birthDatepicker"]', birthday);
 		driver.click('form[action="/register"] button[name="submit"]');
 		return callback();
 };
 
-//method for editing user's account setting.
-exports.editToAccount = function(userName, password, email, driver, callback) {
-	driver.click('#change_user_name small');
-	driver.fill('form[action="/register"]',{
-		'new_username' : userName
-	},false);
-	driver.click('.editable-buttons');
+// method for editing account setting
+exports.editAccountSetting = function(password, email, driver, callback) {
+	driver.click('div#usrPwd .change-value');
+	driver.wait(5000, function() {
+		this.sendKeys('div.editable-input input[type="password"]', password);
+		this.click('div.editable-buttons button[type="submit"]');
+		this.click('div#usrEmail .change-value');
+		this.wait(5000, function() {
+			driver.sendKeys('div.editable-input input[class="form-control input-small"]', email, {reset: true});
+			driver.click('div.editable-buttons button[type="submit"]');
+			driver.wait(5000, function() {
+				//preference
+				driver.click('#option2');
+				driver.click('#opt1');
+				driver.click('#INVS', {checked : true});
+				driver.click('form[action="/register"] button[type="submit"]');			
+			});
+		});
+	});
 	return callback();
 };
 
-
-//method to forgot password
-exports.forgotPassword = function(username, Email, driver, callback) {
-	driver.fill('form[name="lost_pw_form"]', {
-		'member' : username,
-		'email' : Email	
-	}, true);
+//method for deleting user's account
+exports.deleteAccount = function(driver, callback) {
+	driver.click('#deleteAccountDialog');
+	driver.click('#deleteAccount');
 	return callback();
 };
 
