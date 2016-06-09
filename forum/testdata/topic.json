@@ -6,7 +6,7 @@
 		"password": "rk@123",
 		"title" : "ping",
 		"content" : "hey there..!!",
-		"category" : "General"
+		"category" : "Automation"
 	},
 	
 	"poll" : {
@@ -23,6 +23,7 @@
 	},
 
 	"editTopic" : {
-		"content" : "This topic is edited"
+		"title" : "HolyDay",
+		"content" : "sunday is funday"
 	}
 }
