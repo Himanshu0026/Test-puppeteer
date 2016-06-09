@@ -2,11 +2,13 @@ var config = require("./config/config.json");
 
 var casper = require('casper').create(config.app);
 
+<<<<<<< Updated upstream
 var testArg = "";
 if(casper.cli.args.length>0){
-
+=======
 var testArg = "forgotpassword";
 if(casper.cli.args.length>0)
+>>>>>>> Stashed changes
 	testArg = casper.cli.args[0];
 	casper.echo("Started testing for the feature: " + testArg +"\n");
 }else{
@@ -31,12 +33,15 @@ switch (testArg) {
     case "postreply":
         
         break;
+<<<<<<< Updated upstream
     case "editprofile":
 	var editProfile = require("./testsuite/editprofile.js");
 	editProfile.featureTest(casper);
+=======
     case "forgotpassword":
         var forgotpwd = require("./testsuite/forgotPassword.js");
 	forgotpwd.featureTest(casper);
+>>>>>>> Stashed changes
 	casper.run();
         break;
     default:
