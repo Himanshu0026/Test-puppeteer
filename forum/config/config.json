@@ -1,5 +1,5 @@
 {
-	"screenShotsLocation": "/home/monika/screenshots/",
+	"screenShotsLocation": "../screenshots/",
 	"url": "http://automation.websitetoolbox.com/",
 	"app": {	
 		"verbose" : true,
