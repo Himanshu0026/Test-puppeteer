@@ -1,0 +1,27 @@
+{
+	"newTopic" : {    
+		"username": "rajatk",
+		"password": "rk@123",
+		"title" : "ping",
+		"content" : "hey there..!!",
+		"category" : "Automation"
+	},
+	
+	"poll" : {
+		"pollQues" : "Are U Happy",
+		"publicCheckbox" : true,
+		"option1" : "YES",
+		"option2" : "NO",
+		"multiple" : false,
+		"timeoutFormat": 3
+	},
+
+	"replyTopic" : {
+		"content" : "This is rajat Kesharwani only test test"
+	},
+
+	"editTopic" : {
+		"title" : "HolyDay",
+		"content" : "sunday is funday"
+	}
+}

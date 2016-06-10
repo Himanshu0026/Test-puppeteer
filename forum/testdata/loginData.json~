@@ -1,0 +1,44 @@
+{
+	"url" : "http://beta12.websitetoolbox.com/", 
+	"username": "sangita",
+	"password": "sangita",
+	
+    "ValidCredential" : {
+	"username": "sangita",
+	"password": "sangita"
+	},
+
+     "ValidEmail" : {
+	"username": "sangita@websitetoolbox.com",
+	"password": "sangita"
+	},
+
+
+     "InvalidPassowrd" : {
+	"username": "sangita",
+	"password": "sangita123",
+	"ExpectedErrorMessage" : "Error: The password you entered is incorrect"
+	},
+
+    "InvalidUsername" : {
+	"username": "sangitajrt",
+	"password": "sangita",
+	"ExpectedErrorMessage" : "Error: There is no account with the username you specified."
+	
+	},
+
+    "BlankField" : {
+	"username": "",
+	"password": "",
+	"ExpectedErrorMessage" : "Error: You must enter your username or email address."
+	},
+
+    "BlankPassword" : {
+	"username": "sangita",
+	"password": "",
+	"ExpectedErrorMessage" : "Error: You must enter your password."
+	}
+
+	
+
+}
