@@ -1,9 +1,9 @@
 {
-	"screenShotsLocation": "/home/hotam/Screenshots/",
+	"screenShotsLocation": "/home/monika/screenshots/",
 	"url": "http://automation.websitetoolbox.com/",
 	"app": {	
 		"verbose" : true,
-	 	"logLevel" : "debug",
+	 	"logLevel" : "info",
 		"viewportSize": { 
 			"width": 1024, 
 			"height": 768 
