@@ -38,7 +38,7 @@ forumLogin.featureTest = function(casper) {
 	});
 
 	//test case for login to application with invalid username and verify error message
-	casper.thenOpen(json['url']);
+	casper.thenOpen(config.url);
 	casper.then(function(){
 		forumLogin.loginToApp(json['InvalidUsername'].username, json['InvalidUsername'].password, casper, function(){
 			casper.log("*****login with invalid username and password and verify error message*****");
@@ -60,7 +60,7 @@ forumLogin.featureTest = function(casper) {
 	});
 
 	//test case for login to application by leaving blank username and password and verify error message
-	casper.thenOpen(json['url']);
+	casper.thenOpen(config.url);
 	casper.then(function(){
 		forumLogin.loginToApp(json['BlankField'].username, json['BlankField'].password, casper, function(){
 			casper.log("*****login by leaving blank username and password and verify error message*****");
@@ -82,7 +82,7 @@ forumLogin.featureTest = function(casper) {
 	});
 
 	//test case for login to application by leaving password field blank and verify error message
-	casper.thenOpen(json['url']);
+	casper.thenOpen(config.url);
 	casper.then(function(){
 		forumLogin.loginToApp(json['BlankPassword'].username, json['BlankPassword'].password, casper, function(){
 			casper.log("*****login by leaving blank username and password and verify error message*****");
@@ -103,7 +103,7 @@ forumLogin.featureTest = function(casper) {
 	});
 
 	//test case for login to application with valid valid username and password then logout from application
-	casper.thenOpen(json['url']);
+	casper.thenOpen(config.url);
 	casper.then(function(){
 		forumLogin.loginToApp(json['ValidCredential'].username, json['ValidCredential'].password, casper, function(){
 			casper.log("User has been successfully login to application");
@@ -117,7 +117,7 @@ forumLogin.featureTest = function(casper) {
 	});
 
 	//test case for login to application with valid valid email and password then logout from application
-	casper.thenOpen(json['url']);
+	casper.thenOpen(config.url);
 	casper.then(function(){
 		forumLogin.loginToApp(json['ValidEmail'].username, json['ValidEmail'].password, casper, function(){
 			casper.log("User has been successfuly login to application");

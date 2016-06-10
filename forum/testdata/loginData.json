@@ -1,5 +1,5 @@
 {
-	"url" : "http://beta12.websitetoolbox.com/", 
+
 	"username": "sangita",
 	"password": "sangita",
 	
@@ -17,7 +17,7 @@
      "InvalidPassowrd" : {
 	"username": "sangita",
 	"password": "sangita123",
-	"ExpectedErrorMessage" : "Error: The password you entered is incorrect"
+	"ExpectedErrorMessage" : "Error: The password you entered is incorrect."
 	},
 
     "InvalidUsername" : {
