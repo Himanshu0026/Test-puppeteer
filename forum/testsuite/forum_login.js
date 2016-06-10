@@ -17,12 +17,13 @@ forumLogin.featureTest = function(casper) {
 	//test case for login to application with invalid password and verify error message
 	casper.then(function(){
 		forumLogin.loginToApp(json['InvalidPassowrd'].username, json['InvalidPassowrd'].password, casper, function(){
-			console.log("*****login with valid username and invalid password and verify error message*****");
+			casper.log("*****login with valid username and invalid password and verify error message*****");
 		});
 	});
-	casper.wait(5000);
+
+	//This 3 seconds of wait has been put to load the page
+	casper.wait(3000);
 	casper.then(function() {
-		this.capture(screenShotsDir + "ErrorOnInvalidPassword.png");
 		var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
 		this.echo(errorMessage.indexOf(json['InvalidPassowrd'].ExpectedErrorMessage));
 		    	this.echo(errorMessage.trim());
@@ -40,10 +41,12 @@ forumLogin.featureTest = function(casper) {
 	casper.thenOpen(json['url']);
 	casper.then(function(){
 		forumLogin.loginToApp(json['InvalidUsername'].username, json['InvalidUsername'].password, casper, function(){
-			console.log("*****login with invalid username and password and verify error message*****");
+			casper.log("*****login with invalid username and password and verify error message*****");
 		});
 	});
-	casper.wait(5000);
+
+	//This 3 seconds of wait has been put to load the required element on the page
+	casper.wait(3000);
 	casper.then(function() {
 		var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
 			this.echo(errorMessage);
@@ -60,10 +63,12 @@ forumLogin.featureTest = function(casper) {
 	casper.thenOpen(json['url']);
 	casper.then(function(){
 		forumLogin.loginToApp(json['BlankField'].username, json['BlankField'].password, casper, function(){
-			console.log("*****login by leaving blank username and password and verify error message*****");
+			casper.log("*****login by leaving blank username and password and verify error message*****");
 		});
 	});
-	casper.wait(5000);
+
+	//This 3 seconds of wait has been put to load the required element on the page
+	casper.wait(3000);
 	casper.then(function() {
 		var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
 			this.echo(errorMessage);
@@ -80,10 +85,11 @@ forumLogin.featureTest = function(casper) {
 	casper.thenOpen(json['url']);
 	casper.then(function(){
 		forumLogin.loginToApp(json['BlankPassword'].username, json['BlankPassword'].password, casper, function(){
-			console.log("*****login by leaving blank username and password and verify error message*****");
+			casper.log("*****login by leaving blank username and password and verify error message*****");
 		});
 	});
-	casper.wait(5000);
+	//This 3 seconds of wait has been put to load the required element on the page
+	casper.wait(3000);
 	casper.then(function() {
 		var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
 			this.echo(errorMessage);
@@ -100,13 +106,13 @@ forumLogin.featureTest = function(casper) {
 	casper.thenOpen(json['url']);
 	casper.then(function(){
 		forumLogin.loginToApp(json['ValidCredential'].username, json['ValidCredential'].password, casper, function(){
-			console.log("User has been successfully login to application");
+			casper.log("User has been successfully login to application");
 		});
 	});
 
 	casper.then(function() {
 		forumLogin.logoutFromApp(casper, function(){
-			console.log("Successfully logout from application");
+			casper.log("Successfully logout from application");
 		});
 	});
 
@@ -114,16 +120,18 @@ forumLogin.featureTest = function(casper) {
 	casper.thenOpen(json['url']);
 	casper.then(function(){
 		forumLogin.loginToApp(json['ValidEmail'].username, json['ValidEmail'].password, casper, function(){
-			console.log("User has been successfuly login to application");
+			casper.log("User has been successfuly login to application");
 		});
 	});
-
 	casper.then(function() {
 		forumLogin.logoutFromApp(casper, function(){
-			console.log("Successfully logout from application");
+			casper.log("Successfully logout from application");
 		});
 	});
 };
+
+
+/***These are the function which has been called in above test cases and also will be used in other js file as per requirement**********/
 
 // method for login to application by passing username and password
 forumLogin.loginToApp = function(username, password, driver,callback) {

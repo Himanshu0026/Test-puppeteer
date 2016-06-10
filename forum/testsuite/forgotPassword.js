@@ -1,7 +1,6 @@
-
-'use strict';
 //----- This js file covers all the valid and invalid scenarios for forgot functionality from login window comes from home page---------//
 
+'use strict';
 var json = require('../testdata/forgotpasswordData.json');
 var config = require('../config/config.json');
 
@@ -18,7 +17,7 @@ forgotpwd.featureTest = function(casper) {
 	// verify title of the forgot password page
 	casper.then(function() {
 		forgotpwd.verifyForgotPasswordLink(casper, function(){
-			console.log("Forgot password link is verified");
+			casper.log("Forgot password link is verified");
 		});
 
 	});
@@ -27,15 +26,14 @@ forgotpwd.featureTest = function(casper) {
 
 	//verify forgot password functionality with invalid scenarios and verify error message
 	casper.then(function() {
-	this.eachThen(json['invalidInfo'], function(response) {
-			console.log("=========" +JSON.stringify(response.data));
+	   this.eachThen(json['invalidInfo'], function(response) {
+		casper.log("=========" +JSON.stringify(response.data));
 		forgotpwd.forgotPassword(response.data, casper, function() {
-		var ActualMessage="";
+			var ActualMessage="";
 			var responseData = response.data;
 			//This is to verify error message while submitting request for reset password with blank username and Email id
 			if(responseData.errorType == "Blank Username and Email") {
 					 ActualMessage = casper.getElementAttribute('form[name="lost_pw_form"] input[name="member"]', 'data-original-title');
-					console.log("******invalid username******"+ActualMessage.trim());
 					if(ActualMessage.trim() == responseData.ExpectedMessage){
 						casper.log("Error message is verified while submit request with blank username and email", 'info');
 					}else {
@@ -46,7 +44,6 @@ forgotpwd.featureTest = function(casper) {
 			}else if(responseData.errorType == "Invalid Username") {
 				casper.wait(5000, function() {
 					var ActualMessage = casper.fetchText('div.alert.alert-danger');
-					console.log("******invalid username******"+ActualMessage.trim());
 					if(ActualMessage.trim() == responseData.ExpectedMessage){
 						casper.log("Error message in case of invalid username has been verified", 'info');
 					}else {
@@ -58,7 +55,6 @@ forgotpwd.featureTest = function(casper) {
 			} else if(response.data.errorType == "Invalid Email") {
 				casper.wait(5000, function() {
 					var ActualMessage = casper.fetchText('div.alert.alert-danger');
-					console.log("******invalid username******"+ActualMessage.trim());
 					if(ActualMessage.trim() == responseData.ExpectedMessage){
 						casper.log("Error message in case of invalid Email has been verified", 'info');
 					}else {
@@ -70,7 +66,6 @@ forgotpwd.featureTest = function(casper) {
 			} else if(response.data.errorType == "Invalid Username and Email") {
 				casper.wait(5000, function() {
 					var ActualMessage = casper.fetchText('div.alert.alert-danger');
-					console.log("******invalid username******"+ActualMessage.trim());
 					if(ActualMessage.trim() == responseData.ExpectedMessage){
 						casper.log("Error message is verified while submitting request with invalid username and email", 'info');
 					}else {
@@ -84,36 +79,50 @@ forgotpwd.featureTest = function(casper) {
 	       });
 	});
 
+
 	/*************** This code has been commented because it is incomplete ******************/
 	//verify forgot password functionality with valid scenarios and verify success message
 	/*casper.then(function() {
 	this.eachThen(json['validinfo'], function(response) {
-			console.log("=========" +JSON.stringify(response.data));
+			casper.log("=========" +JSON.stringify(response.data));
 		forgotpwd.forgotPassword(response.data, casper, function() {
 		var ActualMessage="";
 			var responseData = response.data;
 			//This is to verify success message after submitting request for reset password with valid email id
-			if(responseData.errorType == "Valid Email only") {
-					ActualMessage = casper.fetchText('div.text-center.bmessage');
-					var ActualMessage1 = casper.fetchText('div.text-center small');
-					ActualMessage = ActualMessage.replace(ActualMessage1, "");
-					console.log("******invalid username******"+ActualMessage.trim());
-					if(ActualMessage.trim() == responseData.ExpectedMessage){
+			if(responseData.validationType == "valid email only") {
+					casper.waitforSelector("div.text-center.bmessage", 
+					function success(){			
+						ActualMessage = casper.fetchText('div.text-center.bmessage');
+						var ActualMessage1 = casper.fetchText('div.text-center small');
+						ActualMessage = ActualMessage.replace(ActualMessage1, "");
+						casper.log("******valid username******"+ActualMessage.trim());
+						test.assertEquals(ActualMessage.trim(), responseData.ExpectedMessage);
+						this.click('small a[href="/categories"]');
+
+						forgotpwd.verifyForgotPasswordLink(casper, function(){
+							casper.log("Forgot password link is verified");
+						});
+					function fail() {
+						test.assertEquals(ActualMessage.trim(), responseData.ExpectedMessage);
+						casper.capture(screenShotsDir+"Error_validEmail.png");
+					});
+
+					/*if(ActualMessage.trim() == responseData.ExpectedMessage){
 						casper.log("successful message is verified while submit request with vaild email only, 'info');
 						this.click('small a[href="/categories"]');
 
 						forgotpwd.verifyForgotPasswordLink(casper, function(){
-							console.log("Forgot password link is verified");
+							casper.log("Forgot password link is verified");
 						});
 					}else {
 						casper.log("Error Occurred", "ERROR");
 						casper.capture(screenShotsDir+"Error_validEmail.png");
 					}
 			//This is to verify success message after submitting request for reset password with valid username
-			}else if(responseData.errorType == "Valid Username only") {
+			}else if(responseData.validationType == "valid username only") {
 				casper.wait(5000, function() {
 					ActualMessage = casper.fetchText('div.alert.alert-danger');
-					console.log("******invalid username******"+ActualMessage.trim());
+					casper.log("******invalid username******"+ActualMessage.trim());
 					if(ActualMessage.trim() == responseData.ExpectedMessage){
 						casper.log("successful message is verified while submit request with vaild username only", 'info');
 						this.click('small a[href="/categories"]');
@@ -123,10 +132,10 @@ forgotpwd.featureTest = function(casper) {
 					}
 				});
 			//This is to verify success message after submitting request for reset password with valid username and email id
-			} else if(response.data.errorType == "Valid Username and Email") {
+			} else if(response.data.validationType == "Valid username and email") {
 				casper.wait(5000, function() {
 					ActualMessage = casper.fetchText('div.alert.alert-danger');
-					console.log("******invalid username******"+ActualMessage.trim());
+					casper.log("******invalid username******"+ActualMessage.trim());
 					if(ActualMessage.trim() == responseData.ExpectedMessage){
 						casper.log("successful message is verified while submit request with vaild username and email only", 'info');
 						this.click('small a[href="/categories"]');
@@ -145,31 +154,33 @@ forgotpwd.featureTest = function(casper) {
 };
 
 
-	//method to send forgot password request after filling username/email
-	forgotpwd.forgotPassword = function(data, driver, callback) {
-		driver.fill('form[name="lost_pw_form"]', {
-			'member' : data.username,
-			'email' : data.email	
-		}, false); 
-		driver.click('input[name="Submit"]');
-		return callback();
-	};
+/***These are the function which has been called in above test cases and also will be used in other js file as per requirement**********/
 
-	//method to verify forgot password link from home page
-	forgotpwd.verifyForgotPasswordLink = function(driver, callback) {
-		driver.click('#td_tab_login');
-		driver.click('#anchor_tab_forget_password');
-		driver.wait(7000, function() {
-		if(driver.getTitle().indexOf("Lost Your Password?")>=0) {
-			console.log("Lost Your Password page is redirected");
-		}else{
-			console.log("Error occurred on forgot Password");
-			driver.capture("ScreenShots/ForgotPasswordError.png");
-		}
-		});
-		return callback();
+//method to send forgot password request after filling username/email
+forgotpwd.forgotPassword = function(data, driver, callback) {
+	driver.fill('form[name="lost_pw_form"]', {
+		'member' : data.username,
+		'email' : data.email	
+	}, false); 
+	driver.click('input[name="Submit"]');
+	return callback();
+};
 
-	};
+//method to verify forgot password link from home page
+forgotpwd.verifyForgotPasswordLink = function(driver, callback) {
+	driver.click('#td_tab_login');
+	driver.click('#anchor_tab_forget_password');
+	driver.wait(7000, function() {
+	if(driver.getTitle().indexOf("Lost Your Password?")>=0) {
+		casper.log("Lost Your Password page is redirected");
+	}else{
+		casper.log("Error occurred on forgot Password");
+		driver.capture("ScreenShots/ForgotPasswordError.png");
+	}
+	});
+	return callback();
+
+};
 
 
 
