@@ -2,11 +2,13 @@ var config = require("./config/config.json");
 
 var casper = require('casper').create(config.app);
 
+<<<<<<< Updated upstream
 var testArg = "";
 if(casper.cli.args.length>0){
-
+=======
 var testArg = "forgotpassword";
 if(casper.cli.args.length>0)
+>>>>>>> Stashed changes
 	testArg = casper.cli.args[0];
 	casper.echo("Started testing for the feature: " + testArg +"\n");
 }else{
@@ -26,36 +28,20 @@ switch (testArg) {
 	casper.run();
         break;
     case "newtopic":
-        var newTopic = require("./testsuite/newTopic.js");
-	newTopic.featureTest(casper);
-	casper.run();
+        
         break;
     case "postreply":
-        var postAReply = require("./testsuite/postAReply.js");
-	postAReply.featureTest(casper);
-	casper.run();
+        
         break;
-    case "edittopic":
-	var editTopic = require("./testsuite/editTopic.js");
-	editTopic.featureTest(casper);
-	casper.run();
-	break;
-    case "deletetopic":
-	var deleteTopic = require("./testsuite/deleteTopic.js");
-	deleteTopic.featureTest(casper);
-	casper.run();
-	break;
-    case "poll":
-	var poll = require("./testsuite/poll.js");
-	poll.featureTest(casper);
-	casper.run();
-	break;
+<<<<<<< Updated upstream
     case "editprofile":
 	var editProfile = require("./testsuite/editprofile.js");
 	editProfile.featureTest(casper);
+=======
     case "forgotpassword":
         var forgotpwd = require("./testsuite/forgotPassword.js");
 	forgotpwd.featureTest(casper);
+>>>>>>> Stashed changes
 	casper.run();
         break;
     default:
@@ -65,11 +51,7 @@ switch (testArg) {
 	casper.echo("	newtopic");
 	casper.echo("	editprofile");
 	casper.echo("	postreply\n");
-	casper.echo("	edittopic\n");
-	casper.echo("	deletetopic\n");
-	casper.echo("	poll\n");
 	casper.echo("Relevant test data has to be fed in JSON format in files placed for each feature in '<current directory>/testData/'.");
 	casper.exit();
-
 };
 

@@ -117,7 +117,7 @@ casper.capture("login.png");
 	});
 };
 
-// method for login to application by passing username and password
+// method for login to application
 forumLogin.loginToApp = function(username, password, driver,callback) {
 	driver.click('#td_tab_login');
 	driver.fill('form[name="frmLogin"]', {
@@ -135,5 +135,5 @@ forumLogin.logoutFromApp = function(driver, callback) {
 	driver.click('#logout');
 	return callback();
 };
-
+//button[@class='dropdown-toggle']/span[@class='caret']
 

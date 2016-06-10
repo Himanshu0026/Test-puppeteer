@@ -1,0 +1,12 @@
+{
+	"screenShotsLocation": "/home/monika/screenshots/",
+	"url": "http://beta12.websitetoolbox.com/",
+	"app": {	
+		"verbose" : true,
+	 	//"logLevel" : "debug",
+		"viewportSize": { 
+			"width": 1024, 
+			"height": 768 
+		}
+	}
+}
