@@ -1,9 +1,7 @@
 {
-    "URL": "http://automation.websitetoolbox.com/",
-
     "userLogin" : {
 	"uname" : "hs123",
-	"upass" : "hhhh",
+	"upass" : "hh",
 	"ExpectedErrorMessage" : "Error: The password you entered is incorrect"
     },
 
@@ -16,20 +14,17 @@
     },
 
     "editAccountSettingWithoutEmail" : {
-	"userName" : "",
-	"upass" : "hhhh",
+	"upass" : "hh",
 	"email" : ""
     },
 
     "editAccountSettingWithInvalidEmail" : {
-	"userName" : "",
-	"upass" : "hhhh",
+	"upass" : "hh",
 	"email" : "xxxxxxxxxx"
     },
 
     "editAccountSetting" : {
-	"userName" : "hs1234",
-	"upass" : "hhhh",
+	"upass" : "hh",
 	"email" : "hotam.hbti123@gmail.com"
     }
 }

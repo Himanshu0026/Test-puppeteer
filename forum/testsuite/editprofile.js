@@ -1,202 +1,189 @@
-// This file is used for testing purpose for editing user's profile and account setting. Screenshots are taken for each step.
-
+/****This script is dedicated for editing user's profile and account setting on the forum. It covers testing of edit user's profile and account setting page with all defined validations****/
+'use strict';
 var forumLogin = require('./forum_login.js');
 var utils = require('./utils.js');
 var json = require('../testdata/editData.json');
-
-
 var config = require('../config/config.json');
 
 var editProfile = module.exports = {};
+var screenShotsDir = config.screenShotsLocation + 'editProfile/';
 
 editProfile.featureTest = function(casper) {
-	var screenShotsDir = config.screenShotsLocation + "editProfile/";
-	// Staring testing with configured URL
+	
+	//Open Forum URL And Get Title 
+	
 	casper.start(config.url, function() {
-		this.echo("Title of the page : " +this.getTitle());
+		this.log('Title of the page : ' +this.getTitle(), 'info');
 	});
 
-	/*
-	* user's login
-	*/
+	//Login To App
 
 	casper.then(function() {
 		forumLogin.loginToApp(json['userLogin'].uname, json['userLogin'].upass, casper, function() {
-			casper.log("Logged-in successfully", 'info');
+			casper.log('Logged-in successfully', 'info');
 		});
 		
 	});
 
-	// After click on log-in button, this methos is used for taking screenshot after loading the page
+	//Getting Screenshot After Successfully Logged-In
+
 	casper.wait(5000, function() {
-		this.capture(screenShotsDir+"loggedIn_user.png");
+		this.capture(screenShotsDir+ 'loggedIn_user.png');
 	});
 
-	/*
-	* click on user's icon to display pop-up for editing profile
-	*/
+	//Clicking On User's Icon To Display User's Drop-down For Editing Profile
 
 	casper.then(function() {
-		utils.clickOnElement(casper, '.default-user', function() {
-			casper.log("clicked on user's icon successfully ", 'info');
-		});
+		this.click('.default-user');
+		this.log('clicked on users icon successfully', 'info');
 	});
 
-	// After click on user's icon, this methos is used for taking screenshot after a given specific time.
+	//Getting Screenshot After clicking On User's Icon
+
 	casper.wait(5000, function() {
-		this.capture(screenShotsDir+"userIcon.png");
+		this.capture(screenShotsDir+ 'userIcon.png');
 	});
-
-	/*
-	* click on user's edit prfile link.
-	*/
+	
+	//Clicking On 'Edit Profile' link
 
 	casper.then(function() {
-		var element = 'a[href="/register/register?edit=1&userid=4533234"]';
-		utils.clickOnElement(casper, element, function() {
-			casper.log("clicked on user's edit profile link successfully", 'info');
-		});
+		this.click('a[href="/register/register?edit=1&userid=4533234"]');
+		this.log('clicked on user edit profile link successfully', 'info');
 	});
 
-	// After click on edit profile link, this methos is used for taking screenshot after loading the page
+	//Getting Screenshot After Loading Edit Profile Page
+
 	casper.wait(5000, function() {
-		this.capture(screenShotsDir+"useredit_form.png");
+		this.capture(screenShotsDir+ 'useredit_form.png');
 	});
+	
+	//Edit Blank/Invalid Data On User's Edit Profile Page	 
 
-	/*
-	* Edit data on user's edit profile with invalid data. Edit prfile page is changed after 	  implementation. This code is commented for backup.
-	*/  
-
-	/*casper.then(function() {
-		editToApp(json['userEditWithoutData'].birthday, casper, function(){
-			casper.log("Mandatory Fields are necessary", 'error');
+	casper.then(function() {
+		editToApp(json['userEditWithoutData'].birthday, casper, function() {
+			casper.log('Mandatory Fields are necessary', 'error');
 		});
 	});
+
+	//Getting Screenshot After Leaving Input Field Blank In User's Edit Profile Page
 
 	casper.wait(5000,function(){
-    		this.capture(screenShotsDir+"errorOnEditProfile.png");
+    		this.capture(screenShotsDir+ 'errorOnEditProfile.png');
 
-	});*/
+	});
+	
+	//Edit Valid Data On User's Edit Profile Page
 
-	/*
-	* Edit data on user's edit profile with valid data
-	*/  
-
-	/*casper.then(function() {
+	casper.then(function() {
 		editToApp(json['userEdit'].birthday, casper, function(){
-			casper.log("values are successfully updated", 'info');
+			casper.log('values are successfully updated', 'info');
 		});
 	});
+	
+	//Getting Screenshot After Updated Values In User's Edit Profile Page
 
 	casper.wait(5000,function(){
-    		this.capture(screenShotsDir+"updatedEditProfile.png");
+    		this.capture(screenShotsDir+ 'updatedEditProfile.png');
 
-	});*/
+	});
 
-	/*
-	* click on user's account settings link for editing user's account setting
-	*/
+	//Clicking On User's 'Account Settings' link For Editing User's Account Setting
 
 	casper.then(function() {
-		var element = 'a[href="/register?action=preferences&userid=4533234"]';
-		utils.clickOnElement(casper,element, function() {
-			casper.log("clicked on user's account settings linkb successfully", 'info');
+		this.click('a[href="/register?action=preferences&userid=4533234"]');
+		this.log('clicked on users account settings link successfully', 'info');
+	});
+
+	//Getting Screenshot After Loading Account Setting Page
+
+	casper.wait(5000, function() {
+		this.capture(screenShotsDir+ 'userAccountSetting_form.png');
+	});
+
+	//Editing User's Account Settings Without An Email
+
+	casper.then(function() {
+		editAccountSetting(json['editAccountSettingWithoutEmail'].upass, json['editAccountSettingWithoutEmail'].email, casper, function() {
+			casper.log('Email address is required', 'error');
 		});
 	});
 
-	// After click on account setting link, this methos is used for taking screenshot after loading the page
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir+"userAccountSetting_form.png");
-	});
+	//Getting Screenshot After Leaving Email Field Blank In Account Settings Page
 
-	/*
-	* edit user's account settings without email
-	*/
+	casper.wait(5000, function() {
+		this.capture(screenShotsDir+ 'errorOnBlankEmail.png');
+	});
+	
+	//Editing User's Account Settings With Invalid Email
 
 	casper.then(function() {
-		editProfile.editAccountSetting(json['editAccountSettingWithoutEmail'].upass, json['editAccountSettingWithoutEmail'].email, casper, function() {
-			casper.log("Email address is required", 'error');
+		editAccountSetting(json['editAccountSettingWithInvalidEmail'].upass, json['editAccountSettingWithInvalidEmail'].email, casper, function() {
+			casper.log('Email address is invalid', 'error');
 		});
 	});
 
-	// this method is used for taking screenshot after filling-up values in account setting page
+	//Getting Screenshot After Filling-Up Invalid Email in Account Setting Page
+
 	casper.wait(5000, function() {
-		this.capture(screenShotsDir+"errorOnBlankEmail.png");
+		this.capture(screenShotsDir+ 'errorOnInvalidEmail.png');
 	});
 
-	/*
-	* edit user's account settings with invalid email
-	*/
-
+	//Editing user's Account Setting With Valid Data
+	
 	casper.then(function() {
-		editProfile.editAccountSetting(json['editAccountSettingWithInvalidEmail'].upass, json['editAccountSettingWithInvalidEmail'].email, casper, function() {
-			casper.log("Email address is invalid", 'error');
+		editAccountSetting(json['editAccountSetting'].upass, json['editAccountSetting'].email, casper, function() {
+			casper.log('successfully updated account setting', 'info');
 		});
 	});
 
-	// this method is used for taking screenshot after filling-up values in account setting page
+	//Getting Screenshot After Filling-Up Values In Account Setting Page
+	
 	casper.wait(5000, function() {
-		this.capture(screenShotsDir+"errorOnInvalidEmail.png");
+		this.capture(screenShotsDir+ 'updatedAccountSetting.png');
 	});
-
-	/*
-	* edit user's account settings with valid data
-	*/
+	
+	//Deleting User's Account. 
 
 	casper.then(function() {
-		editProfile.editAccountSetting(json['editAccountSetting'].upass, json['editAccountSetting'].email, casper, function() {
-			casper.log("successfully updated account setting", 'info');
-		});
-	});
-
-	// this method is used for taking screenshot after filling-up values in account setting page
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir+"updatedAccountSetting.png");
-	});
-
-	/*
-	* delete user's account. This method is commented because of deletion of account every time
-	*/
-
-	/*casper.then(function() {
 		deleteAccount(casper, function() {
-			casper.log("Account deleted successfully", 'info');
+			casper.log('Account deleted successfully', 'info');
 		});
 	});
 
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir+"deletedAccount.png");
-	});*/
+	//Getting Screenshot After Deletion Of The User
 
-	/*
-	* Click On Logout Link for log-out
-	*/
+	casper.wait(5000, function() {
+		this.capture(screenShotsDir+ 'deletedAccount.png');
+	});
+
+	//Clicking On Logout Link
 
 	casper.then(function() {
-		forumLogin.logoutFromApp(casper, function(){
-			casper.log("Successfully logout from forum", 'info');
+		forumLogin.logoutFromApp(casper, function() {
+			casper.log('Successfully logout from forum', 'info');
 		});
 	});
 
-	// this method is used for taking screenshot after successfully logged-out from forum
+	//Getting Screenshot After Clicking On 'Logout' Link  
+
 	casper.wait(5000, function() {
-		this.capture(screenShotsDir+"logout.png");
+		this.capture(screenShotsDir+ 'logout.png');
 	});
 };
 
-//***************************************************************************************************
+/************************************PRIVATE METHODS***********************************/
 
-// method definitions are written here 
+//Method For Editing User's Edit Profile
 
-// method for editing user's profile page
-editProfile.editToApp = function(birthday, driver, callback){
-	driver.sendKeys('input[id="birthDatepicker"]', birthday);
+var editToApp = function(birthday, driver, callback) {
+	driver.sendKeys('input[id="birthDatepicker"]', birthday, {reset:true});
 	driver.click('form[action="/register"] button[name="submit"]');
 	return callback();
 };
 
-// method for editing user's account setting
-editProfile.editAccountSetting = function(password, email, driver, callback) {
+//Method For Editing User's Account Settings
+
+var editAccountSetting = function(password, email, driver, callback) {
 	driver.click('div#usrPwd .change-value');
 	driver.wait(5000, function() {
 		this.sendKeys('div.editable-input input[type="password"]', password);
@@ -207,18 +194,19 @@ editProfile.editAccountSetting = function(password, email, driver, callback) {
 			driver.click('div.editable-buttons button[type="submit"]');
 			driver.wait(5000, function() {
 				// editing preference on the account setting page
-				driver.click('#option2');
-				driver.click('#opt1');
-				driver.click('#INVS', {checked : true});
-				driver.click('form[action="/register"] button[type="submit"]');			
+				this.click('#option2');
+				this.click('#opt1');
+				this.click('#INVS', {checked : true});
+				this.click('form[action="/register"] button[type="submit"]');			
 			});
 		});
 	});
 	return callback();
 };
 
-//method for deleting user's account
-editProfile.deleteAccount = function(driver, callback) {
+//Method For Deleting User's Account
+
+var deleteAccount = function(driver, callback) {
 	driver.click('#deleteAccountDialog');
 	driver.click('#deleteAccount');
 	return callback();
