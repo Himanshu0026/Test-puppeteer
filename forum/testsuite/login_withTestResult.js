@@ -8,7 +8,7 @@
 });*/
 
 var json = require('../testdata/loginData.json');
-var reusable = require('ReusableFn.js');
+//var reusable = require('ReusableFn.js');
 
 casper.test.begin("Verify login functionality with invalid password", function(test) {
 
@@ -16,7 +16,7 @@ casper.start(json['url'], function() {
 	this.echo("Title of the page :"+this.getTitle());
 });
 casper.then(function(){
-	reusable.loginToApp(json['InvalidPassowrd'].username, json['InvalidPassowrd'].password, casper, function(){
+	loginToApp(json['InvalidPassowrd'].username, json['InvalidPassowrd'].password, casper, function(){
 		console.log("*****login with valid username and invalid password and verify error message*****");
 	});
 });
@@ -43,7 +43,7 @@ casper.run(function() {
 casper.test.begin("Verify login functionality with invalid username", function(test) {
 casper.start(json['url']);
 casper.then(function(){
-	reusable.loginToApp(json['InvalidUsername'].username, json['InvalidUsername'].password, casper, function(){
+	loginToApp(json['InvalidUsername'].username, json['InvalidUsername'].password, casper, function(){
 		console.log("*****login with invalid username and password and verify error message*****");
 	});
 });
@@ -70,7 +70,7 @@ casper.run(function() {
 casper.test.begin("Verify login functionality with blank data", function(test) {
 casper.start(json['url']);
 casper.then(function(){
-	reusable.loginToApp(json['BlankField'].username, json['BlankField'].password, casper, function(){
+	loginToApp(json['BlankField'].username, json['BlankField'].password, casper, function(){
 		console.log("*****login by leaving blank username and password and verify error message*****");
 	});
 });
@@ -97,7 +97,7 @@ casper.run(function() {
 casper.test.begin("Verify login functionality with blank password", function(test) {
 casper.start(json['url']);
 casper.then(function(){
-	reusable.loginToApp(json['BlankPassword'].username, json['BlankPassword'].password, casper, function(){
+	loginToApp(json['BlankPassword'].username, json['BlankPassword'].password, casper, function(){
 		console.log("*****login by leaving blank username and password and verify error message*****");
 	});
 });
@@ -124,13 +124,13 @@ casper.run(function() {
 casper.test.begin("Verify login functionality with valid username nad password",function(test) {
 casper.start(json['url']);
 casper.then(function(){
-	reusable.loginToApp(json['ValidCredential'].username, json['ValidCredential'].password, casper, function(){
+	loginToApp(json['ValidCredential'].username, json['ValidCredential'].password, casper, function(){
 		console.log("User has been successfuly login to application");
 	});
 });
 casper.wait(5000);
 casper.then(function() {
-	reusable.logoutFromApp(casper, function(){
+	logoutFromApp(casper, function(){
 		console.log("Successfully logout from application");
 	});
 casper.wait(3000);
@@ -144,13 +144,13 @@ casper.run(function() {
 casper.test.begin("Verify login functionality with valid email and password", function(test) {
 casper.start(json['url']);
 casper.then(function(){
-	reusable.loginToApp(json['ValidEmail'].username, json['ValidEmail'].password, casper, function(){
+	loginToApp(json['ValidEmail'].username, json['ValidEmail'].password, casper, function(){
 		casper.echo("User has been successfuly login to application");
 	});
 });
 casper.wait(3000);
 casper.then(function() {
-	reusable.logoutFromApp(casper, function(){
+	logoutFromApp(casper, function(){
 		casper.echo("Successfully logout from application");
 	});
 });
@@ -161,5 +161,22 @@ casper.run(function() {
 });
 //****************************************************************************************
 
+// method for login to application by passing username and password
+loginToApp = function(username, password, driver,callback) {
+	driver.click('#td_tab_login');
+	driver.fill('form[name="frmLogin"]', {
+		'member': username,
+		'pw' : password
+	}, false); //incase of true, it will submit the form and for false, it will not submit form
 
+        driver.click('form[name="frmLogin"] button');
+	return callback();
+};
+
+//method for logout from application
+logoutFromApp = function(driver, callback) {
+	driver.click('button.dropdown-toggle span.caret');
+	driver.click('#logout');
+	return callback();
+};
 
