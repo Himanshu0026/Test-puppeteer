@@ -1,4 +1,0 @@
-var utilities = module.exports = {
-
-
-};
