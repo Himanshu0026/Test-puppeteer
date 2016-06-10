@@ -2,6 +2,7 @@
 * This file is dedicated to initiate the test flow. It redirects the control to respective feature test as it receives as an argument.
 */
 
+'use strict';
 var config = require("./config/config.json");
 
 var casper = require('casper').create(config.app);

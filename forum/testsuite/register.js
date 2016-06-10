@@ -1,5 +1,5 @@
 /****This script is dedicated for new user registration on the forum. It covers testing of registration page with all defined validations****/
-
+'use strict';
 var forumLogin = require('./forum_login.js');
 var json = require('../testdata/registerData.json');
 var config = require('../config/config.json');
@@ -9,8 +9,6 @@ var forumRegister = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'register/';
 
 forumRegister.featureTest = function(casper) {
-	
-	"use strict";
 	
 	//Open Forum URL And Get Title 
 

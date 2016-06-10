@@ -1,3 +1,4 @@
+'use strict';
 var json = require('../testdata/loginData.json');
 var config = require('../config/config.json');
 
@@ -11,7 +12,7 @@ forumLogin.featureTest = function(casper) {
 	
 	//test case for login to application with invalid password and verify error message
 	casper.then(function(){
-		loginToApp(json['InvalidPassowrd'].username, json['InvalidPassowrd'].password, casper, function(){
+		forumLogin.loginToApp(json['InvalidPassowrd'].username, json['InvalidPassowrd'].password, casper, function(){
 			console.log("*****login with valid username and invalid password and verify error message*****");
 		});
 	});
@@ -33,7 +34,7 @@ forumLogin.featureTest = function(casper) {
 	//test case for login to application with invalid username and verify error message
 	casper.thenOpen(json['url']);
 	casper.then(function(){
-		loginToApp(json['InvalidUsername'].username, json['InvalidUsername'].password, casper, function(){
+		forumLogin.loginToApp(json['InvalidUsername'].username, json['InvalidUsername'].password, casper, function(){
 			console.log("*****login with invalid username and password and verify error message*****");
 		});
 	});
@@ -52,7 +53,7 @@ forumLogin.featureTest = function(casper) {
 	//test case for login to application by leaving blank username and password and verify error message
 	casper.thenOpen(json['url']);
 	casper.then(function(){
-		loginToApp(json['BlankField'].username, json['BlankField'].password, casper, function(){
+		forumLogin.loginToApp(json['BlankField'].username, json['BlankField'].password, casper, function(){
 			console.log("*****login by leaving blank username and password and verify error message*****");
 		});
 	});
@@ -71,7 +72,7 @@ forumLogin.featureTest = function(casper) {
 	//test case for login to application by leaving password field blank and verify error message
 	casper.thenOpen(json['url']);
 	casper.then(function(){
-		loginToApp(json['BlankPassword'].username, json['BlankPassword'].password, casper, function(){
+		forumLogin.loginToApp(json['BlankPassword'].username, json['BlankPassword'].password, casper, function(){
 			console.log("*****login by leaving blank username and password and verify error message*****");
 		});
 	});
@@ -90,14 +91,14 @@ forumLogin.featureTest = function(casper) {
 	//test case for login to application with valid valid username and password then logout from application
 	casper.thenOpen(json['url']);
 	casper.then(function(){
-		loginToApp(json['ValidCredential'].username, json['ValidCredential'].password, casper, function(){
+		forumLogin.loginToApp(json['ValidCredential'].username, json['ValidCredential'].password, casper, function(){
 			console.log("User has been successfully login to application");
 casper.capture("login.png");
 		});
 	});
 
 	casper.then(function() {
-		logoutFromApp(casper, function(){
+		forumLogin.logoutFromApp(casper, function(){
 			console.log("Successfully logout from application");
 		});
 	});
@@ -105,13 +106,13 @@ casper.capture("login.png");
 	//test case for login to application with valid valid email and password then logout from application
 	casper.thenOpen(json['url']);
 	casper.then(function(){
-		loginToApp(json['ValidEmail'].username, json['ValidEmail'].password, casper, function(){
+		forumLogin.loginToApp(json['ValidEmail'].username, json['ValidEmail'].password, casper, function(){
 			console.log("User has been successfuly login to application");
 		});
 	});
 
 	casper.then(function() {
-		logoutFromApp(casper, function(){
+		forumLogin.logoutFromApp(casper, function(){
 			console.log("Successfully logout from application");
 		});
 	});
