@@ -1,6 +1,4 @@
 {
-    "URL": "http://automation.websitetoolbox.com",
-	
     "invalidInfo" : [{
         "uname" : "",
         "uemail" : "blank_uname@wt.com",
@@ -140,8 +138,8 @@
     }],
     
     "validInfo" : {
-    	"uname" : "3565",
-        "uemail" : "3565@wt.com",
+    	"uname" : "3575",
+        "uemail" : "3575@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",

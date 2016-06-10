@@ -1,4 +1,4 @@
-/***********************Used For Fill Data On Register Page***************************/
+/****This script is dedicated for new user registration on the forum. It covers testing of registration page with all defined validations****/
 
 var forumLogin = require('./forum_login.js');
 var json = require('../testdata/registerData.json');
@@ -9,33 +9,30 @@ var forumRegister = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'register/';
 
 forumRegister.featureTest = function(casper) {
+	
+	"use strict";
+	
+	//Open Forum URL And Get Title 
 
-	/*
-	* Open Forum URL And Get Title
-	*/ 
-
-	casper.start(json['URL'], function() {
+	casper.start(config.url, function() {
 		this.log('Title of the page :' +this.getTitle(), 'info');
 	});
 	
-	/*
-	* Click On Register Link
-	*/ 
+	//Click On Register Link 
 
 	casper.then(function() {
-		clickOnRegisterLink(casper, function() {
-			casper.log('Successfully open register form.....', 'info');
-		});
+		this.click('.pull-right a');
+		this.log('Successfully open register form.....', 'info');
 	});
+	
+	//Getting Screenshot After Clicking On 'Register' Link  
 	
 	casper.wait(5000, function() {
 		this.capture(screenShotsDir + 'register_form.png');
 	});
 	
-	/*
-	* Fill Blank/Invalid Data On Registration Form
-	*/ 
-	
+	//Fill Blank/Invalid Data On Registration Form And Verifying Errors
+		
 	casper.then(function() {
 		this.eachThen(json['invalidInfo'], function(response) {
 			casper.log('Response Data : ' +JSON.stringify(response.data), 'info');
@@ -89,6 +86,8 @@ forumRegister.featureTest = function(casper) {
 					msgTitle = 'InvalidEmail';
 				}
 				
+				//Called Method For Verifying Error Messages
+				
 				casper.wait('3000', function() {
 					verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
 				});
@@ -96,24 +95,22 @@ forumRegister.featureTest = function(casper) {
 		});
 	});   
 	
-	/*
-	* Fill Valid Data On Registration Form
-	*/
-	
+	//Fill Valid Data On Registration Form
+		
 	casper.then(function() {
 		registerToApp(json['validInfo'], casper, function() {
 			casper.log('Successfully registered on forum....', 'info');
 		});
 	});
 
+	//Getting Screenshot After Submitting 'Register' Form  
+	
 	casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'register_submit.png');
 	});
 	
-	/*
-	* Verify For Email Verification Message
-	*/
-
+	//Verify For Email Verification Message
+	
 	casper.then(function() {
 		var pendingEmailStatus = this.exists('div.bmessage');
 		if (pendingEmailStatus) {
@@ -121,16 +118,19 @@ forumRegister.featureTest = function(casper) {
 			var successMsg = message.substring(0, message.indexOf('<'));
 			var expectedSuccessMsg = json['validInfo'].expectedSuccessMsg;
 			if(successMsg.trim() == expectedSuccessMsg.trim()) {
-				casper.log('**Error message is verified when user successfully registered**' , 'info');
+				this.log('**Error message is verified when user successfully registered**' , 'info');
 			} else {
-				casper.log('**Error : Error Message Is Not Correct**', 'info');
+				this.log('**Error : Error Message Is Not Correct**', 'info');
 			}
 			
+			//Clicking On 'Back To Category' Link 
+			
 			this.then(function() {
-				backToCategory(casper, function(){
-					casper.log('Successfully back to category', 'info');
-				});
+				casper.click('a[href="/categories"]');
+				casper.log('Successfully back to category', 'info');
 			});
+			
+			//Getting Screenshot After Clicking On 'Back To Category' Link  
 			
 			this.wait(5000, function() {
 				casper.capture(screenShotsDir + 'backToCategory.png');
@@ -138,35 +138,27 @@ forumRegister.featureTest = function(casper) {
 		} 
 	});
 	
-	/*
-	* Click On Logout Link
-	*/
+	//Click On Logout Link
 	
 	casper.then(function() {
 		forumLogin.logoutFromApp(casper, function(){
 			casper.log('Successfully logout from application', 'info');
 		});
 			
+		//Getting Screenshot After Clicking On 'Logout' Link  
+		
 		this.wait(5000, function() {
 			casper.capture(screenShotsDir + 'logout.png');
 		});
 	});
 };
 
-/*
-* Method For Clicking On Register Link
-*/
 
-clickOnRegisterLink = function(driver, callback) {
-	driver.click('.pull-right a');
-	return callback();
-};
+/************************************PRIVATE METHODS***********************************/
 
-/*
-* Method For Fill Data On Registration Form
-*/
+//Method For Filling Data In Registration Form
 
-registerToApp = function(data, driver, callback) {
+var registerToApp = function(data, driver, callback) {
 	driver.fill('form[action="/register/create_account"]', {
 		'member' : data.uname,
 		'email': data.uemail,
@@ -181,25 +173,14 @@ registerToApp = function(data, driver, callback) {
 	return callback();
 };
 
-/*
-* Method For Verify Error Message On Registration Form After Submitting Form
-*/
+//Method For Verifying Error Message On Registration Form After Submitting Form
 
-verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver) {
+var verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver) {
 	if((errorMessage == expectedErrorMsg) || (errorMessage.indexOf(expectedErrorMsg) > -1)) {
 		driver.log('**Error message is verified when user try to register with ' +msgTitle, 'info');
 	} else {
 		driver.log("**Error : Error Message Is Not Correct**", 'info');
 	}
 	driver.capture(screenShotsDir + 'Error_RegisterWith' +msgTitle+ '.png');
-}
-
-/*
-* Call Method When User Will Click On "Back To Category" Link
-*/
-
-backToCategory = function(driver, callback) {
-	driver.click('a[href="/categories"]');
-	return callback();
 };
 
