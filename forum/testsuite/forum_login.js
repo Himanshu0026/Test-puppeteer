@@ -1,4 +1,7 @@
+
 'use strict';
+//----- This js file covers all the valid and invalid scenarios for login functionlaity from home page---------//
+
 var json = require('../testdata/loginData.json');
 var config = require('../config/config.json');
 
@@ -6,6 +9,7 @@ var forumLogin = module.exports = {};
 
 forumLogin.featureTest = function(casper) {
 	var screenShotsDir = config.screenShotsLocation + "login/";
+	// this code is to lauch application to perform related actions
 	casper.start(config.url, function() {
 		this.echo("Title of the page :"+this.getTitle());
 	});
@@ -18,17 +22,18 @@ forumLogin.featureTest = function(casper) {
 	});
 	casper.wait(5000);
 	casper.then(function() {
-	this.capture(screenShotsDir + "ErrorOnInvalidPassword.png");
-	var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
-	this.echo(errorMessage.indexOf(json['InvalidPassowrd'].ExpectedErrorMessage));
-	    	this.echo(errorMessage.trim());
-		//casper.assert(true, (errorMessage.trim() == json['InvalidPassowrd'].ExpectedErrorMessage));
-		if(errorMessage.trim() == json['InvalidPassowrd'].ExpectedErrorMessage){
-			this.echo('Error message is verified when user try to login with invalid password');
-		}else{
-			console.log("Error occurred");
-			this.capture(screenShotsDir + "ErrorOnInvalidPassword.png");
-		}
+		this.capture(screenShotsDir + "ErrorOnInvalidPassword.png");
+		var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
+		this.echo(errorMessage.indexOf(json['InvalidPassowrd'].ExpectedErrorMessage));
+		    	this.echo(errorMessage.trim());
+			//casper.assert(true, (errorMessage.trim() == json['InvalidPassowrd'].ExpectedErrorMessage));
+			if(errorMessage.trim() == json['InvalidPassowrd'].ExpectedErrorMessage){
+				this.echo('Error message is verified when user try to login with invalid password');
+			}else{
+				casper.log("Error occurred", 'ERROR');
+				// code to take screenshot in case of failed test case
+				this.capture(screenShotsDir + "ErrorOnInvalidPassword.png");
+			}
 	});
 
 	//test case for login to application with invalid username and verify error message
@@ -40,14 +45,15 @@ forumLogin.featureTest = function(casper) {
 	});
 	casper.wait(5000);
 	casper.then(function() {
-	var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
-		this.echo(errorMessage);
-		if(errorMessage.trim() == json['InvalidUsername'].ExpectedErrorMessage){
-			this.echo('Error message is verified when user try to login with invalid username');
-		}else{
-			console.log("Error occurred");
-			this.capture(screenShotsDir + "Error_ErrorOnInvalidUsername.png");
-		}
+		var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
+			this.echo(errorMessage);
+			if(errorMessage.trim() == json['InvalidUsername'].ExpectedErrorMessage){
+				this.echo('Error message is verified when user try to login with invalid username');
+			}else{
+				casper.log("Error occurred", 'ERROR');
+				// code to take screenshot in case of failed test case
+				this.capture(screenShotsDir + "Error_ErrorOnInvalidUsername.png");
+			}
 	});
 
 	//test case for login to application by leaving blank username and password and verify error message
@@ -59,14 +65,15 @@ forumLogin.featureTest = function(casper) {
 	});
 	casper.wait(5000);
 	casper.then(function() {
-	var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
-		this.echo(errorMessage);
-		if(errorMessage.trim() == json['BlankField'].ExpectedErrorMessage){
-			this.echo('Error message is verified when user try to login with blank data');
-		}else{
-			console.log("Error occurred");
-			this.capture(screenShotsDir + "Error_LoginwithBlankfield.png");
-		}
+		var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
+			this.echo(errorMessage);
+			if(errorMessage.trim() == json['BlankField'].ExpectedErrorMessage){
+				this.echo('Error message is verified when user try to login with blank data');
+			}else{
+				casper.log("Error occurred", 'ERROR');
+				// code to take screenshot in case of failed test case
+				this.capture(screenShotsDir + "Error_LoginwithBlankfield.png");
+			}
 	});
 
 	//test case for login to application by leaving password field blank and verify error message
@@ -78,14 +85,15 @@ forumLogin.featureTest = function(casper) {
 	});
 	casper.wait(5000);
 	casper.then(function() {
-	var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
-		this.echo(errorMessage);
-		if(errorMessage.trim() == json['BlankPassword'].ExpectedErrorMessage){
-			this.echo('Error message is verified when user try to login with blank password');
-		}else{
-			console.log("Error occurred");
-			this.capture(screenShotsDir + "Error_LoginwithBlankPassword.png");
-		}
+		var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
+			this.echo(errorMessage);
+			if(errorMessage.trim() == json['BlankPassword'].ExpectedErrorMessage){
+				this.echo('Error message is verified when user try to login with blank password');
+			}else{
+				casper.log("Error occurred", 'ERROR');
+				// code to take screenshot in case of failed test case
+				this.capture(screenShotsDir + "Error_LoginwithBlankPassword.png");
+			}
 	});
 
 	//test case for login to application with valid valid username and password then logout from application
@@ -93,7 +101,6 @@ forumLogin.featureTest = function(casper) {
 	casper.then(function(){
 		forumLogin.loginToApp(json['ValidCredential'].username, json['ValidCredential'].password, casper, function(){
 			console.log("User has been successfully login to application");
-casper.capture("login.png");
 		});
 	});
 
@@ -136,5 +143,6 @@ forumLogin.logoutFromApp = function(driver, callback) {
 	driver.click('#logout');
 	return callback();
 };
+
 
 
