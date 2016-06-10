@@ -47,7 +47,7 @@ editProfile.featureTest = function(casper) {
 	//Clicking On 'Edit Profile' link
 
 	casper.then(function() {
-		this.click('a[href="/register/register?edit=1&userid=4533234"]');
+		this.click('a[href="/register/register?edit=1&userid=4535587"]');
 		this.log('clicked on user edit profile link successfully', 'info');
 	});
 
@@ -90,7 +90,7 @@ editProfile.featureTest = function(casper) {
 	//Clicking On User's 'Account Settings' link For Editing User's Account Setting
 
 	casper.then(function() {
-		this.click('a[href="/register?action=preferences&userid=4533234"]');
+		this.click('a[href="/register?action=preferences&userid=4535587"]');
 		this.log('clicked on users account settings link successfully', 'info');
 	});
 
