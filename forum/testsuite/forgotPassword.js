@@ -1,3 +1,4 @@
+
 //----- This js file covers all the valid and invalid scenarios for forgot functionality from login window comes from home page---------//
 
 'use strict';
@@ -59,7 +60,7 @@ forgotpwd.featureTest = function(casper) {
 						casper.log("Error message in case of invalid Email has been verified", 'info');
 					}else {
 						casper.log("Error Occurred", "error");
-						this.capture("ScreenShots/Error_ForgotPasswordwithinvalidEmail.png");
+						this.capture(screenShotsDir+"Error_ForgotPasswordwithinvalidEmail.png");
 					}
 				});
 			//This is to verify error message while submitting request for reset password with invalid username and email id
