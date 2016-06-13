@@ -9,10 +9,11 @@
 
 var json = require('../testdata/loginData.json');
 //var reusable = require('ReusableFn.js');
+var forumurl = 'automation.forumchitchat.com/';
 
 casper.test.begin("Verify login functionality with invalid password", function(test) {
 
-casper.start(json['url'], function() {
+casper.start(forumurl, function() {
 	this.echo("Title of the page :"+this.getTitle());
 });
 casper.then(function(){
@@ -41,7 +42,7 @@ casper.run(function() {
 
 //************************************************************************************
 casper.test.begin("Verify login functionality with invalid username", function(test) {
-casper.start(json['url']);
+casper.start(forumurl);
 casper.then(function(){
 	loginToApp(json['InvalidUsername'].username, json['InvalidUsername'].password, casper, function(){
 		console.log("*****login with invalid username and password and verify error message*****");
@@ -62,13 +63,13 @@ var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
 });
 casper.run(function() {
         test.done();
-	test.assert(true);
+	//test.assert(true);
     });
 });
 //************************************************************************************
 
 casper.test.begin("Verify login functionality with blank data", function(test) {
-casper.start(json['url']);
+casper.start(forumurl);
 casper.then(function(){
 	loginToApp(json['BlankField'].username, json['BlankField'].password, casper, function(){
 		console.log("*****login by leaving blank username and password and verify error message*****");
@@ -89,13 +90,13 @@ var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
 });
 casper.run(function() {
         test.done();
-	test.assert(true);
+	//test.assert(true);
     });
 });
 //************************************************************************************
 
 casper.test.begin("Verify login functionality with blank password", function(test) {
-casper.start(json['url']);
+casper.start(forumurl);
 casper.then(function(){
 	loginToApp(json['BlankPassword'].username, json['BlankPassword'].password, casper, function(){
 		console.log("*****login by leaving blank username and password and verify error message*****");
@@ -116,13 +117,13 @@ var errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
 });
 casper.run(function() {
         test.done();
-	test.assert(true);
+	//test.assert(true);
     });
 });
 //**************************************************************************************
 
 casper.test.begin("Verify login functionality with valid username nad password",function(test) {
-casper.start(json['url']);
+casper.start(forumurl);
 casper.then(function(){
 	loginToApp(json['ValidCredential'].username, json['ValidCredential'].password, casper, function(){
 		console.log("User has been successfuly login to application");
@@ -137,12 +138,11 @@ casper.wait(3000);
 });
 casper.run(function() {
         test.done();
-	test.assert(true);
     });
 });
 //****************************************************************************************
 casper.test.begin("Verify login functionality with valid email and password", function(test) {
-casper.start(json['url']);
+casper.start(forumurl);
 casper.then(function(){
 	loginToApp(json['ValidEmail'].username, json['ValidEmail'].password, casper, function(){
 		casper.echo("User has been successfuly login to application");
@@ -156,7 +156,7 @@ casper.then(function() {
 });
 casper.run(function() {
         test.done();
-	test.assert(true);
+	//test.assert(true);
     });
 });
 //****************************************************************************************

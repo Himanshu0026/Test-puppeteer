@@ -13,9 +13,12 @@ if(feature){
 
 switch (feature) {
     case "login":
-        casper.test.begin('some test name', function(test) {
+        casper.test.begin('Verify login functionality from home page with all valid and invalid scenarios ',6, function(test) {
 		var forumLogin = require("./testsuite/forum_login.js");
-		forumLogin.featureTest(casper);
+		forumLogin.featureTest(casper, casper.test);
+		casper.run(function(){
+			test.done();
+		});
 	});
         break;
     case "register":
