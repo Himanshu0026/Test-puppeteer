@@ -20,14 +20,14 @@ forumLogin.featureTest = function(casper, test) {
 		loginToApp(json['InvalidPassowrd'].username, json['InvalidPassowrd'].password, casper, function(){
 			casper.echo("login with valid username and invalid password and verify error message");
 			casper.waitForSelector('form[name="frmLogin"] [role="alert"]',
-			function success(){
-				errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
-				this.echo("Actual error message  --> "+errorMessage.trim());
-				test.assertEquals(errorMessage.trim(),json['InvalidPassowrd'].ExpectedErrorMessage);
-				casper.echo('Error message is verified when user try to login with invalid password');
-			}, function fail() {
-				casper.capture(screenShotsDir+"Error_InvalidPassowrd.png");
-				});
+				function success(){
+					errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
+					this.echo("Actual error message  --> "+errorMessage.trim());
+					test.assertEquals(errorMessage.trim(),json['InvalidPassowrd'].ExpectedErrorMessage);
+					casper.echo('Error message is verified when user try to login with invalid password');
+				}, function fail() {
+					casper.capture(screenShotsDir+"Error_InvalidPassowrd.png");
+			});	
 		});
 	});
 

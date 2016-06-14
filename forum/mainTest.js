@@ -30,6 +30,15 @@ switch (feature) {
     case "postreply":
         
         break;
+	case "forgotpassword":
+        casper.test.begin('Verify forgot your password functionality from home page ', function(test) {
+		var forumLogin = require("./testsuite/forgotPassword.js");
+		forumLogin.featureTest(casper, casper.test);
+		casper.run(function(){
+			test.done();
+		});
+	});
+        break;
     default:
 	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
         casper.echo("Options:");
