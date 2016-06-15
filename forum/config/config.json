@@ -1,6 +1,7 @@
 {
 	"screenShotsLocation": "/home/monika/screenshots/",
 	"url": "http://automation.websitetoolbox.com/",
+	"backEndUrl": "https://www.websitetoolbox.com",
 	"app": {	
 		"verbose" : true,
 	 	"logLevel" : "info",

@@ -22,7 +22,14 @@ switch (feature) {
 	});
         break;
     case "register":
-        
+    	casper.test.begin('REGISTRATION TEST', function(test) {
+		var forumRegister = require("./testsuite/register.js");
+		forumRegister.featureTest(casper, test);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
         break;
     case "newtopic":
         

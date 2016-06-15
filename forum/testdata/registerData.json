@@ -36,18 +36,6 @@
     },
     
     {
-        "uname" : "blank_fullname",
-        "uemail" : "blank_fullname@wt.com",
-        "upass" : "1234",
-        "fullName" : "",
-        "imID" : "Hello",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature blank full name",
-        "namePrivate" : true,
-        "expectedErrorMsg" : "Please enter user full name." 
-    },
-    
-    {
         "uname" : "blank_imID",
         "uemail" : "blank_imID@wt.com",
         "upass" : "1234",
@@ -69,6 +57,18 @@
         "usignature" : "This is my signature blank birthday",
         "namePrivate" : true,
         "expectedErrorMsg" : "Please enter birthday." 
+    },
+    
+    {
+        "uname" : "blank_signature",
+        "uemail" : "blank_signature@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank Signature",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "Please provide a signature." 
     },
     
     {
@@ -108,7 +108,7 @@
         "usignature" : "This is my signature 18",
         "namePrivate" : true,
         "errorType" : "existWithUsernameAndEmail",
-        "expectedSuccessMsg" : "Error: It looks like you already have a forum account! A forum account for that username and email address combination already exists!"
+        "expectedErrorMsg" : "Error: It looks like you already have a forum account! A forum account for that username and email address combination already exists!"
     },
     
     {
@@ -138,8 +138,8 @@
     }],
     
     "validInfo" : {
-    	"uname" : "3575",
-        "uemail" : "3575@wt.com",
+    	"uname" : "100",
+        "uemail" : "100@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",
@@ -147,5 +147,11 @@
         "usignature" : "This is my signature 18",
         "namePrivate" : true,
         "expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
+    },
+    
+    "backEndInfo" : {
+    	"uname" : "automation",
+    	"upass" : "test"
     }
+    
 }
