@@ -17,14 +17,14 @@ forumLogin.featureTest = function(casper, test) {
 	
 	//test case for login to application with invalid password and verify error message
 	casper.then(function(){
-		loginToApp(json['InvalidPassowrd'].username, json['InvalidPassowrd'].password, casper, function(){
+		forumLogin.loginToApp(json['InvalidPassowrd'].username, json['InvalidPassowrd'].password, casper, function(){
 			casper.echo("login with valid username and invalid password and verify error message");
 			casper.waitForSelector('form[name="frmLogin"] [role="alert"]',
 				function success(){
 					errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
 					this.echo("Actual error message  --> "+errorMessage.trim());
 					test.assertEquals(errorMessage.trim(),json['InvalidPassowrd'].ExpectedErrorMessage);
-					casper.echo('Error message is verified when user try to login with invalid password');
+					casper.echo('Error message is verified when user try to login with invalid password', 'info');
 				}, function fail() {
 					casper.capture(screenShotsDir+"Error_InvalidPassowrd.png");
 			});	
@@ -34,7 +34,7 @@ forumLogin.featureTest = function(casper, test) {
 	//test case for login to application with invalid username and verify error message
 	casper.thenOpen(config.url);
 	casper.then(function(){
-		loginToApp(json['InvalidUsername'].username, json['InvalidUsername'].password, casper, function(){
+		forumLogin.loginToApp(json['InvalidUsername'].username, json['InvalidUsername'].password, casper, function(){
 			casper.echo("login with invalid username and password and verify error message");
 			casper.waitForSelector('form[name="frmLogin"] [role="alert"]',
 			function success(){
@@ -51,7 +51,7 @@ forumLogin.featureTest = function(casper, test) {
 	//test case for login to application by leaving blank username and password and verify error message
 	casper.thenOpen(config.url);
 	casper.then(function(){
-		loginToApp(json['BlankField'].username, json['BlankField'].password, casper, function(){
+		forumLogin.loginToApp(json['BlankField'].username, json['BlankField'].password, casper, function(){
 			casper.echo("login by leaving blank username and password and verify error message");
 			casper.waitForSelector('form[name="frmLogin"] [role="alert"]',
 			function success(){
@@ -68,7 +68,7 @@ forumLogin.featureTest = function(casper, test) {
 	//test case for login to application by leaving password field blank and verify error message
 	casper.thenOpen(config.url);
 	casper.then(function(){
-		loginToApp(json['BlankPassword'].username, json['BlankPassword'].password, casper, function(){
+		forumLogin.loginToApp(json['BlankPassword'].username, json['BlankPassword'].password, casper, function(){
 			casper.echo("Login by leaving blank username and password and verify error message");
 			casper.waitForSelector('form[name="frmLogin"] [role="alert"]',
 			function success(){
@@ -85,12 +85,12 @@ forumLogin.featureTest = function(casper, test) {
 	//test case for login to application with valid valid username and password then logout from application
 	casper.thenOpen(config.url);
 	casper.then(function(){
-		loginToApp(json['ValidCredential'].username, json['ValidCredential'].password, casper, function(){
+		forumLogin.loginToApp(json['ValidCredential'].username, json['ValidCredential'].password, casper, function(){
 			casper.wait(3000, function() {
 			test.assertDoesntExist('#td_tab_login');
 			casper.echo("User has been successfuly login to application"); });
 			casper.wait(3000, function(){
-				logoutFromApp(casper, function(){
+				forumLogin.logoutFromApp(casper, function(){
 					casper.echo("Successfully logout from application");
 				});
 			});	
@@ -100,12 +100,12 @@ forumLogin.featureTest = function(casper, test) {
 	//test case for login to application with valid valid email and password then logout from application
 	casper.thenOpen(config.url);
 	casper.then(function(){
-		loginToApp(json['ValidEmail'].username, json['ValidEmail'].password, casper, function(){
+		forumLogin.loginToApp(json['ValidEmail'].username, json['ValidEmail'].password, casper, function(){
 			casper.wait(3000, function() {
 			test.assertDoesntExist('#td_tab_login');
 			casper.echo("User has been successfuly login to application"); });
 			casper.wait(3000, function(){
-				logoutFromApp(casper, function(){
+				forumLogin.logoutFromApp(casper, function(){
 					casper.echo("Successfully logout from application");
 				});
 			});
@@ -117,8 +117,12 @@ forumLogin.featureTest = function(casper, test) {
 /***These are the function which has been called in above test cases and also will be used in other js file as per requirement**********/
 
 // method for login to application by passing username and password
- var loginToApp = function(username, password, driver,callback) {
-	driver.click('#td_tab_login');
+forumLogin.loginToApp = function(username, password, driver,callback) {
+	try{	
+		driver.click('#td_tab_login');
+	}catch(err){
+		casper.echo("Exception is : "+err);
+	};
 	driver.fill('form[name="frmLogin"]', {
 		'member': username,
 		'pw' : password
@@ -129,7 +133,7 @@ forumLogin.featureTest = function(casper, test) {
 };
 
 //method for logout from application
-var logoutFromApp = function(driver, callback) {
+forumLogin.logoutFromApp = function(driver, callback) {
 	driver.click('button.dropdown-toggle span.caret');
 	driver.click('#logout');
 	return callback();

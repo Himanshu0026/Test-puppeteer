@@ -2,7 +2,8 @@ var config = require("./config/config.json");
 
 casper.options.viewportSize = config.app.viewportSize;
 casper.options.verbose = config.app.verbose;
-casper.options.logLevel = config.app.loglevel;
+casper.options.logLevel = config.app.logLevel;
+casper.options.waitTimeout = config.app.waitTimeout;
 
 var feature = casper.cli.get('feature');
 if(feature){
@@ -46,6 +47,15 @@ switch (feature) {
 		});
 	});
         break;
+	case "calander" :
+		 casper.test.begin('Verify calander functionlity ', function(test) {
+		 var calander = require("./testsuite/calender.js");
+		 calander.featureTest(casper, casper.test);
+		 casper.run(function(){
+			test.done();
+		 });
+	});
+        break;	
     default:
 	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
         casper.echo("Options:");
