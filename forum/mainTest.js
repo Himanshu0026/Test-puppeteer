@@ -32,11 +32,39 @@ switch (feature) {
 		});
 	});
         break;
-    case "newtopic":
+   case "newtopic":
+	casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+
+		var newTopic = require("./testsuite/newTopic.js");
+		newTopic.featureTest(casper, casper.test);
+		
+		casper.run(function(){
+			test.done();
+		});
+	});
         
         break;
     case "postreply":
-        
+        casper.test.begin("Start reply topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+
+		var postAReply = require("./testsuite/postAReply.js");
+		postAReply.featureTest(casper, casper.test);
+		
+		casper.run(function(){
+			test.done();
+		});
+	});
+        break;
+ case "edittopic":
+        casper.test.begin("Start edit Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+
+		var editTopic = require("./testsuite/editTopic.js");
+		editTopic.featureTest(casper, casper.test);
+		
+		casper.run(function(){
+			test.done();
+		});
+	});
         break;
 	case "forgotpassword":
         casper.test.begin('Verify forgot your password functionality from home page ', function(test) {
@@ -47,15 +75,28 @@ switch (feature) {
 		});
 	});
         break;
+case "deletetopic":
+        casper.test.begin("Delete Topic functionality from home page & verify deleted post", function(test) {
+
+		var deleteTopic = require("./testsuite/deleteTopic.js");
+		deleteTopic.featureTest(casper, casper.test);
+		
+		casper.run(function(){
+			test.done();
+		});
+	});
+        break;
+
 	case "calander" :
 		 casper.test.begin('Verify calander functionlity ', function(test) {
 		 var calander = require("./testsuite/calender.js");
 		 calander.featureTest(casper, casper.test);
 		 casper.run(function(){
 			test.done();
-		 });
+		});
 	});
-        break;	
+        break;
+
     default:
 	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
         casper.echo("Options:");
@@ -63,6 +104,8 @@ switch (feature) {
 	casper.echo("	login");
 	casper.echo("	newtopic");
 	casper.echo("	postreply\n");
+	casper.echo("	edittopic\n");
+	casper.echo("	deletetopic\n");
 	casper.echo("Relevant test data has to be fed in JSON format in files placed for each feature in '<current directory>/testData/'.");
 	casper.exit();
 };

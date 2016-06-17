@@ -9,19 +9,20 @@ var config = require('../config/config.json');
 var postAReply = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'postAReply/';
 
-postAReply.featureTest = function(casper) {
+postAReply.featureTest = function(casper, test) {
 
 	//Open Forum URL And Get Title 
 
 	casper.start(config.url, function() {
-		this.log('Title of the page :' +this.getTitle(), 'info');
+		casper.echo('Title of the page :' +this.getTitle(), 'info');
+		test.assertTitle('Automation Forum', 'page has the correct title');
 	});
 
 	//Login to app
 
 	casper.then(function() {
 		forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
-			casper.log('User has successfully login to application', 'info');
+			casper.echo('User has successfully login to application', 'info');
 		});
 	});
 
@@ -31,11 +32,42 @@ postAReply.featureTest = function(casper) {
 		this.capture(screenShotsDir+ 'login.png');
 	});
 
-	//Reply topic
+	// Verify error message when user try to post blank content
+
+	casper.then(function() { 
+			casper.on('remote.alert', function(message) { 
+    				test.info('alert message: ' + message);
+				var errMessage = message;
+				test.assertEquals(errMessage.trim(), json.replyTopic.blankContent.ExpectedErrorMessage.trim());
+				casper.echo('Error message is verified when user enters blank content');
+				
+			});
+		});
+	
+	//Reply topic with blank content
+	
+	casper.then(function() {
+		replyTopic(json.replyTopic.blankContent.content, casper, function() {
+			casper.echo('post a reply by leaving blank content and verify error message', 'info');
+		});
+	});
+
+	
+	//Getting Screenshot After Clicking On 'POST' Link 
+
+	/*casper.wait(3000,function( ){
+		this.capture(screenShotsDir+ 'blankReplyTopic.png');
+	});*/
+
+	casper.thenOpen(config.url, function() {
+	    this.echo("Now I'm in your Home again.")
+	});
+
+	//Reply topic with valid credential
 
 	casper.then(function() {
-		replyTopic(json['replyTopic'].content, casper, function() {
-			casper.log('Replied successfully', 'info');
+		replyTopic(json.replyTopic.ValidCredential.content, casper, function() {
+			casper.echo('Replied successfully', 'info');
 		});
 	});
 
@@ -46,17 +78,28 @@ postAReply.featureTest = function(casper) {
 	});
 
 	// Verify Posted Reply
-	casper.then(function() {
-		verifyPostReply(json['replyTopic'].content, casper, function() {
-			casper.log('checking reply post', 'info');
+
+	casper.then(function(){
+		
+		var elementId = this.evaluate(function() {
+			var element = document.querySelectorAll("span[id^='post_message_']");
+			var id = element[element.length-1].id;
+			return id;	
 		});
+		var contentMsg = this.fetchText("#"+elementId);
+		casper.echo('************ contentMsg : ' +contentMsg, 'info');
+		var content = json.replyTopic.ValidCredential.content;
+		casper.echo('************ content : ' +content, 'info');
+		
+		test.assertEquals(contentMsg.trim(), content.trim());
+		casper.echo('content message is Verified when user try to post a reply on topic');
 	});
 
 	//Logout From App
 
 	casper.then(function() {
 		forumLogin.logoutFromApp(casper, function() {
-			casper.log('Successfully logout from application');
+			casper.echo('Successfully logout from application');
 		});
 	});
 
@@ -73,45 +116,29 @@ postAReply.featureTest = function(casper) {
 
 // method for reply topic on any post
 
-var replyTopic = function(content, driver, callback) {
+var replyTopic = function(content, driver, callback) { console.log("function content : "+content);
+	
 	driver.click('form[name="posts"] h4 a');
 	driver.then(function() {
 		this.sendKeys('#message', content);
 	});
 	driver.wait(7000, function() {
 		this.withFrame('message_ifr', function() {
-			this.log('enter message in iframe', 'info');
 	 		this.sendKeys('#tinymce', content);
 			this.capture(screenShotsDir+ 'replyContent.png');	
 		});
 	});
 
-	driver.then(function(){
-		this.click('#reply_submit');
-	});
 	
-	return callback();
-};
-
-
-// method for verify latest replied topic on the post
-
-var verifyPostReply = function(content, driver, callback) {
-	var elementId = driver.evaluate(function() {
-		var element = document.querySelectorAll("span[id^='post_message_']");
-		var id = element[element.length-1].id;
-		return id;	
+	driver.then(function(){
+			driver.click('#reply_submit');
 	});
-
-	var contentMsg = driver.fetchText("#"+elementId);
-	driver.log('************ contentMsg : ' +contentMsg, 'info');
-	driver.log('************ content : ' +content, 'info');
-	if(contentMsg.trim() == content.trim()) {
-		driver.log('Successfully content verified', 'info');
-	} else {
-		driver.log('Error occured in verifying content', 'error');
-		driver.capture(screenShotsDir+ 'contentError.png');
-	}
+	/*driver.then(function(){
+			driver.on('remote.alert', function(message) { driver.echo("inside ON function");
+			console.log('alert message: ' + message);	
+		});
+	});*/
+	
 	return callback();
 };
 
