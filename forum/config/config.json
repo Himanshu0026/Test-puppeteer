@@ -1,6 +1,6 @@
 {
 	"screenShotsLocation": "/home/sangita/screenshots/",
-	"url": "http://automation.websitetoolbox.com/",
+	"url": "http://automation.websitetoolbox.com",
 	"backEndUrl": "https://www.websitetoolbox.com/tool/members/login",
 	"app": {	
 		"verbose" : true,

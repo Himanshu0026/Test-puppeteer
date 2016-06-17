@@ -3,7 +3,7 @@ var config = require("./config/config.json");
 casper.options.viewportSize = config.app.viewportSize;
 casper.options.verbose = config.app.verbose;
 casper.options.logLevel = config.app.logLevel;
-casper.options.waitTimeout = config.app.waitTimeout;
+//casper.options.waitTimeout = config.app.waitTimeout;
 
 var feature = casper.cli.get('feature');
 if(feature){
@@ -14,7 +14,7 @@ if(feature){
 
 switch (feature) {
     case "login":
-        casper.test.begin('Verify login functionality from home page with all valid and invalid scenarios ',6, function(test) {
+        casper.test.begin('Verify login functionality from home page with all valid and invalid scenarios ', function(test) {
 		var forumLogin = require("./testsuite/forum_login.js");
 		forumLogin.featureTest(casper, casper.test);
 		casper.run(function(){
@@ -86,11 +86,11 @@ case "deletetopic":
 		});
 	});
         break;
-
-	case "calander" :
+	case "calender" :
 		 casper.test.begin('Verify calander functionlity ', function(test) {
-		 var calander = require("./testsuite/calender.js");
-		 calander.featureTest(casper, casper.test);
+		var x = require('casper').selectXPath;
+		 var calenderSettings = require("./testsuite/calender.js");
+		 calenderSettings.featureTest(casper, casper.test,x);
 		 casper.run(function(){
 			test.done();
 		});
