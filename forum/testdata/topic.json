@@ -1,7 +1,7 @@
 {
 	"newTopic" : {
 
-			"username" : "rajatk2",
+			"username" : "rajatk",
 			"password" : "rk@123",
 			"tempHref" : "",
 
@@ -85,10 +85,10 @@
 	},
 	
 	"followTopic" : {
-		"ExpectedErrorMessage" : "You haven't followed any topics yet."
+		"ExpectedWarningMessage" : "You haven't followed any topics yet."
 	},
 
 	"followCategory" : {
-		"ExpectedErrorMessage" : "You haven't followed any categories yet."
+		"ExpectedWarningMessage" : "You haven't followed any categories yet."
 	}
 }

@@ -31,7 +31,7 @@ newTopic.featureTest = function(casper, test) {
 		});
 
 		
-		//test case for Start New Topic Page with All Blank Field and verify error message
+		/*//test case for Start New Topic Page with All Blank Field and verify error message
 		
 		casper.then(function(){
 			gotoNewTopicpage(casper, function() {
@@ -287,62 +287,94 @@ newTopic.featureTest = function(casper, test) {
 			verifyFollowContent(casper, function(){
 				casper.echo('verify Follow Content');
 			});
-		});
+		});*/
 
 		//follow and unFollow Topic
 
-		//verify when no Topic is followed by user 
+		//verify warning message when no Topic is followed by user 
 
 		casper.thenOpen(config.url, function() {
 			casper.echo('Hit on url : '+config.url);
 		});
 		
-		//click on followed content link and verify expected error message
+		//click on followed content link and verify expected Warning message
 		casper.then(function() {
 			this.capture(screenShotsDir+ 'dropdown.png');
 			this.click('span.user-nav-panel li a[href^="/search"]');
-			this.wait(5000,function() {
-				this.capture(screenShotsDir+ 'followedContent.png');
-			});
 			casper.then(function() {
-				var errMessage = this.fetchText('.no-space');
-				casper.echo('errorMessage : '+errMessage);
-				casper.echo('json.followTopic.ExpectedErrorMessage : '+json.followTopic.ExpectedErrorMessage);
-				test.assertEquals(errMessage.trim(), json.followTopic.ExpectedErrorMessage.trim());
-				casper.echo('error message verified');
-
+				if(this.exists('.no-space')) { 
+					verifyWarningMsg(json.followTopic.ExpectedWarningMessage, casper, function() {
+						casper.echo('warning message is verified');
+					});
+				} else {
+					casper.echo('you have followed some topics try to unfollow all contents');
+					
+					this.click('div.panel-heading input[name = "allbox"]');
+					this.wait(3000, function() {
+						this.capture(screenShotsDir+ 'SelectAllForUnfollowContent.png');
+					});
+					this.wait(5000, function() {
+						this.click('.unfollow-button');
+					});
+					this.then(function() {
+						verifyWarningMsg(json.followTopic.ExpectedWarningMessage, casper, function() {
+							casper.echo('warning message is verified');
+						});
+					});
+				}
+				casper.then(function() {
+					this.wait(5000,function() {
+						this.capture(screenShotsDir+ 'followedContent.png');
+					});
+				});
 			});
 		});
 
 		//follow and unFollow category
 
-		//verify when no category is followed by user 
+		//verify warning message when no category is followed by user 
 
 		casper.thenOpen(config.url, function() {
 			casper.echo('Hit on url : '+config.url);
 		});
 		
-		//click on followed content link and verify expected error message
+		//click on followed category link and verify expected Warning message
 		casper.then(function() {
 			this.capture(screenShotsDir+ 'dropdown.png');
 			this.click('span.user-nav-panel li a[href^="/search"]');
-			this.wait(5000,function() {
-				this.capture(screenShotsDir+ 'followedContent.png');
-			});
 			casper.then(function() {
 				this.click('ul.pull-left li#show_threads #anchor_tab_forum_subscriptions');
 			});
-			
-			this.wait(7000, function() {
-				this.capture(screenShotsDir+ 'followedCategory.png');
+			casper.then(function() {
+				this.wait(5000,function() {
+					this.capture(screenShotsDir+ 'followedCategory.png');
+				});
 			});
 			casper.then(function() {
-				var errMessage = this.fetchText('.no-space');
-				casper.echo('errorMessage : '+errMessage);
-				casper.echo('json.followCategory.ExpectedErrorMessage : '+json.followCategory.ExpectedErrorMessage);
-				test.assertEquals(errMessage.trim(), json.followCategory.ExpectedErrorMessage.trim());
-				casper.echo('error message verified');
-
+				if(this.exists('.no-space')) {
+					verifyWarningMsg(json.followCategory.ExpectedWarningMessage, casper, function() {
+						casper.echo('warning message is verified');
+					});
+				} else { 
+					casper.echo('you have followed some category trying to unfollow all category');
+					this.click('div.panel-heading input[name = "allbox"]');
+					this.wait(3000, function() {
+						this.capture(screenShotsDir+ 'SelectAllForUnfollowCategory.png');
+					});
+					this.wait(5000, function() {
+						this.click('.unfollow-button');
+					});
+					this.then(function() {
+						verifyWarningMsg(json.followCategory.ExpectedWarningMessage, casper, function() {
+							casper.echo('warning message is verified');
+						});
+					});	
+				}
+				casper.then(function() {
+					this.wait(5000,function() {
+						this.capture(screenShotsDir+ 'followedCategory.png');
+					});
+				});
 			});
 		});
 
@@ -483,3 +515,13 @@ var verifyUnFollowContent = function(driver, callback) {
 	return callback();
 };
 
+// verify warning message for follow content and follow category
+
+var verifyWarningMsg = function(warningMsg, driver, callback){
+
+	var warningMessage = driver.fetchText('.no-space');
+	casper.echo('warningMessage : '+warningMessage);
+	casper.echo('json.followTopic.ExpectedErrorMessage : '+warningMsg);
+	driver.test.assertEquals(warningMessage.trim(), warningMsg.trim());
+	return callback();
+};
