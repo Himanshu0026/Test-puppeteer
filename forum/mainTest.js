@@ -89,8 +89,8 @@ case "deletetopic":
 	case "calender" :
 		 casper.test.begin('Verify calander functionlity ', function(test) {
 		var x = require('casper').selectXPath;
-		 var calenderSettings = require("./testsuite/calender.js");
-		 calenderSettings.featureTest(casper, casper.test,x);
+		 var calender = require("./testsuite/calender.js");
+		 calender.featureTest(casper, casper.test,x);
 		 casper.run(function(){
 			test.done();
 		});
