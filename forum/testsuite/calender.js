@@ -7,25 +7,23 @@ var forumLogin = require('./forum_login.js');
 var utils = require('./utils.js');
 var json = require('../testdata/calenderData.json');
 
-var calenderSettings = module.exports = {};
+var calender = module.exports = {};
 
-calenderSettings.featureTest = function(casper, test,x) {
+calender.featureTest = function(casper, test,x) {
 	
 	var screenShotsDir = config.screenShotsLocation + "calender/";
-	var date = new Date();
+	var moment = require('moment');
+	moment().format();
+	
 
 	// this is to lauch application to perform related actions
 	casper.start(config.backEndUrl, function() {
 		casper.echo("Title of the page : "+this.getTitle(), 'info');
 		casper.echo(this.getCurrentUrl());
+		casper.echo("Current month is : "+ moment.months(moment().month()));
+		casper.echo("Current date is : "+ moment().date());
+		casper.echo("Current year is : "+ moment().year());
 		
-var monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
-		casper.echo("Current month is : "+ monthNames[date.getMonth()]);
-		casper.echo("Current year is : "+ date.getFullYear());
-		casper.echo("Current date is : "+ date.getDate());
-
 	});
 	
 	//login to backend app by call login function
@@ -75,7 +73,7 @@ var monthNames = ["January", "February", "March", "April", "May", "June",
 		casper.echo("Title of the page : "+this.getTitle(), 'info');
 	});
 	casper.then(function() {
-		calenderSettings.gotoGeneralSettingspage(casper, function(){
+		calender.gotoGeneralSettingspage(casper, function(){
 			casper.echo("Navigated to General Settings page");
 		});
 		this.waitForSelector('#enable_calendar', function() {
@@ -140,7 +138,7 @@ var monthNames = ["January", "February", "March", "April", "May", "June",
 	casper.thenOpen(config.url);
 	//verify calender page and highlighted current date
 	casper.then(function(){
-		calenderSettings.gotoCalanderpage(casper, function() {
+		calender.gotoCalanderpage(casper, function() {
 			casper.wait(3000, function(){
 				test.assert(this.getCurrentUrl().indexOf("calendar")>=0);
 				casper.echo("Title of the page : "+ this.getTitle());
@@ -149,7 +147,7 @@ var monthNames = ["January", "February", "March", "April", "May", "June",
 
 				var highlightedDate = this.fetchText('td.this-day div span a');
 				casper.echo("*** today's date *** "+highlightedDate);
-				test.assertEquals(highlightedDate.trim(), date.getDate().toString());
+				test.assertEquals(highlightedDate.trim(), moment().date().toString());
 			});
 		});
 	});
@@ -158,41 +156,113 @@ var monthNames = ["January", "February", "March", "April", "May", "June",
 	casper.then(function() {
 
 		//verify default calender view mode after navigating to Calender page
+		this.waitForSelector('#monthlyView', function() {
+			test.assertExists('label.btn.btn-default.active');
+			casper.echo('By default Month calender mode is opened');
+		});
 		
-
-
-
 		//verify yearly view after click on year calender mode
 		this.waitForSelector('#yearlyView', function() {
 			this.click('#yearlyView');
 			this.wait(5000, function() {
 				var year = this.fetchText('form[action="/calendar/display"] div a');
-				casper.echo("***Current years is *** : "+year);
-				test.assertEquals(year.trim(), date.getFullYear().toString());
+				casper.echo("*** Current years is *** : "+year);
+				test.assertEquals(year.trim(), (moment().year()).toString());
 				this.capture(screenShotsDir+'calenderview_year.png');
+
+				//verify next year after clicking on next year arrow
+				this.click('a[data-original-title="Next Year"]');
+				this.wait(3000, function() {
+					casper.echo((moment().year()+1));
+					var year = this.fetchText('form[action="/calendar/display"] div a');
+					casper.echo("*** next years is *** : "+year);
+					test.assertEquals(year.trim(), (moment().year()+1).toString());					
+				});
+
+				//verify previous year after clicking on previous year icon
+				this.wait(3000, function() {
+					this.click('a[data-original-title="Previous Year"]');
+					this.wait(3000, function() {
+						var year = this.fetchText('form[action="/calendar/display"] div a');
+						casper.echo("*** previous year is *** : "+year);
+						test.assertEquals(year.trim(), (moment().year()).toString());
+
+						//verify today's calender by clicking on Today option
+						this.click('a.btn.btn-default');
+						this.wait(3000, function() {
+							var highlightedDate = this.fetchText('td.this-day div span a');
+							casper.echo("*** today's date *** "+highlightedDate);
+							test.assertEquals(highlightedDate.trim(), moment().date().toString());
+						});
+					
+					});
+				});
 				
 			});
 		});
+	});
 
-		/*this.waitForSelector('#weeklyView', function() {
+
+	casper.then(function() {
+		this.waitForSelector('#weeklyView', function() {
 			this.click('#weeklyView');
 			this.wait(3000, function() {
-			this.capture(screenShotsDir+'calenderview_week.png');
+				//test.assertExists('table.calendar-mini.col-md-3');
+				test.assertExists('div.calendar-detail-wrapper.weekly');
+				casper.echo('Weekly calender mode is verified after clicking on Weekly calender mode');
+				this.capture(screenShotsDir+'calenderview_week.png');
 			});
-		});*/
-		
-		
+		});
+	});
 
+	casper.then(function() {	
+		this.waitForSelector('#monthlyView', function() {
+			var year = "";
+			this.click('#monthlyView');
+			this.wait(3000, function(){
+				var month = this.fetchText('form[action="/calendar/display"] div a');
+				year = this.fetchText('form[action="/calendar/display"] div a span');
+				month = (month.replace(year, '')).trim()+' ' +year.trim();
+				casper.echo("*** Current month is *** : "+month);
+				test.assertEquals(month, (moment.months(moment().month())+' '+moment().year()));
+				this.capture(screenShotsDir+'calenderview_month.png');
 
+				//verify next month after clicking on next month arrow
+				this.click('a[data-original-title="Next Month"]');
+				this.wait(3000, function() {
+					casper.echo(moment.months(moment().month()+1));
+					var next_month = this.fetchText('form[action="/calendar/display"] div a');
+					next_month = (next_month.replace(year, '')).trim()+' ' +year.trim();
+					casper.echo("*** next month is *** : "+next_month);
+					test.assertEquals(month, (moment.months(moment().month())+' '+moment().year()));					
+				});
 
-
-
-
+				//verify previous month after clicking on previous month icon
+				this.wait(3000, function() {
+					this.click('a[data-original-title="Previous Month"]');
+					this.wait(3000, function() {
+						var prev_month = this.fetchText('form[action="/calendar/display"] div a');
+						prev_month = (prev_month.replace(year, '')).trim()+' ' +year.trim();
+						casper.echo("*** previous month is *** : "+prev_month);
+						test.assertEquals(month, (moment.months(moment().month())+' '+moment().year()));
+						this.click('a.btn.btn-default');
+					
+					});
+				});
+			});
+		});
 
 	});	
 	
 		
-	
+	casper.then(function() {
+		this.click('a.btn.btn-sm.btn-primary');	
+		
+
+
+
+
+	});
 			
 
 
@@ -208,7 +278,7 @@ var monthNames = ["January", "February", "March", "April", "May", "June",
 };
 
 //function to go to general settings page in backend
-calenderSettings.gotoGeneralSettingspage = function(driver, callback) {
+calender.gotoGeneralSettingspage = function(driver, callback) {
 
 	driver.waitForSelector('a[data-tooltip-elm="ddSettings"]', function(){
 		this.click('a[data-tooltip-elm="ddSettings"]');
@@ -222,7 +292,7 @@ calenderSettings.gotoGeneralSettingspage = function(driver, callback) {
 };
 
 //function to go calender page in forum application
-calenderSettings.gotoCalanderpage = function(driver, callback) {
+calender.gotoCalanderpage = function(driver, callback) {
 	driver.waitForSelector('#links-nav', function(){
 		this.click('#links-nav');
 			
@@ -233,5 +303,45 @@ calenderSettings.gotoCalanderpage = function(driver, callback) {
 	});
 	return callback();
 };
+
+//function to create an event
+calender.createEvent = function(data, driver, callback) {
+	driver.fill( 'form#PostCalEvent',  {
+		"event_title" : "data.title",
+		"message" : data.description
+	}, false);
+	
+	if (data.Allday){
+		utils.enableorDisableCheckbox('allDay', true, casper, function() {
+				casper.echo("All day checkbox has been enabled", 'info');
+			});
+	} else {
+		driver.sendKeys('#event_start_date', data.startDate);
+		driver.sendKeys('#event_end_date', data.endDate);
+		driver.click('#from_time');
+		driver.fill('form#PostCalEvent',{
+			'from_time' : data.startTime
+		},false);
+		driver.click('select[name="to_time"]');
+		driver.fill('form#PostCalEvent',{
+		'to_time' : data.endTime
+		},false);
+		driver.sendKeys('', data.startTime);
+		driver.sendKeys('', data.endTime);
+
+	};
+
+	if (data.Repeat) {
+		utils.enableorDisableCheckbox('repeat', true, casper, function() {
+				casper.echo("Repeat checkbox has been enabled", 'info');
+			});
+	};
+
+		
+
+
+
+};
+
 
 
