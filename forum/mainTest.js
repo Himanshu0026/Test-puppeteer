@@ -58,7 +58,8 @@ switch (feature) {
 	casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 
 		var newTopic = require("./testsuite/newTopic.js");
-		newTopic.featureTest(casper, casper.test);
+		var x = require('casper').selectXPath;
+		newTopic.featureTest(casper, casper.test, x);
 		
 		casper.run(function(){
 			test.done();
@@ -70,8 +71,8 @@ switch (feature) {
         casper.test.begin("Start reply topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 
 		var postAReply = require("./testsuite/postAReply.js");
-		postAReply.featureTest(casper, casper.test);
-		
+		var x = require('casper').selectXPath;
+		postAReply.featureTest(casper, casper.test, x);
 		casper.run(function(){
 			test.done();
 		});
@@ -81,8 +82,8 @@ switch (feature) {
         casper.test.begin("Start edit Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 
 		var editTopic = require("./testsuite/editTopic.js");
-		editTopic.featureTest(casper, casper.test);
-		
+		var x = require('casper').selectXPath;
+		editTopic.featureTest(casper, casper.test, x);
 		casper.run(function(){
 			test.done();
 		});

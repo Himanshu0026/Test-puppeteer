@@ -1,7 +1,8 @@
 /****This script is dedicated for start new topic on the forum. It covers testing of topic detail page with all defined validations****/
 
 "use strict";
-
+var utils = require('./utils.js');
+var forumRegister = require('./register.js');
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
 var config = require('../config/config.json');
@@ -9,19 +10,68 @@ var config = require('../config/config.json');
 var newTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'newTopic/';
 
-newTopic.featureTest = function(casper, test) {
+newTopic.featureTest = function(casper, test, x) {
 	
-	//Open Forum URL And Get Title 
+	
 	//casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
-		casper.start(config.url, function() {
+		
+		//go to backend url
+
+		casper.start(config.backEndUrl,function() {
+			casper.echo('Login To Backend URL and disable start topic checkbox');
+			this.wait(7000, function() {
+				casper.echo('Title of the page :' +this.getTitle(), 'info');
+				test.assertTitle('Website Toolbox - Account Login', 'The page has correct title');		
+			});
+		});
+		casper.then(function() {
+			forumRegister.loginToForumBackEnd(config.backendCred, casper, function() {
+				casper.echo('User has been successfuly login to backend', 'info');
+			});
+		});
+		//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'backendLogin.png');
+		});
+
+		casper.then(function() {
+			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
+				casper.echo("Successfully navigated to Edit User group Permission page");
+				casper.wait(4000, function(){
+					this.capture(screenShotsDir+'EditUserPermissionpage.png');
+				});
+			});
+		});	
+		casper.then(function() {
+			utils.enableorDisableCheckbox('post_threads', false, casper, function() {
+				casper.echo("Starts Tpoic checkbox has been disabled", 'info');
+			});
+		});
+		casper.then(function() {
+			utils.clickOnElement(casper, '.btn-blue', function() {
+				casper.echo('Saving Changes');
+			});
+		});
+		casper.then(function() {
+			var msg  = this.fetchText('p[align="center"] font.heading');
+			casper.echo('msg : ' +msg, 'info');
+			casper.echo('config.permissionSettingMsg : ' +config.permissionSettingMsg, 'info');
+			test.assertEquals(msg.trim(), config.permissionSettingMsg.trim());
+		});
+		casper.wait(2000, function() {
+			this.capture(screenShotsDir+'afterChangePermission.png');
+		});		
+		
+		//* start from forum url
+		casper.thenOpen(config.url, function() {
 			casper.echo('Title of the page :' +this.getTitle(), 'info');
 			test.assertTitle('Automation Forum', 'page has the correct title');
 		});
-
+		
 		//Login To App
 		casper.then(function() {
 			forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
-				casper.echo('User has been successfuly login to application', 'info');
+				casper.echo('User has been successfuly login to application with register user', 'info');
 			});
 		});
 
@@ -30,8 +80,68 @@ newTopic.featureTest = function(casper, test) {
 			this.capture(screenShotsDir+ 'login.png');
 		});
 
+		// click on start new topic	
+		casper.then(function(){
+			gotoNewTopicpage(casper, function() {
+				casper.echo('click on START NEW TOPIC', 'info');
+			});
+		});
+		casper.then(function() {
+			
+			if(this.exists('.text-danger')){
+				var warningMsg = this.fetchText('.text-danger');
+				warningMsg = warningMsg.split('.');
+				warningMsg = warningMsg[0] + '.'; 
+				test.assertEquals(warningMsg.trim(), json.newTopic.startTopicPermissionWarning.trim());
+				casper.echo('you are not able to start new topic go to backend and enable permission ');
+			}
+		});
+
+		// reopen backend to enable permission
+		casper.thenOpen(config.backEndUrl,function() {
+			casper.echo('Login To Backend URL and enable start topic checkbox');
+			this.wait(7000, function() {
+				casper.echo('Title of the page :' +this.getTitle(), 'info');
+				test.assertTitle('Website Toolbox', 'The page has correct title');		
+			});
+		});
 		
-		/*//test case for Start New Topic Page with All Blank Field and verify error message
+		casper.then(function() {
+			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
+				casper.echo("Successfully navigated to Edit User group Permission page");
+				casper.wait(4000, function(){
+					this.capture(screenShotsDir+'EditUserPermissionpage.png');
+				});
+			});
+		});	
+		casper.then(function() {
+			utils.enableorDisableCheckbox('post_threads', true, casper, function() {
+				casper.echo("Starts Tpoic checkbox has been enabled", 'info');
+			});
+		});
+		casper.then(function() {
+			utils.clickOnElement(casper, '.btn-blue', function() {
+				casper.echo('Saving Changes');
+			});
+		});
+		casper.then(function() {
+			var msg  = this.fetchText('p[align="center"] font.heading');
+			casper.echo('msg : ' +msg, 'info');
+			casper.echo('config.permissionSettingMsg : ' +config.permissionSettingMsg, 'info');
+			test.assertEquals(msg.trim(), config.permissionSettingMsg.trim());
+		});
+		casper.wait(2000, function() {
+			this.capture(screenShotsDir+'afterChangePermission.png');
+		});		
+
+		casper.thenOpen(config.url, function() {
+			casper.echo('Hit on URL : '+config.url);
+		});
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+'forumUrl.png');
+		});		
+
+		//test case for Start New Topic Page with All Blank Field and verify error message
 		
 		casper.then(function(){
 			gotoNewTopicpage(casper, function() {
@@ -287,7 +397,7 @@ newTopic.featureTest = function(casper, test) {
 			verifyFollowContent(casper, function(){
 				casper.echo('verify Follow Content');
 			});
-		});*/
+		});
 
 		//follow and unFollow Topic
 
@@ -410,6 +520,9 @@ var gotoNewTopicpage = function(driver, callback) {
 	driver.click('#links-nav');
 	driver.click('#latest_topics_show');
 	driver.click('a[href="/post/printadd"]');
+	driver.wait(7000, function() {
+		this.capture(screenShotsDir+ 'startTopic.png');
+	});
 	return callback();
 };
 
