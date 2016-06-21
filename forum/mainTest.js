@@ -3,10 +3,7 @@ var config = require("./config/config.json");
 casper.options.viewportSize = config.app.viewportSize;
 casper.options.verbose = config.app.verbose;
 casper.options.logLevel = config.app.logLevel;
-<<<<<<< HEAD
-=======
 //casper.options.waitTimeout = config.app.waitTimeout;
->>>>>>> 09b66e44b340722dae61e89277cdcb6db1924d60
 
 var feature = casper.cli.get('feature');
 if(feature){
