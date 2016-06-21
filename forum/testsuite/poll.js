@@ -94,10 +94,16 @@ var savePollPage = function(pollQues, publicCheckbox, option1, option2, multiple
 	driver.sendKeys('input[name="public"]', publicCheckbox);
 	driver.sendKeys('#poll_option_1 div input', option1);
 	driver.sendKeys('#poll_option_2 div input', option2);
-	driver.wait(5000, function() {
-		this.click('a[href="#poll-timeout"] .text-muted');
-		this.capture(screenShotsDir+ 'fillPoll.png');
+	driver.then(function(){
+		this.click('a[href="#poll-timeout"] small.text-muted');
 	});
-	driver.click('#save_poll');
+	driver.then(function() {
+		driver.wait(5000, function() {
+			this.capture(screenShotsDir+ 'fillPoll.png');
+		});
+	});
+	driver.then(function() {
+		driver.click('#save_poll');
+	});
+	
 };
-

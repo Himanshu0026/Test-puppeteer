@@ -3,6 +3,10 @@ var config = require("./config/config.json");
 casper.options.viewportSize = config.app.viewportSize;
 casper.options.verbose = config.app.verbose;
 casper.options.logLevel = config.app.logLevel;
+<<<<<<< HEAD
+=======
+//casper.options.waitTimeout = config.app.waitTimeout;
+>>>>>>> 09b66e44b340722dae61e89277cdcb6db1924d60
 
 var feature = casper.cli.get('feature');
 if(feature){
@@ -13,9 +17,12 @@ if(feature){
 
 switch (feature) {
     case "login":
-        casper.test.begin('some test name', function(test) {
+        casper.test.begin('Verify login functionality from home page with all valid and invalid scenarios ', function(test) {
 		var forumLogin = require("./testsuite/forum_login.js");
-		forumLogin.featureTest(casper);
+		forumLogin.featureTest(casper, casper.test);
+		casper.run(function(){
+			test.done();
+		});
 	});
         break;
     case "editProfile":
@@ -41,14 +48,80 @@ switch (feature) {
         
         break;
     case "register":
-        
+    	casper.test.begin('REGISTRATION TEST', function(test) {
+		var forumRegister = require("./testsuite/register.js");
+		forumRegister.featureTest(casper, test);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
         break;
-    case "newtopic":
+   case "newtopic":
+	casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+
+		var newTopic = require("./testsuite/newTopic.js");
+		newTopic.featureTest(casper, casper.test);
+		
+		casper.run(function(){
+			test.done();
+		});
+	});
         
         break;
     case "postreply":
-        
+        casper.test.begin("Start reply topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+
+		var postAReply = require("./testsuite/postAReply.js");
+		postAReply.featureTest(casper, casper.test);
+		
+		casper.run(function(){
+			test.done();
+		});
+	});
         break;
+ case "edittopic":
+        casper.test.begin("Start edit Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+
+		var editTopic = require("./testsuite/editTopic.js");
+		editTopic.featureTest(casper, casper.test);
+		
+		casper.run(function(){
+			test.done();
+		});
+	});
+        break;
+	case "forgotpassword":
+        casper.test.begin('Verify forgot your password functionality from home page ', function(test) {
+		var forumLogin = require("./testsuite/forgotPassword.js");
+		forumLogin.featureTest(casper, casper.test);
+		casper.run(function(){
+			test.done();
+		});
+	});
+        break;
+case "deletetopic":
+        casper.test.begin("Delete Topic functionality from home page & verify deleted post", function(test) {
+
+		var deleteTopic = require("./testsuite/deleteTopic.js");
+		deleteTopic.featureTest(casper, casper.test);
+		
+		casper.run(function(){
+			test.done();
+		});
+	});
+        break;
+	case "calender" :
+		 casper.test.begin('Verify calander functionlity ', function(test) {
+		var x = require('casper').selectXPath;
+		 var calender = require("./testsuite/calender.js");
+		 calender.featureTest(casper, casper.test,x);
+		 casper.run(function(){
+			test.done();
+		});
+	});
+        break;
+
     default:
 	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
         casper.echo("Options:");
@@ -56,6 +129,8 @@ switch (feature) {
 	casper.echo("	login");
 	casper.echo("	newtopic");
 	casper.echo("	postreply\n");
+	casper.echo("	edittopic\n");
+	casper.echo("	deletetopic\n");
 	casper.echo("Relevant test data has to be fed in JSON format in files placed for each feature in '<current directory>/testData/'.");
 	casper.exit();
 };

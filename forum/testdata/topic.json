@@ -1,10 +1,43 @@
 {
-	"newTopic" : {    
-		"username": "rajatk",
-		"password": "rk@123",
-		"title" : "ping",
-		"content" : "hey there..!!",
-		"category" : "Automation"
+	"newTopic" : {
+
+			"username" : "rajatk",
+			"password" : "rk@123",
+			"tempHref" : "",
+
+			"ValidCredential" : {
+				"title" : "ONEpluse",
+				"content" : "hey there..!!",
+				"category" : "Automation"
+			},    
+			
+			"blankTitle" : {
+				"title" : "",
+				"content" : "hey there..!!",
+				"category" : "Automation",
+				"ExpectedErrorMessage" : "Error: You must enter a title for your message."
+			},
+
+			"blankContent" : {
+				"title" : "ping",
+				"content" : "",
+				"category" : "Automation",
+				"ExpectedErrorMessage" : "Error: You must enter a message to post."
+			},
+
+			"blankCategory" : {
+				"title" : "ping",
+				"content" : "hey there..!!",
+				"category" : "",
+				"ExpectedErrorMessage" : "Error: You must select a category for your message."
+			},
+	
+			"blankField" : {
+				"title" : "",
+				"content" : "",
+				"category" : "",
+				"ExpectedErrorMessage" : "Error: You must enter a title for your message."
+			}
 	},
 	
 	"poll" : {
@@ -17,11 +50,45 @@
 	},
 
 	"replyTopic" : {
-		"content" : "This is rajat Kesharwani only test test"
+
+		"ValidCredential" : {
+			"content" : "hello This is only test test"
+		},
+		
+		"blankContent" : {
+			"content" : "",
+			"ExpectedErrorMessage" : "Error: You must enter a message to post."
+		}
+		
 	},
 
 	"editTopic" : {
-		"title" : "HolyDay",
-		"content" : "sunday is funday"
+		
+		"validTitle" : {
+			"title" : "HolyDay"
+		},
+
+		"blankTitle" : {
+			"title" : "",
+			"ExpectedErrorMessage" : "Error: You must enter a subject for your message."
+		},
+
+		"validContent" : {
+			"content" : "sunday is funday"
+		},
+
+		"blankContent" : {
+			"content" : "",
+			"ExpectedErrorMessage" : "Error: You must enter a message to post."
+		}
+		
+	},
+	
+	"followTopic" : {
+		"ExpectedWarningMessage" : "You haven't followed any topics yet."
+	},
+
+	"followCategory" : {
+		"ExpectedWarningMessage" : "You haven't followed any categories yet."
 	}
 }
