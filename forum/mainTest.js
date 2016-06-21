@@ -28,6 +28,7 @@ switch (feature) {
 		editProfile.featureTest(casper, casper.test);
 		casper.run(function() {
 			test.done();
+			test.assert(true);
 		});
 	});
         
