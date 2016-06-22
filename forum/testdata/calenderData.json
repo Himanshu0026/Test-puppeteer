@@ -53,6 +53,37 @@
 	"endTime" : "09:00 am",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
 	"ExpectedErrMessage" : "Error: The Event date can not fall before the current date."
+	},
+
+	{
+	"validationType" : "Recurssion with blank day in Daily",
+	"Title" : "new event",
+	"Allday" : false,
+	"startDate" : "06/22/2016",
+	"endDate" : "06/22/2016",
+	"startTime" : "07:00 am",
+	"endTime" : "09:00 am",
+	"Repeat" : true,
+	"recurrence" : "Daily",
+	"days" : "",
+	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
+	"ExpectedErrMessage" : "Error: The Event date can not fall before the current date."
+	},
+
+	{
+	"validationType" : "Start date older than current Date",
+	"Title" : "new event",
+	"Allday" : false,
+	"startDate" : "06/22/2016",
+	"endDate" : "06/22/2016",
+	"startTime" : "07:00 am",
+	"endTime" : "09:00 am",
+	"Repeat" : true,
+	"recurrence" : "Weekly",
+	"weeks" : "2",
+	"weekday" : ["Sunday", "Monday"],
+	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
+	"ExpectedErrMessage" : "Error: The Event date can not fall before the current date."
 	}
 	
 	]
