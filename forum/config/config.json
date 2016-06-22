@@ -1,5 +1,5 @@
 {
-	"screenShotsLocation": "../Screenshots/",
+	"screenShotsLocation": "/home/hotam/Screenshots/",
 	"url": "http://automation.websitetoolbox.com/",
 	"backEndUrl": "https://www.websitetoolbox.com/",
 	"app": {	

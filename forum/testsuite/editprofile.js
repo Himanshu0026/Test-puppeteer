@@ -10,15 +10,25 @@ var screenShotsDir = config.screenShotsLocation + 'editProfile/';
 editProfile.featureTest = function(casper, test) {
 	// Methos For Verifying Alert Message
 	casper.on('remote.alert', function(message) {
-		this.echo("********************");
-		this.echo('alert message: ' + message, 'info');
+		this.log('alert message: ' + message, 'info');
 		var expectedErrorMsg = "Please provide a signature.";
 		test.assertEquals(message, expectedErrorMsg);
 		this.log('Alert message is verified when user try to edit with without signature', 'info');
 	});
 
+	//Method For Loading "User's Field" under settings From Backend
+	/*casper.start( config.backEndUrl, function () {
+		test.assertTitle('Website Toolbox');
+		this.log('Title of the page :' +this.getTitle(), 'info');
+		casper.then(function() {
+			openBackEndFieldSetttings(casper, test, function() {
+				casper.log('Loaded "Fields" under "Users" on settings from backend', 'info');		
+			});
+		});
+	});*/
+	
 	//Open Forum URL And Get Title 
-	casper.start(config.url, function() {
+	casper.thenOpen(config.url, function() {
 		try {
 			test.assertTitle('Automation Forum');
 		} catch (e) {
@@ -50,7 +60,7 @@ editProfile.featureTest = function(casper, test) {
 		} catch (e) {
 			this.log('Please check userName or Password. You may have entered either userName or password wrong', 'error');
 		}
-	});
+	}); 
 
 	//Clicking On 'Edit Profile' link
 	casper.then(function() {
@@ -89,12 +99,13 @@ editProfile.featureTest = function(casper, test) {
 								errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
 								msgTitle = 'BlankBirthDay';
 							} 
-
-							//Called Method For Verifying Error Messages
-				
-							//casper.wait('3000', function() {
-								verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
-							//});
+								
+								//Called Method For Verifying Error Messages
+								if(errorMessage && errorMessage != '') {
+									verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
+								} else {
+									casper.log('some error occurred on updating edirt profile', 'info');
+								}
 					});
 				});
 		} catch (e) {
@@ -168,10 +179,12 @@ editProfile.featureTest = function(casper, test) {
 
 				//Called Method For Verifying Error Messages
 				
-				casper.wait('3000', function() {
-				if (errorMessage && errorMessage != '')
+				if (errorMessage && errorMessage != '') {
 					verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
-				});
+				} else {
+					casper.log('some error occurred on updating account setting', 'info');
+				}
+					
 			});
 		});
 	});
@@ -212,7 +225,7 @@ editProfile.featureTest = function(casper, test) {
 			test.assertExists('button.dropdown-toggle span.caret');
 			test.assertExists('#logout');
 			forumLogin.logoutFromApp(casper, function() {
-				casper.echo('Successfully logout from forum', 'info');
+				casper.log('Successfully logout from forum', 'info');
 				casper.wait(5000, function() {
 					this.capture(screenShotsDir+ 'logout.png');
 				});
@@ -221,14 +234,66 @@ editProfile.featureTest = function(casper, test) {
 			casper.log('logout button not found', 'error');
 		}
 	}); 
-
-	casper.run(function(){
-	test.done();
-	test.assert(true);
-	});
 };
 
 /************************************PRIVATE METHODS***********************************/
+
+//Method for opening user's field from backend setting
+var openBackEndFieldSetttings = function(driver, test, callback) {
+	
+	//Open Forum Backend URL And Get Title 
+	/*driver.start(config.backEndUrl, function() {
+		this.log('Title of the page :' +driver.getTitle(), 'info');
+		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', driver.getTitle());
+		
+	});*/
+	
+	//Click On Login Link 
+	driver.then(function() {
+		test.assertExists('a#navLogin');
+		this.click('a#navLogin');
+		driver.wait(5000, function() {
+			this.capture(screenShotsDir + 'login_form.png');
+			this.log('Successfully open login form.....', 'info');
+		});
+	});  
+	//Filling Username/Password On Login Form
+	driver.then(function() {
+		loginToForumBackEnd(json.backEndInfo, casper, function() {
+			driver.wait(5000,function(){
+				this.capture(screenShotsDir + 'login_submit.png');
+				driver.log('Successfully login on forum back end....', 'info');
+			});
+		});
+	});
+
+	//Clicking On "Users" Tab Under Settings 
+	driver.then(function() {
+		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		test.assertExists('div#ddUsers a[href="/tool/members/mb/fields"]');
+		this.click('div#ddUsers a[href="/tool/members/mb/fields"]');
+	});
+	
+	driver.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+		driver.wait(5000,function(){
+			this.capture(screenShotsDir + 'Default_Registration_Options.png');
+			this.log('Successfully Open Default Registration Options.....', 'info');
+		});
+	});
+	return callback();
+};
+
+//Method For Login To Forum Backend
+var loginToForumBackEnd = function(data, driver, callback) {
+	driver.fill('form[name="frmLogin"]', {
+		'username' : data.uname,
+		'password' : data.upass,
+	}, false);
+	driver.test.assertExists('form[name="frmLogin"] button');
+	driver.click('form[name="frmLogin"] button');
+	return callback();
+};
 
 //Method For Editing User's Edit Profile
 
@@ -237,7 +302,7 @@ var editToProfile = function(userData, driver, callback) {
 	driver.click('#edit_signature .text-muted');
 	driver.fill('form[action="/register"]', {
 		'name': userData.fullName,
-        	'imType': userData.imType,
+        'imType': userData.imType,
 		'imID': userData.imID,
 		'signature' : userData.signature
 		
