@@ -1,5 +1,6 @@
 /****This script is dedicated for editing user's profile and account setting on the forum. It covers testing of edit user's profile and account setting page with all defined validations****/
 'use strict';
+var forumRegister = require('./register.js');
 var forumLogin = require('./forum_login.js');
 var json = require('../testdata/editData.json');
 var config = require('../config/config.json');
@@ -16,17 +17,96 @@ editProfile.featureTest = function(casper, test) {
 		this.log('Alert message is verified when user try to edit with without signature', 'info');
 	});
 
-	//Method For Loading "User's Field" under settings From Backend
-	/*casper.start( config.backEndUrl, function () {
-		test.assertTitle('Website Toolbox');
-		this.log('Title of the page :' +this.getTitle(), 'info');
-		casper.then(function() {
-			openBackEndFieldSetttings(casper, test, function() {
-				casper.log('Loaded "Fields" under "Users" on settings from backend', 'info');		
-			});
+	//Login To Forum BackEnd
+	forumRegister.loginToForumBackEnd(casper, test, function() {
+		casper.log('Logged-in successfully from back-end', 'info');		
+	}); 
+
+	//Clicking On "Users" Tab Under Settings 
+	casper.then(function() {
+		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		test.assertExists('div#ddUsers a[href="/tool/members/mb/fields"]');
+		this.click('div#ddUsers a[href="/tool/members/mb/fields"]');
+		casper.wait(5000,function(){
+			this.capture(screenShotsDir + 'forum_settings.png');
 		});
-	});*/
+	});
+
+	//Redirecting To 'Default Registration Options' Page
+	casper.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+		casper.wait(5000,function(){
+			this.capture(screenShotsDir + 'Default_Registration_Options.png');
+			this.echo('Successfully Open Default Registration Options.....', 'info');
+		});
+	});
+
+	//Set Different Value For 'Full Name' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
+	casper.then(function() {
+		this.eachThen(json['setDefaultBackendSetting'], function(response) {
+			this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+				this.log('REOPEN Default Registration Options', 'info');
+			});
 	
+			this.log('Response Data : ' +JSON.stringify(response.data), 'info');
+			var responseData = response.data;
+			this.then(function() {
+				this.fillSelectors('form[name="posts"]', {
+					'select[name="opt_invisible"]' :  responseData.opt_invisible,
+					'select[name="visiblity_invisible"]' :  responseData.visiblity_invisible,
+					'select[name="required_name"]' :  responseData.required_name,
+					'select[name="visiblity_name"]' :  responseData.visiblity_name,
+					'select[name="required_imType"]' :  responseData.required_imType,
+					'select[name="visiblity_imType"]' :  responseData.visiblity_imType,
+					'select[name="required_dob"]' :  responseData.required_dob,
+					'select[name="visiblity_dob"]' :  responseData.visiblity_dob,
+					'select[name="required_signature"]' :  responseData.required_signature,
+					'select[name="visiblity_signature"]' :  responseData.visiblity_signature
+				}, false);
+        		});
+			
+			this.then(function() {
+				test.assertExists('form[name="posts"] button');
+				this.click('form[name="posts"] button');
+				casper.wait(5000, function() {
+					this.capture(screenShotsDir + 'updatedBackendSettings.png');				
+				});
+			});
+
+			/*this.wait(5000,function(){
+				this.capture(screenShotsDir + 'fullName_'+responseData.required+'_'+responseData.visibility+'.png');
+				this.thenOpen("http://automation.websitetoolbox.com/register/register", function() {
+					this.capture(screenShotsDir + 'fullName_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
+					if (responseData.visibility == '1') {
+						test.assertDoesntExist('form[name="PostTopic"] input[name="name"]');
+					} else {
+						test.assertExists('form[name="PostTopic"] input[name="name"]');
+						if (responseData.required == '1') {
+							registerToApp(json['fullnameData'], casper, function() {
+								var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="name"]', 'data-original-title');
+								if(errorMsg && errorMsg != "") {
+									verifyErrorMsg(errorMsg, responseData.expectedErrorMsg, 'blankFullNameWithRequired', casper);
+								}
+							});
+						} else {
+							registerToApp(json['fullnameData'], casper, function() {
+								casper.echo('Processing to registration on forum.....', 'info');
+							});
+							
+							this.wait(5000,function(){
+								this.capture(screenShotsDir + 'register_submit.png');
+								redirectToLogout(casper, test, function() {
+									casper.echo('FULL NAME TASK COMPLETED........');
+								});
+							});
+							
+						}
+					}
+				});
+			});*/
+		});
+	});
+
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
 		try {

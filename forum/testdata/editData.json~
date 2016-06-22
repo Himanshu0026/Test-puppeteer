@@ -71,7 +71,20 @@
 	},
 
 	"backEndInfo" : {
-    	"uname" : "automation",
-    	"upass" : "test"
-    }
+	    	"uname" : "automation",
+	    	"upass" : "test"
+    	},
+
+	"setDefaultBackendSetting" : [{
+		"opt_invisible" : "1",
+		"visiblity_invisible" : "8",
+		"required_name" : "1",
+		"visiblity_name" : "8",
+		"required_imType" : "1",
+		"visiblity_imType" : "8",
+		"required_dob" : "1",
+		"visiblity_dob" : "8",
+		"required_signature" : "1",
+		"visiblity_signature" : "8"
+	}]	
 }  

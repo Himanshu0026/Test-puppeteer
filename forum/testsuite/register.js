@@ -435,48 +435,39 @@ forumRegister.customFieldsTest = function(casper, test) {
 
 //Login To Forum Back End
 
-var loginToForumBackEnd = function(driver, test, callback) {
+forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	
 	//Open Forum Backend URL And Get Title 
-	
 	driver.start(config.backEndUrl, function() {
 		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title of the page :' +this.getTitle(), 'info');
 	});
 	
 	//Click On Login Link 
-
 	driver.then(function() {
 		test.assertExists('a#navLogin');
 		this.click('a#navLogin');
-		this.echo('Successfully open login form.....', 'info');
-	});
-	
-	//Getting Screenshot After Clicking On 'Login' Link  
-	
-	driver.wait(5000, function() {
-		this.capture(screenShotsDir + 'login_form.png');
+		driver.wait(5000, function() {
+			this.capture(screenShotsDir + 'login_form.png');
+			this.log('Successfully open back-end login form ', 'info');
+		});
 	});
 	
 	//Filling Username/Password On Login Form
-	
 	driver.then(function() {
-		fillDataToLogin(json['backEndInfo'], driver, function() {
-			driver.echo('Successfully login on forum back end....', 'info');
+		forumRegister.fillDataToLogin(json.backEndInfo, driver, function() {
+			driver.wait(5000,function(){
+				this.capture(screenShotsDir + 'login_submit.png');
+				this.log('Successfully login on forum back-end', 'info');
+			});
 		});
-	});
-
-	//Getting Screenshot After Submitting 'Login' Form From Backend
-	
-	driver.wait(5000,function(){
-		this.capture(screenShotsDir + 'login_submit.png');
 	});
 };
 
 
 //Method For Filling Data In Login Form(Back end)
 
-var fillDataToLogin = function(data, driver, callback) {
+forumRegister.fillDataToLogin = function(data, driver, callback) {
 	driver.fill('form[name="frmLogin"]', {
 		'username' : data.uname,
 		'password' : data.upass,
