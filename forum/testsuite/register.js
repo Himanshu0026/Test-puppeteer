@@ -13,7 +13,7 @@ forumRegister.featureTest = function(casper, test) {
 
 	//Login To Forum BackEnd 
 	
-	loginToForumBackEnd(casper, test, function() {
+	forumRegister.loginToForumBackEnd(casper, test, function() {
 		casper.echo('Successfully Login To Forum Back End...........', 'Info');
 	});
 	
@@ -162,7 +162,7 @@ forumRegister.customFieldsTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	
-	loginToForumBackEnd(casper, test, function() {
+	forumRegister.loginToForumBackEnd(casper, test, function() {
 		casper.echo('Successfully Login To Forum Back End...........', 'Info');
 	});
 	
@@ -435,7 +435,7 @@ forumRegister.customFieldsTest = function(casper, test) {
 
 //Login To Forum Back End
 
-var loginToForumBackEnd = function(driver, test, callback) {
+forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	
 	//Open Forum Backend URL And Get Title 
 	
