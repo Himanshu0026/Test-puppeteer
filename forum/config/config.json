@@ -1,7 +1,7 @@
 {
 	"screenShotsLocation": "/home/hotam/Screenshots/",
 	"url": "http://automation.websitetoolbox.com/",
-	"backEndUrl": "https://www.websitetoolbox.com/tool/members/login",
+	"backEndUrl": "https://www.websitetoolbox.com/",
 	"app": {	
 		"verbose" : true,
 	 	"logLevel" : "info",

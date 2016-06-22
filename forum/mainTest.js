@@ -48,7 +48,16 @@ switch (feature) {
     case "register":
     	casper.test.begin('REGISTRATION TEST', function(test) {
 		var forumRegister = require("./testsuite/register.js");
-		//forumRegister.featureTest(casper, test);
+		forumRegister.featureTest(casper, test);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
+        break;
+         case "registerWithSettings":
+    	casper.test.begin('REGISTRATION TEST', function(test) {
+		var forumRegister = require("./testsuite/register.js");
 		forumRegister.customFieldsTest(casper, test);
 		casper.run(function(){
 			test.done();
