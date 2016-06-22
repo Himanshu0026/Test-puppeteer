@@ -59,6 +59,11 @@ switch (testArg) {
 	editProfile.featureTest(casper);
 	casper.run();
 	break;
+   case "deleteAccount":
+	var deleteAccount = require("./testsuite/deleteAccount.js");
+	deleteAccount.featureTest(casper);
+	casper.run();
+	break;
     case "forgotpassword":
         var forgotpwd = require("./testsuite/forgotPassword.js");
 	forgotpwd.featureTest(casper);
@@ -71,6 +76,7 @@ switch (testArg) {
 	casper.echo("	forgotpassword");
 	casper.echo("	newtopic");
 	casper.echo("	editprofile");
+	casper.echo("	deleteAccount");	
 	casper.echo("	postreply");
 	casper.echo("	edittopic");
 	casper.echo("	deletetopic");

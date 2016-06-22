@@ -1,173 +1,230 @@
 /****This script is dedicated for editing user's profile and account setting on the forum. It covers testing of edit user's profile and account setting page with all defined validations****/
 'use strict';
 var forumLogin = require('./forum_login.js');
-var utils = require('./utils.js');
 var json = require('../testdata/editData.json');
 var config = require('../config/config.json');
 
 var editProfile = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'editProfile/';
 
-editProfile.featureTest = function(casper) {
-	
+editProfile.featureTest = function(casper, test) {
+	// Methos For Verifying Alert Message
+	casper.on('remote.alert', function(message) {
+		this.echo("********************");
+		this.echo('alert message: ' + message, 'info');
+		var expectedErrorMsg = "Please provide a signature.";
+		test.assertEquals(message, expectedErrorMsg);
+		this.log('Alert message is verified when user try to edit with without signature', 'info');
+	});
+
 	//Open Forum URL And Get Title 
-	
 	casper.start(config.url, function() {
+		try {
+			test.assertTitle('Automation Forum');
+		} catch (e) {
+			this.log('Title does not match', 'error');
+		}
 		this.log('Title of the page : ' +this.getTitle(), 'info');
 	});
 
 	//Login To App
-
 	casper.then(function() {
-		forumLogin.loginToApp(json['userLogin'].uname, json['userLogin'].upass, casper, function() {
-			casper.log('Logged-in successfully', 'info');
+		forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, casper, function() {
+			casper.log('User logged-in successfully', 'info');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'loggedIn_user.png');
+			});
 		});
-		
-	});
 
-	//Getting Screenshot After Successfully Logged-In
-
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir+ 'loggedIn_user.png');
 	});
 
 	//Clicking On User's Icon To Display User's Drop-down For Editing Profile
-
 	casper.then(function() {
-		this.click('.default-user');
-		this.log('clicked on users icon successfully', 'info');
+		try {
+			test.assertExists('.default-user');
+			this.click('.default-user');
+			this.log('clicked on users icon successfully', 'info');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'userIcon.png');
+			});
+		} catch (e) {
+			this.log('Please check userName or Password. You may have entered either userName or password wrong', 'error');
+		}
 	});
 
-	//Getting Screenshot After clicking On User's Icon
-
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir+ 'userIcon.png');
-	});
-	
 	//Clicking On 'Edit Profile' link
-
 	casper.then(function() {
-		this.click('a[href="/register/register?edit=1&userid=4535587"]');
-		this.log('clicked on user edit profile link successfully', 'info');
+		try {
+			test.assertExists('a[href^="/register/register?edit="]');
+			this.click('a[href^="/register/register?edit="]');
+			this.log('clicked on user edit profile link successfully', 'info');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'useredit_form.png');
+			});
+		} catch (e) {
+			this.log('edit profile link not found. Please check user name or password', 'error');
+		}
 	});
 
-	//Getting Screenshot After Loading Edit Profile Page
+	//Editing Upload Avatar On User's Edit Profile Page
+	/*casper.then(function() {
+		test.assertExist('a#attachAvatar.linkAvatarProfile');
+	});*/
 
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir+ 'useredit_form.png');
-	});
-	
-	//Edit Blank/Invalid Data On User's Edit Profile Page	 
-
+	//Fill Blank/Invalid Data On Edit Profile Page And Verifying Errors
 	casper.then(function() {
-		editToApp(json['userEditWithoutData'].birthday, casper, function() {
-			casper.log('Mandatory Fields are necessary', 'error');
-		});
-	});
+		try {
+				this.eachThen(json['invalidDataForEditProfile'], function(response) {
+					casper.log('Response Data : ' +JSON.stringify(response.data), 'info');
+					var responseData = response.data;
+					editToProfile(responseData, casper, function() {
+							var errorMessage = '';
+							var msgTitle = '';
+							if (responseData.expectedErrorMsg)
+								var expectedErrorMsg = responseData.expectedErrorMsg;
+							if (responseData.imID == '') {
+								errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+								msgTitle = 'BlankScreenName';
+							} else if (responseData.birthday == '') {
+								errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
+								msgTitle = 'BlankBirthDay';
+							} 
 
-	//Getting Screenshot After Leaving Input Field Blank In User's Edit Profile Page
-
-	casper.wait(5000,function(){
-    		this.capture(screenShotsDir+ 'errorOnEditProfile.png');
-
-	});
+							//Called Method For Verifying Error Messages
+				
+							//casper.wait('3000', function() {
+								verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
+							//});
+					});
+				});
+		} catch (e) {
+			this.log('please change some of the settings from backend', 'error');
+		}
 	
+	});	
+
+	// This Is Used To Reload The Current Page
+	casper.then(function(){
+		this.reload();
+	});
+
 	//Edit Valid Data On User's Edit Profile Page
-
 	casper.then(function() {
-		editToApp(json['userEdit'].birthday, casper, function(){
-			casper.log('values are successfully updated', 'info');
+		editToProfile(json.validDataForEditProfile, casper, function(){
+			casper.then(function() {
+                                try {
+					test.assertExists('#moderator-panel div[role="alert"]');
+					var successMessage = this.fetchText('#moderator-panel div[role="alert"]');
+					this.log('Actual Success Message : '+successMessage.trim(), 'info');
+					this.log('Ecpected Success Message : '+json.validDataForEditProfile.expectedSuccessMsg, 'info');
+					test.assertEquals(successMessage.trim(),json.validDataForEditProfile.expectedSuccessMsg);
+					this.log('Success message is verified when user try to edit with valid data', 'info');
+					casper.wait(5000,function(){
+						this.capture(screenShotsDir+ 'updatedEditProfile.png');
+						this.log('Profile Updated Successfully', 'info');
+					});
+				} catch (e) {
+					this.log('success message not found', 'error');
+				}
+			});
 		});
-	});
-	
-	//Getting Screenshot After Updated Values In User's Edit Profile Page
-
-	casper.wait(5000,function(){
-    		this.capture(screenShotsDir+ 'updatedEditProfile.png');
-
 	});
 
 	//Clicking On User's 'Account Settings' link For Editing User's Account Setting
-
 	casper.then(function() {
-		this.click('a[href="/register?action=preferences&userid=4535587"]');
-		this.log('clicked on users account settings link successfully', 'info');
+		try {
+			test.assertExists('a[href^="/register?action=preferences&userid="]');
+			this.click('a[href^="/register?action=preferences&userid="]');
+			this.log('clicked on users account settings link successfully', 'info');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'userAccountSetting_form.png');
+			});
+		} catch (e) {
+			this.log('account setting link not found', 'error');
+		}
 	});
 
-	//Getting Screenshot After Loading Account Setting Page
-
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir+ 'userAccountSetting_form.png');
-	});
-
-	//Editing User's Account Settings Without An Email
-
+	//Fill Blank/Invalid Data On Account Setting Page And Verifying Errors
 	casper.then(function() {
-		editAccountSetting(json['editAccountSettingWithoutEmail'].upass, json['editAccountSettingWithoutEmail'].email, casper, function() {
-			casper.log('Email address is required', 'error');
+			this.eachThen(json['invalidDataForAccount'], function(response) {
+			casper.log('Response Data : ' +JSON.stringify(response.data), 'info');
+			var responseData = response.data;
+			editAccountSetting(responseData, casper, function() {
+				var errorMessage = '';
+				var msgTitle = '';
+				var expectedErrorMsg = '';
+				if (responseData.expectedErrorMsg)
+					expectedErrorMsg = responseData.expectedErrorMsg;
+				if (responseData.upass == '') {
+					errorMessage = casper.fetchText('div.editable-error-block.help-block');
+					msgTitle = 'BlankPassword';
+				} else if (responseData.email == '') {
+					errorMessage = casper.fetchText('div.editable-error-block.help-block');
+					msgTitle = 'BlankEmail';
+				} else if (responseData.email == 'xxxxxxxxxx') {
+					errorMessage = casper.fetchText('div.editable-error-block.help-block');
+					msgTitle = 'InvalidEmail';
+				} 
+
+				//Called Method For Verifying Error Messages
+				
+				casper.wait('3000', function() {
+				if (errorMessage && errorMessage != '')
+					verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
+				});
+			});
 		});
 	});
 
-	//Getting Screenshot After Leaving Email Field Blank In Account Settings Page
-
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir+ 'errorOnBlankEmail.png');
+	// This Is Used To Reload The Current Page
+	casper.then(function(){
+		this.reload();
 	});
-	
-	//Editing User's Account Settings With Invalid Email
 
+	//Editing user's Account Setting With Valid Data	
 	casper.then(function() {
-		editAccountSetting(json['editAccountSettingWithInvalidEmail'].upass, json['editAccountSettingWithInvalidEmail'].email, casper, function() {
-			casper.log('Email address is invalid', 'error');
+		editAccountSetting(json.validDataForEditAccount, casper, function() {
+			casper.wait(3000, function() {
+
+				this.capture(screenShotsDir+ '11.png');
+				try {
+					test.assertExists('div.alert.alert-success.text-center');
+					var successMessage = this.fetchText('div.alert.alert-success.text-center');
+					this.log('Actual Success Message : '+successMessage.trim(), 'info');
+					this.log('Ecpected Success Message : '+json.validDataForEditAccount.expectedSuccessMsg, 'info');
+					test.assertEquals(successMessage.trim(),json.validDataForEditAccount.expectedSuccessMsg);
+					this.log('Success message is verified when user try to edit account setting and preferences with valid data', 'info');
+					casper.wait(5000, function() {
+						this.capture(screenShotsDir+ 'updatedAccountSetting.png');
+						this.log('account setting updated successfully', 'info');
+					});
+				} catch (e) {
+					this.log('Success message not found', 'error');
+				}
+			});
+			
 		});
-	});
-
-	//Getting Screenshot After Filling-Up Invalid Email in Account Setting Page
-
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir+ 'errorOnInvalidEmail.png');
-	});
-
-	//Editing user's Account Setting With Valid Data
-	
-	casper.then(function() {
-		editAccountSetting(json['editAccountSetting'].upass, json['editAccountSetting'].email, casper, function() {
-			casper.log('successfully updated account setting', 'info');
-		});
-	});
-
-	//Getting Screenshot After Filling-Up Values In Account Setting Page
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir+ 'updatedAccountSetting.png');
-	});
-	
-	//Deleting User's Account. 
-
-	casper.then(function() {
-		deleteAccount(casper, function() {
-			casper.log('Account deleted successfully', 'info');
-		});
-	});
-
-	//Getting Screenshot After Deletion Of The User
-
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir+ 'deletedAccount.png');
 	});
 
 	//Clicking On Logout Link
-
 	casper.then(function() {
-		forumLogin.logoutFromApp(casper, function() {
-			casper.log('Successfully logout from forum', 'info');
-		});
-	});
+		try {
+			test.assertExists('button.dropdown-toggle span.caret');
+			test.assertExists('#logout');
+			forumLogin.logoutFromApp(casper, function() {
+				casper.echo('Successfully logout from forum', 'info');
+				casper.wait(5000, function() {
+					this.capture(screenShotsDir+ 'logout.png');
+				});
+			});
+		} catch (e) {
+			casper.log('logout button not found', 'error');
+		}
+	}); 
 
-	//Getting Screenshot After Clicking On 'Logout' Link  
-
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir+ 'logout.png');
+	casper.run(function(){
+	test.done();
+	test.assert(true);
 	});
 };
 
@@ -175,39 +232,84 @@ editProfile.featureTest = function(casper) {
 
 //Method For Editing User's Edit Profile
 
-var editToApp = function(birthday, driver, callback) {
-	driver.sendKeys('input[id="birthDatepicker"]', birthday, {reset:true});
-	driver.click('form[action="/register"] button[name="submit"]');
-	return callback();
+var editToProfile = function(userData, driver, callback) {
+	driver.test.assertExists('#edit_signature .text-muted');
+	driver.click('#edit_signature .text-muted');
+	driver.fill('form[action="/register"]', {
+		'name': userData.fullName,
+        	'imType': userData.imType,
+		'imID': userData.imID,
+		'signature' : userData.signature
+		
+    	}, false);
+	driver.sendKeys('input[id=birthDatepicker]', userData.birthday, {reset: true});
+	driver.wait(3000, function() {
+		driver.then(function() {
+			driver.test.assertExists('form[action="/register"] button[name="submit"]');
+			this.click('form[action="/register"] button[name="submit"]');
+			driver.wait(3000, function() {
+				this.sendKeys('#signature', '', {keepFocus: true,reset: true});
+				return callback();
+			});
+		});
+	});
 };
 
 //Method For Editing User's Account Settings
 
-var editAccountSetting = function(password, email, driver, callback) {
-	driver.click('div#usrPwd .change-value');
-	driver.wait(5000, function() {
-		this.sendKeys('div.editable-input input[type="password"]', password);
-		this.click('div.editable-buttons button[type="submit"]');
-		this.click('div#usrEmail .change-value');
-		this.wait(5000, function() {
-			driver.sendKeys('div.editable-input input[class="form-control input-small"]', email, {reset: true});
-			driver.click('div.editable-buttons button[type="submit"]');
+var editAccountSetting = function(userData, driver, callback) {
+	if (userData.upass == '') {
+		driver.test.assertExists('div#usrPwd .change-value');
+		driver.click('div#usrPwd .change-value');
+		driver.wait(5000, function() {
+			this.sendKeys('div.editable-input input[type="password"]', userData.upass, {reset: true});
+			this.click('div.editable-buttons button[type="submit"]');
+			return callback();
+		});
+	} else if (userData.email == '') {
+		driver.test.assertExists('div#usrEmail .change-value');
+		driver.click('div#usrEmail .change-value');
+		driver.wait(5000, function() {
+			driver.sendKeys('div.editable-input input[class="form-control input-small"]', userData.email, {reset: true});
+			this.click('div.editable-buttons button[type="submit"]');
+			return callback();
+		});
+	} else if (userData.email == 'xxxxxxxxxx'){
+		driver.test.assertExists('div#usrEmail .change-value');
+		driver.click('div#usrEmail .change-value');
+		driver.wait(5000, function() {
+			driver.sendKeys('div.editable-input input[class="form-control input-small"]', userData.email, {reset: true});
+			this.click('div.editable-buttons button[type="submit"]');
+			return callback();
+		});
+	} else {
+		driver.test.assertExists('div#usrPwd .change-value');
+		driver.click('div#usrPwd .change-value');
+		driver.wait(5000, function() {
+			this.sendKeys('div.editable-input input[type="password"]', userData.upass, {reset: true});
+			this.click('div.editable-buttons button[type="submit"]');
+			driver.test.assertExists('div#usrEmail .change-value');
+			driver.click('div#usrEmail .change-value');
 			driver.wait(5000, function() {
-				// editing preference on the account setting page
-				this.click('#option2');
-				this.click('#opt1');
-				this.click('#INVS', {checked : true});
-				this.click('form[action="/register"] button[type="submit"]');			
+				driver.sendKeys('div.editable-input input[class="form-control input-small"]', userData.email, {reset: true});
+				this.click('div.editable-buttons button[type="submit"]');
+				driver.wait(5000, function () {
+					this.click('button.btn.btn-primary')
+					return callback();		
+				});
+			
 			});
 		});
-	});
-	return callback();
+	}	
 };
 
-//Method For Deleting User's Account
+//Method For Verifying Error Message On Edit Profile/Account Setting Page After Submitting Form
 
-var deleteAccount = function(driver, callback) {
-	driver.click('#deleteAccountDialog');
-	driver.click('#deleteAccount');
-	return callback();
+var verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver) {
+	if((errorMessage == expectedErrorMsg) || (errorMessage.indexOf(expectedErrorMsg) > -1)) {
+		driver.log('Error message is verified when user try to edit with "' +msgTitle+'"', 'info');
+	} else {
+		driver.log("Error Message Is Not Correct", 'error');
+	}
+	driver.capture(screenShotsDir + 'Error_OnEdit' +msgTitle+ '.png');
 };

@@ -9,12 +9,15 @@ var config = require('../config/config.json');
 var deleteTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'deleteTopic/';
 
-deleteTopic.featureTest = function(casper) {
+deleteTopic.featureTest = function(casper, test) {
 		
+
+
 	//Open Forum URL And Get Title 
 
 	casper.start(config.url, function() {
 		this.log('Title of the page :' +this.getTitle(), 'info');
+		test.assertTitle('Automation Forum', 'page has the correct title');
 	});
 
 	//Login To App
@@ -34,15 +37,50 @@ deleteTopic.featureTest = function(casper) {
 	//Delete Topic
 
 	casper.then(function() {
-		deleteTopic(casper, function() {
-			casper.log('topic deleted', 'info');		
+		casper.echo('deleting topic');
+		this.click('div.panel-body input.entry-checkbox');
+		var val1 = this.evaluate(function(){
+			var elm = document.querySelector('.entry-checkbox:checked');
+			var checkedValue = elm.value;
+			return checkedValue;
 		});
+
+		if(test.assertExists('li.selectedRow span.topic-content a.topic-title span')) {
+			this.click('a#delete');
+		}	
+
+		casper.wait(7000, function() {
+			this.click('div.panel-body input.entry-checkbox');
+			var val2 = this.evaluate(function(){
+				var elm = document.querySelector('.entry-checkbox:checked');
+				var checkedValue = elm.value;
+				return checkedValue;
+			});
+			test.assertNotEquals(val1,val2);
+			casper.echo('deleted post is verified');
+		});		
 	});
 	
 	//Getting Screenshot After Clicking On 'Delete' Icon
  
 	casper.wait(10000,function() {
 		this.capture(screenShotsDir+ 'deletedTopic.png');
+	});
+	
+	//Delete All Topic
+	casper.then(function(){
+		casper.echo('deleting all topic');
+		var checked = this.click('div.panel-heading input[name = "allbox"]');
+		this.capture(screenShotsDir+ 'SelectAllForDelete.png');	
+		console.log('checked : '+checked);
+		test.assertEquals(checked,true);
+		this.click('a#delete');
+	});
+	
+	//Getting Screenshot After Clicking On 'Delete' Icon
+ 
+	casper.wait(10000,function() {
+		this.capture(screenShotsDir+ 'deletedAllTopic.png');
 	});
 
 	//Log Out From App
@@ -62,18 +100,15 @@ deleteTopic.featureTest = function(casper) {
 
 /************************************PRIVATE METHODS***********************************/
 
-// method for delete topic 
 
-var deleteTopic = function(driver, callback) {
-	driver.click('div.panel-body input.entry-checkbox');
-	driver.then(function() {
-		var topicTitle = driver.fetchText('.topic-title');
-		this.log('++++++++++++++++++++++++++++++++++++topic Title : ' +topicTitle, 'info');
-	});
+/*var deleteAllTopic = function(driver, callback){
+	
+	driver.click('div.panel-heading input[name = "allbox"]');
+	driver.capture(screenShotsDir+ 'SelectAllForDelete.png');
 	driver.then(function() {
 		this.click('a#delete');
 	});
 	return callback();
-};
+};*/
 
 
