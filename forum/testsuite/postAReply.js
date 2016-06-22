@@ -2,6 +2,8 @@
 
 "use strict";
 
+var utils = require('./utils.js');
+var forumRegister = require('./register.js');
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
 var config = require('../config/config.json');
@@ -9,30 +11,214 @@ var config = require('../config/config.json');
 var postAReply = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'postAReply/';
 
-postAReply.featureTest = function(casper, test) {
+postAReply.featureTest = function(casper, test, x) {
 
-	//Open Forum URL And Get Title 
-
-	casper.start(config.url, function() {
-		casper.echo('Title of the page :' +this.getTitle(), 'info');
-		test.assertTitle('Automation Forum', 'page has the correct title');
-	});
-
-	//Login to app
-
-	casper.then(function() {
-		forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
-			casper.echo('User has successfully login to application', 'info');
+	//Login To Backend URL and disable Reply Topic and Reply Own Topic checkbox
+		casper.start(config.backEndUrl,function() {
+			casper.echo('Login To Backend URL and disable Reply Topic and Reply Own Topic checkbox');
+			this.wait(7000, function() {
+				casper.echo('Title of the page :' +this.getTitle(), 'info');
+				test.assertTitle('Website Toolbox - Account Login', 'The page has correct title');		
+			});
 		});
-	});
+		casper.then(function() {
+			forumRegister.loginToForumBackEnd(config.backendCred, casper, function() {
+				casper.echo('User has been successfuly login to backend', 'info');
+			});
+		});
+		//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'backendLogin.png');
+		});
 
-	//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.then(function() {
+			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
+				casper.echo("Successfully navigated to Edit User group Permission page");
+				casper.wait(4000, function(){
+					this.capture(screenShotsDir+'EditUserPermissionpage.png');
+				});
+			});
+		});	
+		casper.then(function() {
+			utils.enableorDisableCheckbox('post_replies', false, casper, function() {
+				casper.echo("Reply Topic checkbox has been disabled", 'info');
+			});
+		});
+		casper.then(function() {
+			utils.enableorDisableCheckbox('other_post_replies', false, casper, function() {
+				casper.echo("Reply own Topic checkbox has been disabled", 'info');
+			});
+		});
+		casper.then(function() {
+			utils.clickOnElement(casper, '.btn-blue', function() {
+				casper.echo('Saving Changes');
+			});
+		});
+		casper.then(function() {
+			var msg  = this.fetchText('p[align="center"] font.heading');
+			test.assertEquals(msg.trim(), config.permissionSettingMsg.trim());
+		});
+		casper.wait(2000, function() {
+			this.capture(screenShotsDir+'afterChangePermission.png');
+		});		
+		
+		// start from forum url
+		casper.thenOpen(config.url, function() {
+			casper.echo('Title of the page :' +this.getTitle(), 'info');
+			test.assertTitle('Automation Forum', 'page has the correct title');
+		});
+		
+		//Login To App
+		casper.then(function() {
+			forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
+				casper.echo('User has been successfuly login to application with register user', 'info');
+			});
+		});
 
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'login.png');
-	});
+		//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'login.png');
+		});
 
-	// Verify error message when user try to post blank content
+		// post reply on own Topics when permission false	
+		casper.then(function(){
+			this.click('form[name="posts"] h4 a');
+			test.assertDoesntExist('#message');
+			casper.echo('you dont have permission to reply post on own topic', 'info');	
+		});
+		
+		//Logout From App
+		casper.then(function() {
+			forumLogin.logoutFromApp(casper, function() {
+				casper.echo('Successfully logout from application');
+			});
+		});
+	
+		//Getting Screenshot After Clicking On 'Logout' Link
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'logout.png');
+		});
+
+		//Login To App with other user
+		casper.then(function() {
+			forumLogin.loginToApp(json['newTopic'].username1, json['newTopic'].password1, casper, function() {
+				casper.echo('User has been successfuly login to application with register user', 'info');
+			});
+		});
+
+		//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'login.png');
+		});
+
+		// post reply on others Topic when permission false	
+		casper.then(function(){
+			test.assertDoesntExist('#message');
+			casper.echo('you dont have permission to reply post on others topic', 'info');
+		});
+
+
+	// reopen Backend URL and enable Reply Topic and Reply Own Topic checkbox
+		casper.thenOpen(config.backEndUrl,function() {
+			casper.echo('\nLogin To Backend URL and enable Reply Topic and Reply Own Topic checkbox\n');
+			this.wait(7000, function() {
+				casper.echo('Title of the page :' +this.getTitle(), 'info');
+				test.assertTitle('Website Toolbox', 'The page has correct title');		
+			});
+		});
+		
+		casper.then(function() {
+			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
+				casper.echo("Successfully navigated to Edit User group Permission page");
+				casper.wait(4000, function(){
+					this.capture(screenShotsDir+'EditUserPermissionpage.png');
+				});
+			});
+		});	
+		casper.then(function() {
+			utils.enableorDisableCheckbox('other_post_replies', true, casper, function() {
+				casper.echo("Reply Others Topic checkbox has been enabled", 'info');
+			});
+		});
+		casper.then(function() {
+			utils.enableorDisableCheckbox('post_replies', true, casper, function() {
+				casper.echo("reply Own Tpoic checkbox has been enabled", 'info');
+			});
+		});
+		casper.then(function() {
+			utils.clickOnElement(casper, '.btn-blue', function() {
+				casper.echo('Saving Changes');
+			});
+		});
+		casper.then(function() {
+			var msg  = this.fetchText('p[align="center"] font.heading');
+			casper.echo('msg : ' +msg, 'info');
+			casper.echo('config.permissionSettingMsg : ' +config.permissionSettingMsg, 'info');
+			test.assertEquals(msg.trim(), config.permissionSettingMsg.trim());
+		});
+		casper.wait(2000, function() {
+			this.capture(screenShotsDir+'afterChangePermission.png');
+		});		
+
+		//reopen forum url for reply on topic after change permission
+		casper.thenOpen(config.url, function() {
+			casper.echo('Hit on URL : '+config.url);
+		});
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+'forumUrl.png');
+		});		
+		
+		// post reply on others topic with valid and invalid contents 	
+		casper.then(function() {
+			casper.echo('replyed on others topic');
+			postReplyAndVerify();
+		});
+			
+		//Logout From App
+		casper.then(function() {
+			forumLogin.logoutFromApp(casper, function() {
+				casper.echo('Successfully logout from application');
+			});
+		});
+	
+		//Getting Screenshot After Clicking On 'Logout' Link
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'logout.png');
+		});
+
+		//Login To App with other user to post reply on own topic
+		casper.then(function() {
+			forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
+				casper.echo('User has been successfuly login to application with register user', 'info');
+			});
+		});
+
+		//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'login.png');
+		});
+
+		// post reply on own topic with valid and invalid contents
+		casper.then(function() {
+			casper.echo('replyed on own topic');
+			postReplyAndVerify();
+		});
+
+		//Logout From App
+		casper.then(function() {
+			forumLogin.logoutFromApp(casper, function() {
+				casper.echo('Successfully logout from application');
+			});
+		});
+	
+		//Getting Screenshot After Clicking On 'Logout' Link
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'logout.png');
+		});
+		
+	///*****************************************************************************************///
+	function postReplyAndVerify(){
+		// Verify error message when user try to post blank content
 
 	casper.then(function() { 
 			casper.on('remote.alert', function(message) { 
@@ -55,12 +241,9 @@ postAReply.featureTest = function(casper, test) {
 	
 	//Getting Screenshot After Clicking On 'POST' Link 
 
-	/*casper.wait(3000,function( ){
-		this.capture(screenShotsDir+ 'blankReplyTopic.png');
-	});*/
-
+	
 	casper.thenOpen(config.url, function() {
-	    this.echo("Now I'm in your Home again.")
+	    this.echo("Hit on url : " +config.url);
 	});
 
 	//Reply topic with valid credential
@@ -86,28 +269,11 @@ postAReply.featureTest = function(casper, test) {
 			var id = element[element.length-1].id;
 			return id;	
 		});
-		var contentMsg = this.fetchText("#"+elementId);
-		casper.echo('************ contentMsg : ' +contentMsg, 'info');
-		var content = json.replyTopic.ValidCredential.content;
-		casper.echo('************ content : ' +content, 'info');
-		
+		var contentMsg = this.fetchText("#"+elementId);		
 		test.assertEquals(contentMsg.trim(), content.trim());
 		casper.echo('content message is Verified when user try to post a reply on topic');
 	});
-
-	//Logout From App
-
-	casper.then(function() {
-		forumLogin.logoutFromApp(casper, function() {
-			casper.echo('Successfully logout from application');
-		});
-	});
-
-	//Getting Screenshot After Clicking On 'Logout' Link
-
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'logout.png');
-	});
+	};
 
 };
 
@@ -116,9 +282,15 @@ postAReply.featureTest = function(casper, test) {
 
 // method for reply topic on any post
 
-var replyTopic = function(content, driver, callback) { console.log("function content : "+content);
+var replyTopic = function(content, driver, callback) { 
 	
-	driver.click('form[name="posts"] h4 a');
+	try{
+		driver.click('form[name="posts"] h4 a');
+	} catch(err) {
+
+	}	
+	
+
 	driver.then(function() {
 		this.sendKeys('#message', content);
 	});
@@ -132,13 +304,7 @@ var replyTopic = function(content, driver, callback) { console.log("function con
 	
 	driver.then(function(){
 			driver.click('#reply_submit');
-	});
-	/*driver.then(function(){
-			driver.on('remote.alert', function(message) { driver.echo("inside ON function");
-			console.log('alert message: ' + message);	
-		});
-	});*/
-	
+	});	
 	return callback();
 };
 

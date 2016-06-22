@@ -2,6 +2,8 @@
 
 "use strict";
 
+var utils = require('./utils.js');
+var forumRegister = require('./register.js');
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
 var config = require('../config/config.json');
@@ -9,28 +11,126 @@ var config = require('../config/config.json');
 var editTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'editTopic/';
 
-editTopic.featureTest = function(casper,test) {
+editTopic.featureTest = function(casper,test, x) {
 
-	//Open Forum URL And Get Title 
+	//go to backend url
 
-	casper.start(config.url, function() {
-		this.log('Title of the page :' +this.getTitle(), 'info');
-		test.assertTitle('Automation Forum', 'page has the correct title');
-	});
-
-	//LOGIN TO APP  
-
-	casper.then(function(){
-		forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
-			casper.log('User has been successfuly login to application', 'info');
+		casper.start(config.backEndUrl,function() {
+			casper.echo('Login To Backend URL and disable start topic checkbox');
+			this.wait(7000, function() {
+				casper.echo('Title of the page :' +this.getTitle(), 'info');
+				test.assertTitle('Website Toolbox - Account Login', 'The page has correct title');		
+			});
 		});
-	});
-	
-	//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.then(function() {
+			forumRegister.loginToForumBackEnd(config.backendCred, casper, function() {
+				casper.echo('User has been successfuly login to backend', 'info');
+			});
+		});
+		//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'backendLogin.png');
+		});
 
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'login.png');
-	});
+		casper.then(function() {
+			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
+				casper.echo("Successfully navigated to Edit User group Permission page");
+				casper.wait(4000, function(){
+					this.capture(screenShotsDir+'EditUserPermissionpage.png');
+				});
+			});
+		});	
+		casper.then(function() {
+			utils.enableorDisableCheckbox('edit_posts', false, casper, function() {
+				casper.echo("Edit Tpoic checkbox has been disabled", 'info');
+			});
+		});
+		casper.then(function() {
+			utils.clickOnElement(casper, '.btn-blue', function() {
+				casper.echo('Saving Changes');
+			});
+		});
+		casper.then(function() {
+			var msg  = this.fetchText('p[align="center"] font.heading');
+			casper.echo('msg : ' +msg, 'info');
+			casper.echo('config.permissionSettingMsg : ' +config.permissionSettingMsg, 'info');
+			test.assertEquals(msg.trim(), config.permissionSettingMsg.trim());
+		});
+		casper.wait(2000, function() {
+			this.capture(screenShotsDir+'afterChangePermission.png');
+		});		
+		
+		//* start from forum url
+		casper.thenOpen(config.url, function() {
+			casper.echo('Title of the page :' +this.getTitle(), 'info');
+			test.assertTitle('Automation Forum', 'page has the correct title');
+		});
+		
+		//Login To App
+		casper.then(function() {
+			forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
+				casper.echo('User has been successfuly login to application with register user', 'info');
+			});
+		});
+
+		//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'login.png');
+		});
+
+		// edit topic title when permission false	
+		casper.then(function(){
+			this.click('form[name="posts"] h4 a');
+			test.assertDoesntExist('#editTopic');	
+		});
+		// edit topic content when permission false
+		casper.then(function(){
+			test.assertDoesntExist('a#edit_post_request');
+		});
+
+		// reopen backend to enable permission
+		casper.thenOpen(config.backEndUrl,function() {
+			casper.echo('Login To Backend URL and enable start topic checkbox');
+			this.wait(7000, function() {
+				casper.echo('Title of the page :' +this.getTitle(), 'info');
+				test.assertTitle('Website Toolbox', 'The page has correct title');		
+			});
+		});
+		
+		casper.then(function() {
+			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
+				casper.echo("Successfully navigated to Edit User group Permission page");
+				casper.wait(4000, function(){
+					this.capture(screenShotsDir+'EditUserPermissionpage.png');
+				});
+			});
+		});	
+		casper.then(function() {
+			utils.enableorDisableCheckbox('edit_posts', true, casper, function() {
+				casper.echo("Edit Tpoic checkbox has been enabled", 'info');
+			});
+		});
+		casper.then(function() {
+			utils.clickOnElement(casper, '.btn-blue', function() {
+				casper.echo('Saving Changes');
+			});
+		});
+		casper.then(function() {
+			var msg  = this.fetchText('p[align="center"] font.heading');
+			casper.echo('msg : ' +msg, 'info');
+			casper.echo('config.permissionSettingMsg : ' +config.permissionSettingMsg, 'info');
+			test.assertEquals(msg.trim(), config.permissionSettingMsg.trim());
+		});
+		casper.wait(2000, function() {
+			this.capture(screenShotsDir+'afterChangePermission.png');
+		});		
+
+		casper.thenOpen(config.url, function() {
+			casper.echo('Hit on URL : '+config.url);
+		});
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+'forumUrl.png');
+		});		
 
 	// Verify error message when user try edit with blank title
 
@@ -184,12 +284,15 @@ var editTopicTitle = function(title, driver, callback){ console.log("title : "+t
 	} catch(err) {
 		casper.echo('Exception : '+err);
 	}
+	
+	
 		driver.then(function(){
-			driver.sendKeys('.input-sm', title, {reset:true});
-			this.capture(screenShotsDir+ 'setTopicTitle.png');
+				driver.sendKeys('.input-sm', title, {reset:true});
+				this.capture(screenShotsDir+ 'setTopicTitle.png');
 		});
 		driver.then(function(){
-			driver.click('div.editable-buttons .editable-submit');	
+				driver.click('div.editable-buttons .editable-submit');
+				
 		});
 	
 	
@@ -208,7 +311,6 @@ var editTopicContent = function(content, driver, callback){
 
 	}
 
-	try{
 		driver.then(function(){
 			this.click('div.post-body .panel-dropdown .pull-right a.dropdown-toggle');
 			this.wait(7000, function(){
@@ -220,26 +322,20 @@ var editTopicContent = function(content, driver, callback){
 			this.click('div.post-body .panel-dropdown .pull-right ul.dropdown-menu li a#edit_post_request');
 			this.wait(7000, function(){
 				driver.capture(screenShotsDir+ 'edit.png');
-			});
+			});		
 		});	
-	
+
 		driver.wait(7000, function(){
 			this.withFrame('message1_ifr', function() {
 				casper.echo('*****enter message in iframe', 'info');
 				driver.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
-				driver.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
- 				driver.sendKeys('#tinymce', content);
+				driver.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true}); 					driver.sendKeys('#tinymce', content);
 				driver.capture(screenShotsDir+ 'editedTopicContent.png');	
 			});
-		});
-	
+		});	
 		driver.then(function(){
 			this.click('div.form-group input.btn-primary');	
 		});
-	} catch(err) {
-		casper.echo('Exception : '+err);
-	}
-	
 
 	return callback();
 };

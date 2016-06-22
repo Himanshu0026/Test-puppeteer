@@ -15,5 +15,7 @@
 	"backendCred" : {
 		"uname" : "automation",
     		"upass" : "test"
-	}
+	},
+	
+	"permissionSettingMsg" : "Your user group settings have been updated."
 }
