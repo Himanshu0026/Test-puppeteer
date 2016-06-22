@@ -7,7 +7,7 @@ http.createServer(function (req, res) {
     res.statusCode = 404
     res.end('no such location')
   })
-}).listen(7777);
+}).listen(80);
 
 handler.on('error', function (err) {
   console.error('Error:', err.message)
@@ -25,4 +25,10 @@ handler.on('issues', function (event) {
     event.payload.action,
     event.payload.issue.number,
     event.payload.issue.title)
+});
+
+app.all("/", function(req, res){
+	console.log("recieved request");
+	res.render("index.html);
+
 });
