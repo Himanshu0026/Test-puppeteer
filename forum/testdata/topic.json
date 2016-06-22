@@ -93,5 +93,9 @@
 
 	"followCategory" : {
 		"ExpectedWarningMessage" : "You haven't followed any categories yet."
+	},
+	
+	"deleteTopic" : {
+		"topicName" : "q2rw"
 	}
 }

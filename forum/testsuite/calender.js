@@ -260,7 +260,7 @@ calender.featureTest = function(casper, test,x) {
 		
 	casper.then(function() {
 		this.click('a.btn.btn-sm.btn-primary');	
-		this.eachThen(json['invalidInfo'], function(response) {
+		/*this.eachThen(json['invalidInfo'], function(response) {
 			casper.echo("=========" +JSON.stringify(response.data));
 			calender.createEvent(response.data, casper, function() {
 				var responseData = response.data;
@@ -300,11 +300,29 @@ calender.featureTest = function(casper, test,x) {
 						casper.capture(screenShotsDir+'createEvent_OldCurrentDate.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
 					});
+				}else if(responseData.validationType == "Recurssion with blank day in Daily") {
+					casper.wait(3000, function() {
+						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
+						casper.echo("Error message for Start date older than current Date is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.capture(screenShotsDir+'createEvent_DailywithBlankDay.png');
+						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+					});
 				}
+			});*/
+		//});
+		this.wait(5000, function(){
+			casper.echo("wait for 5 seconds");
+			casper.echo("=========" +JSON.stringify(json["invalidInfo"][6]));
+			calender.createEvent(json["invalidInfo"][6], casper, function() {
+					casper.wait(5000, function() {
+					casper.echo("********************************************");
+					this.capture(screenShotsDir+'createEvent_Weekly.png');
+					var ActualErrMessage = this.fetchText('div.alert.alert-danger');
+					casper.echo("Error message is : "+casper.fetchText('div.alert.alert-danger'));
+				});
 			});
+
 		});
-
-
 
 
 	});
@@ -366,15 +384,27 @@ calender.createEvent = function(data, driver, callback) {
 			});
 			if(!data.startDate){
 				this.sendKeys('#event_start_date', "1/23/2017", {reset:true});
-			} else {
+			} else {	casper.echo("******"+ data.startDate);
 				this.sendKeys('#event_start_date', data.startDate, {reset:true});}
 		} else {
 			utils.enableorDisableCheckbox('allDay', false, driver, function() {
 				casper.echo("Allday checkbox has been disabled", 'info');
 			});
-			this.sendKeys('#event_start_date', data.startDate, {reset:true});
-			this.sendKeys('#event_end_date', data.endDate, {reset:true});
-			this.click('#from_time');
+			this.sendKeys('#event_start_date', data.startDate, {reset:true, keepFocus: true});
+		
+			this.sendKeys('#event_end_date', data.endDate, {reset:true, keepFocus: true});
+
+			var date1 = this.evaluate(function () {
+				return document.getElementById('event_start_date').value;
+			var date1 =document.getElementById('event_end_date').value;
+			});
+			var date2 = this.evaluate(function () {
+				return document.getElementById('event_end_date').value;
+			});
+			casper.echo("*******Start date ******* : "+date1);
+			casper.echo("**********end date ****** : "+date2);
+
+						this.click('#from_time');
 			this.fill('form#PostCalEvent',{
 				'from_time' : data.startTime
 			},false);
@@ -386,58 +416,74 @@ calender.createEvent = function(data, driver, callback) {
 		};
 	});
 
-	/*if (data.Repeat) {
+	if (data.Repeat) {
 		utils.enableorDisableCheckbox('repeat', true, casper, function() {
 				casper.echo("Repeat checkbox has been enabled", 'info');
 			});
 		switch (data.recurrence) {
 		
 		case "Daily" :
-			driver.click('input#rb_event_1');
-			driver.sendKeys('input[name="weeklybox"]', data.days, {reset:true} );
+			driver.click('#rb_event_1');
+			
+			driver.sendKeys('input[name="dailybox"]', data.days, {reset:true} );
 		break;
 		case "Weekly" : 
-			driver.click('input#rb_event_2');
-			driver.sendKeys('input[name="weeklybox"]', data.weekly, {reset:true} );
-			switch (data.day) {
-				case "Monday" :
-					driver.click('input#cb_monbox');
-				case "Tuesday" :
-					driver.click('input#cb_tuebox');
-				case "Wednesday" :
-					driver.click('input#cb_wedbox');
-				case "Thursday" :
-					driver.click('input#cb_thubox');
-				case "Friday" :
-					driver.click('input#cb_fribox');
-				case "Saturday" :
-					driver.click('input#cb_satbox');
-				case "Sunday" :
-					driver.click('input#cb_sunbox');
-			};
+			driver.click('#rb_event_2');
+			driver.sendKeys('input[name="weeklybox"]', data.weeks, {reset:true} );
+driver.wait(3000, function() { this.capture(screenShotsDir+'createEvent_Weeklyday.png'); casper.echo("**********weeks day *******"); });
+			casper.echo("Length of array          **** "+data.weekday.length);
+			for(var i=0; i<data.weekday.length; i++){
+				casper.echo("*********weekday******"+data.weekday[i]);
+				switch (data.weekday[i]) {
+					case "Monday" :
+						driver.click('input#cb_monbox');
+					break;
+					case "Tuesday" :
+						driver.click('input#cb_tuebox');
+					break;
+					case "Wednesday" :
+						driver.click('input#cb_wedbox');
+					break;
+					case "Thursday" :
+						driver.click('input#cb_thubox');
+					break;
+					case "Friday" :
+						driver.click('input#cb_fribox');
+					break;
+					case "Saturday" :
+						driver.click('input#cb_satbox');
+					break;
+					case "Sunday" :
+						driver.click('input#cb_sunbox');
+					break;
+					default :
+						casper.echo("No week day is passed in parameter");
+				};
+			}
 	
 		break;
 		case "Monthly" :
-			driver.click('input#rb_event_3');
-			driver.sendKeys('input[name="weeklybox"]', data.weekly, {reset:true} );
+			driver.click('#rb_event_3');
+			driver.sendKeys('input[name="monthlybox"]', data.months, {reset:true} );
 
 
 		break;
 		case "Yearly" :
-			driver.click('input#');
-			driver.sendKeys('input[name="weeklybox"]', data.weekly, {reset:true} );
+			driver.click('#rb_event_4');
+			driver.sendKeys('input[name="yearlybox"]', data.years, {reset:true} );
 
 
 
 
+//driver.wait(3000, function() { this.capture(screenShotsDir+'createEvent_Weeklyday.png'); casper.echo("**********weeks day *******"); });
 
 
 
-
+		};
 	};
-	};*/
 	driver.wait(3000, function(){
-		this.click('button#post_event_buttton');	
+		this.click('button#post_event_buttton');
+	this.capture(screenShotsDir+'createEvent_Weeklyday.png'); casper.echo("**********weeks day *******");	
 	});
 	return callback();
 

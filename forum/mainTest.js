@@ -2,7 +2,7 @@ var config = require("./config/config.json");
 
 casper.options.viewportSize = config.app.viewportSize;
 casper.options.verbose = config.app.verbose;
-casper.options.logLevel = config.app.logLevel;
+//casper.options.logLevel = config.app.logLevel;
 //casper.options.waitTimeout = config.app.waitTimeout;
 
 var feature = casper.cli.get('feature');
@@ -55,7 +55,7 @@ switch (feature) {
 		});
 	});
         break;
-         case "registerWithSettings":
+	case "registerWithSettings":
     	casper.test.begin('REGISTRATION TEST', function(test) {
 		var forumRegister = require("./testsuite/register.js");
 		forumRegister.customFieldsTest(casper, test);
@@ -113,8 +113,8 @@ case "deletetopic":
         casper.test.begin("Delete Topic functionality from home page & verify deleted post", function(test) {
 
 		var deleteTopic = require("./testsuite/deleteTopic.js");
-		deleteTopic.featureTest(casper, casper.test);
-		
+		var x = require('casper').selectXPath;
+		deleteTopic.featureTest(casper, casper.test, x);		
 		casper.run(function(){
 			test.done();
 		});
