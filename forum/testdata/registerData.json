@@ -152,6 +152,72 @@
     "backEndInfo" : {
     	"uname" : "automation",
     	"upass" : "test"
+    },
+    
+    "setValueOnRegister" : [{
+    	"required" : "1",
+    	"visibility" : "1"
+    }, 
+    
+    {
+    	"required" : "1",
+    	"visibility" : "2"
+    },
+    
+    {
+    	"required" : "1",
+    	"visibility" : "4"
+    },
+    
+    {
+    	"required" : "0",
+    	"visibility" : "1"
+    },
+    
+    {
+    	"required" : "0",
+    	"visibility" : "2"
+    },
+    
+    {
+    	"required" : "0",
+    	"visibility" : "4"
+    }],
+    
+    "fullnameData" : {
+    	"uname" : "blank_fullname",
+        "uemail" : "blank_fullname@wt.com",
+        "upass" : "1234",
+        "fullName" : "",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank fullname",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "Please enter user full name." 
+    },
+    
+    "imIdBlankData" : {
+        "uname" : "blank_imID1",
+        "uemail" : "blank_imID1@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank IM ID",
+        "imID" : "",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank im-id",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "Please enter your screen name." 
+    },
+    
+    "imIdData" : {
+        "uname" : "blank_imID2",
+        "uemail" : "blank_imID2@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank IM ID",
+        "imID" : "hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank im-id",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "Please enter your screen name." 
     }
     
 }

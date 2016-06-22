@@ -2,7 +2,7 @@ var config = require("./config/config.json");
 
 casper.options.viewportSize = config.app.viewportSize;
 casper.options.verbose = config.app.verbose;
-casper.options.logLevel = config.app.loglevel;
+casper.options.logLevel = config.app.logLevel;
 
 var feature = casper.cli.get('feature');
 if(feature){
@@ -21,10 +21,21 @@ switch (feature) {
 		});
 	});
         break;
+	case "editProfile":
+	casper.test.begin("Start Edit Profile functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+		var editProfile = require("./testsuite/editprofile.js");
+		editProfile.featureTest(casper, casper.test);
+		casper.run(function() {
+			test.done();
+		});
+	});
+        
+        break;
     case "register":
     	casper.test.begin('REGISTRATION TEST', function(test) {
 		var forumRegister = require("./testsuite/register.js");
-		forumRegister.featureTest(casper, test);
+		//forumRegister.featureTest(casper, test);
+		forumRegister.customFieldsTest(casper, test);
 		casper.run(function(){
 			test.done();
 			test.assert(true);
