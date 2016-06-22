@@ -1,4 +1,7 @@
 var http = require('http');
+//express = require('express');
+
+//var app = exports.app = express();
 var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: 'myhashsecret' });
 
@@ -27,8 +30,8 @@ handler.on('issues', function (event) {
     event.payload.issue.title)
 });
 
-app.all("/", function(req, res){
+/*app.get("/default", function(req, res){
 	console.log("recieved request");
-	res.render("index.html);
+	res.render("index.html");
 
-});
+});*/
