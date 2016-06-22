@@ -270,7 +270,7 @@ postAReply.featureTest = function(casper, test, x) {
 			return id;	
 		});
 		var contentMsg = this.fetchText("#"+elementId);		
-		test.assertEquals(contentMsg.trim(), content.trim());
+		test.assertEquals(contentMsg.trim(), json.replyTopic.ValidCredential.content.trim());
 		casper.echo('content message is Verified when user try to post a reply on topic');
 	});
 	};

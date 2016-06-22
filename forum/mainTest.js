@@ -113,8 +113,8 @@ case "deletetopic":
         casper.test.begin("Delete Topic functionality from home page & verify deleted post", function(test) {
 
 		var deleteTopic = require("./testsuite/deleteTopic.js");
-		deleteTopic.featureTest(casper, casper.test);
-		
+		var x = require('casper').selectXPath;
+		deleteTopic.featureTest(casper, casper.test, x);		
 		casper.run(function(){
 			test.done();
 		});

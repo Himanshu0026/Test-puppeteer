@@ -1,6 +1,7 @@
 /****This script is dedicated for start new topic on the forum. It covers testing of topic detail page with all defined validations****/
 
 "use strict";
+
 var utils = require('./utils.js');
 var forumRegister = require('./register.js');
 var json = require('../testdata/topic.json');
