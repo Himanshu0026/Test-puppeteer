@@ -204,8 +204,7 @@
         "imID" : "",
         "birthday" : "04/12/1991",
         "usignature" : "This is my signature blank im-id",
-        "namePrivate" : true,
-        "expectedErrorMsg" : "Please enter your screen name." 
+        "namePrivate" : true
     },
     
     "imIdData" : {
@@ -216,8 +215,51 @@
         "imID" : "hello",
         "birthday" : "04/12/1991",
         "usignature" : "This is my signature blank im-id",
-        "namePrivate" : true,
-        "expectedErrorMsg" : "Please enter your screen name." 
+        "namePrivate" : true
+    },
+    
+    "dobBlankData" : {
+        "uname" : "blank_dob",
+        "uemail" : "blank_dob@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank dob",
+        "imID" : "hello",
+        "birthday" : "",
+        "usignature" : "This is my signature blank dob",
+        "namePrivate" : true
+    },
+    
+    "dobData" : {
+        "uname" : "blank_dob1",
+        "uemail" : "blank_dob1@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank dob",
+        "imID" : "hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank dob",
+        "namePrivate" : true
+    },
+    
+    "signatureBlankData" : {
+        "uname" : "blank_signature",
+        "uemail" : "blank_signature@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank Signature",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "",
+        "namePrivate" : true
+    },
+    
+    "signatureData" : {
+        "uname" : "blank_signature1",
+        "uemail" : "blank_signature1@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank Signature",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "hii...how r u?",
+        "namePrivate" : true
     }
     
 }

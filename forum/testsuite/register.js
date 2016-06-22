@@ -189,7 +189,7 @@ forumRegister.customFieldsTest = function(casper, test) {
 	
 	//Set Different Value For 'Full Name' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
 	
-	/*casper.then(function() {
+	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
 			this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
 				this.echo('REOPEN Default Registration Options.....', 'info');
@@ -241,7 +241,7 @@ forumRegister.customFieldsTest = function(casper, test) {
 				});
 			});
 		});
-	});*/
+	});
 	
 	//Set Different Value For 'Instant Messaging' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
 	
@@ -279,7 +279,6 @@ forumRegister.customFieldsTest = function(casper, test) {
 						if (responseData.required == '1') {
 							registerToApp(json['imIdBlankData'], casper, function() {
 								var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
-								test.error("errorMsg : " +errorMsg);
 								if(errorMsg && errorMsg != "") {
 									verifyErrorMsg(errorMsg, "Please enter your screen name.", 'blankImIDWithRequired', casper);
 								}
@@ -307,6 +306,127 @@ forumRegister.customFieldsTest = function(casper, test) {
 				});
 			});
 		});
+	});
+	
+	//Set Different Value For 'Full Name' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
+	
+	casper.then(function() {
+		this.eachThen(json['setValueOnRegister'], function(response) {
+			this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+				this.echo('REOPEN Default Registration Options.....', 'info');
+			});
+	
+			this.echo('Response Data : ' +JSON.stringify(response.data), 'info');
+			var responseData = response.data;
+			this.then(function() {
+				this.fillSelectors('form[name="posts"]', {
+					'select[name="required_dob"]' :  responseData.required,
+					'select[name="visiblity_dob"]' :  responseData.visibility
+				}, false);
+        		});
+			
+			this.then(function() {
+				test.assertExists('form[name="posts"] button');
+				this.click('form[name="posts"] button');
+			});
+
+			this.wait(5000,function(){
+				this.capture(screenShotsDir + 'dob_'+responseData.required+'_'+responseData.visibility+'.png');
+				this.thenOpen("http://automation.websitetoolbox.com/register/register", function() {
+					this.capture(screenShotsDir + 'dob_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
+					if (responseData.visibility == '1') {
+						test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
+					} else {
+						test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
+						if (responseData.required == '1') {
+							registerToApp(json['dobBlankData'], casper, function() {
+								var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
+								if(errorMsg && errorMsg != "") {
+									verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper);
+								}
+							});
+						} else {
+							registerToApp(json['dobBlankData'], casper, function() {
+								casper.echo('Processing to registration on forum with blank dob.....', 'info');
+							});
+							
+							registerToApp(json['dobData'], casper, function() {
+								casper.echo('Processing to registration on forum without blank dob.....', 'info');
+							});
+							
+							this.wait(5000,function(){
+								this.capture(screenShotsDir + 'register_submit.png');
+								redirectToLogout(casper, test, function() {
+									casper.echo('BIRTHDAY TASK COMPLETED........');
+								});
+							});
+						}
+					}
+				});
+			});
+		});
+	});
+	
+	//Set Different Value For 'Signature' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
+	
+	casper.then(function() {
+		this.eachThen(json['setValueOnRegister'], function(response) {
+			this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+				this.echo('REOPEN Default Registration Options.....', 'info');
+			});
+	
+			this.echo('Response Data : ' +JSON.stringify(response.data), 'info');
+			var responseData = response.data;
+			this.then(function() {
+				this.fillSelectors('form[name="posts"]', {
+					'select[name="required_signature"]' :  responseData.required,
+					'select[name="visiblity_signature"]' :  responseData.visibility
+				}, false);
+        		});
+			
+			this.then(function() {
+				test.assertExists('form[name="posts"] button');
+				this.click('form[name="posts"] button');
+			});
+
+			this.wait(5000,function(){
+				this.capture(screenShotsDir + 'signature_'+responseData.required+'_'+responseData.visibility+'.png');
+				this.thenOpen("http://automation.websitetoolbox.com/register/register", function() {
+					this.capture(screenShotsDir + 'signature_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
+					if (responseData.visibility == '1') {
+						test.assertDoesntExist('form[name="PostTopic"] div.sign-container');
+					} else {
+						test.assertExists('form[name="PostTopic"] div.sign-container');
+						if (responseData.required == '1') {
+							registerToApp(json['signatureBlankData'], casper, function() {});
+						} else {
+							registerToApp(json['signatureBlankData'], casper, function() {
+								casper.echo('Processing to registration on forum with blank signature.....', 'info');
+							});
+							
+							registerToApp(json['signatureData'], casper, function() {
+								casper.echo('Processing to registration on forum without blank signature.....', 'info');
+							});
+							
+							this.wait(5000,function(){
+								this.capture(screenShotsDir + 'register_submit.png');
+								redirectToLogout(casper, test, function() {
+									casper.echo('SIGNATURE TASK COMPLETED........');
+								});
+							});
+						}
+					}
+				});
+			});
+		});
+	});
+	
+	//Handling 'Alert' While Submitting The Form
+	
+	casper.on('remote.alert', function(message) {
+		var expectedErrorMsg = "Please provide a signature.";
+		test.assertEquals(message, expectedErrorMsg);
+		this.capture(screenShotsDir + 'Error_RegisterWithsignature.png');
 	});
 };
 
@@ -396,12 +516,12 @@ var registerToApp = function(data, driver, callback) {
 	}
 	
 	try {
-		driver.test.assertExists('form[name="PostTopic"] input[name="signature"]');
+		driver.test.assertExists('form[name="PostTopic"] div.sign-container');
 		driver.fill('form[name="PostTopic"]', {
 			'signature' : data.usignature
 		}, false);
 	} catch(e) {
-		driver.test.assertDoesntExist('form[name="PostTopic"] input[name="signature"]');
+		driver.test.assertDoesntExist('form[name="PostTopic"] div.sign-container');
 	}
 	
 	try {
