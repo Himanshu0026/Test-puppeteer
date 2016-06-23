@@ -437,17 +437,11 @@ forumRegister.customFieldsTest = function(casper, test) {
 
 forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	
-	//Open Forum Backend URL And Get Title 
-	
-	driver.start(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
-		this.echo('Title of the page :' +this.getTitle(), 'info');
-	});
 	
 	//Click On Login Link 
 
 	driver.then(function() {
-		test.assertExists('a#navLogin');
+		//test.assertExists('a#navLogin');
 		this.click('a#navLogin');
 		this.echo('Successfully open login form.....', 'info');
 	});

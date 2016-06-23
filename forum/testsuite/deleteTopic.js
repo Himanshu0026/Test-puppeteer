@@ -25,15 +25,11 @@ deleteTopic.featureTest = function(casper, test, x) {
 			});
 	});
 	casper.then(function() {
-		forumRegister.loginToForumBackEnd(config.backendCred, casper, function() {
+		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('User has been successfuly login to backend', 'info');
 		});
 	});
-	//Getting Screenshot After Clicking On 'Log In' Link 
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'backendLogin.png');
-	});
-
+	
 	casper.then(function() {
 		utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 			casper.echo("Successfully navigated to Edit User group Permission page");
@@ -173,7 +169,7 @@ deleteTopic.featureTest = function(casper, test, x) {
 	
 	//Getting Screenshot After Clicking On 'Delete' Icon
  
-	casper.wait(10000,function() {
+	casper.wait(7000,function() {
 		this.capture(screenShotsDir+ 'deletedTopic.png');
 	});
 	
@@ -197,7 +193,7 @@ deleteTopic.featureTest = function(casper, test, x) {
 
 	casper.then(function() {
 		forumLogin.logoutFromApp(casper, function() {
-			casper.log('Successfully logout from application', 'info');
+			casper.echo('Successfully logout from application', 'info');
 		});
 	});
 

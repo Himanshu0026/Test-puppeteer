@@ -26,13 +26,9 @@ newTopic.featureTest = function(casper, test, x) {
 			});
 		});
 		casper.then(function() {
-			forumRegister.loginToForumBackEnd(config.backendCred, casper, function() {
+			forumRegister.loginToForumBackEnd(casper, test, function() {
 				casper.echo('User has been successfuly login to backend', 'info');
 			});
-		});
-		//Getting Screenshot After Clicking On 'Log In' Link 
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+ 'backendLogin.png');
 		});
 
 		casper.then(function() {
@@ -107,6 +103,10 @@ newTopic.featureTest = function(casper, test, x) {
 			});
 		});
 		
+		/*casper.thenOpen('https://www.websitetoolbox.com/tool/members/dashboard', function() {
+				casper.echo('User has been successfuly login to backend', 'info');
+		});*/
+
 		casper.then(function() {
 			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 				casper.echo("Successfully navigated to Edit User group Permission page");

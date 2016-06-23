@@ -23,13 +23,9 @@ editTopic.featureTest = function(casper,test, x) {
 			});
 		});
 		casper.then(function() {
-			forumRegister.loginToForumBackEnd(config.backendCred, casper, function() {
+			forumRegister.loginToForumBackEnd(casper, test, function() {
 				casper.echo('User has been successfuly login to backend', 'info');
 			});
-		});
-		//Getting Screenshot After Clicking On 'Log In' Link 
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+ 'backendLogin.png');
 		});
 
 		casper.then(function() {
@@ -355,15 +351,3 @@ var editTopicContent = function(content, driver, callback){
 	}
 	return callback();
 };*/
-
-
-
-
-
-
-
-
-
-
-
-

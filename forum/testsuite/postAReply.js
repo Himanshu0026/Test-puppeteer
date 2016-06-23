@@ -22,13 +22,9 @@ postAReply.featureTest = function(casper, test, x) {
 			});
 		});
 		casper.then(function() {
-			forumRegister.loginToForumBackEnd(config.backendCred, casper, function() {
+			forumRegister.loginToForumBackEnd(casper, test, function() {
 				casper.echo('User has been successfuly login to backend', 'info');
 			});
-		});
-		//Getting Screenshot After Clicking On 'Log In' Link 
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+ 'backendLogin.png');
 		});
 
 		casper.then(function() {
@@ -275,6 +271,17 @@ postAReply.featureTest = function(casper, test, x) {
 	});
 	};
 
+	//Logout From App
+	casper.then(function() {
+		forumLogin.logoutFromApp(casper, function() {
+			casper.echo('Successfully logout from application');
+		});
+	});
+	
+	//Getting Screenshot After Clicking On 'Logout' Link
+	casper.wait(7000, function() {
+		this.capture(screenShotsDir+ 'logout.png');
+	});
 };
 
 
