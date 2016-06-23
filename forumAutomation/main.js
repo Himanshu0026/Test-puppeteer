@@ -2,6 +2,9 @@
 var http = require('http');
 var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: 'monika' });
+var github = require("github");
+
+
 
 http.createServer(function (req, res) {
   handler(req, res, function (err) {
@@ -19,7 +22,15 @@ handler.on('push', function (event) {
     	event.payload.repository.name,
     	event.payload.ref);
 	console.log(JSON.stringify(event.payload));
-	//github.repos.createStatus({ ... });
+	github.repos.createStatus({
+		"user": "its4monika",
+		"repo": "QA-automation",
+		"sha": "monika",
+		"state": "failure",
+		"target_url": "http://chatbeta.websitetoolbox.com/",
+		"description": "This is webhook testing",
+		"context": "Forum automation"
+	});
 });
 
 handler.on('issues', function (event) {
