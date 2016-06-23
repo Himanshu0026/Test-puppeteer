@@ -18,6 +18,7 @@
 	"Title" : "new event",
 	"Allday" : true,
 	"startDate" : "06/22/2016",
+	"timeZone" : "+5.5",
 	"description" : "",
 	"ExpectedErrMessage" : "Error: Please enter the description."
 	},
@@ -27,6 +28,7 @@
 	"Title" : "new event",
 	"Allday" : true,
 	"startDate" : "06/20/2016",
+	"timeZone" : "+5.5",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
 	"ExpectedErrMessage" : "Error: The Event date can not fall before the current date."
 	},
@@ -39,6 +41,7 @@
 	"endDate" : "06/20/2016",
 	"startTime" : "07:00 am",
 	"endTime" : "09:00 am",
+	"timeZone" : "+5.5",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
 	"ExpectedErrMessage" : "Error: The end date can not fall before the start date."
 	},
@@ -51,40 +54,61 @@
 	"endDate" : "06/25/2016",
 	"startTime" : "07:00 am",
 	"endTime" : "09:00 am",
+	"timeZone" : "+5.5",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
 	"ExpectedErrMessage" : "Error: The Event date can not fall before the current date."
 	},
 
 	{
-	"validationType" : "Recurssion with blank day in Daily",
+	"validationType" : "Daily Recurssion with blank day",
 	"Title" : "new event",
 	"Allday" : false,
 	"startDate" : "06/22/2016",
 	"endDate" : "06/22/2016",
 	"startTime" : "07:00 am",
 	"endTime" : "09:00 am",
+	"timeZone" : "+5.5",
 	"Repeat" : true,
 	"recurrence" : "Daily",
 	"days" : "",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
-	"ExpectedErrMessage" : "Error: The Event date can not fall before the current date."
+	"ExpectedErrMessage" : "Error: Please enter numeric days."
 	},
 
 	{
-	"validationType" : "Start date older than current Date",
+	"validationType" : "Monthly Recurssion with blank day",
 	"Title" : "new event",
 	"Allday" : false,
 	"startDate" : "06/22/2016",
-	"endDate" : "06/22/2016",
-	"startTime" : "07:00 am",
+	"endDate" : "07/30/2016",
+	"startTime" : "07:00 pm",
 	"endTime" : "09:00 am",
+	"timeZone" : "+5.5",
 	"Repeat" : true,
 	"recurrence" : "Weekly",
-	"weeks" : "2",
+	"weeks" : "",
 	"weekday" : ["Sunday", "Monday"],
+	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
+	"ExpectedErrMessage" : "Error: Please enter numeric days."
+	},
+
+	{
+	"validationType" : "Monthly Recurssion with current date but passed time",
+	"Title" : "new event",
+	"Allday" : false,
+	"startDate" : "06/23/2016",
+	"endDate" : "06/23/2016",
+	"startTime" : "07:00 am",
+	"endTime" : "09:00 am",
+	"timeZone" : "+5.5",
+	"Repeat" : true,
+	"recurrence" : "Weekly",
+	"weeks" : "1",
+	"weekday" : ["Sunday"],
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
 	"ExpectedErrMessage" : "Error: The Event date can not fall before the current date."
 	}
+	
 	
 	]
 

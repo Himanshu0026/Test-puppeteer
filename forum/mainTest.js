@@ -120,11 +120,11 @@ case "deletetopic":
 		});
 	});
         break;
-	case "calender" :
-		 casper.test.begin('Verify calander functionlity ', function(test) {
+	case "calendar" :
+		 casper.test.begin('Verify calendar functionlity ', function(test) {
 		var x = require('casper').selectXPath;
-		 var calender = require("./testsuite/calender.js");
-		 calender.featureTest(casper, casper.test,x);
+		 var calendar = require("./testsuite/calendar.js");
+		 calendar.featureTest(casper, casper.test,x);
 		 casper.run(function(){
 			test.done();
 		});
