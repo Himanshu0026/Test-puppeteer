@@ -76,15 +76,43 @@
     	},
 
 	"setDefaultBackendSetting" : [{
-		"opt_invisible" : "1",
-		"visiblity_invisible" : "8",
-		"required_name" : "1",
-		"visiblity_name" : "8",
-		"required_imType" : "1",
-		"visiblity_imType" : "8",
-		"required_dob" : "1",
-		"visiblity_dob" : "8",
-		"required_signature" : "1",
-		"visiblity_signature" : "8"
-	}]	
+	    	"required" : "0",
+	    	"visibility" : "1"
+	}, 
+
+	{
+		"required" : "0",
+		"visibility" : "2"
+	},
+
+	{
+		"required" : "0",
+		"visibility" : "8"
+	},
+
+	{
+		"required" : "1",
+		"visibility" : "1"
+	},
+
+	{
+		"required" : "1",
+		"visibility" : "2"
+	},
+
+	{
+		"required" : "1",
+		"visibility" : "8"
+	}],
+
+	"fullnameData" : {
+    		"fullName" : "",
+		"imType" : "Skype",
+		"imID" : "hs123",
+		"birthday" : "04/15/1991",
+		"userTitle" : "REGISTERED USER",
+		"signature" : "This is my signature",
+		"namePrivate" : true,
+		"expectedSuccessMsg" : "Your settings have been updated." 
+    	}
 }  

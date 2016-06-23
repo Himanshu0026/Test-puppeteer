@@ -41,8 +41,8 @@ editProfile.featureTest = function(casper, test) {
 		});
 	});
 
-	//Set Different Value For 'Full Name' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
-	casper.then(function() {
+	//Set Different Value For 'Invisible mode' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
+	/*casper.then(function() {
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
 			this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
 				this.log('REOPEN Default Registration Options', 'info');
@@ -52,16 +52,8 @@ editProfile.featureTest = function(casper, test) {
 			var responseData = response.data;
 			this.then(function() {
 				this.fillSelectors('form[name="posts"]', {
-					'select[name="opt_invisible"]' :  responseData.opt_invisible,
-					'select[name="visiblity_invisible"]' :  responseData.visiblity_invisible,
-					'select[name="required_name"]' :  responseData.required_name,
-					'select[name="visiblity_name"]' :  responseData.visiblity_name,
-					'select[name="required_imType"]' :  responseData.required_imType,
-					'select[name="visiblity_imType"]' :  responseData.visiblity_imType,
-					'select[name="required_dob"]' :  responseData.required_dob,
-					'select[name="visiblity_dob"]' :  responseData.visiblity_dob,
-					'select[name="required_signature"]' :  responseData.required_signature,
-					'select[name="visiblity_signature"]' :  responseData.visiblity_signature
+					'select[name="opt_invisible"]' :  responseData.required,
+					'select[name="visiblity_invisible"]' :  responseData.visibility
 				}, false);
         		});
 			
@@ -73,8 +65,8 @@ editProfile.featureTest = function(casper, test) {
 				});
 			});
 
-			/*this.wait(5000,function(){
-				this.capture(screenShotsDir + 'fullName_'+responseData.required+'_'+responseData.visibility+'.png');
+			this.wait(5000,function(){
+				this.capture(screenShotsDir + 'invisibleMode_'+responseData.required+'_'+responseData.visibility+'.png');
 				this.thenOpen("http://automation.websitetoolbox.com/register/register", function() {
 					this.capture(screenShotsDir + 'fullName_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
 					if (responseData.visibility == '1') {
@@ -103,44 +95,91 @@ editProfile.featureTest = function(casper, test) {
 						}
 					}
 				});
-			});*/
+			});
 		});
-	});
+	});*/
 
-	//Open Forum URL And Get Title 
-	casper.thenOpen(config.url, function() {
-		try {
-			test.assertTitle('Automation Forum');
-		} catch (e) {
-			this.log('Title does not match', 'error');
-		}
-		this.log('Title of the page : ' +this.getTitle(), 'info');
-	});
+	//Set Different Value For 'Full Name' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
+	casper.then(function() {
+		this.eachThen(json['setDefaultBackendSetting'], function(response) {
+			casper.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+				casper.echo('REOPEN Default Registration Options', 'info');
+			});
+	
+			casper.echo('Response Data : ' +JSON.stringify(response.data), 'info');
+			var responseData = response.data;
+			casper.then(function() {
+				this.fillSelectors('form[name="posts"]', {
+					'select[name="required_name"]' :  responseData.required,
+					'select[name="visiblity_name"]' :  responseData.visibility
+				}, false);
+        		});
+			
+			casper.then(function() {
+				test.assertExists('form[name="posts"] button');
+				this.click('form[name="posts"] button');
+			});
 
 	//Login To App
 	casper.then(function() {
 		forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, casper, function() {
 			casper.log('User logged-in successfully', 'info');
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedIn_user.png');
+				this.capture(screenShotsDir + 'fullName_'+responseData.required+'_'+responseData.visibility+'.png');
+				this.thenOpen(config.url, function() {
+					loginToFrontEnd(casper, function() {
+						casper.echo('loaded edit profile page', 'info');	
+						casper.capture(screenShotsDir + 'fullName_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
+						if (responseData.visibility == '1') {
+							test.assertDoesntExist('form[name="PostTopic"] input[name="name"]');
+						} else {
+							test.assertExists('form[name="PostTopic"] input[name="name"]');
+							if (responseData.required == '1') {
+								editToProfile(json.fullnameData, casper, function() {
+									var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="name"]', 'data-original-title');
+									if(errorMsg && errorMsg != "") {
+										verifyErrorMsg(errorMsg, responseData.expectedErrorMsg, 'blankFullNameWithRequired', casper);
+									}
+								});
+							} else {
+								editToProfile(json.fullnameData, casper, function() {
+									casper.echo('Processing to edit profile on forum.....', 'info');
+								});
+							}
+						}
+						casper.wait(5000,function(){
+							this.capture(screenShotsDir + 'register_submit.png');
+							redirectToLogout(casper, test, function() {
+								casper.echo('FULL NAME TASK COMPLETED........');
+							});
+						});
+					});
+				});
 			});
 		});
 
 	});
 
-	//Clicking On User's Icon To Display User's Drop-down For Editing Profile
+	//Set Different Value For 'Instant Messaging' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
 	casper.then(function() {
-		try {
-			test.assertExists('.default-user');
-			this.click('.default-user');
-			this.log('clicked on users icon successfully', 'info');
-			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'userIcon.png');
+		this.eachThen(json['setDefaultBackendSetting'], function(response) {
+			casper.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+				casper.echo('REOPEN Default Registration Options', 'info');
 			});
-		} catch (e) {
-			this.log('Please check userName or Password. You may have entered either userName or password wrong', 'error');
-		}
-	}); 
+	
+			casper.echo('Response Data : ' +JSON.stringify(response.data), 'info');
+			var responseData = response.data;
+			casper.then(function() {
+				this.fillSelectors('form[name="posts"]', {
+					'select[name="required_imType"]' :  responseData.required,
+					'select[name="visiblity_imType"]' :  responseData.visibility
+				}, false);
+        		});
+			
+			casper.then(function() {
+				test.assertExists('form[name="posts"] button');
+				this.click('form[name="posts"] button');
+			});
 
 	//Clicking On 'Edit Profile' link
 	casper.then(function() {
@@ -149,17 +188,54 @@ editProfile.featureTest = function(casper, test) {
 			this.click('a[href^="/register/register?edit="]');
 			this.log('clicked on user edit profile link successfully', 'info');
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'useredit_form.png');
+				this.capture(screenShotsDir + 'instantMessaging_'+responseData.required+'_'+responseData.visibility+'.png');
+				this.thenOpen(config.url, function() {
+					loginToFrontEnd(casper, function() {
+						casper.echo('loaded edit profile page', 'info');	
+						casper.capture(screenShotsDir + 'instantMessaging_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
+						if (responseData.visibility == '1') {
+							test.assertDoesntExist('form[name="PostTopic"] input[name="imType"]');
+						} else {
+							this.fillSelectors('form[name="PostTopic"]', {
+								'select[name="imType"]' :  'Google'
+							}, false);
+							test.assertExists('form[name="PostTopic"] input[name="imID"]');
+							if (responseData.required == '1') {
+								registerToApp(json['imIdBlankData'], casper, function() {
+									var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+									if(errorMsg && errorMsg != "") {
+										verifyErrorMsg(errorMsg, "Please enter your screen name.", 'blankImIDWithRequired', casper);
+									}
+								});
+							} else {
+								registerToApp(json['imIdBlankData'], casper, function() {
+									var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+									verifyErrorMsg(errorMsg, 'Please enter your screen name.', 'BlankIM_ID', casper);
+									casper.echo('Processing to registration on forum.....', 'info');
+								});
+							
+								registerToApp(json['imIdData'], casper, function() {
+									casper.echo('Processing to registration on forum.....', 'info');
+								});
+							
+							}
+						}
+						casper.wait(5000,function(){
+							this.capture(screenShotsDir + 'register_submit.png');
+							redirectToLogout(casper, test, function() {
+								casper.echo('FULL NAME TASK COMPLETED........');
+							});
+						});
+					});
+				});
 			});
-		} catch (e) {
-			this.log('edit profile link not found. Please check user name or password', 'error');
-		}
+		});
 	});
 
 	//Editing Upload Avatar On User's Edit Profile Page
 	/*casper.then(function() {
 		test.assertExist('a#attachAvatar.linkAvatarProfile');
-	});*/
+	});
 
 	//Fill Blank/Invalid Data On Edit Profile Page And Verifying Errors
 	casper.then(function() {
@@ -313,46 +389,54 @@ editProfile.featureTest = function(casper, test) {
 		} catch (e) {
 			casper.log('logout button not found', 'error');
 		}
-	}); 
+	});*/ 
 };
 
-/************************************PRIVATE METHODS***********************************/
+/*****************************************PRIVATE METHODS****************************************/
 
-//Method for opening user's field from backend setting
-var openBackEndFieldSetttings = function(driver, test, callback) {
-	
-	//Open Forum Backend URL And Get Title 
-	/*driver.start(config.backEndUrl, function() {
-		this.log('Title of the page :' +driver.getTitle(), 'info');
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', driver.getTitle());
-		
+//Method For Login To Front-end And Move To Edit Profile Page
+var loginToFrontEnd = function(driver, callback) {
+
+	//Open Forum URL And Get Title 
+	/*driver.thenOpen(config.url, function() {
+		try {
+			this.test.assertTitle('Automation Forum');
+		} catch (e) {
+			this.log('Title does not match', 'error');
+		}
+		this.log('Title of the page : ' +this.getTitle(), 'info');
 	});*/
-	
-	//Click On Login Link 
+
+	//Login To App
 	driver.then(function() {
-		test.assertExists('a#navLogin');
-		this.click('a#navLogin');
-		driver.wait(5000, function() {
-			this.capture(screenShotsDir + 'login_form.png');
-			this.log('Successfully open login form.....', 'info');
-		});
-	});  
-	//Filling Username/Password On Login Form
-	driver.then(function() {
-		loginToForumBackEnd(json.backEndInfo, casper, function() {
-			driver.wait(5000,function(){
-				this.capture(screenShotsDir + 'login_submit.png');
-				driver.log('Successfully login on forum back end....', 'info');
+		this.test.assertExists('#td_tab_login');
+		forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, driver, function() {
+			driver.log('User logged-in successfully', 'info');
+			driver.wait(5000, function() {
+				this.capture(screenShotsDir+ 'loggedIn_user.png');
 			});
 		});
 	});
 
-	//Clicking On "Users" Tab Under Settings 
+	//Clicking On User's Icon To Display User's Drop-down For Editing Profile
 	driver.then(function() {
-		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		test.assertExists('div#ddUsers a[href="/tool/members/mb/fields"]');
-		this.click('div#ddUsers a[href="/tool/members/mb/fields"]');
+			this.test.assertExists('.default-user');
+			this.click('.default-user');
+			this.log('clicked on users icon successfully', 'info');
+			driver.wait(5000, function() {
+				this.capture(screenShotsDir+ 'userIcon.png');
+			});
+	}); 
+
+	//Clicking On 'Edit Profile' link
+	driver.then(function() {
+			this.test.assertExists('a[href^="/register/register?edit="]');
+			this.click('a[href^="/register/register?edit="]');
+			this.log('clicked on user edit profile link successfully', 'info');
+			driver.wait(5000, function() {
+				this.capture(screenShotsDir+ 'useredit_form.png');
+return callback();
+			});
 	});
 	
 	driver.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
@@ -382,7 +466,7 @@ var editToProfile = function(userData, driver, callback) {
 	driver.click('#edit_signature .text-muted');
 	driver.fill('form[action="/register"]', {
 		'name': userData.fullName,
-        'imType': userData.imType,
+        	'imType': userData.imType,
 		'imID': userData.imID,
 		'signature' : userData.signature
 		
@@ -457,4 +541,19 @@ var verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver) 
 		driver.log("Error Message Is Not Correct", 'error');
 	}
 	driver.capture(screenShotsDir + 'Error_OnEdit' +msgTitle+ '.png');
+};
+
+//Logout To Forum Front End
+var redirectToLogout = function(driver, test, callback) {
+	driver.then(function() {
+		this.test.assertExists('button.dropdown-toggle span.caret');
+		this.test.assertExists('#logout');
+		forumLogin.logoutFromApp(driver, function() {
+			driver.echo('Successfully logout from forum', 'info');
+			driver.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});
+		});
+		return callback();
+	});
 };
