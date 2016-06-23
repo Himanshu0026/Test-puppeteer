@@ -2,7 +2,20 @@
 var http = require('http');
 var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: 'monika' });
-var github = require("github");
+var GitHubApi = require("github");
+
+var github = new GitHubApi({
+    // optional
+    debug: true,
+    protocol: "https",
+    host: "api.github.com", // should be api.github.com for GitHub
+    pathPrefix: "/api/v3", // for some GHEs; none for GitHub
+    timeout: 5000,
+    headers: {
+        "user-agent": "My-Cool-GitHub-App" // GitHub is happy with a unique user agent
+    },
+    followRedirects: false, // default: true; there's currently an issue with non-get redirects, so allow ability to disable follow-redirects
+});
 
 
 
@@ -25,7 +38,7 @@ handler.on('push', function (event) {
 	github.repos.createStatus({
 		"user": "its4monika",
 		"repo": "QA-automation",
-		"sha": "monika",
+		"sha": "1e8afb95d527ca52e63ec329f5baefa1ff110083",
 		"state": "failure",
 		"target_url": "http://chatbeta.websitetoolbox.com/",
 		"description": "This is webhook testing",
