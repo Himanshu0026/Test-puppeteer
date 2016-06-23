@@ -1,25 +1,25 @@
+'use strict';
 var http = require('http');
-//express = require('express');
-
-//var app = exports.app = express();
 var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: 'monika' });
 
 http.createServer(function (req, res) {
   handler(req, res, function (err) {
-    res.statusCode = 404
-    res.end('no such location')
-  })
+    res.statusCode = 404;
+    res.end('no such location');
+  });
 }).listen(80);
 
 handler.on('error', function (err) {
-  console.error('Error:', err.message)
+  console.error('Error:', err.message);
 });
 
 handler.on('push', function (event) {
-  console.log('Received a push event for %s to %s',
-    event.payload.repository.name,
-    event.payload.ref)
+	console.log('Received a push event for %s to %s',
+    	event.payload.repository.name,
+    	event.payload.ref);
+	console.log(JSON.stringify(event.payload));
+	//github.repos.createStatus({ ... });
 });
 
 handler.on('issues', function (event) {
@@ -27,11 +27,7 @@ handler.on('issues', function (event) {
     event.payload.repository.name,
     event.payload.action,
     event.payload.issue.number,
-    event.payload.issue.title)
+    event.payload.issue.title);
+	console.log(JSON.stringify(event.payload));
 });
 
-/*app.get("/default", function(req, res){
-	console.log("recieved request");
-	res.render("index.html");
-
-});*/
