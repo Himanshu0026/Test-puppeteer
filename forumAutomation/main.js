@@ -8,8 +8,8 @@ var github = new GitHubApi({
     // optional
     debug: true,
     protocol: "https",
-    host: "api.github.com", // should be api.github.com for GitHub
-    pathPrefix: "/api/v3", // for some GHEs; none for GitHub
+    host: "github.com", // should be api.github.com for GitHub
+    pathPrefix: "", // for some GHEs; none for GitHub
     timeout: 5000,
     headers: {
         "user-agent": "My-Cool-GitHub-App" // GitHub is happy with a unique user agent
@@ -36,7 +36,7 @@ handler.on('push', function (event) {
     	event.payload.ref);
 	console.log(JSON.stringify(event.payload));
 	github.repos.createStatus({
-		"user": "its4monika",
+		"user": "webtoolbox",
 		"repo": "QA-automation",
 		"sha": "1e8afb95d527ca52e63ec329f5baefa1ff110083",
 		"state": "failure",
