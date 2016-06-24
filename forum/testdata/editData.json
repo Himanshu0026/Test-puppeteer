@@ -54,17 +54,18 @@
 		"expectedErrorMsg" : "You entered an invalid email address."
     	}],
 
-    	"validDataForEditProfile" : {
+	"validDataForEditProfile" : {
 		"fullName" : "Hotam Singh",
 		"imType" : "Skype",
 		"imID" : "hs123",
 		"birthday" : "04/15/1991",
 		"userTitle" : "REGISTERED USER",
 		"signature" : "This is my signature",
+		"namePrivate" : true,
 		"expectedSuccessMsg" : "Your settings have been updated."
 	},
 
-	"validDataForEditAccount" : {
+    	"validDataForEditAccount" : {
 		"upass" : "hh",
 		"email" : "hotam.hbti123@gmail.com",
 		"expectedSuccessMsg" : "Your preferences have been updated successfully."
@@ -105,7 +106,7 @@
 		"visibility" : "8"
 	}],
 
-	"fullnameData" : {
+	"blankFullnameData" : {
     		"fullName" : "",
 		"imType" : "Skype",
 		"imID" : "hs123",
@@ -114,5 +115,78 @@
 		"signature" : "This is my signature",
 		"namePrivate" : true,
 		"expectedSuccessMsg" : "Your settings have been updated." 
+    	},
+
+	"fullnameData" : {
+    		"fullName" : "Hotam Singh",
+		"imType" : "Skype",
+		"imID" : "hs123",
+		"birthday" : "04/15/1991",
+		"userTitle" : "REGISTERED USER",
+		"signature" : "This is my signature",
+		"namePrivate" : true,
+		"expectedSuccessMsg" : "Your settings have been updated." 
+    	},
+
+	"imIdBlankData" : {
+		"fullName" : "Hotam Singh",
+		"imType" : "Skype",
+		"imID" : "",
+		"birthday" : "04/15/1991",
+		"userTitle" : "REGISTERED USER",
+		"signature" : "This is my signature",
+		"namePrivate" : true,  
+		"expectedErrorMsg" : "Please enter your screen name."
+    	},
+
+	"imIdData" : {
+		"fullName" : "Hotam Singh",
+		"imType" : "Skype",
+		"imID" : "HSK123",
+		"birthday" : "04/15/1991",
+		"userTitle" : "REGISTERED USER",
+		"signature" : "This is my signature",
+		"namePrivate" : true,  
+		"expectedSuccessMsg" : "Your settings have been updated."
+    	},
+
+	"dobBlankData" : {
+		"fullName" : "Hotam Singh",
+		"imType" : "Skype",
+		"imID" : "HSK123",
+		"birthday" : "",
+		"userTitle" : "REGISTERED USER",
+		"signature" : "This is my signature",
+		"expectedErrorMsg" : "Please enter birthday."
+    	},
+    
+    	"dobData" : {
+		"fullName" : "Hotam Singh",
+		"imType" : "Skype",
+		"imID" : "hs123",
+		"birthday" : "04/15/1991",
+		"userTitle" : "REGISTERED USER",
+		"signature" : "This is my signature",
+		"expectedSuccessMsg" : "Your settings have been updated."
+    	},
+
+	"signatureBlankData" : {
+		"fullName" : "Hotam Singh",
+		"imType" : "Skype",
+		"imID" : "HSK123",
+		"birthday" : "04/15/1991",
+		"userTitle" : "REGISTERED USER",
+		"signature" : "",
+		"expectedErrorMsg" : "please provide a signature."
+    	},
+    
+    	"signatureData" : {
+		"fullName" : "Hotam Singh",
+		"imType" : "Skype",
+		"imID" : "HSK123",
+		"birthday" : "04/15/1991",
+		"userTitle" : "REGISTERED USER",
+		"signature" : "This is my signature",
+		"expectedErrorMsg" : "please provide a signature."
     	}
 }  

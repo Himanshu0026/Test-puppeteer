@@ -2,7 +2,7 @@ var config = require("./config/config.json");
 
 casper.options.viewportSize = config.app.viewportSize;
 casper.options.verbose = config.app.verbose;
-//casper.options.logLevel = config.app.logLevel;
+casper.options.logLevel = config.app.logLevel;
 //casper.options.waitTimeout = config.app.waitTimeout;
 
 var feature = casper.cli.get('feature');
@@ -26,6 +26,18 @@ switch (feature) {
 	casper.test.begin("Start Edit Profile functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 		var editProfile = require("./testsuite/editprofile.js");
 		editProfile.featureTest(casper, casper.test);
+		casper.run(function() {
+			test.done();
+			test.assert(true);
+		});
+	});
+        
+        break;
+
+    case "editProfileWithSettings":
+	casper.test.begin("Start Edit Profile functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+		var editProfile = require("./testsuite/editprofile.js");
+		editProfile.customFieldsTest(casper, casper.test);
 		casper.run(function() {
 			test.done();
 			test.assert(true);
