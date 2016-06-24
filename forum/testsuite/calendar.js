@@ -260,7 +260,7 @@ calendar.featureTest = function(casper, test,x) {
 		
 	casper.then(function() {
 		this.click('a.btn.btn-sm.btn-primary');	
-		this.eachThen(json['invalidInfo'], function(response) {
+		/*this.eachThen(json['invalidInfo'], function(response) {
 
 		try { 
 			casper.echo("=========" +JSON.stringify(response.data));
@@ -351,26 +351,40 @@ calendar.featureTest = function(casper, test,x) {
 						casper.capture(screenShotsDir+'createEvent_Monthlyless1month.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
 					});
+				} else if(responseData.validationType == "Monthly Recurssion with The Period with blank months") {
+					casper.wait(3000, function() {
+						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
+						casper.echo("Error message for Monthly Recurssion with The Period with blank months is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.capture(screenShotsDir+'createEvent_MonthlyTheperiodBlankmonths.png');
+						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+					});
+				} else if(responseData.validationType == "Yearly Recurssion with Every Period with blank years") {
+					casper.wait(3000, function() {
+						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
+						casper.echo("Error message for Yearly Recurssion with Every Period with blank years : "+casper.fetchText('div.alert.alert-danger'));
+						casper.capture(screenShotsDir+'createEvent_Yearly_blankyears.png');
+						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+					});
 				}
 			});
 		} catch (err) {
 			casper.echo("Error occurred: "+err);
 		}
-		});
-		/*this.wait(5000, function(){
+		});*/
+		this.wait(5000, function(){
 			casper.echo("wait for 5 seconds");
-			casper.echo("=========" +JSON.stringify(json["invalidInfo"][11]));
-			calendar.createEvent(json["invalidInfo"][11], casper, function() {
+			casper.echo("=========" +JSON.stringify(json["invalidInfo"][13]));
+			calendar.createEvent(json["invalidInfo"][13], casper, function() {
 					casper.wait(5000, function() {
 					casper.echo("********************************************");
 					this.capture(screenShotsDir+'createEvent_weekly.png');
 					var ActualErrMessage = this.fetchText('div.alert.alert-danger');
 					casper.echo("Error message is : "+casper.fetchText('div.alert.alert-danger.text-center'));
-					test.assertEquals(ActualErrMessage , "Error: No event will occur for the date range you specified.");
+					test.assertEquals(ActualErrMessage , "Error: Please enter numeric days.");
 				});
 			});
 
-		});*/
+		});
 
 
 	});
@@ -520,20 +534,48 @@ calendar.createEvent = function(data, driver, callback) {
 						driver.click('#rb_pattern_5');
 						this.click('select[name="monthlycombo2"]');
 						this.fill('form#PostCalEvent',{
-							'monthlycombo2' : data.monthlycombo
-							},false);
+						'monthlycombo2' : data.monthlycombo   //need to pass like 'First' or 'Second' in the field
+						},false);
 
 						this.click('select[name="monthlycombo3"]');
 						this.fill('form#PostCalEvent',{
-							'monthlycombo3' : data.weekday
-							},false);
+						'monthlycombo3' : data.weekday
+						},false);
 						driver.sendKeys('input[name="monthlybox2"]', data.months, {reset:true} );
 					break;
 				};
 			break;
 			case "Yearly" :
 				driver.click('#rb_event_4');
-				driver.sendKeys('input[name="yearlybox"]', data.years, {reset:true} );
+				switch ( data.rec_yearly) {
+
+					case "Every" :
+						driver.click('#rb_pattern_6');
+						driver.click('select[name="yearlycombo"]');
+						this.fill('form#PostCalEvent',{
+						'yearlycombo' : data.monthname
+						},false);
+						driver.sendKeys('input[name="yearly_dailybox"]', data.years, {reset:true} );
+					break;
+					case "The" :
+						driver.click('#rb_pattern_7');
+						this.click('select[name="yearlycombo3"]');
+						this.fill('form#PostCalEvent',{
+						'yearlycombo3' : data.yearlycombo   //need to pass like 'First' or 'Second' in the field
+						},false);
+
+						this.click('select[name="yearlycombo4"]');
+						this.fill('form#PostCalEvent',{
+						'monthlycombo3' : data.weekday
+						},false);
+
+						this.click('select[name="yearlycombo5"]');
+						this.fill('form#PostCalEvent',{
+						'yearlycombo5' : data.monthname
+						},false);
+					break;
+				};
+			break;
 
 
 
@@ -542,7 +584,7 @@ calendar.createEvent = function(data, driver, callback) {
 	});
 	driver.wait(3000, function(){
 		this.click('button#post_event_buttton');
-	//this.capture(screenShotsDir+'createEvent_Weeklyday.png'); casper.echo("**********weeks day *******");	
+	this.capture(screenShotsDir+'createEvent_Weeklyday.png'); casper.echo("********** weeks day *******");	
 	});
 	return callback();
 
