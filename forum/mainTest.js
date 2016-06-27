@@ -2,7 +2,7 @@ var config = require("./config/config.json");
 
 casper.options.viewportSize = config.app.viewportSize;
 casper.options.verbose = config.app.verbose;
-casper.options.logLevel = config.app.logLevel;
+//casper.options.logLevel = config.app.logLevel;
 //casper.options.waitTimeout = config.app.waitTimeout;
 
 var feature = casper.cli.get('feature');
@@ -152,6 +152,7 @@ case "deletetopic":
 	casper.echo("	postreply\n");
 	casper.echo("	edittopic\n");
 	casper.echo("	deletetopic\n");
+	casper.echo("	calendar\n");
 	casper.echo("Relevant test data has to be fed in JSON format in files placed for each feature in '<current directory>/testData/'.");
 	casper.exit();
 };
