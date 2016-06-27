@@ -8,7 +8,7 @@
 	"validationType" : "Blank Title",
 	"Title" : "",
 	"Allday" : true,
-	"startDate" : "06/24/2016",
+	"startDate" : "06/27/2016",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and then click on a button to continue with the script",
 	"ExpectedErrMessage" : "Error: Please enter the title."
 	},
@@ -17,7 +17,7 @@
 	"validationType" : "Blank Description",
 	"Title" : "new event",
 	"Allday" : true,
-	"startDate" : "06/24/2016",
+	"startDate" : "06/27/2016",
 	"timeZone" : "+5.5",
 	"description" : "",
 	"ExpectedErrMessage" : "Error: Please enter the description."
@@ -37,7 +37,7 @@
 	"validationType" : "Start date greater than end Date",
 	"Title" : "new event",
 	"Allday" : false,
-	"startDate" : "06/24/2016",
+	"startDate" : "06/27/2016",
 	"endDate" : "06/20/2016",
 	"startTime" : "07:00 am",
 	"endTime" : "09:00 am",
@@ -50,8 +50,8 @@
 	"validationType" : "Start date older than current Date",
 	"Title" : "new event",
 	"Allday" : false,
-	"startDate" : "06/20/2016",
-	"endDate" : "06/25/2016",
+	"startDate" : "06/25/2016",
+	"endDate" : "06/27/2016",
 	"startTime" : "07:00 am",
 	"endTime" : "09:00 am",
 	"timeZone" : "+5.5",
@@ -63,8 +63,8 @@
 	"validationType" : "Daily Recurssion with blank day",
 	"Title" : "new event",
 	"Allday" : false,
-	"startDate" : "06/24/2016",
-	"endDate" : "06/24/2016",
+	"startDate" : "06/27/2016",
+	"endDate" : "06/27/2016",
 	"startTime" : "07:00 am",
 	"endTime" : "09:00 am",
 	"timeZone" : "+5.5",
@@ -79,7 +79,7 @@
 	"validationType" : "Weekly Recurssion with blank day",
 	"Title" : "new event",
 	"Allday" : false,
-	"startDate" : "06/24/2016",
+	"startDate" : "06/27/2016",
 	"endDate" : "07/30/2016",
 	"startTime" : "07:00 pm",
 	"endTime" : "09:00 am",
@@ -96,8 +96,8 @@
 	"validationType" : "Weekly Recurssion with current date but passed time",
 	"Title" : "new event",
 	"Allday" : false,
-	"startDate" : "06/24/2016",
-	"endDate" : "06/23/2016",
+	"startDate" : "06/27/2016",
+	"endDate" : "06/27/2016",
 	"startTime" : "07:00 am",
 	"endTime" : "09:00 am",
 	"timeZone" : "+5.5",
@@ -113,7 +113,7 @@
 	"validationType" : "Weekly Recurssion without selecting Weekday",
 	"Title" : "new event",
 	"Allday" : false,
-	"startDate" : "06/24/2016",
+	"startDate" : "06/27/2016",
 	"endDate" : "07/28/2016",
 	"startTime" : "07:00 am",
 	"endTime" : "09:00 am",
@@ -130,8 +130,8 @@
 	"validationType" : "Monthly Recurssion with blank day",
 	"Title" : "new event",
 	"Allday" : false,
-	"startDate" : "06/24/2016",
-	"endDate" : "07/28/2016",
+	"startDate" : "06/27/2016",
+	"endDate" : "09/28/2016",
 	"startTime" : "07:00 am",
 	"endTime" : "09:00 am",
 	"timeZone" : "+5.5",
@@ -148,7 +148,7 @@
 	"validationType" : "Monthly Recurssion with blank months",
 	"Title" : "new event",
 	"Allday" : false,
-	"startDate" : "06/24/2016",
+	"startDate" : "06/27/2016",
 	"endDate" : "07/28/2016",
 	"startTime" : "07:00 am",
 	"endTime" : "09:00 am",
@@ -166,7 +166,7 @@
 	"validationType" : "Monthly Recurssion with less than 1 months",
 	"Title" : "new event",
 	"Allday" : false,
-	"startDate" : "06/24/2016",
+	"startDate" : "06/27/2016",
 	"endDate" : "06/28/2016",
 	"startTime" : "07:00 am",
 	"endTime" : "09:00 am",
@@ -184,7 +184,7 @@
 	"validationType" : "Monthly Recurssion with The Period with blank months",
 	"Title" : "new event",
 	"Allday" : false,
-	"startDate" : "06/24/2016",
+	"startDate" : "06/27/2016",
 	"endDate" : "07/28/2016",
 	"startTime" : "07:00 am",
 	"endTime" : "09:00 am",
@@ -203,7 +203,7 @@
 	"validationType" : "Yearly Recurssion with Every Period with blank years",
 	"Title" : "new event",
 	"Allday" : false,
-	"startDate" : "06/24/2016",
+	"startDate" : "06/27/2016",
 	"endDate" : "07/28/2018",
 	"startTime" : "07:00 am",
 	"endTime" : "09:00 am",
@@ -215,10 +215,27 @@
 	"years" : "",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
 	"ExpectedErrMessage" : "Error: Please enter numeric days."
+	}],
+
+	"validInfo" : [{
+	"validationType" : "Create event with Allday",
+	"Title" : "Create event with Allday",
+	"Allday" : true,
+	"startDate" : "06/27/2016",
+	"description" : "I've got a script in casperjs that goes to a website checks a box if available and then click on a button to continue with the script"
+	},
+
+	{
+	"validationType" : "Create event with Allday",
+	"Title" : "Create event with Allday",
+	"Allday" : true,
+	"startDate" : "06/27/2016",
+	"description" : "I've got a script in casperjs that goes to a website checks a box if available and then click on a button to continue with the script"
 	}
 	
-	
-	
+
+
+
 	]
 
 }

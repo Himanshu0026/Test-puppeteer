@@ -6,11 +6,11 @@ var forumRegister = require('./register.js');
 var forumLogin = require('./forum_login.js');
 var utils = require('./utils.js');
 var json = require('../testdata/calendarData.json');
-	var screenShotsDir = config.screenShotsLocation + "calendar/";
+var screenShotsDir = config.screenShotsLocation + "calendar/";
 
 var calendar = module.exports = {};
 
-calendar.featureTest = function(casper, test,x) {
+calendar.featureTest = function(casper, test, x) {
 	
 	var moment = require('moment');
 	moment().format();
@@ -28,7 +28,7 @@ calendar.featureTest = function(casper, test,x) {
 	});
 	
 	//login to backend app by call login function
-	/*casper.then(function() {
+	casper.then(function() {
 
 		forumRegister.loginToForumBackEnd(config["backendCred"], casper, function() {
 			casper.echo(config["backendCred"].uname +"*******"+config["backendCred"].upass);
@@ -38,7 +38,7 @@ calendar.featureTest = function(casper, test,x) {
 	
 	// test case to disable calander checkbox from GEneral SEttings page
 	casper.then(function() {
-		calander.gotoGeneralSettingspage(casper, function(){
+		calendar.gotoGeneralSettingspage(casper, function(){
 			casper.echo("Navigated to General Settings page");
 		});
 		this.waitForSelector('#enable_calendar', function() {
@@ -52,7 +52,7 @@ calendar.featureTest = function(casper, test,x) {
 				this.capture(screenShotsDir+'updatecalendaronGeneralSetting.png');
 			});
 		});
-	});*/
+	});
 	
 	//Now login to forum and check calendar option is not visible in side menu
 	casper.thenOpen(config.url);
@@ -60,17 +60,17 @@ calendar.featureTest = function(casper, test,x) {
 		forumLogin.loginToApp(json.username, json.password, casper, function(){
 			casper.echo("User has successfully login to the forum application", 'info');
 		});
-		/*this.waitForSelector('#links-nav', function(){
+		this.waitForSelector('#links-nav', function(){
 			this.click('#links-nav');
 			this.wait(5000, function(){
 				test.assertDoesntExist('#calenders_show');
 				this.capture(screenShotsDir+'CalendarnotVisible.png');
 			});		
-		});*/
+		});
 	});
 
 	//enable calendar checkbox from general setting page in backend
-	/*casper.thenOpen(config.backEndUrl, function(){
+	casper.thenOpen(config.backEndUrl, function(){
 		casper.echo("Title of the page : "+this.getTitle(), 'info');
 	});
 	casper.then(function() {
@@ -138,10 +138,10 @@ calendar.featureTest = function(casper, test,x) {
 
 	});
 
-	casper.thenOpen(config.url);*/
+	casper.thenOpen(config.url);
 	//verify calendar page and highlighted current date
 	casper.then(function(){
-		calendar.gotoCalanderpage(casper, function() {
+		calendar.gotoCalendarpage(casper, function() {
 			casper.wait(3000, function(){
 				test.assert(this.getCurrentUrl().indexOf("calendar")>=0);
 				casper.echo("Title of the page : "+ this.getTitle());
@@ -156,7 +156,7 @@ calendar.featureTest = function(casper, test,x) {
 	});
 
 	//Verify calendar mode
-	/*casper.then(function() {
+	casper.then(function() {
 
 		//verify default calendar view mode after navigating to calendar page
 		this.waitForSelector('#monthlyView', function() {
@@ -255,12 +255,12 @@ calendar.featureTest = function(casper, test,x) {
 			});
 		});
 
-	});	*/
+	});	
 	
 		
 	casper.then(function() {
 		this.click('a.btn.btn-sm.btn-primary');	
-		/*this.eachThen(json['invalidInfo'], function(response) {
+		this.eachThen(json['invalidInfo'], function(response) {
 
 		try { 
 			casper.echo("=========" +JSON.stringify(response.data));
@@ -370,25 +370,27 @@ calendar.featureTest = function(casper, test,x) {
 		} catch (err) {
 			casper.echo("Error occurred: "+err);
 		}
-		});*/
-		this.wait(5000, function(){
+		});
+		/*this.wait(5000, function(){
 			casper.echo("wait for 5 seconds");
-			casper.echo("=========" +JSON.stringify(json["invalidInfo"][13]));
-			calendar.createEvent(json["invalidInfo"][13], casper, function() {
+			casper.echo("=========" +JSON.stringify(json["validInfo"][0]));
+			calendar.createEvent(json["validInfo"][0], casper, function() {
 					casper.wait(5000, function() {
 					casper.echo("********************************************");
 					this.capture(screenShotsDir+'createEvent_weekly.png');
-					var ActualErrMessage = this.fetchText('div.alert.alert-danger');
-					casper.echo("Error message is : "+casper.fetchText('div.alert.alert-danger.text-center'));
-					test.assertEquals(ActualErrMessage , "Error: Please enter numeric days.");
+					test.assertExists('span h3 strong', 'locator for title text is verified');
+					var title1 = this.fetchText('span h3 strong');
+					casper.echo("*************** "+ title1);
+					test.assertEquals(title1, 'Create event with Allday', "Verified title of event after creating cal event");
+					casper.echo("Description is :"+ this.fetchText('.event-description.clearfix.text-block'));
 				});
 			});
 
-		});
+		});*/
 
 
 	});
-			
+
 
 
 
@@ -417,7 +419,7 @@ calendar.gotoGeneralSettingspage = function(driver, callback) {
 };
 
 //function to go calendar page in forum application
-calendar.gotoCalanderpage = function(driver, callback) {
+calendar.gotoCalendarpage = function(driver, callback) {
 	driver.waitForSelector('#links-nav', function(){
 		this.click('#links-nav');
 			
@@ -587,10 +589,24 @@ calendar.createEvent = function(data, driver, callback) {
 	this.capture(screenShotsDir+'createEvent_Weeklyday.png'); casper.echo("********** weeks day *******");	
 	});
 	return callback();
+};
+
+
+calendar.verifyCreatedEvent = function(data, driver, callback) {
+	test.assertExists('span h3 strong', 'locator for title text is verified');
+	var title = this.fetchText('span h3 strong');
+	var description = this.fetchText('.event-description.clearfix.text-block');
+	test.assertEquals(title, data.Title, "Verified title of event after creating cal event");
+	test.assertEquals(description, 'data.description, Verify description of the event');
+	if (data.Allday){
+		
+	}
+	
+
+
 
 
 
 };
-
 
 
