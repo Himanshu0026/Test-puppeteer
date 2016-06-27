@@ -11,22 +11,22 @@ var config = require('../config/config.json');
 var editTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'editTopic/';
 
-editTopic.featureTest = function(casper,test, x) {
+editTopic.editTopicfeature = function(casper,test, x, callback) {
 
 	//go to backend url
-
-		casper.start(config.backEndUrl,function() {
+		casper.thenOpen(config.backEndUrl,function() {
 			casper.echo('Login To Backend URL and disable start topic checkbox');
 			this.wait(7000, function() {
 				casper.echo('Title of the page :' +this.getTitle(), 'info');
-				test.assertTitle('Website Toolbox - Account Login', 'The page has correct title');		
+				test.assertTitle('Website Toolbox', 'The page has correct title');		
 			});
 		});
-		casper.then(function() {
+
+		/*casper.then(function() {
 			forumRegister.loginToForumBackEnd(casper, test, function() {
 				casper.echo('User has been successfuly login to backend', 'info');
 			});
-		});
+		});*/
 
 		casper.then(function() {
 			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
@@ -63,7 +63,7 @@ editTopic.featureTest = function(casper,test, x) {
 		});
 		
 		//Login To App
-		casper.then(function() {
+		/*casper.then(function() {
 			forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
 				casper.echo('User has been successfuly login to application with register user', 'info');
 			});
@@ -72,7 +72,7 @@ editTopic.featureTest = function(casper,test, x) {
 		//Getting Screenshot After Clicking On 'Log In' Link 
 		casper.wait(7000, function() {
 			this.capture(screenShotsDir+ 'login.png');
-		});
+		});*/
 
 		// edit topic title when permission false	
 		casper.then(function(){
@@ -261,7 +261,9 @@ editTopic.featureTest = function(casper,test, x) {
     		this.test.assertEquals(message, json.editTopic.blankContent.ExpectedErrorMessage.trim());
 	};
 
+	return callback();
 };
+
 
 
 /************************************PRIVATE METHODS***********************************/
@@ -336,18 +338,3 @@ var editTopicContent = function(content, driver, callback){
 	return callback();
 };
 
-// method for verify edit topic content to application
-
-/*var verifyEditTopicContent = function(content, driver, callback){
-	var getContent = driver.fetchText('div.post-body-content span[id^="post_message_"]');
-	driver.log('******* getContent : ' +getContent, 'info');
-	driver.log('******* content : ' +content, 'info');
-	if(getContent.trim() == content.trim()){
-		driver.log('Title verified', 'info');
-	}
-	else{
-		driver.log('Error Occured in verifying edited content ','error');
-		driver.capture(screenShotsDir+ 'editContentError.png');
-	}
-	return callback();
-};*/

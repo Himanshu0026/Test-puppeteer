@@ -4,6 +4,7 @@
 
 var utils = require('./utils.js');
 var forumRegister = require('./register.js');
+var editTopic = require('./editTopic.js');
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
 var config = require('../config/config.json');
@@ -12,12 +13,8 @@ var newTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'newTopic/';
 
 newTopic.featureTest = function(casper, test, x) {
-	
-	
-	//casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 		
 		//go to backend url
-
 		casper.start(config.backEndUrl,function() {
 			casper.echo('Login To Backend URL and disable start topic checkbox');
 			this.wait(7000, function() {
@@ -59,7 +56,7 @@ newTopic.featureTest = function(casper, test, x) {
 			this.capture(screenShotsDir+'afterChangePermission.png');
 		});		
 		
-		//* start from forum url
+		//start from forum url
 		casper.thenOpen(config.url, function() {
 			casper.echo('Title of the page :' +this.getTitle(), 'info');
 			test.assertTitle('Automation Forum', 'page has the correct title');
@@ -482,30 +479,20 @@ newTopic.featureTest = function(casper, test, x) {
 					});	
 				}
 				casper.then(function() {
-					this.wait(5000,function() {
+						this.wait(5000,function() {
 						this.capture(screenShotsDir+ 'followedCategory.png');
 					});
 				});
 			});
 		});
-
-		//LOGOUT FROM APP
+	
 		casper.then(function() {
-			forumLogin.logoutFromApp(casper, function() {
-				casper.echo('Successfully logout from application', 'info');
+			casper.echo('start edit topic title and edit topic content', 'info');
+			editTopic.editTopicfeature(casper,test, x, function(){
+				casper.echo("Edit Topic Feature");
 			});
 		});
-		
-		//Getting Screenshot After Clicking On 'Log Out' Link
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+ 'logout.png');
-		});
 
-		/*casper.run(function(){
-			test.done();
-		});*/
-
-//	});
 };
 
 

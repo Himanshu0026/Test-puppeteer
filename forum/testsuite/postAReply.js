@@ -203,7 +203,7 @@ postAReply.featureTest = function(casper, test, x) {
 		//share post
 		casper.then(function() {
 
-			clickOnDropdown(x, json.shareTopic.username, json.shareTopic.content, casper, function() {  
+			clickOnDropdown(x, json.sharePost.username, json.sharePost.content, casper, function() {  
 				casper.echo("$$$$$$$$$$$$$$$$$$$$$$$$$");
 			});
 
@@ -211,8 +211,8 @@ postAReply.featureTest = function(casper, test, x) {
 				casper.echo('sharing on facebook');		
 			});
 		});
-		/*casper.thenOpen(json.shareTopic.socialUrl,function() {
-			casper.echo('thenOpen : '+json.shareTopic.socialUrl);
+		/*casper.thenOpen(json.sharePost.socialUrl,function() {
+			casper.echo('thenOpen : '+json.sharePost.socialUrl);
 			casper.echo('open facebook to post');
 		});
 		casper.wait(7000, function() {
@@ -235,6 +235,7 @@ postAReply.featureTest = function(casper, test, x) {
 		});*/
 
 		// edit own post when it is disabled from backend
+
 	// reopen Backend URL and disable edit own post checkbox
 		casper.thenOpen(config.backEndUrl,function() {
 			casper.echo('\nLogin To Backend URL and disable Edit Own Post checkbox\n');
@@ -281,14 +282,11 @@ postAReply.featureTest = function(casper, test, x) {
 		});	
 
 		casper.then(function() {
-			clickOnDropdown(x, json.shareTopic.username, json.shareTopic.content, casper, function() {  
+			clickOnDropdown(x, json.editPost.username, json.editPost.content, casper, function() {  
 				casper.echo("click on dropdown");
 			});
 			
 			casper.wait(2000, function() {
-				/*var pid = json.deletePost.dataPid;
-				test.assertDoesntExist('a[data-pid="'+pid+'"]');
-				this.click('a[data-pid="'+pid+'"]');*/
 				test.assertDoesntExist('#edit_post_request');
 				casper.echo('you can not edit your post go to user permission and change the settings');
 			});
@@ -313,7 +311,7 @@ postAReply.featureTest = function(casper, test, x) {
 		});	
 		casper.then(function() {
 			utils.enableorDisableCheckbox('edit_posts', true, casper, function() {
-				casper.echo("Edit Own Post checkbox has been disabled", 'info');
+				casper.echo("Edit Own Post checkbox has been enable", 'info');
 			});
 		});
 		casper.then(function() {
@@ -334,13 +332,14 @@ postAReply.featureTest = function(casper, test, x) {
 		//reopen forum url for edit own post after change permission
 		casper.thenOpen(config.url, function() {
 			casper.echo('Hit on URL : '+config.url);
+0.
 		});
 		casper.wait(7000, function() {
 			this.capture(screenShotsDir+'forumUrl.png');
 		});	
 
 		casper.then(function() {
-			clickOnDropdown(x, json.shareTopic.username, json.shareTopic.content, casper, function() {  
+			clickOnDropdown(x, json.editPost.username, json.editPost.content, casper, function() {  
 				casper.echo("clicked on dropdown");
 			});
 			
@@ -348,6 +347,8 @@ postAReply.featureTest = function(casper, test, x) {
 				var pid = json.deletePost.dataPid;
 				test.assertExists('a[data-pid="'+pid+'"]');
 				this.click('a[data-pid="'+pid+'"]');
+				/*test.assertExists('edit_post_request');
+				this.click('edit_post_request');*/	
 			});
 		});
 
@@ -362,7 +363,7 @@ postAReply.featureTest = function(casper, test, x) {
 		//Edit Topic Content With blank Data
 
 		casper.then(function(){
-			casper.wait(5000, function(){
+			casper.wait(7000, function(){
 				this.withFrame('message1_ifr', function() {
 					casper.echo('*****enter message in iframe', 'info');
 					this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
@@ -381,13 +382,13 @@ postAReply.featureTest = function(casper, test, x) {
 			this.capture(screenShotsDir+ 'editedPostBlank.png');
 		});
 		
-		//Edit Topic Content With Valid Data
+		//Edit Post Content With Valid Data
 
 		casper.thenOpen(config.url, function() {
 			casper.log('Hit on url : '+config.url);
 		});
 		casper.then(function() {
-			clickOnDropdown(x, json.shareTopic.username, json.shareTopic.content, casper, function() {  
+			clickOnDropdown(x, json.editPost.username, json.editPost.content, casper, function() {  
 				casper.echo("clicked on dropdown");
 			});
 			
@@ -399,7 +400,7 @@ postAReply.featureTest = function(casper, test, x) {
 		});
 		
 		casper.then(function(){
-			casper.wait(5000, function(){
+			casper.wait(7000, function(){
 				this.withFrame('message1_ifr', function() {
 					casper.echo('*****enter message in iframe', 'info');
 					this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
@@ -421,7 +422,7 @@ postAReply.featureTest = function(casper, test, x) {
 
 		//Verify Edited post With Valid data
 		casper.then(function() {
-			var username = json.shareTopic.username;
+			var username = json.editPost.username;
 			var content = json.editTopic.validContent.content;
 			var msg = this.fetchText(x('//a[text()="'+username+'"]/following::span[contains(text(),"'+content+'")]'));
 			casper.echo('*********** msg : '+msg.trim());
@@ -480,7 +481,8 @@ postAReply.featureTest = function(casper, test, x) {
 			});
 			
 			casper.wait(2000, function() {
-				test.assertDoesntExist('#delete_post_request');
+				var pid = json.deletePost.dataPid;
+				test.assertDoesntExist('a[data-pid="'+pid+'"][id="delete_post_request"]');
 				casper.echo('you can not delete post go to user permission and change the settings');
 			});
 		});
@@ -539,8 +541,9 @@ postAReply.featureTest = function(casper, test, x) {
 				var pid = json.deletePost.dataPid;
 				test.assertExists('a[data-pid="'+pid+'"][id="delete_post_request"]');
 				this.click('a[data-pid="'+pid+'"][id="delete_post_request"]');
-				//test.assertExists('#delete_post_request');
-				//this.click('#delete_post_request');
+				casper.wait(7000, function() {
+					this.capture(screenShotsDir+'deletePost.png');
+				});
 			});
 		});
 		
@@ -669,13 +672,14 @@ var clickOnDropdown = function(x, username, content, driver, callback){
 		//var username = "rajatk2";
 	
 		var classVal = x('//a[text()="'+username+'"]/following::span[contains(text(),"'+content+'")]');
-		var id = casper.getElementAttribute(classVal, "id");		
-		id = id.replace('post_message', 'posttoggle' );
+		var postId = casper.getElementAttribute(classVal, "id");		
+		var id = postId.replace('post_message', 'posttoggle' );
 		var pid = id.replace('posttoggle_','');
+		casper.echo('postId : '+postId);
 		casper.echo('id : '+id);
 		casper.echo('pid : '+pid);
 		json.deletePost.dataPid = pid;
-		json.deletePost.deleteVal = classVal;
+		json.deletePost.deleteVal = postId;
 		this.click('#'+id);
 	});
 	
@@ -705,8 +709,8 @@ var shareOn = function(socialSite, driver, callback) {
 			return element;
 		});
 		
-		json.shareTopic.socialUrl = elehref;
-		casper.echo('socialUrl : ' +json.shareTopic.socialUrl);
+		json.sharePost.socialUrl = elehref;
+		casper.echo('socialUrl : ' +json.sharePost.socialUrl);
 	});*/
 };
 

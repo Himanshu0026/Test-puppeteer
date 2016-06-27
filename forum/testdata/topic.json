@@ -55,7 +55,7 @@
 	"replyTopic" : {
 
 		"ValidCredential" : {
-			"content" : "hello This is only test test"
+			"content" : "hello"
 		},
 		
 		"blankContent" : {
@@ -99,7 +99,14 @@
 		"topicName" : "ONEpluse"
 	},
 
-	"shareTopic" : {
+	
+	"sharePost" : {
+		"socialUrl" : "",
+		"username" : "rajatk2",
+		"content" : "hello"
+	},
+
+	"editPost" : {
 		"socialUrl" : "",
 		"username" : "rajatk2",
 		"content" : "hello"
