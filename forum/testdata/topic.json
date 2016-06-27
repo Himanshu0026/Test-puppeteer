@@ -97,5 +97,24 @@
 	
 	"deleteTopic" : {
 		"topicName" : "ONEpluse"
+	},
+
+	"shareTopic" : {
+		"socialUrl" : "",
+		"username" : "rajatk2",
+		"content" : "hello"
+	},
+
+	"deletePost" : {
+		"socialUrl" : "",
+		"username" : "rajatk2",
+		"content" : "sunday is funday",
+		"deleteVal" : "",
+		"dataPid" : ""
 	}
 }
+
+
+
+
+
