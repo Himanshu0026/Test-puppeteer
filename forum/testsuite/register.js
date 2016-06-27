@@ -439,38 +439,30 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	
 	
 	//Click On Login Link 
-
 	driver.then(function() {
 		//test.assertExists('a#navLogin');
 		this.click('a#navLogin');
-		this.echo('Successfully open login form.....', 'info');
-	});
-	
-	//Getting Screenshot After Clicking On 'Login' Link  
-	
-	driver.wait(5000, function() {
-		this.capture(screenShotsDir + 'login_form.png');
+		driver.wait(5000, function() {
+			this.capture(screenShotsDir + 'login_form.png');
+			this.log('Successfully open back-end login form ', 'info');
+		});
 	});
 	
 	//Filling Username/Password On Login Form
-	
 	driver.then(function() {
-		fillDataToLogin(json['backEndInfo'], driver, function() {
-			driver.echo('Successfully login on forum back end....', 'info');
+		forumRegister.fillDataToLogin(json.backEndInfo, driver, function() {
+			driver.wait(5000,function(){
+				this.capture(screenShotsDir + 'login_submit.png');
+				this.log('Successfully login on forum back-end', 'info');
+			});
 		});
-	});
-
-	//Getting Screenshot After Submitting 'Login' Form From Backend
-	
-	driver.wait(5000,function(){
-		this.capture(screenShotsDir + 'login_submit.png');
 	});
 };
 
 
 //Method For Filling Data In Login Form(Back end)
 
-var fillDataToLogin = function(data, driver, callback) {
+forumRegister.fillDataToLogin = function(data, driver, callback) {
 	driver.fill('form[name="frmLogin"]', {
 		'username' : data.uname,
 		'password' : data.upass,
