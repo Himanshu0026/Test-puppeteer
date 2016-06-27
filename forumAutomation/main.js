@@ -1,8 +1,9 @@
 'use strict';
 var http = require('http');
 var createHandler = require('github-webhook-handler');
+var exec = require('child_process').exec;
 var handler = createHandler({ path: '/webhook', secret: 'monika' });
-var GitHubApi = require("github");
+/*var GitHubApi = require("github");
 
 var github = new GitHubApi({
     // optional
@@ -15,16 +16,25 @@ var github = new GitHubApi({
         "user-agent": "My-Cool-GitHub-App" // GitHub is happy with a unique user agent
     },
     followRedirects: false, // default: true; there's currently an issue with non-get redirects, so allow ability to disable follow-redirects
-});
+});*/
 
-
+var child = exec('casperjs test ../forum/mainTest.js --feature=login -o abc.out');
+	child.stdout.on('data', function(data) {
+	    console.log('stdout: ' + data);
+	});
+	child.stderr.on('data', function(data) {
+	    console.log('stdout: ' + data);
+	});
+	child.on('close', function(code) {
+	    console.log('closing code: ' + code);
+	});
 
 http.createServer(function (req, res) {
   handler(req, res, function (err) {
     res.statusCode = 404;
     res.end('no such location');
   });
-}).listen(80);
+}).listen(6789);
 
 handler.on('error', function (err) {
   console.error('Error:', err.message);
@@ -35,7 +45,7 @@ handler.on('push', function (event) {
     	event.payload.repository.name,
     	event.payload.ref);
 	console.log(JSON.stringify(event.payload));
-	github.repos.createStatus({
+	/*github.repos.createStatus({
 		"user": "webtoolbox",
 		"repo": "QA-automation",
 		"sha": "1e8afb95d527ca52e63ec329f5baefa1ff110083",
@@ -43,6 +53,17 @@ handler.on('push', function (event) {
 		"target_url": "http://chatbeta.websitetoolbox.com/",
 		"description": "This is webhook testing",
 		"context": "Forum automation"
+	});*/
+	
+	var child = exec('casperjs test ../forum/mainTest.js --feature=login');
+	child.stdout.on('data', function(data) {
+	    console.log('stdout: ' + data);
+	});
+	child.stderr.on('data', function(data) {
+	    console.log('stdout: ' + data);
+	});
+	child.on('close', function(code) {
+	    console.log('closing code: ' + code);
 	});
 });
 
