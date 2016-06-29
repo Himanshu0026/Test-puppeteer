@@ -81,8 +81,13 @@ forumRegister.featureTest = function(casper, test) {
 								test.assertDoesntExist('form[name="PostTopic"] input[name="imID"]');
 							}
 						} else if (response.data.birthday == '') {
-							errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
-							msgTitle = 'BlankBirthday';
+							try {
+								test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
+								errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
+								msgTitle = 'BlankBirthday';
+							} catch(e) {
+								test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
+							}
 						} else if (response.data.errorType == 'existWithName') {
 							casper.wait('5000', function() {
 								errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
@@ -101,7 +106,14 @@ forumRegister.featureTest = function(casper, test) {
 							});
 						} else if (response.data.errorType == 'invalidBirthday') {
 							casper.wait('5000', function() {
-								errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
+								try {
+									test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
+									errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
+								} catch(e) {
+									test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
+									errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
+									expectedErrorMsg = 'Error: It looks like you are already registered';
+								}
 								msgTitle = 'InvalidBday';
 							});
 						} else if (response.data.errorType == 'invalidEmail') {
@@ -471,6 +483,8 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	driver.wait(5000,function(){
 		this.capture(screenShotsDir + 'login_submit.png');
 	});
+	
+	return callback();
 };
 
 
