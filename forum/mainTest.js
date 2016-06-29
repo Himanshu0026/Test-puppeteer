@@ -2,7 +2,7 @@ var config = require("./config/config.json");
 
 casper.options.viewportSize = config.app.viewportSize;
 casper.options.verbose = config.app.verbose;
-//casper.options.logLevel = config.app.logLevel;
+casper.options.logLevel = config.app.logLevel;
 //casper.options.waitTimeout = config.app.waitTimeout;
 
 var feature = casper.cli.get('feature');
@@ -68,9 +68,29 @@ switch (feature) {
 	});
         break;
 	case "registerWithSettings":
-    	casper.test.begin('REGISTRATION TEST', function(test) {
+    	casper.test.begin('REGISTRATION WITH SETTINGS TEST', function(test) {
 		var forumRegister = require("./testsuite/register.js");
 		forumRegister.customFieldsTest(casper, test);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
+        break;
+        case "inContextRegistration":
+    	casper.test.begin('IN CONTEXT REGISTRATION TEST', function(test) {
+		var inContextForumRegister = require("./testsuite/inContextRegister.js");
+		inContextForumRegister.featureTest(casper, test);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
+        break;
+         case "backEndRegistration":
+    	casper.test.begin('BACK END REGISTRATION TEST', function(test) {
+		var backEndRegister = require("./testsuite/backEndRegister.js");
+		backEndRegister.featureTest(casper, test);
 		casper.run(function(){
 			test.done();
 			test.assert(true);

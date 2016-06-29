@@ -134,7 +134,9 @@ forumLogin.loginToApp = function(username, password, driver,callback) {
 
 //method for logout from application
 forumLogin.logoutFromApp = function(driver, callback) {
+	driver.test.assertExists('button.dropdown-toggle span.caret');
 	driver.click('button.dropdown-toggle span.caret');
+	driver.test.assertExists('#logout');
 	driver.click('#logout');
 	return callback();
 };

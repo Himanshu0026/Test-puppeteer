@@ -14,7 +14,7 @@ forumRegister.featureTest = function(casper, test) {
 	//Login To Forum BackEnd 
 	
 	forumRegister.loginToForumBackEnd(casper, test, function() {
-		casper.echo('Successfully Login To Forum Back End...........', 'Info');
+		casper.echo('Successfully Login To Forum Back End...........', 'INFO');
 	});
 	
 	//Clicking On "General" Tab Under Settings 
@@ -24,7 +24,7 @@ forumRegister.featureTest = function(casper, test) {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 		test.assertExists('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
 		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
-		this.echo('Successfully open forum settings form.....', 'info');
+		this.echo('Successfully open forum settings form.....', 'INFO');
 	});
 	
 	//Getting Screenshot After Clicking On "General" Tab Under Settings 
@@ -43,10 +43,10 @@ forumRegister.featureTest = function(casper, test) {
 		if(element) {
 			this.thenOpen(config.url, function() {
 				test.assertTitle('Automation Forum', this.getTitle());
-				this.echo('Title of the page :' +this.getTitle(), 'info');
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
 				test.assertExists('.pull-right a[href="/register/register"]');
 				this.click('.pull-right a[href="/register/register"]');
-				this.echo('Successfully open register form.....', 'info');
+				this.echo('Successfully open register form.....', 'INFO');
 			});
 			
 			this.wait(5000, function() {
@@ -55,9 +55,9 @@ forumRegister.featureTest = function(casper, test) {
 			
 			this.then(function() {
 				this.eachThen(json['invalidInfo'], function(response) {
-					casper.log('Response Data : ' +JSON.stringify(response.data), 'info');
+					casper.log('Response Data : ' +JSON.stringify(response.data), 'INFO');
 					var responseData = response.data;
-					registerToApp(response.data, casper, function() {
+					forumRegister.registerToApp(response.data, casper, function() {
 						var errorMessage = '';
 						var msgTitle = '';
 						var expectedErrorMsg = '';
@@ -131,9 +131,9 @@ forumRegister.featureTest = function(casper, test) {
 			//Fill Valid Data On Registration Form
 	
 			this.then(function() {
-				registerToApp(json['validInfo'], casper, function() {
+				forumRegister.registerToApp(json['validInfo'], casper, function() {
 					//test.assertDoesntExist('form[action="/register/create_account"] button');
-					casper.echo('Processing to registration on forum.....', 'info');
+					casper.echo('Processing to registration on forum.....', 'INFO');
 				});
 			});
 
@@ -146,7 +146,7 @@ forumRegister.featureTest = function(casper, test) {
 			//Handling Logout And Redirecting To The Respective Page
 			
 			this.then(function() {
-				redirectToLogout(casper, test, function() {});
+				forumRegister.redirectToLogout(casper, test, function() {});
 			});
 		} else {
 			test.assertDoesntExist('.pull-right a[href="/register/register"]');
@@ -154,19 +154,19 @@ forumRegister.featureTest = function(casper, test) {
 	});
 };
 
-/**************************Full Name Field Validation****************************/
+/**************************registerWithSettings Field Validation****************************/
 
-forumRegister.customFieldsTest = function(casper, test) {
+forumRegister.registerWithSettings = function(casper, test) {
 	
 	casper.echo('*************OPEN FIELDS SETTING PAGE FROM BACKEND*******************');
 	
 	//Login To Forum BackEnd 
 	
 	forumRegister.loginToForumBackEnd(casper, test, function() {
-		casper.echo('Successfully Login To Forum Back End...........', 'Info');
+		casper.echo('Successfully Login To Forum Back End...........', 'INFO');
 	});
 	
-	//Clicking On 'General' Tab Under Settings 
+	//Clicking On 'Fields' Tab Under Users 
 	
 	casper.then(function() {
 		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
@@ -178,7 +178,7 @@ forumRegister.customFieldsTest = function(casper, test) {
 	//Redirecting To 'Default Registration Options' Page
 	
 	casper.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
-		this.echo('Successfully Open Default Registration Options.....', 'info');
+		this.echo('Successfully Open Default Registration Options.....', 'INFO');
 	});
 	
 	//Getting Screenshot After Clicking On "General" Tab Under Settings 
@@ -192,10 +192,10 @@ forumRegister.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
 			this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
-				this.echo('REOPEN Default Registration Options.....', 'info');
+				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
 	
-			this.echo('Response Data : ' +JSON.stringify(response.data), 'info');
+			this.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
 			var responseData = response.data;
 			this.then(function() {
 				this.fillSelectors('form[name="posts"]', {
@@ -218,20 +218,20 @@ forumRegister.customFieldsTest = function(casper, test) {
 					} else {
 						test.assertExists('form[name="PostTopic"] input[name="name"]');
 						if (responseData.required == '1') {
-							registerToApp(json['fullnameData'], casper, function() {
+							forumRegister.registerToApp(json['fullnameData'], casper, function() {
 								var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="name"]', 'data-original-title');
 								if(errorMsg && errorMsg != "") {
 									verifyErrorMsg(errorMsg, responseData.expectedErrorMsg, 'blankFullNameWithRequired', casper);
 								}
 							});
 						} else {
-							registerToApp(json['fullnameData'], casper, function() {
-								casper.echo('Processing to registration on forum.....', 'info');
+							forumRegister.registerToApp(json['fullnameData'], casper, function() {
+								casper.echo('Processing to registration on forum.....', 'INFO');
 							});
 							
 							this.wait(5000,function(){
 								this.capture(screenShotsDir + 'register_submit.png');
-								redirectToLogout(casper, test, function() {
+								forumRegister.redirectToLogout(casper, test, function() {
 									casper.echo('FULL NAME TASK COMPLETED........');
 								});
 							});
@@ -248,10 +248,10 @@ forumRegister.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
 			this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
-				this.echo('REOPEN Default Registration Options.....', 'info');
+				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
 	
-			this.echo('Response Data : ' +JSON.stringify(response.data), 'info');
+			this.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
 			var responseData = response.data;
 			this.then(function() {
 				this.fillSelectors('form[name="posts"]', {
@@ -277,26 +277,26 @@ forumRegister.customFieldsTest = function(casper, test) {
 						}, false);
 						test.assertExists('form[name="PostTopic"] input[name="imID"]');
 						if (responseData.required == '1') {
-							registerToApp(json['imIdBlankData'], casper, function() {
+							forumRegister.registerToApp(json['imIdBlankData'], casper, function() {
 								var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
 								if(errorMsg && errorMsg != "") {
 									verifyErrorMsg(errorMsg, "Please enter your screen name.", 'blankImIDWithRequired', casper);
 								}
 							});
 						} else {
-							registerToApp(json['imIdBlankData'], casper, function() {
+							forumRegister.registerToApp(json['imIdBlankData'], casper, function() {
 								var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
 								verifyErrorMsg(errorMsg, 'Please enter your screen name.', 'BlankIM_ID', casper);
-								casper.echo('Processing to registration on forum.....', 'info');
+								casper.echo('Processing to registration on forum.....', 'INFO');
 							});
 							
-							registerToApp(json['imIdData'], casper, function() {
-								casper.echo('Processing to registration on forum.....', 'info');
+							forumRegister.registerToApp(json['imIdData'], casper, function() {
+								casper.echo('Processing to registration on forum.....', 'INFO');
 							});
 							
 							this.wait(5000,function(){
 								this.capture(screenShotsDir + 'register_submit.png');
-								redirectToLogout(casper, test, function() {
+								forumRegister.redirectToLogout(casper, test, function() {
 									casper.echo('IM-ID  TASK COMPLETED........');
 								});
 							});
@@ -313,10 +313,10 @@ forumRegister.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
 			this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
-				this.echo('REOPEN Default Registration Options.....', 'info');
+				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
 	
-			this.echo('Response Data : ' +JSON.stringify(response.data), 'info');
+			this.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
 			var responseData = response.data;
 			this.then(function() {
 				this.fillSelectors('form[name="posts"]', {
@@ -339,24 +339,24 @@ forumRegister.customFieldsTest = function(casper, test) {
 					} else {
 						test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
 						if (responseData.required == '1') {
-							registerToApp(json['dobBlankData'], casper, function() {
+							forumRegister.registerToApp(json['dobBlankData'], casper, function() {
 								var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
 								if(errorMsg && errorMsg != "") {
 									verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper);
 								}
 							});
 						} else {
-							registerToApp(json['dobBlankData'], casper, function() {
-								casper.echo('Processing to registration on forum with blank dob.....', 'info');
+							forumRegister.registerToApp(json['dobBlankData'], casper, function() {
+								casper.echo('Processing to registration on forum with blank dob.....', 'INFO');
 							});
 							
-							registerToApp(json['dobData'], casper, function() {
-								casper.echo('Processing to registration on forum without blank dob.....', 'info');
+							forumRegister.registerToApp(json['dobData'], casper, function() {
+								casper.echo('Processing to registration on forum without blank dob.....', 'INFO');
 							});
 							
 							this.wait(5000,function(){
 								this.capture(screenShotsDir + 'register_submit.png');
-								redirectToLogout(casper, test, function() {
+								forumRegister.redirectToLogout(casper, test, function() {
 									casper.echo('BIRTHDAY TASK COMPLETED........');
 								});
 							});
@@ -372,10 +372,10 @@ forumRegister.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
 			this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
-				this.echo('REOPEN Default Registration Options.....', 'info');
+				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
 	
-			this.echo('Response Data : ' +JSON.stringify(response.data), 'info');
+			this.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
 			var responseData = response.data;
 			this.then(function() {
 				this.fillSelectors('form[name="posts"]', {
@@ -398,19 +398,19 @@ forumRegister.customFieldsTest = function(casper, test) {
 					} else {
 						test.assertExists('form[name="PostTopic"] div.sign-container');
 						if (responseData.required == '1') {
-							registerToApp(json['signatureBlankData'], casper, function() {});
+							forumRegister.registerToApp(json['signatureBlankData'], casper, function() {});
 						} else {
-							registerToApp(json['signatureBlankData'], casper, function() {
-								casper.echo('Processing to registration on forum with blank signature.....', 'info');
+							forumRegister.registerToApp(json['signatureBlankData'], casper, function() {
+								casper.echo('Processing to registration on forum with blank signature.....', 'INFO');
 							});
 							
-							registerToApp(json['signatureData'], casper, function() {
-								casper.echo('Processing to registration on forum without blank signature.....', 'info');
+							forumRegister.registerToApp(json['signatureData'], casper, function() {
+								casper.echo('Processing to registration on forum without blank signature.....', 'INFO');
 							});
 							
 							this.wait(5000,function(){
 								this.capture(screenShotsDir + 'register_submit.png');
-								redirectToLogout(casper, test, function() {
+								forumRegister.redirectToLogout(casper, test, function() {
 									casper.echo('SIGNATURE TASK COMPLETED........');
 								});
 							});
@@ -437,32 +437,46 @@ forumRegister.customFieldsTest = function(casper, test) {
 
 forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	
+	//Open Forum Backend URL And Get Title 
+	
+	driver.start(config.backEndUrl, function() {
+		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
 	
 	//Click On Login Link 
+
 	driver.then(function() {
-		//test.assertExists('a#navLogin');
+		test.assertExists('a#navLogin');
 		this.click('a#navLogin');
-		driver.wait(5000, function() {
-			this.capture(screenShotsDir + 'login_form.png');
-			this.log('Successfully open back-end login form ', 'info');
-		});
+		this.echo('Successfully open login form.....', 'INFO');
+	});
+	
+	//Getting Screenshot After Clicking On 'Login' Link  
+	
+	driver.wait(5000, function() {
+		this.capture(screenShotsDir + 'login_form.png');
 	});
 	
 	//Filling Username/Password On Login Form
+	
 	driver.then(function() {
-		forumRegister.fillDataToLogin(json.backEndInfo, driver, function() {
-			driver.wait(5000,function(){
-				this.capture(screenShotsDir + 'login_submit.png');
-				this.log('Successfully login on forum back-end', 'info');
-			});
+		fillDataToLogin(json['backEndInfo'], driver, function() {
+			driver.echo('Successfully login on forum back end....', 'INFO');
 		});
+	});
+
+	//Getting Screenshot After Submitting 'Login' Form From Backend
+	
+	driver.wait(5000,function(){
+		this.capture(screenShotsDir + 'login_submit.png');
 	});
 };
 
 
 //Method For Filling Data In Login Form(Back end)
 
-forumRegister.fillDataToLogin = function(data, driver, callback) {
+var fillDataToLogin = function(data, driver, callback) {
 	driver.fill('form[name="frmLogin"]', {
 		'username' : data.uname,
 		'password' : data.upass,
@@ -475,7 +489,7 @@ forumRegister.fillDataToLogin = function(data, driver, callback) {
 
 //Method For Filling Data In Registration Form
 
-var registerToApp = function(data, driver, callback) {
+forumRegister.registerToApp = function(data, driver, callback) {
 	driver.fill('form[name="PostTopic"]', {
 		'member' : data.uname,
 		'email': data.uemail,
@@ -531,23 +545,23 @@ var verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver) 
 	driver.capture(screenShotsDir + 'Error_RegisterWith' +msgTitle+ '.png');
 };
 
-//Logout To Forum Back End
+//Logout To Forum Front End
 
-var redirectToLogout = function(driver, test, callback) {
+forumRegister.redirectToLogout = function(driver, test, callback) {
 	try {
 		test.assertExists('div.bmessage');
 		var message = this.fetchText('div.bmessage');
 		var successMsg = message.substring(0, message.indexOf('<'));
 		var expectedSuccessMsg = json['validInfo'].expectedSuccessMsg;
 		test.assertEquals(successMsg.trim(), expectedSuccessMsg.trim());
-		driver.echo('Successfully done registration on forum.....', 'info');
+		driver.echo('Successfully done registration on forum.....', 'INFO');
 		
 		//Clicking On 'Back To Category' Link 
 
 		driver.then(function() {
 			test.assertExists('a[href="/categories"]');
 			this.click('a[href="/categories"]');
-			this.echo('Successfully back to category', 'info');
+			this.echo('Successfully back to category', 'INFO');
 		});
 
 		//Getting Screenshot After Clicking On 'Back To Category' Link  
@@ -560,7 +574,7 @@ var redirectToLogout = function(driver, test, callback) {
 
 		driver.then(function() {
 			forumLogin.logoutFromApp(driver, function(){
-				driver.echo('Successfully logout from application', 'info');
+				driver.echo('Successfully logout from application', 'INFO');
 			});
 
 			//Getting Screenshot After Clicking On 'Logout' Link  
@@ -575,9 +589,23 @@ var redirectToLogout = function(driver, test, callback) {
 			var errorMessage = driver.fetchText('#registerEditProfile div[role="alert"]');
 			var expectedErrorMsg = "Error: It looks like you already have a forum account!";
 			test.assert(errorMessage.indexOf(expectedErrorMsg) > -1);
-			driver.echo('USER ALREADY REGISTERED ON FORUM.....', 'info');
+			driver.echo('USER ALREADY REGISTERED ON FORUM.....', 'INFO');
 		} catch(e1) {
-			driver.echo('Successfully done registration on forum.....', 'error');
+			driver.echo('Successfully done registration on forum.....', 'INFO');
+			
+			//Click On Logout Link
+
+			driver.then(function() {
+				forumLogin.logoutFromApp(driver, function(){
+					driver.echo('Successfully logout from application', 'INFO');
+				});
+
+				//Getting Screenshot After Clicking On 'Logout' Link  
+
+				this.wait(5000, function() {
+					this.capture(screenShotsDir + 'logout.png');
+				});
+			});
 		}
 	}
 	return callback();
