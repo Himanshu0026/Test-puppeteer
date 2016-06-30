@@ -102,20 +102,23 @@
 	
 	"sharePost" : {
 		"socialUrl" : "",
-		"username" : "rajatk2",
+		"email" : "sangita.digi@gmail.com",
+		"password" : "Test@321",
+		"username" : "sun",
 		"content" : "hello"
 	},
 
 	"editPost" : {
 		"socialUrl" : "",
-		"username" : "rajatk2",
-		"content" : "hello"
+		"username" : "sun",
+		"content" : "hello",
+		"validContent" : "sun is fun"
 	},
 
 	"deletePost" : {
 		"socialUrl" : "",
-		"username" : "rajatk2",
-		"content" : "sunday is funday",
+		"username" : "sun",
+		"content" : "sun is fun",
 		"deleteVal" : "",
 		"dataPid" : ""
 	}

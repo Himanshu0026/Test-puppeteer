@@ -162,6 +162,15 @@ case "deletetopic":
 		});
 	});
         break;
+	case "incontextlogin" :
+		 casper.test.begin('Verify inContext Login functionlity ', function(test) {
+		 var inContextLogin = require("./testsuite/inContextLogin.js");
+		 inContextLogin.featureTest(casper, casper.test);
+		 casper.run(function(){
+			test.done();
+		});
+	});
+        break;
 
     default:
 	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
