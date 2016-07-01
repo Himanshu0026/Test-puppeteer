@@ -1,12 +1,21 @@
 {
-	"screenShotsLocation": "/home/monika/screenshots/",
+	"screenShotsLocation": "/home/rajatk/Screenshots/",
 	"url": "http://automation.websitetoolbox.com/",
+	"backEndUrl": "https://www.websitetoolbox.com/tool/members/login",
 	"app": {	
 		"verbose" : true,
 	 	"logLevel" : "info",
+		"waitTimeout" : "10000",
 		"viewportSize": { 
 			"width": 1024, 
 			"height": 768 
 		}
-	}
+	},
+
+	"backendCred" : {
+		"uname" : "automation",
+    		"upass" : "test"
+	},
+	
+	"permissionSettingMsg" : "Your user group settings have been updated."
 }

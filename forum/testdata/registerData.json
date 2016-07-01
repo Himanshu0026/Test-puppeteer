@@ -36,18 +36,6 @@
     },
     
     {
-        "uname" : "blank_fullname",
-        "uemail" : "blank_fullname@wt.com",
-        "upass" : "1234",
-        "fullName" : "",
-        "imID" : "Hello",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature blank full name",
-        "namePrivate" : true,
-        "expectedErrorMsg" : "Please enter user full name." 
-    },
-    
-    {
         "uname" : "blank_imID",
         "uemail" : "blank_imID@wt.com",
         "upass" : "1234",
@@ -69,6 +57,18 @@
         "usignature" : "This is my signature blank birthday",
         "namePrivate" : true,
         "expectedErrorMsg" : "Please enter birthday." 
+    },
+    
+    {
+        "uname" : "blank_signature",
+        "uemail" : "blank_signature@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank Signature",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "Please provide a signature." 
     },
     
     {
@@ -108,7 +108,7 @@
         "usignature" : "This is my signature 18",
         "namePrivate" : true,
         "errorType" : "existWithUsernameAndEmail",
-        "expectedSuccessMsg" : "Error: It looks like you already have a forum account! A forum account for that username and email address combination already exists!"
+        "expectedErrorMsg" : "Error: It looks like you already have a forum account! A forum account for that username and email address combination already exists!"
     },
     
     {
@@ -138,8 +138,8 @@
     }],
     
     "validInfo" : {
-    	"uname" : "3575",
-        "uemail" : "3575@wt.com",
+    	"uname" : "105",
+        "uemail" : "105@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",
@@ -147,5 +147,119 @@
         "usignature" : "This is my signature 18",
         "namePrivate" : true,
         "expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
+    },
+    
+    "backEndInfo" : {
+    	"uname" : "automation",
+    	"upass" : "test"
+    },
+    
+    "setValueOnRegister" : [{
+    	"required" : "1",
+    	"visibility" : "1"
+    }, 
+    
+    {
+    	"required" : "1",
+    	"visibility" : "2"
+    },
+    
+    {
+    	"required" : "1",
+    	"visibility" : "4"
+    },
+    
+    {
+    	"required" : "0",
+    	"visibility" : "1"
+    },
+    
+    {
+    	"required" : "0",
+    	"visibility" : "2"
+    },
+    
+    {
+    	"required" : "0",
+    	"visibility" : "4"
+    }],
+    
+    "fullnameData" : {
+    	"uname" : "blank_fullname",
+        "uemail" : "blank_fullname@wt.com",
+        "upass" : "1234",
+        "fullName" : "",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank fullname",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "Please enter user full name." 
+    },
+    
+    "imIdBlankData" : {
+        "uname" : "blank_imID1",
+        "uemail" : "blank_imID1@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank IM ID",
+        "imID" : "",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank im-id",
+        "namePrivate" : true
+    },
+    
+    "imIdData" : {
+        "uname" : "blank_imID2",
+        "uemail" : "blank_imID2@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank IM ID",
+        "imID" : "hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank im-id",
+        "namePrivate" : true
+    },
+    
+    "dobBlankData" : {
+        "uname" : "blank_dob",
+        "uemail" : "blank_dob@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank dob",
+        "imID" : "hello",
+        "birthday" : "",
+        "usignature" : "This is my signature blank dob",
+        "namePrivate" : true
+    },
+    
+    "dobData" : {
+        "uname" : "blank_dob1",
+        "uemail" : "blank_dob1@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank dob",
+        "imID" : "hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "This is my signature blank dob",
+        "namePrivate" : true
+    },
+    
+    "signatureBlankData" : {
+        "uname" : "blank_signature",
+        "uemail" : "blank_signature@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank Signature",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "",
+        "namePrivate" : true
+    },
+    
+    "signatureData" : {
+        "uname" : "blank_signature1",
+        "uemail" : "blank_signature1@wt.com",
+        "upass" : "1234",
+        "fullName" : "Blank Signature",
+        "imID" : "Hello",
+        "birthday" : "04/12/1991",
+        "usignature" : "hii...how r u?",
+        "namePrivate" : true
     }
+    
 }
