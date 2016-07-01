@@ -1,11 +1,8 @@
 'use strict';
 var http = require('http');
+var queueServices = require('./services/queueServices.js');
 var createHandler = require('github-webhook-handler');
-var execSync = require('child_process').execSync;
-var queue = require('queue');
 var handler = createHandler({ path: '/webhook', secret: 'monika' });
-
-console.log("execution completed");
 
 http.createServer(function (req, res) {
   handler(req, res, function (err) {
@@ -15,7 +12,7 @@ http.createServer(function (req, res) {
 }).listen(6789);
 
 handler.on('error', function (err) {
-  console.error('Error:', err.message);
+	console.error('Error:', err.message);
 });
 
 handler.on('push', function (event) {
@@ -23,24 +20,25 @@ handler.on('push', function (event) {
     	event.payload.repository.name,
     	event.payload.ref);
 	console.log(JSON.stringify(event.payload));
-	var automationExec = execSync('casperjs test ../forum/mainTest.js --feature=login');
-	/*child.stdout.on('data', function(data) {
-	    console.log('stdout: ' + automationExec.stdout);
-	//});
-	child.stderr.on('data', function(data) {
-	    console.log('stdout: ' + data);
-	});
-	child.on('close', function(code) {
-	    console.log('closing code: ' + code);
-	});*/
+
+	var commitDetails = {};
+	var commitPayload = event.payload.head_commit;
+	commitDetails["commitId"] = commitPayload.id;
+	commitDetails["commitMessage"] = commitPayload.message;
+	commitDetails["commitUrl"] = commitPayload.url;
+	commitDetails["committerName"] = commitPayload.committer.name;
+	commitDetails["committerEmail"] = commitPayload.committer.email;
+	var tempArr = event.payload.ref.split("/");
+	var branchName = tempArr[tempArr.length-1];
+	commitDetails["branchName"] = branchName;
+	queueServices.addNewJob(commitDetails);
 });
 
 handler.on('issues', function (event) {
-  console.log('Received an issue event for %s action=%s: #%d %s',
-    event.payload.repository.name,
-    event.payload.action,
-    event.payload.issue.number,
-    event.payload.issue.title);
+	console.log('Received an issue event for %s action=%s: #%d %s',
+		event.payload.repository.name,
+		event.payload.action,
+		event.payload.issue.number,
+		event.payload.issue.title);
 	console.log(JSON.stringify(event.payload));
 });
-
