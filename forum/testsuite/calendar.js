@@ -410,17 +410,17 @@ calendar.featureTest = function(casper, test, x) {
 
 	});*/
 
-	/*casper.then(function() {
+	casper.then(function() {
 		this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 			this.click('a.btn.btn-sm.btn-primary');	
 		});
 		//this.eachThen(json['invalidInfo'], function(response) {
-			casper.echo("=========" +JSON.stringify(json["validInfo"][3]));
-			calendar.createEvent(json["validInfo"][3], casper, function() {
+			casper.echo("=========" +JSON.stringify(json["validInfo"][5]));
+			calendar.createEvent(json["validInfo"][5], casper, function() {
 				casper.wait(5000, function() {
 					casper.echo("*****************************");
-					calendar.verifyCreatedEvent(json["validInfo"][3], casper, function(){
-						casper.capture(screenShotsDir+"EventwithWeeklyRepeat.png");
+					calendar.verifyCreatedEvent(json["validInfo"][5], casper, function(){
+						casper.capture(screenShotsDir+"EventwithMonthlyRepeat_The.png");
 					});
 				
 				});
@@ -431,9 +431,9 @@ calendar.featureTest = function(casper, test, x) {
 
 
 
-	});*/
+	});
 
-	casper.then(function() {
+	/*casper.then(function() {
 		this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 			this.click('a.btn.btn-sm.btn-primary');	
 		});
@@ -456,6 +456,7 @@ calendar.featureTest = function(casper, test, x) {
 					
 				}else if(responseData.validationType == "Create event with ranged date") {
 					casper.wait(3000, function() {
+						casper.capture(screenShotsDir+"rangedDate.png");
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithRangeddate.png");
 							casper.echo("-----------------------------------------------------------------");
@@ -487,6 +488,28 @@ calendar.featureTest = function(casper, test, x) {
 
 						});
 					});
+				} if(responseData.validationType == "Monthly Recurssion with Day Period") {
+					casper.wait(3000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecDay.png");
+							casper.echo("-----------------------------------------------------------------");
+							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
+								this.click('a.btn.btn-sm.btn-primary');	
+							});
+
+						});
+					});
+				} if(responseData.validationType == "Monthly Recurssion with The Period") {
+					casper.wait(3000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecThe.png");
+							casper.echo("-----------------------------------------------------------------");
+							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
+								this.click('a.btn.btn-sm.btn-primary');	
+							});
+
+						});
+					});
 				}
 			});
 
@@ -497,7 +520,7 @@ calendar.featureTest = function(casper, test, x) {
 		});
 
 
-	});
+	});*/
 
 	
 
@@ -547,7 +570,7 @@ calendar.createEvent = function(data, driver, callback) {
  		this.sendKeys('#tinymce', data.description);	
 	});
 	driver.wait(3000, function() {
-		
+		casper.capture(screenShotsDir+"sangita123.png");
 		if (data.Allday){
 			utils.enableorDisableCheckbox('allDay', true, driver, function() {
 				casper.echo("Allday checkbox has been enabled", 'info');
@@ -564,15 +587,9 @@ calendar.createEvent = function(data, driver, callback) {
 		
 			this.sendKeys('#event_end_date', data.endDate, {reset:true, keepFocus: true});
 
-			this.click('#from_time');
-			this.fill('form#PostCalEvent',{
-				'from_time' : data.startTime
-			},false);
+			this.sendKeys('#event_from_time', data.startTime, {reset:true, keepFocus: true});
 
-			this.click('select[name="to_time"]');
-			this.fill('form#PostCalEvent',{
-			'to_time' : data.endTime
-			},false);
+			this.sendKeys('#to_time', data.endTime, {reset:true, keepFocus: true});
 
 		}
 		this.click('select[name="time_offset"]');
@@ -690,7 +707,8 @@ calendar.createEvent = function(data, driver, callback) {
 		}
 	});
 	driver.wait(3000, function(){
-		this.click('button#post_event_buttton');	
+		this.click('button#post_event_buttton');
+		casper.capture(screenShotsDir+"CreateEvent.png");	
 	});
 	return callback();
 };
@@ -733,7 +751,25 @@ calendar.verifyCreatedEvent = function(data, driver, callback) {
 				driver.test.assertEquals(rec_msg.trim(), inputData, 'Reccursion message for weekly event is verified');
 			break;
 			case "Monthly" :
-				casper.echo("*******************************");
+				if (data.rec_monthly == "Day") {
+					var rec_msg = driver.fetchText('span small[class="text-muted"]');
+					var inputData = 'This event occurs on day '+data.days+' of every '+ data.months + ' month(s)';
+					driver.test.assertEquals(rec_msg.trim(), inputData, 'Reccursion message for monthly event with "Day" period is verified');
+				} else if (data.rec_monthly == "The") {
+					var rec_msg = driver.fetchText('span small[class="text-muted"]');
+					var inputData = 'This event occurs on the '+data.monthlycombo +' '+data.weekday+' of every '+ data.months + ' month(s)';
+					driver.test.assertEquals(rec_msg.trim(), inputData, 'Reccursion message for monthly event with "The" period is verified');
+				}
+			break;
+			case "Yearly" :
+				if (data.rec_yearly == "Every") {
+					var rec_msg = driver.fetchText('span small[class="text-muted"]');
+					casper.echo(rec_msg);
+				} else if (data.rec_yearly == "The") {
+					var rec_msg = driver.fetchText('span small[class="text-muted"]');
+					casper.echo(rec_msg);
+				}
+			break;
 	
 		}
 	}
@@ -741,7 +777,7 @@ calendar.verifyCreatedEvent = function(data, driver, callback) {
 
 	var url = driver.getCurrentUrl();
 		url= url.split(".com");
-		casper.echo("*****href***** "+url[1]);
+		casper.echo(" href : "+url[1], "INFO");
 		var event_href = url[1];
 		var read_data = fs.read(filePath)
   		var result = read_data.replace(data.calender_href, event_href);
