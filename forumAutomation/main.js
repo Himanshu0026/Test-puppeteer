@@ -9,7 +9,7 @@ http.createServer(function (req, res) {
     res.statusCode = 404;
     res.end('no such location');
   });
-}).listen(6789);
+}).listen(80);
 
 handler.on('error', function (err) {
 	console.error('Error:', err.message);
@@ -19,7 +19,7 @@ handler.on('push', function (event) {
 	console.log('Received a push event for %s to %s',
     	event.payload.repository.name,
     	event.payload.ref);
-	console.log(JSON.stringify(event.payload));
+	//console.log(JSON.stringify(event.payload));
 
 	var commitDetails = {};
 	var commitPayload = event.payload.head_commit;
