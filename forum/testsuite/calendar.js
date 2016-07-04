@@ -390,28 +390,13 @@ calendar.featureTest = function(casper, test, x) {
 		} catch (err) {
 			casper.echo("Error occurred: "+err);
 		}
-		});*/
-		/*this.wait(5000, function(){
-			casper.echo("wait for 5 seconds");
-			casper.capture(screenShotsDir+"createEvent.png");
-			casper.echo("=========" +JSON.stringify(json["validInfo"][0]));
-			calendar.createEvent(json["validInfo"][0], casper, function() {
-				casper.wait(5000, function() {
-					casper.capture(screenShotsDir+"calender.png");
-					calendar.verifyCreatedEvent(json["validInfo"][0], casper, function(){
-						casper.echo("enter to verify event");
-					});
-				
-				});
-			});
-
 		});
-
+		
 
 	});*/
 
-	casper.then(function() {
-		this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
+	/*casper.then(function() {
+		/*this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 			this.click('a.btn.btn-sm.btn-primary');	
 		});
 		//this.eachThen(json['invalidInfo'], function(response) {
@@ -421,17 +406,27 @@ calendar.featureTest = function(casper, test, x) {
 					casper.echo("*****************************");
 					calendar.verifyCreatedEvent(json["validInfo"][5], casper, function(){
 						casper.capture(screenShotsDir+"EventwithMonthlyRepeat_The.png");
+						calendar.gethrefofCreatedEvent(json["validInfo"][5], casper, function() {
+							casper.echo("href value is : "+ json["validInfo"][5].calender_href, "INFO");
+						});
 					});
 				
 				});
 			});
 
 		//});
+		var href = json["validInfo"][0].calender_href;
+		this.click('a[href="'+href+'"]');
+		casper.wait(5000, function() {
+			casper.echo("*****************************");
+			calendar.verifyCreatedEvent(json["validInfo"][0], casper, function(){
+				casper.capture(screenShotsDir+"EventwithAllday.png");
+			});
+				
+		});
 
 
-
-
-	});
+	});*/
 
 	/*casper.then(function() {
 		this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
@@ -447,6 +442,9 @@ calendar.featureTest = function(casper, test, x) {
 					casper.wait(3000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithAllday.png");
+							calendar.gethrefofCreatedEvent(responseData, casper, function() {
+								casper.echo("href value is : "+ responseData.calender_href, "INFO");
+							});
 							casper.echo("-----------------------------------------------------------------");
 							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 								this.click('a.btn.btn-sm.btn-primary');	
@@ -459,6 +457,9 @@ calendar.featureTest = function(casper, test, x) {
 						casper.capture(screenShotsDir+"rangedDate.png");
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithRangeddate.png");
+							calendar.gethrefofCreatedEvent(responseData, casper, function() {
+								casper.echo("href value is : "+ responseData.calender_href, "INFO");
+							});
 							casper.echo("-----------------------------------------------------------------");
 							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 								this.click('a.btn.btn-sm.btn-primary');	
@@ -470,6 +471,9 @@ calendar.featureTest = function(casper, test, x) {
 					casper.wait(3000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithDailyRecurssion.png");
+							calendar.gethrefofCreatedEvent(responseData, casper, function() {
+								casper.echo("href value is : "+ responseData.calender_href, "INFO");
+							});
 							casper.echo("-----------------------------------------------------------------");
 							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 								this.click('a.btn.btn-sm.btn-primary');	
@@ -481,6 +485,9 @@ calendar.featureTest = function(casper, test, x) {
 					casper.wait(3000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithWeeklyRecurssion.png");
+							calendar.gethrefofCreatedEvent(responseData, casper, function() {
+								casper.echo("href value is : "+ responseData.calender_href, "INFO");
+							});
 							casper.echo("-----------------------------------------------------------------");
 							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 								this.click('a.btn.btn-sm.btn-primary');	
@@ -492,6 +499,9 @@ calendar.featureTest = function(casper, test, x) {
 					casper.wait(3000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecDay.png");
+							calendar.gethrefofCreatedEvent(responseData, casper, function() {
+								casper.echo("href value is : "+ responseData.calender_href, "INFO");
+							});
 							casper.echo("-----------------------------------------------------------------");
 							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 								this.click('a.btn.btn-sm.btn-primary');	
@@ -503,6 +513,9 @@ calendar.featureTest = function(casper, test, x) {
 					casper.wait(3000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecThe.png");
+							calendar.gethrefofCreatedEvent(responseData, casper, function() {
+								casper.echo("href value is : "+ responseData.calender_href, "INFO");
+							});
 							casper.echo("-----------------------------------------------------------------");
 							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 								this.click('a.btn.btn-sm.btn-primary');	
@@ -521,6 +534,118 @@ calendar.featureTest = function(casper, test, x) {
 
 
 	});*/
+
+	casper.then(function() {
+try { 
+		this.eachThen(json['validInfo'], function(response) {
+	
+		
+			casper.echo("=========" +JSON.stringify(response.data));
+			calendar.ViewCalenderEvent(response.data, casper, function() {
+				var responseData = response.data;
+				if(responseData.validationType == "Create event with Allday") {
+					casper.wait(3000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithAllday_View.png");
+							casper.echo("-----------------------------------------------------------------");
+							casper.back();
+							casper.capture(screenShotsDir+"CreateEventwithAllday_View_prev.png");
+						});
+					});
+					
+				}else if(responseData.validationType == "Create event with ranged date") {
+					casper.wait(3000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithRangeddate_view.png");
+							casper.echo("-----------------------------------------------------------------");
+							casper.back();
+
+						});
+					});
+				}else if(responseData.validationType == "Daily Recurssion") {
+					casper.wait(3000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithDailyRecurssion_view.png");
+							casper.echo("-----------------------------------------------------------------");
+							casper.back();
+
+						});
+					});
+				}else if(responseData.validationType == "Weekly Recurssion") {casper.echo("+++++++++++");
+					casper.wait(3000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithWeeklyRecurssion_view.png");
+							casper.echo("-----------------------------------------------------------------");
+							casper.back();
+
+						});
+					});
+				} else if(responseData.validationType == "Monthly Recurssion with Day Period") {
+					casper.wait(3000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecDay_view.png");
+							casper.echo("-----------------------------------------------------------------");
+							casper.back();
+						});
+					});
+				}else if(responseData.validationType == "Monthly Recurssion with The Period") {
+					casper.wait(3000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecThe_view.png");
+							casper.echo("-----------------------------------------------------------------");
+							casper.back();
+
+						});
+					});
+				}
+			});
+
+			
+
+		});
+
+}catch(err){
+				casper.echo("Error occurred :"+err);
+			}
+
+	});
+	
+	casper.thenOpen(config.url+'calendar/', function(){
+		casper.echo("current page title is "+this.getTitle());
+	});
+
+	casper.then(function() {
+		this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
+			this.click('a.btn.btn-sm.btn-primary');	
+		});
+		casper.echo("=========" +JSON.stringify(json["validInfo"][0]));
+		calendar.createEvent(json["validInfo"][0], casper, function() {
+			casper.wait(3000, function() {
+				calendar.verifyCreatedEvent(json["validInfo"][0], casper, function(){
+					var url = driver.getCurrentUrl();
+					url= url.split(".com");
+					var event_href = url[1];
+					var cal_href = event_href.split("?");
+					var cal_id =  cal_href[1].split("&");
+					event_href = cal_href[0]+"?"+cal_id[2]+"&"+cal_id[0]+"&"+cal_id[1];
+					casper.echo("current href is "+ event_href, "INFO");
+
+					casper.wait(3000, function() {
+						this.click('i.glyphicon.glyphicon-chevron-down');
+casper.echo("*********id of delete option "+ 'a#event_delete_'+cal_id[0]);
+						this.click('a#event_delete_'+cal_id[0]);
+casper.echo("clicked", "INFO");
+
+					});
+					casper.echo("-----------------------------------------------------------------");
+					
+				});
+			});
+
+		});	
+
+
+	});
 
 	
 
@@ -773,21 +898,76 @@ calendar.verifyCreatedEvent = function(data, driver, callback) {
 	
 		}
 	}
+	return callback();
+
+};
 
 
+calendar.gethrefofCreatedEvent = function(data, driver, callback) {	
 	var url = driver.getCurrentUrl();
-		url= url.split(".com");
-		casper.echo(" href : "+url[1], "INFO");
-		var event_href = url[1];
-		var read_data = fs.read(filePath)
-  		var result = read_data.replace(data.calender_href, event_href);
-		fs.write(filePath, result, 'w');
+	url= url.split(".com");
+	casper.echo(" href : "+url[1], "INFO");
+	var event_href = url[1];
+	casper.echo("current url is "+ event_href, "INFO");
+	var cal_href = event_href.split("?");
+	var cal_id =  cal_href[1].split("&");
+	event_href = cal_href[0]+"?"+cal_id[2]+"&"+cal_id[0]+"&"+cal_id[1];
+	//casper.echo("href value is : "+ event_href, "INFO");
+	var read_data = fs.read(filePath)
+  	var result = read_data.replace(data.calender_href, event_href);
+	fs.write(filePath, result, 'w');
+
+	return callback();
+
+};
+
+calendar.ViewCalenderEvent = function(data, driver, callback) {
+
+	var href = data.calender_href;
+	try{
+		casper.echo("try......... : " +href);
+		driver.test.assertExists('a[href="'+href+'"]');
+		driver.waitForSelector('a[href="'+href+'"]', function(){
+			this.click('a[href="'+href+'"]');
+		});
+	}catch(err) {
+casper.echo("catch......... : " +href);
+		//driver.click('a[data-original-title="Next Month"]');
+		//this.click('a[href^="/calendar/eventdetail?date="]');
+	};
+
+	/*if (data.Repeat) {
+		switch (data.recurrence) {
+			case "Daily" :
+				driver.click('a[href="'+href+'"]');
+			break;
+			case "Weekly" :
+				driver.click('a[href="'+href+'"]');
+			break;
+			case "Monthly" :
+				driver.click('a[href="'+href+'"]');
+			break;
+			case "Yearly" :
+				driver.click('a[href="'+href+'"]');
+			break;
+		}
+
+	} else {
+		driver.click('a[href="'+href+'"]');
+
+	}*/
 
 
 	return callback();
 
-
 };
+
+
+	
+
+
+
+
 
 
 
