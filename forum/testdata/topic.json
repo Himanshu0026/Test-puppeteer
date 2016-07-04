@@ -5,6 +5,8 @@
 			"password" : "rk@123",
 			"username1" : "sun",
 			"password1" : "rk@123",
+			"adminUname" : "rajatk",
+			"adminPass" : "rk@123",
 			
 			"startTopicPermissionWarning" : "Sorry! You don't have permission to perform this action.",
 
@@ -121,6 +123,15 @@
 		"content" : "sun is fun",
 		"deleteVal" : "",
 		"dataPid" : ""
+	},
+
+	"pin/unPin" : {
+		"topicTitle" : "ONEpluse"
+	},
+	
+	"lock/unLock" : {
+		"topicTitle" : "ONEpluse",
+		"ExpectedWarningMessage" : "Note: This topic is locked. No new replies will be accepted."
 	}
 }
 
