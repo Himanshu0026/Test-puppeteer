@@ -11,7 +11,7 @@ executorServices.execute = function(script){
 
 executorServices.executeJob = function(commitDetails, callback){
 	//executorServices.execute("sh /home/${USER}/Website-Toolbox/gitdeploy.sh "+commitDetails.branchName);
-	var testResult = executorServices.execute("casperjs test ../forum/automation.js --feature=login > automation.log; cat automation.log | grep 'FAIL' > fail.log; cat automation.log | grep 'tests executed in'");
+	var testResult = executorServices.execute("sudo bash -c 'casperjs test ../forum/automation.js --feature=login > automation.log; cat automation.log | grep FAIL > fail.log; cat automation.log | grep \"tests executed in\"'");
 	commitDetails['testResult'] = testResult;
 	commitDetails['attachments'] = [
                 {   
