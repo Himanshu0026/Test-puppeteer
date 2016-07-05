@@ -49,10 +49,25 @@ switch (feature) {
 	casper.test.begin("Start 'Delete Account' functionality from home page & verify content with all scenarios", function(test) {
 
 		var deleteAccount = require("./testsuite/deleteAccount.js");
-		deleteAccount.featureTest(casper, casper.test);
+		var x = require('casper').selectXPath;
+		deleteAccount.featureTest(casper, casper.test, x);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
+        
+        break;
+		
+    case "deleteAccountWithSettings":
+	casper.test.begin("Start 'Delete Account' functionality from home page & verify content with all scenarios", function(test) {
+
+		var deleteAccount = require("./testsuite/deleteAccount.js");
+		deleteAccount.customFieldsTest(casper, casper.test);
 		
 		casper.run(function(){
 			test.done();
+			test.assert(true);
 		});
 	});
         
