@@ -46,12 +46,41 @@
 	},
 	
 	"poll" : {
-		"pollQues" : "Are U Happy",
-		"publicCheckbox" : true,
-		"option1" : "YES",
-		"option2" : "NO",
-		"multiple" : false,
-		"timeoutFormat": 3
+		"blankPollQues" : {
+			"pollQues" : "",
+			"publicCheckbox" : true,
+			"option1" : "YES",
+			"option2" : "NO",
+			"multiple" : false,
+			"timeoutFormat": 3,
+			"ExpectedErrorMessage" : "Please enter a poll question."
+		},
+		"blankOption1" : {
+			"pollQues" : "Are U Happy",
+			"publicCheckbox" : true,
+			"option1" : "",
+			"option2" : "NO",
+			"multiple" : false,
+			"timeoutFormat": 3,
+			"ExpectedErrorMessage" : "Please specify at least two options for the poll."
+		},
+		"blankOption2" : {
+			"pollQues" : "Are U Happy",
+			"publicCheckbox" : true,
+			"option1" : "YES",
+			"option2" : "",
+			"multiple" : false,
+			"timeoutFormat": 3,
+			"ExpectedErrorMessage" : "Please specify at least two options for the poll."
+		},
+		"vadidCredintial" : {
+			"pollQues" : "Are U Happy",
+			"publicCheckbox" : true,
+			"option1" : "YES",
+			"option2" : "NO",
+			"multiple" : false,
+			"timeoutFormat": 3
+		}
 	},
 
 	"replyTopic" : {
@@ -132,6 +161,11 @@
 	"lock/unLock" : {
 		"topicTitle" : "ONEpluse",
 		"ExpectedWarningMessage" : "Note: This topic is locked. No new replies will be accepted."
+	},
+
+	"moveTopic" : {
+		"topicName" : "HolyDay",
+		"moveToCategory" : "fd"
 	}
 }
 

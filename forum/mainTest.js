@@ -206,6 +206,26 @@ case "deletetopic":
 		});
 	});
         break;
+	case "poll" :
+		 casper.test.begin('Verify poll topic functionlity ', function(test) {
+		 var poll = require("./testsuite/poll.js");
+		 var x = require('casper').selectXPath;
+		 poll.featureTest(casper, casper.test, x);
+		 casper.run(function(){
+			test.done();
+		});
+	});
+        break;
+	case "movetopic" :
+		 casper.test.begin('Verify move topic functionlity ', function(test) {
+		 var moveTopic = require("./testsuite/moveTopic.js");
+		 var x = require('casper').selectXPath;
+		 moveTopic.moveTopicFeature(casper, casper.test, x);
+		 casper.run(function(){
+			test.done();
+		});
+	});
+        break;
 
     default:
 	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
@@ -217,6 +237,7 @@ case "deletetopic":
 	casper.echo("	edittopic\n");
 	casper.echo("	deletetopic\n");
 	casper.echo("	calendar\n");
+	casper.echo("	poll\n");
 	casper.echo("Relevant test data has to be fed in JSON format in files placed for each feature in '<current directory>/testData/'.");
 	casper.exit();
 };
