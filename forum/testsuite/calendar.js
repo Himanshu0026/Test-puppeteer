@@ -15,7 +15,13 @@ var calendar = module.exports = {};
 
 calendar.featureTest = function(casper, test, x) {
 	
-	
+	// Methos For Verifying Alert Message
+	casper.on('remote.alert', function(message) {
+		casper.echo('alert message: ' + message, 'INFO');
+		var expectedErrorMsg = "Delete this event?";
+		test.assertEquals(message, expectedErrorMsg);
+		casper.echo('Alert message is verified when user deletes calendar event', 'INFO');
+	});
 
 	// this is to launch application to perform related actions
 	casper.start(config.backEndUrl, function() {
@@ -29,7 +35,7 @@ calendar.featureTest = function(casper, test, x) {
 	});
 	
 	//login to backend app by call login function
-	/*casper.then(function() {
+	casper.then(function() {
 
 		forumRegister.loginToForumBackEnd(casper, config["backendCred"], function() {
 			casper.echo(config["backendCred"].uname +"*******"+config["backendCred"].upass);
@@ -53,7 +59,7 @@ calendar.featureTest = function(casper, test, x) {
 				this.capture(screenShotsDir+'updatecalendaronGeneralSetting.png');
 			});
 		});
-	});*/
+	});
 	
 	//Now login to forum and check calendar option is not visible in side menu
 	casper.thenOpen(config.url);
@@ -64,17 +70,17 @@ calendar.featureTest = function(casper, test, x) {
 				this.capture(screenShotsDir+"login.png");
 			});
 		});
-		/*this.waitForSelector('#links-nav', function(){
+		this.waitForSelector('#links-nav', function(){
 			this.click('#links-nav');
 			this.wait(5000, function(){
 				test.assertDoesntExist('#calenders_show');
 				this.capture(screenShotsDir+'CalendarnotVisible.png');
 			});		
-		});*/
+		});
 	});
 
 	//enable calendar checkbox from general setting page in backend
-	/*casper.thenOpen(config.backEndUrl, function(){
+	casper.thenOpen(config.backEndUrl, function(){
 		casper.echo("Title of the page : "+this.getTitle(), 'info');
 	});
 	casper.then(function() {
@@ -90,7 +96,7 @@ calendar.featureTest = function(casper, test, x) {
 			this.click('button[type="submit"]');
 		});
 		this.wait(5000, function() {
-			this.capture(screenShotsDir+'chechedScreen.png');
+			this.capture(screenShotsDir+'checkedScreen.png');
 			test.assert(this.evaluate(function () {return document.getElementById('enable_calendar').checked;}));
 		});
 	});
@@ -140,7 +146,7 @@ calendar.featureTest = function(casper, test, x) {
 			});
 		});
 
-	});*/
+	});
 
 	casper.thenOpen(config.url);
 	//verify calendar page and highlighted current date
@@ -160,7 +166,7 @@ calendar.featureTest = function(casper, test, x) {
 	});
 
 	//Verify calendar mode
-	/*casper.then(function() {
+	casper.then(function() {
 
 		//verify default calendar view mode after navigating to calendar page
 		this.waitForSelector('#monthlyView', function() {
@@ -227,7 +233,7 @@ calendar.featureTest = function(casper, test, x) {
 			var year = "";
 			this.click('#monthlyView');
 			this.wait(3000, function(){
-				var month = this.fetchText('fovar img = fs.readFileSync(path.resolve('public/img/favicon.ico'));rm[action="/calendar/display"] div a');
+				var month = this.fetchText('form[action="/calendar/display"] div a');
 				year = this.fetchText('form[action="/calendar/display"] div a span');
 				month = (month.replace(year, '')).trim()+' ' +year.trim();
 				casper.echo("*** Current month is *** : "+month);
@@ -259,14 +265,14 @@ calendar.featureTest = function(casper, test, x) {
 			});
 		});
 
-	});	*/
+	});	
 	
-		
-	/*casper.then(function() {
+	//Verify error message while creating calendar event with invalid scenarios	
+	casper.then(function() {
 		this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 			this.click('a.btn.btn-sm.btn-primary');	
 		});
-		/*this.eachThen(json['invalidInfo'], function(response) {
+		this.eachThen(json['invalidInfo'], function(response) {
 
 		try { 
 			casper.echo("=========" +JSON.stringify(response.data));
@@ -393,42 +399,15 @@ calendar.featureTest = function(casper, test, x) {
 		});
 		
 
-	});*/
-
-	/*casper.then(function() {
-		/*this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
-			this.click('a.btn.btn-sm.btn-primary');	
-		});
-		//this.eachThen(json['invalidInfo'], function(response) {
-			casper.echo("=========" +JSON.stringify(json["validInfo"][5]));
-			calendar.createEvent(json["validInfo"][5], casper, function() {
-				casper.wait(5000, function() {
-					casper.echo("*****************************");
-					calendar.verifyCreatedEvent(json["validInfo"][5], casper, function(){
-						casper.capture(screenShotsDir+"EventwithMonthlyRepeat_The.png");
-						calendar.gethrefofCreatedEvent(json["validInfo"][5], casper, function() {
-							casper.echo("href value is : "+ json["validInfo"][5].calender_href, "INFO");
-						});
-					});
-				
-				});
-			});
-
-		//});
-		var href = json["validInfo"][0].calender_href;
-		this.click('a[href="'+href+'"]');
-		casper.wait(5000, function() {
-			casper.echo("*****************************");
-			calendar.verifyCreatedEvent(json["validInfo"][0], casper, function(){
-				casper.capture(screenShotsDir+"EventwithAllday.png");
-			});
-				
-		});
+	});
 
 
-	});*/
-
-	/*casper.then(function() {
+	casper.thenOpen(config.url+'calendar/', function(){
+		casper.echo("current page title is "+this.getTitle());
+	});
+	
+	//Create event with all valid scenarios and verify all details on the event page
+	casper.then(function() {
 		this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 			this.click('a.btn.btn-sm.btn-primary');	
 		});
@@ -533,112 +512,71 @@ calendar.featureTest = function(casper, test, x) {
 		});
 
 
-	});*/
-
-	casper.then(function() {
-try { 
-		this.eachThen(json['validInfo'], function(response) {
-	
-		
-			casper.echo("=========" +JSON.stringify(response.data));
-			calendar.ViewCalenderEvent(response.data, casper, function() {
-				var responseData = response.data;
-				if(responseData.validationType == "Create event with Allday") {
-					casper.wait(3000, function() {
-						calendar.verifyCreatedEvent(responseData, casper, function(){
-							casper.capture(screenShotsDir+"CreateEventwithAllday_View.png");
-							casper.echo("-----------------------------------------------------------------");
-							casper.back();
-							casper.capture(screenShotsDir+"CreateEventwithAllday_View_prev.png");
-						});
-					});
-					
-				}else if(responseData.validationType == "Create event with ranged date") {
-					casper.wait(3000, function() {
-						calendar.verifyCreatedEvent(responseData, casper, function(){
-							casper.capture(screenShotsDir+"CreateEventwithRangeddate_view.png");
-							casper.echo("-----------------------------------------------------------------");
-							casper.back();
-
-						});
-					});
-				}else if(responseData.validationType == "Daily Recurssion") {
-					casper.wait(3000, function() {
-						calendar.verifyCreatedEvent(responseData, casper, function(){
-							casper.capture(screenShotsDir+"CreateEventwithDailyRecurssion_view.png");
-							casper.echo("-----------------------------------------------------------------");
-							casper.back();
-
-						});
-					});
-				}else if(responseData.validationType == "Weekly Recurssion") {casper.echo("+++++++++++");
-					casper.wait(3000, function() {
-						calendar.verifyCreatedEvent(responseData, casper, function(){
-							casper.capture(screenShotsDir+"CreateEventwithWeeklyRecurssion_view.png");
-							casper.echo("-----------------------------------------------------------------");
-							casper.back();
-
-						});
-					});
-				} else if(responseData.validationType == "Monthly Recurssion with Day Period") {
-					casper.wait(3000, function() {
-						calendar.verifyCreatedEvent(responseData, casper, function(){
-							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecDay_view.png");
-							casper.echo("-----------------------------------------------------------------");
-							casper.back();
-						});
-					});
-				}else if(responseData.validationType == "Monthly Recurssion with The Period") {
-					casper.wait(3000, function() {
-						calendar.verifyCreatedEvent(responseData, casper, function(){
-							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecThe_view.png");
-							casper.echo("-----------------------------------------------------------------");
-							casper.back();
-
-						});
-					});
-				}
-			});
-
-			
-
-		});
-
-}catch(err){
-				casper.echo("Error occurred :"+err);
-			}
-
 	});
-	
+
+	casper.thenOpen(config.backEndUrl, function(){
+		casper.echo("Title of the page : "+this.getTitle(), 'info');
+	});
+
+	//Disable delete own event checkbox for registered user from user group permission settings page
+	casper.then(function() {
+		calendar.updateCalendarSettings(x, 'delete_own_events', false, casper, function() {
+			casper.echo('User permission setting updated with disabled delete Own events settings', 'INFO');
+		});
+	});	
 	casper.thenOpen(config.url+'calendar/', function(){
 		casper.echo("current page title is "+this.getTitle());
 	});
 
+	casper.then(function(){
+		this.click('a[href="'+json["DeleteEvent"][0].calender_href+'"]');
+		this.waitForSelector('i.glyphicon.glyphicon-chevron-down', function() {
+		//this.wait(3000, function() {
+			this.click('i.glyphicon.glyphicon-chevron-down');
+			test.assertDoesntExist('a[id^="event_delete"]');
+		});
+	});
+
+	casper.thenOpen(config.backEndUrl, function(){
+		casper.echo("Title of the page : "+this.getTitle(), 'info');
+	});
+
+	//eneble delete own event checkbox for registered user from user group permission settings page
 	casper.then(function() {
+		calendar.updateCalendarSettings(x, 'delete_own_events', true, casper, function() {
+			casper.echo('User permission setting updated by enabling delete Own events checkbox', 'INFO');
+		});
+	});	
+	casper.thenOpen(config.url+'calendar/', function(){
+		casper.echo("current page title is "+this.getTitle());
+	});
+
+	
+
+	//Verify delete functionality after creating calendar event with Allday
+	casper.then(function() {
+		casper.echo("VERIFY DELETE FUNCTIONALITY AFTER CREATING CALENDAR EVENT WITH ALLDAY", "INFO");
 		this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 			this.click('a.btn.btn-sm.btn-primary');	
 		});
-		casper.echo("=========" +JSON.stringify(json["validInfo"][0]));
+		casper.echo("=========>>" +JSON.stringify(json["validInfo"][0]));
 		calendar.createEvent(json["validInfo"][0], casper, function() {
-			casper.wait(3000, function() {
-				calendar.verifyCreatedEvent(json["validInfo"][0], casper, function(){
-					var url = driver.getCurrentUrl();
-					url= url.split(".com");
-					var event_href = url[1];
-					var cal_href = event_href.split("?");
-					var cal_id =  cal_href[1].split("&");
-					event_href = cal_href[0]+"?"+cal_id[2]+"&"+cal_id[0]+"&"+cal_id[1];
-					casper.echo("current href is "+ event_href, "INFO");
+			casper.wait(5000, function() {
+				var url = casper.getCurrentUrl();
+				url= url.split(".com");
+				var event_href = url[1];
+				var cal_href = event_href.split("?");
+				var cal_id =  cal_href[1].split("&");
+				event_href = cal_href[0]+"?"+cal_id[2]+"&"+cal_id[0]+"&"+cal_id[1];
+				casper.echo(" href is "+ event_href, "INFO");
 
-					casper.wait(3000, function() {
-						this.click('i.glyphicon.glyphicon-chevron-down');
-casper.echo("*********id of delete option "+ 'a#event_delete_'+cal_id[0]);
-						this.click('a#event_delete_'+cal_id[0]);
-casper.echo("clicked", "INFO");
-
+				casper.wait(3000, function() {
+					calendar.deleteEvent(event_href, casper, function() {
+						casper.wait(3000, function() {
+							test.assertDoesntExist('a[href="'+event_href+'"]');
+						});
 					});
 					casper.echo("-----------------------------------------------------------------");
-					
 				});
 			});
 
@@ -921,49 +859,44 @@ calendar.gethrefofCreatedEvent = function(data, driver, callback) {
 
 };
 
-calendar.ViewCalenderEvent = function(data, driver, callback) {
 
-	var href = data.calender_href;
-	try{
-		casper.echo("try......... : " +href);
-		driver.test.assertExists('a[href="'+href+'"]');
-		driver.waitForSelector('a[href="'+href+'"]', function(){
-			this.click('a[href="'+href+'"]');
-		});
-	}catch(err) {
-casper.echo("catch......... : " +href);
-		//driver.click('a[data-original-title="Next Month"]');
-		//this.click('a[href^="/calendar/eventdetail?date="]');
-	};
+calendar.deleteEvent = function(event_href, driver, callback) {
 
-	/*if (data.Repeat) {
-		switch (data.recurrence) {
-			case "Daily" :
-				driver.click('a[href="'+href+'"]');
-			break;
-			case "Weekly" :
-				driver.click('a[href="'+href+'"]');
-			break;
-			case "Monthly" :
-				driver.click('a[href="'+href+'"]');
-			break;
-			case "Yearly" :
-				driver.click('a[href="'+href+'"]');
-			break;
-		}
-
-	} else {
-		driver.click('a[href="'+href+'"]');
-
-	}*/
-
-
-	return callback();
+	driver.click('i.glyphicon.glyphicon-chevron-down');
+	var href = event_href.split("&");
+	href=href[1].split("=");
+	casper.echo("id of delete option "+ 'a#event_delete_'+href[1], "INFO");
+	driver.waitForSelector(('a#event_delete_'+href[1]), function() {
+		this.click('a#event_delete_'+href[1]);
+	});
+	callback();
 
 };
 
+calendar.updateCalendarSettings = function(x, checkbox_id, status, driver, callback) {
 
-	
+	utils.gotoEditUserGroupPermissionpage(x,"Registered Users", driver, function() {
+		casper.echo("Successfully navigated to Edit User group Permission page");
+		driver.waitForSelector('#'+checkbox_id, function() {
+			utils.enableorDisableCheckbox(checkbox_id, status, driver, function() {
+				casper.echo("Calendar checkbox has been "+status, 'info');
+			});
+		});
+		driver.waitForSelector('button[type="submit"]', function(){
+			this.click('button[type="submit"]');
+			casper.echo("calendar related setting has been updated for registered user fron edit User permission page");
+			this.wait(3000, function(){
+				this.test.assertExists('p[align="center"]');
+				var updationMsg = this.fetchText('p[align="center"]');
+				this.test.assertEquals(updationMsg, 'Your user group settings have been updated.');
+				casper.echo("-------------------------------------------------------------------------");
+			});
+		});
+
+	});
+	return callback();
+
+};
 
 
 
