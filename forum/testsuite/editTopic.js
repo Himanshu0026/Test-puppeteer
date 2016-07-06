@@ -64,6 +64,17 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
 				casper.echo('---------------------------------------------------------------------------');
 			});
+			//Login To App
+			casper.then(function() {
+				forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
+					casper.echo('User has been successfuly login to application with register user', 'INFO');
+				});
+			});
+
+			//Getting Screenshot After Clicking On 'Log In' Link 
+			casper.wait(7000, function() {
+				this.capture(screenShotsDir+ 'login.png');
+			});
 
 			// edit topic title when permission false	
 			casper.then(function(){

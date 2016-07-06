@@ -4,9 +4,12 @@
 
 var utils = require('./utils.js');
 var forumRegister = require('./register.js');
+var pinTopic = require('./pinTopic.js');
+var lock_unLockTopic = require('./lock_unLockTopic.js');
 var editTopic = require('./editTopic.js');
 var postAReply = require('./postAReply.js');
 var deleteTopic = require('./deleteTopic.js');
+var poll = require('./poll.js');
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
 var config = require('../config/config.json');
@@ -492,7 +495,46 @@ newTopic.featureTest = function(casper, test, x) {
 				});
 			});
 		});
-	
+		
+		//start poll topic
+		casper.then(function() {
+			casper.echo('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+			casper.echo('start Poll topic ', 'INFO');
+			poll.pollFeature(casper,test, x, function(){
+				casper.echo('Poll Topic Feature', 'INFO');
+			});
+		});
+
+		/*//Logout From App
+		casper.then(function() {
+			forumLogin.logoutFromApp(casper, function() {
+				casper.echo('Successfully logout from application', 'INFO');
+			});
+		});
+
+		//Getting Screenshot After Clicking On 'Logout' Link
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'logout.png');
+		});*/
+
+		//start pin/unpin topic
+		casper.then(function() {
+			casper.echo('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+			casper.echo('start pin / unpin topic ', 'INFO');
+			pinTopic.pinUnPinFeature(casper,test, x, function(){
+				casper.echo('Pin Unpin Topic Feature', 'INFO');
+			});
+		});
+
+		//start lock/unLock topic
+		casper.then(function() {
+			casper.echo('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+			casper.echo('start Lock / unLock topic ', 'INFO');
+			lock_unLockTopic.lockUnLockFeature(casper,test, x, function(){
+				casper.echo('Lock UnLock Topic Feature', 'INFO');
+			});
+		});
+
 		//start edit topic title and edit topic content
 		casper.then(function() {
 			casper.echo('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');

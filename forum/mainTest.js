@@ -49,10 +49,25 @@ switch (feature) {
 	casper.test.begin("Start 'Delete Account' functionality from home page & verify content with all scenarios", function(test) {
 
 		var deleteAccount = require("./testsuite/deleteAccount.js");
-		deleteAccount.featureTest(casper, casper.test);
+		var x = require('casper').selectXPath;
+		deleteAccount.featureTest(casper, casper.test, x);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
+        
+        break;
+		
+    case "deleteAccountWithSettings":
+	casper.test.begin("Start 'Delete Account' functionality from home page & verify content with all scenarios", function(test) {
+
+		var deleteAccount = require("./testsuite/deleteAccount.js");
+		deleteAccount.customFieldsTest(casper, casper.test);
 		
 		casper.run(function(){
 			test.done();
+			test.assert(true);
 		});
 	});
         
@@ -97,7 +112,7 @@ switch (feature) {
 		});
 	});
         break;
-   case "newtopic":
+   case "topic":
 	casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 
 		var newTopic = require("./testsuite/newTopic.js");
@@ -171,17 +186,58 @@ case "deletetopic":
 		});
 	});
         break;
+	case "pintopic" :
+		 casper.test.begin('Verify pin topic functionlity ', function(test) {
+		 var pinTopic = require("./testsuite/pinTopic.js");
+		 var x = require('casper').selectXPath;
+		 pinTopic.pinUnPinFeature(casper, casper.test, x);
+		 casper.run(function(){
+			test.done();
+		});
+	});
+        break;
+	case "lockunlock" :
+		 casper.test.begin('Verify lock-unLock topic functionlity ', function(test) {
+		 var lock_unLockTopic = require("./testsuite/lock_unLockTopic.js");
+		 var x = require('casper').selectXPath;
+		 lock_unLockTopic.featureTest(casper, casper.test, x);
+		 casper.run(function(){
+			test.done();
+		});
+	});
+        break;
+	case "poll" :
+		 casper.test.begin('Verify poll topic functionlity ', function(test) {
+		 var poll = require("./testsuite/poll.js");
+		 var x = require('casper').selectXPath;
+		 poll.featureTest(casper, casper.test, x);
+		 casper.run(function(){
+			test.done();
+		});
+	});
+        break;
+	case "movetopic" :
+		 casper.test.begin('Verify move topic functionlity ', function(test) {
+		 var moveTopic = require("./testsuite/moveTopic.js");
+		 var x = require('casper').selectXPath;
+		 moveTopic.moveTopicFeature(casper, casper.test, x);
+		 casper.run(function(){
+			test.done();
+		});
+	});
+        break;
 
     default:
 	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
         casper.echo("Options:");
 	casper.echo("	register");
 	casper.echo("	login");
-	casper.echo("	newtopic");
+	casper.echo("	topic");
 	casper.echo("	postreply\n");
 	casper.echo("	edittopic\n");
 	casper.echo("	deletetopic\n");
 	casper.echo("	calendar\n");
+	casper.echo("	poll\n");
 	casper.echo("Relevant test data has to be fed in JSON format in files placed for each feature in '<current directory>/testData/'.");
 	casper.exit();
 };
