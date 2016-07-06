@@ -1,3 +1,7 @@
+//This script is invoked from automation server to run automated testing.
+'use strict';
+
+//Reading configuration parameters from config.json
 var config = require("./config/config.json");
 
 casper.options.viewportSize = config.app.viewportSize;
@@ -19,6 +23,17 @@ casper.options.logLevel = config.app.logLevel;
 		casper.run(function() {
 			test.done();
 			test.assert(true);
+		});
+	});
+//TOPIC RELATED FLOW
+	casper.test.begin("Start Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+
+		var newTopic = require("./testsuite/newTopic.js");
+		var x = require('casper').selectXPath;
+		newTopic.featureTest(casper, casper.test, x);
+		
+		casper.run(function(){
+			test.done();
 		});
 	});
         
