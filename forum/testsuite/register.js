@@ -449,13 +449,6 @@ forumRegister.registerWithSettings = function(casper, test) {
 
 forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	
-	//Open Forum Backend URL And Get Title 
-	
-	driver.start(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-	
 	//Click On Login Link 
 
 	driver.then(function() {
@@ -475,6 +468,7 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	driver.then(function() {
 		fillDataToLogin(json['backEndInfo'], driver, function() {
 			driver.echo('Successfully login on forum back end....', 'INFO');
+			return callback();
 		});
 	});
 
@@ -483,8 +477,6 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	driver.wait(5000,function(){
 		this.capture(screenShotsDir + 'login_submit.png');
 	});
-	
-	return callback();
 };
 
 
@@ -589,6 +581,7 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 		driver.then(function() {
 			forumLogin.logoutFromApp(driver, function(){
 				driver.echo('Successfully logout from application', 'INFO');
+				return callback();
 			});
 
 			//Getting Screenshot After Clicking On 'Logout' Link  
@@ -604,6 +597,7 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 			var expectedErrorMsg = "Error: It looks like you already have a forum account!";
 			test.assert(errorMessage.indexOf(expectedErrorMsg) > -1);
 			driver.echo('USER ALREADY REGISTERED ON FORUM.....', 'INFO');
+			return callback();
 		} catch(e1) {
 			driver.echo('Successfully done registration on forum.....', 'INFO');
 			
@@ -612,6 +606,7 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 			driver.then(function() {
 				forumLogin.logoutFromApp(driver, function(){
 					driver.echo('Successfully logout from application', 'INFO');
+					return callback();
 				});
 
 				//Getting Screenshot After Clicking On 'Logout' Link  
@@ -622,6 +617,5 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 			});
 		}
 	}
-	return callback();
 };
 

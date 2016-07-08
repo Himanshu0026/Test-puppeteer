@@ -200,5 +200,17 @@
 		"usignature" : "This is my signature 18",
 		"namePrivate" : true,
 		"expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
+	},
+
+	"deleteAdmin" : {
+		"uname" : "hsk",
+		"uemail" : "hsk@wt.com",
+		"upass" : "hsk",
+		"fullName" : "18",
+		"imID" : "18",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature 18",
+		"namePrivate" : true,
+		"expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 	}
 }  
