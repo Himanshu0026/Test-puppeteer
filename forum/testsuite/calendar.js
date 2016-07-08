@@ -103,7 +103,7 @@ calendar.featureTest = function(casper, test, x) {
 	});
 
 	//enable all calendar related settings from user group permission for registered user
-	casper.then(function(){
+	/*casper.then(function(){
 		utils.gotoEditUserGroupPermissionpage(x,"Registered Users", casper, function() {
 			casper.echo("Successfully navigated to Edit User group Permission page");
 			casper.wait(3000, function(){
@@ -147,7 +147,7 @@ calendar.featureTest = function(casper, test, x) {
 			});
 		});
 
-	});
+	});*/
 
 	casper.thenOpen(config.url);
 	//verify calendar page and highlighted current date
@@ -167,7 +167,7 @@ calendar.featureTest = function(casper, test, x) {
 	});
 
 	//Verify calendar mode
-	casper.then(function() {
+	/*casper.then(function() {
 
 		//verify default calendar view mode after navigating to calendar page
 		this.waitForSelector('#monthlyView', function() {
@@ -266,7 +266,7 @@ calendar.featureTest = function(casper, test, x) {
 			});
 		});
 
-	});	
+	});	*/
 	
 	//Verify error message while creating calendar event with invalid scenarios	
 	/*casper.then(function() {
@@ -591,14 +591,9 @@ calendar.featureTest = function(casper, test, x) {
 			casper.echo('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
 			casper.echo('View calendar event with recursion date', 'INFO');
 			viewCalendarEvent.viewCalendarEventFeature(casper,test, x, function(){
-				casper.echo('View calendar', 'INFO');
+				casper.echo('*********** View event with recurring date ******* ', 'INFO');
 			});
 		});
-
-
-
-
-
 
 
 };

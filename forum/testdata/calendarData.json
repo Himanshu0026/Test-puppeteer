@@ -259,9 +259,9 @@
 
 	{
 	"validationType" : "Weekly Recurssion",
-	"Title" : "Create calendar event with Weekly Recurssion",
+	"Title" : "Weekly Recurssion",
 	"Allday" : false,
-	"startDate" : "07/07/2016",
+	"startDate" : "07/09/2016",
 	"endDate" : "09/30/2016",
 	"startTime" : "05:30 PM",
 	"endTime" : "08:30 PM",
@@ -269,17 +269,17 @@
 	"Repeat" : true,
 	"recurrence" : "Weekly",
 	"weeks" : "2",
-	"weekday" : ["Monday", "Sunday"],
+	"weekday" : ["Wednesday", "Sunday"],
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and",
-	"calender_href" : "/calendar/eventdetail?date=2016-7-5&eventid=80796&calendarid=106758"
+	"calender_href" : "/calendar/eventdetail?date=2016-7-9&eventid=80852&calendarid=106758"
 	},
 
 	{
 	"validationType" : "Monthly Recurssion with Day Period",
-	"Title" : "Create cal event with monthly Recurssion with Day Period",
+	"Title" : "Monthly Recurssion with Day Period",
 	"Allday" : false,
-	"startDate" : "07/08/2016",
-	"endDate" : "09/28/2016",
+	"startDate" : "07/09/2016",
+	"endDate" : "11/28/2016",
 	"startTime" : "07:00 AM",
 	"endTime" : "09:00 AM",
 	"timeZone" : "+5.5",
@@ -289,14 +289,14 @@
 	"days" : "5",
 	"months" : "1",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and",
-	"calender_href" : "/calendar/eventdetail?date=2016-7-6&eventid=80797&calendarid=106758"
+	"calender_href" : "/calendar/eventdetail?date=2016-8-5&eventid=80851&calendarid=106758"
 	},
 
 	{
 	"validationType" : "Monthly Recurssion with The Period",
 	"Title" : "Monthly Recurssion with The Period",
 	"Allday" : false,
-	"startDate" : "07/08/2016",
+	"startDate" : "07/07/2016",
 	"endDate" : "11/28/2016",
 	"startTime" : "07:00 AM",
 	"endTime" : "09:00 AM",
