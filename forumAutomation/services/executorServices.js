@@ -14,7 +14,7 @@ executorServices.execute = function(script){
 //It executes job. Take job details as argument, executed the job and initiates mail sending.
 executorServices.executeJob = function(commitDetails, callback){
 	//Executing gitdeploy.sh to update Forum's code for given branch name
-	//var gitDeployResult = executorServices.execute("sh /home/monika/gitdeploy.sh "+commitDetails.branchName);
+	var gitDeployResult = executorServices.execute("sh /home/monika/gitdeploy.sh "+commitDetails.branchName);
 	//Executing automation test script
 	var testResult = executorServices.execute("sudo bash -c 'casperjs test ../forum/automation.js --feature=login > log/automation.log; cat log/automation.log | grep FAIL > log/fail.log; cat log/automation.log | grep \"tests executed in\"'");
 	//Adding test result with commit details
