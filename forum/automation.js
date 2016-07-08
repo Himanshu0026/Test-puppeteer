@@ -7,6 +7,7 @@ var config = require("./config/config.json");
 casper.options.viewportSize = config.app.viewportSize;
 casper.options.verbose = config.app.verbose;
 casper.options.logLevel = config.app.logLevel;
+casper.options.colorizerType = 'Dummy';
 
 //LOGIN TESTING SECTION
         casper.test.begin('Verify login functionality from home page with all valid and invalid scenarios ', function(test) {
