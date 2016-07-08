@@ -7,7 +7,7 @@ var executorServices = module.exports = {};
 //Execute the script in synchronous way and returns stdout as the output
 executorServices.execute = function(script){
 	var scriptOutput = execSync(script);
-	console.log('scriptOutput: ' + scriptOutput);
+	console.log('scriptOutput : ' + scriptOutput);
 	return scriptOutput;
 };
 
