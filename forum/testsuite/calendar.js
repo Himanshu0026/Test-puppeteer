@@ -4,6 +4,7 @@
 
 var forumRegister = require('./register.js');
 var forumLogin = require('./forum_login.js');
+var viewCalendarEvent = require('./viewCalendarEvent.js');
 var utils = require('./utils.js');
 var fs = require('fs');
 var filePath = './testdata/calendarData.json';
@@ -258,7 +259,7 @@ calendar.featureTest = function(casper, test, x) {
 						prev_month = (prev_month.replace(year, '')).trim()+' ' +year.trim();
 						casper.echo("*** previous month is *** : "+prev_month);
 						test.assertEquals(month, (moment.months(moment().month())+' '+moment().year()));
-						this.click('a.btn.btn-default');
+						this.click('a.btn.btn-default[href^="/calendar?"]');
 					
 					});
 				});
@@ -268,7 +269,7 @@ calendar.featureTest = function(casper, test, x) {
 	});	
 	
 	//Verify error message while creating calendar event with invalid scenarios	
-	casper.then(function() {
+	/*casper.then(function() {
 		this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 			this.click('a.btn.btn-sm.btn-primary');	
 		});
@@ -583,9 +584,16 @@ calendar.featureTest = function(casper, test, x) {
 		});	
 
 
-	});
+	});*/
 
 	
+	casper.then(function() {
+			casper.echo('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+			casper.echo('View calendar event with recursion date', 'INFO');
+			viewCalendarEvent.viewCalendarEventFeature(casper,test, x, function(){
+				casper.echo('View calendar', 'INFO');
+			});
+		});
 
 
 
