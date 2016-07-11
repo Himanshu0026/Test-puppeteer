@@ -1,5 +1,6 @@
 /****This script is dedicated for new user registration on the forum. It covers testing of registration page with all defined validations****/
 'use strict';
+var utils = require('./utils.js');
 var forumLogin = require('./forum_login.js');
 var json = require('../testdata/registerData.json');
 var config = require('../config/config.json');
@@ -13,8 +14,15 @@ forumRegister.featureTest = function(casper, test) {
 
 	//Login To Forum BackEnd 
 	
-	forumRegister.loginToForumBackEnd(casper, test, function() {
-		casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+	casper.start(config.backEndUrl, function() {
+		//test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+	
+	casper.then(function() {
+		forumRegister.loginToForumBackEnd(casper, test, function() {
+			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+		});
 	});
 	
 	//Clicking On "General" Tab Under Settings 
@@ -37,132 +45,131 @@ forumRegister.featureTest = function(casper, test) {
 		
 	casper.then(function(){
 		test.assertExists('#REQreg');
-		var element = this.evaluate(function () {
-			return document.getElementById('REQreg').checked;
+		utils.enableorDisableCheckbox('REQreg', true, casper, function() {
+			casper.echo("User Accounts Checkbox Has Been Enabled For Registered User", 'INFO');
 		});
-		if(element) {
-			this.thenOpen(config.url, function() {
-				test.assertTitle('Automation Forum', this.getTitle());
-				this.echo('Title of the page :' +this.getTitle(), 'INFO');
-				test.assertExists('.pull-right a[href="/register/register"]');
-				this.click('.pull-right a[href="/register/register"]');
-				this.echo('Successfully open register form.....', 'INFO');
-			});
-			
-			this.wait(5000, function() {
-				this.capture(screenShotsDir + 'register_form.png');
-			});
-			
-			this.then(function() {
-				this.eachThen(json['invalidInfo'], function(response) {
-					casper.log('Response Data : ' +JSON.stringify(response.data), 'INFO');
-					var responseData = response.data;
-					forumRegister.registerToApp(response.data, casper, function() {
-						var errorMessage = '';
-						var msgTitle = '';
-						var expectedErrorMsg = '';
-						if (response.data.expectedErrorMsg)
-							expectedErrorMsg = response.data.expectedErrorMsg;
-						if (response.data.uname == '') {
-							errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="member"]', 'data-original-title');
-							msgTitle = 'BlankUsername';
-						} else if (response.data.uemail == '') {
-							errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="email"]', 'data-original-title');
-							msgTitle = 'BlankEmail';
-						} else if (response.data.upass == '') {
-							errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="pw"]', 'data-original-title');
-							msgTitle = 'BlankPassword';
-						} else if (response.data.imID == '') {
-							try {
-								test.assertExists('form[name="PostTopic"] input[name="imID"]');
-								errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
-								msgTitle = 'BlankIM_ID';
-							} catch(e) {
-								test.assertDoesntExist('form[name="PostTopic"] input[name="imID"]');
-							}
-						} else if (response.data.birthday == '') {
-							try {
-								test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
-								errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
-								msgTitle = 'BlankBirthday';
-							} catch(e) {
-								test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
-							}
-						} else if (response.data.errorType == 'existWithName') {
-							casper.wait('5000', function() {
-								errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
-								expectedErrorMsg = responseData.errorMsg1+ '"' +responseData.uname+ '"' +responseData.errorMsg2; 
-								msgTitle = 'ExistUsername';
-							});
-						} else if (response.data.errorType == 'existWithEmail') {
-							casper.wait('5000', function() {
-								errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
-								msgTitle = 'ExistEmail';
-							});
-						} else if (response.data.errorType == 'existWithUsernameAndEmail') {
-							casper.wait('5000', function() {
-								errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
-								msgTitle = 'ExistUsernameAndEmail';
-							});
-						} else if (response.data.errorType == 'invalidBirthday') {
-							casper.wait('5000', function() {
-								try {
-									test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
-									errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
-								} catch(e) {
-									test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
-									errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
-									expectedErrorMsg = 'Error: It looks like you are already registered';
-								}
-								msgTitle = 'InvalidBday';
-							});
-						} else if (response.data.errorType == 'invalidEmail') {
-							errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="email"]', 'data-original-title');
-							msgTitle = 'InvalidEmail';
-						}
+	});
 		
-						//Called Method For Verifying Error Messages
-		
-						casper.wait('3000', function() {
-							if(errorMessage && errorMessage != "") {
-								verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
-							}
-						});
+	casper.thenOpen(config.url, function() {
+		//test.assertTitle('Automation Forum', this.getTitle());
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		test.assertExists('.pull-right a[href="/register/register"]');
+		this.click('.pull-right a[href="/register/register"]');
+		this.echo('Successfully open register form.....', 'INFO');
+	});
+			
+	casper.wait(5000, function() {
+		this.capture(screenShotsDir + 'register_form.png');
+	});
+			
+	casper.then(function() {
+		this.eachThen(json['invalidInfo'], function(response) {
+			casper.log('Response Data : ' +JSON.stringify(response.data), 'INFO');
+			var responseData = response.data;
+			forumRegister.registerToApp(response.data, casper, function() {
+				var errorMessage = '';
+				var msgTitle = '';
+				var expectedErrorMsg = '';
+				if (response.data.expectedErrorMsg)
+					expectedErrorMsg = response.data.expectedErrorMsg;
+				if (response.data.uname == '') {
+					casper.echo('*********************CASE-1********************', 'INFO');
+					casper.echo('*********************Blank Username********************', 'INFO');
+					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="member"]', 'data-original-title');
+					msgTitle = 'BlankUsername';
+				} else if (response.data.uemail == '') {
+					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="email"]', 'data-original-title');
+					msgTitle = 'BlankEmail';
+				} else if (response.data.upass == '') {
+					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="pw"]', 'data-original-title');
+					msgTitle = 'BlankPassword';
+				} else if (response.data.imID == '') {
+					try {
+						test.assertExists('form[name="PostTopic"] input[name="imID"]');
+						errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+						msgTitle = 'BlankIM_ID';
+					} catch(e) {
+						test.assertDoesntExist('form[name="PostTopic"] input[name="imID"]');
+					}
+				} else if (response.data.birthday == '') {
+					try {
+						test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
+						errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
+						msgTitle = 'BlankBirthday';
+					} catch(e) {
+						test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
+					}
+				} else if (response.data.errorType == 'existWithName') {
+					casper.wait('3000', function() {
+						errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
+						expectedErrorMsg = responseData.errorMsg1+ '"' +responseData.uname+ '"' +responseData.errorMsg2; 
+						msgTitle = 'ExistUsername';
 					});
+				} else if (response.data.errorType == 'existWithEmail') {
+					casper.wait('3000', function() {
+						errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
+						msgTitle = 'ExistEmail';
+					});
+				} else if (response.data.errorType == 'existWithUsernameAndEmail') {
+					casper.wait('3000', function() {
+						errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
+						msgTitle = 'ExistUsernameAndEmail';
+					});
+				} else if (response.data.errorType == 'invalidBirthday') {
+					casper.wait('3000', function() {
+						try {
+							test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
+							errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
+						} catch(e) {
+							test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
+							errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
+							expectedErrorMsg = 'Error: It looks like you are already registered';
+						}
+						msgTitle = 'InvalidBday';
+					});
+				} else if (response.data.errorType == 'invalidEmail') {
+					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="email"]', 'data-original-title');
+					msgTitle = 'InvalidEmail';
+				}
+
+				//Called Method For Verifying Error Messages
+
+				casper.wait('5000', function() {
+					if(errorMessage && errorMessage != "") {
+						verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
+					}
 				});
 			});
-			
-			//Handling 'Alert' While Submitting The Form
-	
-			this.on('remote.alert', function(message) {
-				var expectedErrorMsg = "Please provide a signature.";
-				test.assertEquals(message, expectedErrorMsg);
-				this.capture(screenShotsDir + 'Error_RegisterWithsignature.png');
-			});
-			
-			//Fill Valid Data On Registration Form
-	
-			this.then(function() {
-				forumRegister.registerToApp(json['validInfo'], casper, function() {
-					//test.assertDoesntExist('form[action="/register/create_account"] button');
-					casper.echo('Processing to registration on forum.....', 'INFO');
-				});
-			});
+		});
+		
+		//Handling 'Alert' While Submitting The Form
 
-			//Getting Screenshot After Submitting 'Register' Form  
+		casper.on('remote.alert', function(message) {
+			var expectedErrorMsg = "Please provide a signature.";
+			test.assertEquals(message, expectedErrorMsg);
+			this.capture(screenShotsDir + 'Error_RegisterWithsignature.png');
+		});
+	});
+			
+	//Fill Valid Data On Registration Form
 
-			this.wait(5000,function(){
-				this.capture(screenShotsDir + 'register_submit.png');
-			});
+	casper.then(function() {
+		forumRegister.registerToApp(json['validInfo'], casper, function() {
+			//test.assertDoesntExist('form[action="/register/create_account"] button');
+			casper.echo('Processing to registration on forum.....', 'INFO');
+		});
+	});
+
+	//Getting Screenshot After Submitting 'Register' Form  
+
+	casper.wait(5000,function(){
+		this.capture(screenShotsDir + 'register_submit.png');
+	});
 			
-			//Handling Logout And Redirecting To The Respective Page
-			
-			this.then(function() {
-				forumRegister.redirectToLogout(casper, test, function() {});
-			});
-		} else {
-			test.assertDoesntExist('.pull-right a[href="/register/register"]');
-		}
+	//Handling Logout And Redirecting To The Respective Page
+
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {});
 	});
 };
 
@@ -174,8 +181,15 @@ forumRegister.registerWithSettings = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	
-	forumRegister.loginToForumBackEnd(casper, test, function() {
-		casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+	casper.start(config.backEndUrl, function() {
+		//test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+	
+	casper.then(function() {
+		forumRegister.loginToForumBackEnd(casper, test, function() {
+			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+		});
 	});
 	
 	//Clicking On 'Fields' Tab Under Users 
@@ -188,14 +202,15 @@ forumRegister.registerWithSettings = function(casper, test) {
 	});
 	
 	//Redirecting To 'Default Registration Options' Page
-	
-	casper.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
-		this.echo('Successfully Open Default Registration Options.....', 'INFO');
+	casper.then(function() {
+		test.assertExists('a[href="/tool/members/mb/fields?action=default_registration_option"]');
+		this.click('a[href="/tool/members/mb/fields?action=default_registration_option"]');
 	});
-	
+		
 	//Getting Screenshot After Clicking On "General" Tab Under Settings 
 	
 	casper.wait(5000,function(){
+		this.echo('Successfully Open Default Registration Options.....', 'INFO');
 		this.capture(screenShotsDir + 'Default_Registration_Options.png');
 	});
 	
@@ -203,10 +218,12 @@ forumRegister.registerWithSettings = function(casper, test) {
 	
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
-			this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+			//this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+			this.thenOpen('http://beta12.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+				this.capture(screenShotsDir + 'Default_Registration_Options_then.png');
 				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
-	
+			
 			this.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
 			var responseData = response.data;
 			this.then(function() {
@@ -221,35 +238,38 @@ forumRegister.registerWithSettings = function(casper, test) {
 				this.click('form[name="posts"] button');
 			});
 
-			this.wait(5000,function(){
-				this.capture(screenShotsDir + 'fullName_'+responseData.required+'_'+responseData.visibility+'.png');
-				this.thenOpen("http://automation.websitetoolbox.com/register/register", function() {
-					this.capture(screenShotsDir + 'fullName_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
-					if (responseData.visibility == '1') {
-						test.assertDoesntExist('form[name="PostTopic"] input[name="name"]');
-					} else {
-						test.assertExists('form[name="PostTopic"] input[name="name"]');
-						if (responseData.required == '1') {
-							forumRegister.registerToApp(json['fullnameData'], casper, function() {
-								var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="name"]', 'data-original-title');
-								if(errorMsg && errorMsg != "") {
-									verifyErrorMsg(errorMsg, responseData.expectedErrorMsg, 'blankFullNameWithRequired', casper);
-								}
-							});
+			this.then(function() {
+				this.wait(5000,function(){
+					this.capture(screenShotsDir + 'fullName_'+responseData.required+'_'+responseData.visibility+'.png');
+					//this.thenOpen("http://automation.websitetoolbox.com/register/register", function() {
+					this.thenOpen("http://beta12.websitetoolbox.com/register/register", function() {
+						this.capture(screenShotsDir + 'fullName_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
+						if (responseData.visibility == '1') {
+							test.assertDoesntExist('form[name="PostTopic"] input[name="name"]');
 						} else {
-							forumRegister.registerToApp(json['fullnameData'], casper, function() {
-								casper.echo('Processing to registration on forum.....', 'INFO');
-							});
-							
-							this.wait(5000,function(){
-								this.capture(screenShotsDir + 'register_submit.png');
-								forumRegister.redirectToLogout(casper, test, function() {
-									casper.echo('FULL NAME TASK COMPLETED........');
+							test.assertExists('form[name="PostTopic"] input[name="name"]');
+							if (responseData.required == '1') {
+								forumRegister.registerToApp(json['fullnameData'], casper, function() {
+									var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="name"]', 'data-original-title');
+									if(errorMsg && errorMsg != "") {
+										verifyErrorMsg(errorMsg, responseData.expectedErrorMsg, 'blankFullNameWithRequired', casper);
+									}
 								});
-							});
-							
+							} else {
+								forumRegister.registerToApp(json['fullnameData'], casper, function() {
+									casper.echo('Processing to registration on forum.....', 'INFO');
+								});
+						
+								this.wait(5000,function(){
+									this.capture(screenShotsDir + 'register_submit.png');
+									forumRegister.redirectToLogout(casper, test, function() {
+										casper.echo('FULL NAME TASK COMPLETED........', 'INFO');
+									});
+								});
+						
+							}
 						}
-					}
+					});
 				});
 			});
 		});
@@ -259,7 +279,7 @@ forumRegister.registerWithSettings = function(casper, test) {
 	
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
-			this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+			this.thenOpen('http://beta12.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
 				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
 	
@@ -279,7 +299,7 @@ forumRegister.registerWithSettings = function(casper, test) {
 
 			this.wait(5000,function(){
 				this.capture(screenShotsDir + 'imType_'+responseData.required+'_'+responseData.visibility+'.png');
-				this.thenOpen("http://automation.websitetoolbox.com/register/register", function() {
+				this.thenOpen("http://beta12.websitetoolbox.com/register/register", function() {
 					this.capture(screenShotsDir + 'imType_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
 					if (responseData.visibility == '1') {
 						test.assertDoesntExist('form[name="PostTopic"] input[name="imType"]');
@@ -309,7 +329,7 @@ forumRegister.registerWithSettings = function(casper, test) {
 							this.wait(5000,function(){
 								this.capture(screenShotsDir + 'register_submit.png');
 								forumRegister.redirectToLogout(casper, test, function() {
-									casper.echo('IM-ID  TASK COMPLETED........');
+									casper.echo('IM-ID  TASK COMPLETED........', 'INFO');
 								});
 							});
 							
@@ -320,11 +340,11 @@ forumRegister.registerWithSettings = function(casper, test) {
 		});
 	});
 	
-	//Set Different Value For 'Full Name' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
+	//Set Different Value For 'Birthday' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
 	
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
-			this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+			this.thenOpen('http://beta12.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
 				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
 	
@@ -344,7 +364,7 @@ forumRegister.registerWithSettings = function(casper, test) {
 
 			this.wait(5000,function(){
 				this.capture(screenShotsDir + 'dob_'+responseData.required+'_'+responseData.visibility+'.png');
-				this.thenOpen("http://automation.websitetoolbox.com/register/register", function() {
+				this.thenOpen("http://beta12.websitetoolbox.com/register/register", function() {
 					this.capture(screenShotsDir + 'dob_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
 					if (responseData.visibility == '1') {
 						test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
@@ -369,7 +389,7 @@ forumRegister.registerWithSettings = function(casper, test) {
 							this.wait(5000,function(){
 								this.capture(screenShotsDir + 'register_submit.png');
 								forumRegister.redirectToLogout(casper, test, function() {
-									casper.echo('BIRTHDAY TASK COMPLETED........');
+									casper.echo('BIRTHDAY TASK COMPLETED........', 'INFO');
 								});
 							});
 						}
@@ -383,7 +403,7 @@ forumRegister.registerWithSettings = function(casper, test) {
 	
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
-			this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+			this.thenOpen('http://beta12.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
 				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
 	
@@ -403,7 +423,7 @@ forumRegister.registerWithSettings = function(casper, test) {
 
 			this.wait(5000,function(){
 				this.capture(screenShotsDir + 'signature_'+responseData.required+'_'+responseData.visibility+'.png');
-				this.thenOpen("http://automation.websitetoolbox.com/register/register", function() {
+				this.thenOpen("http://beta12.websitetoolbox.com/register/register", function() {
 					this.capture(screenShotsDir + 'signature_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
 					if (responseData.visibility == '1') {
 						test.assertDoesntExist('form[name="PostTopic"] div.sign-container');
@@ -423,7 +443,7 @@ forumRegister.registerWithSettings = function(casper, test) {
 							this.wait(5000,function(){
 								this.capture(screenShotsDir + 'register_submit.png');
 								forumRegister.redirectToLogout(casper, test, function() {
-									casper.echo('SIGNATURE TASK COMPLETED........');
+									casper.echo('SIGNATURE TASK COMPLETED........', 'INFO');
 								});
 							});
 						}
@@ -448,10 +468,10 @@ forumRegister.registerWithSettings = function(casper, test) {
 //Login To Forum Back End
 
 forumRegister.loginToForumBackEnd = function(driver, test, callback) {
-	
+		
 	//Click On Login Link 
 
-	driver.then(function() {
+	/*driver.then(function() {
 		test.assertExists('a#navLogin');
 		this.click('a#navLogin');
 		this.echo('Successfully open login form.....', 'INFO');
@@ -461,14 +481,13 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	
 	driver.wait(5000, function() {
 		this.capture(screenShotsDir + 'login_form.png');
-	});
+	});*/
 	
 	//Filling Username/Password On Login Form
 	
 	driver.then(function() {
-		fillDataToLogin(json['backEndInfo'], driver, function() {
-			driver.echo('Successfully login on forum back end....', 'INFO');
-			return callback();
+		fillDataToLogin(config.backendCred, driver, function() {
+			driver.echo('Proccessing to login on forum back end....', 'INFO');
 		});
 	});
 
@@ -477,6 +496,8 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	driver.wait(5000,function(){
 		this.capture(screenShotsDir + 'login_submit.png');
 	});
+	
+	return callback();
 };
 
 
@@ -537,6 +558,15 @@ forumRegister.registerToApp = function(data, driver, callback) {
 		driver.test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
 	}
 	
+	try {
+		driver.test.assertExists('form[name="PostTopic"] input[name="rules_checkbox"]');
+		utils.enableorDisableCheckbox('rules_checkbox', true, driver, function() {
+			casper.echo("Rules Checkbox Has Been Enabled For User", 'INFO');
+		});
+	} catch(e) {
+		driver.test.assertDoesntExist('form[name="PostTopic"] input[name="rules_checkbox"]');
+	}
+	
 	driver.test.assertExists('form[action="/register/create_account"] button');
 	driver.click('form[action="/register/create_account"] button');
 	return callback();
@@ -545,8 +575,8 @@ forumRegister.registerToApp = function(data, driver, callback) {
 //Method For Verifying Error Message On Registration Form After Submitting Form
 
 var verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver) {
-	driver.echo("errorMessage : " +errorMessage);
-	driver.echo("expectedErrorMsg : " +expectedErrorMsg);
+	driver.echo("errorMessage : " +errorMessage, 'INFO');
+	driver.echo("expectedErrorMsg : " +expectedErrorMsg, 'INFO');
 	driver.test.assert(errorMessage.indexOf(expectedErrorMsg) > -1);
 	driver.capture(screenShotsDir + 'Error_RegisterWith' +msgTitle+ '.png');
 };
@@ -581,7 +611,6 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 		driver.then(function() {
 			forumLogin.logoutFromApp(driver, function(){
 				driver.echo('Successfully logout from application', 'INFO');
-				return callback();
 			});
 
 			//Getting Screenshot After Clicking On 'Logout' Link  
@@ -597,7 +626,6 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 			var expectedErrorMsg = "Error: It looks like you already have a forum account!";
 			test.assert(errorMessage.indexOf(expectedErrorMsg) > -1);
 			driver.echo('USER ALREADY REGISTERED ON FORUM.....', 'INFO');
-			return callback();
 		} catch(e1) {
 			driver.echo('Successfully done registration on forum.....', 'INFO');
 			
@@ -606,7 +634,6 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 			driver.then(function() {
 				forumLogin.logoutFromApp(driver, function(){
 					driver.echo('Successfully logout from application', 'INFO');
-					return callback();
 				});
 
 				//Getting Screenshot After Clicking On 'Logout' Link  
@@ -617,5 +644,6 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 			});
 		}
 	}
+	return callback();
 };
 

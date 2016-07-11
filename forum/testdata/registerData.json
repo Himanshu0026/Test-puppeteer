@@ -73,7 +73,7 @@
     
     {
     	"uname" : "shipra",
-        "uemail" : "35asasa@wt.com",
+        "uemail" : "454@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",
@@ -86,8 +86,8 @@
     },
     
     {
-    	"uname" : "jhgsdgdg",
-        "uemail" : "18@wt.com",
+    	"uname" : "jhgsdddgdg",
+        "uemail" : "35asasa@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",
@@ -99,8 +99,8 @@
     },
     
     {
-    	"uname" : "356",
-        "uemail" : "356@wt.com",
+    	"uname" : "shipra",
+        "uemail" : "35asasa@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",
@@ -147,11 +147,6 @@
         "usignature" : "This is my signature 18",
         "namePrivate" : true,
         "expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
-    },
-    
-    "backEndInfo" : {
-    	"uname" : "automation",
-    	"upass" : "test"
     },
     
     "setValueOnRegister" : [{
