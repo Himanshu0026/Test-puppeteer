@@ -47,7 +47,9 @@ calendar.featureTest = function(casper, test, x) {
 	// test case to disable calander checkbox from GEneral SEttings page
 	casper.then(function() {
 		calendar.gotoGeneralSettingspage(casper, function(){
-			casper.echo("Navigated to General Settings page");
+			casper.wait(3000, function() {
+				casper.echo("Navigated to General Settings page");
+			});
 		});
 		this.waitForSelector('#enable_calendar', function() {
 			utils.enableorDisableCheckbox('enable_calendar', false, casper, function() {
@@ -81,7 +83,7 @@ calendar.featureTest = function(casper, test, x) {
 	});
 
 	//enable calendar checkbox from general setting page in backend
-	casper.thenOpen(config.backEndUrl, function(){
+	casper.thenOpen(config.backEndUrl+'tool/members/dashboard', function(){
 		casper.echo("Title of the page : "+this.getTitle(), 'info');
 	});
 	casper.then(function() {
@@ -400,15 +402,32 @@ calendar.featureTest = function(casper, test, x) {
 		});
 		
 
-	});
+	});*/
 
 
 	casper.thenOpen(config.url+'calendar/', function(){
 		casper.echo("current page title is "+this.getTitle());
 	});
+	casper.then(function() {
+		this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
+			this.click('a.btn.btn-sm.btn-primary');	
+		});
+		calendar.createEvent(json["validInfo"][7], casper, function() {
+				//var responseData = response.data;
+			casper.wait(5000, function() {
+				casper.capture(screenShotsDir+"ThePeriod.png");
+				calendar.verifyCreatedEvent(json["validInfo"][7], casper, function(){
+					casper.capture(screenShotsDir+"CreateEventwithYearlyrecThePeriod.png");
+					calendar.gethrefofCreatedEvent(json["validInfo"][7], casper, function() {
+						casper.echo("href value is : "+ json["validInfo"][7].calender_href, "INFO");
+					});
+				});
+			});
+		});
+	});
 	
 	//Create event with all valid scenarios and verify all details on the event page
-	casper.then(function() {
+	/*casper.then(function() {
 		this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 			this.click('a.btn.btn-sm.btn-primary');	
 		});
@@ -475,7 +494,7 @@ calendar.featureTest = function(casper, test, x) {
 
 						});
 					});
-				} if(responseData.validationType == "Monthly Recurssion with Day Period") {
+				} else if(responseData.validationType == "Monthly Recurssion with Day Period") {
 					casper.wait(3000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecDay.png");
@@ -489,10 +508,38 @@ calendar.featureTest = function(casper, test, x) {
 
 						});
 					});
-				} if(responseData.validationType == "Monthly Recurssion with The Period") {
+				} else if(responseData.validationType == "Monthly Recurssion with The Period") {
 					casper.wait(3000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecThe.png");
+							calendar.gethrefofCreatedEvent(responseData, casper, function() {
+								casper.echo("href value is : "+ responseData.calender_href, "INFO");
+							});
+							casper.echo("-----------------------------------------------------------------");
+							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
+								this.click('a.btn.btn-sm.btn-primary');	
+							});
+
+						});
+					});
+				} else if(responseData.validationType == "Yearly Recurssion with Every Period") {
+					casper.wait(3000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithYearlyRecEvery.png");
+							calendar.gethrefofCreatedEvent(responseData, casper, function() {
+								casper.echo("href value is : "+ responseData.calender_href, "INFO");
+							});
+							casper.echo("-----------------------------------------------------------------");
+							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
+								this.click('a.btn.btn-sm.btn-primary');	
+							});
+
+						});
+					});
+				} else if(responseData.validationType == "Yearly Recurssion with The Period") {
+					casper.wait(3000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithYearlyRecThe.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
 								casper.echo("href value is : "+ responseData.calender_href, "INFO");
 							});
@@ -513,9 +560,9 @@ calendar.featureTest = function(casper, test, x) {
 		});
 
 
-	});
+	});*/
 
-	casper.thenOpen(config.backEndUrl, function(){
+	/*casper.thenOpen(config.backEndUrl, function(){
 		casper.echo("Title of the page : "+this.getTitle(), 'info');
 	});
 
@@ -636,7 +683,6 @@ calendar.createEvent = function(data, driver, callback) {
  		this.sendKeys('#tinymce', data.description);	
 	});
 	driver.wait(3000, function() {
-		casper.capture(screenShotsDir+"sangita123.png");
 		if (data.Allday){
 			utils.enableorDisableCheckbox('allDay', true, driver, function() {
 				casper.echo("Allday checkbox has been enabled", 'info');
@@ -721,10 +767,11 @@ calendar.createEvent = function(data, driver, callback) {
 						driver.sendKeys('input[name="monthlybox"]', data.months, {reset:true} );
 					break;
 					case "The" :
+						
 						driver.click('#rb_pattern_5');
 						this.click('select[name="monthlycombo2"]');
 						this.fill('form#PostCalEvent',{
-						'monthlycombo2' : data.monthlycombo   //need to pass like 'First' or 'Second' in the field
+						'monthlycombo2' : data.monthlycombo
 						},false);
 
 						this.click('select[name="monthlycombo3"]');
@@ -751,14 +798,14 @@ calendar.createEvent = function(data, driver, callback) {
 						driver.click('#rb_pattern_7');
 						this.click('select[name="yearlycombo3"]');
 						this.fill('form#PostCalEvent',{
-						'yearlycombo3' : data.yearlycombo   //need to pass like 'First' or 'Second' in the field
+						'yearlycombo3' : data.yearlycombo 
 						},false);
 
 						this.click('select[name="yearlycombo4"]');
 						this.fill('form#PostCalEvent',{
-						'monthlycombo3' : data.weekday
+						'yearlycombo4' : data.weekday
 						},false);
-
+	
 						this.click('select[name="yearlycombo5"]');
 						this.fill('form#PostCalEvent',{
 						'yearlycombo5' : data.monthname
@@ -822,8 +869,21 @@ calendar.verifyCreatedEvent = function(data, driver, callback) {
 					var inputData = 'This event occurs on day '+data.days+' of every '+ data.months + ' month(s)';
 					driver.test.assertEquals(rec_msg.trim(), inputData, 'Reccursion message for monthly event with "Day" period is verified');
 				} else if (data.rec_monthly == "The") {
+					var monthlycombo;
+					if(data.monthlycombo == "1") {
+						monthlycombo = "First";
+					} else if(data.monthlycombo == "2") {
+						monthlycombo = "Second";
+					} else if(data.monthlycombo == "3") {
+						monthlycombo = "Third";
+					} else if(data.monthlycombo == "4") {
+						monthlycombo = "Fourth";
+					} else if(data.monthlycombo == "5") {
+						monthlycombo = "Last";
+					} 
+
 					var rec_msg = driver.fetchText('span small[class="text-muted"]');
-					var inputData = 'This event occurs on the '+data.monthlycombo +' '+data.weekday+' of every '+ data.months + ' month(s)';
+					var inputData = 'This event occurs on the '+monthlycombo +' '+data.weekday+' of every '+ data.months + ' month(s)';
 					driver.test.assertEquals(rec_msg.trim(), inputData, 'Reccursion message for monthly event with "The" period is verified');
 				}
 			break;
@@ -831,9 +891,25 @@ calendar.verifyCreatedEvent = function(data, driver, callback) {
 				if (data.rec_yearly == "Every") {
 					var rec_msg = driver.fetchText('span small[class="text-muted"]');
 					casper.echo(rec_msg);
-				} else if (data.rec_yearly == "The") {
+					var inputData = 'This event occurs every '+data.monthname+' '+ data.years;
+					driver.test.assertEquals(rec_msg.trim(), inputData, 'Reccursion message for Yearly event with "Every" period is verified');
+				}else if (data.rec_yearly == "The") {
+					var yearlycombo;
+					if(data.yearlycombo == "1") {
+						yearlycombo = "First";
+					} else if(data.yearlycombo == "2") {
+						yearlycombo = "Second";
+					} else if(data.yearlycombo == "3") {
+						yearlycombo = "Third";
+					} else if(data.yearlycombo == "4") {
+						yearlycombo = "Fourth";
+					} else if(data.yearlycombo == "5") {
+						yearlycombo = "Last";
+					} 
 					var rec_msg = driver.fetchText('span small[class="text-muted"]');
 					casper.echo(rec_msg);
+					var inputData = 'This event occurs on every '+yearlycombo+' '+ data.weekday+ ' of '+data.monthname;
+					driver.test.assertEquals(rec_msg.trim(), inputData, 'Reccursion message for Yearly event with "The" period is verified');
 				}
 			break;
 	
@@ -900,6 +976,10 @@ calendar.updateCalendarSettings = function(x, checkbox_id, status, driver, callb
 	return callback();
 
 };
+
+function dayOfWeekAsInteger(day) {
+  return ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"].indexOf(day);
+}
 
 
 
