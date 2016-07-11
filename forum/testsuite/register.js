@@ -175,7 +175,7 @@ forumRegister.featureTest = function(casper, test) {
 
 forumRegister.registerWithSettings = function(casper, test) {
 	
-	casper.echo('*************OPEN FIELDS SETTING PAGE FROM BACKEND*******************');
+	casper.echo('*************FULL NAME FIELD SETTINGS FROM BACKEND*******************');
 	
 	//Login To Forum BackEnd 
 	
@@ -216,8 +216,8 @@ forumRegister.registerWithSettings = function(casper, test) {
 	
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
-			//this.thenOpen('https://www.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
-			this.thenOpen('http://beta12.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+			var backurl = config.backEndUrl+ 'tool/members/mb/fields?action=default_registration_option';
+			this.thenOpen(backurl, function() {
 				this.capture(screenShotsDir + 'Default_Registration_Options_then.png');
 				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
@@ -239,8 +239,8 @@ forumRegister.registerWithSettings = function(casper, test) {
 			this.then(function() {
 				this.wait(5000,function(){
 					this.capture(screenShotsDir + 'fullName_'+responseData.required+'_'+responseData.visibility+'.png');
-					//this.thenOpen("http://automation.websitetoolbox.com/register/register", function() {
-					this.thenOpen("http://beta12.websitetoolbox.com/register/register", function() {
+					var fronturl = config.url+ 'register/register';
+					this.thenOpen(fronturl, function() {
 						this.capture(screenShotsDir + 'fullName_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
 						if (responseData.visibility == '1') {
 							test.assertDoesntExist('form[name="PostTopic"] input[name="name"]');
@@ -277,7 +277,8 @@ forumRegister.registerWithSettings = function(casper, test) {
 	
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
-			this.thenOpen('http://beta12.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+			var backurl = config.backEndUrl+ 'tool/members/mb/fields?action=default_registration_option';
+			this.thenOpen(backurl, function() {
 				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
 	
@@ -297,7 +298,8 @@ forumRegister.registerWithSettings = function(casper, test) {
 
 			this.wait(5000,function(){
 				this.capture(screenShotsDir + 'imType_'+responseData.required+'_'+responseData.visibility+'.png');
-				this.thenOpen("http://beta12.websitetoolbox.com/register/register", function() {
+				var fronturl = config.url+ 'register/register';
+				this.thenOpen(fronturl, function() {
 					this.capture(screenShotsDir + 'imType_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
 					if (responseData.visibility == '1') {
 						test.assertDoesntExist('form[name="PostTopic"] input[name="imType"]');
@@ -342,7 +344,8 @@ forumRegister.registerWithSettings = function(casper, test) {
 	
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
-			this.thenOpen('http://beta12.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+			var backurl = config.backEndUrl+ 'tool/members/mb/fields?action=default_registration_option';
+			this.thenOpen(backurl, function() {
 				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
 	
@@ -362,7 +365,8 @@ forumRegister.registerWithSettings = function(casper, test) {
 
 			this.wait(5000,function(){
 				this.capture(screenShotsDir + 'dob_'+responseData.required+'_'+responseData.visibility+'.png');
-				this.thenOpen("http://beta12.websitetoolbox.com/register/register", function() {
+				var fronturl = config.url+ 'register/register';
+				this.thenOpen(fronturl, function() {
 					this.capture(screenShotsDir + 'dob_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
 					if (responseData.visibility == '1') {
 						test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
@@ -401,7 +405,8 @@ forumRegister.registerWithSettings = function(casper, test) {
 	
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
-			this.thenOpen('http://beta12.websitetoolbox.com/tool/members/mb/fields?action=default_registration_option', function() {
+			var backurl = config.backEndUrl+ 'tool/members/mb/fields?action=default_registration_option';
+			this.thenOpen(backurl, function() {
 				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
 	
@@ -421,7 +426,8 @@ forumRegister.registerWithSettings = function(casper, test) {
 
 			this.wait(5000,function(){
 				this.capture(screenShotsDir + 'signature_'+responseData.required+'_'+responseData.visibility+'.png');
-				this.thenOpen("http://beta12.websitetoolbox.com/register/register", function() {
+				var fronturl = config.url+ 'register/register';
+				this.thenOpen(fronturl, function() {
 					this.capture(screenShotsDir + 'signature_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
 					if (responseData.visibility == '1') {
 						test.assertDoesntExist('form[name="PostTopic"] div.sign-container');

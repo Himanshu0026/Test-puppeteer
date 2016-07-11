@@ -251,6 +251,7 @@ case "deletetopic":
 	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
         casper.echo("Options:");
 	casper.echo("	register");
+	casper.echo("	registerWithSettings");
 	casper.echo("	login");
 	casper.echo("	topic");
 	casper.echo("	postreply\n");
