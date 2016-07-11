@@ -73,8 +73,6 @@ forumRegister.featureTest = function(casper, test) {
 				if (response.data.expectedErrorMsg)
 					expectedErrorMsg = response.data.expectedErrorMsg;
 				if (response.data.uname == '') {
-					casper.echo('*********************CASE-1********************', 'INFO');
-					casper.echo('*********************Blank Username********************', 'INFO');
 					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="member"]', 'data-original-title');
 					msgTitle = 'BlankUsername';
 				} else if (response.data.uemail == '') {
@@ -100,30 +98,30 @@ forumRegister.featureTest = function(casper, test) {
 						test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
 					}
 				} else if (response.data.errorType == 'existWithName') {
-					casper.wait('3000', function() {
+					casper.wait('5000', function() {
 						errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
 						expectedErrorMsg = responseData.errorMsg1+ '"' +responseData.uname+ '"' +responseData.errorMsg2; 
 						msgTitle = 'ExistUsername';
 					});
 				} else if (response.data.errorType == 'existWithEmail') {
-					casper.wait('3000', function() {
+					casper.wait('5000', function() {
 						errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
 						msgTitle = 'ExistEmail';
 					});
 				} else if (response.data.errorType == 'existWithUsernameAndEmail') {
-					casper.wait('3000', function() {
+					casper.wait('5000', function() {
 						errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
 						msgTitle = 'ExistUsernameAndEmail';
 					});
 				} else if (response.data.errorType == 'invalidBirthday') {
-					casper.wait('3000', function() {
+					casper.wait('5000', function() {
 						try {
 							test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
 							errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
 						} catch(e) {
 							test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
 							errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
-							expectedErrorMsg = 'Error: It looks like you are already registered';
+							expectedErrorMsg = 'Error: It looks like you already have a forum account!';
 						}
 						msgTitle = 'InvalidBday';
 					});
@@ -134,7 +132,7 @@ forumRegister.featureTest = function(casper, test) {
 
 				//Called Method For Verifying Error Messages
 
-				casper.wait('5000', function() {
+				casper.wait('3000', function() {
 					if(errorMessage && errorMessage != "") {
 						verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
 					}
@@ -471,7 +469,7 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 		
 	//Click On Login Link 
 
-	/*driver.then(function() {
+	driver.then(function() {
 		test.assertExists('a#navLogin');
 		this.click('a#navLogin');
 		this.echo('Successfully open login form.....', 'INFO');
@@ -481,7 +479,7 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	
 	driver.wait(5000, function() {
 		this.capture(screenShotsDir + 'login_form.png');
-	});*/
+	});
 	
 	//Filling Username/Password On Login Form
 	
@@ -586,7 +584,7 @@ var verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver) 
 forumRegister.redirectToLogout = function(driver, test, callback) {
 	try {
 		test.assertExists('div.bmessage');
-		var message = this.fetchText('div.bmessage');
+		var message = driver.fetchText('div.bmessage');
 		var successMsg = message.substring(0, message.indexOf('<'));
 		var expectedSuccessMsg = json['validInfo'].expectedSuccessMsg;
 		test.assertEquals(successMsg.trim(), expectedSuccessMsg.trim());
