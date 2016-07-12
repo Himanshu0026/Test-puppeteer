@@ -630,6 +630,9 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 			var expectedErrorMsg = "Error: It looks like you already have a forum account!";
 			test.assert(errorMessage.indexOf(expectedErrorMsg) > -1);
 			driver.echo('USER ALREADY REGISTERED ON FORUM.....', 'INFO');
+			test.assertExists('i.icon.icon-menu');
+			driver.click('i.icon.icon-menu');
+			driver.click('a[href="/latest"]');
 		} catch(e1) {
 			driver.echo('Successfully done registration on forum.....', 'INFO');
 			
