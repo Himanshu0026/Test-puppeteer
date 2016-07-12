@@ -316,8 +316,35 @@ viewCalendarEvent.ViewEvent = function(data, driver, callback) {
 			break;
 			case "Yearly" :
 				if (data.rec_yearly == "Every") {
-					var rec_msg = driver.fetchText('span small[class="text-muted"]');
-					casper.echo(rec_msg);
+					var StDate = new Date(data.startDate);
+					var EdDate = new Date(data.endDate);
+
+					var rule = new RRule({
+			 		 freq: RRule.YEARLY,
+			  		interval: parseInt(data.years),
+			  		bymonthday: data.monthname,
+			  		dtstart: StDate,
+			  		until: EdDate
+					})
+					var dateArr = rule.all();
+					driver.eachThen(dateArr, function(response) {
+						var data_href = moment(response.data).format("YYYY-M-D");
+						var jumpDate = moment(data_href, "YYYY-M-D").format("M-YYYY");
+						var calendar_href = (data.calender_href).replace((data.calender_href).substring(27,35), data_href);
+						casper.echo(calendar_href, 'INFO');
+						viewCalendarEvent.jumpTocalendar(jumpDate, driver, function() {
+							driver.wait(3000, function() {
+								this.capture(screenShotsDir+jumpDate+'viewResult.png');
+								driver.test.assertExists('a[href="'+calendar_href+'"]');
+								this.click('a[href="'+calendar_href+'"]');
+									this.wait(3000, function() {
+										this.capture(screenShotsDir+jumpDate+'monthlyDayEvent.png')
+										this.click('a.btn.btn-default[href^="/calendar?"]');
+									});
+							});	
+						});
+						
+					});
 				} else if (data.rec_yearly == "The") {
 					var rec_msg = driver.fetchText('span small[class="text-muted"]');
 					casper.echo(rec_msg);
