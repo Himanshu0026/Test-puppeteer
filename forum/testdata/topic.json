@@ -165,7 +165,13 @@
 
 	"moveTopic" : {
 		"topicName" : "HolyDay",
-		"moveToCategory" : "fd"
+		"moveToCategory1" : "fd",
+		"moveToCategory2" : "Automation"
+	},
+
+	"hideUnHideCategory" : {
+		"categoryName" : "Automation",
+		"infoMessage" : "Deselect the categories you would like to stop hiding."
 	}
 }
 

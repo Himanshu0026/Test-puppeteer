@@ -305,19 +305,19 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			casper.echo('---------------------------------------------------------------------------');
 		});
 
-		//Logout(Admin) From App
-		this.then(function() {
-			forumLogin.logoutFromApp(casper, function() {
-				casper.echo('Successfully logout from application', 'INFO');
-			});
-		});
-
-		//Getting Screenshot After Clicking On 'Logout' Link
-		this.wait(7000, function() {
-			this.capture(screenShotsDir+ 'logout.png');
-		});		
-				
 	});
+
+	//Logout(Admin) From App
+	this.then(function() {
+		forumLogin.logoutFromApp(casper, function() {
+			casper.echo('Successfully logout from application', 'INFO');
+		});
+	});
+
+	//Getting Screenshot After Clicking On 'Logout' Link
+	this.wait(7000, function() {
+		this.capture(screenShotsDir+ 'logout.png');
+	});	
 	return callback();
 };
 

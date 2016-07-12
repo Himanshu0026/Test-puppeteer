@@ -1,4 +1,4 @@
-/****This script is dedicated for Admin to move topic/post on the forum. It covers testing of move topic/post with all defined validations****/
+/****This script is dedicated for Admin to hide/un-hide category on the forum. It covers testing of hide/un-hide category with all defined validations****/
 
 "use strict";
 
@@ -40,22 +40,115 @@ hideCategory.hideCategoryFeature = function(casper, test, x) {
 		});
 		this.then(function() {
 			var selectCategory = json.hideUnHideCategory.categoryName;
-			var classVal = x("//a/span[text()='"+selectCategory+"']/parent::a");
+			var classVal = x('//a/span[text()="'+selectCategory+'"]/parent::a');
 			var href = this.getElementAttribute(classVal, "href");
 			test.assertExists('a[href="'+href+'"]');
 			var hideButtonId = href.split('=');
-			test.assertExists('a[data-forumid="517180"]');
-			this.click('a[data-forumid="517180"]');
-			this.wait(4000, function(){
-				test.assertDoesntExist('a[href="'+href+'"]');
-				casper.echo('successfully verified category is hide');
-			});
+			casper.echo('hideButtonId : ' +hideButtonId[1]);
+			test.assertExists('a[data-forumid="'+hideButtonId[1]+'"]');
+			this.click('a[data-forumid="'+hideButtonId[1]+'"]');
 			this.wait(7000, function() {
-				this.capture(screenShotsDir+ 'selectedCategory.png');
+				this.capture(screenShotsDir+ 'hideCategory.png');
+				this.reload();
 			});
+		
+			//verify after hiding category
+			this.wait(2000, function(){
+				test.assertDoesntExist(x('//a/span[text()="'+selectCategory+'"]'));
+				casper.echo('successfully verified category is hide', 'INFO');
+			});
+			
 		});
 
 	});
+
+	/*****Deselect particular category from Filter Category and check that category is showing in the list*****/
+	casper.then(function() {
+		casper.echo('Deselect particular category from Filter Category and check that category is showing in the list', 'INFO');
+		test.assertExists('a[href="#filter-modal"]');
+		this.click('a[href="#filter-modal"]');
+		this.wait(7000, function() {
+			this.capture(screenShotsDir+ 'filterModel.png');
+		});
+		this.then(function() {
+			test.assertExists('form[action="/forums"] div#alertMsg');
+			var info = this.fetchText('form[action="/forums"] div#alertMsg');
+			casper.echo('dialog info : ' +info);
+			test.assertEquals(info.trim(),json.hideUnHideCategory.infoMessage, 'info message is verified');
+			
+		});
+		this.then(function() {
+			test.assertExists('li.list-group-item');
+			this.click('li.list-group-item');
+		});
+		this.then(function() {
+			test.assertExists('#apply_forum_filter');
+			this.click('#apply_forum_filter');
+		});
+
+		//verify un-hide category
+		this.then(function() {
+			var selectCategory = json.hideUnHideCategory.categoryName;
+			test.assertExists(x('//a/span[text()="'+selectCategory+'"]'));
+			casper.echo('successfully verified category is un-hide', 'INFO');
+			this.capture(screenShotsDir+ 'verifyOnCategoryPage.png');
+		});
+		
+	});
+	
+	/*****Check Clear Filter functionality to stop hiding hidded category*****/
+	casper.then(function() {
+		var selectCategory = json.hideUnHideCategory.categoryName;
+		var classVal = x('//a/span[text()="'+selectCategory+'"]/parent::a');
+		var href = this.getElementAttribute(classVal, "href");
+		test.assertExists('a[href="'+href+'"]');
+		var hideButtonId = href.split('=');
+		casper.echo('hideButtonId : ' +hideButtonId[1]);
+		test.assertExists('a[data-forumid="'+hideButtonId[1]+'"]');
+		this.click('a[data-forumid="'+hideButtonId[1]+'"]');
+		this.wait(7000, function() {
+			this.capture(screenShotsDir+ 'hideCategory.png');
+			this.reload();
+		});
+
+		//verify after hiding category
+		this.wait(2000, function(){
+			test.assertDoesntExist(x('//a/span[text()="'+selectCategory+'"]'));
+			casper.echo('successfully verified category is hide', 'INFO');
+		});
+
+		this.then(function() {
+			test.assertExists('a[href="#filter-modal"]');
+			this.click('a[href="#filter-modal"]');
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'filterModel.png');
+			});
+			this.then(function() {
+				test.assertExists('form[action="/forums"] div#alertMsg');
+				var info = this.fetchText('form[action="/forums"] div#alertMsg');
+				casper.echo('dialog info : ' +info);
+				test.assertEquals(info.trim(),json.hideUnHideCategory.infoMessage, 'info message is verified');
+			
+			});
+			this.then(function() {
+				test.assertExists('#clear_forum_filter');
+				this.click('#clear_forum_filter');
+			});
+			this.then(function() {
+				test.assertExists('#apply_forum_filter');
+				this.click('#apply_forum_filter');
+			});
+
+			//verify un-hide category
+			this.then(function() {
+				var selectCategory = json.hideUnHideCategory.categoryName;
+				test.assertExists(x('//a/span[text()="'+selectCategory+'"]'));
+				casper.echo('successfully verified category is un-hide', 'INFO');
+				this.capture(screenShotsDir+ 'verifyOnCategoryPage.png');
+			});
+		});
+	});
+
 	//Log Out From App
 	casper.then(function() {
 		forumLogin.logoutFromApp(casper, function() {

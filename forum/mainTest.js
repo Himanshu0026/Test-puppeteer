@@ -112,27 +112,7 @@ switch (feature) {
 		});
 	});
         break;
-        case "verifyCategoryPermissions":
-    	casper.test.begin('VERIFY CATEGORY PERMISSIONS TEST', function(test) {
-		var verifyCategoryPermissions = require("./testsuite/verifyCategoryPermissions.js");
-		verifyCategoryPermissions.featureTest(casper, test);
-		casper.run(function(){
-			test.done();
-			test.assert(true);
-		});
-	});
-        break;
-        case "uploadAttachment":
-    	casper.test.begin('VERIFY UPLOAD ATTACHMENT TEST', function(test) {
-		var uploadAttachment = require("./testsuite/uploadAttachment.js");
-		uploadAttachment.featureTest(casper, test);
-		casper.run(function(){
-			test.done();
-			test.assert(true);
-		});
-	});
-        break;
-	case "topic":
+   case "topic":
 	casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 
 		var newTopic = require("./testsuite/newTopic.js");
@@ -241,6 +221,16 @@ case "deletetopic":
 		 var moveTopic = require("./testsuite/moveTopic.js");
 		 var x = require('casper').selectXPath;
 		 moveTopic.moveTopicFeature(casper, casper.test, x);
+		 casper.run(function(){
+			test.done();
+		});
+	});
+        break;
+	case "hidecategory" :
+		 casper.test.begin('Verify hide/un-hide category functionlity ', function(test) {
+		 var hideCategory = require("./testsuite/hideCategory.js");
+		 var x = require('casper').selectXPath;
+		 hideCategory.hideCategoryFeature(casper, casper.test, x);
 		 casper.run(function(){
 			test.done();
 		});
