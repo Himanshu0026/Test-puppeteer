@@ -597,6 +597,12 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	});
 	
 	casper.then(function() {
+		utils.enableorDisableCheckbox('view_forum', true, casper, function() {
+			casper.echo("View Category Checkbox Has Been Enabled For Un-Registered User", 'INFO');
+		});
+	});
+	
+	casper.then(function() {
 		utils.enableorDisableCheckbox('post_threads', true, casper, function() {
 			casper.echo("Start Topic Checkbox Has Been Enabled For Un-Registered User", 'INFO');
 		});
@@ -807,6 +813,12 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	});
 	
 	casper.then(function() {
+		utils.enableorDisableCheckbox('view_forum', true, casper, function() {
+			casper.echo("View Category Checkbox Has Been Enabled For Pending User", 'INFO');
+		});
+	});
+	
+	casper.then(function() {
 		utils.enableorDisableCheckbox('post_threads', true, casper, function() {
 			casper.echo("Start Topic Checkbox Has Been Disabled For Pending User", 'INFO');
 		});
@@ -916,6 +928,12 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	casper.then(function(){
 		test.assertExists('#other_post_replies');
 		test.assertExists('#post_replies');
+	});
+	
+	casper.then(function() {
+		utils.enableorDisableCheckbox('view_forum', true, casper, function() {
+			casper.echo("View Category Checkbox Has Been Enabled For Registered User", 'INFO');
+		});
 	});
 	
 	casper.then(function() {
@@ -1075,6 +1093,12 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	});
 	
 	casper.then(function() {
+		utils.enableorDisableCheckbox('view_forum', true, casper, function() {
+			casper.echo("View Category Checkbox Has Been Enabled For Un-Registered User", 'INFO');
+		});
+	}); 
+	
+	casper.then(function() {
 		utils.enableorDisableCheckbox('post_replies', false, casper, function() {
 			casper.echo("Reply Topic Checkbox Has Been Disabled For Un-Registered User", 'INFO');
 		});
@@ -1173,6 +1197,12 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	});
 	
 	casper.then(function() {
+		utils.enableorDisableCheckbox('view_forum', true, casper, function() {
+			casper.echo("View Category Checkbox Has Been Enabled For Un-Registered User", 'INFO');
+		});
+	});
+	
+	casper.then(function() {
 		utils.enableorDisableCheckbox('post_replies', true, casper, function() {
 			casper.echo("Reply Topic Checkbox Has Been Enabled For Un-Registered User", 'INFO');
 		});
@@ -1268,6 +1298,12 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	casper.then(function(){
 		test.assertExists('#other_post_replies');
 		test.assertExists('#post_replies');
+	});
+	
+	casper.then(function() {
+		utils.enableorDisableCheckbox('view_forum', true, casper, function() {
+			casper.echo("View Category Checkbox Has Been Enabled For Pending User", 'INFO');
+		});
 	});
 	
 	casper.then(function() {
@@ -1386,6 +1422,12 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	});
 	
 	casper.then(function() {
+		utils.enableorDisableCheckbox('view_forum', true, casper, function() {
+			casper.echo("View Category Checkbox Has Been Enabled For Pending User", 'INFO');
+		});
+	});
+	
+	casper.then(function() {
 		utils.enableorDisableCheckbox('post_replies', true, casper, function() {
 			casper.echo("Reply Topic Checkbox Has Been Enabled For Pending User", 'INFO');
 		});
@@ -1498,6 +1540,12 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	casper.then(function(){
 		test.assertExists('#post_threads');
 		test.assertExists('#upload_attachments');
+	});
+	
+	casper.then(function() {
+		utils.enableorDisableCheckbox('view_forum', true, casper, function() {
+			casper.echo("View Category Checkbox Has Been Enabled For Registered User", 'INFO');
+		});
 	});
 	
 	casper.then(function() {
@@ -1614,6 +1662,12 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	casper.then(function(){
 		test.assertExists('#post_threads');
 		test.assertExists('#upload_attachments');
+	});
+	
+	casper.then(function() {
+		utils.enableorDisableCheckbox('view_forum', true, casper, function() {
+			casper.echo("View Category Checkbox Has Been Enabled For Registered User", 'INFO');
+		});
 	});
 	
 	casper.then(function() {
@@ -1734,6 +1788,12 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	});
 	
 	casper.then(function() {
+		utils.enableorDisableCheckbox('view_forum', true, casper, function() {
+			casper.echo("View Category Checkbox Has Been Enabled For Registered User", 'INFO');
+		});
+	});
+	
+	casper.then(function() {
 		utils.enableorDisableCheckbox('other_post_replies', true, casper, function() {
 			casper.echo("Reply Other Topic Checkbox Has Been Enabled For Registered User", 'INFO');
 		});
@@ -1785,13 +1845,19 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Clicking On 'Start New Topic' Tab
 	casper.then(function() {
-		this.click('form[name="posts"] h4 a');
-		this.wait(5000,function(){
-			test.assertExists('#message');
-			this.click('#message');
-			test.assertDoesntExist('a#insert_image_dialog_');
-			test.assertDoesntExist('a#fancy_attach_');
-		});
+		try {
+			test.assertExists('form[name="posts"] h4 a');
+			this.click('form[name="posts"] h4 a');
+			this.wait(5000,function(){
+				test.assertExists('#message');
+				this.click('#message');
+				test.assertDoesntExist('a#insert_image_dialog_');
+				test.assertDoesntExist('a#fancy_attach_');
+			});
+		} catch(e) {
+			test.assertDoesntExist('form[name="posts"] h4 a');
+			this.echo('There is no topic to display', 'INFO');
+		}
 	});
 	
 	//Logout From App
@@ -1858,6 +1924,12 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	});
 	
 	casper.then(function() {
+		utils.enableorDisableCheckbox('view_forum', true, casper, function() {
+			casper.echo("View Category Checkbox Has Been Enabled For Registered User", 'INFO');
+		});
+	});
+	
+	casper.then(function() {
 		utils.enableorDisableCheckbox('other_post_replies', true, casper, function() {
 			casper.echo("Reply Other Topic Checkbox Has Been Enabled For Registered User", 'INFO');
 		});
@@ -1909,13 +1981,19 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Clicking On 'Start New Topic' Tab
 	casper.then(function() {
-		this.click('form[name="posts"] h4 a');
-		this.wait(5000,function(){
-			test.assertExists('#message');
-			this.click('#message');
-			test.assertExists('a#insert_image_dialog_');
-			test.assertExists('a#fancy_attach_');
-		});
+		try {
+			test.assertExists('form[name="posts"] h4 a');
+			this.click('form[name="posts"] h4 a');
+			this.wait(5000,function(){
+				test.assertExists('#message');
+				this.click('#message');
+				test.assertExists('a#insert_image_dialog_');
+				test.assertExists('a#fancy_attach_');
+			});
+		} catch(e) {
+			test.assertDoesntExist('form[name="posts"] h4 a');
+			this.echo('There is no topic to display', 'INFO');
+		}
 	});
 	
 	//Logout From App
@@ -2158,5 +2236,4 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			casper.echo('Successfully Logout From Application', 'INFO');
 		});
 	});
-
 };

@@ -252,6 +252,9 @@ case "deletetopic":
         casper.echo("Options:");
 	casper.echo("	register");
 	casper.echo("	registerWithSettings");
+	casper.echo("	inContextRegistration");
+	casper.echo("	backEndRegistration");
+	casper.echo("	verifyCategoryPermissions");
 	casper.echo("	login");
 	casper.echo("	topic");
 	casper.echo("	postreply\n");

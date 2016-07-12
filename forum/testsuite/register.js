@@ -13,7 +13,6 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 forumRegister.featureTest = function(casper, test) {
 
 	//Login To Forum BackEnd 
-	
 	casper.start(config.backEndUrl, function() {
 		//test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
