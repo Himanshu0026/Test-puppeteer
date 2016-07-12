@@ -34,14 +34,20 @@ viewCalendarEvent.viewCalendarEventFeature = function(casper, test, x, callback)
 		});
 	});*/
 
-	/*****Lock any topic and Verify Lock option of topic listing page[Home page]*****/
-	casper.then(function() {
+	
+	/*casper.then(function() {
 	
 		//this.eachThen(json['invalidInfo'], function(response) {
-			casper.echo("=========" +JSON.stringify(json["validInfo"][3]));
+			casper.echo("=========" +JSON.stringify(json["validInfo"][0]));
 					//casper.echo("*****************************");
-					viewCalendarEvent.ViewEvent(json["validInfo"][3], casper, function(){
+					viewCalendarEvent.ViewEvent(json["validInfo"][0], casper, function(){
 						casper.echo("*****************View calendar recursion event ******************");
+						casper.wait(3000, function() {
+							//calendar.verifyCreatedEvent(json["validInfo"][0], casper, function(){
+								casper.echo("*********************INFO***********************", "INFO");
+							//});	
+
+						});
 						
 					});
 
@@ -53,78 +59,59 @@ viewCalendarEvent.viewCalendarEventFeature = function(casper, test, x, callback)
 				casper.capture(screenShotsDir+"EventwithAllday.png");
 			});
 				
-		});*/
+		});
+
+	});*/
 
 
-	});
 
 
-
-
-	/*casper.wait(7000);
+	casper.wait(7000);
 	//Verify link of created event in the calendar and also verify all details on the respective event page after clicking on respective link
 	casper.then(function() {
-		casper.echo("VERIFY LINK ON CALENDAR PAGE AND VERIFY ALL RESPECTIVE DETAILS ON THE EVENT PAGE", "INFO");
+		casper.echo("VERIFY LINK ON CALENDAR PAGE AND VERIFY ALL RESPECTIVE DETAILS ON THE EVENT DETAILS PAGE", "INFO");
 		try { 
 		this.eachThen(json['validInfo'], function(response) {
-	
 		
-			casper.echo("=========" +JSON.stringify(response.data));
-			calendar.ViewCalenderEvent(response.data, casper, function() {
+			casper.echo("=========> " +JSON.stringify(response.data));
+			viewCalendarEvent.ViewEvent(response.data, casper, function() {
 				var responseData = response.data;
 				if(responseData.validationType == "Create event with Allday") {
 					casper.wait(3000, function() {
-						calendar.verifyCreatedEvent(responseData, casper, function(){
-							casper.capture(screenShotsDir+"CreateEventwithAllday_View.png");
-							casper.echo("-----------------------------------------------------------------");
-							casper.back();
-							casper.capture(screenShotsDir+"CreateEventwithAllday_View_prev.png");
-						});
-					});
-					
+						this.capture(screenShotsDir+'ViewAllDayEvent.png')
+						this.click('a.btn.btn-default[href^="/calendar?"]');
+						casper.echo("VERIFY LINK OF ALLDAY CALENDAR EVENT IN CALENDAR", "INFO");
+					});	
 				}else if(responseData.validationType == "Create event with ranged date") {
 					casper.wait(3000, function() {
-						calendar.verifyCreatedEvent(responseData, casper, function(){
-							casper.capture(screenShotsDir+"CreateEventwithRangeddate_view.png");
-							casper.echo("-----------------------------------------------------------------");
-							casper.back();
-
-						});
+						this.capture(screenShotsDir+'ViewRangedDateEvent.png')
+						this.click('a.btn.btn-default[href^="/calendar?"]');
+						casper.echo("VERIFY LINK FOR RANGED DATE CALENDAR EVENT IN CALENDAR", "INFO");
 					});
 				}else if(responseData.validationType == "Daily Recurssion") {
 					casper.wait(3000, function() {
-						calendar.verifyCreatedEvent(responseData, casper, function(){
-							casper.capture(screenShotsDir+"CreateEventwithDailyRecurssion_view.png");
-							casper.echo("-----------------------------------------------------------------");
-							casper.back();
-
-						});
+						casper.echo("ALL RECURSION DATE FOR DAILY RECURSION EVENT HAVE BEEN VERIFIED", "INFO");
 					});
-				}else if(responseData.validationType == "Weekly Recurssion") {casper.echo("+++++++++++");
+				}else if(responseData.validationType == "Weekly Recurssion") {
 					casper.wait(3000, function() {
-						calendar.verifyCreatedEvent(responseData, casper, function(){
-							casper.capture(screenShotsDir+"CreateEventwithWeeklyRecurssion_view.png");
-							casper.echo("-----------------------------------------------------------------");
-							casper.back();
+						casper.echo("ALL RECURSION DATE FOR WEEKLY RECURSION EVENT HAVE BEEN VERIFIED", "INFO");
 
-						});
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with Day Period") {
 					casper.wait(3000, function() {
-						calendar.verifyCreatedEvent(responseData, casper, function(){
-							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecDay_view.png");
-							casper.echo("-----------------------------------------------------------------");
-							casper.back();
-						});
+						casper.echo("ALL RECURSION DATE FOR MONTHLY RECURSION WITH DAY PERIOD HAVE BEEN VERIFIED", "INFO");
 					});
 				}else if(responseData.validationType == "Monthly Recurssion with The Period") {
 					casper.wait(3000, function() {
-						calendar.verifyCreatedEvent(responseData, casper, function(){
-							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecThe_view.png");
-							casper.echo("-----------------------------------------------------------------");
-							casper.back();
-
-						});
+						casper.echo("ALL RECURSION DATE FOR MONTHLY RECURSION WITH THE PERIOD HAVE BEEN VERIFIED", "INFO");
+					});
+				} else if(responseData.validationType == "Yeary Recurssion with Every Period") {
+					casper.wait(3000, function() {
+						casper.echo("ALL RECURSION DATE FOR YEARLY RECURSION WITH EVERY PERIOD HAVE BEEN VERIFIED", "INFO");
+					});
+				} else if(responseData.validationType == "Yearly Recurssion with The Period") {
+					casper.wait(3000, function() {
+						casper.echo("ALL RECURSION DATE FOR YEARLY RECURSION WITH THE PERIOD HAVE BEEN VERIFIED", "INFO");
 					});
 				}
 			});
@@ -137,7 +124,7 @@ viewCalendarEvent.viewCalendarEventFeature = function(casper, test, x, callback)
 			casper.echo("Error occurred :"+err);
 		}
 
-	});*/
+	});
 
 
 	return callback();
@@ -151,10 +138,37 @@ viewCalendarEvent.ViewEvent = function(data, driver, callback) {
 	if(data.Repeat) {
 		switch (data.recurrence) {
 			case "Daily" :
+				var StDate = new Date(data.startDate);
+				var EdDate = new Date(data.endDate);
 				
-				var rec_msg = driver.fetchText('span small[class="text-muted"]');
-				var inputData = 'This event occurs every '+data.days+' day(s)';
-				driver.test.assertEquals(rec_msg.trim(), inputData, 'Reccursion message for weekly event is verified');
+				var rule = new RRule({
+			 	freq: RRule.DAILY,
+			  	interval: parseInt(data.days),
+			  	dtstart: StDate,
+			  	until: EdDate
+				})
+
+				var dateArr = rule.all();
+				driver.eachThen(dateArr, function(response) {
+					var data_href = moment(response.data).format("YYYY-M-D");
+					var jumpDate = moment(data_href, "YYYY-M-D").format("M-YYYY");
+					var href_start = (data.calender_href).indexOf("=");
+					var href_last = (data.calender_href).indexOf("&");
+					var calendar_href = (data.calender_href).replace((data.calender_href).substring(href_start+1,href_last), data_href);
+					casper.echo(calendar_href, 'INFO');
+					viewCalendarEvent.jumpTocalendar(jumpDate, driver, function() {
+						driver.wait(3000, function() {
+							this.capture(screenShotsDir+data_href+'viewResultDaily.png');
+							driver.test.assertExists('a[href="'+calendar_href+'"]');
+							this.click('a[href="'+calendar_href+'"]');
+							this.wait(3000, function() {
+								this.capture(screenShotsDir+data_href+'DailyEvent.png')
+								this.click('a.btn.btn-default[href^="/calendar?"]');
+							});
+						});	
+					});
+						
+				});
 			break;
 			case "Weekly" :
 				var StDate = new Date(data.startDate);
@@ -201,15 +215,17 @@ viewCalendarEvent.ViewEvent = function(data, driver, callback) {
 					driver.eachThen(dateArr, function(response) {
 						var data_href = moment(response.data).format("YYYY-M-D");
 						var jumpDate = moment(data_href, "YYYY-M-D").format("M-YYYY");
-						var calendar_href = (data.calender_href).replace((data.calender_href).substring(27,35), data_href);
+						var href_start = (data.calender_href).indexOf("=");
+						var href_last = (data.calender_href).indexOf("&");
+						var calendar_href = (data.calender_href).replace((data.calender_href).substring(href_start+1,href_last), data_href);
 						casper.echo(calendar_href, 'INFO');
 						viewCalendarEvent.jumpTocalendar(jumpDate, driver, function() {
 							driver.wait(3000, function() {
-								this.capture(screenShotsDir+jumpDate+'viewResult.png');
+								this.capture(screenShotsDir+data_href+'WeeklyviewResult.png');
 								driver.test.assertExists('a[href="'+calendar_href+'"]');
 								this.click('a[href="'+calendar_href+'"]');
 									this.wait(3000, function() {
-										this.capture(screenShotsDir+jumpDate+'monthlyDayEvent.png')
+										this.capture(screenShotsDir+data_href+'WeeklyEvent.png')
 										this.click('a.btn.btn-default[href^="/calendar?"]');
 									});
 							});	
@@ -235,15 +251,17 @@ viewCalendarEvent.ViewEvent = function(data, driver, callback) {
 					driver.eachThen(dateArr, function(response) {
 						var data_href = moment(response.data).format("YYYY-M-D");
 						var jumpDate = moment(data_href, "YYYY-M-D").format("M-YYYY");
-						var calendar_href = (data.calender_href).replace((data.calender_href).substring(27,35), data_href);
+						var href_start = (data.calender_href).indexOf("=");
+						var href_last = (data.calender_href).indexOf("&");
+						var calendar_href = (data.calender_href).replace((data.calender_href).substring(href_start+1,href_last), data_href);
 						casper.echo(calendar_href, 'INFO');
 						viewCalendarEvent.jumpTocalendar(jumpDate, driver, function() {
 							driver.wait(3000, function() {
-								this.capture(screenShotsDir+jumpDate+'viewResult.png');
+								this.capture(screenShotsDir+data_href+'MonthlyDayviewResult.png');
 								driver.test.assertExists('a[href="'+calendar_href+'"]');
 								this.click('a[href="'+calendar_href+'"]');
 									this.wait(3000, function() {
-										this.capture(screenShotsDir+jumpDate+'monthlyDayEvent.png')
+										this.capture(screenShotsDir+data_href+'monthlyDayEvent.png')
 										this.click('a.btn.btn-default[href^="/calendar?"]');
 									});
 							});	
@@ -254,7 +272,7 @@ viewCalendarEvent.ViewEvent = function(data, driver, callback) {
 					var StDate = new Date(data.startDate);
 					var EdDate = new Date(data.endDate);
 					var rec, W;
-					if(data.monthlycombo = "5") {
+					if(data.monthlycombo == "5") {
 						rec = -1;
 					} else {
 						rec = parseInt(data.monthlycombo);
@@ -295,16 +313,19 @@ viewCalendarEvent.ViewEvent = function(data, driver, callback) {
 					var dateArr = rule.all();
 					driver.eachThen(dateArr, function(response) {
 						var data_href = moment(response.data).format("YYYY-M-D");
+						casper.echo("******************************** "+data_href, "INFO");
 						var jumpDate = moment(data_href, "YYYY-M-D").format("M-YYYY");
-						var calendar_href = (data.calender_href).replace((data.calender_href).substring(27,35), data_href);
-						casper.echo(calendar_href, 'INFO');
+						var href_start = (data.calender_href).indexOf("=");
+						var href_last = (data.calender_href).indexOf("&");
+						var calendar_href = (data.calender_href).replace((data.calender_href).substring(href_start+1,href_last), data_href);
+						casper.echo("   ****   "+calendar_href, 'INFO');
 						viewCalendarEvent.jumpTocalendar(jumpDate, driver, function() {
 							driver.wait(3000, function() {
-								this.capture(screenShotsDir+jumpDate+'viewResult.png');
+								this.capture(screenShotsDir+data_href+'monthlyTheviewResult.png');
 								driver.test.assertExists('a[href="'+calendar_href+'"]');
 								this.click('a[href="'+calendar_href+'"]');
 									this.wait(3000, function() {
-										this.capture(screenShotsDir+jumpDate+'monthlyTheEvent.png')
+										this.capture(screenShotsDir+data_href+'monthlyTheEvent.png')
 										this.click('a.btn.btn-default[href^="/calendar?"]');
 									});
 							});	
@@ -320,25 +341,28 @@ viewCalendarEvent.ViewEvent = function(data, driver, callback) {
 					var EdDate = new Date(data.endDate);
 
 					var rule = new RRule({
-			 		 freq: RRule.YEARLY,
-			  		interval: parseInt(data.years),
-			  		bymonthday: data.monthname,
+			 		freq: RRule.YEARLY,
+			  		bymonth: parseInt(moment().month(data.monthname).format("M")),
+		  			bymonthday: parseInt(data.monthday),
 			  		dtstart: StDate,
 			  		until: EdDate
 					})
+					
 					var dateArr = rule.all();
 					driver.eachThen(dateArr, function(response) {
 						var data_href = moment(response.data).format("YYYY-M-D");
 						var jumpDate = moment(data_href, "YYYY-M-D").format("M-YYYY");
-						var calendar_href = (data.calender_href).replace((data.calender_href).substring(27,35), data_href);
+						var href_start = (data.calender_href).indexOf("=");
+						var href_last = (data.calender_href).indexOf("&");
+						var calendar_href = (data.calender_href).replace((data.calender_href).substring(href_start+1,href_last), data_href);
 						casper.echo(calendar_href, 'INFO');
 						viewCalendarEvent.jumpTocalendar(jumpDate, driver, function() {
 							driver.wait(3000, function() {
-								this.capture(screenShotsDir+jumpDate+'viewResult.png');
+								this.capture(screenShotsDir+data_href+'YearlyEveryviewResult.png');
 								driver.test.assertExists('a[href="'+calendar_href+'"]');
 								this.click('a[href="'+calendar_href+'"]');
 									this.wait(3000, function() {
-										this.capture(screenShotsDir+jumpDate+'monthlyDayEvent.png')
+										this.capture(screenShotsDir+data_href+'YearlyEveryEvent.png')
 										this.click('a.btn.btn-default[href^="/calendar?"]');
 									});
 							});	
@@ -346,13 +370,75 @@ viewCalendarEvent.ViewEvent = function(data, driver, callback) {
 						
 					});
 				} else if (data.rec_yearly == "The") {
-					var rec_msg = driver.fetchText('span small[class="text-muted"]');
-					casper.echo(rec_msg);
+					var StDate = new Date(data.startDate);
+					var EdDate = new Date(data.endDate);
+					var rec, W;
+					if(data.yearlycombo == "5") {
+						rec = -1;
+					} else {
+						rec = parseInt(data.yearlycombo);
+					}
+					//var rule;
+					switch(data.weekday) {
+
+						case "Monday" : 
+					  		W = [RRule.MO.nth(rec)];
+						break;
+						case "Tuesday" :
+							W = [RRule.TU.nth(rec)]; 
+						break;
+						case "Wednesday" :
+							W = [RRule.WE.nth(rec)];
+						break;
+						case "Thursday" :
+							W = [RRule.TH.nth(rec)];
+						break;
+						case "Friday" :
+							W = [RRule.FR.nth(rec)];
+						break;
+						case "Saturday" :
+							W = [RRule.SA.nth(rec)];
+						break;
+						case "Sunday" :
+							W = [RRule.SU.nth(rec)];
+						break;
+					}
+
+					var rule = new RRule({
+			 		freq: RRule.YEARLY,
+			  		bymonth: parseInt(moment().month(data.monthname).format("M")),
+		  			byweekday: W,
+			  		dtstart: StDate,
+			  		until: EdDate
+					})
+					
+					var dateArr = rule.all();
+					driver.eachThen(dateArr, function(response) {
+						var data_href = moment(response.data).format("YYYY-M-D");
+						var jumpDate = moment(data_href, "YYYY-M-D").format("M-YYYY");
+						var href_start = (data.calender_href).indexOf("=");
+						var href_last = (data.calender_href).indexOf("&");
+						var calendar_href = (data.calender_href).replace((data.calender_href).substring(href_start+1,href_last), data_href);
+						casper.echo(calendar_href, 'INFO');
+						viewCalendarEvent.jumpTocalendar(jumpDate, driver, function() {
+							driver.wait(3000, function() {
+								this.capture(screenShotsDir+data_href+'YearlyTheviewResult.png');
+								driver.test.assertExists('a[href="'+calendar_href+'"]');
+								this.click('a[href="'+calendar_href+'"]');
+									this.wait(3000, function() {
+										this.capture(screenShotsDir+data_href+'YearlyTheEvent.png')
+										this.click('a.btn.btn-default[href^="/calendar?"]');
+									});
+							});	
+						});
+						
+					});
 				}
 			break;
 	
 		}
 	}else {
+		casper.echo(" href --> "+href, "INFO");
 		driver.waitForSelector('a[href="'+href+'"]', function(){
 			this.click('a[href="'+href+'"]');
 		});

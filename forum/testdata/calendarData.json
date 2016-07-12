@@ -315,7 +315,7 @@
 	"validationType" : "Yearly Recurssion with Every Period",
 	"Title" : "Yearly Recurssion with Every Period",
 	"Allday" : false,
-	"startDate" : "07/12/2016",
+	"startDate" : "07/13/2016",
 	"endDate" : "10/20/2018",
 	"startTime" : "07:00 AM",
 	"endTime" : "09:00 AM",
@@ -324,9 +324,9 @@
 	"recurrence" : "Yearly",
 	"rec_yearly" : "Every",
 	"monthname" : "February",
-	"years" : "1",
+	"monthday" : "10",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and",
-	"calender_href" : "/calendar/eventdetail?date=2016-7-12&eventid=80953&calendarid=106758"
+	"calender_href" : "/calendar/eventdetail?date=2016-7-13&eventid=81014&calendarid=106758"
 	},
 
 	{
