@@ -78,9 +78,11 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			this.capture(screenShotsDir+ 'category.png');
 		});
 		casper.then(function() {
-			test.assertExists('h3 a[href="/?forum=517180"]');
+			var classVal = x("//h3/a/span/parent::a");
+			var href = this.getElementAttribute(classVal, "href"); 
+			test.assertExists('h3 a[href="'+href+'"]');
 			casper.echo('---------------------------------------------------------------------------');
-			this.click('h3 a[href="/?forum=517180"]');
+			this.click('h3 a[href="'+href+'"]');
 		});
 		casper.wait(7000, function() {
 			this.capture(screenShotsDir+ 'categoryTopicList.png');
@@ -150,46 +152,52 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			});
 		});
 		casper.then(function() {
-		
-			var postTitle = json['pin/unPin'].topicTitle;
-			casper.echo('pin topic title : ' +postTitle, 'INFO');
-			var classVal = x("//a[text()='"+postTitle+"']"); 
-			selectTopic(classVal, 'pin', 'Pin/Un-Pin', casper, function() {});
-	
+			if(this.exists('div.alert-info')){
+				var warningMsg = this.fetchText('div.alert-info');
+				test.assertEquals(warningMsg.trim(), json['pin/unPin'].warningMessage, warningMsg.trim()+' and verified warning message');
+			} else {
+				var postTitle = json['pin/unPin'].topicTitle;
+				casper.echo('pin topic title : ' +postTitle, 'INFO');
+				var classVal = x("//a[text()='"+postTitle+"']"); 
+				selectTopic(classVal, 'pin', 'Pin/Un-Pin', casper, function() {});
+				//verify pin topic
+				casper.then(function() {
+					var postTitle = json['pin/unPin'].topicTitle;
+					casper.echo('pin topic title : ' +postTitle, 'INFO');
+					test.assertExists(x("//a[text()='"+postTitle+"']/following::span/i")); 
+					casper.echo('---------------------------------------------------------------------------');
+					casper.echo('pin topic is verified', 'INFO');
+					casper.echo('---------------------------------------------------------------------------');
+				});
+			}
 		});
 	});
 
-	//verify pin topic
-	casper.then(function() {
-		var postTitle = json['pin/unPin'].topicTitle;
-		casper.echo('pin topic title : ' +postTitle, 'INFO');
-		test.assertExists(x("//a[text()='"+postTitle+"']/following::span/i")); 
-		casper.echo('---------------------------------------------------------------------------');
-		casper.echo('pin topic is verified', 'INFO');
-		casper.echo('---------------------------------------------------------------------------');
-	});
 	
 	/*****un-pin topic from Profile page and verify un-pin topic*****/
 	casper.then(function() {
 		casper.echo('unPin topic from Profile page and verify unPin topic', 'INFO');
-	
-		casper.then(function() {
-			var postTitle = json['pin/unPin'].topicTitle;
-			casper.echo('un-pin topic title : ' +postTitle, 'INFO');
-			var classVal = x("//a[text()='"+postTitle+"']"); 
-			selectTopic(classVal, 'unpin', 'Pin/Un-Pin', casper, function() {});
-	
-		});
+		if(this.exists('div.alert-info')){
+			var warningMsg = this.fetchText('div.alert-info');
+			test.assertEquals(warningMsg.trim(), json['pin/unPin'].warningMessage, warningMsg.trim()+' and verified warning message');
+		} else {
+			casper.then(function() {
+				var postTitle = json['pin/unPin'].topicTitle;
+				casper.echo('un-pin topic title : ' +postTitle, 'INFO');
+				var classVal = x("//a[text()='"+postTitle+"']"); 
+				selectTopic(classVal, 'unpin', 'Pin/Un-Pin', casper, function() {});
+			});
+			//verify un-pin topic
+			casper.then(function() {
+				var postTitle = json['pin/unPin'].topicTitle;
+				casper.echo('un-pin topic title : ' +postTitle, 'INFO');
+				test.assertDoesntExist(x("//a[text()='"+postTitle+"']/following::span/i[@class='glyphicon-pushpin']")); 
+				casper.echo('un-pin topic is verified', 'INFO');
+				casper.echo('---------------------------------------------------------------------------');
+			});
+		}
 	});
 
-	//verify un-pin topic
-	casper.then(function() {
-		var postTitle = json['pin/unPin'].topicTitle;
-		casper.echo('un-pin topic title : ' +postTitle, 'INFO');
-		test.assertDoesntExist(x("//a[text()='"+postTitle+"']/following::span/i[@class='glyphicon-pushpin']")); 
-		casper.echo('un-pin topic is verified', 'INFO');
-		casper.echo('---------------------------------------------------------------------------');
-	});
 	return callback();
 };
 

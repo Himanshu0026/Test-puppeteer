@@ -130,7 +130,7 @@ switch (feature) {
 
 		var postAReply = require("./testsuite/postAReply.js");
 		var x = require('casper').selectXPath;
-		postAReply.featureTest(casper, casper.test, x);
+		postAReply.postAReplyFeature(casper, casper.test, x);
 		casper.run(function(){
 			test.done();
 		});
