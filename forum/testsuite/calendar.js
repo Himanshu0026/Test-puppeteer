@@ -104,6 +104,24 @@ calendar.featureTest = function(casper, test, x) {
 			this.capture(screenShotsDir+'checkedScreen.png');
 			test.assert(this.evaluate(function () {return document.getElementById('enable_calendar').checked;}));
 		});
+		this.waitForSelector('a[data-tooltip-elm="ddSettings"]', function() {
+			this.click('a[data-tooltip-elm="ddSettings"]');
+		});
+		this.waitForSelector('a[href="/tool/members/mb/settings?tab=Display"]', function() {
+			this.click('a[href="/tool/members/mb/settings?tab=Display"]');
+		});
+		this.waitForSelector('select[name="display_time"]', function() {
+			this.click('select[name="display_time"]');
+			this.evaluate(function() {
+   				$('select[name="display_time"]').val('2').change();
+			});
+		});
+		this.waitForSelector('button[type="submit"]', function(){
+			this.click('button[type="submit"]');
+		});
+		this.wait(5000, function() {
+			this.capture(screenShotsDir+'timeformat.png');
+		});
 	});
 
 	//enable all calendar related settings from user group permission for registered user
@@ -297,7 +315,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message in case of blank title is : "+casper.fetchText('div.alert.alert-danger'));
 						casper.capture(screenShotsDir+'createEventablankTitle.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("****************************************************************************", "INFO");
 					});
 					
 				}else if(responseData.validationType == "Blank Description") {
@@ -306,7 +324,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message in case of blank description is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEventBlankdesc.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Allday with Previous Date") {
 					casper.wait(3000, function() {
@@ -314,7 +332,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message for allDay with Previous date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEventallDay_prevDate.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Start date greater than end Date") {
 					casper.wait(3000, function() {
@@ -322,7 +340,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message for end date older than Start date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_greaterStartDate.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Start date older than current Date") {
 					casper.wait(3000, function() {
@@ -330,7 +348,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message for Start date older than current Date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_OldCurrentDate.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Daily Recurssion with blank day") {
 					casper.wait(3000, function() {
@@ -338,7 +356,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message for Start date older than current Date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_DailywithBlankDay.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Weekly Recurssion with blank day") {
 					casper.wait(3000, function() {
@@ -346,7 +364,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message for Start date older than current Date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_WeeklywithBlankDay.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Weekly Recurssion with current date but passed time") {
 					casper.wait(3000, function() {
@@ -354,7 +372,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message for Weekly Recurssion with current date but passed time is : "+casper.fetchText('div.alert.alert-danger') , "INFO");
 						casper.capture(screenShotsDir+'createEvent_WeeklywithcurrentDaypassedTime.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Weekly Recurssion without selecting Weekday") {
 					casper.wait(3000, function() {
@@ -362,7 +380,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message for Weekly Recurssion without selecting Weekday is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_WeeklywithoutWeekday.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with blank day") {
 					casper.wait(3000, function() {
@@ -370,7 +388,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message for Monthly Recurssion with blank day is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_MonthlywithBlankDay.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("***************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with blank months") {
 					casper.wait(3000, function() {
@@ -378,7 +396,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message for Monthly Recurssion with blank months is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_MonthlywithBlankmonths.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("**************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with less than 1 months") {
 					casper.wait(3000, function() {
@@ -386,7 +404,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message for Monthly Recurssion with less than 1 months is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_Monthlyless1month.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with The Period with blank months") {
 					casper.wait(3000, function() {
@@ -394,7 +412,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message for Monthly Recurssion with The Period with blank months is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_MonthlyTheperiodBlankmonths.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Yearly Recurssion with Every Period with blank years") {
 					casper.wait(3000, function() {
@@ -402,7 +420,7 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message for Yearly Recurssion with Every Period with blank years : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_Yearly_blankyears.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("*****************************************************************", "INFO");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				}
 			});
@@ -422,19 +440,19 @@ calendar.featureTest = function(casper, test, x) {
 		this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 			this.click('a.btn.btn-sm.btn-primary');	
 		});
-		calendar.createEvent(json["validInfo"][7], casper, function() {
+		calendar.createEvent(json["validInfo"][8], casper, function() {
 				//var responseData = response.data;
-			casper.wait(5000, function() {
+			casper.wait(10000, function() {
 				casper.capture(screenShotsDir+"ThePeriod.png");
-				calendar.verifyCreatedEvent(json["validInfo"][7], casper, function(){
+				calendar.verifyCreatedEvent(json["validInfo"][8], casper, function(){
 					casper.capture(screenShotsDir+"CreateEventwithYearlyrecThePeriod.png");
-					calendar.gethrefofCreatedEvent(json["validInfo"][7], casper, function() {
-						casper.echo("href value is : "+ json["validInfo"][7].calender_href, "INFO");
+					calendar.gethrefofCreatedEvent(json["validInfo"][8], casper, function() {
+						casper.echo("href value is : "+ json["validInfo"][8].calender_href, "INFO");
 					});
 				});
 			});
 			casper.wait(3000, function() {
-				casper.echo("=========" +JSON.stringify(json["validInfo"][7]));
+				casper.echo("=========" +JSON.stringify(json["validInfo"][8]));
 			});
 		});
 	});*/
@@ -451,7 +469,9 @@ calendar.featureTest = function(casper, test, x) {
 			calendar.createEvent(response.data, casper, function() {
 				var responseData = response.data;
 				if(responseData.validationType == "Create event with Allday") {
-					casper.wait(3000, function() {
+
+				//put wait for 7 seconds to load page properly on beta server otherwise it throws an assertion error by taking wrong value for time i.e. "1468540800" instead of "15 July", but for live server it takes 3 seconds only to load
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithAllday.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
@@ -465,8 +485,7 @@ calendar.featureTest = function(casper, test, x) {
 					});
 					
 				}else if(responseData.validationType == "Create event with ranged date") {
-					casper.wait(3000, function() {
-						casper.capture(screenShotsDir+"rangedDate.png");
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithRangeddate.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
@@ -480,7 +499,7 @@ calendar.featureTest = function(casper, test, x) {
 						});
 					});
 				}else if(responseData.validationType == "Daily Recurssion") {
-					casper.wait(3000, function() {
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithDailyRecurssion.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
@@ -494,7 +513,7 @@ calendar.featureTest = function(casper, test, x) {
 						});
 					});
 				}else if(responseData.validationType == "Weekly Recurssion") {
-					casper.wait(3000, function() {
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithWeeklyRecurssion.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
@@ -508,7 +527,7 @@ calendar.featureTest = function(casper, test, x) {
 						});
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with Day Period") {
-					casper.wait(3000, function() {
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecDay.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
@@ -522,7 +541,7 @@ calendar.featureTest = function(casper, test, x) {
 						});
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with The Period") {
-					casper.wait(3000, function() {
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecThe.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
@@ -536,7 +555,7 @@ calendar.featureTest = function(casper, test, x) {
 						});
 					});
 				} else if(responseData.validationType == "Yearly Recurssion with Every Period") {
-					casper.wait(3000, function() {
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithYearlyRecEvery.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
@@ -550,9 +569,23 @@ calendar.featureTest = function(casper, test, x) {
 						});
 					});
 				} else if(responseData.validationType == "Yearly Recurssion with The Period") {
-					casper.wait(3000, function() {
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithYearlyRecThe.png");
+							calendar.gethrefofCreatedEvent(responseData, casper, function() {
+								casper.echo("href value is : "+ responseData.calender_href, "INFO");
+							});
+							casper.echo("*****************************************************************", "INFO");
+							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
+								this.click('a.btn.btn-sm.btn-primary');	
+							});
+
+						});
+					});
+				} else if(responseData.validationType == "Invalid Date of month") {
+					casper.wait(7000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithInvalidDateAllday.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
 								casper.echo("href value is : "+ responseData.calender_href, "INFO");
 							});
