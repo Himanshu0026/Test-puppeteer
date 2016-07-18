@@ -14,7 +14,6 @@ forumRegister.featureTest = function(casper, test) {
 
 	//Login To Forum BackEnd 
 	casper.start(config.backEndUrl, function() {
-		//test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 	});
 	
@@ -25,7 +24,6 @@ forumRegister.featureTest = function(casper, test) {
 	});
 	
 	//Clicking On "General" Tab Under Settings 
-	
 	casper.then(function() {
 		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
@@ -35,13 +33,11 @@ forumRegister.featureTest = function(casper, test) {
 	});
 	
 	//Getting Screenshot After Clicking On "General" Tab Under Settings 
-	
 	casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'forum_settings.png');
 	});
 	
 	//Getting 'User Accounts' Field Value, If, Enabled, Then Filling Data For Testing
-		
 	casper.then(function(){
 		test.assertExists('#REQreg');
 		utils.enableorDisableCheckbox('REQreg', true, casper, function() {
@@ -49,8 +45,12 @@ forumRegister.featureTest = function(casper, test) {
 		});
 	});
 		
+	casper.then(function(){
+		test.assertExists('.button.btn-m.btn-blue');
+		this.click('.button.btn-m.btn-blue');
+	});
+	
 	casper.thenOpen(config.url, function() {
-		//test.assertTitle('Automation Forum', this.getTitle());
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		test.assertExists('.pull-right a[href="/register/register"]');
 		this.click('.pull-right a[href="/register/register"]');
@@ -130,7 +130,6 @@ forumRegister.featureTest = function(casper, test) {
 				}
 
 				//Called Method For Verifying Error Messages
-
 				casper.wait('3000', function() {
 					if(errorMessage && errorMessage != "") {
 						verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
@@ -140,7 +139,6 @@ forumRegister.featureTest = function(casper, test) {
 		});
 		
 		//Handling 'Alert' While Submitting The Form
-
 		casper.on('remote.alert', function(message) {
 			var expectedErrorMsg = "Please provide a signature.";
 			test.assertEquals(message, expectedErrorMsg);
@@ -149,22 +147,18 @@ forumRegister.featureTest = function(casper, test) {
 	});
 			
 	//Fill Valid Data On Registration Form
-
 	casper.then(function() {
 		forumRegister.registerToApp(json['validInfo'], casper, function() {
-			//test.assertDoesntExist('form[action="/register/create_account"] button');
 			casper.echo('Processing to registration on forum.....', 'INFO');
 		});
 	});
 
 	//Getting Screenshot After Submitting 'Register' Form  
-
 	casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'register_submit.png');
 	});
 			
 	//Handling Logout And Redirecting To The Respective Page
-
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {});
 	});
@@ -177,9 +171,7 @@ forumRegister.registerWithSettings = function(casper, test) {
 	casper.echo('*************FULL NAME FIELD SETTINGS FROM BACKEND*******************');
 	
 	//Login To Forum BackEnd 
-	
 	casper.start(config.backEndUrl, function() {
-		//test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 	});
 	
@@ -190,7 +182,6 @@ forumRegister.registerWithSettings = function(casper, test) {
 	});
 	
 	//Clicking On 'Fields' Tab Under Users 
-	
 	casper.then(function() {
 		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
@@ -205,14 +196,12 @@ forumRegister.registerWithSettings = function(casper, test) {
 	});
 		
 	//Getting Screenshot After Clicking On "General" Tab Under Settings 
-	
 	casper.wait(5000,function(){
 		this.echo('Successfully Open Default Registration Options.....', 'INFO');
 		this.capture(screenShotsDir + 'Default_Registration_Options.png');
 	});
 	
 	//Set Different Value For 'Full Name' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
-	
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
 			var backurl = config.backEndUrl+ 'tool/members/mb/fields?action=default_registration_option';
@@ -273,7 +262,6 @@ forumRegister.registerWithSettings = function(casper, test) {
 	});
 	
 	//Set Different Value For 'Instant Messaging' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
-	
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
 			var backurl = config.backEndUrl+ 'tool/members/mb/fields?action=default_registration_option';
@@ -340,7 +328,6 @@ forumRegister.registerWithSettings = function(casper, test) {
 	});
 	
 	//Set Different Value For 'Birthday' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
-	
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
 			var backurl = config.backEndUrl+ 'tool/members/mb/fields?action=default_registration_option';
@@ -401,7 +388,6 @@ forumRegister.registerWithSettings = function(casper, test) {
 	});
 	
 	//Set Different Value For 'Signature' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
-	
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
 			var backurl = config.backEndUrl+ 'tool/members/mb/fields?action=default_registration_option';
@@ -457,7 +443,6 @@ forumRegister.registerWithSettings = function(casper, test) {
 	});
 	
 	//Handling 'Alert' While Submitting The Form
-	
 	casper.on('remote.alert', function(message) {
 		var expectedErrorMsg = "Please provide a signature.";
 		test.assertEquals(message, expectedErrorMsg);

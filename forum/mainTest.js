@@ -112,7 +112,27 @@ switch (feature) {
 		});
 	});
         break;
-   case "topic":
+        case "verifyCategoryPermissions":
+    	casper.test.begin('VERIFY CATEGORY PERMISSIONS TEST', function(test) {
+		var verifyCategoryPermissions = require("./testsuite/verifyCategoryPermissions.js");
+		verifyCategoryPermissions.featureTest(casper, test);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
+        break;
+        case "uploadAttachment":
+    	casper.test.begin('VERIFY UPLOAD ATTACHMENT TEST', function(test) {
+		var uploadAttachment = require("./testsuite/uploadAttachment.js");
+		uploadAttachment.featureTest(casper, test);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
+        break;
+	case "topic":
 	casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 
 		var newTopic = require("./testsuite/newTopic.js");

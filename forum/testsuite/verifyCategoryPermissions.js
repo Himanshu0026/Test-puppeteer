@@ -21,13 +21,39 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.start(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 		
 		//Login To Forum BackEnd 
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
 		});
+	});
+	
+	//Clicking On "General" Tab Under Settings 
+	casper.then(function() {
+		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+		test.assertExists('div#ddSettings a[href="/tool/members/mb/settings?tab=Display"]');
+		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Display"]');
+		this.echo('Successfully open forum settings form.....', 'INFO');
+	});
+	
+	//Getting Screenshot After Clicking On "Display" Tab Under Settings 
+	casper.wait(5000,function(){
+		this.capture(screenShotsDir + 'forum_settings.png');
+	});
+	
+	//Getting 'Show Private Forums' Field Value
+	casper.then(function(){
+		test.assertExists('#show_private_forums');
+		utils.enableorDisableCheckbox('show_private_forums', false, casper, function() {
+			casper.echo("Show Private Forums Has Been Disabled For Registered User", 'INFO');
+		});
+	});
+	
+	casper.then(function(){
+		test.assertExists('.button.btn-m.btn-blue');
+		this.click('.button.btn-m.btn-blue');
 	});
 	
 	//Clicking On 'Group Permissions' Link Under 'Users' Tab 
@@ -90,7 +116,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	// start from forum url
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		test.assertTitle('Automation Forum', 'page has the correct title');
 	});
 	
 	//Login To App
@@ -133,7 +158,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 		
 		//Login To Forum BackEnd 
@@ -202,7 +226,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	// start from forum url
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		test.assertTitle('Automation Forum', 'page has the correct title');
 	});
 	
 	//Clicking On 'Categories' Tab
@@ -223,16 +246,15 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	});
 	
 	casper.then(function() {
-		this.echo('                                      CASE 3                                                 ', 'INFO');
-		this.echo('************************************************************************************', 'INFO');
-		this.echo('DISABLE VIEW CATEGORY FOR  PENDING EMAIL VERIFICATION USER FROM GROUP PERMISSION', 'INFO');
-		this.echo('CHECK PERMISSION TO VIEW CATEGORY AFTER DISABLEING PERMISSION FOR PENDING EMAIL VERIFICATION USER', 'INFO');
-		this.echo('************************************************************************************', 'INFO');
+		casper.echo('                                      CASE 3                                                 ', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('DISABLE VIEW CATEGORY FOR  PENDING EMAIL VERIFICATION USER FROM GROUP PERMISSION', 'INFO');
+		casper.echo('CHECK PERMISSION TO VIEW CATEGORY AFTER DISABLEING PERMISSION FOR PENDING EMAIL VERIFICATION USER', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
 	});
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 		
 		//Login To Forum BackEnd 
@@ -301,7 +323,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	// start from forum url
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		test.assertTitle('Automation Forum', 'page has the correct title');
 	});
 	
 	//Login To App
@@ -341,7 +362,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 		
 		//Login To Forum BackEnd 
@@ -410,7 +430,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	// start from forum url
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		test.assertTitle('Automation Forum', 'page has the correct title');
 	});
 	
 	//Login To App
@@ -453,7 +472,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 		
 		//Login To Forum BackEnd 
@@ -522,7 +540,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	// start from forum url
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		test.assertTitle('Automation Forum', 'page has the correct title');
 	});
 	
 	//Clicking On 'Categories' Tab
@@ -552,7 +569,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 		
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 
 		//Login To Forum BackEnd 
@@ -627,7 +643,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	// start from forum url
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		test.assertTitle('Automation Forum', 'page has the correct title');
 	});
 	
 	//Clicking On 'Categories' Tab
@@ -656,7 +671,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 
 		//Login To Forum BackEnd 
@@ -725,7 +739,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	// start from forum url
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		test.assertTitle('Automation Forum', 'page has the correct title');
 	});
 	
 	//Login To App
@@ -768,7 +781,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 
 		//Login To Forum BackEnd 
@@ -843,7 +855,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	// start from forum url
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		test.assertTitle('Automation Forum', 'page has the correct title');
 	});
 	
 	//Login To App
@@ -885,7 +896,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 		
 		//Login To Forum BackEnd 
@@ -967,12 +977,11 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	// start from forum url
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		test.assertTitle('Automation Forum', 'page has the correct title');
 	});
 	
 	//Login To App
 	casper.then(function() {
-		forumLogin.loginToApp(topicJSON['newTopic'].username, topicJSON['newTopic'].password, casper, function() {
+		forumLogin.loginToApp('100', '1234', casper, function() {
 			casper.echo('User Has Been Successfuly Login To Application With Register User', 'INFO');
 		});
 	});
@@ -1003,40 +1012,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 		this.capture(screenShotsDir+ 'logout.png');
 	});
 
-	// start from forum url
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		test.assertTitle('Automation Forum', 'page has the correct title');
-	});
-	
-	//Login To App with other user
-	casper.then(function() {
-		forumLogin.loginToApp(topicJSON['newTopic'].username1, topicJSON['newTopic'].password1, casper, function() {
-			casper.echo('User Has Been Successfuly Login To Application With Register User', 'INFO');
-		});
-	});
-
-	//Getting Screenshot After Clicking On 'Log In' Link 
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'login.png');
-	});
-
-	// post reply on others Topic when permission false	
-	casper.then(function(){
-		this.click('form[name="posts"] h4 a');
-		this.wait(5000,function(){
-			test.assertDoesntExist('#message');
-			this.echo('Registered User Do Not Have Permission To Reply Post On Others Topic', 'INFO');
-		});
-	});
-	
-	//Logout From App
-	casper.then(function() {
-		forumLogin.logoutFromApp(casper, function() {
-			casper.echo('Successfully Logout From Application', 'INFO');
-		});
-	});
-	
 	casper.then(function() {
 		casper.echo('                                      CASE 10', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
@@ -1047,7 +1022,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 		
 		//Login To Forum BackEnd 
@@ -1129,7 +1103,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	// start from forum url
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		test.assertTitle('Automation Forum', 'page has the correct title');
 	});
 	
 	// post reply on own Topics when permission false	
@@ -1151,7 +1124,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 		
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 
 		//Login To Forum BackEnd 
@@ -1233,7 +1205,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	//Sstart From Forum URL
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		test.assertTitle('Automation Forum', 'page has the correct title');
 	});
 	
 	// post reply on own Topics when permission true	
@@ -1255,7 +1226,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 
 		//Login To Forum BackEnd 
@@ -1336,7 +1306,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('Automation Forum');
 		this.echo('Title Of The Page : ' +this.getTitle(), 'INFO');
 	});
 
@@ -1376,7 +1345,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 
 		//Login To Forum BackEnd 
@@ -1457,7 +1425,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('Automation Forum');
 		this.echo('Title Of The Page : ' +this.getTitle(), 'INFO');
 	});
 
@@ -1497,7 +1464,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 
 		//Login To Forum BackEnd 
@@ -1578,7 +1544,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('Automation Forum');
 		this.echo('Title Of The Page : ' +this.getTitle(), 'INFO');
 	});
 
@@ -1619,7 +1584,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 
 		//Login To Forum BackEnd 
@@ -1700,7 +1664,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('Automation Forum');
 		this.echo('Title Of The Page : ' +this.getTitle(), 'INFO');
 	});
 
@@ -1741,7 +1704,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 
 		//Login To Forum BackEnd 
@@ -1829,7 +1791,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('Automation Forum');
 		this.echo('Title Of The Page : ' +this.getTitle(), 'INFO');
 	});
 
@@ -1877,7 +1838,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 
 		//Login To Forum BackEnd 
@@ -1965,7 +1925,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('Automation Forum');
 		this.echo('Title Of The Page : ' +this.getTitle(), 'INFO');
 	});
 
@@ -2013,7 +1972,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 
 		//Login To Forum BackEnd 
@@ -2088,7 +2046,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('Automation Forum');
 		this.echo('Title Of The Page : ' +this.getTitle(), 'INFO');
 	});
 
@@ -2130,7 +2087,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 
 		//Login To Forum BackEnd 
@@ -2205,7 +2161,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('Automation Forum');
 		this.echo('Title Of The Page : ' +this.getTitle(), 'INFO');
 	});
 
