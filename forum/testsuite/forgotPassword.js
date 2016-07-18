@@ -11,7 +11,7 @@ forgotpwd.featureTest = function(casper, test) {
 	var screenShotsDir = config.screenShotsLocation + "forgotPwd/";
 	var ActualMessage="";
 
-	// this code is to lauch application to perform related actions
+	// this code is to launch application to perform related actions
 	casper.start(config.url, function() {
 		this.echo("Title of the page :"+this.getTitle());
 	});
@@ -221,15 +221,12 @@ forgotpwd.featureTest = function(casper, test) {
 					},function fail() {
 						test.assertEquals(ActualMessage.trim(), responseData.ExpectedMessage);
 						casper.capture(screenShotsDir+"Error_ValidEmailInvalidUsername.png");
-					});
-					
+					});	
 			  } 
 		
 		     });
 	       });
 	});
-
-
 };
 
 

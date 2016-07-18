@@ -85,7 +85,7 @@ switch (feature) {
 	case "registerWithSettings":
     	casper.test.begin('REGISTRATION WITH SETTINGS TEST', function(test) {
 		var forumRegister = require("./testsuite/register.js");
-		forumRegister.customFieldsTest(casper, test);
+		forumRegister.registerWithSettings(casper, test);
 		casper.run(function(){
 			test.done();
 			test.assert(true);
@@ -130,7 +130,7 @@ switch (feature) {
 
 		var postAReply = require("./testsuite/postAReply.js");
 		var x = require('casper').selectXPath;
-		postAReply.featureTest(casper, casper.test, x);
+		postAReply.postAReplyFeature(casper, casper.test, x);
 		casper.run(function(){
 			test.done();
 		});
@@ -226,11 +226,25 @@ case "deletetopic":
 		});
 	});
         break;
+	case "hidecategory" :
+		 casper.test.begin('Verify hide/un-hide category functionlity ', function(test) {
+		 var hideCategory = require("./testsuite/hideCategory.js");
+		 var x = require('casper').selectXPath;
+		 hideCategory.hideCategoryFeature(casper, casper.test, x);
+		 casper.run(function(){
+			test.done();
+		});
+	});
+        break;
 
     default:
 	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
         casper.echo("Options:");
 	casper.echo("	register");
+	casper.echo("	registerWithSettings");
+	casper.echo("	inContextRegistration");
+	casper.echo("	backEndRegistration");
+	casper.echo("	verifyCategoryPermissions");
 	casper.echo("	login");
 	casper.echo("	topic");
 	casper.echo("	postreply\n");

@@ -586,9 +586,6 @@ var gotoNewTopicpage = function(driver, callback) {
 // method for goto New Topic page to application
 
 var postTopicpage = function(data, driver, callback) {
-	casper.echo("data.title : "+data.title, 'INFO');
-	casper.echo("data.content : "+data.content, 'INFO');
-	casper.echo("data.category : "+data.category, 'INFO');
 	driver.sendKeys('input[name="subject"]', data.title, {reset:true});
 	 driver.withFrame('message_ifr', function() {
 		this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
@@ -596,12 +593,15 @@ var postTopicpage = function(data, driver, callback) {
  		this.sendKeys('#tinymce', data.content);
 		this.capture(screenShotsDir+ 'content.png');	
 	});	
-		driver.wait(3000);
-		driver.click('#all_forums_dropdown');
-		driver.fill('form[name="PostTopic"]',{
-			'forum' : data.category
-		},false);
+		driver.then(function() {
+			driver.click('#all_forums_dropdown');
+			var val = this.fetchText('#all_forums_dropdown option[value="537762"]');
+			driver.fill('form[name="PostTopic"]',{
+				'forum' : val.trim()
+			},false);
 	
+		});	
+		
 	//code for open insert image model
 
 	/*driver.click('#insert_image_dialog_');

@@ -286,8 +286,9 @@ var gotoNewTopic = function(data, driver, callback) {
 		});	
 		driver.wait(3000, function() {
 			this.click('#all_forums_dropdown');
+			var val = this.fetchText('#all_forums_dropdown option[value="537762"]');
 			this.fill('form[name="PostTopic"]',{
-				'forum' : data.category
+				'forum' : val.trim()
 			},false);
 			this.capture(screenShotsDir+ 'fillTopic.png');
 		});

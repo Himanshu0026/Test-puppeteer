@@ -72,9 +72,11 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			this.capture(screenShotsDir+ 'category.png');
 		});
 		casper.then(function() {
-			test.assertExists('h3 a[href="/?forum=517180"]');
+			var classVal = x("//h3/a/span/parent::a");
+			var href = this.getElementAttribute(classVal, "href");
+			test.assertExists('h3 a[href="'+href+'"]');
 			casper.echo('---------------------------------------------------------------------------');
-			this.click('h3 a[href="/?forum=517180"]');
+			this.click('h3 a[href="'+href+'"]');
 		});
 		casper.wait(7000, function() {
 			this.capture(screenShotsDir+ 'categoryTopicList.png');
@@ -150,23 +152,25 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			});
 		});
 		casper.then(function() {
-		
-			var postTitle = json['lock/unLock'].topicTitle;
-			casper.echo('lock topic title : ' +postTitle, 'INFO');
-			var classVal = x("//a[text()='"+postTitle+"']"); 
-			selectTopic(classVal, 'lock', casper, function() {});
-	
+			if(this.exists('div.alert-info')){
+				var warningMsg = this.fetchText('div.alert-info');
+				test.assertEquals(warningMsg.trim(), json['pin/unPin'].warningMessage, warningMsg.trim()+' and verified warning message');
+			} else {
+				var postTitle = json['lock/unLock'].topicTitle;
+				casper.echo('lock topic title : ' +postTitle, 'INFO');
+				var classVal = x("//a[text()='"+postTitle+"']"); 
+				selectTopic(classVal, 'lock', casper, function() {});
+				//verify lock topic
+				casper.then(function() {
+					var postTitle = json['lock/unLock'].topicTitle;
+					casper.echo('lock topic title : ' +postTitle, 'INFO');
+					test.assertExists(x("//a[text()='"+postTitle+"']/following::span/i")); 
+					casper.echo('---------------------------------------------------------------------------');
+					casper.echo('lock topic is verified', 'INFO');
+					casper.echo('---------------------------------------------------------------------------');
+				});
+			}
 		});
-	});
-
-	//verify lock topic
-	casper.then(function() {
-		var postTitle = json['lock/unLock'].topicTitle;
-		casper.echo('lock topic title : ' +postTitle, 'INFO');
-		test.assertExists(x("//a[text()='"+postTitle+"']/following::span/i")); 
-		casper.echo('---------------------------------------------------------------------------');
-		casper.echo('lock topic is verified', 'INFO');
-		casper.echo('---------------------------------------------------------------------------');
 	});
 
 	/*****Lock any topic from post page and verify locked message*****/
@@ -203,7 +207,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 				this.capture(screenShotsDir+ 'clickLockTopic.png');	
 			});
 		});
-		
+		casper.reload();
 		casper.then(function() {
 			test.assertExists('.alert-warning');
 			casper.echo('---------------------------------------------------------------------------');
@@ -275,23 +279,27 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 		});
 
 		casper.then(function() {
-			var postTitle = json['lock/unLock'].topicTitle;
-			casper.echo('un-lock topic title : ' +postTitle, 'INFO');
-			var classVal = x("//a[text()='"+postTitle+"']"); 
-			selectTopic(classVal, 'unlock', casper, function() {});
-	
+			if(this.exists('div.alert-info')){
+				var warningMsg = this.fetchText('div.alert-info');
+				test.assertEquals(warningMsg.trim(), json['pin/unPin'].warningMessage, warningMsg.trim()+' and verified warning message');
+			} else {
+				var postTitle = json['lock/unLock'].topicTitle;
+				casper.echo('un-lock topic title : ' +postTitle, 'INFO');
+				var classVal = x("//a[text()='"+postTitle+"']"); 
+				selectTopic(classVal, 'unlock', casper, function() {});
+				//verify un-lock topic
+				casper.then(function() {
+					var postTitle = json['lock/unLock'].topicTitle;
+					casper.echo('un-lock topic title : ' +postTitle, 'INFO');
+					test.assertDoesntExist(x("//a[text()='"+postTitle+"']/following::span/i[@class='glyphicon-lock']")); 
+					casper.echo('un-lock topic is verified', 'INFO');
+					casper.echo('---------------------------------------------------------------------------');
+				});
+			}		
 		});
 	});
 
-	//verify un-lock topic
-	casper.then(function() {
-		var postTitle = json['lock/unLock'].topicTitle;
-		casper.echo('un-lock topic title : ' +postTitle, 'INFO');
-		test.assertDoesntExist(x("//a[text()='"+postTitle+"']/following::span/i[@class='glyphicon-lock']")); 
-		casper.echo('un-lock topic is verified', 'INFO');
-		casper.echo('---------------------------------------------------------------------------');
-	});
-
+	
 	/*****UnLock any locked  topic from post page and verify that the locked message should be disappeared*****/
 	casper.then(function() {
 		casper.echo('UnLock any locked  topic from post page and verify that the locked message should be disappeared', 'INFO');
@@ -305,19 +313,19 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			casper.echo('---------------------------------------------------------------------------');
 		});
 
-		//Logout(Admin) From App
-		this.then(function() {
-			forumLogin.logoutFromApp(casper, function() {
-				casper.echo('Successfully logout from application', 'INFO');
-			});
-		});
-
-		//Getting Screenshot After Clicking On 'Logout' Link
-		this.wait(7000, function() {
-			this.capture(screenShotsDir+ 'logout.png');
-		});		
-				
 	});
+
+	//Logout(Admin) From App
+	casper.then(function() {
+		forumLogin.logoutFromApp(casper, function() {
+			casper.echo('Successfully logout from application', 'INFO');
+		});
+	});
+
+	//Getting Screenshot After Clicking On 'Logout' Link
+	casper.wait(7000, function() {
+		this.capture(screenShotsDir+ 'logout.png');
+	});	
 	return callback();
 };
 

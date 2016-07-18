@@ -4,6 +4,7 @@
 
 var forumRegister = require('./register.js');
 var forumLogin = require('./forum_login.js');
+var viewCalendarEvent = require('./viewCalendarEvent.js');
 var utils = require('./utils.js');
 var fs = require('fs');
 var filePath = './testdata/calendarData.json';
@@ -37,16 +38,20 @@ calendar.featureTest = function(casper, test, x) {
 	//login to backend app by call login function
 	casper.then(function() {
 
-		forumRegister.loginToForumBackEnd(casper, config["backendCred"], function() {
-			casper.echo(config["backendCred"].uname +"*******"+config["backendCred"].upass);
-			casper.echo('Successfully login on forum back end....', 'info');
+		forumRegister.loginToForumBackEnd(casper, test, function() {
+			casper.wait(3000, function(){
+				casper.echo(config["backendCred"].uname +"******* "+config["backendCred"].upass);
+				casper.echo('Successfully login on forum back end....', 'info');
+			});
 		});
 	});
 	
 	// test case to disable calander checkbox from GEneral SEttings page
 	casper.then(function() {
 		calendar.gotoGeneralSettingspage(casper, function(){
-			casper.echo("Navigated to General Settings page");
+			casper.wait(3000, function() {
+				casper.echo("Navigated to General Settings page");
+			});
 		});
 		this.waitForSelector('#enable_calendar', function() {
 			utils.enableorDisableCheckbox('enable_calendar', false, casper, function() {
@@ -99,6 +104,24 @@ calendar.featureTest = function(casper, test, x) {
 			this.capture(screenShotsDir+'checkedScreen.png');
 			test.assert(this.evaluate(function () {return document.getElementById('enable_calendar').checked;}));
 		});
+		this.waitForSelector('a[data-tooltip-elm="ddSettings"]', function() {
+			this.click('a[data-tooltip-elm="ddSettings"]');
+		});
+		this.waitForSelector('a[href="/tool/members/mb/settings?tab=Display"]', function() {
+			this.click('a[href="/tool/members/mb/settings?tab=Display"]');
+		});
+		this.waitForSelector('select[name="display_time"]', function() {
+			this.click('select[name="display_time"]');
+			this.evaluate(function() {
+   				$('select[name="display_time"]').val('2').change();
+			});
+		});
+		this.waitForSelector('button[type="submit"]', function(){
+			this.click('button[type="submit"]');
+		});
+		this.wait(5000, function() {
+			this.capture(screenShotsDir+'timeformat.png');
+		});
 	});
 
 	//enable all calendar related settings from user group permission for registered user
@@ -143,6 +166,7 @@ calendar.featureTest = function(casper, test, x) {
 				var updationMsg = this.fetchText('p[align="center"]');
 				test.assertEquals(updationMsg, 'Your user group settings have been updated.');
 				this.capture(screenShotsDir+'updateCalendarpermission.png');
+				casper.echo("*****************************************************************", "INFO");
 			});
 		});
 
@@ -161,6 +185,7 @@ calendar.featureTest = function(casper, test, x) {
 				var highlightedDate = this.fetchText('td.this-day div span a');
 				casper.echo("*** today's date *** "+highlightedDate);
 				test.assertEquals(highlightedDate.trim(), moment().date().toString());
+				casper.echo("*****************************************************************", "INFO");
 			});
 		});
 	});
@@ -182,6 +207,7 @@ calendar.featureTest = function(casper, test, x) {
 				casper.echo("*** Current years is *** : "+year);
 				test.assertEquals(year.trim(), (moment().year()).toString());
 				this.capture(screenShotsDir+'calendarview_year.png');
+				casper.echo("*****************************************************************", "INFO");
 
 				//verify next year after clicking on next year arrow
 				this.click('a[data-original-title="Next Year"]');
@@ -189,7 +215,8 @@ calendar.featureTest = function(casper, test, x) {
 					casper.echo((moment().year()+1));
 					var year = this.fetchText('form[action="/calendar/display"] div a');
 					casper.echo("*** next years is *** : "+year);
-					test.assertEquals(year.trim(), (moment().year()+1).toString());					
+					test.assertEquals(year.trim(), (moment().year()+1).toString());	
+					casper.echo("*****************************************************************", "INFO");				
 				});
 
 				//verify previous year after clicking on previous year icon
@@ -201,11 +228,12 @@ calendar.featureTest = function(casper, test, x) {
 						test.assertEquals(year.trim(), (moment().year()).toString());
 
 						//verify today's calendar by clicking on Today option
-						this.click('a.btn.btn-default');
+						this.click('a.btn.btn-default[href^="/calendar?"]');
 						this.wait(3000, function() {
 							var highlightedDate = this.fetchText('td.this-day div span a');
 							casper.echo("*** today's date *** "+highlightedDate);
 							test.assertEquals(highlightedDate.trim(), moment().date().toString());
+							casper.echo("*****************************************************************", "INFO");
 						});
 					
 					});
@@ -215,7 +243,7 @@ calendar.featureTest = function(casper, test, x) {
 		});
 	});
 
-
+	//Verify Weekly view of the calendar
 	casper.then(function() {
 		this.waitForSelector('#weeklyView', function() {
 			this.click('#weeklyView');
@@ -239,6 +267,7 @@ calendar.featureTest = function(casper, test, x) {
 				casper.echo("*** Current month is *** : "+month);
 				test.assertEquals(month, (moment.months(moment().month())+' '+moment().year()));
 				this.capture(screenShotsDir+'calendarview_month.png');
+				casper.echo("*****************************************************************", "INFO");
 
 				//verify next month after clicking on next month arrow
 				this.click('a[data-original-title="Next Month"]');
@@ -247,7 +276,8 @@ calendar.featureTest = function(casper, test, x) {
 					var next_month = this.fetchText('form[action="/calendar/display"] div a');
 					next_month = (next_month.replace(year, '')).trim()+' ' +year.trim();
 					casper.echo("*** next month is *** : "+next_month);
-					test.assertEquals(month, (moment.months(moment().month())+' '+moment().year()));					
+					test.assertEquals(month, (moment.months(moment().month())+' '+moment().year()));	
+					casper.echo("*****************************************************************", "INFO");				
 				});
 
 				//verify previous month after clicking on previous month icon
@@ -258,7 +288,8 @@ calendar.featureTest = function(casper, test, x) {
 						prev_month = (prev_month.replace(year, '')).trim()+' ' +year.trim();
 						casper.echo("*** previous month is *** : "+prev_month);
 						test.assertEquals(month, (moment.months(moment().month())+' '+moment().year()));
-						this.click('a.btn.btn-default');
+						this.click('a.btn.btn-default[href^="/calendar?"]');
+						casper.echo("*****************************************************************", "INFO");
 					
 					});
 				});
@@ -284,112 +315,112 @@ calendar.featureTest = function(casper, test, x) {
 						casper.echo("Error message in case of blank title is : "+casper.fetchText('div.alert.alert-danger'));
 						casper.capture(screenShotsDir+'createEventablankTitle.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("****************************************************************************", "INFO");
 					});
 					
 				}else if(responseData.validationType == "Blank Description") {
 					casper.wait(3000, function() {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
-						casper.echo("Error message in case of blank description is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.echo("Error message in case of blank description is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEventBlankdesc.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Allday with Previous Date") {
 					casper.wait(3000, function() {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
-						casper.echo("Error message for allDay with Previous date is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.echo("Error message for allDay with Previous date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEventallDay_prevDate.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Start date greater than end Date") {
 					casper.wait(3000, function() {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
-						casper.echo("Error message for end date older than Start date is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.echo("Error message for end date older than Start date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_greaterStartDate.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Start date older than current Date") {
 					casper.wait(3000, function() {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
-						casper.echo("Error message for Start date older than current Date is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.echo("Error message for Start date older than current Date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_OldCurrentDate.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Daily Recurssion with blank day") {
 					casper.wait(3000, function() {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
-						casper.echo("Error message for Start date older than current Date is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.echo("Error message for Start date older than current Date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_DailywithBlankDay.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Weekly Recurssion with blank day") {
 					casper.wait(3000, function() {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
-						casper.echo("Error message for Start date older than current Date is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.echo("Error message for Start date older than current Date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_WeeklywithBlankDay.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Weekly Recurssion with current date but passed time") {
 					casper.wait(3000, function() {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
-						casper.echo("Error message for Weekly Recurssion with current date but passed time is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.echo("Error message for Weekly Recurssion with current date but passed time is : "+casper.fetchText('div.alert.alert-danger') , "INFO");
 						casper.capture(screenShotsDir+'createEvent_WeeklywithcurrentDaypassedTime.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Weekly Recurssion without selecting Weekday") {
 					casper.wait(3000, function() {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
-						casper.echo("Error message for Weekly Recurssion without selecting Weekday is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.echo("Error message for Weekly Recurssion without selecting Weekday is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_WeeklywithoutWeekday.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with blank day") {
 					casper.wait(3000, function() {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
-						casper.echo("Error message for Monthly Recurssion with blank day is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.echo("Error message for Monthly Recurssion with blank day is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_MonthlywithBlankDay.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("***************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with blank months") {
 					casper.wait(3000, function() {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
-						casper.echo("Error message for Monthly Recurssion with blank months is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.echo("Error message for Monthly Recurssion with blank months is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_MonthlywithBlankmonths.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("**************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with less than 1 months") {
 					casper.wait(3000, function() {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
-						casper.echo("Error message for Monthly Recurssion with less than 1 months is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.echo("Error message for Monthly Recurssion with less than 1 months is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_Monthlyless1month.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with The Period with blank months") {
 					casper.wait(3000, function() {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
-						casper.echo("Error message for Monthly Recurssion with The Period with blank months is : "+casper.fetchText('div.alert.alert-danger'));
+						casper.echo("Error message for Monthly Recurssion with The Period with blank months is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_MonthlyTheperiodBlankmonths.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Yearly Recurssion with Every Period with blank years") {
 					casper.wait(3000, function() {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
-						casper.echo("Error message for Yearly Recurssion with Every Period with blank years : "+casper.fetchText('div.alert.alert-danger'));
+						casper.echo("Error message for Yearly Recurssion with Every Period with blank years : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_Yearly_blankyears.png');
 						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
-						casper.echo("-----------------------------------------------------------------");
+						casper.echo("****************************************************************************", "INFO");
 					});
 				}
 			});
@@ -405,6 +436,26 @@ calendar.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.url+'calendar/', function(){
 		casper.echo("current page title is "+this.getTitle());
 	});
+	/*casper.then(function() {
+		this.waitForSelector('a.btn.btn-sm.btn-primary', function() {
+			this.click('a.btn.btn-sm.btn-primary');	
+		});
+		calendar.createEvent(json["validInfo"][8], casper, function() {
+				//var responseData = response.data;
+			casper.wait(10000, function() {
+				casper.capture(screenShotsDir+"ThePeriod.png");
+				calendar.verifyCreatedEvent(json["validInfo"][8], casper, function(){
+					casper.capture(screenShotsDir+"CreateEventwithYearlyrecThePeriod.png");
+					calendar.gethrefofCreatedEvent(json["validInfo"][8], casper, function() {
+						casper.echo("href value is : "+ json["validInfo"][8].calender_href, "INFO");
+					});
+				});
+			});
+			casper.wait(3000, function() {
+				casper.echo("=========" +JSON.stringify(json["validInfo"][8]));
+			});
+		});
+	});*/
 	
 	//Create event with all valid scenarios and verify all details on the event page
 	casper.then(function() {
@@ -418,13 +469,15 @@ calendar.featureTest = function(casper, test, x) {
 			calendar.createEvent(response.data, casper, function() {
 				var responseData = response.data;
 				if(responseData.validationType == "Create event with Allday") {
-					casper.wait(3000, function() {
+
+				//put wait for 7 seconds to load page properly on beta server otherwise it throws an assertion error by taking wrong value for time i.e. "1468540800" instead of "15 July", but for live server it takes 3 seconds only to load
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithAllday.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
 								casper.echo("href value is : "+ responseData.calender_href, "INFO");
 							});
-							casper.echo("-----------------------------------------------------------------");
+							casper.echo("*****************************************************************", "INFO");
 							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 								this.click('a.btn.btn-sm.btn-primary');	
 							});
@@ -432,14 +485,13 @@ calendar.featureTest = function(casper, test, x) {
 					});
 					
 				}else if(responseData.validationType == "Create event with ranged date") {
-					casper.wait(3000, function() {
-						casper.capture(screenShotsDir+"rangedDate.png");
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithRangeddate.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
 								casper.echo("href value is : "+ responseData.calender_href, "INFO");
 							});
-							casper.echo("-----------------------------------------------------------------");
+							casper.echo("*****************************************************************", "INFO");
 							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 								this.click('a.btn.btn-sm.btn-primary');	
 							});
@@ -447,13 +499,13 @@ calendar.featureTest = function(casper, test, x) {
 						});
 					});
 				}else if(responseData.validationType == "Daily Recurssion") {
-					casper.wait(3000, function() {
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithDailyRecurssion.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
 								casper.echo("href value is : "+ responseData.calender_href, "INFO");
 							});
-							casper.echo("-----------------------------------------------------------------");
+							casper.echo("*****************************************************************", "INFO");
 							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 								this.click('a.btn.btn-sm.btn-primary');	
 							});
@@ -461,41 +513,83 @@ calendar.featureTest = function(casper, test, x) {
 						});
 					});
 				}else if(responseData.validationType == "Weekly Recurssion") {
-					casper.wait(3000, function() {
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithWeeklyRecurssion.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
 								casper.echo("href value is : "+ responseData.calender_href, "INFO");
 							});
-							casper.echo("-----------------------------------------------------------------");
+							casper.echo("*****************************************************************", "INFO");
 							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 								this.click('a.btn.btn-sm.btn-primary');	
 							});
 
 						});
 					});
-				} if(responseData.validationType == "Monthly Recurssion with Day Period") {
-					casper.wait(3000, function() {
+				} else if(responseData.validationType == "Monthly Recurssion with Day Period") {
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecDay.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
 								casper.echo("href value is : "+ responseData.calender_href, "INFO");
 							});
-							casper.echo("-----------------------------------------------------------------");
+							casper.echo("*****************************************************************", "INFO");
 							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 								this.click('a.btn.btn-sm.btn-primary');	
 							});
 
 						});
 					});
-				} if(responseData.validationType == "Monthly Recurssion with The Period") {
-					casper.wait(3000, function() {
+				} else if(responseData.validationType == "Monthly Recurssion with The Period") {
+					casper.wait(7000, function() {
 						calendar.verifyCreatedEvent(responseData, casper, function(){
 							casper.capture(screenShotsDir+"CreateEventwithMonthlyRecThe.png");
 							calendar.gethrefofCreatedEvent(responseData, casper, function() {
 								casper.echo("href value is : "+ responseData.calender_href, "INFO");
 							});
-							casper.echo("-----------------------------------------------------------------");
+							casper.echo("*****************************************************************", "INFO");
+							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
+								this.click('a.btn.btn-sm.btn-primary');	
+							});
+
+						});
+					});
+				} else if(responseData.validationType == "Yearly Recurssion with Every Period") {
+					casper.wait(7000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithYearlyRecEvery.png");
+							calendar.gethrefofCreatedEvent(responseData, casper, function() {
+								casper.echo("href value is : "+ responseData.calender_href, "INFO");
+							});
+							casper.echo("*****************************************************************", "INFO");
+							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
+								this.click('a.btn.btn-sm.btn-primary');	
+							});
+
+						});
+					});
+				} else if(responseData.validationType == "Yearly Recurssion with The Period") {
+					casper.wait(7000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithYearlyRecThe.png");
+							calendar.gethrefofCreatedEvent(responseData, casper, function() {
+								casper.echo("href value is : "+ responseData.calender_href, "INFO");
+							});
+							casper.echo("*****************************************************************", "INFO");
+							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
+								this.click('a.btn.btn-sm.btn-primary');	
+							});
+
+						});
+					});
+				} else if(responseData.validationType == "Invalid Date of month") {
+					casper.wait(7000, function() {
+						calendar.verifyCreatedEvent(responseData, casper, function(){
+							casper.capture(screenShotsDir+"CreateEventwithInvalidDateAllday.png");
+							calendar.gethrefofCreatedEvent(responseData, casper, function() {
+								casper.echo("href value is : "+ responseData.calender_href, "INFO");
+							});
+							casper.echo("*****************************************************************", "INFO");
 							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
 								this.click('a.btn.btn-sm.btn-primary');	
 							});
@@ -576,7 +670,7 @@ calendar.featureTest = function(casper, test, x) {
 							test.assertDoesntExist('a[href="'+event_href+'"]');
 						});
 					});
-					casper.echo("-----------------------------------------------------------------");
+					casper.echo("*****************************************************************", "INFO");
 				});
 			});
 
@@ -586,11 +680,12 @@ calendar.featureTest = function(casper, test, x) {
 	});
 
 	
-
-
-
-
-
+	casper.then(function() {
+			viewCalendarEvent.viewCalendarEventFeature(casper,test, x, function(){
+				casper.echo('VERIFY EVENT LINK IN CALENDAR AND VIEW CALENDAR EVENT WITH RECURSION DATE', 'INFO');
+				casper.echo("*************************************************************************", "INFO");
+			});
+		});
 
 
 };
@@ -633,7 +728,6 @@ calendar.createEvent = function(data, driver, callback) {
  		this.sendKeys('#tinymce', data.description);	
 	});
 	driver.wait(3000, function() {
-		casper.capture(screenShotsDir+"sangita123.png");
 		if (data.Allday){
 			utils.enableorDisableCheckbox('allDay', true, driver, function() {
 				casper.echo("Allday checkbox has been enabled", 'info');
@@ -718,10 +812,11 @@ calendar.createEvent = function(data, driver, callback) {
 						driver.sendKeys('input[name="monthlybox"]', data.months, {reset:true} );
 					break;
 					case "The" :
+						
 						driver.click('#rb_pattern_5');
 						this.click('select[name="monthlycombo2"]');
 						this.fill('form#PostCalEvent',{
-						'monthlycombo2' : data.monthlycombo   //need to pass like 'First' or 'Second' in the field
+						'monthlycombo2' : data.monthlycombo
 						},false);
 
 						this.click('select[name="monthlycombo3"]');
@@ -742,20 +837,20 @@ calendar.createEvent = function(data, driver, callback) {
 						this.fill('form#PostCalEvent',{
 						'yearlycombo' : data.monthname
 						},false);
-						driver.sendKeys('input[name="yearly_dailybox"]', data.years, {reset:true} );
+						driver.sendKeys('input[name="yearly_dailybox"]', data.monthday, {reset:true} );
 					break;
 					case "The" :
 						driver.click('#rb_pattern_7');
 						this.click('select[name="yearlycombo3"]');
 						this.fill('form#PostCalEvent',{
-						'yearlycombo3' : data.yearlycombo   //need to pass like 'First' or 'Second' in the field
+						'yearlycombo3' : data.yearlycombo 
 						},false);
 
 						this.click('select[name="yearlycombo4"]');
 						this.fill('form#PostCalEvent',{
-						'monthlycombo3' : data.weekday
+						'yearlycombo4' : data.weekday
 						},false);
-
+	
 						this.click('select[name="yearlycombo5"]');
 						this.fill('form#PostCalEvent',{
 						'yearlycombo5' : data.monthname
@@ -819,8 +914,21 @@ calendar.verifyCreatedEvent = function(data, driver, callback) {
 					var inputData = 'This event occurs on day '+data.days+' of every '+ data.months + ' month(s)';
 					driver.test.assertEquals(rec_msg.trim(), inputData, 'Reccursion message for monthly event with "Day" period is verified');
 				} else if (data.rec_monthly == "The") {
+					var monthlycombo;
+					if(data.monthlycombo == "1") {
+						monthlycombo = "First";
+					} else if(data.monthlycombo == "2") {
+						monthlycombo = "Second";
+					} else if(data.monthlycombo == "3") {
+						monthlycombo = "Third";
+					} else if(data.monthlycombo == "4") {
+						monthlycombo = "Fourth";
+					} else if(data.monthlycombo == "5") {
+						monthlycombo = "Last";
+					} 
+
 					var rec_msg = driver.fetchText('span small[class="text-muted"]');
-					var inputData = 'This event occurs on the '+data.monthlycombo +' '+data.weekday+' of every '+ data.months + ' month(s)';
+					var inputData = 'This event occurs on the '+monthlycombo +' '+data.weekday+' of every '+ data.months + ' month(s)';
 					driver.test.assertEquals(rec_msg.trim(), inputData, 'Reccursion message for monthly event with "The" period is verified');
 				}
 			break;
@@ -828,9 +936,25 @@ calendar.verifyCreatedEvent = function(data, driver, callback) {
 				if (data.rec_yearly == "Every") {
 					var rec_msg = driver.fetchText('span small[class="text-muted"]');
 					casper.echo(rec_msg);
-				} else if (data.rec_yearly == "The") {
+					var inputData = 'This event occurs every '+data.monthname+' '+ data.monthday;
+					driver.test.assertEquals(rec_msg.trim(), inputData, 'Reccursion message for Yearly event with "Every" period is verified');
+				}else if (data.rec_yearly == "The") {
+					var yearlycombo;
+					if(data.yearlycombo == "1") {
+						yearlycombo = "First";
+					} else if(data.yearlycombo == "2") {
+						yearlycombo = "Second";
+					} else if(data.yearlycombo == "3") {
+						yearlycombo = "Third";
+					} else if(data.yearlycombo == "4") {
+						yearlycombo = "Fourth";
+					} else if(data.yearlycombo == "5") {
+						yearlycombo = "Last";
+					} 
 					var rec_msg = driver.fetchText('span small[class="text-muted"]');
 					casper.echo(rec_msg);
+					var inputData = 'This event occurs on every '+yearlycombo+' '+ data.weekday+ ' of '+data.monthname;
+					driver.test.assertEquals(rec_msg.trim(), inputData, 'Reccursion message for Yearly event with "The" period is verified');
 				}
 			break;
 	
@@ -889,7 +1013,7 @@ calendar.updateCalendarSettings = function(x, checkbox_id, status, driver, callb
 				this.test.assertExists('p[align="center"]');
 				var updationMsg = this.fetchText('p[align="center"]');
 				this.test.assertEquals(updationMsg, 'Your user group settings have been updated.');
-				casper.echo("-------------------------------------------------------------------------");
+				casper.echo("******************************************************************");
 			});
 		});
 
@@ -897,7 +1021,6 @@ calendar.updateCalendarSettings = function(x, checkbox_id, status, driver, callb
 	return callback();
 
 };
-
 
 
 

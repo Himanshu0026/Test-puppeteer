@@ -12,9 +12,15 @@ var screenShotsDir = config.screenShotsLocation + 'backEndRegister/';
 backEndForumRegister.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
+	casper.start(config.backEndUrl, function() {
+		//test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
 	
-	forumRegister.loginToForumBackEnd(casper, test, function() {
-		casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+	casper.then(function() {
+		forumRegister.loginToForumBackEnd(casper, test, function() {
+			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+		});
 	});
 	
 	//Clicking On 'New User' Tab Under Users 
@@ -27,13 +33,11 @@ backEndForumRegister.featureTest = function(casper, test) {
 	});
 	
 	//Getting Screenshot After Clicking On "New User" Tab Under Users 
-	
 	casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'forum_newUser.png');
 	});
 	
 	//Fill Invalid Data For User Registration And Handle Errors 
-	
 	casper.then(function() {
 		this.eachThen(backEndRegisterJSON['invalidInfo'], function(response) {
 			casper.log('Response Data : ' +JSON.stringify(response.data), 'INFO');
@@ -119,7 +123,6 @@ var redirectToBackEndLogout = function(driver, test, callback) {
 		var errorMessage = driver.fetchText('div.ui-dialog div[id^="ui-id-"]');
 		var expectedErrorMsg = "There is already a user registered with the username ";
 		test.assert(errorMessage.indexOf(expectedErrorMsg) > -1);
-		driver.echo('USER ALREADY REGISTERED ON FORUM BACK END.....', 'INFO');
 	} catch(e) {
 		test.assertDoesntExist('div.ui-dialog');
 		test.assertDoesntExist('.tooltip p');
@@ -139,4 +142,10 @@ var verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver) 
 	driver.echo('expectedErrorMsg : ' +expectedErrorMsg, 'INFO');
 	driver.test.assert(errorMessage.indexOf(expectedErrorMsg) > -1);
 	driver.capture(screenShotsDir + 'Error_RegisterWith' +msgTitle+ '.png');
+	try {
+		driver.test.assertExists('div.ui-dialog');
+		driver.click('button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only');
+	} catch(e) {
+		driver.test.assertDoesntExist('div.ui-dialog');
+	}
 };

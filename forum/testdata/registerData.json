@@ -73,7 +73,7 @@
     
     {
     	"uname" : "shipra",
-        "uemail" : "35asasa@wt.com",
+        "uemail" : "45fdf4@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",
@@ -86,8 +86,8 @@
     },
     
     {
-    	"uname" : "jhgsdgdg",
-        "uemail" : "18@wt.com",
+    	"uname" : "jhgsdddgdg",
+        "uemail" : "35asasa@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",
@@ -95,12 +95,12 @@
         "usignature" : "This is my signature 18",
         "namePrivate" : true,
         "errorType" : "existWithEmail",
-        "expectedErrorMsg" : "Error: It looks like you are already registered"
+        "expectedErrorMsg" : "Error: It looks like you already have a forum account!"
     },
     
     {
-    	"uname" : "356",
-        "uemail" : "356@wt.com",
+    	"uname" : "100",
+        "uemail" : "100@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",
@@ -112,8 +112,8 @@
     },
     
     {
-    	"uname" : "35",
-        "uemail" : "35@wt.com",
+    	"uname" : "35ddf",
+        "uemail" : "35wew@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",
@@ -125,7 +125,7 @@
     },
     
     {
-        "uname" : "invalid_email",
+        "uname" : "invalid_emailk",
         "uemail" : "aaaaa",
         "upass" : "1234",
         "fullName" : "Invalid Email",
@@ -138,8 +138,8 @@
     }],
     
     "validInfo" : {
-    	"uname" : "105",
-        "uemail" : "105@wt.com",
+    	"uname" : "800",
+        "uemail" : "800@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",
@@ -147,11 +147,6 @@
         "usignature" : "This is my signature 18",
         "namePrivate" : true,
         "expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
-    },
-    
-    "backEndInfo" : {
-    	"uname" : "automation",
-    	"upass" : "test"
     },
     
     "setValueOnRegister" : [{

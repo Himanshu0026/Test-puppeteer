@@ -36,26 +36,121 @@ moveTopic.moveTopicFeature = function(casper, test, x) {
 			this.capture(screenShotsDir+ 'categoryPage.png');				
 		});
 		this.then(function() {
-			test.assertExists('a[href="/?forum=517180"]');
-			this.click('a[href="/?forum=517180"]');
+			var moveToCategory = json.moveTopic.moveToCategory2;
+			var classVal = x("//a/span[text()='"+moveToCategory+"']/parent::a");
+			var href = this.getElementAttribute(classVal, "href");
+
+			test.assertExists('a[href="'+href+'"]');
+			this.click('a[href="'+href+'"]');
 			this.wait(7000, function() {
 				this.capture(screenShotsDir+ 'clickCategory.png');
 			});
 		});
 		this.then(function() {
 			var topicTitle = json.moveTopic.topicName;
-			var moveToCategory = json.moveTopic.moveToCategory;
+			var moveToCategory = json.moveTopic.moveToCategory1;
 			var classVal = x("//a/span[text()='"+topicTitle+"']/parent::a"); 
 			selectTopic(classVal, 'move', casper, function() {});
-			test.assertExists('#move_threads_dropdown');
-			this.click('#move_threads_dropdown');
-			this.fill('form[name="admindd"]',{
-				'moveto' : moveToCategory
-			},false);
-			test.assertExists('button[name="submit"]');
-			this.click('button[name="submit"]');
-			this.wait(7000,function() {
-				this.capture(screenShotsDir+ 'moved.png');				
+			this.then(function() {
+				test.assertExists('#move_threads_dropdown');
+				this.click('#move_threads_dropdown');
+				this.fill('form[name="admindd"]',{
+					'moveto' : moveToCategory
+				},false);
+				test.assertExists('button[name="submit"]');
+				this.click('button[name="submit"]');
+				this.wait(7000,function() {
+					this.capture(screenShotsDir+ 'moved.png');				
+				});
+			});
+			
+		});
+
+		//verify moved topic
+		this.then(function() {
+			this.thenOpen(config.url, function() {
+				casper.echo('hit on url : '+config.url, 'INFO');
+			});
+			this.then(function() {
+				test.assertExists('a[href="/categories"]');
+				this.click('a[href="/categories"]');
+				this.wait(7000, function() {
+					this.capture(screenShotsDir+ 'categoryPage.png');				
+				});
+			});
+			this.then(function() {
+				var moveToCategory = json.moveTopic.moveToCategory1;
+				var classVal = x("//a/span[text()='"+moveToCategory+"']/parent::a");
+				var href = this.getElementAttribute(classVal, "href");
+
+				test.assertExists('a[href="'+href+'"]');
+				this.click('a[href="'+href+'"]');
+				this.wait(7000, function() {
+					this.capture(screenShotsDir+ 'clickCategory.png');
+				});
+
+			});
+			this.then(function() {
+				var topicTitle = json.moveTopic.topicName;
+				test.assertExists(x("//a/span[text()='"+topicTitle+"']/parent::a"));
+				casper.echo('move topic is verified', 'INFO');
+			});
+		});
+	});
+
+	/*****Move topic/post from lopic listing page.*****/
+	casper.then(function() {
+		this.thenOpen(config.url, function() {
+			casper.echo('hit on url : '+config.url, 'INFO');
+		});
+		this.then(function() {
+			var topicTitle = json.moveTopic.topicName;
+			var moveToCategory = json.moveTopic.moveToCategory2;
+			var classVal = x("//a/span[text()='"+topicTitle+"']/parent::a"); 
+			selectTopic(classVal, 'move', casper, function() {});
+			this.then(function() {
+				test.assertExists('#move_threads_dropdown');
+				this.click('#move_threads_dropdown');
+				this.fill('form[name="admindd"]',{
+					'moveto' : moveToCategory
+				},false);
+				test.assertExists('button[name="submit"]');
+				this.click('button[name="submit"]');
+				this.wait(7000,function() {
+					this.capture(screenShotsDir+ 'moved.png');				
+				});
+			});
+			
+		});
+
+		//verify moved topic
+		this.then(function() {
+			this.thenOpen(config.url, function() {
+				casper.echo('hit on url : '+config.url, 'INFO');
+			});
+			this.then(function() {
+				test.assertExists('a[href="/categories"]');
+				this.click('a[href="/categories"]');
+				this.wait(7000, function() {
+					this.capture(screenShotsDir+ 'categoryPage.png');				
+				});
+			});
+			this.then(function() {
+				var moveToCategory = json.moveTopic.moveToCategory1;
+				var classVal = x("//a/span[text()='"+moveToCategory+"']/parent::a");
+				var href = this.getElementAttribute(classVal, "href");
+
+				test.assertExists('a[href="'+href+'"]');
+				this.click('a[href="'+href+'"]');
+				this.wait(7000, function() {
+					this.capture(screenShotsDir+ 'clickCategory.png');
+				});
+
+			});
+			this.then(function() {
+				var topicTitle = json.moveTopic.topicName;
+				test.assertDoesntExist(x("//a/span[text()='"+topicTitle+"']/parent::a"));
+				casper.echo('move topic is verified', 'INFO');
 			});
 		});
 	});
