@@ -1,5 +1,6 @@
 //This script is responsible for executing any external script/process. 
 'use strict';
+var fs = require(fs);
 var mailServices = require('./mailServices.js');
 var execSync = require('child_process').execSync;
 var executorServices = module.exports = {};
@@ -31,9 +32,13 @@ executorServices.executeJob = function(commitDetails, callback){
 	//initiating mail sending to committer
 	mailServices.sendMail(commitDetails, function(err){
 		if(err)
-			console.log("error occurred while sending email: "+err);
+			console.error("error occurred while sending email: "+err);
 		else
 			console.log("Mail sent successfully.");
+		//Deleting commit specific log files
+		fs.unlinkSync('log/automation.log');
+		fs.unlinkSync('log/fail.log');
+		console.log("Commit specific log files deleted.");
 		return callback();
 	});
 };
