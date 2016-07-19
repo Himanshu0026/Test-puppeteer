@@ -75,6 +75,9 @@
 			"option2" : "NO",
 			"multiple" : false,
 			"timeoutFormat": 3
+		},
+		"pollOnATopic" : {
+			"topicName" : "HolyDay"
 		}
 	},
 
@@ -156,13 +159,14 @@
 	
 	"lock/unLock" : {
 		"topicTitle" : "ONEpluse",
-		"ExpectedWarningMessage" : "Note: This topic is locked. No new replies will be accepted."
+		"ExpectedWarningMessage" : "Note: This topic is locked. No new replies will be accepted.",
+		"ExpectedMessage" : "You cannot vote on a locked topic."
 	},
 
 	"moveTopic" : {
 		"topicName" : "HolyDay",
-		"moveToCategory1" : "fd",
-		"moveToCategory2" : "Automation"
+		"moveToCategory1" : "",
+		"moveToCategory2" : ""
 	},
 
 	"hideUnHideCategory" : {

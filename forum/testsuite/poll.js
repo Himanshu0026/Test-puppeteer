@@ -149,6 +149,7 @@ poll.pollFeature = function(casper, test, x, callback) {
 			casper.echo('go to new topic', 'INFO');
 		});
 	});
+
 	//Go To Poll Page
 	casper.then(function() {
 		gotoNewPollpage(casper, function() {
@@ -286,7 +287,7 @@ var gotoNewTopic = function(data, driver, callback) {
 		});	
 		driver.wait(3000, function() {
 			this.click('#all_forums_dropdown');
-			var val = this.fetchText('#all_forums_dropdown option[value="537762"]');
+			var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
 			this.fill('form[name="PostTopic"]',{
 				'forum' : val.trim()
 			},false);

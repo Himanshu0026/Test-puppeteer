@@ -12,7 +12,6 @@ inContextForumRegister.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.start(config.backEndUrl, function() {
-		test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 		
 		//Login To Forum BackEnd 
@@ -80,7 +79,6 @@ inContextForumRegister.featureTest = function(casper, test) {
 	
 	//Open Forum Front End URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('Automation Forum', this.getTitle());
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 	});
 	
@@ -89,7 +87,7 @@ inContextForumRegister.featureTest = function(casper, test) {
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('INCONTEXT NEW REGISTRATION FROM START NEW TOPIC REGISTER LINK', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
-	}):
+	});
 	
 	//Clicking On Start New Topic Button
 	casper.then(function() {

@@ -112,7 +112,27 @@ switch (feature) {
 		});
 	});
         break;
-   case "topic":
+        case "verifyCategoryPermissions":
+    	casper.test.begin('VERIFY CATEGORY PERMISSIONS TEST', function(test) {
+		var verifyCategoryPermissions = require("./testsuite/verifyCategoryPermissions.js");
+		verifyCategoryPermissions.featureTest(casper, test);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
+        break;
+        case "uploadAttachment":
+    	casper.test.begin('VERIFY UPLOAD ATTACHMENT TEST', function(test) {
+		var uploadAttachment = require("./testsuite/uploadAttachment.js");
+		uploadAttachment.featureTest(casper, test);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
+        break;
+	case "topic":
 	casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 
 		var newTopic = require("./testsuite/newTopic.js");
@@ -200,7 +220,7 @@ case "deletetopic":
 		 casper.test.begin('Verify lock-unLock topic functionlity ', function(test) {
 		 var lock_unLockTopic = require("./testsuite/lock_unLockTopic.js");
 		 var x = require('casper').selectXPath;
-		 lock_unLockTopic.featureTest(casper, casper.test, x);
+		 lock_unLockTopic.lockUnLockFeature(casper, casper.test, x);
 		 casper.run(function(){
 			test.done();
 		});
@@ -210,7 +230,7 @@ case "deletetopic":
 		 casper.test.begin('Verify poll topic functionlity ', function(test) {
 		 var poll = require("./testsuite/poll.js");
 		 var x = require('casper').selectXPath;
-		 poll.featureTest(casper, casper.test, x);
+		 poll.pollFeature(casper, casper.test, x);
 		 casper.run(function(){
 			test.done();
 		});

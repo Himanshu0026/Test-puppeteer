@@ -13,7 +13,6 @@ backEndForumRegister.featureTest = function(casper, test) {
 	
 	//Login To Forum BackEnd 
 	casper.start(config.backEndUrl, function() {
-		//test.assertTitle('The Easiest Way to Create a Forum | Website Toolbox', this.getTitle());
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 	});
 	
@@ -80,7 +79,6 @@ backEndForumRegister.featureTest = function(casper, test) {
 	
 	casper.then(function() {
 		registerToBackEnd(backEndRegisterJSON['validInfo'], casper, function() {
-			//test.assertDoesntExist('form[action="/register/create_account"] button');
 			casper.echo('Processing to registration on forum back end.....', 'INFO');
 		});
 	});
