@@ -5,6 +5,7 @@
 var utils = require('./utils.js');
 var forumRegister = require('./register.js');
 var pinTopic = require('./pinTopic.js');
+var moveTopic = require('./moveTopic.js');
 var lock_unLockTopic = require('./lock_unLockTopic.js');
 var editTopic = require('./editTopic.js');
 var postAReply = require('./postAReply.js');
@@ -283,7 +284,7 @@ newTopic.featureTest = function(casper, test, x) {
 			casper.echo('---------------------------------------------------------------------------');
 		});
 
-		//test case for Start New Topic Page with valid data and verify content with followed content		
+		//Add New topic by enable Follow check box and verify unfollow topic option on forum listing page		
 		casper.thenOpen(config.url, function() {
 			casper.echo('Hit on url : '+config.url, 'INFO');
 		});
@@ -341,7 +342,7 @@ newTopic.featureTest = function(casper, test, x) {
 			});
 		});
 		
-		//test case for Start New Topic Page with valid data and verify content with Unfollowed content
+		//Add New topic by disabling Follow check box and verify follow topic option on Post page
 		
 		casper.thenOpen(config.url, function() {
 			casper.echo('Hit on url : '+config.url, 'INFO');
@@ -432,7 +433,7 @@ newTopic.featureTest = function(casper, test, x) {
 					this.wait(3000, function() {
 						this.capture(screenShotsDir+ 'SelectAllForUnfollowContent.png');
 					});
-					this.wait(5000, function() {
+					this.wait(7000, function() {
 						this.click('.unfollow-button');
 					});
 					this.then(function() {
@@ -526,6 +527,15 @@ newTopic.featureTest = function(casper, test, x) {
 			});
 		});
 
+		//start move topic
+		casper.then(function() {
+			casper.echo('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+			casper.echo('start move topic ', 'INFO');
+			moveTopic.moveTopicFeature(casper,test, x, function(){
+				casper.echo('move Topic Feature', 'INFO');
+			});
+		});
+
 		//start lock/unLock topic
 		casper.then(function() {
 			casper.echo('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
@@ -595,7 +605,7 @@ var postTopicpage = function(data, driver, callback) {
 	});	
 		driver.then(function() {
 			driver.click('#all_forums_dropdown');
-			var val = this.fetchText('#all_forums_dropdown option[value="537762"]');
+			var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
 			driver.fill('form[name="PostTopic"]',{
 				'forum' : val.trim()
 			},false);
@@ -688,6 +698,7 @@ var verifyUnFollowContent = function(driver, callback) {
 var verifyWarningMsg = function(warningMsg, driver, callback){
 
 	var warningMessage = driver.fetchText('.no-space');
+	casper.echo('warningMessage : ' +warningMessage.trim());
 	driver.test.assertEquals(warningMessage.trim(), warningMsg.trim(), warningMessage.trim()+' and warning message is verified');
 	casper.echo('---------------------------------------------------------------------------');
 	return callback();

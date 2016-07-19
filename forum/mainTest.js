@@ -220,7 +220,7 @@ case "deletetopic":
 		 casper.test.begin('Verify lock-unLock topic functionlity ', function(test) {
 		 var lock_unLockTopic = require("./testsuite/lock_unLockTopic.js");
 		 var x = require('casper').selectXPath;
-		 lock_unLockTopic.featureTest(casper, casper.test, x);
+		 lock_unLockTopic.lockUnLockFeature(casper, casper.test, x);
 		 casper.run(function(){
 			test.done();
 		});
@@ -230,7 +230,7 @@ case "deletetopic":
 		 casper.test.begin('Verify poll topic functionlity ', function(test) {
 		 var poll = require("./testsuite/poll.js");
 		 var x = require('casper').selectXPath;
-		 poll.featureTest(casper, casper.test, x);
+		 poll.pollFeature(casper, casper.test, x);
 		 casper.run(function(){
 			test.done();
 		});

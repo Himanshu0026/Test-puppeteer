@@ -10,11 +10,23 @@ var config = require('../config/config.json');
 var lock_unLockTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'lockUnLock/';
 
-lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
+lock_unLockTopic.lockUnLockFeature = function(casper, test, x) {
 	
 	//Open Forum URL And Get Title 
-	casper.thenOpen(config.url, function() {
+	casper.start(config.url, function() {
 		this.log('Title of the page :' +this.getTitle());
+	});
+
+	//Login to app
+	casper.then(function(){
+		forumLogin.loginToApp(json['newTopic'].adminUname, json['newTopic'].adminPass, casper, function() {
+			casper.log('Admin has successfully login to application with valid username and password', 'INFO');
+		});
+	});
+	
+	//Getting Screenshot After Clicking On 'Log In' Link 
+	casper.wait(7000, function() {
+		this.capture(screenShotsDir+ 'login.png');
 	});
 
 	/*****Lock any topic and Verify Lock option of topic listing page[Home page]*****/
@@ -207,7 +219,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 				this.capture(screenShotsDir+ 'clickLockTopic.png');	
 			});
 		});
-		casper.reload();
+		//casper.reload();
 		casper.then(function() {
 			test.assertExists('.alert-warning');
 			casper.echo('---------------------------------------------------------------------------');
@@ -241,9 +253,9 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 	});
 
 	
-	/*****unLock topic from Profile page and verify un-locked topic*****/
+	/*****un-Lock topic from Profile page and verify unlocked topic*****/
 	casper.then(function() {
-		casper.echo('unLock topic from Profile page and verify un-locked topic', 'INFO');
+		casper.echo('un-Lock topic from Profile page and verify unlocked topic', 'INFO');
 		//Login to app
 		casper.then(function(){
 			forumLogin.loginToApp(json['newTopic'].adminUname, json['newTopic'].adminPass, casper, function() {
@@ -300,9 +312,9 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 	});
 
 	
-	/*****UnLock any locked  topic from post page and verify that the locked message should be disappeared*****/
+	/*****UnLock any locked  topic from post page and verify that the locked message should be disappeared *****/
 	casper.then(function() {
-		casper.echo('UnLock any locked  topic from post page and verify that the locked message should be disappeared', 'INFO');
+		casper.echo('UnLock any locked  topic from post page and verify that the locked message should be disappeared ', 'INFO');
 		var postTitle = json['lock/unLock'].topicTitle;		
 		test.assertExists(x("//a[text()='"+postTitle+"']"));
 		casper.echo('---------------------------------------------------------------------------');
@@ -313,6 +325,209 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			casper.echo('---------------------------------------------------------------------------');
 		});
 
+	});
+
+	/*****Add New topic by enable lock check box and verify lock topic  on forum listing page*****/
+	casper.then(function() {
+		casper.echo('Add New topic by enable lock check box and verify lock topic  on forum listing page', 'INFO');
+		casper.thenOpen(config.url, function() {
+			casper.echo('Hit on url : ' +config.url);
+		});
+
+		//go to start new topic
+		casper.then(function() {
+			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+				casper.echo('go to new topic', 'INFO');
+			});
+		});
+	
+		casper.then(function() {
+			this.click('#LCK');
+			this.wait(2000, function() {
+				this.capture(screenShotsDir+ 'checkedLock.png');
+			});
+			this.then(function() {
+				this.click('#post_submit');
+			});
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'postPage.png');
+			});
+		});
+
+		//Verify lock topic option on post page
+		casper.then(function() {
+			test.assertExists('.alert-warning');
+			var warningMsg = this.fetchText('.alert-warning');
+			test.assertEquals(warningMsg.trim(), json['lock/unLock'].ExpectedWarningMessage, warningMsg.trim()+' and message is verified');
+		});
+	});
+
+	/*****Add New topic by disabling Follow check box and verify follow topic option on Post page*****/
+	casper.then(function() {
+		casper.echo('Add New topic by disabling Follow check box and verify follow topic option on Post page', 'INFO');
+		casper.thenOpen(config.url, function() {
+			casper.echo('Hit on url : ' +config.url);
+		});
+
+		//go to start new topic
+		casper.then(function() {
+			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+				casper.echo('go to new topic', 'INFO');
+			});
+		});
+	
+		casper.then(function() {
+			this.wait(2000, function() {
+				this.capture(screenShotsDir+ 'unCheckedLock.png');
+			});
+			this.then(function() {
+				this.click('#post_submit');
+			});
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'postPage.png');
+			});
+		});
+
+		//Verify lock topic option on post page
+		casper.then(function() {
+			test.assertDoesntExist('.alert-warning');
+		});
+	});
+
+	/*****Add New topic by enable lock check box and verify unlock topic option on latest topic page*****/
+	casper.then(function() {
+		casper.echo('Add New topic by enable lock check box and verify unlock topic option on latest topic page', 'INFO');
+		casper.thenOpen(config.url, function() {
+			casper.echo('Hit on url : ' +config.url);
+		});
+
+		//go to start new topic
+		casper.then(function() {
+			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+				casper.echo('go to new topic', 'INFO');
+			});
+		});
+	
+		casper.then(function() {
+			var href = "";
+			this.click('#LCK');
+			this.wait(2000, function() {
+				this.capture(screenShotsDir+ 'checkedLock.png');
+			});
+			this.then(function() {
+				this.click('#post_submit');
+			});
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'postPage.png');
+				var url = this.getCurrentUrl();
+				url = url.split('#');
+				href = url[0].split('.com');
+				casper.thenOpen(config.url, function() {
+					casper.echo('Hit on url : ' +config.url);
+				});
+			});
+			
+			//Verify lock topic option on post page
+			casper.then(function() {
+				test.assertExists('a[href="'+href[1]+'"]');
+				this.click('a[href="'+href[1]+'"]');
+				casper.then(function() {
+					test.assertExists('.alert-warning');
+					var warningMsg = this.fetchText('.alert-warning');
+					test.assertEquals(warningMsg.trim(), json['lock/unLock'].ExpectedWarningMessage, warningMsg.trim()+' and message is verified');
+				});
+			});
+		});
+	});
+	
+	/*****Add New topic by disabling lock check box and verify lock topic option on latest topic page*****/
+	casper.then(function() {
+		casper.echo('Add New topic by disabling lock check box and verify lock topic option on latest topic page', 'INFO');
+		casper.thenOpen(config.url, function() {
+			casper.echo('Hit on url : ' +config.url);
+		});
+
+		//go to start new topic
+		casper.then(function() {
+			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+				casper.echo('go to new topic', 'INFO');
+			});
+		});
+	
+		casper.then(function() {
+			var href ="";
+			this.wait(2000, function() {
+				this.capture(screenShotsDir+ 'unCheckedLock.png');
+			});
+			this.then(function() {
+				this.click('#post_submit');
+			});
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'postPage.png');
+				var url = this.getCurrentUrl();
+				url = url.split('#');
+				href = url[0].split('.com');
+				casper.thenOpen(config.url, function() {
+					casper.echo('Hit on url : ' +config.url);
+				});
+			});
+
+			//Verify lock topic option on post page
+			this.then(function() {
+				test.assertExists('a[href="'+href[1]+'"]');
+				this.click('a[href="'+href[1]+'"]');
+				casper.then(function() {
+					test.assertDoesntExist('.alert-warning');
+				});
+			});
+		});
+	});
+
+	/*****Verify Vote option against locked topic on post page*****/
+	casper.then(function() {
+		this.thenOpen(config.url, function() {
+			casper.echo('hit on url : ' +config.url, 'INFO');
+		});
+		casper.then(function() {
+			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+				casper.echo('go to new topic', 'INFO');
+			});
+			casper.then(function() {
+				this.click('#LCK');
+				this.wait(2000, function() {
+					this.capture(screenShotsDir+ 'checkedLock.png');
+				});
+			});
+		});
+
+		//Go To Poll Page
+		casper.then(function() {
+			gotoNewPollpage(casper, function() {
+				casper.log('redirect to Poll', 'INFO');
+			});
+		});
+
+		//Getting Screenshot After Clicking On 'Poll' Link 
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'newPoll.png');
+		});
+		
+		//Post Poll Data 
+		casper.then(function() {
+			savePollPage(json['poll'].vadidCredintial, casper, function() {
+				casper.log('poll posted successfully', 'info');
+			});
+		});
+
+		//Getting Screenshot After Clicking On 'Save Poll' Link
+		casper.wait(7000,function() {
+			this.capture(screenShotsDir+ 'savePoll.png');
+		});
+		casper.then(function() {
+			var msg = this.getElementAttribute('form[name="Poll"] input[name="pollvotesave"]', 'data-original-title');
+			casper.echo('msg : ' +msg.trim());
+			test.assertEquals(msg.trim(), json['lock/unLock'].ExpectedMessage, msg.trim()+' and message is verified');
+		});
 	});
 
 	//Logout(Admin) From App
@@ -326,11 +541,12 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 	casper.wait(7000, function() {
 		this.capture(screenShotsDir+ 'logout.png');
 	});	
-	return callback();
+	//return callback();
 };
 
 /************************************PRIVATE METHODS***********************************/
 
+//method for select topic ange href value and click on checkbox
 var selectTopic = function(topicVal, eleStatus, driver, callback) {
 	var href = driver.getElementAttribute(topicVal, "href");
 	href = href.split('-');
@@ -353,8 +569,66 @@ var selectTopic = function(topicVal, eleStatus, driver, callback) {
 	return callback();
 };
 
+// method for go to new poll to application
 
+var gotoNewTopic = function(data, driver, callback) {
+	driver.click('#links-nav');
+	driver.click('#latest_topics_show');
+	driver.click('a[href="/post/printadd"]');
+	driver.wait(7000, function() {
+		this.capture(screenShotsDir+ 'startTopic.png');
+	});
+	driver.then(function() {
+         	 this.sendKeys('input[name="subject"]', data.title, {reset:true});
+		 this.withFrame('message_ifr', function() {
+			this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
+			this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
+	 		this.sendKeys('#tinymce', data.content);
+			this.capture(screenShotsDir+ 'content.png');	
+		});	
+		driver.wait(3000, function() {
+			this.click('#all_forums_dropdown');
+			var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
+			this.fill('form[name="PostTopic"]',{
+				'forum' : val.trim()
+			},false);
+			this.capture(screenShotsDir+ 'fillTopic.png');
+		});
+	});
 
+	return callback();
+};
+
+var gotoNewPollpage = function(driver, callback) {
+	driver.then(function() {
+		this.capture(screenShotsDir+ 'TopicDetails.png');
+		this.test.assertExists('ul li a[href="#poll"]');
+		casper.echo('---------------------------------------------------------------------------');
+		this.click('ul li a[href="#poll"]');
+	});
+	return callback();
+};
+
+// method for go to save new poll  to application
+
+var savePollPage = function(data, driver, callback) {
+	driver.sendKeys('#poll_question', data.pollQues, {reset:true});
+	driver.sendKeys('input[name="public"]', data.publicCheckbox);
+	driver.sendKeys('#poll_option_1 div input', data.option1, {reset:true});
+	driver.sendKeys('#poll_option_2 div input', data.option2, {reset:true});
+	driver.then(function(){
+		this.click('a[href="#poll-timeout"] small.text-muted');
+	});
+	driver.then(function() {
+		driver.wait(5000, function() {
+			this.capture(screenShotsDir+ 'fillPoll.png');
+		});
+	});
+	driver.then(function() {
+		driver.click('#save_poll');
+	});
+	
+};
 
 
 

@@ -287,7 +287,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		casper.wait(2000, function() {
 			this.capture(screenShotsDir+'afterChangePermission.png');
 		});	
- 		
+
 		//reopen forum url for edit own post after change permission
 		casper.thenOpen(config.url, function() {
 			casper.echo('Hit on URL : '+config.url, 'INFO');
@@ -337,7 +337,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		//click on checkbox set true	
 		casper.then(function() {
 			utils.enableorDisableCheckbox('edit_posts', true, casper, function() {
-				casper.echo("Edit Own Post checkbox has been disabled", 'INFO');
+				casper.echo("Edit Own Post checkbox has been enable", 'INFO');
 			});
 		});
 
