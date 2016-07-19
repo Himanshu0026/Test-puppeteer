@@ -23,7 +23,7 @@ switch (feature) {
 	});
         break;
     case "editProfile":
-	casper.test.begin("Start Edit Profile functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+	casper.test.begin("Start 'Edit Profile' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 		var editProfile = require("./testsuite/editprofile.js");
 		editProfile.featureTest(casper, casper.test);
 		casper.run(function() {
@@ -31,8 +31,6 @@ switch (feature) {
 			test.assert(true);
 		});
 	});
-        
-        break;
 
     case "editProfileWithSettings":
 	casper.test.begin("Start Edit Profile functionality from home page & verify content with all valid and invalid scenarios", function(test) {
@@ -44,7 +42,6 @@ switch (feature) {
 		});
 	});
         
-        break;
     case "deleteAccount":
 	casper.test.begin("Start 'Delete Account' functionality from home page & verify content with all scenarios", function(test) {
 
@@ -56,15 +53,12 @@ switch (feature) {
 			test.assert(true);
 		});
 	});
-        
-        break;
 		
     case "deleteAccountWithSettings":
-	casper.test.begin("Start 'Delete Account' functionality from home page & verify content with all scenarios", function(test) {
+	casper.test.begin("Start 'Delete Account With Setting' functionality from home page & verify content with all scenarios", function(test) {
 
 		var deleteAccount = require("./testsuite/deleteAccount.js");
 		deleteAccount.customFieldsTest(casper, casper.test);
-		
 		casper.run(function(){
 			test.done();
 			test.assert(true);

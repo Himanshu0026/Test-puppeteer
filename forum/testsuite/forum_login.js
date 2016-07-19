@@ -120,24 +120,32 @@ forumLogin.featureTest = function(casper, test) {
 forumLogin.loginToApp = function(username, password, driver,callback) {
 	try{	
 		driver.click('#td_tab_login');
-	}catch(err){
-		casper.echo("Exception is : "+err);
-	};
-	driver.fill('form[name="frmLogin"]', {
-		'member': username,
-		'pw' : password
-	}, false); //incase of true, it will submit the form and for false, it will not submit form
+		driver.fill('form[name="frmLogin"]', {
+			'member': username,
+			'pw' : password
+		}, false); //incase of true, it will submit the form and for false, it will not submit form
 
-        driver.click('form[name="frmLogin"] button');
+       	 	driver.click('form[name="frmLogin"] button');
+	}catch(err){
+		driver.test.assertDoesntExist('#td_tab_login');
+	};
 	return callback();
 };
 
 //method for logout from application
 forumLogin.logoutFromApp = function(driver, callback) {
-	driver.test.assertExists('button.dropdown-toggle span.caret');
-	driver.click('button.dropdown-toggle span.caret');
-	driver.test.assertExists('#logout');
-	driver.click('#logout');
+	try {
+		driver.test.assertExists('button.dropdown-toggle span.caret');
+		driver.click('button.dropdown-toggle span.caret');
+		try {
+			driver.test.assertExists('#logout');
+			driver.click('#logout');
+		}catch(e) {
+			driver.test.assertDoesntExist('#logout');
+		}
+	}catch(e) {
+		driver.test.assertDoesntExist('button.dropdown-toggle span.caret');
+	}
 	return callback();
 };
 

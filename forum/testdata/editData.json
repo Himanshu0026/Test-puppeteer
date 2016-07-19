@@ -2,7 +2,14 @@
 {
     	"loginData" : {
 		"uname" : "hs123",
-		"upass" : "hh"
+		"uemail" : "hotam.hbti123@gmail.com",
+		"upass" : "hh",
+		"fullName" : "HOTAM SINGH",
+		"imID" : "HSK",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature",
+		"namePrivate" : true,
+		"expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
     	},
 
     	"invalidDataForEditProfile" : [{		
@@ -36,12 +43,33 @@
     	}],
 	
 	"invalidDataForAccount" : [{
+		"new_username" : "hs1234",
 		"upass" : "hh",
-		"email" : "hotam.hbti123@gmail.com",
-		"expectedErrorMsg" : "Password is required."
+		"email" : "hotam.hbti123@gmail.com"
 	},
 
 	{
+		"new_username" : "",
+		"upass" : "hh",
+		"email" : "hotam.hbti123@gmail.com",
+		"expectedErrorMsg" : "Username is required."
+	},
+
+	{
+		"new_username" : "hs123",
+		"upass" : "",
+		"email" : "hotam.hbti123@gmail.com",
+		"expectedErrorMsg" : "Password is required."
+	},
+	
+	{
+		"new_username" : "hs123",
+		"upass" : "hh",
+		"email" : "hs@wt.com"
+	},
+
+	{
+		"new_username" : "hs123",
 		"upass" : "hh",
 		"email" : "",
 		"expectedErrorMsg" : "Email Address is required."
@@ -49,6 +77,7 @@
     	},
 
 	{
+		"new_username" : "hs123",
 		"upass" : "hh",
 		"email" : "xxxxxxxxxx",
 		"expectedErrorMsg" : "You entered an invalid email address."
@@ -66,13 +95,14 @@
 	},
 
     	"validDataForEditAccount" : {
+		"new_username" : "hs123",
 		"upass" : "hh",
 		"email" : "hotam.hbti123@gmail.com",
 		"expectedSuccessMsg" : "Your preferences have been updated successfully."
 	},
 
 	"backEndInfo" : {
-	    	"uname" : "automation",
+	    	"uname" : "beta12",
 	    	"upass" : "test"
     	},
 
@@ -202,15 +232,9 @@
 		"expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 	},
 
-	"deleteAdmin" : {
-		"uname" : "hsk",
-		"uemail" : "hsk@wt.com",
-		"upass" : "hsk",
-		"fullName" : "18",
-		"imID" : "18",
-		"birthday" : "04/12/1991",
-		"usignature" : "This is my signature 18",
-		"namePrivate" : true,
-		"expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
+	"newTopic" : {
+		"title" : "hsk",
+		"content" : "hellloooooo!!!!!!!!!",
+		"category" : "General"
 	}
 }  
