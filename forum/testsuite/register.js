@@ -204,8 +204,9 @@ forumRegister.registerWithSettings = function(casper, test) {
 	//Set Different Value For 'Full Name' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
-			var backurl = config.backEndUrl+ 'tool/members/mb/fields?action=default_registration_option';
-			this.thenOpen(backurl, function() {
+			var backurl = 'https://' +config.backendCred.uname+ '.websitetoolbox.com/';
+			var settingsUrl = backurl+ 'tool/members/mb/fields?action=default_registration_option';
+			this.thenOpen(settingsUrl, function() {
 				this.capture(screenShotsDir + 'Default_Registration_Options_then.png');
 				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
@@ -264,8 +265,9 @@ forumRegister.registerWithSettings = function(casper, test) {
 	//Set Different Value For 'Instant Messaging' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
-			var backurl = config.backEndUrl+ 'tool/members/mb/fields?action=default_registration_option';
-			this.thenOpen(backurl, function() {
+			var backurl = 'https://' +config.backendCred.uname+ '.websitetoolbox.com/';
+			var settingsUrl = backurl+ 'tool/members/mb/fields?action=default_registration_option';
+			this.thenOpen(settingsUrl, function() {
 				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
 	
@@ -330,8 +332,9 @@ forumRegister.registerWithSettings = function(casper, test) {
 	//Set Different Value For 'Birthday' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
-			var backurl = config.backEndUrl+ 'tool/members/mb/fields?action=default_registration_option';
-			this.thenOpen(backurl, function() {
+			var backurl = 'https://' +config.backendCred.uname+ '.websitetoolbox.com/';
+			var settingsUrl = backurl+ 'tool/members/mb/fields?action=default_registration_option';
+			this.thenOpen(settingsUrl, function() {
 				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
 	
@@ -390,8 +393,9 @@ forumRegister.registerWithSettings = function(casper, test) {
 	//Set Different Value For 'Signature' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Register Form
 	casper.then(function() {
 		this.eachThen(json['setValueOnRegister'], function(response) {
-			var backurl = config.backEndUrl+ 'tool/members/mb/fields?action=default_registration_option';
-			this.thenOpen(backurl, function() {
+			var backurl = 'https://' +config.backendCred.uname+ '.websitetoolbox.com/';
+			var settingsUrl = backurl+ 'tool/members/mb/fields?action=default_registration_option';
+			this.thenOpen(settingsUrl, function() {
 				this.echo('REOPEN Default Registration Options.....', 'INFO');
 			});
 	
@@ -614,9 +618,7 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 			var expectedErrorMsg = "Error: It looks like you already have a forum account!";
 			test.assert(errorMessage.indexOf(expectedErrorMsg) > -1);
 			driver.echo('USER ALREADY REGISTERED ON FORUM.....', 'INFO');
-			test.assertExists('i.icon.icon-menu');
-			driver.click('i.icon.icon-menu');
-			driver.click('a[href="/latest"]');
+			return callback();
 		} catch(e1) {
 			driver.echo('Successfully done registration on forum.....', 'INFO');
 			
