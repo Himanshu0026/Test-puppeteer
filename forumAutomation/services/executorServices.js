@@ -1,6 +1,6 @@
 //This script is responsible for executing any external script/process. 
 'use strict';
-var fs = require(fs);
+var fs = require('fs');
 var mailServices = require('./mailServices.js');
 var execSync = require('child_process').execSync;
 var executorServices = module.exports = {};
@@ -15,18 +15,20 @@ executorServices.execute = function(script){
 //It executes job. Take job details as argument, executed the job and initiates mail sending.
 executorServices.executeJob = function(commitDetails, callback){
 	//Executing gitdeploy.sh to update Forum's code for given branch name
-	var gitDeployResult = executorServices.execute("sh /home/monika/gitdeploy.sh "+commitDetails.branchName);
+//if(commitDetails.branchName == "automation"){
+	console.log("Executing gitdeploy.sh");
+	var gitDeployResult = executorServices.execute("sudo bash -c '/home/monika/gitdeploy.sh "+commitDetails.branchName+ "'");
 	//Executing automation test script
-	var testResult = executorServices.execute("sudo bash -c 'casperjs test ../forum/automation.js --feature=login > log/automation.log; cat log/automation.log | grep FAIL > log/fail.log; cat log/automation.log | grep \"tests executed in\"'");
+	var testResult = executorServices.execute("sudo bash -c '/home/monika/project/git/QA-automation/forumAutomation/bin/automation.sh'");
 	//Adding test result with commit details
 	commitDetails['testResult'] = testResult;
 	//Addling log files as attachments
 	commitDetails['attachments'] = [
                 {   
-            		path: 'log/automation.log'
+            		path: '/home/monika/project/git/QA-automation/forumAutomation/log/automation.log'
         	},
 		{   
-            		path: 'log/fail.log'
+            		path: '/home/monika/project/git/QA-automation/forumAutomation/log/fail.log'
         	}
 	];
 	//initiating mail sending to committer
@@ -36,9 +38,12 @@ executorServices.executeJob = function(commitDetails, callback){
 		else
 			console.log("Mail sent successfully.");
 		//Deleting commit specific log files
-		fs.unlinkSync('log/automation.log');
-		fs.unlinkSync('log/fail.log');
+		fs.unlinkSync('/home/monika/project/git/QA-automation/forumAutomation/log/automation.log');
+		fs.unlinkSync('/home/monika/project/git/QA-automation/forumAutomation/log/fail.log');
 		console.log("Commit specific log files deleted.");
 		return callback();
 	});
+/*}else{
+	return callback();
+}*/
 };
