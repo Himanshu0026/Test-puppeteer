@@ -9,10 +9,10 @@ var config = require('../config/config.json');
 var pinTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'pinTopic/';
 
-pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
+pinTopic.pinUnPinFeature = function(casper, test, x) {
 	
 	//Open Forum URL And Get Title 
-	casper.thenOpen(config.url, function() {
+	casper.start(config.url, function() {
 		this.log('Title of the page :' +this.getTitle());
 	});
 
@@ -48,6 +48,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		casper.echo('---------------------------------------------------------------------------');
 	});
 
+
 	/*****unPin any topic and Verify unPin icon of topic listing page[Home page]*****/
 	casper.then(function() {
 		casper.echo('unPin any topic and Verify unPin icon of topic listing page[Home page]', 'INFO');
@@ -66,6 +67,341 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
 		casper.echo('unPin topic is verified', 'INFO');
 		casper.echo('---------------------------------------------------------------------------');
+	});
+
+	/*****Pin any topic and Verify Pin icon of topic listing page from moderator shield icon*****/
+	casper.then(function() {
+		casper.echo('Pin any topic and Verify Pin icon of topic listing page from moderator shield icon', 'INFO');
+		/*this.thenOpen(config.url, function() {
+			casper.echo('go to topic listing page', 'INFO');
+		});*/
+		this.then(function() {
+			this.capture(screenShotsDir+ '111.png');
+		});;
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			casper.echo('pin topic title : ' +postTitle, 'INFO');
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			var href = this.getElementAttribute(classVal, "href");
+			this.click('a[href="'+href+'"]');
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
+			});
+		});
+		this.then(function() {
+			test.assertExists('a.dropdown-toggle i.icon-shield');
+			this.click('a.dropdown-toggle i.icon-shield');
+			this.wait(1000, function() {
+				this.capture(screenShotsDir+ 'dropdown.png');
+			});
+			this.click('a[href^="/mbactions/pin?"]');
+		});
+	});
+
+	//verify pin topic
+	casper.then(function() {
+		this.thenOpen(config.url, function() {
+			casper.echo('go to topic listing page', 'INFO');
+		});
+		var postTitle = json['pin/unPin'].topicTitle;
+		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+		var href = this.getElementAttribute(classVal, "href");
+		test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
+		casper.echo('pin topic is verified', 'INFO');
+		casper.echo('---------------------------------------------------------------------------');
+	});
+
+	/*****Un-Pin any topic and Verify Pin icon of topic listing page from moderator shield icon*****/
+	casper.then(function() {
+		casper.echo('Un-Pin any topic and Verify Pin icon of topic listing page from moderator shield icon', 'INFO');
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			casper.echo('unpin topic title : ' +postTitle, 'INFO');
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			var href = this.getElementAttribute(classVal, "href");
+			this.click('a[href="'+href+'"]');
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
+			});
+		});
+		this.then(function() {
+			test.assertExists('a.dropdown-toggle i.icon-shield');
+			this.click('a.dropdown-toggle i.icon-shield');
+			this.wait(1000, function() {
+				this.capture(screenShotsDir+ 'dropdown.png');
+			});
+			this.click('a[href^="/mbactions/unpin?"]');
+		});
+	});
+
+	//verify unPin topic
+	casper.then(function() {
+		this.thenOpen(config.url, function() {
+			casper.echo('go to topic listing page', 'INFO');
+		});
+		var postTitle = json['pin/unPin'].topicTitle;
+		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+		var href = this.getElementAttribute(classVal, "href");
+		test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
+		casper.echo('unPin topic is verified', 'INFO');
+		casper.echo('---------------------------------------------------------------------------');
+	});
+
+	/*****Pin any topic and Verify Pin icon of  latest topic page*****/
+	casper.then(function() {
+		casper.echo('Pin any topic and Verify Pin icon of  latest topic page', 'INFO');
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(7000, function() {
+				this.click('a[href="/latest"]');
+			});
+		});
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			casper.echo('pin topic title : ' +postTitle, 'INFO');
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			selectTopic(classVal, 'pin', 'Pin/Un-pin', casper, function() {});
+		});
+	});
+
+	//verify pin topic
+	casper.then(function() {
+		var postTitle = json['pin/unPin'].topicTitle;
+		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+		var href = this.getElementAttribute(classVal, "href");
+		test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
+		casper.echo('pin topic is verified', 'INFO');
+		casper.echo('---------------------------------------------------------------------------');
+	});
+
+	/*****Un- Pin any topic and Verify Pin icon of  latest topic page*****/
+	casper.then(function() {
+		casper.echo('Un- Pin any topic and Verify Pin icon of  latest topic page', 'INFO');
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(7000, function() {
+				this.click('a[href="/latest"]');
+			});
+		});
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			casper.echo('unpin topic title : ' +postTitle, 'INFO');
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			selectTopic(classVal, 'unpin', 'Pin/Un-pin', casper, function() {});
+		});
+	});
+
+	//verify unPin topic
+	casper.then(function() {
+		var postTitle = json['pin/unPin'].topicTitle;
+		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+		var href = this.getElementAttribute(classVal, "href");
+		test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
+		casper.echo('unPin topic is verified', 'INFO');
+		casper.echo('---------------------------------------------------------------------------');
+	});
+
+	/*****Pin any topic and Verify Pin icon of latest topic from moderator shield icon*****/
+	casper.then(function() {
+		casper.echo('Pin any topic and Verify Pin icon of latest topic from moderator shield icon', 'INFO');
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(7000, function() {
+				this.click('a[href="/latest"]');
+			});
+		});
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			casper.echo('pin topic title : ' +postTitle, 'INFO');
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			var href = this.getElementAttribute(classVal, "href");
+			this.click('a[href="'+href+'"]');
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
+			});
+		});
+		this.then(function() {
+			test.assertExists('a.dropdown-toggle i.icon-shield');
+			this.click('a.dropdown-toggle i.icon-shield');
+			this.wait(1000, function() {
+				this.capture(screenShotsDir+ 'dropdown.png');
+			});
+			this.click('a[href^="/mbactions/pin?"]');
+		});
+	});
+
+	//verify pin topic
+	casper.then(function() {
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(7000, function() {
+				this.click('a[href="/latest"]');
+			});
+		});
+		var postTitle = json['pin/unPin'].topicTitle;
+		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+		var href = this.getElementAttribute(classVal, "href");
+		test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
+		casper.echo('pin topic is verified', 'INFO');
+		casper.echo('---------------------------------------------------------------------------');
+	});
+
+	/*****Un-Pin any topic and Verify Pin icon of latest topic from moderator shield icon*****/
+	casper.then(function() {
+		casper.echo('Un-Pin any topic and Verify Pin icon of latest topic from moderator shield icon', 'INFO');
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			casper.echo('unpin topic title : ' +postTitle, 'INFO');
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			var href = this.getElementAttribute(classVal, "href");
+			this.click('a[href="'+href+'"]');
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
+			});
+		});
+		this.then(function() {
+			test.assertExists('a.dropdown-toggle i.icon-shield');
+			this.click('a.dropdown-toggle i.icon-shield');
+			this.wait(1000, function() {
+				this.capture(screenShotsDir+ 'dropdown.png');
+			});
+			this.click('a[href^="/mbactions/unpin?"]');
+		});
+	});
+
+	//verify unPin topic
+	casper.then(function() {
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(7000, function() {
+				this.click('a[href="/latest"]');
+			});
+		});
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			var href = this.getElementAttribute(classVal, "href");
+			test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
+			casper.echo('unPin topic is verified', 'INFO');
+			casper.echo('---------------------------------------------------------------------------');
+		});
+	});
+	
+	/*****Pin any topic and Verify Pin icon under category page from moderator shield icon*****/
+	casper.then(function() {
+		casper.echo('Pin any topic and Verify Pin icon under category page from moderator shield icon', 'INFO');
+		test.assertExists('a[href="/categories"]');
+		casper.echo('---------------------------------------------------------------------------');
+		this.click('a[href="/categories"]');
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'category.png');
+		});
+		casper.then(function() {
+			var classVal = x("//h3/a/span/parent::a");
+			var href = this.getElementAttribute(classVal, "href"); 
+			test.assertExists('h3 a[href="'+href+'"]');
+			casper.echo('---------------------------------------------------------------------------');
+			this.click('h3 a[href="'+href+'"]');
+		});
+		casper.wait(7000, function() {
+			this.capture(screenShotsDir+ 'categoryTopicList.png');
+		});
+		casper.then(function() {
+		
+			var postTitle = json['pin/unPin'].topicTitle;
+			casper.echo('pin topic title : ' +postTitle, 'INFO');
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			var href = this.getElementAttribute(classVal, "href");
+			this.click('a[href="'+href+'"]');
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
+			});
+		});
+		this.then(function() {
+			test.assertExists('a.dropdown-toggle i.icon-shield');
+			this.click('a.dropdown-toggle i.icon-shield');
+			this.wait(1000, function() {
+				this.capture(screenShotsDir+ 'dropdown.png');
+			});
+			this.click('a[href^="/mbactions/pin?"]');
+		});
+	});
+
+	//verify pin topic
+	casper.then(function() {
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(7000, function() {
+				this.click('a[href="/latest"]');
+			});
+		});
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			var href = this.getElementAttribute(classVal, "href");
+			test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
+			casper.echo('pin topic is verified', 'INFO');
+			casper.echo('---------------------------------------------------------------------------');
+		});
+	});
+
+	/*****Un-Pin any topic and Verify Pin icon under category page from moderator shield icon*****/
+	casper.then(function() {
+		casper.echo('Un-Pin any topic and Verify Pin icon under category page from moderator shield icon', 'INFO');
+		casper.then(function() {
+			test.assertExists('a[href="/categories"]');
+			casper.echo('---------------------------------------------------------------------------');
+			this.click('a[href="/categories"]');
+			casper.wait(7000, function() {
+				this.capture(screenShotsDir+ 'category.png');
+			});
+			casper.then(function() {
+				var classVal = x("//h3/a/span/parent::a");
+				var href = this.getElementAttribute(classVal, "href"); 
+				test.assertExists('h3 a[href="'+href+'"]');
+				casper.echo('---------------------------------------------------------------------------');
+				this.click('h3 a[href="'+href+'"]');
+			});
+			casper.wait(7000, function() {
+				this.capture(screenShotsDir+ 'categoryTopicList.png');
+			});
+			this.then(function() {
+				var postTitle = json['pin/unPin'].topicTitle;
+				casper.echo('unpin topic title : ' +postTitle, 'INFO');
+				var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+				var href = this.getElementAttribute(classVal, "href");
+				this.click('a[href="'+href+'"]');
+				this.wait(7000, function() {
+					this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
+				});
+			});
+		});
+		this.then(function() {
+			test.assertExists('a.dropdown-toggle i.icon-shield');
+			this.click('a.dropdown-toggle i.icon-shield');
+			this.wait(1000, function() {
+				this.capture(screenShotsDir+ 'dropdown.png');
+			});
+			this.click('a[href^="/mbactions/unpin?"]');
+		});
+	});
+
+	//verify unPin topic
+	casper.then(function() {
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(7000, function() {
+				this.click('a[href="/latest"]');
+			});
+		});
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			var href = this.getElementAttribute(classVal, "href");
+			test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
+			casper.echo('unPin topic is verified', 'INFO');
+			casper.echo('---------------------------------------------------------------------------');
+		});
 	});
 
 	/*****Pin any topic and Verify Pin icon of post listing page under category*****/
@@ -117,6 +453,102 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
 			selectTopic(classVal, 'unpin', 'Pin/Un-Pin', casper, function() {});
 	
+		});
+	});
+
+	//verify unPin topic
+	casper.then(function() {
+		var postTitle = json['pin/unPin'].topicTitle;
+		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+		var href = this.getElementAttribute(classVal, "href");
+		test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
+		casper.echo('unPin topic is verified', 'INFO');
+		casper.echo('---------------------------------------------------------------------------');
+	});
+	
+	/*****Pin any topic and Verify Pin icon under sub category page from moderator shield icon *****/
+	casper.then(function() {
+		casper.echo('Pin any topic and Verify Pin icon under sub category page from moderator shield icon', 'INFO');
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(2000, function() {
+				this.capture(screenShotsDir+ 'linkTab.png');
+			});
+			this.then(function() {
+				this.click('li i.icon-right-dir');
+				this.wait(2000, function() {
+					this.click('li a');
+				});
+			});
+		});
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			casper.echo('pin topic title : ' +postTitle, 'INFO');
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			var href = this.getElementAttribute(classVal, "href");
+			this.click('a[href="'+href+'"]');
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
+			});
+		});
+		this.then(function() {
+			test.assertExists('a.dropdown-toggle i.icon-shield');
+			this.click('a.dropdown-toggle i.icon-shield');
+			this.wait(1000, function() {
+				this.capture(screenShotsDir+ 'dropdown.png');
+			});
+			this.click('a[href^="/mbactions/pin?"]');
+		});
+		this.thenOpen(config.url, function() {
+			casper.echo('go to topic listing page : ');
+		});
+	});
+
+	//verify pin topic
+	casper.then(function() {
+		var postTitle = json['pin/unPin'].topicTitle;
+		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+		var href = this.getElementAttribute(classVal, "href");
+		test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
+		casper.echo('pin topic is verified', 'INFO');
+		casper.echo('---------------------------------------------------------------------------');
+	});
+
+	/*****Un-Pin any topic and Verify Pin icon under sub category page from moderator shield icon*****/
+	casper.then(function() {
+		casper.echo('Un-Pin any topic and Verify Pin icon under sub category page from moderator shield icon', 'INFO');
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(2000, function() {
+				this.capture(screenShotsDir+ 'linkTab.png');
+			});
+			this.then(function() {
+				this.click('li i.icon-right-dir');
+				this.wait(2000, function() {
+					this.click('li a');
+				});
+			});
+		});
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			casper.echo('unpin topic title : ' +postTitle, 'INFO');
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			var href = this.getElementAttribute(classVal, "href");
+			this.click('a[href="'+href+'"]');
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
+			});
+		});
+		this.then(function() {
+			test.assertExists('a.dropdown-toggle i.icon-shield');
+			this.click('a.dropdown-toggle i.icon-shield');
+			this.wait(1000, function() {
+				this.capture(screenShotsDir+ 'dropdown.png');
+			});
+			this.click('a[href^="/mbactions/unpin?"]');
+		});
+		this.thenOpen(config.url, function() {
+			casper.echo('go to topic listing page : ');
 		});
 	});
 
@@ -197,8 +629,470 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			});
 		}
 	});
+	/*****Add New topic by enable pin check box and verify unpin topic option on latest topic page*****/
+	casper.then(function() {
+		casper.echo('Add New topic by enable pin check box and verify unpin topic option on latest topic page', 'INFO');
+		var href = "";
+		this.thenOpen(config.url, function() {
+			casper.echo('hit on url : ' +config.url, 'INFO');
+		});
+		this.then(function() {
+			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+				casper.echo('go to new topic', 'INFO');
+			});
+			this.then(function() {
+				this.click('#Pin');
+				this.wait(2000, function() {
+					this.capture(screenShotsDir+ 'checkedLock.png');
+				});
+			});
+			this.then(function() {
+				this.click('#post_submit');
+			});
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'postPage.png');
+				var url = this.getCurrentUrl();
+				casper.echo('url : ' +url);
+				url = url.split('#');
+				href = url[0].split('.com');
+			});
+		});
 
-	return callback();
+		//verify pin icon from topic listion page
+		casper.then(function() {
+			casper.echo('href : ' +href[1]);
+			casper.thenOpen(config.url, function() {
+				casper.echo('go to topic listing page to verify pin icon ', 'INFO');
+			});
+			casper.then(function() {
+				test.assertExists(x('//a[@href="'+href[1]+'"]/following::span/i'));
+				casper.echo('pin topic is verified', 'INFO');
+				casper.echo('---------------------------------------------------------------------------');
+			});
+		});
+		casper.then(function() {
+			this.click('.entry-checkbox');
+			this.then(function() {
+				this.click('#delete');
+				casper.echo('newely created topic is deleted ', 'INFO');
+			});
+		});
+	});
+	/*****Add New topic by disabling pin check box and verify unpin topic  on latest topic page*****/
+	casper.then(function() {
+		casper.echo('Add New topic by disabling pin check box and verify unpin topic  on latest topic page', 'INFO');
+		var href = "";
+		this.thenOpen(config.url, function() {
+			casper.echo('hit on url : ' +config.url, 'INFO');
+		});
+		this.then(function() {
+			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+				casper.echo('go to new topic', 'INFO');
+			});
+			this.then(function() {
+				this.wait(2000, function() {
+					this.capture(screenShotsDir+ 'checkedLock.png');
+				});
+			});
+			this.then(function() {
+				this.click('#post_submit');
+			});
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'postPage.png');
+				var url = this.getCurrentUrl();
+				casper.echo('url : ' +url);
+				url = url.split('#');
+				href = url[0].split('.com');
+			});
+		});
+
+		//verify pin icon is not showing on topic listion page
+		casper.then(function() {
+			casper.echo('href : ' +href[1]);
+			casper.thenOpen(config.url, function() {
+				casper.echo('go to topic listing page to verify pin icon ', 'INFO');
+			});
+			casper.then(function() {
+				test.assertDoesntExist(x('//a[@href="'+href[1]+'"]/following::span/i[@class="glyphicon-pushpin"]'));
+				casper.echo('unPin topic is verified', 'INFO');
+				casper.echo('---------------------------------------------------------------------------');
+			});
+		});
+		casper.then(function() {
+			this.click('.entry-checkbox');
+			this.then(function() {
+				this.click('#delete');
+				casper.echo('newely created topic is deleted ', 'INFO');
+			});
+		});
+	});
+
+	/*****Add New topic by enable pin check box and verify pin topic  on forum listing page*****/
+	casper.then(function() {
+		casper.echo('Add New topic by enable pin check box and verify pin topic  on forum listing page', 'INFO');
+		var href = "";
+		this.thenOpen(config.url, function() {
+			casper.echo('hit on url : ' +config.url, 'INFO');
+		});
+		this.then(function() {
+			this.click('a[href="/categories"]');
+			this.wait(2000, function() {
+				this.capture(screenShotsDir+ 'category.png');
+			});
+		});
+		this.then(function() {
+			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+				casper.echo('go to new topic', 'INFO');
+			});
+			this.then(function() {
+				this.click('#Pin');
+				this.wait(2000, function() {
+					this.capture(screenShotsDir+ 'checkedLock.png');
+				});
+			});
+			this.then(function() {
+				this.click('#post_submit');
+			});
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'postPage.png');
+				var url = this.getCurrentUrl();
+				casper.echo('url : ' +url);
+				url = url.split('#');
+				href = url[0].split('.com');
+			});
+		});
+
+		//verify pin icon from topic listion page
+		casper.then(function() {
+			casper.echo('href : ' +href[1]);
+			casper.thenOpen(config.url, function() {
+				casper.echo('go to topic listing page to verify pin icon ', 'INFO');
+			});
+			casper.then(function() {
+				test.assertExists(x('//a[@href="'+href[1]+'"]/following::span/i'));
+				casper.echo('pin topic is verified', 'INFO');
+				casper.echo('---------------------------------------------------------------------------');
+			});
+		});
+		casper.then(function() {
+			this.click('.entry-checkbox');
+			this.then(function() {
+				this.click('#delete');
+				casper.echo('newely created topic is deleted ', 'INFO');
+			});
+		});
+		
+	});
+	/*****Add New topic by disabling pin check box and verify unpin topic  on forum listing page*****/
+	casper.then(function() {
+		casper.echo('Add New topic by disabling pin check box and verify unpin topic  on forum listing page', 'INFO');
+		var href = "";
+		this.thenOpen(config.url, function() {
+			casper.echo('hit on url : ' +config.url, 'INFO');
+		});
+		this.then(function() {
+			this.click('a[href="/categories"]');
+			this.wait(2000, function() {
+				this.capture(screenShotsDir+ 'category.png');
+			});
+		});
+		this.then(function() {
+			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+				casper.echo('go to new topic', 'INFO');
+			});
+			this.then(function() {
+				this.wait(2000, function() {
+					this.capture(screenShotsDir+ 'checkedLock.png');
+				});
+			});
+			this.then(function() {
+				this.click('#post_submit');
+			});
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'postPage.png');
+				var url = this.getCurrentUrl();
+				casper.echo('url : ' +url);
+				url = url.split('#');
+				href = url[0].split('.com');
+			});
+		});
+
+		//verify pin icon is not showing on topic listion page
+		casper.then(function() {
+			casper.echo('href : ' +href[1]);
+			casper.thenOpen(config.url, function() {
+				casper.echo('go to topic listing page to verify pin icon ', 'INFO');
+			});
+			casper.then(function() {
+				test.assertDoesntExist(x('//a[@href="'+href[1]+'"]/following::span/i[@class="glyphicon-pushpin"]'));
+				casper.echo('unPin topic is verified', 'INFO');
+				casper.echo('---------------------------------------------------------------------------');
+			});
+		});
+		casper.then(function() {
+			this.click('.entry-checkbox');
+			this.then(function() {
+				this.click('#delete');
+				casper.echo('newely created topic is deleted ', 'INFO');
+			});
+		});
+		
+	});
+
+	/*****Add New topic by enable pin check box and verify unpin topic option on topic listing page for sub category topic *****/
+	casper.then(function() {
+		casper.echo('Add New topic by enable pin check box and verify unpin topic option on topic listing page for sub category topic ', 'INFO');
+		var href = "";
+		this.thenOpen(config.url, function() {
+			casper.echo('hit on url : ' +config.url, 'INFO');
+		});
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(2000, function() {
+				this.capture(screenShotsDir+ 'linkTab.png');
+			});
+			this.then(function() {
+				this.click('li i.icon-right-dir');
+				this.wait(2000, function() {
+					this.click('li a');
+				});
+			});
+		});
+		this.then(function() {
+			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+				casper.echo('go to new topic', 'INFO');
+			});
+			this.then(function() {
+				this.click('#Pin');
+				this.wait(2000, function() {
+					this.capture(screenShotsDir+ 'checkedLock.png');
+				});
+			});
+			this.then(function() {
+				this.click('#post_submit');
+			});
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'postPage.png');
+				var url = this.getCurrentUrl();
+				casper.echo('url : ' +url);
+				url = url.split('#');
+				href = url[0].split('.com');
+			});
+		});
+
+		//verify pin icon from topic listion page
+		casper.then(function() {
+			casper.echo('href : ' +href[1]);
+			casper.thenOpen(config.url, function() {
+				casper.echo('go to topic listing page to verify pin icon ', 'INFO');
+			});
+			casper.then(function() {
+				test.assertExists(x('//a[@href="'+href[1]+'"]/following::span/i'));
+				casper.echo('pin topic is verified', 'INFO');
+				casper.echo('---------------------------------------------------------------------------');
+			});
+		});
+		casper.then(function() {
+			this.click('.entry-checkbox');
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'checkedForDel.png');
+			});
+			this.then(function() {
+				this.click('#delete');
+				casper.echo('newely created topic is deleted ', 'INFO');
+			});
+		});
+		
+	});
+	/*****Add New topic by disabling un pin check box and verify pin topic option on topic listing page for sub category topic *****/
+	casper.then(function() {
+		casper.echo('Add New topic by disabling un pin check box and verify pin topic option on topic listing page for sub category topic ', 'INFO');
+		var href = "";
+		this.thenOpen(config.url, function() {
+			casper.echo('hit on url : ' +config.url, 'INFO');
+		});
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(2000, function() {
+				this.capture(screenShotsDir+ 'linkTab.png');
+			});
+			this.then(function() {
+				this.click('li i.icon-right-dir');
+				this.wait(2000, function() {
+					this.click('li a');
+				});
+			});
+		});
+		this.then(function() {
+			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+				casper.echo('go to new topic', 'INFO');
+			});
+			this.then(function() {
+				this.wait(2000, function() {
+					this.capture(screenShotsDir+ 'checkedLock.png');
+				});
+			});
+			this.then(function() {
+				this.click('#post_submit');
+			});
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'postPage.png');
+				var url = this.getCurrentUrl();
+				casper.echo('url : ' +url);
+				url = url.split('#');
+				href = url[0].split('.com');
+			});
+		});
+
+		//verify pin icon is not showing on topic listion page
+		casper.then(function() {
+			casper.echo('href : ' +href[1]);
+			casper.thenOpen(config.url, function() {
+				casper.echo('go to topic listing page to verify pin icon ', 'INFO');
+			});
+			casper.then(function() {
+				test.assertDoesntExist(x('//a[@href="'+href[1]+'"]/following::span/i[@class="glyphicon-pushpin"]'));
+				casper.echo('unPin topic is verified', 'INFO');
+				casper.echo('---------------------------------------------------------------------------');
+			});
+		});
+	});
+
+	/*****Pin any topic and Verify Pin icon of  topic listing page under sub category *****/
+	casper.then(function() {
+		casper.echo('Pin any topic and Verify Pin icon of  topic listing page under sub category', 'INFO');
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(2000, function() {
+				this.capture(screenShotsDir+ 'linkTab.png');
+			});
+			this.then(function() {
+				this.click('li i.icon-right-dir');
+				this.wait(2000, function() {
+					this.click('li a');
+				});
+			});
+		});
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			casper.echo('pin topic title : ' +postTitle, 'INFO');
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			selectTopic(classVal, 'pin', 'Pin/Un-pin', casper, function() {});
+		});
+	});
+
+	//verify pin topic
+	casper.then(function() {
+		var postTitle = json['pin/unPin'].topicTitle;
+		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+		var href = this.getElementAttribute(classVal, "href");
+		test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
+		casper.echo('pin topic is verified', 'INFO');
+		casper.echo('---------------------------------------------------------------------------');
+	});
+
+	/*****Un-Pin any topic and Verify Pin icon of  topic listing page under sub category*****/
+	casper.then(function() {
+		casper.echo('Un-Pin any topic and Verify Pin icon of  topic listing page under sub category', 'INFO');
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(2000, function() {
+				this.capture(screenShotsDir+ 'linkTab.png');
+			});
+			this.then(function() {
+				this.click('li i.icon-right-dir');
+				this.wait(2000, function() {
+					this.click('li a');
+				});
+			});
+		});
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			casper.echo('unpin topic title : ' +postTitle, 'INFO');
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			selectTopic(classVal, 'unpin', 'Pin/Un-pin', casper, function() {});
+		});
+	});
+
+	//verify unPin topic
+	casper.then(function() {
+		var postTitle = json['pin/unPin'].topicTitle;
+		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+		var href = this.getElementAttribute(classVal, "href");
+		test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
+		casper.echo('unPin topic is verified', 'INFO');
+		casper.echo('---------------------------------------------------------------------------');
+	});
+
+	/*****Pin any topic and Verify Pin icon of  category search page *****/
+	casper.then(function() {
+		casper.echo('Pin any topic and Verify Pin icon of  category search page ', 'INFO');
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(7000, function() {
+				this.click('a[href="/latest"]');
+			});
+		});
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			casper.echo('pin topic title : ' +postTitle, 'INFO');
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			selectTopic(classVal, 'pin', 'Pin/Un-pin', casper, function() {});
+		});
+	});
+
+	//verify pin topic
+	casper.then(function() {
+		this.then(function() {
+			test.assertExists('#inline_search_box');
+			this.click('#inline_search_box');
+			this.sendKeys('#inline_search_box', json['pin/unPin'].topicTitle);
+			this.sendKeys('#inline_search_box', casper.page.event.key.Enter , {keepFocus: true});
+		});
+		var postTitle = json['pin/unPin'].topicTitle;
+		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+		var href = this.getElementAttribute(classVal, "href");
+		test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
+		casper.echo('pin topic is verified', 'INFO');
+		casper.echo('---------------------------------------------------------------------------');
+	});
+
+	/*****Un-Pin any topic and Verify Pin icon of  category search page  *****/
+	casper.then(function() {
+		casper.echo('Un-Pin any topic and Verify Pin icon of  category search page ', 'INFO');
+		this.then(function() {
+			this.click('#links-nav');
+			this.wait(7000, function() {
+				this.click('a[href="/latest"]');
+			});
+		});
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			casper.echo('unpin topic title : ' +postTitle, 'INFO');
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			selectTopic(classVal, 'unpin', 'Pin/Un-pin', casper, function() {});
+		});
+	});
+
+	//verify unPin topic
+	casper.then(function() {
+		this.then(function() {
+			test.assertExists('#inline_search_box');
+			this.click('#inline_search_box');
+			this.sendKeys('#inline_search_box', json['pin/unPin'].topicTitle);
+			this.sendKeys('#inline_search_box', casper.page.event.key.Enter , {keepFocus: true});
+		});
+		var postTitle = json['pin/unPin'].topicTitle;
+		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+		var href = this.getElementAttribute(classVal, "href");
+		test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
+		casper.echo('unPin topic is verified', 'INFO');
+		casper.echo('---------------------------------------------------------------------------');
+	});
+
+	
+
+	//return callback();
 };
 
 /************************************PRIVATE METHODS***********************************/
@@ -222,6 +1116,40 @@ var selectTopic = function(topicVal, eleStatus, dropdownTitle, driver, callback)
 	driver.wait(7000, function() {
 		this.capture(screenShotsDir +eleStatus +'.png');
 	});
+	return callback();
+};
+
+// method for go to new poll to application
+
+var gotoNewTopic = function(data, driver, callback) {
+	driver.click('#links-nav');
+	driver.click('#latest_topics_show');
+	driver.click('a[href="/post/printadd"]');
+	driver.wait(7000, function() {
+		this.capture(screenShotsDir+ 'startTopic.png');
+	});
+	driver.then(function() {
+         	 this.sendKeys('input[name="subject"]', data.title, {reset:true});
+		 this.withFrame('message_ifr', function() {
+			this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
+			this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
+	 		this.sendKeys('#tinymce', data.content);
+			this.capture(screenShotsDir+ 'content.png');	
+		});	
+		driver.wait(3000, function() {
+			try {
+				this.click('#all_forums_dropdown');
+				var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
+				this.fill('form[name="PostTopic"]',{
+					'forum' : val.trim()
+				},false);
+				this.capture(screenShotsDir+ 'fillTopic.png');
+			} catch(err) {
+
+			}
+		});
+	});
+
 	return callback();
 };
 
