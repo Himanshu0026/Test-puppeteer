@@ -18,30 +18,30 @@ forumLogin.featureTest = function(casper, test) {
 	//test case for login to application with invalid password and verify error message
 	casper.then(function(){
 		forumLogin.loginToApp(json['InvalidPassowrd'].username, json['InvalidPassowrd'].password, casper, function(){
-			casper.echo("login with valid username and invalid password and verify error message");
+			casper.echo('login with valid username and invalid password and verify error message', 'INFO');
 			casper.waitForSelector('form[name="frmLogin"] [role="alert"]',
 				function success(){
-					errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
-					this.echo("Actual error message  --> "+errorMessage.trim());
+					errorMessage = casper.fetchText('form[name="frmLogin"] [role="alert"]');
+					this.echo("Actual error message  --> "+errorMessage.trim(), 'INFO');
 					test.assertEquals(errorMessage.trim(),json['InvalidPassowrd'].ExpectedErrorMessage);
-					casper.echo('Error message is verified when user try to login with invalid password', 'info');
+					casper.echo('Error message is verified when user try to login with invalid password', 'INFO');
 				}, function fail() {
 					casper.capture(screenShotsDir+"Error_InvalidPassowrd.png");
-			});	
+			});
 		});
 	});
-
+	
 	//test case for login to application with invalid username and verify error message
 	casper.thenOpen(config.url);
 	casper.then(function(){
 		forumLogin.loginToApp(json['InvalidUsername'].username, json['InvalidUsername'].password, casper, function(){
-			casper.echo("login with invalid username and password and verify error message");
+			casper.echo('login with invalid username and password and verify error message', 'INFO');
 			casper.waitForSelector('form[name="frmLogin"] [role="alert"]',
 			function success(){
 				errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
-				this.echo("Actual error message --> "+errorMessage.trim());
+				this.echo('Actual error message --> '+errorMessage.trim(), 'INFO');
 				test.assertEquals(errorMessage.trim(),json['InvalidUsername'].ExpectedErrorMessage);
-				casper.echo('Error message is verified when user try to login with invalid username');
+				casper.echo('Error message is verified when user try to login with invalid username', 'INFO');
 			}, function fail() {
 				casper.capture(screenShotsDir+"Error_InvalidUsername.png");
 			});
@@ -52,13 +52,13 @@ forumLogin.featureTest = function(casper, test) {
 	casper.thenOpen(config.url);
 	casper.then(function(){
 		forumLogin.loginToApp(json['BlankField'].username, json['BlankField'].password, casper, function(){
-			casper.echo("login by leaving blank username and password and verify error message");
+			casper.echo('login by leaving blank username and password and verify error message', 'INFO');
 			casper.waitForSelector('form[name="frmLogin"] [role="alert"]',
 			function success(){
 				errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
-				this.echo("Actual error message --> "+errorMessage.trim());
+				this.echo('Actual error message --> '+errorMessage.trim(), 'INFO');
 				test.assertEquals(errorMessage.trim(),json['BlankField'].ExpectedErrorMessage);
-				casper.echo('Error message is verified when user try to login with blank data');
+				casper.echo('Error message is verified when user try to login with blank data', 'INFO');
 			}, function fail() {
 				casper.capture(screenShotsDir+"Error_BlankField.png");
 			});
@@ -69,13 +69,13 @@ forumLogin.featureTest = function(casper, test) {
 	casper.thenOpen(config.url);
 	casper.then(function(){
 		forumLogin.loginToApp(json['BlankPassword'].username, json['BlankPassword'].password, casper, function(){
-			casper.echo("Login by leaving blank username and password and verify error message");
+			casper.echo('Login by leaving blank username and password and verify error message', 'INFO');
 			casper.waitForSelector('form[name="frmLogin"] [role="alert"]',
 			function success(){
 				errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
-				this.echo("Actual error message --> "+errorMessage.trim());
+				this.echo('Actual error message --> '+errorMessage.trim(), 'INFO');
 				test.assertEquals(errorMessage.trim(),json['BlankPassword'].ExpectedErrorMessage);
-				casper.echo('Error message is verified when user try to login with blank data');
+				casper.echo('Error message is verified when user try to login with blank data', 'INFO');
 			}, function fail() {
 				casper.capture(screenShotsDir+"Error_BlankPassword.png");
 			});
@@ -86,14 +86,16 @@ forumLogin.featureTest = function(casper, test) {
 	casper.thenOpen(config.url);
 	casper.then(function(){
 		forumLogin.loginToApp(json['ValidCredential'].username, json['ValidCredential'].password, casper, function(){
-			casper.wait(3000, function() {
-			test.assertDoesntExist('#td_tab_login');
-			casper.echo("User has been successfuly login to application"); });
-			casper.wait(3000, function(){
-				forumLogin.logoutFromApp(casper, function(){
-					casper.echo("Successfully logout from application");
-				});
-			});	
+			casper.wait(5000, function() {
+				casper.capture(screenShotsDir+"1.png");
+				test.assertDoesntExist('#td_tab_login');
+				casper.echo('User has been successfuly login to application', 'INFO'); 
+				casper.wait(3000, function(){
+					forumLogin.logoutFromApp(casper, function(){
+						casper.echo('Successfully logout from application', 'INFO');
+					});
+				});	
+			});
 		});
 	});
 	
@@ -102,11 +104,12 @@ forumLogin.featureTest = function(casper, test) {
 	casper.then(function(){
 		forumLogin.loginToApp(json['ValidEmail'].username, json['ValidEmail'].password, casper, function(){
 			casper.wait(3000, function() {
-			test.assertDoesntExist('#td_tab_login');
-			casper.echo("User has been successfuly login to application"); });
-			casper.wait(3000, function(){
-				forumLogin.logoutFromApp(casper, function(){
-					casper.echo("Successfully logout from application");
+				test.assertDoesntExist('#td_tab_login');
+				casper.echo('User has been successfuly login to application', 'INFO'); 
+				casper.wait(3000, function(){
+					forumLogin.logoutFromApp(casper, function(){
+						casper.echo('Successfully logout from application', 'INFO');
+					});
 				});
 			});
 		});

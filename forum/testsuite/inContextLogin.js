@@ -270,7 +270,7 @@ inContextLogin.featureTest = function(casper, test) {
 	});
 	
 	/***********Incontext New Registration From Message Mouse Mover Button************/
-	casper.thenOpen(config.url, function() {
+	/*casper.thenOpen(config.url, function() {
 		casper.echo('Incontext Login From Message Mouse Mover Button', 'INFO');
 	});
 	
@@ -284,19 +284,7 @@ inContextLogin.featureTest = function(casper, test) {
     			this.click('#guest_user_message');
 		});
 	});
-	/*casper.then(function() {
-		//test.assertExists('form[name="posts"] a[href^="/profile/"]');
-		this.page.injectJs('http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js');
-		var name = this.evaluate(function () {
-			var element = document.querySelector('form[name="posts"] a.username.usergroup946060');
-			$(element).hover(function() {console.log("--------------------");
-				var popover = $('form[name="posts"] div.popover.hovercard.fade.top.in');
-				return popover;
-			});
-		});
-		casper.echo("name : " +name.innerHTML, 'INFO');
-	});*/
-	
+		
 	casper.wait(5000, function() {
 		this.capture(screenShotsDir + 'clickOnMessage.png');
 	});
@@ -323,7 +311,7 @@ inContextLogin.featureTest = function(casper, test) {
 				});
 			});
 		}
-	});*/
+	});
 	
 	//Filling Valid Data On Login
 	
@@ -341,7 +329,7 @@ inContextLogin.featureTest = function(casper, test) {
 			
 	casper.then(function() {
 		redirectToLogout(casper, test, function() {});
-	});
+	});*/
 };
 
 

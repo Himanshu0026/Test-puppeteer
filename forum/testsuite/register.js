@@ -446,6 +446,11 @@ forumRegister.registerWithSettings = function(casper, test) {
 		});
 	});
 	
+	casper.thenOpen(config.backEndUrl, function() {
+		test.assertExists('a[href="/tool/members/login?action=logout"]');
+		this.click('a[href="/tool/members/login?action=logout"]');
+	});
+	
 	//Handling 'Alert' While Submitting The Form
 	casper.on('remote.alert', function(message) {
 		var expectedErrorMsg = "Please provide a signature.";
@@ -614,8 +619,8 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 		try {
 			test.assertExists('#registerEditProfile div[role="alert"]');
 			var errorMessage = driver.fetchText('#registerEditProfile div[role="alert"]');
-			var expectedErrorMsg = "Error: It looks like you already have a forum account!";
-			test.assert(errorMessage.indexOf(expectedErrorMsg) > -1);
+			var expectedErrorMsg = "It looks like you already have a forum account!";
+			driver.test.assert(errorMessage.indexOf(expectedErrorMsg) > -1);
 			driver.echo('USER ALREADY REGISTERED ON FORUM.....', 'INFO');
 			return callback();
 		} catch(e1) {

@@ -135,6 +135,13 @@ inContextForumRegister.featureTest = function(casper, test) {
 		casper.echo('************************************************************************************', 'INFO');
 	});
 	
+	casper.then(function() {
+		test.assertExists('i.icon.icon-menu');
+		this.click('i.icon.icon-menu');
+		test.assertExists('a[href="/latest"]');
+		this.click('a[href="/latest"]');
+	});
+
 	//Clicking On Start New Topic Button
 	
 	casper.then(function() {
@@ -182,6 +189,13 @@ inContextForumRegister.featureTest = function(casper, test) {
 		casper.echo('************************************************************************************', 'INFO');
 	});
 	
+	casper.then(function() {
+		test.assertExists('i.icon.icon-menu');
+		this.click('i.icon.icon-menu');
+		test.assertExists('a[href="/latest"]');
+		this.click('a[href="/latest"]');
+	});
+	
 	//Clicking On 'Like' This Post Icon
 	casper.then(function() {
 		test.assertExists('i.glyphicon.glyphicon-like-alt');
@@ -213,6 +227,13 @@ inContextForumRegister.featureTest = function(casper, test) {
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('INCONTEXT NEW REGISTRATION WHILE LIKE POST FROM TOPIC PAGE', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
+	});
+	
+	casper.then(function() {
+		test.assertExists('i.icon.icon-menu');
+		this.click('i.icon.icon-menu');
+		test.assertExists('a[href="/latest"]');
+		this.click('a[href="/latest"]');
 	});
 	
 	//Clicking On Any Topic Present In The List
@@ -258,6 +279,13 @@ inContextForumRegister.featureTest = function(casper, test) {
 		casper.echo('************************************************************************************', 'INFO');
 	});
 	
+	casper.then(function() {
+		test.assertExists('i.icon.icon-menu');
+		this.click('i.icon.icon-menu');
+		test.assertExists('a[href="/latest"]');
+		this.click('a[href="/latest"]');
+	});
+	
 	//Clicking On Any Topic Present In The List
 	casper.then(function() {
 		test.assertExists('form[name="posts"] a.topic-title');
@@ -301,6 +329,13 @@ inContextForumRegister.featureTest = function(casper, test) {
 		casper.echo('************************************************************************************', 'INFO');
 	});
 	
+	casper.then(function() {
+		test.assertExists('i.icon.icon-menu');
+		this.click('i.icon.icon-menu');
+		test.assertExists('a[href="/latest"]');
+		this.click('a[href="/latest"]');
+	});
+	
 	//Clicking On Any Topic Present In The List
 	casper.then(function() {
 		test.assertExists('form[name="posts"] a.topic-title');
@@ -342,6 +377,13 @@ inContextForumRegister.featureTest = function(casper, test) {
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('INCONTEXT NEW REGISTRATION FROM VOTE ON POST FROM POST LIST', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
+	});
+	
+	casper.then(function() {
+		test.assertExists('i.icon.icon-menu');
+		this.click('i.icon.icon-menu');
+		test.assertExists('a[href="/latest"]');
+		this.click('a[href="/latest"]');
 	});
 	
 	//Clicking On Any Topic Present In The List

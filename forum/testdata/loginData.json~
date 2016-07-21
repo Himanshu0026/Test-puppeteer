@@ -1,5 +1,5 @@
 {
-	"url" : "http://beta12.websitetoolbox.com/", 
+
 	"username": "sangita",
 	"password": "sangita",
 	
@@ -17,26 +17,26 @@
      "InvalidPassowrd" : {
 	"username": "sangita",
 	"password": "sangita123",
-	"ExpectedErrorMessage" : "Error: The password you entered is incorrect"
+	"ExpectedErrorMessage" : "The password you entered is incorrect."
 	},
 
     "InvalidUsername" : {
 	"username": "sangitajrt",
 	"password": "sangita",
-	"ExpectedErrorMessage" : "Error: There is no account with the username you specified."
+	"ExpectedErrorMessage" : "There is no account with the username you specified."
 	
 	},
 
     "BlankField" : {
 	"username": "",
 	"password": "",
-	"ExpectedErrorMessage" : "Error: You must enter your username or email address."
+	"ExpectedErrorMessage" : "You must enter your username or email address."
 	},
 
     "BlankPassword" : {
 	"username": "sangita",
 	"password": "",
-	"ExpectedErrorMessage" : "Error: You must enter your password."
+	"ExpectedErrorMessage" : "You must enter your password."
 	}
 
 	

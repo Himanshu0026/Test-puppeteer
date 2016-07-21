@@ -18,19 +18,19 @@
 			"blankTitle" : {
 				"title" : "",
 				"content" : "hey there..!!",
-				"ExpectedErrorMessage" : "Error: You must enter a title for your message."
+				"ExpectedErrorMessage" : "You must enter a title for your message."
 			},
 
 			"blankContent" : {
 				"title" : "ping",
 				"content" : "",
-				"ExpectedErrorMessage" : "Error: You must enter a message to post."
+				"ExpectedErrorMessage" : "You must enter a message to post."
 			},
 
 			"blankCategory" : {
 				"title" : "ping",
 				"content" : "hey there..!!",
-				"ExpectedErrorMessage" : "Error: You must select a category for your message."
+				"ExpectedErrorMessage" : "You must select a category for your message."
 			},
 	
 			"blankField" : {
