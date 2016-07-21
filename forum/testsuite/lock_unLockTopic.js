@@ -10,10 +10,10 @@ var config = require('../config/config.json');
 var lock_unLockTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'lockUnLock/';
 
-lock_unLockTopic.lockUnLockFeature = function(casper, test, x) {
+lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 	
 	//Open Forum URL And Get Title 
-	casper.start(config.url, function() {
+	casper.thenOpen(config.url, function() {
 		this.log('Title of the page :' +this.getTitle());
 	});
 
@@ -524,6 +524,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x) {
 			this.capture(screenShotsDir+ 'savePoll.png');
 		});
 		casper.then(function() {
+			this.click('form[name="Poll"] input[name="pollvotesave"]');
 			var msg = this.getElementAttribute('form[name="Poll"] input[name="pollvotesave"]', 'data-original-title');
 			casper.echo('msg : ' +msg.trim());
 			test.assertEquals(msg.trim(), json['lock/unLock'].ExpectedMessage, msg.trim()+' and message is verified');
@@ -541,7 +542,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x) {
 	casper.wait(7000, function() {
 		this.capture(screenShotsDir+ 'logout.png');
 	});	
-	//return callback();
+	return callback();
 };
 
 /************************************PRIVATE METHODS***********************************/
