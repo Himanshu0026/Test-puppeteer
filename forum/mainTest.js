@@ -33,7 +33,7 @@ switch (feature) {
 	});
 
     case "editProfileWithSettings":
-	casper.test.begin("Start Edit Profile functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+	casper.test.begin("Start 'Edit Profile With Setting' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 		var editProfile = require("./testsuite/editprofile.js");
 		editProfile.customFieldsTest(casper, casper.test);
 		casper.run(function() {

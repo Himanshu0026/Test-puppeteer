@@ -28,6 +28,19 @@ editProfile.featureTest = function(casper, test) {
 		} catch (e) {
 			this.echo('Title does not match', 'ERROR');
 		}
+		try {
+			test.assertExists('a.default-user');
+			this.click('a.default-user');
+			try {
+				test.assertExists('a#logout');
+				this.click('a#logout');
+				casper.wait(5000, function() {});
+			}catch(e) {
+				test.assertDoesntExist('a#logout');
+			}
+		}catch(e) {
+			test.assertDoesntExist('a.default-user');
+		}
 	});
 
 	//Registering A user
@@ -606,6 +619,19 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		try {
+			test.assertExists('a.default-user');
+			this.click('a.default-user');
+			try {
+				test.assertExists('a#logout');
+				this.click('a#logout');
+				casper.wait(5000, function() {});
+			}catch(e) {
+				test.assertDoesntExist('a#logout');
+			}
+		}catch(e) {
+			test.assertDoesntExist('a.default-user');
+		}
 	});
 	
 	//Registering A user
@@ -651,6 +677,19 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		try {
+			test.assertExists('a.default-user');
+			this.click('a.default-user');
+			try {
+				test.assertExists('a#logout');
+				this.click('a#logout');
+				casper.wait(5000, function() {});
+			}catch(e) {
+				test.assertDoesntExist('a#logout');
+			}
+		}catch(e) {
+			test.assertDoesntExist('a.default-user');
+		}
 	});
 
 	//Login To App And Verify User Name Visibility On Account Setting Page
@@ -703,6 +742,19 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		try {
+			test.assertExists('a.default-user');
+			this.click('a.default-user');
+			try {
+				test.assertExists('a#logout');
+				this.click('a#logout');
+				casper.wait(5000, function() {});
+			}catch(e) {
+				test.assertDoesntExist('a#logout');
+			}
+		}catch(e) {
+			test.assertDoesntExist('a.default-user');
+		}
 	});
 	
 	//Registering A user
@@ -750,6 +802,19 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		try {
+			test.assertExists('a.default-user');
+			this.click('a.default-user');
+			try {
+				test.assertExists('a#logout');
+				this.click('a#logout');
+				casper.wait(5000, function() {});
+			}catch(e) {
+				test.assertDoesntExist('a#logout');
+			}
+		}catch(e) {
+			test.assertDoesntExist('a.default-user');
+		}
 	});
 
 	//Login To App And Verify User Name Visibility On Account Setting Page
@@ -800,6 +865,19 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		try {
+			test.assertExists('a.default-user');
+			this.click('a.default-user');
+			try {
+				test.assertExists('a#logout');
+				this.click('a#logout');
+				casper.wait(5000, function() {});
+			}catch(e) {
+				test.assertDoesntExist('a#logout');
+			}
+		}catch(e) {
+			test.assertDoesntExist('a.default-user');
+		}
 	});
 	
 	//Registering A user
@@ -847,6 +925,19 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		try {
+			test.assertExists('a.default-user');
+			this.click('a.default-user');
+			try {
+				test.assertExists('a#logout');
+				this.click('a#logout');
+				casper.wait(5000, function() {});
+			}catch(e) {
+				test.assertDoesntExist('a#logout');
+			}
+		}catch(e) {
+			test.assertDoesntExist('a.default-user');
+		}
 	});
 
 	//Login To App And Verify User Name Visibility On Account Setting Page
@@ -897,6 +988,19 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		try {
+			test.assertExists('a.default-user');
+			this.click('a.default-user');
+			try {
+				test.assertExists('a#logout');
+				this.click('a#logout');
+				casper.wait(5000, function() {});
+			}catch(e) {
+				test.assertDoesntExist('a#logout');
+			}
+		}catch(e) {
+			test.assertDoesntExist('a.default-user');
+		}
 	});
 	
 	//Registering A user
@@ -944,6 +1048,19 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		try {
+			test.assertExists('a.default-user');
+			this.click('a.default-user');
+			try {
+				test.assertExists('a#logout');
+				this.click('a#logout');
+				casper.wait(5000, function() {});
+			}catch(e) {
+				test.assertDoesntExist('a#logout');
+			}
+		}catch(e) {
+			test.assertDoesntExist('a.default-user');
+		}
 	});
 
 	//Login To App And Verify User Name Visibility On Account Setting Page
