@@ -28,19 +28,6 @@ editProfile.featureTest = function(casper, test) {
 		} catch (e) {
 			this.echo('Title does not match', 'ERROR');
 		}
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Registering A user
@@ -619,19 +606,6 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 	
 	//Registering A user
@@ -677,19 +651,6 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And Verify User Name Visibility On Account Setting Page
@@ -742,19 +703,6 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 	
 	//Registering A user
@@ -802,19 +750,6 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And Verify User Name Visibility On Account Setting Page
@@ -865,19 +800,6 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 	
 	//Registering A user
@@ -925,19 +847,6 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And Verify User Name Visibility On Account Setting Page
@@ -988,19 +897,6 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 	
 	//Registering A user
@@ -1048,19 +944,6 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And Verify User Name Visibility On Account Setting Page
@@ -1395,7 +1278,7 @@ var disableUserNameForRegisteredUser = function(driver, test, callback) {
 										var expectedSuccessMsg = 'Your user group settings have been updated.';
 										verifySuccessMsg(successMsg, expectedSuccessMsg, 'userNameWithUnchecked', driver, function() {
 											driver.capture(screenShotsDir+ 'success.png');
-											makeRegisteredUser(driver, driver.test, function() {
+											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
 												return callback();					
 											});
@@ -1423,7 +1306,7 @@ var disableUserNameForRegisteredUser = function(driver, test, callback) {
 };
 
 //Method For Making A User Registered From back-End
-var makeRegisteredUser = function(driver, test, callback) {
+editProfile.makeRegisteredUser = function(driver, test, callback) {
 	try {
 		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		driver.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
@@ -1502,7 +1385,7 @@ var disableInvisibleModeForRegisteredUser = function(driver, test, callback) {
 										var expectedSuccessMsg = 'Your user group settings have been updated.';
 										verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedEditOwnProfile', driver, function() {
 											driver.capture(screenShotsDir+ 'success.png');
-											makeRegisteredUser(driver, driver.test, function() {
+											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
 												return callback();					
 											});
@@ -1570,7 +1453,7 @@ var disableEditOwnProfileForRegisteredUser = function(driver, test, callback) {
 										var expectedSuccessMsg = 'Your user group settings have been updated.';
 										verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedEditOwnProfile', driver, function() {
 											driver.capture(screenShotsDir+ 'success.png');
-											makeRegisteredUser(driver, driver.test, function() {
+											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
 												return callback();					
 											});
@@ -1637,7 +1520,7 @@ var disableCustomUserTitleForRegisteredUser = function(driver, test, callback) {
 										var expectedSuccessMsg = 'Your user group settings have been updated.';
 										verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedEditOwnProfile', driver, function() {
 											driver.capture(screenShotsDir+ 'success.png');
-											makeRegisteredUser(driver, driver.test, function() {
+											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
 												return callback();					
 											});
