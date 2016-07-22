@@ -66,6 +66,20 @@ switch (feature) {
 	});
         
         break;
+
+    case "generalPermission":
+	casper.test.begin("Start 'General Permission' functionality from home page & verify content with all scenarios", function(test) {
+
+		var generalPermission = require("./testsuite/generalPermission.js");
+		var x = require('casper').selectXPath;
+		generalPermission.featureTest(casper, casper.test, x);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
+        
+        break;
     case "register":
     	casper.test.begin('REGISTRATION TEST', function(test) {
 		var forumRegister = require("./testsuite/register.js");

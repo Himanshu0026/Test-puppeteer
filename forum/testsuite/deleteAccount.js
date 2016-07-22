@@ -3,6 +3,7 @@
 var forumRegister = require('./register.js');
 var forumLogin = require('./forum_login.js');
 var utils = require('./utils.js');
+var editProfile = require('./editprofile.js');
 var json = require('../testdata/editData.json');
 var config = require('../config/config.json');
 
@@ -23,19 +24,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.start(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 	
 	//Open Registration Form
@@ -45,91 +33,76 @@ deleteAccount.featureTest = function(casper, test, x) {
 			this.click('a[href^="/register/register"]');
 			casper.wait(5000, function() {
 				this.capture(screenShotsDir+ '1_registerFrom.png');
-				this.echo('registration from opened successfully', 'INFO');		
+				this.echo('registration from opened successfully', 'INFO');
+
+				//Registering a user And Verifying Do Not Delete Account
+				forumRegister.registerToApp(json.deleteAccount, casper, function() {
+					casper.wait(5000, function() {
+						this.capture(screenShotsDir+ '1_registeredUser.png');
+						this.echo('user registered successfully', 'INFO');
+
+						//Clicking On User's Icon To Display User's Drop-down For Editing Profile
+						casper.then(function() {
+							try {
+								test.assertExists('.default-user');
+								this.click('.default-user');
+								this.echo('clicked on users icon successfully', 'INFO');
+								test.assertExists('a[href^="/register/register?edit="]');
+								this.click('a[href^="/register/register?edit="]');
+								test.assertExists('a[href^="/register?action=preferences&userid="]');
+								this.click('a[href^="/register?action=preferences&userid="]');
+							} catch (e) {
+								forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function() {
+									casper.wait(7000, function() {
+										this.capture(screenShotsDir+ '1_demo.png');
+										this.echo('User Logged-in Successfully', 'INFO');	
+										test.assertExists('a.default-user');
+										this.click('a.default-user');
+										test.assertExists('a[href^="/register/register?edit="]');
+										this.click('a[href^="/register/register?edit="]');
+										test.assertExists('a[href^="/register?action=preferences&userid="]');
+										this.click('a[href^="/register?action=preferences&userid="]');
+						
+									}); 						
+								});
+							}
+						
+							//Do Not Delete User's Account. 
+							casper.then(function() {
+								doNotDeleteAccount(casper, function() {
+									casper.wait(5000, function() {
+										this.capture(screenShotsDir+ '1_doNotDeleteAccount.png');
+										//this.echo('Account is not deleted', 'INFO');
+									});
+								});
+					
+							});
+						});		
+					});
+					casper.then(function() {
+						try {
+							test.assertExists('.default-user');
+							forumRegister.redirectToLogout(casper, test, function() {
+								casper.wait(5000, function() {
+									casper.echo('Do Not Delete Account Task Completed From Account Setting Page', 'INFO');
+								});						
+
+							});
+						}catch(e) {
+							test.assertDoesntExist('.default-user');												
+						}			
+					});
+				});		
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href^="/register/register"]');
 		}	
 	});
 
-	//Registering a user And Verifying Do Not Delete Account
-	casper.then(function () {
-		forumRegister.registerToApp(json.deleteAccount, casper, function() {
-			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ '1_registeredUser.png');
-				this.echo('user registered successfully', 'INFO');
-
-				//Clicking On User's Icon To Display User's Drop-down For Editing Profile
-				casper.then(function() {
-					try {
-						test.assertExists('.default-user');
-						this.click('.default-user');
-						this.echo('clicked on users icon successfully', 'INFO');
-						test.assertExists('a[href^="/register/register?edit="]');
-						this.click('a[href^="/register/register?edit="]');
-						test.assertExists('a[href^="/register?action=preferences&userid="]');
-						this.click('a[href^="/register?action=preferences&userid="]');
-					} catch (e) {
-						forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function() {
-							casper.wait(7000, function() {
-								this.capture(screenShotsDir+ '1_demo.png');
-								this.echo('User Logged-in Successfully', 'INFO');	
-								test.assertExists('a.default-user');
-								this.click('a.default-user');
-								test.assertExists('a[href^="/register/register?edit="]');
-								this.click('a[href^="/register/register?edit="]');
-								test.assertExists('a[href^="/register?action=preferences&userid="]');
-								this.click('a[href^="/register?action=preferences&userid="]');
-							
-							}); 						
-						});
-					}
-							
-					//Do Not Delete User's Account. 
-					casper.then(function() {
-						doNotDeleteAccount(casper, function() {
-							casper.wait(5000, function() {
-								this.capture(screenShotsDir+ '1_doNotDeleteAccount.png');
-								//this.echo('Account is not deleted', 'INFO');
-							});
-						});
-						
-					});
-				});		
-			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Do Not Delete Account Task Completed From Account Setting Page', 'INFO');
-						});						
-	
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user');												
-				}			
-			});
-		});
-	});
-
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And Delete User's Account
@@ -193,19 +166,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Registering A User And Make An Admin
@@ -253,19 +213,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 
@@ -335,19 +282,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And An Admin Deletes An Account From Member's List By Selecting 		  		Member's Profile Page
@@ -412,19 +346,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 		
 	//Registering A user
@@ -525,19 +446,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 	
 	//Registering A User And Make An Admin
@@ -587,19 +495,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And An Admin Deletes Own Account From Member's List
@@ -672,19 +567,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Registering A user And Create A New Topic
@@ -793,19 +675,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Registering A user And Create A New Topic
@@ -910,19 +779,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Registering A User And Make An Admin
@@ -970,19 +826,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And An Admin Deletes Other user's Account From Setting Page
@@ -1065,19 +908,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Registering A User
@@ -1152,19 +982,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And Delete An Account From User's profilePage
@@ -1220,19 +1037,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Registering A user
@@ -1592,19 +1396,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 		
 	//Registering A User On Forum
@@ -1697,19 +1488,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 		
 	//Registering A User On Forum
@@ -1801,19 +1579,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 		
 	//Registering A User On Forum
@@ -1905,19 +1670,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 		
 	//Registering A User On Forum
@@ -1990,19 +1742,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 		
 	//Registering A User On Forum
@@ -2062,19 +1801,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And Delete An Account From Account Setting Page
@@ -2127,19 +1853,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 		
 	//Registering A User On Forum
@@ -2195,19 +1908,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And Delete An Account From Account Setting Page
@@ -2260,19 +1960,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 		
 	//Registering A User On Forum
@@ -2326,19 +2013,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And Delete An Account From Account Setting Page
@@ -2391,19 +2065,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 		
 	//Registering A User On Forum
@@ -2460,19 +2121,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And Delete An Account From Account Setting Page
@@ -2543,19 +2191,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 		
 	//Registering A User On Forum
@@ -2647,19 +2282,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 		
 	//Registering A User On Forum
@@ -2733,19 +2355,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 		
 	//Registering A User On Forum
@@ -2801,19 +2410,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And Delete An Account From User's Profile Page
@@ -2866,19 +2462,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 		
 	//Registering A User On Forum
@@ -2932,19 +2515,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.thenOpen(config.url, function() {
 		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a.default-user');
-			this.click('a.default-user');
-			try {
-				test.assertExists('a#logout');
-				this.click('a#logout');
-				casper.wait(5000, function() {});
-			}catch(e) {
-				test.assertDoesntExist('a#logout');
-			}
-		}catch(e) {
-			test.assertDoesntExist('a.default-user');
-		}
 	});
 
 	//Login To App And Delete An Account From User's Profile Page
@@ -3072,45 +2642,6 @@ var verifySuccessMsg = function(successMsg, expectedSuccessMsg, driver, callback
 	return callback();
 };
 
-//Method For Changing User Group To Registered User
-var makeRegisteredUser = function(driver, test, callback) {
-	try {
-		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		driver.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		try {
-			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			driver.wait(5000, function() {
-				try {
-					this.test.assertExists('#autosuggest');
-					this.sendKeys('#autosuggest', 'hs1234', {keepFocus: true});
-					this.click('#autosuggest');
-					this.page.sendEvent("keypress", this.page.event.key.Enter);
-					driver.wait(3000, function() {
-						driver.then(function() {
-							this.fillSelectors('form[name="ugfrm"]', {
-								'select[name="usergroupid"]' :  '20237477'
-							}, true);
-						});
-						driver.wait(3000, function() {
-							this.capture(screenShotsDir + 'popUp.png');
-							test.assertExists('a[href="/tool/members/login?action=logout"]');
-							driver.click('a[href="/tool/members/login?action=logout"]');
-							return callback();
-						});
-					});
-				}catch(e) {
-					this.test.assertDoesntExist('#autosuggest');
-				}
-			});
-		}catch(e) {
-			test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		}
-	}catch(e) {
-		test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}
-};
-
 //Method For Changing User Group To Admin User
 var makeAnAdminUser = function(driver, test, callback) {
 	try {
@@ -3191,7 +2722,7 @@ var enableDeleteOwnProfileForRegisteredUser = function(driver, test, callback) {
 										var expectedSuccessMsg = 'Your user group settings have been updated.';
 										verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
 											driver.capture(screenShotsDir+ 'success.png');
-											makeRegisteredUser(driver, driver.test, function() {
+											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
 												return callback();					
 											});
@@ -3325,7 +2856,7 @@ var disableDeleteOwnProfileForRegisteredUser = function(driver, test, callback) 
 										var expectedSuccessMsg = 'Your user group settings have been updated.';
 										verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
 											driver.capture(screenShotsDir+ 'success.png');
-											makeRegisteredUser(driver, driver.test, function() {
+											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
 												return callback();					
 											});
