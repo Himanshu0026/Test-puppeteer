@@ -436,6 +436,9 @@ newTopic.featureTest = function(casper, test, x) {
 					this.wait(7000, function() {
 						this.click('.unfollow-button');
 					});
+					this.wait(7000, function() {
+						this.capture(screenShotsDir+ 'unfollow.png');
+					});
 					this.then(function() {
 						verifyWarningMsg(json.followTopic.ExpectedWarningMessage, casper, function() {
 							casper.echo('warning message is verified', 'INFO');
@@ -604,12 +607,13 @@ var postTopicpage = function(data, driver, callback) {
 		this.capture(screenShotsDir+ 'content.png');	
 	});	
 		driver.then(function() {
-			driver.click('#all_forums_dropdown');
-			var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
-			driver.fill('form[name="PostTopic"]',{
-				'forum' : val.trim()
-			},false);
-	
+			if(data.category) {
+				driver.click('#all_forums_dropdown');
+				var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
+				driver.fill('form[name="PostTopic"]',{
+					'forum' : val.trim()
+				},false);
+			}
 		});	
 		
 	//code for open insert image model

@@ -914,60 +914,6 @@ editProfile.customFieldsTest = function(casper, test) {
 			this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
 		}
 	});
-
-	//Login To App And Verify User Name Visibility On Account Setting Page
-	casper.then(function() {
-		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
-			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedIn_user.png');
-				casper.echo('User logged-in successfully', 'INFO');
-				casper.then(function() {
-					try {
-						this.test.assertExists('a.default-user ');
-						this.click('a.default-user ');
-						try {
-							this.test.assertExists('span li a[href^="/register?action=preferences"]');
-							this.click('span li a[href^="/register?action=preferences"]');
-							casper.wait(5000, function() {
-								this.capture(screenShotsDir+ 'profile.png');	
-								try {
-									test.assertExists('div#usrName .change-value');
-								}catch(e) {
-									test.assertDoesntExist('div#usrName .change-value');
-								}			
-							});
-						}catch(e) {
-							test.assertDoesntExist('span li a[href^="/register?action=preferences"]');
-						}
-					}catch(e) {
-						test.assertDoesntExist('a.default-user ');
-					}						
-				});
-			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Edit Profile Invisibility verified', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user');													
-				}			
-			});
-		});
-	});
-
-	//Open Front_end URL and Get Title
-	casper.thenOpen(config.url, function() {
-		try {
-			test.assertTitle('forum12');
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		}catch(e) {
-			this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-		}
-	});
 	
 	//Registering A user
 	casper.then(function() {
@@ -1473,7 +1419,7 @@ var disableUserNameForRegisteredUser = function(driver, test, callback) {
 										var expectedSuccessMsg = 'Your user group settings have been updated.';
 										verifySuccessMsg(successMsg, expectedSuccessMsg, 'userNameWithUnchecked', driver, function() {
 											driver.capture(screenShotsDir+ 'success.png');
-											makeRegisteredUser(driver, driver.test, function() {
+											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
 												return callback();					
 											});
@@ -1501,7 +1447,7 @@ var disableUserNameForRegisteredUser = function(driver, test, callback) {
 };
 
 //Method For Making A User Registered From back-End
-var makeRegisteredUser = function(driver, test, callback) {
+editProfile.makeRegisteredUser = function(driver, test, callback) {
 	try {
 		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		driver.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
@@ -1580,7 +1526,7 @@ var disableInvisibleModeForRegisteredUser = function(driver, test, callback) {
 										var expectedSuccessMsg = 'Your user group settings have been updated.';
 										verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedEditOwnProfile', driver, function() {
 											driver.capture(screenShotsDir+ 'success.png');
-											makeRegisteredUser(driver, driver.test, function() {
+											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
 												return callback();					
 											});
@@ -1648,7 +1594,7 @@ var disableEditOwnProfileForRegisteredUser = function(driver, test, callback) {
 										var expectedSuccessMsg = 'Your user group settings have been updated.';
 										verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedEditOwnProfile', driver, function() {
 											driver.capture(screenShotsDir+ 'success.png');
-											makeRegisteredUser(driver, driver.test, function() {
+											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
 												return callback();					
 											});
@@ -1715,7 +1661,7 @@ var disableCustomUserTitleForRegisteredUser = function(driver, test, callback) {
 										var expectedSuccessMsg = 'Your user group settings have been updated.';
 										verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedEditOwnProfile', driver, function() {
 											driver.capture(screenShotsDir+ 'success.png');
-											makeRegisteredUser(driver, driver.test, function() {
+											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
 												return callback();					
 											});

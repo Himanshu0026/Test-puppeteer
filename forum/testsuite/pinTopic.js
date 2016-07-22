@@ -9,10 +9,10 @@ var config = require('../config/config.json');
 var pinTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'pinTopic/';
 
-pinTopic.pinUnPinFeature = function(casper, test, x) {
+pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 	
 	//Open Forum URL And Get Title 
-	casper.start(config.url, function() {
+	casper.thenOpen(config.url, function() {
 		this.log('Title of the page :' +this.getTitle());
 	});
 
@@ -481,37 +481,43 @@ pinTopic.pinUnPinFeature = function(casper, test, x) {
 				});
 			});
 		});
-		this.then(function() {
-			var postTitle = json['pin/unPin'].topicTitle;
-			casper.echo('pin topic title : ' +postTitle, 'INFO');
-			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-			var href = this.getElementAttribute(classVal, "href");
-			this.click('a[href="'+href+'"]');
-			this.wait(7000, function() {
-				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
-			});
-		});
-		this.then(function() {
-			test.assertExists('a.dropdown-toggle i.icon-shield');
-			this.click('a.dropdown-toggle i.icon-shield');
-			this.wait(1000, function() {
-				this.capture(screenShotsDir+ 'dropdown.png');
-			});
-			this.click('a[href^="/mbactions/pin?"]');
-		});
-		this.thenOpen(config.url, function() {
-			casper.echo('go to topic listing page : ');
-		});
-	});
 
-	//verify pin topic
-	casper.then(function() {
-		var postTitle = json['pin/unPin'].topicTitle;
-		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-		var href = this.getElementAttribute(classVal, "href");
-		test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
-		casper.echo('pin topic is verified', 'INFO');
-		casper.echo('---------------------------------------------------------------------------');
+		if(this.exists('span.alert-info')){
+			var info = this.fetchText('span.alert-info');
+			test.assertEquals(info.trim(), 'There are currently no topics to display.', info.trim()+' info message is verified');
+		} else {
+			this.then(function() {
+				var postTitle = json['pin/unPin'].topicTitle;
+				casper.echo('pin topic title : ' +postTitle, 'INFO');
+				var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+				var href = this.getElementAttribute(classVal, "href");
+				this.click('a[href="'+href+'"]');
+				this.wait(7000, function() {
+					this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
+				});
+			});
+			this.then(function() {
+				test.assertExists('a.dropdown-toggle i.icon-shield');
+				this.click('a.dropdown-toggle i.icon-shield');
+				this.wait(1000, function() {
+					this.capture(screenShotsDir+ 'dropdown.png');
+				});
+				this.click('a[href^="/mbactions/pin?"]');
+			});
+			this.thenOpen(config.url, function() {
+				casper.echo('go to topic listing page : ');
+			});
+
+			//verify pin topic
+			casper.then(function() {
+				var postTitle = json['pin/unPin'].topicTitle;
+				var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+				var href = this.getElementAttribute(classVal, "href");
+				test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
+				casper.echo('pin topic is verified', 'INFO');
+				casper.echo('---------------------------------------------------------------------------');
+			});
+		}
 	});
 
 	/*****Un-Pin any topic and Verify Pin icon under sub category page from moderator shield icon*****/
@@ -529,37 +535,41 @@ pinTopic.pinUnPinFeature = function(casper, test, x) {
 				});
 			});
 		});
-		this.then(function() {
-			var postTitle = json['pin/unPin'].topicTitle;
-			casper.echo('unpin topic title : ' +postTitle, 'INFO');
-			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-			var href = this.getElementAttribute(classVal, "href");
-			this.click('a[href="'+href+'"]');
-			this.wait(7000, function() {
-				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
+		if(this.exists('span.alert-info')){
+			var info = this.fetchText('span.alert-info');
+			test.assertEquals(info.trim(), 'There are currently no topics to display.', info.trim()+' info message is verified');
+		} else { 
+			this.then(function() {
+				var postTitle = json['pin/unPin'].topicTitle;
+				casper.echo('unpin topic title : ' +postTitle, 'INFO');
+				var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+				var href = this.getElementAttribute(classVal, "href");
+				this.click('a[href="'+href+'"]');
+				this.wait(7000, function() {
+					this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
+				});
 			});
-		});
-		this.then(function() {
-			test.assertExists('a.dropdown-toggle i.icon-shield');
-			this.click('a.dropdown-toggle i.icon-shield');
-			this.wait(1000, function() {
-				this.capture(screenShotsDir+ 'dropdown.png');
+			this.then(function() {
+				test.assertExists('a.dropdown-toggle i.icon-shield');
+				this.click('a.dropdown-toggle i.icon-shield');
+				this.wait(1000, function() {
+					this.capture(screenShotsDir+ 'dropdown.png');
+				});
+				this.click('a[href^="/mbactions/unpin?"]');
 			});
-			this.click('a[href^="/mbactions/unpin?"]');
-		});
-		this.thenOpen(config.url, function() {
-			casper.echo('go to topic listing page : ');
-		});
-	});
-
-	//verify unPin topic
-	casper.then(function() {
-		var postTitle = json['pin/unPin'].topicTitle;
-		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-		var href = this.getElementAttribute(classVal, "href");
-		test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
-		casper.echo('unPin topic is verified', 'INFO');
-		casper.echo('---------------------------------------------------------------------------');
+			this.thenOpen(config.url, function() {
+				casper.echo('go to topic listing page : ');
+			});
+			//verify unPin topic
+			casper.then(function() {
+				var postTitle = json['pin/unPin'].topicTitle;
+				var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+				var href = this.getElementAttribute(classVal, "href");
+				test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
+				casper.echo('unPin topic is verified', 'INFO');
+				casper.echo('---------------------------------------------------------------------------');
+			});
+		}
 	});
 
 	/*****pin topic from Profile page and verify pin topic*****/
@@ -670,14 +680,15 @@ pinTopic.pinUnPinFeature = function(casper, test, x) {
 				casper.echo('---------------------------------------------------------------------------');
 			});
 		});
+		
+		//delete newely created topic
 		casper.then(function() {
-			this.click('.entry-checkbox');
-			this.then(function() {
-				this.click('#delete');
-				casper.echo('newely created topic is deleted ', 'INFO');
+			deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
+				casper.echo('newely created topic is deleted ', 'INFO');		
 			});
 		});
 	});
+
 	/*****Add New topic by disabling pin check box and verify unpin topic  on latest topic page*****/
 	casper.then(function() {
 		casper.echo('Add New topic by disabling pin check box and verify unpin topic  on latest topic page', 'INFO');
@@ -718,11 +729,11 @@ pinTopic.pinUnPinFeature = function(casper, test, x) {
 				casper.echo('---------------------------------------------------------------------------');
 			});
 		});
+
+		//delete newely created topic
 		casper.then(function() {
-			this.click('.entry-checkbox');
-			this.then(function() {
-				this.click('#delete');
-				casper.echo('newely created topic is deleted ', 'INFO');
+			deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
+				casper.echo('newely created topic is deleted ', 'INFO');		
 			});
 		});
 	});
@@ -774,15 +785,15 @@ pinTopic.pinUnPinFeature = function(casper, test, x) {
 				casper.echo('---------------------------------------------------------------------------');
 			});
 		});
+
+		//delete newely created topic
 		casper.then(function() {
-			this.click('.entry-checkbox');
-			this.then(function() {
-				this.click('#delete');
-				casper.echo('newely created topic is deleted ', 'INFO');
+			deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
+				casper.echo('newely created topic is deleted ', 'INFO');		
 			});
 		});
-		
 	});
+
 	/*****Add New topic by disabling pin check box and verify unpin topic  on forum listing page*****/
 	casper.then(function() {
 		casper.echo('Add New topic by disabling pin check box and verify unpin topic  on forum listing page', 'INFO');
@@ -829,14 +840,13 @@ pinTopic.pinUnPinFeature = function(casper, test, x) {
 				casper.echo('---------------------------------------------------------------------------');
 			});
 		});
-		casper.then(function() {
-			this.click('.entry-checkbox');
-			this.then(function() {
-				this.click('#delete');
-				casper.echo('newely created topic is deleted ', 'INFO');
-			});
-		});
 		
+		//delete newely created topic
+		/*casper.then(function() {
+			deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
+				casper.echo('newely created topic is deleted ', 'INFO');		
+			});
+		});*/
 	});
 
 	/*****Add New topic by enable pin check box and verify unpin topic option on topic listing page for sub category topic *****/
@@ -892,18 +902,15 @@ pinTopic.pinUnPinFeature = function(casper, test, x) {
 				casper.echo('---------------------------------------------------------------------------');
 			});
 		});
+		
+		//delete newely created topic
 		casper.then(function() {
-			this.click('.entry-checkbox');
-			this.wait(7000, function() {
-				this.capture(screenShotsDir+ 'checkedForDel.png');
-			});
-			this.then(function() {
-				this.click('#delete');
-				casper.echo('newely created topic is deleted ', 'INFO');
+			deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
+				casper.echo('newely created topic is deleted ', 'INFO');		
 			});
 		});
-		
 	});
+
 	/*****Add New topic by disabling un pin check box and verify pin topic option on topic listing page for sub category topic *****/
 	casper.then(function() {
 		casper.echo('Add New topic by disabling un pin check box and verify pin topic option on topic listing page for sub category topic ', 'INFO');
@@ -956,6 +963,14 @@ pinTopic.pinUnPinFeature = function(casper, test, x) {
 				casper.echo('---------------------------------------------------------------------------');
 			});
 		});
+
+		//delete newely created topic
+		/*casper.then(function() {
+			deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
+				casper.echo('newely created topic is deleted ', 'INFO');		
+			});
+		});*/
+
 	});
 
 	/*****Pin any topic and Verify Pin icon of  topic listing page under sub category *****/
@@ -1092,11 +1107,12 @@ pinTopic.pinUnPinFeature = function(casper, test, x) {
 
 	
 
-	//return callback();
+	return callback();
 };
 
 /************************************PRIVATE METHODS***********************************/
 
+//method for select topic and click on dropdown
 var selectTopic = function(topicVal, eleStatus, dropdownTitle, driver, callback) {
 	var href = driver.getElementAttribute(topicVal, "href");
 	href = href.split('-');
@@ -1109,6 +1125,25 @@ var selectTopic = function(topicVal, eleStatus, dropdownTitle, driver, callback)
 		this.test.assertExists('a[data-original-title="'+dropdownTitle+'"]');
 		casper.echo('---------------------------------------------------------------------------');
 		this.click('a[data-original-title="'+dropdownTitle+'"]');
+		this.test.assertExists('#' +eleStatus);
+		casper.echo('---------------------------------------------------------------------------');
+		this.click('#' +eleStatus);
+	});
+	driver.wait(7000, function() {
+		this.capture(screenShotsDir +eleStatus +'.png');
+	});
+	return callback();
+};
+
+//method for delete newly created topic
+var deleteNewlyCreatedTopic = function(href, eleStatus, driver, callback){
+	href = href.split('-');
+	var id = href[1].split('?');
+	driver.click('input[value="'+id[0]+'"]');
+	driver.wait(3000, function() {
+		this.capture(screenShotsDir+ 'checked.png');
+	});
+	driver.then(function() {
 		this.test.assertExists('#' +eleStatus);
 		casper.echo('---------------------------------------------------------------------------');
 		this.click('#' +eleStatus);
