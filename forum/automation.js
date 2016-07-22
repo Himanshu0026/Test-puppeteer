@@ -20,14 +20,14 @@ casper.options.logLevel = config.app.logLevel;
 	});
 
 //IN CONTEXT REGISTRATION
-    	casper.test.begin('IN CONTEXT REGISTRATION TEST', function(test) {
+    	/*casper.test.begin('IN CONTEXT REGISTRATION TEST', function(test) {
 		var inContextForumRegister = require("./testsuite/inContextRegister.js");
 		inContextForumRegister.featureTest(casper, test);
 		casper.run(function(){
 			test.done();
 			test.assert(true);
 		});
-	});
+	});*/
 
 //BACKEND REGISTRATION
     	casper.test.begin('BACK END REGISTRATION TEST', function(test) {
@@ -58,7 +58,7 @@ casper.options.logLevel = config.app.logLevel;
 	});
 
 //FORGOT PASSWORD
-	casper.test.begin('Verify forgot your password functionality from home page ', function(test) {
+	/*casper.test.begin('Verify forgot your password functionality from home page ', function(test) {
 		var forumLogin = require("./testsuite/forgotPassword.js");
 		forumLogin.featureTest(casper, casper.test);
 		casper.run(function(){
@@ -67,7 +67,7 @@ casper.options.logLevel = config.app.logLevel;
 	});
 	
 //EDIT PROFILE WITH SETTINGS
-	/*casper.test.begin("Start Edit Profile functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+	casper.test.begin("Start Edit Profile functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 		var editProfile = require("./testsuite/editprofile.js");
 		editProfile.customFieldsTest(casper, casper.test);
 		casper.run(function() {
@@ -85,7 +85,7 @@ casper.options.logLevel = config.app.logLevel;
 			test.done();
 			test.assert(true);
 		});
-	});*/
+	});
 //TOPIC RELATED FLOW
 	casper.test.begin("Start Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 
@@ -96,7 +96,7 @@ casper.options.logLevel = config.app.logLevel;
 		casper.run(function(){
 			test.done();
 		});
-	});
+	});*/
 
 //HIDE CATEGORY
         
