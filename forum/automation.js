@@ -10,7 +10,7 @@ casper.options.logLevel = config.app.logLevel;
 //casper.options.colorizerType = 'Dummy';
 
 //REGISTER WITH SETTINGS
-    	casper.test.begin('REGISTRATION WITH SETTINGS TEST', function(test) {
+    	/*casper.test.begin('REGISTRATION WITH SETTINGS TEST', function(test) {
 		var forumRegister = require("./testsuite/register.js");
 		forumRegister.registerWithSettings(casper, test);
 		casper.run(function(){
@@ -67,14 +67,14 @@ casper.options.logLevel = config.app.logLevel;
 	});
 	
 //EDIT PROFILE WITH SETTINGS
-	/*casper.test.begin("Start Edit Profile functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+	casper.test.begin("Start Edit Profile functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 		var editProfile = require("./testsuite/editprofile.js");
 		editProfile.customFieldsTest(casper, casper.test);
 		casper.run(function() {
 			test.done();
 			test.assert(true);
 		});
-	});
+	});*/
 //DELETE ACCOUNT WITH SETTINGS
 	casper.test.begin("Start 'Delete Account' functionality from home page & verify content with all scenarios", function(test) {
 
@@ -85,9 +85,9 @@ casper.options.logLevel = config.app.logLevel;
 			test.done();
 			test.assert(true);
 		});
-	});*/
+	});
 //TOPIC RELATED FLOW
-	casper.test.begin("Start Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+	/*casper.test.begin("Start Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 
 		var newTopic = require("./testsuite/newTopic.js");
 		var x = require('casper').selectXPath;
@@ -96,7 +96,7 @@ casper.options.logLevel = config.app.logLevel;
 		casper.run(function(){
 			test.done();
 		});
-	});
+	});*/
 
 //HIDE CATEGORY
         

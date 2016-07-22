@@ -485,6 +485,7 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	driver.then(function() {
 		fillDataToLogin(config.backendCred, driver, function() {
 			driver.echo('Proccessing to login on forum back end....', 'INFO');
+			return callback();
 		});
 	});
 
@@ -493,7 +494,6 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	driver.wait(5000,function(){
 		this.capture(screenShotsDir + 'login_submit.png');
 	});
-	return callback();
 };
 
 

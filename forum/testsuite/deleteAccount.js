@@ -2770,41 +2770,46 @@ var enableDeleteOwnProfileForPendingUser = function(driver, test, callback) {
 							}
 						}
 					});
-					this.click('a[href="'+grpName+'"]');
-					this.wait(5000,function(){
-						this.capture(screenShotsDir + 'group_pending.png');
-						try {
-							test.assertExists('#delete_profile');
-							utils.enableorDisableCheckbox('delete_profile', true, driver, function() {
-								driver.echo('checkbox is checked', 'INFO');
-								driver.capture(screenShotsDir+ 'checked.png');			
-							});
+					try {
+						this.click('a[href="'+grpName+'"]');
+						this.wait(5000,function(){
+							this.capture(screenShotsDir + 'group_pending.png');
 							try {
-								test.assertExists('button.button.btn-m.btn-blue');
-								this.click('button.button.btn-m.btn-blue');
-								driver.wait(5000, function() {
-									this.capture(screenShotsDir+ 'updatedChangePermission.png');
-									try {
-										test.assertExists('font[color="red"]');
-										var successMsg = this.fetchText('font[color="red"]');
-										var expectedSuccessMsg = 'Your user group settings have been updated.';
-										verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
-											driver.capture(screenShotsDir+ 'success.png');
-											test.assertExists('a[href="/tool/members/login?action=logout"]');
-											driver.click('a[href="/tool/members/login?action=logout"]');
-											return callback();
-										});
-									}catch(e) {
-										test.assertDoesntExist('font[color="red"]');
-									}
+								test.assertExists('#delete_profile');
+								utils.enableorDisableCheckbox('delete_profile', true, driver, function() {
+									driver.echo('checkbox is checked', 'INFO');
+									driver.capture(screenShotsDir+ 'checked.png');			
 								});
+								try {
+									test.assertExists('button.button.btn-m.btn-blue');
+									this.click('button.button.btn-m.btn-blue');
+									driver.wait(5000, function() {
+										this.capture(screenShotsDir+ 'updatedChangePermission.png');
+										try {
+											test.assertExists('font[color="red"]');
+											var successMsg = this.fetchText('font[color="red"]');
+											var expectedSuccessMsg = 'Your user group settings have been updated.';
+											verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
+												driver.capture(screenShotsDir+ 'success.png');
+												test.assertExists('a[href="/tool/members/login?action=logout"]');
+												driver.click('a[href="/tool/members/login?action=logout"]');
+												return callback();
+											});
+										}catch(e) {
+											test.assertDoesntExist('font[color="red"]');
+										}
+									});
+								}catch(e) {
+									test.assertDoesntExist('button.button.btn-m.btn-blue');
+								}
 							}catch(e) {
-								test.assertDoesntExist('button.button.btn-m.btn-blue');
+								test.assertDoesntExist('#delete_profile');
 							}
-						}catch(e) {
-							test.assertDoesntExist('#delete_profile');
-						}
-					});
+						});
+					}catch(e) {
+						this.assertDoesntExist('a[href="'+grpName+'"]');
+						this.echo('Email Address Verification is disabled', 'ERROR');
+					}
 				});
 			});
 		}catch(e) {
@@ -2904,41 +2909,45 @@ var disableDeleteOwnProfileForPendingUser = function(driver, test, callback) {
 							}
 						}
 					});
-					this.click('a[href="'+grpName+'"]');
-					this.wait(5000,function(){
-						this.capture(screenShotsDir + 'group_pending.png');
-						try {
-							test.assertExists('#delete_profile');
-							utils.enableorDisableCheckbox('delete_profile', true, driver, function() {
-								driver.echo('checkbox is checked', 'INFO');
-								driver.capture(screenShotsDir+ 'checked.png');			
-							});
+					try {
+						this.click('a[href="'+grpName+'"]');
+						this.wait(5000,function(){
+							this.capture(screenShotsDir + 'group_pending.png');
 							try {
-								test.assertExists('button.button.btn-m.btn-blue');
-								this.click('button.button.btn-m.btn-blue');
-								driver.wait(5000, function() {
-									this.capture(screenShotsDir+ 'updatedChangePermission.png');
-									try {
-										test.assertExists('font[color="red"]');
-										var successMsg = this.fetchText('font[color="red"]');
-										var expectedSuccessMsg = 'Your user group settings have been updated.';
-										verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
-											driver.capture(screenShotsDir+ 'success.png');
-											test.assertExists('a[href="/tool/members/login?action=logout"]');
-											driver.click('a[href="/tool/members/login?action=logout"]');
-											return callback();
-										});
-									}catch(e) {
-										test.assertDoesntExist('font[color="red"]');
-									}
+								test.assertExists('#delete_profile');
+								utils.enableorDisableCheckbox('delete_profile', true, driver, function() {
+									driver.echo('checkbox is checked', 'INFO');
+									driver.capture(screenShotsDir+ 'checked.png');			
 								});
+								try {
+									test.assertExists('button.button.btn-m.btn-blue');
+									this.click('button.button.btn-m.btn-blue');
+									driver.wait(5000, function() {
+										this.capture(screenShotsDir+ 'updatedChangePermission.png');
+										try {
+											test.assertExists('font[color="red"]');
+											var successMsg = this.fetchText('font[color="red"]');
+											var expectedSuccessMsg = 'Your user group settings have been updated.';
+											verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
+												driver.capture(screenShotsDir+ 'success.png');
+												test.assertExists('a[href="/tool/members/login?action=logout"]');
+												driver.click('a[href="/tool/members/login?action=logout"]');
+												return callback();
+											});
+										}catch(e) {
+											test.assertDoesntExist('font[color="red"]');
+										}
+									});
+								}catch(e) {
+									test.assertDoesntExist('button.button.btn-m.btn-blue');
+								}
 							}catch(e) {
-								test.assertDoesntExist('button.button.btn-m.btn-blue');
+								test.assertDoesntExist('#delete_profile');
 							}
-						}catch(e) {
-							test.assertDoesntExist('#delete_profile');
-						}
-					});
+						});
+					}catch(e) {
+						this.echo('Email address Verification is disabled from Back-end', 'ERROR');
+					}
 				});
 			});
 		}catch(e) {
