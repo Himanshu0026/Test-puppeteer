@@ -1,10 +1,10 @@
 {
-	"screenShotsLocation": "/home/hotam/Screenshots/",
+	"screenShotsLocation": "../Screenshots/",
 	"url": "http://beta12.websitetoolbox.com/",
 	"backEndUrl": "https://beta12.websitetoolbox.com/tool/members/login",
 	"app": {	
 		"verbose" : true,
-	 	"logLevel" : "debug",
+	 	"logLevel" : "info",
 		"waitTimeout" : "10000",
 		"viewportSize": { 
 			"width": 1024, 
