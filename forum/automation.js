@@ -20,14 +20,14 @@ casper.options.logLevel = config.app.logLevel;
 	});
 
 //IN CONTEXT REGISTRATION
-    	casper.test.begin('IN CONTEXT REGISTRATION TEST', function(test) {
+    	/*casper.test.begin('IN CONTEXT REGISTRATION TEST', function(test) {
 		var inContextForumRegister = require("./testsuite/inContextRegister.js");
 		inContextForumRegister.featureTest(casper, test);
 		casper.run(function(){
 			test.done();
 			test.assert(true);
 		});
-	});
+	});*/
 
 //BACKEND REGISTRATION
     	casper.test.begin('BACK END REGISTRATION TEST', function(test) {
@@ -58,7 +58,7 @@ casper.options.logLevel = config.app.logLevel;
 	});
 
 //FORGOT PASSWORD
-	casper.test.begin('Verify forgot your password functionality from home page ', function(test) {
+	/*casper.test.begin('Verify forgot your password functionality from home page ', function(test) {
 		var forumLogin = require("./testsuite/forgotPassword.js");
 		forumLogin.featureTest(casper, casper.test);
 		casper.run(function(){
