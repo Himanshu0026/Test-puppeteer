@@ -40,63 +40,88 @@ deleteAccount.featureTest = function(casper, test, x) {
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ '1_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
-
-						//Clicking On User's Icon To Display User's Drop-down For Editing Profile
-						casper.then(function() {
-							try {
-								test.assertExists('.default-user');
-								this.click('.default-user');
-								this.echo('clicked on users icon successfully', 'INFO');
-								test.assertExists('a[href^="/register/register?edit="]');
-								this.click('a[href^="/register/register?edit="]');
-								test.assertExists('a[href^="/register?action=preferences&userid="]');
-								this.click('a[href^="/register?action=preferences&userid="]');
-							} catch (e) {
-								forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function() {
-									casper.wait(7000, function() {
-										this.capture(screenShotsDir+ '1_demo.png');
-										this.echo('User Logged-in Successfully', 'INFO');	
-										test.assertExists('a.default-user');
-										this.click('a.default-user');
-										test.assertExists('a[href^="/register/register?edit="]');
-										this.click('a[href^="/register/register?edit="]');
-										test.assertExists('a[href^="/register?action=preferences&userid="]');
-										this.click('a[href^="/register?action=preferences&userid="]');
-						
-									}); 						
-								});
-							}
-						
-							//Do Not Delete User's Account. 
-							casper.then(function() {
-								doNotDeleteAccount(casper, function() {
-									casper.wait(5000, function() {
-										this.capture(screenShotsDir+ '1_doNotDeleteAccount.png');
-										//this.echo('Account is not deleted', 'INFO');
-									});
-								});
-					
-							});
-						});		
-					});
-					casper.then(function() {
-						try {
-							test.assertExists('.default-user');
-							forumRegister.redirectToLogout(casper, test, function() {
-								casper.wait(5000, function() {
-									casper.echo('Do Not Delete Account Task Completed From Account Setting Page', 'INFO');
-								});						
-
-							});
-						}catch(e) {
-							test.assertDoesntExist('.default-user');												
-						}			
+		
 					});
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on front-end home page,');
 		}	
+	});
+
+	//Clicking On User's Icon To Display User's Drop-down For Editing Profile
+	casper.then(function() {
+		try {
+			try {
+				test.assertExists('.default-user');
+				this.click('.default-user');
+				this.echo('clicked on users icon successfully', 'INFO');
+				try {
+					test.assertExists('a[href^="/register/register?edit="]');
+					this.click('a[href^="/register/register?edit="]');
+					try {
+						test.assertExists('a[href^="/register?action=preferences&userid="]');
+						this.click('a[href^="/register?action=preferences&userid="]');
+					}catch(e) {
+						test.assertDoesntExist('a[href^="/register?action=preferences&userid="]', 'Account Setting Tab Not Found On Edit Profile Page');
+					}
+				}catch(e) {
+					test.assertDoesntExist('a[href^="/register/register?edit="]', 'Edit Profile Link Not Found');
+				}
+			}catch(e) {
+				test.assertDoesntExist('.default-user', '.default-user not found');
+			}
+		} catch (e) {
+			forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function() {
+				casper.wait(7000, function() {
+					this.capture(screenShotsDir+ '1_demo.png');
+					this.echo('User Logged-in Successfully', 'INFO');
+					try {
+						test.assertExists('a.default-user');
+						this.click('a.default-user');
+						try {
+							test.assertExists('a[href^="/register/register?edit="]');
+							this.click('a[href^="/register/register?edit="]');
+							try {
+								test.assertExists('a[href^="/register?action=preferences&userid="]');
+								this.click('a[href^="/register?action=preferences&userid="]');
+							}catch(e) {
+								test.assertDoesntExist('a[href^="/register?action=preferences&userid="]', 'Account Setting Tab Not Found On Edit Profile Page');
+							}
+						}catch(e) {
+							test.assertDoesntExist('a[href^="/register/register?edit="]', 'Edit Profile Link Not Found');
+						}
+					}catch(e) {
+						test.assertDoesntExist('a.default-user', '.default-user not found');
+					}
+				}); 						
+			});
+		}
+	
+		//Do Not Delete User's Account. 
+		casper.then(function() {
+			doNotDeleteAccount(casper, function() {
+				casper.wait(5000, function() {
+					this.capture(screenShotsDir+ '1_doNotDeleteAccount.png');
+					//this.echo('Account is not deleted', 'INFO');
+				});
+			});
+
+		});
+		casper.then(function() {
+			try {
+				test.assertExists('.default-user');
+				forumRegister.redirectToLogout(casper, test, function() {
+					casper.wait(5000, function() {
+						casper.echo('Do Not Delete Account Task Completed From Account Setting Page', 'INFO');
+					});						
+
+				});
+			}catch(e) {
+				test.assertDoesntExist('.default-user', '.default-user not found');	
+											
+			}			
+		});
 	});
 
 	//Open Forum URL And Get Title 
@@ -123,14 +148,14 @@ deleteAccount.featureTest = function(casper, test, x) {
 								test.assertExists('a[href^="/register?action=preferences&userid="]');
 								this.click('a[href^="/register?action=preferences&userid="]');
 							} catch(e) {
-								test.assertDoesntExist('a[href^="/register?action=preferences&userid="]');
+								test.assertDoesntExist('a[href^="/register?action=preferences&userid="]', 'account setting tab not found on edit profile page');
 							}
 						} catch(e) {
-							test.assertDoesntExist('a[href^="/register/register?edit="]');
+							test.assertDoesntExist('a[href^="/register/register?edit="]', 'edit profile link not found');
 						}
 						
 					} catch (e) {
-						test.assertDoesntExist('a.default-user');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}
 					
 						
@@ -155,7 +180,8 @@ deleteAccount.featureTest = function(casper, test, x) {
 	
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');	
+											
 				}			
 			});
 		});
@@ -185,7 +211,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 								test.assertExists('.default-user');
 								forumRegister.redirectToLogout(casper, test, function() {});
 							}catch(e) {
-								test.assertDoesntExist('.default-user');									
+								test.assertDoesntExist('.default-user', '.default-user not found');									
 							}	
 						});
 						casper.thenOpen(config.backEndUrl, function() {
@@ -205,7 +231,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}	
 	});
 
@@ -242,7 +268,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 												test.assertExists('i.glyphicon.glyphicon-trash');
 												this.click('i.glyphicon.glyphicon-trash');
 											}catch(e) {
-												test.assertDoesntExist('i.glyphicon.glyphicon-trash');
+												test.assertDoesntExist('i.glyphicon.glyphicon-trash', 'delete account button not found');
 											}
 											casper.wait(5000, function() {
 												this.capture(screenShotsDir+ '3_delete.png');
@@ -250,15 +276,15 @@ deleteAccount.featureTest = function(casper, test, x) {
 											});
 										});
 									} catch (e) {
-										test.assertDoesntExist('input[name="delete_member"][type="checkbox"]');
+										test.assertDoesntExist('input[name="delete_member"][type="checkbox"]', 'checkbox not found');
 									}
 								});
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/register/members"]');
+							test.assertDoesntExist('a[href^="/register/members"]', 'member tab not found');
 						}
 					}catch(e) {
-						test.assertDoesntExist('.icon.icon-menu');
+						test.assertDoesntExist('.icon.icon-menu', 'menu tab not found');
 					}
 				});
 			});
@@ -271,7 +297,8 @@ deleteAccount.featureTest = function(casper, test, x) {
 						});			
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');	
+											
 				}			
 			});	
 		});
@@ -314,15 +341,16 @@ deleteAccount.featureTest = function(casper, test, x) {
 											});										
 										});
 									} catch (e) {
-										test.assertDoesntExist('span.col-sm-9.right-side a strong');
+										test.assertDoesntExist('span.col-sm-9.right-side a strong', 'user not found');
+											
 									}
 								});
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/register/members"]');
+							test.assertDoesntExist('a[href^="/register/members"]', 'member tab not found');
 						}
 					}catch(e) {
-						this.test.assertDoesntExist('.icon.icon-menu');
+						this.test.assertDoesntExist('.icon.icon-menu', 'menu tab not found');
 					}
 				});
 			});
@@ -335,7 +363,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -364,7 +392,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}	
 	});
 
@@ -401,7 +429,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 													test.assertExists('i.glyphicon.glyphicon-trash');
 												this.click('i.glyphicon.glyphicon-trash');
 												}catch(e) {
-													test.assertDoesntExist('i.glyphicon.glyphicon-trash');
+													test.assertDoesntExist('i.glyphicon.glyphicon-trash', 'delete account button not found');
 												}
 												casper.wait(5000, function() {
 													this.capture(screenShotsDir+ '5_delete.png');
@@ -419,10 +447,10 @@ deleteAccount.featureTest = function(casper, test, x) {
 								});
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/register/members"]');
+							test.assertDoesntExist('a[href^="/register/members"]', 'member tab not found');
 						}
 					}catch(e) {
-						test.assertDoesntExist('.icon.icon-menu');
+						test.assertDoesntExist('.icon.icon-menu', 'menu tab not found');
 					}
 				});
 			});
@@ -435,7 +463,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -467,7 +495,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 									casper.wait(5000, function() {});
 								});
 							}catch(e) {
-								test.assertDoesntExist('.default-user');												
+								test.assertDoesntExist('.default-user', '.default-user not found');												
 							}			
 						});
 						casper.thenOpen(config.backEndUrl, function() {
@@ -487,7 +515,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}	
 	});
 
@@ -527,7 +555,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 												test.assertExists('i.glyphicon.glyphicon-trash');
 												this.click('i.glyphicon.glyphicon-trash');
 											}catch(e) {
-												test.assertDoesntExist('i.glyphicon.glyphicon-trash');
+												test.assertDoesntExist('i.glyphicon.glyphicon-trash', 'delete account button not found');
 											}
 											casper.wait(5000, function() {
 												this.capture(screenShotsDir+ '6_delete.png');
@@ -535,15 +563,15 @@ deleteAccount.featureTest = function(casper, test, x) {
 											});
 										});
 									} catch (e) {
-										test.assertDoesntExist(x('//a/strong[text()="hs123"]/ancestor::li/span/input'), 'checkbox is verified');
+										test.assertDoesntExist(x('//a/strong[text()="hs123"]/ancestor::li/span/input'), 'checkbox is not verified');
 									}
 								});
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/register/members"]');
+							test.assertDoesntExist('a[href^="/register/members"]', 'member tab not found');
 						}
 					}catch(e) {
-						test.assertDoesntExist('.icon.icon-menu');
+						test.assertDoesntExist('.icon.icon-menu', 'menu tab not found');
 					}
 				});
 			});
@@ -556,7 +584,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -598,7 +626,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 										casper.wait(5000, function() {});
 									});
 								}catch(e) {
-									test.assertDoesntExist('.default-user');									
+									test.assertDoesntExist('.default-user', '.default-user not found');									
 								}					
 							});
 			
@@ -607,7 +635,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}	
 	});
 
@@ -648,10 +676,10 @@ deleteAccount.featureTest = function(casper, test, x) {
 								}
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/latest"]');
+							test.assertDoesntExist('a[href^="/latest"]', 'topics tab not found');
 						}
 					}catch(e) {
-						test.assertDoesntExist('.icon.icon-menu');
+						test.assertDoesntExist('.icon.icon-menu', 'menu tab not found');
 					}
 				});
 			});
@@ -664,7 +692,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 						});
 					});
 				}catch(e) {
-																	
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -709,13 +737,13 @@ deleteAccount.featureTest = function(casper, test, x) {
 								casper.wait(5000, function() {});
 							});
 						}catch(e) {
-																	
+							test.assertDoesntExist('.default-user', '.default-user not found');										
 						}			
 					});
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}	
 	});
 
@@ -749,14 +777,14 @@ this.capture(screenShotsDir+ '8_delete.png');
 										});	
 									});
 								}catch(e) {
-									test.assertDoesntExist('a.topic-title span');
+									test.assertDoesntExist('a.topic-title span', 'user not found');
 								}						
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/latest"]');
+							test.assertDoesntExist('a[href^="/latest"]', 'topics tab not found');
 						}
 					}catch(e) {
-						test.assertDoesntExist('.icon.icon-menu');
+						test.assertDoesntExist('.icon.icon-menu', 'menu tab not found');
 					}
 				});
 			});
@@ -769,7 +797,7 @@ this.capture(screenShotsDir+ '8_delete.png');
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -800,7 +828,7 @@ this.capture(screenShotsDir+ '8_delete.png');
 									casper.wait(5000, function() {});
 								});
 							}catch(e) {
-								test.assertDoesntExist('.default-user');												
+								test.assertDoesntExist('.default-user', '.default-user not found');												
 							}			
 						});
 						casper.thenOpen(config.backEndUrl, function() {
@@ -818,7 +846,7 @@ this.capture(screenShotsDir+ '8_delete.png');
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}	
 	});
 
@@ -870,22 +898,22 @@ this.capture(screenShotsDir+ '8_delete.png');
 		});	
 	}			);																		});
 												}catch(e) {
-													test.assertDoesntExist('a[href^="/register?action=preferences&userid='+id+'"]');
+													test.assertDoesntExist('a[href^="/register?action=preferences&userid='+id+'"]', 'account setting tab not found on edit profile page');
 												}																				
 											});
 										}catch(e) {
-											test.assertDoesntExist('#anchor_tab_edit');
+											test.assertDoesntExist('#anchor_tab_edit', 'edit button not found');
 										}							
 									});
 								}catch(e) {
-									test.assertDoesntExist(user, 'user is verified');
+									test.assertDoesntExist(user, 'user is not verified');
 								}
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/latest"]');
+							test.assertDoesntExist('a[href^="/latest"]', 'topics tab not found');
 						}
 					}catch(e) {
-						test.assertDoentExist('.icon.icon-menu');
+						test.assertDoentExist('.icon.icon-menu', 'menu tab not found');
 					}						
 				});
 			});
@@ -898,7 +926,7 @@ this.capture(screenShotsDir+ '8_delete.png');
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -925,7 +953,7 @@ this.capture(screenShotsDir+ '8_delete.png');
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}	
 	});
 
@@ -956,10 +984,10 @@ this.capture(screenShotsDir+ '8_delete.png');
 								});				
 							});
 						}catch(e) {
-							test.assertDoesntExist('span li a[href^="/profile/"]');
+							test.assertDoesntExist('span li a[href^="/profile/"]', 'profile link not found');
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user ');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}						
 				});
 			});
@@ -972,7 +1000,7 @@ this.capture(screenShotsDir+ '8_delete.png');
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');													
+					test.assertDoesntExist('.default-user', '.default-user not found');													
 				}			
 			});
 		});
@@ -1011,10 +1039,10 @@ this.capture(screenShotsDir+ '8_delete.png');
 								});					
 							});
 						}catch(e) {
-							this.echo('profile link not found', 'ERROR');
+							test.assertDoesntExist('span li a[href^="/profile/"]', 'profile link not found');
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user ');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}						
 				});
 			});
@@ -1027,7 +1055,7 @@ this.capture(screenShotsDir+ '8_delete.png');
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -1058,14 +1086,14 @@ this.capture(screenShotsDir+ '8_delete.png');
 									casper.wait(5000, function() {});
 								});
 							}catch(e) {
-								test.assertDoesntExist('.default-user');												
+								test.assertDoesntExist('.default-user', '.default-user not found');												
 							}			
 						});
 					});
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}	
 	});
 
@@ -1104,18 +1132,18 @@ this.capture(screenShotsDir+ '8_delete.png');
 											this.click('a[href="/tool/members/login?action=logout"]');
 										});
 									}catch(e) {
-										test.assertDoesntExist('#changeUserGroupActions a.button span.delete');
+										test.assertDoesntExist('#changeUserGroupActions a.button span.delete', 'delete button not found');
 									}
 								});
 							}catch(e) {
-								test.assertDoesntExist('#autosuggest');
+								test.assertDoesntExist('#autosuggest', 'searchbox not found on group permission page');
 							}
 						});
 					}catch(e) {
-						test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+						test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]', 'group permission link not found under users tab');
 					}
 				}catch(e) {
-					test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+					test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', 'users tab not found');
 				}
 			});		
 		});
@@ -1154,49 +1182,40 @@ this.capture(screenShotsDir+ '8_delete.png');
 									}
 								});
 casper.echo('grpName :....====... '+grpName);
-								this.click('a[href="'+grpName+'"]');
-								this.wait(5000,function(){
-									this.capture(screenShotsDir + '13_group_registered.png');
+								this.click('a[href="'+grpName+'"]');	
+								casper.wait(5000, function() {
+									this.capture(screenShotsDir+ '13_registeredUserList.png');
 									try {
-										test.assertExists('a[href^="/tool/members/mb/usergroup?action=show_all_primary_users"]');
-										this.click('a[href^="/tool/members/mb/usergroup?action=show_all_primary_users"]');
-										casper.wait(5000, function() {
-											this.capture(screenShotsDir+ '13_registeredUserList.png');
-											try {
-												test.assertExists('#groupUsersList input[name="user_id"][type="checkbox"]');
-												this.click('#groupUsersList input[name="user_id"][type="checkbox"]');
-												try {
-													test.assertExists('#floatingActionMenu select.text');
-													this.click('#floatingActionMenu select.text');
-	try {
-	test.assertExists('select.text option[value="delete_members"]');
-																this.click('select.text option[value="delete_members"]');
-																						casper.wait(3000, function() {
-																							this.capture(screenShotsDir+ '13_delete.png');
-																							this.echo('Delete Account Task Completed For Registered User From The Back-end', 'INFO');
-																							this.click('a[href="/tool/members/login?action=logout"]');
-																						});
-	}catch(e) {
-		test.assertDoesntExist('select.text option[value="delete_members"]');
-	}
-												}catch(e) {
-													test.assertDoesntExist('#floatingActionMenu select.text');
-												}
-											}catch(e) {
-												test.assertDoesntExist('#groupUsersList input[name="user_id"][type="checkbox"]');
-											}
-										});
+										test.assertExists('#groupUsersList input[name="user_id"][type="checkbox"]');
+										this.click('#groupUsersList input[name="user_id"][type="checkbox"]');
+										try {
+											test.assertExists('#floatingActionMenu select.text');
+											this.click('#floatingActionMenu select.text');
+try {
+test.assertExists('select.text option[value="delete_members"]');
+														this.click('select.text option[value="delete_members"]');
+																				casper.wait(3000, function() {
+																					this.capture(screenShotsDir+ '13_delete.png');
+																					this.echo('Delete Account Task Completed For Registered User From The Back-end', 'INFO');
+																					this.click('a[href="/tool/members/login?action=logout"]');
+																				});
+}catch(e) {
+test.assertDoesntExist('select.text option[value="delete_members"]');
+}
+										}catch(e) {
+											test.assertDoesntExist('#floatingActionMenu select.text');
+										}
 									}catch(e) {
-										test.assertDoesntExist('a[href^="/tool/members/mb/usergroup?action=show_all_primary_users"]');
+										test.assertDoesntExist('#groupUsersList input[name="user_id"][type="checkbox"]', 'There are currently no primary users in this group');
 									}
 								});
 							});
 						});
 					}catch(e) {
-						test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+						test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]', 'group permission link not found under users tab');
 					}
 				}catch(e) {
-					test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+					test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', 'users tab not found');
 				}
 			});		
 		});
@@ -1230,58 +1249,50 @@ casper.echo('grpName :....====... '+grpName);
 									for(var i=1; i<=7; i++) {
 										var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 										if (x1.innerText == 'Pending Email Verification') {
-											var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+											var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a:nth-child(2)').getAttribute('href');
 											return x2;
 										}
 									}
 								});
 								try {
-									this.click('a[href="'+grpName+'"]');
-									this.wait(5000,function(){
-										this.capture(screenShotsDir + '14_group_pending.png');
+									this.click('a[href="'+grpName+'"]');	
+									casper.wait(5000, function() {
+										this.capture(screenShotsDir+ '14_pendingUserList.png');
 										try {
-											test.assertExists('a[href^="/tool/members/mb/usergroup?action=show_all_primary_users"]');
-											this.click('a[href^="/tool/members/mb/usergroup?action=show_all_primary_users"]');
-											casper.wait(5000, function() {
-												this.capture(screenShotsDir+ '14_pendingUserList.png');
+											test.assertExists('#groupUsersList input[name="user_id"][type="checkbox"]');
+											this.click('#groupUsersList input[name="user_id"][type="checkbox"]');
+											try {
+												test.assertExists('#floatingActionMenu select.text');
+												this.click('#floatingActionMenu select.text');
 												try {
-													test.assertExists('#groupUsersList input[name="user_id"][type="checkbox"]');
-													this.click('#groupUsersList input[name="user_id"][type="checkbox"]');
-													try {
-														test.assertExists('#floatingActionMenu select.text');
-														this.click('#floatingActionMenu select.text');
-														try {
-		test.assertExists('select.text option[value="delete_members"]');
-														this.click('select.text option[value="delete_members"]');
-														casper.wait(3000, function() {
-															this.capture(screenShotsDir+ '14_delete.png');
-															this.echo('Delete Account Task Completed For Pending Email Verification From The Back-end', 'INFO');
-															this.click('a[href="/tool/members/login?action=logout"]');
-														});
-														}catch(e) {
-			test.assertDoesntExist('select.text option[value="delete_members"]');
-		}
-													}catch(e) {
-														test.assertDoesntExist('#floatingActionMenu select.text');	
-													}
+test.assertExists('select.text option[value="delete_members"]');
+												this.click('select.text option[value="delete_members"]');
+												casper.wait(3000, function() {
+													this.capture(screenShotsDir+ '14_delete.png');
+													this.echo('Delete Account Task Completed For Pending Email Verification From The Back-end', 'INFO');
+													this.click('a[href="/tool/members/login?action=logout"]');
+												});
 												}catch(e) {
-													test.assertDoesntExist('#groupUsersList input[name="user_id"][type="checkbox"]');
-												}
-											});
+	test.assertDoesntExist('select.text option[value="delete_members"]');
+}
+											}catch(e) {
+												test.assertDoesntExist('#floatingActionMenu select.text');	
+											}
 										}catch(e) {
-											test.assertDoesntExist('a[href^="/tool/members/mb/usergroup?action=show_all_primary_users"]');
+											test.assertDoesntExist('#groupUsersList input[name="user_id"][type="checkbox"]', 'There are currently no primary users in this group');
+											this.click('a[href="/tool/members/login?action=logout"]');
 										}
 									});
+										
 								}catch(e) {
-									test.assertDoesntExist('a[href="'+grpName+'"]');
+									test.assertDoesntExist('a[href="'+grpName+'"]', 'primary users link not found for this user group');
 								}
 							});
-						//});
 					}catch(e) {
-						test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+						test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]', 'group permission link not found under users tab');
 					}
 				}catch(e) {
-					test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+					test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', 'users tab not found');
 				}
 			});		
 		});
@@ -1320,48 +1331,39 @@ casper.echo('grpName :....====... '+grpName);
 									}
 								});
 								this.click('a[href="'+grpName+'"]');
-								this.wait(5000,function(){
-									this.capture(screenShotsDir + '15_group_Admin.png');
+								casper.wait(5000, function() {
+									this.capture(screenShotsDir+ '15_adminUserList.png');
 									try {
-										test.assertExists('a[href^="/tool/members/mb/usergroup?action=show_all_primary_users"]');
-										this.click('a[href^="/tool/members/mb/usergroup?action=show_all_primary_users"]');
-										casper.wait(5000, function() {
-											this.capture(screenShotsDir+ '15_adminUserList.png');
+										test.assertExists('#groupUsersList input[name="user_id"][type="checkbox"]');
+										this.click('#groupUsersList input[name="user_id"][type="checkbox"]');
+										try {
+											test.assertExists('#floatingActionMenu select.text');
+											this.click('#floatingActionMenu select.text');
 											try {
-												test.assertExists('#groupUsersList input[name="user_id"][type="checkbox"]');
-												this.click('#groupUsersList input[name="user_id"][type="checkbox"]');
-												try {
-													test.assertExists('#floatingActionMenu select.text');
-													this.click('#floatingActionMenu select.text');
-													try {
-	test.assertExists('select.text option[value="delete_members"]');
-														this.click('select.text option[value="delete_members"]');
-														casper.wait(3000, function() {
-															this.capture(screenShotsDir+ '15_delete.png');
-															this.echo('Delete Account Task Completed For Administrator User From The Back-end', 'INFO');
-															this.click('a[href="/tool/members/login?action=logout"]');
-														});
-													}catch(e) {
-		test.assertDoesntExist('select.text option[value="delete_members"]');
-	}
-												}catch(e) {
-													test.assertDoesntExist('#floatingActionMenu select.text');
-												}
+test.assertExists('select.text option[value="delete_members"]');
+												this.click('select.text option[value="delete_members"]');
+												casper.wait(3000, function() {
+													this.capture(screenShotsDir+ '15_delete.png');
+													this.echo('Delete Account Task Completed For Administrator User From The Back-end', 'INFO');
+													this.click('a[href="/tool/members/login?action=logout"]');
+												});
 											}catch(e) {
-												test.assertDoesntExist('#groupUsersList input[name="user_id"][type="checkbox"]');
-											}
-										});
+test.assertDoesntExist('select.text option[value="delete_members"]');
+}
+										}catch(e) {
+											test.assertDoesntExist('#floatingActionMenu select.text');
+										}
 									}catch(e) {
-										test.assertDoesntExist('a[href^="/tool/members/mb/usergroup?action=show_all_primary_users"]');
+										test.assertDoesntExist('#groupUsersList input[name="user_id"][type="checkbox"]', 'There are currently no primary users in this group');
 									}
 								});
 							});
 						});
 					}catch(e) {
-						test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+						test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]', 'group permission link not found under users tab');
 					}
 				}catch(e) {
-					test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+					test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', 'users tab not found');
 				}
 			});		
 		});
@@ -1414,7 +1416,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}
 		
 	});
@@ -1441,10 +1443,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 								});					
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/register?action=preferences"]');	
+							test.assertDoesntExist('a[href^="/register?action=preferences"]', 'account setting tab not found');	
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}	
 				});
 			});
@@ -1457,7 +1459,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 						});					
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -1506,7 +1508,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}
 	});
 
@@ -1532,10 +1534,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 								});					
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/register?action=preferences"]');	
+							test.assertDoesntExist('a[href^="/register?action=preferences"]', 'account setting tab not found');	
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}	
 				});
 			});
@@ -1548,7 +1550,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -1597,7 +1599,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}
 	});
 
@@ -1623,10 +1625,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 								});					
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/register?action=preferences"]');	
+							test.assertDoesntExist('a[href^="/register?action=preferences"]', 'account setting tab not found');	
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}	
 				});
 			});
@@ -1639,7 +1641,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 						});				
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -1688,7 +1690,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}
 	});
 
@@ -1714,10 +1716,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 								});					
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/register?action=preferences"]');	
+							test.assertDoesntExist('a[href^="/register?action=preferences"]', 'account setting tab not found');	
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}	
 				});
 			});
@@ -1730,7 +1732,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 						});					
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -1764,14 +1766,14 @@ deleteAccount.customFieldsTest = function(casper, test) {
 									casper.wait(5000, function() {});					
 								});
 							}catch(e) {
-								test.assertDoesntExist('.default-user');												
+								test.assertDoesntExist('.default-user', '.default-user not found');												
 							}
 						});
 					});
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}
 	});	
 
@@ -1825,10 +1827,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 								});					
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/register?action=preferences"]');	
+							test.assertDoesntExist('a[href^="/register?action=preferences"]', 'account setting tab not found');	
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}	
 				});
 			});
@@ -1841,7 +1843,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -1877,7 +1879,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}
 	});	
 
@@ -1932,10 +1934,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 								});					
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/register?action=preferences"]');	
+							test.assertDoesntExist('a[href^="/register?action=preferences"]', 'account setting tab not found');	
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}	
 				});
 			});
@@ -1948,7 +1950,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -1984,7 +1986,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}
 	});	
 
@@ -2037,10 +2039,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 								});					
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/register?action=preferences"]');	
+							test.assertDoesntExist('a[href^="/register?action=preferences"]', 'account setting tab not found');	
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}	
 				});
 			});
@@ -2053,7 +2055,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -2089,7 +2091,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}
 	});	
 
@@ -2145,10 +2147,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 								});					
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/register?action=preferences"]');	
+							test.assertDoesntExist('a[href^="/register?action=preferences"]', 'account setting tab not found on edit profile page');	
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}	
 				});
 			});
@@ -2161,7 +2163,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 						});		
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -2209,7 +2211,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}
 	});
 
@@ -2235,10 +2237,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 								});					
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/profile"]');
+							test.assertDoesntExist('a[href^="/profile"]', 'profile link not found');
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}	
 				});
 			});
@@ -2251,7 +2253,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -2300,7 +2302,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}
 	});
 
@@ -2326,10 +2328,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 								});					
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/profile"]');
+							test.assertDoesntExist('a[href^="/profile"]', 'profile link not found');
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}	
 				});
 			});
@@ -2342,7 +2344,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 			
@@ -2379,7 +2381,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}
 	});	
 
@@ -2434,10 +2436,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 								});					
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/profile"]');
+							test.assertDoesntExist('a[href^="/profile"]', 'profile link not found');
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}	
 				});
 			});
@@ -2450,7 +2452,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 						});
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -2486,7 +2488,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 				});		
 			});
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
+			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
 		}
 	});	
 
@@ -2539,10 +2541,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 								});					
 							});
 						}catch(e) {
-							test.assertDoesntExist('a[href^="/profile"]');	
+							test.assertDoesntExist('a[href^="/profile"]', 'profile link not found');	
 						}
 					}catch(e) {
-						test.assertDoesntExist('a.default-user');
+						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}	
 				});
 			});
@@ -2563,7 +2565,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 						});				
 					});
 				}catch(e) {
-					test.assertDoesntExist('.default-user');												
+					test.assertDoesntExist('.default-user', '.default-user not found');												
 				}			
 			});
 		});
@@ -2605,7 +2607,7 @@ var delAccount = function(driver, callback) {
 			driver.test.assertDoesntExist('#delUserAccount');
 		}
 	}catch(e) {
-		driver.test.assertDoesntExist('i.glyphicon.glyphicon-trash');
+		driver.test.assertDoesntExist('i.glyphicon.glyphicon-trash', 'delete account button not found');
 	}
 	return callback();
 };
@@ -2670,7 +2672,7 @@ var makeAnAdminUser = function(driver, test, callback) {
 						});
 					});
 				}catch(e) {
-					this.test.assertDoesntExist('#autosuggest');
+					this.test.assertDoesntExist('#autosuggest', 'searchbox not found on group permission page on gropu permission page');
 				}
 			});
 		}catch(e) {
