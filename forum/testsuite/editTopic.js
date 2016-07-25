@@ -268,7 +268,9 @@ var editTopicTitle = function(title, driver, callback){
 
 		driver.then(function(){
 			driver.click('#editTopic');
-			this.capture(screenShotsDir+ 'editTopicTitle.png');
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'editTopicTitle.png');
+			});
 		});
 	} catch(err) {
 		casper.echo('Exception : '+err, 'INFO');

@@ -176,9 +176,9 @@ poll.pollFeature = function(casper, test, x, callback) {
 
 	//verify error message
 	casper.then(function() {
-		test.assertExists('.alert-info');
+		test.assertExists('.alert-danger');
 		casper.echo('---------------------------------------------------------------------------');
-		var errMsg = this.fetchText('div.panel-default div.alert-info');
+		var errMsg = this.fetchText('div.panel-default div.alert-danger');
 		test.assertEquals(errMsg.trim(), json.poll.blankPollQues.ExpectedErrorMessage.trim(), errMsg.trim()+' and verified error message');
 		casper.echo('---------------------------------------------------------------------------');
 	});
@@ -198,9 +198,9 @@ poll.pollFeature = function(casper, test, x, callback) {
 
 	//verify error message
 	casper.then(function() {
-		test.assertExists('.alert-info');
+		test.assertExists('.alert-danger');
 		casper.echo('---------------------------------------------------------------------------');
-		var errMsg = this.fetchText('div.panel-default div.alert-info');
+		var errMsg = this.fetchText('div.panel-default div.alert-danger');
 		test.assertEquals(errMsg.trim(), json.poll.blankOption1.ExpectedErrorMessage.trim(), errMsg.trim()+' and verified error message');
 		casper.echo('---------------------------------------------------------------------------');
 	});
@@ -220,9 +220,9 @@ poll.pollFeature = function(casper, test, x, callback) {
 
 	//verify error message
 	casper.then(function() {
-		test.assertExists('.alert-info');
+		test.assertExists('.alert-danger');
 		casper.echo('---------------------------------------------------------------------------');
-		var errMsg = this.fetchText('div.panel-default div.alert-info');
+		var errMsg = this.fetchText('div.panel-default div.alert-danger');
 		test.assertEquals(errMsg.trim(), json.poll.blankOption2.ExpectedErrorMessage.trim(), errMsg.trim()+' and verified error message');
 		casper.echo('---------------------------------------------------------------------------');
 	});

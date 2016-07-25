@@ -330,6 +330,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 	/*****Add New topic by enable lock check box and verify lock topic  on forum listing page*****/
 	casper.then(function() {
 		casper.echo('Add New topic by enable lock check box and verify lock topic  on forum listing page', 'INFO');
+		var href = "";
 		casper.thenOpen(config.url, function() {
 			casper.echo('Hit on url : ' +config.url);
 		});
@@ -351,6 +352,11 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			});
 			this.wait(7000, function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+				var url = this.getCurrentUrl();
+				casper.echo('url : ' +url);
+				url = url.split('#');
+				href = url[0].split('.com');
+				casper.echo('********************href : ' +href[1]);
 			});
 		});
 
@@ -360,11 +366,21 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			var warningMsg = this.fetchText('.alert-warning');
 			test.assertEquals(warningMsg.trim(), json['lock/unLock'].ExpectedWarningMessage, warningMsg.trim()+' and message is verified');
 		});
+		casper.thenOpen(config.url, function() {
+			casper.echo('go to topic listing page to delete newly created topic ', 'INFO');
+		});
+		//delete newely created topic
+		casper.then(function() {
+			deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
+				casper.echo('newely created topic is deleted ', 'INFO');		
+			});
+		});
 	});
 
 	/*****Add New topic by disabling Follow check box and verify follow topic option on Post page*****/
 	casper.then(function() {
 		casper.echo('Add New topic by disabling Follow check box and verify follow topic option on Post page', 'INFO');
+		var href = "";
 		casper.thenOpen(config.url, function() {
 			casper.echo('Hit on url : ' +config.url);
 		});
@@ -385,6 +401,10 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			});
 			this.wait(7000, function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+				var url = this.getCurrentUrl();
+				casper.echo('url : ' +url);
+				url = url.split('#');
+				href = url[0].split('.com');
 			});
 		});
 
@@ -392,11 +412,23 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 		casper.then(function() {
 			test.assertDoesntExist('.alert-warning');
 		});
+		
+		casper.thenOpen(config.url, function() {
+			casper.echo('go to topic listing page to delete newly created topic', 'INFO');
+		});
+
+		//delete newely created topic
+		casper.then(function() {
+			deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
+				casper.echo('newely created topic is deleted ', 'INFO');		
+			});
+		});
 	});
 
 	/*****Add New topic by enable lock check box and verify unlock topic option on latest topic page*****/
 	casper.then(function() {
 		casper.echo('Add New topic by enable lock check box and verify unlock topic option on latest topic page', 'INFO');
+		var href = "";
 		casper.thenOpen(config.url, function() {
 			casper.echo('Hit on url : ' +config.url);
 		});
@@ -437,12 +469,23 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 					test.assertEquals(warningMsg.trim(), json['lock/unLock'].ExpectedWarningMessage, warningMsg.trim()+' and message is verified');
 				});
 			});
+			casper.thenOpen(config.url, function() {
+				casper.echo('go to topic listing page to delete newly created topic', 'INFO');
+			});
+
+			//delete newely created topic
+			casper.then(function() {
+			deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
+				casper.echo('newely created topic is deleted ', 'INFO');		
+			});
+		});
 		});
 	});
 	
 	/*****Add New topic by disabling lock check box and verify lock topic option on latest topic page*****/
 	casper.then(function() {
 		casper.echo('Add New topic by disabling lock check box and verify lock topic option on latest topic page', 'INFO');
+		var href = "";
 		casper.thenOpen(config.url, function() {
 			casper.echo('Hit on url : ' +config.url);
 		});
@@ -480,11 +523,23 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 					test.assertDoesntExist('.alert-warning');
 				});
 			});
+
+			casper.thenOpen(config.url, function() {
+				casper.echo('go to topic listing page to delete newly created topic', 'INFO');
+			});
+			//delete newely created topic
+			casper.then(function() {
+				deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
+					casper.echo('newely created topic is deleted ', 'INFO');		
+				});
+			});
 		});
 	});
 
 	/*****Verify Vote option against locked topic on post page*****/
 	casper.then(function() {
+		casper.echo('Verify Vote option against locked topic on post page', 'INFO');
+		var href = "";
 		this.thenOpen(config.url, function() {
 			casper.echo('hit on url : ' +config.url, 'INFO');
 		});
@@ -522,12 +577,35 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 		//Getting Screenshot After Clicking On 'Save Poll' Link
 		casper.wait(7000,function() {
 			this.capture(screenShotsDir+ 'savePoll.png');
+			var url = this.getCurrentUrl();
+			casper.echo('url : ' +url);
+			url = url.split('#');
+			href = url[0].split('.com');
+			casper.echo('**********************href : ' +href[1]);
 		});
-		casper.then(function() {
+		this.then(function() {
 			this.click('form[name="Poll"] input[name="pollvotesave"]');
 			var msg = this.getElementAttribute('form[name="Poll"] input[name="pollvotesave"]', 'data-original-title');
 			casper.echo('msg : ' +msg.trim());
 			test.assertEquals(msg.trim(), json['lock/unLock'].ExpectedMessage, msg.trim()+' and message is verified');
+		});
+		this.then(function() {
+			this.thenOpen(config.url, function() {
+				casper.echo('go to topic listing page to delete newly created topic ', 'INFO');
+			});
+
+			//delete newely created topic
+			this.then(function() {
+				casper.echo('**********************href : ' +href[1]);
+				var id = href[1].split('=');
+				casper.echo('id : ' +id[1]);
+				test.assertExists('input[value="'+id[1]+'"]');
+				this.click('input[value="'+id[1]+'"]');
+				this.wait(2000, function() {
+					this.click('#delete');
+					casper.echo('newely created topic is deleted ', 'INFO');
+				});
+			});
 		});
 	});
 
@@ -629,6 +707,25 @@ var savePollPage = function(data, driver, callback) {
 		driver.click('#save_poll');
 	});
 	
+};
+
+//method for delete newly created topic
+var deleteNewlyCreatedTopic = function(href, eleStatus, driver, callback){
+	href = href.split('-');
+	var id = href[1].split('?');
+	driver.click('input[value="'+id[0]+'"]');
+	driver.wait(3000, function() {
+		this.capture(screenShotsDir+ 'checked.png');
+	});
+	driver.then(function() {
+		this.test.assertExists('#' +eleStatus);
+		casper.echo('---------------------------------------------------------------------------');
+		this.click('#' +eleStatus);
+	});
+	driver.wait(7000, function() {
+		this.capture(screenShotsDir +eleStatus +'.png');
+	});
+	return callback();
 };
 
 
