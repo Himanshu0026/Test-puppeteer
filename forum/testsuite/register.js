@@ -469,14 +469,16 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	//Click On Login Link 
 
 	driver.then(function() {
-		test.assertExists('a#navLogin');
-		this.click('a#navLogin');
-		this.echo('Successfully open login form.....', 'INFO');
+		driver.wait(7000, function(){
+			test.assertExists('a#navLogin');
+			this.click('a#navLogin');
+			this.echo('Successfully open login form.....', 'INFO');
+		});
 	});
 	
 	//Getting Screenshot After Clicking On 'Login' Link  
 	
-	driver.wait(5000, function() {
+	driver.wait(7000, function() {
 		this.capture(screenShotsDir + 'login_form.png');
 	});
 	
