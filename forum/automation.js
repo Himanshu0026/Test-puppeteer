@@ -90,12 +90,21 @@ casper.options.logLevel = config.app.logLevel;
 			test.assert(true);
 		});
 	});
-//DELETE ACCOUNT WITH SETTINGS
-	casper.test.begin("Start 'Delete Account' functionality from home page & verify content with all scenarios", function(test) {
 
+//DELETE ACCOUNT FUNCTIONALITY
+	casper.test.begin("Start 'Delete Account' functionality from home page & verify content with all scenarios", function(test) {
+		var deleteAccount = require("./testsuite/deleteAccount.js");
+		var x = require('casper').selectXPath;
+		deleteAccount.featureTest(casper, casper.test, x);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
+//DELETE ACCOUNT WITH SETTINGS
+	casper.test.begin("Start 'Delete Account With Setting' functionality from home page & verify content with all scenarios", function(test) {
 		var deleteAccount = require("./testsuite/deleteAccount.js");
 		deleteAccount.customFieldsTest(casper, casper.test);
-		
 		casper.run(function(){
 			test.done();
 			test.assert(true);
