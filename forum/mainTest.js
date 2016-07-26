@@ -264,7 +264,15 @@ case "deletetopic":
 		});
 	});
         break;
-
+	case "thumpsUpDown" :
+		 casper.test.begin('Verify thumps up/down functionlity ', function(test) {
+		 var thumpsUpDown = require("./testsuite/thumpsUpDown.js");
+		 thumpsUpDown.featureTest(casper, casper.test);
+		 casper.run(function(){
+			test.done();
+		});
+	});
+        break;
     default:
 	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
         casper.echo("Options:");
