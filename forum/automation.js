@@ -62,7 +62,7 @@ casper.options.logLevel = config.app.logLevel;
 	});
 	});
 //IN CONTEXT LOGIN
-	casper.wait(5000, function(){
+	/*casper.wait(5000, function(){
 	casper.test.begin('Verify inContext Login functionlity ', function(test) {
 		 var inContextLogin = require("./testsuite/inContextLogin.js");
 		 inContextLogin.featureTest(casper, casper.test);
@@ -72,7 +72,7 @@ casper.options.logLevel = config.app.logLevel;
 	});
 	});
 //FORGOT PASSWORD
-	/*casper.wait(5000, function(){
+	casper.wait(5000, function(){
 	casper.test.begin('Verify forgot your password functionality from home page ', function(test) {
 		var forumLogin = require("./testsuite/forgotPassword.js");
 		forumLogin.featureTest(casper, casper.test);
