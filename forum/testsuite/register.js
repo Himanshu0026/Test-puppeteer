@@ -467,7 +467,9 @@ forumRegister.registerWithSettings = function(casper, test) {
 forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 		
 	//Click On Login Link 
-
+	try{
+		test.assertDoesntExist('a#navLogin');
+	}catch(e){
 	driver.then(function() {
 		driver.wait(7000, function(){
 			test.assertExists('a#navLogin');
@@ -487,7 +489,7 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	driver.then(function() {
 		fillDataToLogin(config.backendCred, driver, function() {
 			driver.echo('Proccessing to login on forum back end....', 'INFO');
-			return callback();
+			
 		});
 	});
 
@@ -496,6 +498,8 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	driver.wait(5000,function(){
 		this.capture(screenShotsDir + 'login_submit.png');
 	});
+	}
+	return callback();
 };
 
 
