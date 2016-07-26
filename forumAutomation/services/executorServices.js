@@ -29,8 +29,9 @@ if(commitDetails.branchName == "automation"){
 			}
 		} else {
 			if (fileStat) {
-				var statJSON = util.inspect(fileStat);
-				if(statJSON.size != 0){
+				var fileSize = fileStat.size;
+				console.log("fail.log size: "+fileSize);
+				if(fileSize != 0){
 					//Adding test result with commit details
 					commitDetails['testResult'] = testResult;
 					//Addling log files as attachments

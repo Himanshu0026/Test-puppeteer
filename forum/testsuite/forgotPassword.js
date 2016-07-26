@@ -244,10 +244,19 @@ forgotpwd.forgotPassword = function(data, driver, callback) {
 
 //method to verify forgot password link from home page
 forgotpwd.gotoForgotPasswordpage = function(driver, callback) {
-	driver.click('#td_tab_login');
-	driver.click('#anchor_tab_forget_password');
-	return callback();
-
+	try{
+		driver.assertDoesntExist('#td_tab_login');
+		forumLogin.logoutFromApp(driver, functtion(){
+			driver.assertExists('#td_tab_login');
+			driver.click('#td_tab_login');
+			driver.click('#anchor_tab_forget_password');
+		});
+	}catch(e){
+		driver.assertExists('#td_tab_login');
+		driver.click('#td_tab_login');
+		driver.click('#anchor_tab_forget_password');
+		return callback();
+	}
 };
 
 
