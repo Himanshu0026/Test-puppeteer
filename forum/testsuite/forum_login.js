@@ -127,8 +127,11 @@ forumLogin.loginToApp = function(username, password, driver,callback) {
 			'member': username,
 			'pw' : password
 		}, false); //incase of true, it will submit the form and for false, it will not submit form
-
-       	 	driver.click('form[name="frmLogin"] button');
+		try {
+			driver.click('form[name="frmLogin"] button');
+		} catch (e) {
+			driver.click('input[type="submit"]');
+		};
 	}catch(err){
 		driver.test.assertDoesntExist('#td_tab_login');
 	};
