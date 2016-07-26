@@ -345,21 +345,21 @@ var verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver) 
 
 var loginToApp = function(username, password, driver,callback) {
 	try{	
-		driver.click('#td_tab_login');
+		driver.test.assertExists('#td_tab_login');
+		forumLogin.loginToApp(username, password, driver, function(){
+			driver.echo("User "+username+" logged-in successfully.");
+			return callback();
+		});
 	}catch(err){
 		casper.echo("Exception is : "+err);
+		forumLogin.logoutFromApp(driver, function(){
+			driver.echo('Successfully logout from application', 'INFO');
+			forumLogin.loginToApp(username, password, driver, function(){
+				driver.echo("User "+username+" logged-in successfully.");
+				return callback();
+			});
+		});
 	};
-	driver.fill('form[name="frmLogin"]', {
-		'member': username,
-		'pw' : password
-	}, false); //incase of true, it will submit the form and for false, it will not submit form
-
-	driver.wait(2000, function() {
-		driver.capture(screenShotsDir + 'login.png');
-	});
-	driver.test.assertExists('form[name="frmLogin"] [value = "Login"]');
-        driver.click('form[name="frmLogin"] [value = "Login"]');
-	return callback();
 };
 
 //Logout To Forum Front End
