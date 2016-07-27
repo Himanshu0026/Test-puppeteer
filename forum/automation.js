@@ -110,8 +110,17 @@ casper.options.logLevel = config.app.logLevel;
 			test.assert(true);
 		});
 	});
+//GENERAL GROUP PERMISSION
+	casper.test.begin("Start 'general group permission' functionality from home page & verify content with all scenarios", function(test) {
+		var generalPermission = require("./testsuite/generalPermission.js");
+		generalPermission.featureTest(casper, casper.test);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
 //TOPIC RELATED FLOW
-	casper.test.begin("Start Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+	/*casper.test.begin("Start Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 
 		var newTopic = require("./testsuite/newTopic.js");
 		var x = require('casper').selectXPath;

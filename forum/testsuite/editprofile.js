@@ -22,12 +22,17 @@ editProfile.featureTest = function(casper, test) {
 	
 	//Open Forum URL And Get Title 
 	casper.start(config.url, function() {
-		try {
-			this.test.assertTitle('forum12');
-			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		} catch (e) {
-			this.echo('Title does not match', 'ERROR');
-		}
+		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Registering A user
@@ -209,11 +214,6 @@ editProfile.featureTest = function(casper, test) {
 			
 		});
 	});
-
-	//Clicking On Logout Link
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {});
-	});
 };
 
 /**************************Back-end  Field Validation********************************/
@@ -230,14 +230,20 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Back-End URL And Get Title
 	casper.start(config.backEndUrl, function() {
-		try {
-			test.assertTitle('Website Toolbox - Account Login');
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		}catch(e) {
-			this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-		}
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 	});
 
+	//Logout From Back-End
+	casper.then(function() {
+		try {
+			this.click('a[href="/tool/members/login?action=logout"]');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logoutFromBackend.png');
+			});
+		}catch(e) {
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}			
+	});
 
 	//Set Different Value For 'Full Name' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
 	casper.then(function() {
@@ -245,12 +251,19 @@ editProfile.customFieldsTest = function(casper, test) {
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
 			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			});
+			
+			//Logout From Back-End
+			casper.then(function() {
 				try {
-					test.assertTitle('Website Toolbox - Account Login');
-					this.echo('Title of the page :' +this.getTitle(), 'INFO');
+					this.click('a[href="/tool/members/login?action=logout"]');
+					casper.wait(5000, function() {
+						this.capture(screenShotsDir+ 'logoutFromBackend.png');
+					});
 				}catch(e) {
-					this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-				}
+					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+				}			
 			});
 
 			//Login To Forum BackEnd
@@ -295,12 +308,6 @@ editProfile.customFieldsTest = function(casper, test) {
 					test.assertExists('form[name="posts"] button');
 					this.click('form[name="posts"] button');
 					casper.wait(5000, function() {
-						try {
-							test.assertExists('a[href="/tool/members/login?action=logout"]');
-							this.click('a[href="/tool/members/login?action=logout"]');
-						}catch(e) {
-							test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-						}
 					});
 				}catch(e) {
 					test.assertDoesntExist('form[name="posts"] button');
@@ -310,55 +317,63 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.wait(5000, function() {
 				this.capture(screenShotsDir + 'fullName_'+responseData.required+'_'+responseData.visibility+'.png');
 				this.thenOpen(config.url, function() {
+					//Logout From App
+					casper.then(function() {
+						forumRegister.redirectToLogout(casper, test, function() {
+							casper.wait(5000, function() {
+								this.capture(screenShotsDir+ 'logout.png');
+							});		
+						});
+			
+					});
 					loginToFrontEnd(casper, function() {
-						casper.echo('loaded edit profile page', 'INFO');	
-						casper.capture(screenShotsDir + 'fullName_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
-						if (responseData.visibility == '1') {
-							try {
-								test.assertDoesntExist('form[name="PostTopic"] input[name="name"]');
-							}catch(e) {
-								test.assertExists('form[name="PostTopic"] input[name="name"]');
-								casper.echo('Full Name Field Is Enabled From Back-End', 'ERROR');
-							}
-						} else {
-							try {
-								test.assertExists('form[name="PostTopic"] input[name="name"]');
-								if (responseData.required == '1') {
-									editToProfile(json.blankFullnameData, casper, function() {
-										try {
-											test.assertExists('#moderator-panel div[role="alert"]');
-											var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
-											if(successMessage && successMessage != "") {
-												verifySuccessMsg(successMessage, 'Your settings have been updated.', 'blankFullNameWithRequired', 	casper, function() {
-												});
-											}
-										}catch(e) {
-											test.assertDoesntExist('#moderator-panel div[role="alert"]');
-										}
-									});
-								} else {
-									editToProfile(json.fullnameData, casper, function() {
-										try {
-											test.assertExists('#moderator-panel div[role="alert"]');
-											var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
-											if(successMessage && successMessage != "") {
-												verifySuccessMsg(successMessage, 'Your settings have been updated.', 'fullNameWithRequired', 		casper, function() {});
-											}
-										}catch(e) {
-											test.assertDoesntExist('#moderator-panel div[role="alert"]');
-										}
-									});
+						casper.wait(5000, function() {
+							casper.echo('loaded edit profile page', 'INFO');	
+							casper.capture(screenShotsDir + 'fullName_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
+							if (responseData.visibility == '1') {
+								try {
+									test.assertDoesntExist('form[name="PostTopic"] input[name="name"]');
+								}catch(e) {
+									test.assertExists('form[name="PostTopic"] input[name="name"]');
+									casper.echo('Full Name Field Is Enabled From Back-End', 'ERROR');
 								}
-							}catch(e) {
-								test.assertDoesntExist('form[name="PostTopic"] input[name="name"]');
-								casper.echo('Full Name Field Is Disabled From Back-End', 'ERROR');
+							} else {
+								try {
+									test.assertExists('form[name="PostTopic"] input[name="name"]');
+									if (responseData.required == '1') {
+										editToProfile(json.blankFullnameData, casper, function() {
+											try {
+												test.assertExists('#moderator-panel div[role="alert"]');
+												var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
+												if(successMessage && successMessage != "") {
+													verifySuccessMsg(successMessage, 'Your settings have been updated.', 'blankFullNameWithRequired', 	casper, function() {
+													});
+												}
+											}catch(e) {
+												test.assertDoesntExist('#moderator-panel div[role="alert"]');
+											}
+										});
+									} else {
+										editToProfile(json.fullnameData, casper, function() {
+											try {
+												test.assertExists('#moderator-panel div[role="alert"]');
+												var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
+												if(successMessage && successMessage != "") {
+													verifySuccessMsg(successMessage, 'Your settings have been updated.', 'fullNameWithRequired', 		casper, function() {});
+												}
+											}catch(e) {
+												test.assertDoesntExist('#moderator-panel div[role="alert"]');
+											}
+										});
+									}
+								}catch(e) {
+									test.assertDoesntExist('form[name="PostTopic"] input[name="name"]');
+									casper.echo('Full Name Field Is Disabled From Back-End', 'ERROR');
+								}
 							}
-						}
+						});
 						casper.wait(5000,function(){
 							this.capture(screenShotsDir + 'register_submit.png');
-							forumRegister.redirectToLogout(casper, test, function() {
-								casper.echo('FULL NAME TASK COMPLETED','INFO');					
-							});
 						});
 					});
 				});
@@ -372,12 +387,19 @@ editProfile.customFieldsTest = function(casper, test) {
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
 			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			});
+
+			//Logout From Back-End
+			casper.then(function() {
 				try {
-					test.assertTitle('Website Toolbox - Account Login');
-					this.echo('Title of the page :' +this.getTitle(), 'INFO');
+					this.click('a[href="/tool/members/login?action=logout"]');
+					casper.wait(5000, function() {
+						this.capture(screenShotsDir+ 'logoutFromBackend.png');
+					});
 				}catch(e) {
-					this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-				}
+					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+				}			
 			});
 
 			//Login To Forum BackEnd
@@ -418,12 +440,6 @@ editProfile.customFieldsTest = function(casper, test) {
 					test.assertExists('form[name="posts"] button');
 					this.click('form[name="posts"] button');
 					casper.wait(5000, function() {
-						try {
-							test.assertExists('a[href="/tool/members/login?action=logout"]');
-							this.click('a[href="/tool/members/login?action=logout"]');
-						}catch(e) {
-							test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-						}
 					});
 				}catch(e) {
 					test.assertDoesntExist('form[name="posts"] button');
@@ -433,58 +449,66 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.wait(5000, function() {
 				this.capture(screenShotsDir + 'instantMessaging_'+responseData.required+'_'+responseData.visibility+'.png');
 				this.thenOpen(config.url, function() {
+					//Logout From App
+					casper.then(function() {
+						forumRegister.redirectToLogout(casper, test, function() {
+							casper.wait(5000, function() {
+								this.capture(screenShotsDir+ 'logout.png');
+							});		
+						});
+			
+					});
 					loginToFrontEnd(casper, function() {
-						casper.echo('loaded edit profile page', 'INFO');	
-						casper.capture(screenShotsDir + 'instantMessaging_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
-						if (responseData.visibility == '1') {
-							try {
-								test.assertDoesntExist('form[name="PostTopic"] input[name="imType"]');
-							}catch(e) {
-								test.assertExists('form[name="PostTopic"] input[name="imType"]');
-								casper.echo('Instant Messaging Field Is Enabled From Back-End', 'ERROR');
-							}
-						} else {
-							try {
-								test.assertExists('form[name="PostTopic"] input[name="imID"]');
-								casper.fillSelectors('form[name="PostTopic"]', {
-									'select[name="imType"]' :  'Google'
-								}, false);
-								if (responseData.required == '1') {
-									editToProfile(json['imIdBlankData'], casper, function() {
-										var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
-										if(errorMsg && errorMsg!= '')
-										verifyErrorMsg(errorMsg, "Please enter your screen name.", 'blankImIDWithRequired', casper, function() {});
-									});
-								} else {
-									editToProfile(json['imIdBlankData'], casper, function() {
-										var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
-										if(errorMsg && errorMsg!= '')
-										verifyErrorMsg(errorMsg, 'Please enter your screen name.', 'BlankIM_ID', casper, function() {});
-										casper.echo('Processing to registration on forum.....', 'INFO');
-									});
-									editToProfile(json['imIdData'], casper, function() {
-										try {
-											test.assertExists('#moderator-panel div[role="alert"]');
-											var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
-											if(successMessage && successMessage != "") {
-											verifySuccessMsg(successMessage, 'Your settings have been updated.', 'successIM_ID', casper, function() {
-												});
-											}
-										}catch(e) {
-											test.assertDoesntExist('#moderator-panel div[role="alert"]');
-										}
-									});
+						casper.wait(5000, function() {
+							casper.echo('loaded edit profile page', 'INFO');	
+							casper.capture(screenShotsDir + 'instantMessaging_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
+							if (responseData.visibility == '1') {
+								try {
+									test.assertDoesntExist('form[name="PostTopic"] input[name="imType"]');
+								}catch(e) {
+									test.assertExists('form[name="PostTopic"] input[name="imType"]');
+									casper.echo('Instant Messaging Field Is Enabled From Back-End', 'ERROR');
 								}
-							}catch(e) {
-								test.assertDoesntExist('form[name="PostTopic"] input[name="imID"]');
-								casper.echo('Instant Messaging Field Is Disabled From Back-End', 'ERROR');
+							} else {
+								try {
+									test.assertExists('form[name="PostTopic"] input[name="imID"]');
+									casper.fillSelectors('form[name="PostTopic"]', {
+										'select[name="imType"]' :  'Google'
+									}, false);
+									if (responseData.required == '1') {
+										editToProfile(json['imIdBlankData'], casper, function() {
+											var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+											if(errorMsg && errorMsg!= '')
+											verifyErrorMsg(errorMsg, "Please enter your screen name.", 'blankImIDWithRequired', casper, function() {});
+										});
+									} else {
+										editToProfile(json['imIdBlankData'], casper, function() {
+											var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+											if(errorMsg && errorMsg!= '')
+											verifyErrorMsg(errorMsg, 'Please enter your screen name.', 'BlankIM_ID', casper, function() {});
+											casper.echo('Processing to registration on forum.....', 'INFO');
+										});
+										editToProfile(json['imIdData'], casper, function() {
+											try {
+												test.assertExists('#moderator-panel div[role="alert"]');
+												var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
+												if(successMessage && successMessage != "") {
+												verifySuccessMsg(successMessage, 'Your settings have been updated.', 'successIM_ID', casper, function() {
+													});
+												}
+											}catch(e) {
+												test.assertDoesntExist('#moderator-panel div[role="alert"]');
+											}
+										});
+									}
+								}catch(e) {
+									test.assertDoesntExist('form[name="PostTopic"] input[name="imID"]');
+									casper.echo('Instant Messaging Field Is Disabled From Back-End', 'ERROR');
+								}
 							}
-						}
+						});
 						casper.wait(5000,function(){
 							this.capture(screenShotsDir + 'register_submit.png');
-							forumRegister.redirectToLogout(casper, test, function() {
-								casper.echo('INSTANT MESSAGING TASK COMPLETED','INFO');					
-							});
 						});
 					});
 				});
@@ -498,12 +522,19 @@ editProfile.customFieldsTest = function(casper, test) {
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
 			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			});
+
+			//Logout From Back-End
+			casper.then(function() {
 				try {
-					test.assertTitle('Website Toolbox - Account Login');
-					this.echo('Title of the page :' +this.getTitle(), 'INFO');
+					this.click('a[href="/tool/members/login?action=logout"]');
+					casper.wait(5000, function() {
+						this.capture(screenShotsDir+ 'logoutFromBackend.png');
+					});
 				}catch(e) {
-					this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-				}
+					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+				}			
 			});
 
 			//Login To Forum BackEnd
@@ -544,12 +575,6 @@ editProfile.customFieldsTest = function(casper, test) {
 					test.assertExists('form[name="posts"] button');
 					this.click('form[name="posts"] button');
 					casper.wait(5000, function() {
-						try {
-							test.assertExists('a[href="/tool/members/login?action=logout"]');
-							this.click('a[href="/tool/members/login?action=logout"]');
-						}catch(e) {
-							test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-						}
 					});
 				}catch(e) {
 					test.assertDoesntExist('form[name="posts"] button');
@@ -559,55 +584,63 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.wait(5000, function() {
 				this.capture(screenShotsDir + 'birthday_'+responseData.required+'_'+responseData.visibility+'.png');
 				this.thenOpen(config.url, function() {
+					//Logout From App
+					casper.then(function() {
+						forumRegister.redirectToLogout(casper, test, function() {
+							casper.wait(5000, function() {
+								this.capture(screenShotsDir+ 'logout.png');
+							});		
+						});
+		
+					});
 					loginToFrontEnd(casper, function() {
-						casper.echo('loaded edit profile page', 'INFO');	
-						casper.capture(screenShotsDir + 'birthday_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
-						if (responseData.visibility == '1') {
-							try {
-								test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
-							}catch(e) {
-								test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
-								casper.echo('Instant Messaging Field Is Enabled From Back-End', 'ERROR');
-							}
-						} else {
-							try {
-								test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
-								if (responseData.required == '1') {
-									editToProfile(json['dobBlankData'], casper, function() {
-										var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
-										if(errorMsg && errorMsg!= '')
-										verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper, function() {});
-									});
-								} else {
-									editToProfile(json['dobBlankData'], casper, function() {
-										var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
-										if(errorMsg && errorMsg!= '')
-										verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper, function() {});
-									});
-							
-									editToProfile(json['dobData'], casper, function() {
-										try {
-											test.assertExists('#moderator-panel div[role="alert"]');
-											var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
-											if(successMessage && successMessage != "") {
-											verifySuccessMsg(successMessage, 'Your settings have been updated.', 'successWithBirthday', casper, function() {
-												});
-											}
-										}catch(e) {
-											test.assertDoesntExist('#moderator-panel div[role="alert"]');
-										}
-									});
+						casper.wait(5000, function() {
+							casper.echo('loaded edit profile page', 'INFO');	
+							casper.capture(screenShotsDir + 'birthday_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
+							if (responseData.visibility == '1') {
+								try {
+									test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
+								}catch(e) {
+									test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
+									casper.echo('Instant Messaging Field Is Enabled From Back-End', 'ERROR');
 								}
-							}catch(e) {
-								test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
-								casper.echo('Birthday Field Is Disabled From Back-End', 'ERROR');
+							} else {
+								try {
+									test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
+									if (responseData.required == '1') {
+										editToProfile(json['dobBlankData'], casper, function() {
+											var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
+											if(errorMsg && errorMsg!= '')
+											verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper, function() {});
+										});
+									} else {
+										editToProfile(json['dobBlankData'], casper, function() {
+											var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+											if(errorMsg && errorMsg!= '')
+											verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper, function() {});
+										});
+							
+										editToProfile(json['dobData'], casper, function() {
+											try {
+												test.assertExists('#moderator-panel div[role="alert"]');
+												var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
+												if(successMessage && successMessage != "") {
+												verifySuccessMsg(successMessage, 'Your settings have been updated.', 'successWithBirthday', casper, function() {
+													});
+												}
+											}catch(e) {
+												test.assertDoesntExist('#moderator-panel div[role="alert"]');
+											}
+										});
+									}
+								}catch(e) {
+									test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
+									casper.echo('Birthday Field Is Disabled From Back-End', 'ERROR');
+								}
 							}
-						}
+						});
 						casper.wait(5000,function(){
 							this.capture(screenShotsDir + 'register_submit.png');
-							forumRegister.redirectToLogout(casper, test, function() {
-								casper.echo('BIRTHDAY TASK COMPLETED','INFO');					
-							});
 						});
 					});
 				});
@@ -621,17 +654,28 @@ editProfile.customFieldsTest = function(casper, test) {
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
 			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			});
+		
+			//Logout From Back-End
+			casper.then(function() {
 				try {
-					test.assertTitle('Website Toolbox - Account Login');
-					this.echo('Title of the page :' +this.getTitle(), 'INFO');
+					this.click('a[href="/tool/members/login?action=logout"]');
+					casper.wait(5000, function() {
+						this.capture(screenShotsDir+ 'logoutFromBackend.png');
+					});
 				}catch(e) {
-					this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-				}
+					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+				}			
 			});
 
 			//Login To Forum BackEnd
-			forumRegister.loginToForumBackEnd(casper, test, function() {
-				casper.echo('Logged-in successfully from back-end', 'INFO');		
+			casper.then(function() {
+				forumRegister.loginToForumBackEnd(casper, test, function() {
+					casper.wait(5000, function() {
+						casper.echo('Logged-in successfully from back-end', 'INFO');
+					});		
+				});
 			}); 
 
 			//Clicking On 'Users' Tab Under Settings 
@@ -666,14 +710,6 @@ editProfile.customFieldsTest = function(casper, test) {
 				try {
 					test.assertExists('form[name="posts"] button');
 					this.click('form[name="posts"] button');
-					casper.wait(5000, function() {
-						try {
-							test.assertExists('a[href="/tool/members/login?action=logout"]');
-							this.click('a[href="/tool/members/login?action=logout"]');
-						}catch(e) {
-							test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-						}
-					});
 				}catch(e) {
 					test.assertDoesntExist('form[name="posts"] button');
 				}
@@ -682,50 +718,58 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.wait(5000, function() {
 				this.capture(screenShotsDir + 'birthday_'+responseData.required+'_'+responseData.visibility+'.png');
 				this.thenOpen(config.url, function() {
+					//Logout From App
+					casper.then(function() {
+						forumRegister.redirectToLogout(casper, test, function() {
+							casper.wait(5000, function() {
+								this.capture(screenShotsDir+ 'logout.png');
+							});		
+						});
+			
+					});
 					loginToFrontEnd(casper, function() {
-						casper.echo('loaded edit profile page', 'INFO');	
-						casper.capture(screenShotsDir + 'birthday_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
-						if (responseData.visibility == '1') {
-							try {
-								test.assertDoesntExist('form[name="PostTopic"] div.sign-container');
-							}catch(e) {
-								test.assertExists('form[name="PostTopic"] div.sign-container');
-								casper.echo('Birthday Field Is Enabled From Back-End', 'ERROR');
-							}
-						} else {
-							try {
-								test.assertExists('form[name="PostTopic"] div.sign-container');
-								if (responseData.required == '1') {
-									editToProfile(json['signatureBlankData'], casper, function() {
-								
-	});
-								} else {
-									editToProfile(json['signatureBlankData'], casper, function() {
-										casper.echo('Processing to registration on forum with blank signature.....', 'INFO');
-									});
-							
-									editToProfile(json['signatureData'], casper, function() {
-										try {
-											test.assertExists('#moderator-panel div[role="alert"]');
-											var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
-											if(successMessage && successMessage != "") {
-											verifySuccessMsg(successMessage, 'Your settings have been updated.', 'fullNameWithRequired', casper, function() {
-												});
-											}
-										}catch(e) {
-											test.assertDoesntExist('#moderator-panel div[role="alert"]');
-										}
-									});
+						casper.wait(5000, function() {
+							casper.echo('loaded edit profile page', 'INFO');	
+							casper.capture(screenShotsDir + 'birthday_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
+							if (responseData.visibility == '1') {
+								try {
+									test.assertDoesntExist('form[name="PostTopic"] div.sign-container');
+								}catch(e) {
+									test.assertExists('form[name="PostTopic"] div.sign-container');
+									casper.echo('Birthday Field Is Enabled From Back-End', 'ERROR');
 								}
-							}catch(e) {
-								test.assertDoesntExist('form[name="PostTopic"] div.sign-container');
+							} else {
+								try {
+									test.assertExists('form[name="PostTopic"] div.sign-container');
+									if (responseData.required == '1') {
+										editToProfile(json['signatureBlankData'], casper, function() {
+								
+		});
+									} else {
+										editToProfile(json['signatureBlankData'], casper, function() {
+											casper.echo('Processing to registration on forum with blank signature.....', 'INFO');
+										});
+							
+										editToProfile(json['signatureData'], casper, function() {
+											try {
+												test.assertExists('#moderator-panel div[role="alert"]');
+												var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
+												if(successMessage && successMessage != "") {
+												verifySuccessMsg(successMessage, 'Your settings have been updated.', 'fullNameWithRequired', casper, function() {
+													});
+												}
+											}catch(e) {
+												test.assertDoesntExist('#moderator-panel div[role="alert"]');
+											}
+										});
+									}
+								}catch(e) {
+									test.assertDoesntExist('form[name="PostTopic"] div.sign-container');
+								}
 							}
-						}
+						});
 						casper.wait(5000,function(){
 							this.capture(screenShotsDir + 'register_submit.png');
-							forumRegister.redirectToLogout(casper, test, function() {
-								casper.echo('SIGNATURE TASK COMPLETED', 'INFO');
-							});
 						});
 					});
 				});
@@ -735,12 +779,17 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		try {
-			test.assertTitle('forum12');
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		}catch(e) {
-			this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-		}
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 	
 	//Registering A user
@@ -755,9 +804,6 @@ editProfile.customFieldsTest = function(casper, test) {
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ 'registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
-						forumRegister.redirectToLogout(casper, test, function() {
-							casper.wait(5000, function() {});
-						});
 					});
 				});		
 			});
@@ -768,12 +814,19 @@ editProfile.customFieldsTest = function(casper, test) {
 		
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From Back-End
+	casper.then(function() {
 		try {
-			test.assertTitle('Website Toolbox - Account Login');
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			this.click('a[href="/tool/members/login?action=logout"]');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logoutFromBackend.png');
+			});
 		}catch(e) {
-			this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-		}	
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}			
 	});
 
 	//Login To Forum BackEnd
@@ -792,12 +845,17 @@ editProfile.customFieldsTest = function(casper, test) {
 	
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		try {
-			test.assertTitle('forum12');
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		}catch(e) {
-			this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-		}
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And Verify User Name Visibility On Account Setting Page
@@ -831,29 +889,22 @@ editProfile.customFieldsTest = function(casper, test) {
 					}						
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('USer Name invisibility verified', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user');													
-				}			
-			});
 		});
 	});
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		try {
-			test.assertTitle('forum12');
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		}catch(e) {
-			this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-		}
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 	
 	//Registering A user
@@ -868,9 +919,6 @@ editProfile.customFieldsTest = function(casper, test) {
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ 'registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
-						forumRegister.redirectToLogout(casper, test, function() {
-							casper.wait(5000, function() {});
-						});
 					});
 				});		
 			});
@@ -884,12 +932,19 @@ editProfile.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});
+
+		//Logout From Back-End
+		casper.then(function() {
 			try {
-				test.assertTitle('Website Toolbox - Account Login');
-				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				this.click('a[href="/tool/members/login?action=logout"]');
+				casper.wait(5000, function() {
+					this.capture(screenShotsDir+ 'logoutFromBackend.png');
+				});
 			}catch(e) {
-				this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-			}
+				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+			}			
 		});
 
 		casper.then(function() {
@@ -907,12 +962,17 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		try {
-			test.assertTitle('forum12');
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		}catch(e) {
-			this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-		}
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 	
 	//Registering A user
@@ -927,9 +987,6 @@ editProfile.customFieldsTest = function(casper, test) {
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ 'registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
-						forumRegister.redirectToLogout(casper, test, function() {
-							casper.wait(5000, function() {});
-						});
 					});
 				});		
 			});
@@ -943,12 +1000,19 @@ editProfile.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});
+
+		//Logout From Back-End
+		casper.then(function() {
 			try {
-				test.assertTitle('Website Toolbox - Account Login');
-				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				this.click('a[href="/tool/members/login?action=logout"]');
+				casper.wait(5000, function() {
+					this.capture(screenShotsDir+ 'logoutFromBackend.png');
+				});
 			}catch(e) {
-				this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-			}
+				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+			}			
 		});
 
 		casper.then(function() {
@@ -966,12 +1030,17 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		try {
-			test.assertTitle('forum12');
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		}catch(e) {
-			this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-		}
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And Verify User Name Visibility On Account Setting Page
@@ -1003,29 +1072,22 @@ editProfile.customFieldsTest = function(casper, test) {
 					}						
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Invisible Mode Invisibility verified', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user');													
-				}			
-			});
 		});
 	});
 
 	//Open Front_End URL and Get Title
 	casper.thenOpen(config.url, function() {
-		try {
-			test.assertTitle('forum12');
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		}catch(e) {
-			this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-		}
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 	
 	//Registering A user
@@ -1040,9 +1102,6 @@ editProfile.customFieldsTest = function(casper, test) {
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ 'registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
-						forumRegister.redirectToLogout(casper, test, function() {
-							casper.wait(5000, function() {});
-						});
 					});
 				});		
 			});
@@ -1056,12 +1115,19 @@ editProfile.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});
+
+		//Logout From Back-End
+		casper.then(function() {
 			try {
-				test.assertTitle('Website Toolbox - Account Login');
-				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				this.click('a[href="/tool/members/login?action=logout"]');
+				casper.wait(5000, function() {
+					this.capture(screenShotsDir+ 'logoutFromBackend.png');
+				});
 			}catch(e) {
-				this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-			}
+				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+			}			
 		});
 
 		casper.then(function() {
@@ -1079,12 +1145,17 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		try {
-			test.assertTitle('forum12');
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		}catch(e) {
-			this.echo(this.getTitle()+' Title Does Not Match' , 'ERROR');
-		}
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And Verify User Name Visibility On Account Setting Page
@@ -1115,18 +1186,6 @@ editProfile.customFieldsTest = function(casper, test) {
 						test.assertDoesntExist('a.default-user ');
 					}						
 				});
-			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Custom User Title Invisibility Verified', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user');													
-				}			
 			});
 		});
 	});
@@ -1295,7 +1354,7 @@ var editAccountSetting = function(userData, driver, callback) {
 								});
 								driver.wait(5000, function () {
 									driver.then(function() {
-										this.removeListener('remote.alert', testAlert2);
+										this.removeListener('remote.alert', testAlert3);
 									});
 									if(userData.email == '') {
 										return callback();			
@@ -1468,8 +1527,6 @@ editProfile.makeRegisteredUser = function(driver, test, callback) {
 						});
 						driver.wait(3000, function() {
 							this.capture(screenShotsDir + 'popUp.png');
-							test.assertExists('a[href="/tool/members/login?action=logout"]');
-							driver.click('a[href="/tool/members/login?action=logout"]');
 							return callback();
 						});
 					});

@@ -121,20 +121,23 @@ forumLogin.featureTest = function(casper, test) {
 
 // method for login to application by passing username and password
 forumLogin.loginToApp = function(username, password, driver,callback) {
-	try{	
+	try{
 		driver.click('#td_tab_login');
 		driver.fill('form[name="frmLogin"]', {
 			'member': username,
 			'pw' : password
-		}, false); //incase of true, it will submit the form and for false, it will not submit form
-		try {
-			driver.click('form[name="frmLogin"] button');
-		} catch (e) {
-			driver.click('input[type="submit"]');
-		};
-	}catch(err){
-		driver.test.assertDoesntExist('#td_tab_login');
-	};
+		}, false);
+	}catch(e) {
+		driver.fill('form[name="frmLogin"]', {
+			'member': username,
+			'pw' : password
+		}, false);
+	}	 
+	try {
+		driver.click('form[name="frmLogin"] button');
+	}catch(e) {
+		driver.click('input.global_button_middle');
+	}
 	return callback();
 };
 

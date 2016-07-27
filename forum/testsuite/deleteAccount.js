@@ -22,8 +22,17 @@ deleteAccount.featureTest = function(casper, test, x) {
 
 	//Open Forum URL And Get Title 
 	casper.start(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 	
 	//Open Registration Form
@@ -108,26 +117,21 @@ deleteAccount.featureTest = function(casper, test, x) {
 			});
 
 		});
-		casper.then(function() {
-			try {
-				test.assertExists('.default-user');
-				forumRegister.redirectToLogout(casper, test, function() {
-					casper.wait(5000, function() {
-						casper.echo('Do Not Delete Account Task Completed From Account Setting Page', 'INFO');
-					});						
-
-				});
-			}catch(e) {
-				test.assertDoesntExist('.default-user', '.default-user not found');	
-											
-			}			
-		});
 	});
 
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And Delete User's Account
@@ -170,28 +174,23 @@ deleteAccount.featureTest = function(casper, test, x) {
 					});
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Delete Account Task Completed From Account Setting Page', 'INFO');
-						});						
-	
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');	
-											
-				}			
-			});
 		});
 
 	});
 
 	//Reopen Front-End URL 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Registering A User And Make An Admin
@@ -206,16 +205,18 @@ deleteAccount.featureTest = function(casper, test, x) {
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ '3_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
-						casper.then(function() {
-							try {
-								test.assertExists('.default-user');
-								forumRegister.redirectToLogout(casper, test, function() {});
-							}catch(e) {
-								test.assertDoesntExist('.default-user', '.default-user not found');									
-							}	
-						});
 						casper.thenOpen(config.backEndUrl, function() {
-							this.echo('loaded back-end url successfully', 'INFO');
+							//Logout From Back-End
+							casper.then(function() {
+								try {
+									this.click('a[href="/tool/members/login?action=logout"]');
+									casper.wait(5000, function() {
+										this.capture(screenShotsDir+ 'logoutFromBackend.png');
+									});
+								}catch(e) {
+									test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+								}			
+							});
 							casper.wait(5000, function() {
 								forumRegister.loginToForumBackEnd(casper, test, function() {
 									casper.echo('user logged-in successfully on forum back-end', 'INFO');
@@ -237,11 +238,19 @@ deleteAccount.featureTest = function(casper, test, x) {
 
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
 	});
 
-
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
+	});
+	
 	//Login To App And An Admin Deletes An Account From Member's List By Selecting 		   		Checkbox 
 	casper.then(function() {
 		forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, casper, function() {
@@ -288,27 +297,23 @@ deleteAccount.featureTest = function(casper, test, x) {
 					}
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Delete Account Task Completed When An Admin Deletes An Account From Members List By Selecting Checkbox', 'INFO');	
-						});			
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');	
-											
-				}			
-			});	
 		});
 
 	});
 
 	//Reopen Front-End URL 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And An Admin Deletes An Account From Member's List By Selecting 		  		Member's Profile Page
@@ -354,26 +359,23 @@ deleteAccount.featureTest = function(casper, test, x) {
 					}
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Delete Account Task Completed When An Admin Deletes An Account From Members List By Selecting Members Profile Page', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 
 	});
 
 	//Reopen Front-End URL 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 		
 	//Registering A user
@@ -454,26 +456,23 @@ deleteAccount.featureTest = function(casper, test, x) {
 					}
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Delete Account Task Completed When An Admin Deletes An Account From Members List Using Search-Box', 'INFO');	
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 
 	});
 
 	//Reopen Front-End URL 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+		
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 	
 	//Registering A User And Make An Admin
@@ -488,18 +487,18 @@ deleteAccount.featureTest = function(casper, test, x) {
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ '6_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
-						casper.then(function() {
-							try {
-								test.assertExists('.default-user');
-								forumRegister.redirectToLogout(casper, test, function() {
-									casper.wait(5000, function() {});
-								});
-							}catch(e) {
-								test.assertDoesntExist('.default-user', '.default-user not found');												
-							}			
-						});
 						casper.thenOpen(config.backEndUrl, function() {
-							this.echo('loaded back-end url successfully', 'INFO');
+							//Logout From Back-End
+							casper.then(function() {
+								try {
+									this.click('a[href="/tool/members/login?action=logout"]');
+									casper.wait(5000, function() {
+										this.capture(screenShotsDir+ 'logoutFromBackend.png');
+									});
+								}catch(e) {
+									test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+								}			
+							});
 						});
 						casper.wait(5000, function() {
 							forumRegister.loginToForumBackEnd(casper, test, function() {
@@ -521,8 +520,17 @@ deleteAccount.featureTest = function(casper, test, x) {
 
 	//Reopen Front-End URL 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+	
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And An Admin Deletes Own Account From Member's List
@@ -575,26 +583,23 @@ deleteAccount.featureTest = function(casper, test, x) {
 					}
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Delete Account Task Completed When An Admin Deletes Own Account From Members List', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 
 	});
 
 	//Reopen Front-End URL 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Registering A user And Create A New Topic
@@ -618,16 +623,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 										});								
 									});							
 								});						
-							});
-							casper.then(function() {
-								try {
-									test.assertExists('.default-user');
-											forumRegister.redirectToLogout(casper, test, function() {
-										casper.wait(5000, function() {});
-									});
-								}catch(e) {
-									test.assertDoesntExist('.default-user', '.default-user not found');									
-								}					
 							});
 			
 						});
@@ -683,26 +678,23 @@ deleteAccount.featureTest = function(casper, test, x) {
 					}
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Delete Account Task Completed When A  User Deletes Own Account From Topic List', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 
 	});
 
 	//Reopen Front-End URL 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+		
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Registering A user And Create A New Topic
@@ -729,16 +721,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 							});
 			
 						});
-					});
-					casper.then(function() {
-						try {
-							test.assertExists('.default-user');
-							forumRegister.redirectToLogout(casper, test, function() {
-								casper.wait(5000, function() {});
-							});
-						}catch(e) {
-							test.assertDoesntExist('.default-user', '.default-user not found');										
-						}			
 					});
 				});		
 			});
@@ -788,25 +770,22 @@ this.capture(screenShotsDir+ '8_delete.png');
 					}
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Delete Account Task Completed When A  User Deletes Own Account From Post Reply Topic List', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 	});
 
 	//Reopen Front-End URL 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Registering A User And Make An Admin
@@ -821,18 +800,18 @@ this.capture(screenShotsDir+ '8_delete.png');
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ '9_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
-						casper.then(function() {
-							try {
-								test.assertExists('.default-user');
-								forumRegister.redirectToLogout(casper, test, function() {
-									casper.wait(5000, function() {});
-								});
-							}catch(e) {
-								test.assertDoesntExist('.default-user', '.default-user not found');												
-							}			
-						});
 						casper.thenOpen(config.backEndUrl, function() {
-							this.echo('loaded back-end url successfully', 'INFO');
+							//Logout From Back-End
+							casper.then(function() {
+								try {
+									this.click('a[href="/tool/members/login?action=logout"]');
+									casper.wait(5000, function() {
+										this.capture(screenShotsDir+ 'logoutFromBackend.png');
+									});
+								}catch(e) {
+									test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+								}			
+							});
 						});
 						forumRegister.loginToForumBackEnd(casper, test, function() {
 							casper.echo('user logged-in successfully on forum back-end', 'INFO');
@@ -852,8 +831,17 @@ this.capture(screenShotsDir+ '8_delete.png');
 
 	//Reopen Front-End URL 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+	
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And An Admin Deletes Other user's Account From Setting Page
@@ -917,25 +905,22 @@ this.capture(screenShotsDir+ '8_delete.png');
 					}						
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Delete Account Task Completed When An Admin Deletes Other users Account From Setting Page', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 	});	
 
 	//Reopen Front-End URL 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+	
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Registering A User
@@ -991,25 +976,22 @@ this.capture(screenShotsDir+ '8_delete.png');
 					}						
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Do Not Delete An Account Task Completed From Users profilePage', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');													
-				}			
-			});
 		});
 	});
 
 	//Reopen Front-End URL 
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And Delete An Account From User's profilePage
@@ -1046,25 +1028,22 @@ this.capture(screenShotsDir+ '8_delete.png');
 					}						
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							casper.echo('Delete An Account Task Completed From Users profilePage', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 	});
 
 	//Reopen Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Registering A user
@@ -1079,16 +1058,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ '12_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
-						casper.then(function() {
-							try {
-								test.assertExists('.default-user');
-								forumRegister.redirectToLogout(casper, test, function() {
-									casper.wait(5000, function() {});
-								});
-							}catch(e) {
-								test.assertDoesntExist('.default-user', '.default-user not found');												
-							}			
-						});
 					});
 				});		
 			});
@@ -1099,8 +1068,19 @@ this.capture(screenShotsDir+ '8_delete.png');
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('Website Toolbox - Account Login');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From Back-End
+	casper.then(function() {
+		try {
+			this.click('a[href="/tool/members/login?action=logout"]');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logoutFromBackend.png');
+			});
+		}catch(e) {
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}			
 	});
 
 	//Login To Forum Back-end And Delete An Account
@@ -1129,7 +1109,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 										casper.wait(3000, function() {
 											this.capture(screenShotsDir + '12_delete.png');
 											this.echo('Delete Account Task Completed Of Newly Registered User From Back-end', 'INFO');			
-											this.click('a[href="/tool/members/login?action=logout"]');
 										});
 									}catch(e) {
 										test.assertDoesntExist('#changeUserGroupActions a.button span.delete', 'delete button not found');
@@ -1151,8 +1130,19 @@ this.capture(screenShotsDir+ '8_delete.png');
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('Website Toolbox - Account Login');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From Back-End
+	casper.then(function() {
+		try {
+			this.click('a[href="/tool/members/login?action=logout"]');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logoutFromBackend.png');
+			});
+		}catch(e) {
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}			
 	});
 
 	//Login To Forum Back-end And Delete An Account Of A Registered User
@@ -1197,7 +1187,6 @@ test.assertExists('select.text option[value="delete_members"]');
 																				casper.wait(3000, function() {
 																					this.capture(screenShotsDir+ '13_delete.png');
 																					this.echo('Delete Account Task Completed For Registered User From The Back-end', 'INFO');
-																					this.click('a[href="/tool/members/login?action=logout"]');
 																				});
 }catch(e) {
 test.assertDoesntExist('select.text option[value="delete_members"]');
@@ -1223,8 +1212,19 @@ test.assertDoesntExist('select.text option[value="delete_members"]');
 	
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('Website Toolbox - Account Login');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From Back-End
+	casper.then(function() {
+		try {
+			this.click('a[href="/tool/members/login?action=logout"]');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logoutFromBackend.png');
+			});
+		}catch(e) {
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}			
 	});
 
 	//Login To Forum Back-end And Delete An Account Of A Pending Email Verification
@@ -1270,7 +1270,6 @@ test.assertExists('select.text option[value="delete_members"]');
 												casper.wait(3000, function() {
 													this.capture(screenShotsDir+ '14_delete.png');
 													this.echo('Delete Account Task Completed For Pending Email Verification From The Back-end', 'INFO');
-													this.click('a[href="/tool/members/login?action=logout"]');
 												});
 												}catch(e) {
 	test.assertDoesntExist('select.text option[value="delete_members"]');
@@ -1280,7 +1279,6 @@ test.assertExists('select.text option[value="delete_members"]');
 											}
 										}catch(e) {
 											test.assertDoesntExist('#groupUsersList input[name="user_id"][type="checkbox"]', 'There are currently no primary users in this group');
-											this.click('a[href="/tool/members/login?action=logout"]');
 										}
 									});
 										
@@ -1300,8 +1298,19 @@ test.assertExists('select.text option[value="delete_members"]');
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('Website Toolbox - Account Login');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From Back-End
+	casper.then(function() {
+		try {
+			this.click('a[href="/tool/members/login?action=logout"]');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logoutFromBackend.png');
+			});
+		}catch(e) {
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}			
 	});
 
 	//Login To Forum Back-end And Delete An Account Of An Administrator Users
@@ -1345,7 +1354,6 @@ test.assertExists('select.text option[value="delete_members"]');
 												casper.wait(3000, function() {
 													this.capture(screenShotsDir+ '15_delete.png');
 													this.echo('Delete Account Task Completed For Administrator User From The Back-end', 'INFO');
-													this.click('a[href="/tool/members/login?action=logout"]');
 												});
 											}catch(e) {
 test.assertDoesntExist('select.text option[value="delete_members"]');
@@ -1378,8 +1386,19 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	
 	//Open Back-End URL And Get Title
 	casper.start(config.backEndUrl, function() {
-		test.assertTitle('Website Toolbox - Account Login');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From Back-End
+	casper.then(function() {
+		try {
+			this.click('a[href="/tool/members/login?action=logout"]');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logoutFromBackend.png');
+			});
+		}catch(e) {
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}			
 	});
 
 	//Login To Forum BackEnd And Change 'Delete Own Profile' Permission For Pending Email 		Verification User Group
@@ -1396,8 +1415,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Front-End URL And Get Title
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 		
 	//Registering A User On Forum
@@ -1450,18 +1478,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					}	
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							this.echo('Delete Account Task completed From Account Setting Page After Changing Permission from Back-End', 'INFO');
-						});					
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 	});
 
@@ -1469,8 +1485,19 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('Website Toolbox - Account Login');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From Back-End
+	casper.then(function() {
+		try {
+			this.click('a[href="/tool/members/login?action=logout"]');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logoutFromBackend.png');
+			});
+		}catch(e) {
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}			
 	});
 
 	//Open Back-End URL And Change 'Delete Own Profile' Permission For Pending Email 		Verification User Group
@@ -1488,8 +1515,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 		
 	//Registering A User On Forum
@@ -1541,18 +1577,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					}	
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							this.echo('Delete Account Task Completed For Pending user From Account Setting Page After Changing Permission from Back-End', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 	});
 
@@ -1560,8 +1584,19 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('Website Toolbox - Account Login');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From Back-End
+	casper.then(function() {
+		try {
+			this.click('a[href="/tool/members/login?action=logout"]');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logoutFromBackend.png');
+			});
+		}catch(e) {
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}			
 	});
 
 	//Open Back-End URL And Change 'Delete Own Profile' Permission For Pending Email 		Verification User Group
@@ -1579,8 +1614,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 		
 	//Registering A User On Forum
@@ -1632,18 +1676,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					}	
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							this.echo('Delete Account Task Completed For Pending user From Account Setting Page After Changing Permission from Back-End', 'INFO');
-						});				
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 	});
 
@@ -1651,8 +1683,19 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('Website Toolbox - Account Login');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From Back-End
+	casper.then(function() {
+		try {
+			this.click('a[href="/tool/members/login?action=logout"]');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logoutFromBackend.png');
+			});
+		}catch(e) {
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}			
 	});
 
 	//Open Back-End URL And Change 'Delete Own Profile' Permission For Pending Email 		Verification User Group
@@ -1670,8 +1713,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 		
 	//Registering A User On Forum
@@ -1723,18 +1775,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					}	
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							this.echo('Delete Account Task Completed For Pending user From Account Setting Page After Changing Permission from Back-End', 'INFO');
-						});					
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 	});
 
@@ -1742,8 +1782,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 		
 	//Registering A User On Forum
@@ -1758,17 +1807,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ 'E_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
-						casper.then(function() {
-							this.click('a[href^="/register/register"]');
-							try {
-								test.assertExists('.default-user');
-								forumRegister.redirectToLogout(casper, test, function() {
-									casper.wait(5000, function() {});					
-								});
-							}catch(e) {
-								test.assertDoesntExist('.default-user', '.default-user not found');												
-							}
-						});
 					});
 				});		
 			});
@@ -1782,8 +1820,19 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			test.assertTitle('Website Toolbox - Account Login');
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});
+
+		//Logout From Back-End
+		casper.then(function() {
+			try {
+				this.click('a[href="/tool/members/login?action=logout"]');
+				casper.wait(5000, function() {
+					this.capture(screenShotsDir+ 'logoutFromBackend.png');
+				});
+			}catch(e) {
+				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+			}			
 		});
 		
 		casper.then(function() {
@@ -1801,8 +1850,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Reopen Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And Delete An Account From Account Setting Page
@@ -1834,18 +1892,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					}	
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							this.echo('Delete Account Task Completed For Registered user From Account Setting Page After Changing Permission from Back-End', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 	});
 
@@ -1853,8 +1899,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 		
 	//Registering A User On Forum
@@ -1869,12 +1924,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ 'F_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
-						casper.then(function() {
-							this.click('a[href^="/register/register"]');
-							forumRegister.redirectToLogout(casper, test, function() {
-								casper.wait(5000, function() {});							
-							});
-						});
 					});
 				});		
 			});
@@ -1888,8 +1937,19 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			test.assertTitle('Website Toolbox - Account Login');
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});
+
+		//Logout From Back-End
+		casper.then(function() {
+			try {
+				this.click('a[href="/tool/members/login?action=logout"]');
+				casper.wait(5000, function() {
+					this.capture(screenShotsDir+ 'logoutFromBackend.png');
+				});
+			}catch(e) {
+				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+			}			
 		});
 
 		//Login To Forum Back-End
@@ -1908,8 +1968,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Reopen Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And Delete An Account From Account Setting Page
@@ -1941,18 +2010,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					}	
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							this.echo('Delete Account Task Completed For Registered user From Account Setting Page After Changing Permission from Back-End', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 	});
 
@@ -1960,8 +2017,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 		
 	//Registering A User On Forum
@@ -1976,12 +2042,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ 'G_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
-						casper.then(function() {
-							this.click('a[href^="/register/register"]');
-							forumRegister.redirectToLogout(casper, test, function() {
-								casper.wait(5000, function() {});							
-							});
-						});
 					});
 				});		
 			});
@@ -1995,8 +2055,19 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			test.assertTitle('Website Toolbox - Account Login');
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});
+
+		//Logout From Back-End
+		casper.then(function() {
+			try {
+				this.click('a[href="/tool/members/login?action=logout"]');
+				casper.wait(5000, function() {
+					this.capture(screenShotsDir+ 'logoutFromBackend.png');
+				});
+			}catch(e) {
+				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+			}			
 		});
 		casper.then(function() {
 			forumRegister.loginToForumBackEnd(casper, test, function() {
@@ -2013,8 +2084,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Reopen Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And Delete An Account From Account Setting Page
@@ -2046,18 +2126,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					}	
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							this.echo('Delete Account Task Completed For Registered user From Account Setting Page After Changing Permission from Back-End', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 	});
 
@@ -2065,8 +2133,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 		
 	//Registering A User On Forum
@@ -2081,12 +2158,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ 'H_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
-						casper.then(function() {
-							this.click('a[href^="/register/register"]');
-							forumRegister.redirectToLogout(casper, test, function() {
-								casper.wait(5000, function() {});								
-							});
-						});
 					});
 				});		
 			});
@@ -2101,8 +2172,19 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		//Open Forum Backend URL And Get Title 
 	
 		casper.thenOpen(config.backEndUrl, function() {
-			test.assertTitle('Website Toolbox - Account Login');
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});
+
+		//Logout From Back-End
+		casper.then(function() {
+			try {
+				this.click('a[href="/tool/members/login?action=logout"]');
+				casper.wait(5000, function() {
+					this.capture(screenShotsDir+ 'logoutFromBackend.png');
+				});
+			}catch(e) {
+				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+			}			
 		});
 
 		//Login To Forum Back-End
@@ -2121,8 +2203,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Reopen Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And Delete An Account From Account Setting Page
@@ -2154,18 +2245,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					}	
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							this.echo('Delete Account Task Completed For Registered user From Account Setting Page After Changing Permission from Back-End', 'INFO');
-						});		
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 	});
 
@@ -2173,8 +2252,19 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('Website Toolbox - Account Login');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From Back-End
+	casper.then(function() {
+		try {
+			this.click('a[href="/tool/members/login?action=logout"]');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logoutFromBackend.png');
+			});
+		}catch(e) {
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}			
 	});
 
 	//Login To Forum BackEnd And Change 'Delete Own Profile' Permission For Pending Email 		Verification User Group
@@ -2191,8 +2281,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Front-End URL And Get Title
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 		
 	//Registering A User On Forum
@@ -2244,18 +2343,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					}	
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							this.echo('Delete Account Task Completed For Pending User From Profile Page After Changing Permission from Back-End', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 	});
 
@@ -2263,8 +2350,19 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		test.assertTitle('Website Toolbox - Account Login');
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From Back-End
+	casper.then(function() {
+		try {
+			this.click('a[href="/tool/members/login?action=logout"]');
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logoutFromBackend.png');
+			});
+		}catch(e) {
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}			
 	});
 
 	//Open Back-End URL And Change 'Delete Own Profile' Permission For Pending Email 		Verification User Group
@@ -2282,8 +2380,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 		
 	//Registering A User On Forum
@@ -2335,18 +2442,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					}	
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							this.echo('Delete Account Task Completed For Pending User From Profile Page After Changing Permission from Back-End', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 			
 		});
 	});
@@ -2355,8 +2450,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 		
 	//Registering A User On Forum
@@ -2371,12 +2475,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ 'K_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
-						casper.then(function() {
-							this.click('a[href^="/register/register"]');
-							forumRegister.redirectToLogout(casper, test, function() {
-								casper.wait(5000, function() {});							
-							});
-						});
 					});
 				});		
 			});
@@ -2390,8 +2488,19 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			test.assertTitle('Website Toolbox - Account Login');
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});
+
+		//Logout From Back-End
+		casper.then(function() {
+			try {
+				this.click('a[href="/tool/members/login?action=logout"]');
+				casper.wait(5000, function() {
+					this.capture(screenShotsDir+ 'logoutFromBackend.png');
+				});
+			}catch(e) {
+				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+			}			
 		});
 
 		//Login To Forum Back-End
@@ -2410,8 +2519,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Reopen Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And Delete An Account From User's Profile Page
@@ -2443,18 +2561,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					}	
 				});
 			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							this.echo('Delete Account Task Completed For Registered User From Profile Page After Changing Permission from Back-End', 'INFO');
-						});
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
-			});
 		});
 	});
 
@@ -2462,8 +2568,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 		
 	//Registering A User On Forum
@@ -2478,12 +2593,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 					casper.wait(5000, function() {
 						this.capture(screenShotsDir+ 'L_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
-						casper.then(function() {
-							this.click('a[href^="/register/register"]');
-							forumRegister.redirectToLogout(casper, test, function() {
-								casper.wait(5000, function() {});							
-							});
-						});
 					});
 				});		
 			});
@@ -2497,8 +2606,19 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			test.assertTitle('Website Toolbox - Account Login');
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});
+
+		//Logout From Back-End
+		casper.then(function() {
+			try {
+				this.click('a[href="/tool/members/login?action=logout"]');
+				casper.wait(5000, function() {
+					this.capture(screenShotsDir+ 'logoutFromBackend.png');
+				});
+			}catch(e) {
+				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+			}			
 		});
 		casper.then(function() {
 			forumRegister.loginToForumBackEnd(casper, test, function() {
@@ -2515,8 +2635,17 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Reopen Front-End URL
 	casper.thenOpen(config.url, function() {
-		test.assertTitle('forum12');
 		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumRegister.redirectToLogout(casper, test, function() {
+			casper.wait(5000, function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});		
+		});
+			
 	});
 
 	//Login To App And Delete An Account From User's Profile Page
@@ -2547,26 +2676,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 						test.assertDoesntExist('a.default-user', '.default-user not found');
 					}	
 				});
-			});
-			casper.then(function() {
-				forumRegister.redirectToLogout(casper, test, function() {
-					casper.wait(5000, function() {
-						this.capture(screenShotsDir+ 'L_logout.png');
-						this.echo('Account Delete task Completed From Account Setting Page While Changing Setting From Back-End For Pending Email Verification User Group And Disable Disable Delete Account Button','INFO');
-					});
-				});
-			});
-			casper.then(function() {
-				try {
-					test.assertExists('.default-user');
-					forumRegister.redirectToLogout(casper, test, function() {
-						casper.wait(5000, function() {
-							this.echo('Delete Account Task Completed For Registered User From Profile Page After Changing Permission from Back-End', 'INFO');
-						});				
-					});
-				}catch(e) {
-					test.assertDoesntExist('.default-user', '.default-user not found');												
-				}			
 			});
 		});
 	});	
@@ -2666,8 +2775,6 @@ var makeAnAdminUser = function(driver, test, callback) {
 						});
 						driver.wait(3000, function() {
 							this.capture(screenShotsDir + 'popUp.png');
-							test.assertExists('a[href="/tool/members/login?action=logout"]');
-							driver.click('a[href="/tool/members/login?action=logout"]');
 							return callback();
 						});
 					});
@@ -2793,8 +2900,6 @@ var enableDeleteOwnProfileForPendingUser = function(driver, test, callback) {
 											var expectedSuccessMsg = 'Your user group settings have been updated.';
 											verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
 												driver.capture(screenShotsDir+ 'success.png');
-												test.assertExists('a[href="/tool/members/login?action=logout"]');
-												driver.click('a[href="/tool/members/login?action=logout"]');
 												return callback();
 											});
 										}catch(e) {
@@ -2932,8 +3037,6 @@ var disableDeleteOwnProfileForPendingUser = function(driver, test, callback) {
 											var expectedSuccessMsg = 'Your user group settings have been updated.';
 											verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
 												driver.capture(screenShotsDir+ 'success.png');
-												test.assertExists('a[href="/tool/members/login?action=logout"]');
-												driver.click('a[href="/tool/members/login?action=logout"]');
 												return callback();
 											});
 										}catch(e) {
