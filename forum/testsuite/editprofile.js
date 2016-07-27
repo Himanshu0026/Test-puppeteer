@@ -22,7 +22,9 @@ editProfile.featureTest = function(casper, test) {
 	
 	//Open Forum URL And Get Title 
 	casper.start(config.url, function() {
-		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -230,7 +232,9 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Back-End URL And Get Title
 	casper.start(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -251,7 +255,9 @@ editProfile.customFieldsTest = function(casper, test) {
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
 			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
-				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				casper.wait(5000, function() {
+					this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				});	
 			});
 			
 			//Logout From Back-End
@@ -297,14 +303,11 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
 			var responseData = response.data;
 			casper.then(function() {
-				this.fillSelectors('form[name="posts"]', {
-					'select[name="required_name"]' :  responseData.required,
-					'select[name="visiblity_name"]' :  responseData.visibility
-				}, false);
-        		});
-			
-			casper.then(function() {
 				try {
+					this.fillSelectors('form[name="posts"]', {
+						'select[name="required_name"]' :  responseData.required,
+						'select[name="visiblity_name"]' :  responseData.visibility
+					}, false);
 					test.assertExists('form[name="posts"] button');
 					this.click('form[name="posts"] button');
 					casper.wait(5000, function() {
@@ -314,9 +317,12 @@ editProfile.customFieldsTest = function(casper, test) {
 				}
 			});
 
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir + 'fullName_'+responseData.required+'_'+responseData.visibility+'.png');
 				this.thenOpen(config.url, function() {
+					casper.wait(5000, function() {
+						this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+					});
 					//Logout From App
 					casper.then(function() {
 						forumRegister.redirectToLogout(casper, test, function() {
@@ -387,7 +393,9 @@ editProfile.customFieldsTest = function(casper, test) {
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
 			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
-				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				casper.wait(5000, function() {
+					this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				});	
 			});
 
 			//Logout From Back-End
@@ -403,9 +411,13 @@ editProfile.customFieldsTest = function(casper, test) {
 			});
 
 			//Login To Forum BackEnd
-			forumRegister.loginToForumBackEnd(casper, test, function() {
-				casper.echo('Logged-in successfully from back-end', 'INFO');		
-			}); 
+			casper.then(function() {
+				forumRegister.loginToForumBackEnd(casper, test, function() {
+					casper.wait(5000, function() {
+						this.echo('Logged-in successfully from back-end', 'INFO');		
+					});
+				});
+			});  
 
 			//Clicking On 'Users' Tab Under Settings 
 			casper.then(function() {
@@ -429,14 +441,11 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
 			var responseData = response.data;
 			casper.then(function() {
-				this.fillSelectors('form[name="posts"]', {
-					'select[name="required_imType"]' :  responseData.required,
-					'select[name="visiblity_imType"]' :  responseData.visibility
-				}, false);
-        		});
-			
-			casper.then(function() {
 				try {
+					this.fillSelectors('form[name="posts"]', {
+						'select[name="required_imType"]' :  responseData.required,
+						'select[name="visiblity_imType"]' :  responseData.visibility
+					}, false);
 					test.assertExists('form[name="posts"] button');
 					this.click('form[name="posts"] button');
 					casper.wait(5000, function() {
@@ -446,9 +455,12 @@ editProfile.customFieldsTest = function(casper, test) {
 				}
 			});
 
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir + 'instantMessaging_'+responseData.required+'_'+responseData.visibility+'.png');
 				this.thenOpen(config.url, function() {
+					casper.wait(5000, function() {
+						this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+					});
 					//Logout From App
 					casper.then(function() {
 						forumRegister.redirectToLogout(casper, test, function() {
@@ -522,7 +534,9 @@ editProfile.customFieldsTest = function(casper, test) {
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
 			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
-				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				casper.wait(5000, function() {
+					this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				});	
 			});
 
 			//Logout From Back-End
@@ -538,8 +552,12 @@ editProfile.customFieldsTest = function(casper, test) {
 			});
 
 			//Login To Forum BackEnd
-			forumRegister.loginToForumBackEnd(casper, test, function() {
-				casper.echo('Logged-in successfully from back-end', 'INFO');		
+			casper.then(function() {
+				forumRegister.loginToForumBackEnd(casper, test, function() {
+					casper.wait(5000, function() {
+						casper.echo('Logged-in successfully from back-end', 'INFO');		
+					});
+				});
 			}); 
 
 			//Clicking On 'Users' Tab Under Settings 
@@ -564,14 +582,11 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
 			var responseData = response.data;
 			casper.then(function() {
-				this.fillSelectors('form[name="posts"]', {
-					'select[name="required_dob"]' :  responseData.required,
-					'select[name="visiblity_dob"]' :  responseData.visibility
-				}, false);
-        		});
-			
-			casper.then(function() {
 				try {
+					this.fillSelectors('form[name="posts"]', {
+						'select[name="required_dob"]' :  responseData.required,
+						'select[name="visiblity_dob"]' :  responseData.visibility
+					}, false);
 					test.assertExists('form[name="posts"] button');
 					this.click('form[name="posts"] button');
 					casper.wait(5000, function() {
@@ -581,9 +596,12 @@ editProfile.customFieldsTest = function(casper, test) {
 				}
 			});
 
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir + 'birthday_'+responseData.required+'_'+responseData.visibility+'.png');
 				this.thenOpen(config.url, function() {
+					casper.wait(5000, function() {
+						this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+					});
 					//Logout From App
 					casper.then(function() {
 						forumRegister.redirectToLogout(casper, test, function() {
@@ -654,7 +672,9 @@ editProfile.customFieldsTest = function(casper, test) {
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
 			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
-				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				casper.wait(5000, function() {
+					this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				});	
 			});
 		
 			//Logout From Back-End
@@ -700,24 +720,25 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
 			var responseData = response.data;
 			casper.then(function() {
-				this.fillSelectors('form[name="posts"]', {
-					'select[name="required_signature"]' :  responseData.required,
-					'select[name="visiblity_signature"]' :  responseData.visibility
-				}, false);
-        		});
-			
-			casper.then(function() {
 				try {
+					this.fillSelectors('form[name="posts"]', {
+						'select[name="required_signature"]' :  responseData.required,
+						'select[name="visiblity_signature"]' :  responseData.visibility
+					}, false);
 					test.assertExists('form[name="posts"] button');
 					this.click('form[name="posts"] button');
+					casper.wait(5000, function() {});
 				}catch(e) {
 					test.assertDoesntExist('form[name="posts"] button');
 				}
 			});
 
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir + 'birthday_'+responseData.required+'_'+responseData.visibility+'.png');
 				this.thenOpen(config.url, function() {
+					casper.wait(5000, function() {
+						this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+					});
 					//Logout From App
 					casper.then(function() {
 						forumRegister.redirectToLogout(casper, test, function() {
@@ -779,7 +800,9 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -814,7 +837,9 @@ editProfile.customFieldsTest = function(casper, test) {
 		
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -845,7 +870,9 @@ editProfile.customFieldsTest = function(casper, test) {
 	
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -894,7 +921,9 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -932,7 +961,9 @@ editProfile.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			casper.wait(5000, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			});	
 		});
 
 		//Logout From Back-End
@@ -962,7 +993,9 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -1000,7 +1033,9 @@ editProfile.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			casper.wait(5000, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			});	
 		});
 
 		//Logout From Back-End
@@ -1030,7 +1065,9 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -1077,7 +1114,9 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_End URL and Get Title
 	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -1115,7 +1154,9 @@ editProfile.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			casper.wait(5000, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			});	
 		});
 
 		//Logout From Back-End
@@ -1145,7 +1186,9 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App

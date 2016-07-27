@@ -22,7 +22,9 @@ deleteAccount.featureTest = function(casper, test, x) {
 
 	//Open Forum URL And Get Title 
 	casper.start(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -120,8 +122,10 @@ deleteAccount.featureTest = function(casper, test, x) {
 	});
 
 	//Open Forum URL And Get Title 
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -179,8 +183,10 @@ deleteAccount.featureTest = function(casper, test, x) {
 	});
 
 	//Reopen Front-End URL 
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -206,6 +212,9 @@ deleteAccount.featureTest = function(casper, test, x) {
 						this.capture(screenShotsDir+ '3_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 						casper.thenOpen(config.backEndUrl, function() {
+							casper.wait(5000, function() {
+								this.echo('Title of the page :' +this.getTitle(), 'INFO');
+							});	
 							//Logout From Back-End
 							casper.then(function() {
 								try {
@@ -237,8 +246,10 @@ deleteAccount.featureTest = function(casper, test, x) {
 	});
 
 	//Open Forum URL And Get Title 
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -302,8 +313,10 @@ deleteAccount.featureTest = function(casper, test, x) {
 	});
 
 	//Reopen Front-End URL 
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -364,8 +377,10 @@ deleteAccount.featureTest = function(casper, test, x) {
 	});
 
 	//Reopen Front-End URL 
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -461,8 +476,10 @@ deleteAccount.featureTest = function(casper, test, x) {
 	});
 
 	//Reopen Front-End URL 
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 		
 	//Logout From App
@@ -488,6 +505,9 @@ deleteAccount.featureTest = function(casper, test, x) {
 						this.capture(screenShotsDir+ '6_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 						casper.thenOpen(config.backEndUrl, function() {
+							casper.wait(5000, function() {
+								this.echo('Title of the page :' +this.getTitle(), 'INFO');
+							});	
 							//Logout From Back-End
 							casper.then(function() {
 								try {
@@ -519,8 +539,10 @@ deleteAccount.featureTest = function(casper, test, x) {
 	});
 
 	//Reopen Front-End URL 
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 	
 	//Logout From App
@@ -588,8 +610,10 @@ deleteAccount.featureTest = function(casper, test, x) {
 	});
 
 	//Reopen Front-End URL 
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -683,8 +707,10 @@ deleteAccount.featureTest = function(casper, test, x) {
 	});
 
 	//Reopen Front-End URL 
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 		
 	//Logout From App
@@ -774,8 +800,10 @@ this.capture(screenShotsDir+ '8_delete.png');
 	});
 
 	//Reopen Front-End URL 
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -801,6 +829,9 @@ this.capture(screenShotsDir+ '8_delete.png');
 						this.capture(screenShotsDir+ '9_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 						casper.thenOpen(config.backEndUrl, function() {
+							casper.wait(5000, function() {
+								this.echo('Title of the page :' +this.getTitle(), 'INFO');
+							});	
 							//Logout From Back-End
 							casper.then(function() {
 								try {
@@ -830,8 +861,10 @@ this.capture(screenShotsDir+ '8_delete.png');
 	});
 
 	//Reopen Front-End URL 
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 	
 	//Logout From App
@@ -909,8 +942,10 @@ this.capture(screenShotsDir+ '8_delete.png');
 	});	
 
 	//Reopen Front-End URL 
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 	
 	//Logout From App
@@ -980,8 +1015,10 @@ this.capture(screenShotsDir+ '8_delete.png');
 	});
 
 	//Reopen Front-End URL 
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -1032,8 +1069,10 @@ this.capture(screenShotsDir+ '8_delete.png');
 	});
 
 	//Reopen Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -1068,7 +1107,9 @@ this.capture(screenShotsDir+ '8_delete.png');
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -1130,7 +1171,9 @@ this.capture(screenShotsDir+ '8_delete.png');
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -1212,7 +1255,9 @@ test.assertDoesntExist('select.text option[value="delete_members"]');
 	
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -1298,7 +1343,9 @@ test.assertExists('select.text option[value="delete_members"]');
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -1386,7 +1433,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	
 	//Open Back-End URL And Get Title
 	casper.start(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -1414,8 +1463,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	});
 
 	//Open Front-End URL And Get Title
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -1485,7 +1536,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -1514,8 +1567,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	});
 
 	//Open Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -1584,7 +1639,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -1613,8 +1670,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	});
 
 	//Open Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -1683,7 +1742,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -1712,8 +1773,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	
 
 	//Open Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -1781,8 +1844,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	/******************5th Test Case Verification With Back-End Settings**************/
 
 	//Open Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -1820,7 +1885,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			casper.wait(5000, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			});	
 		});
 
 		//Logout From Back-End
@@ -1849,8 +1916,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	});
 
 	//Reopen Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -1898,8 +1967,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	/******************6th Test Case Verification With Back-End Settings**************/
 
 	//Open Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -1937,7 +2008,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			casper.wait(5000, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			});	
 		});
 
 		//Logout From Back-End
@@ -1967,8 +2040,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	});
 
 	//Reopen Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -2016,8 +2091,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	/******************7th Test Case Verification With Back-End Settings**************/
 
 	//Open Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -2055,7 +2132,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			casper.wait(5000, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			});	
 		});
 
 		//Logout From Back-End
@@ -2083,8 +2162,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	});
 
 	//Reopen Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -2132,8 +2213,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	/******************8th Test Case Verification With Back-End Settings**************/
 
 	//Open Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -2172,7 +2255,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		//Open Forum Backend URL And Get Title 
 	
 		casper.thenOpen(config.backEndUrl, function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			casper.wait(5000, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			});	
 		});
 
 		//Logout From Back-End
@@ -2202,8 +2287,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	});
 
 	//Reopen Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -2252,7 +2339,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -2280,8 +2369,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	});
 
 	//Open Front-End URL And Get Title
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -2350,7 +2441,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -2379,8 +2472,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	});
 
 	//Open Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -2449,8 +2544,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	/******************11th Test Case Verification With Back-End Settings**************/
 
 	//Open Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -2488,7 +2585,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			casper.wait(5000, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			});	
 		});
 
 		//Logout From Back-End
@@ -2518,8 +2617,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	});
 
 	//Reopen Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -2567,8 +2668,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	/******************12th Test Case Verification With Back-End Settings**************/
 
 	//Open Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -2606,7 +2709,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			casper.wait(5000, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			});	
 		});
 
 		//Logout From Back-End
@@ -2634,8 +2739,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	});
 
 	//Reopen Front-End URL
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page : ' +this.getTitle(), 'INFO');
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App

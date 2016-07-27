@@ -16,7 +16,9 @@ generalPermission.featureTest = function(casper, test, x) {
 	
 	//Open Fornt-End URL
 	casper.start(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 	
 	//Logout From App
@@ -42,6 +44,9 @@ generalPermission.featureTest = function(casper, test, x) {
 						this.capture(screenShotsDir+ '1_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 						casper.thenOpen(config.backEndUrl, function() {
+							casper.wait(5000, function() {
+								this.echo('Title of the page :' +this.getTitle(), 'INFO');
+							});	
 							//Logout From Back-End
 							casper.then(function() {
 								try {
@@ -74,7 +79,9 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -139,8 +146,10 @@ generalPermission.featureTest = function(casper, test, x) {
 	});
 		
 	//Open Fornt-End URL
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -174,8 +183,9 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		this.capture(screenShotsDir+ 'demo1.png');	
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -242,8 +252,10 @@ generalPermission.featureTest = function(casper, test, x) {
 	});
 
 	//Open Fornt-End URL
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -282,7 +294,9 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -347,8 +361,10 @@ generalPermission.featureTest = function(casper, test, x) {
 	});
 
 	//Open Fornt-End URL
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -402,7 +418,9 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 	
 	//Logout From Back-End
@@ -467,8 +485,10 @@ generalPermission.featureTest = function(casper, test, x) {
 	});
 
 	//Open Fornt-End URL
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -532,7 +552,9 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -597,8 +619,10 @@ generalPermission.featureTest = function(casper, test, x) {
 	});
 
 	//Open Fornt-End URL
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -653,7 +677,9 @@ generalPermission.featureTest = function(casper, test, x) {
 	
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -718,8 +744,10 @@ generalPermission.featureTest = function(casper, test, x) {
 	});
 
 	//Open Fornt-End URL
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -774,7 +802,9 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -904,8 +934,10 @@ generalPermission.featureTest = function(casper, test, x) {
 	});
 
 	//Open Fornt-End URL
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
@@ -958,7 +990,9 @@ generalPermission.featureTest = function(casper, test, x) {
 	
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+		casper.wait(5000, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		});	
 	});
 
 	//Logout From Back-End
@@ -1088,8 +1122,10 @@ generalPermission.featureTest = function(casper, test, x) {
 	});
 
 	//Open Fornt-End URL
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');	
+	casper.start(config.url, function() {
+		casper.wait(5000, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		});
 	});
 
 	//Logout From App
