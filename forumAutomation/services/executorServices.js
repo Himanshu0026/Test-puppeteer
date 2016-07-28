@@ -15,13 +15,13 @@ executorServices.execute = function(script){
 //It executes job. Take job details as argument, executed the job and initiates mail sending.
 executorServices.executeJob = function(commitDetails, callback){
 	//Executing gitdeploy.sh to update Forum's code for given branch name
-//if(commitDetails.branchName == "automation"){
+if(commitDetails.branchName == "automation"){
 	console.log("Executing gitdeploy.sh");
 	var gitDeployResult = executorServices.execute("sudo bash -c '/home/monika/gitdeploy.sh "+commitDetails.branchName+ "'");
 	//Executing automation test script
 	var testResult = executorServices.execute("sudo bash -c '/home/monika/project/git/QA-automation/forumAutomation/bin/automation.sh'");
-	var automationLogFile = '/home/monika/project/git/QA-automation/forumAutomation/log/automation.log';
-	var failLogFile = '/home/monika/project/git/QA-automation/forumAutomation/log/fail.log';
+	var automationLogFile = '/home/monika/project/git/QA-automation/forumAutomation/log/automation.txt';
+	var failLogFile = '/home/monika/project/git/QA-automation/forumAutomation/log/fail.txt';
 	fs.stat(failLogFile, function(err, fileStat) {
 		if (err) {
 			if (err.code == 'ENOENT') {
@@ -60,8 +60,8 @@ executorServices.executeJob = function(commitDetails, callback){
 		}
 	});
 
-/*
+
 }else{
 	return callback();
-}*/
+}
 };
