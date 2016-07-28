@@ -23,7 +23,8 @@ forumLogin.featureTest = function(casper, test) {
 				function success(){
 					errorMessage = casper.fetchText('form[name="frmLogin"] [role="alert"]');
 					this.echo("Actual error message  --> "+errorMessage.trim(), 'INFO');
-					test.assertEquals(errorMessage.trim(),json['InvalidPassowrd'].ExpectedErrorMessage);
+					//test.assertEquals(errorMessage.trim(),json['InvalidPassowrd'].ExpectedErrorMessage);
+					test.assert(errorMessage.indexOf(json['InvalidPassowrd'].ExpectedErrorMessage) > -1);
 					casper.echo('Error message is verified when user try to login with invalid password', 'INFO');
 				}, function fail() {
 					casper.capture(screenShotsDir+"Error_InvalidPassowrd.png");
@@ -40,7 +41,8 @@ forumLogin.featureTest = function(casper, test) {
 			function success(){
 				errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
 				this.echo('Actual error message --> '+errorMessage.trim(), 'INFO');
-				test.assertEquals(errorMessage.trim(),json['InvalidUsername'].ExpectedErrorMessage);
+				//test.assertEquals(errorMessage.trim(),json['InvalidUsername'].ExpectedErrorMessage);
+				test.assert(errorMessage.indexOf(json['InvalidUsername'].ExpectedErrorMessage) > -1);
 				casper.echo('Error message is verified when user try to login with invalid username', 'INFO');
 			}, function fail() {
 				casper.capture(screenShotsDir+"Error_InvalidUsername.png");
@@ -57,7 +59,8 @@ forumLogin.featureTest = function(casper, test) {
 			function success(){
 				errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
 				this.echo('Actual error message --> '+errorMessage.trim(), 'INFO');
-				test.assertEquals(errorMessage.trim(),json['BlankField'].ExpectedErrorMessage);
+				//test.assertEquals(errorMessage.trim(),json['BlankField'].ExpectedErrorMessage);
+				test.assert(errorMessage.indexOf(json['BlankField'].ExpectedErrorMessage) > -1);
 				casper.echo('Error message is verified when user try to login with blank data', 'INFO');
 			}, function fail() {
 				casper.capture(screenShotsDir+"Error_BlankField.png");
@@ -74,7 +77,8 @@ forumLogin.featureTest = function(casper, test) {
 			function success(){
 				errorMessage = this.fetchText('form[name="frmLogin"] [role="alert"]');
 				this.echo('Actual error message --> '+errorMessage.trim(), 'INFO');
-				test.assertEquals(errorMessage.trim(),json['BlankPassword'].ExpectedErrorMessage);
+				//test.assertEquals(errorMessage.trim(),json['BlankPassword'].ExpectedErrorMessage);
+				test.assert(errorMessage.indexOf(json['BlankPassword'].ExpectedErrorMessage) > -1);
 				casper.echo('Error message is verified when user try to login with blank data', 'INFO');
 			}, function fail() {
 				casper.capture(screenShotsDir+"Error_BlankPassword.png");
@@ -134,9 +138,11 @@ forumLogin.loginToApp = function(username, password, driver,callback) {
 		}, false);
 	}	 
 	try {
-		driver.click('form[name="frmLogin"] button');
+		driver.test.assertExists('form[name="frmLogin"] input[type="submit"]');
+		driver.click('form[name="frmLogin"] input[type="submit"]');
 	}catch(e) {
-		driver.click('input.global_button_middle');
+		driver.test.assertExists('form[name="frmLogin"] button[type="submit"]');
+		driver.click('form[name="frmLogin"] button[type="submit"]');
 	}
 	return callback();
 };

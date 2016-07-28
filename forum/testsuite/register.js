@@ -569,8 +569,11 @@ forumRegister.registerToApp = function(data, driver, callback) {
 		driver.test.assertDoesntExist('form[name="PostTopic"] input[name="rules_checkbox"]');
 	}
 	
-	driver.test.assertExists('form[action="/register/create_account"] button');
-	driver.click('form[action="/register/create_account"] button');
+	driver.evaluate(function() {         
+		document.querySelector('form[name="PostTopic"]').action = '/register/create_account?apikey=4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q';     
+	});
+	//driver.test.assertExists('form[name="PostTopic"] button');
+	//driver.click('form[name="PostTopic"] button');
 	return callback();
 };
 
