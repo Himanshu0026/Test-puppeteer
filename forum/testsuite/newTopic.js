@@ -25,7 +25,7 @@ newTopic.featureTest = function(casper, test, x) {
 			casper.echo('Login To Backend URL and disable start topic checkbox', 'INFO');
 			this.wait(7000, function() {
 				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-				test.assertTitle('Website Toolbox - Account Login', 'The page has correct title');
+				//test.assertTitle('Website Toolbox - Account Login', 'The page has correct title');
 				casper.echo('---------------------------------------------------------------------------');		
 			});
 		});
@@ -115,7 +115,7 @@ newTopic.featureTest = function(casper, test, x) {
 			casper.echo('Login To Backend URL and enable start topic checkbox', 'INFO');
 			this.wait(7000, function() {
 				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-				test.assertTitle('Website Toolbox', 'The page has correct title');
+				//test.assertTitle('Website Toolbox', 'The page has correct title');
 				casper.echo('---------------------------------------------------------------------------');		
 			});
 		});

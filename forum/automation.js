@@ -43,18 +43,7 @@ casper.options.logLevel = config.app.logLevel;
 			});
 		});
 	});
-	casper.wait(5000, function(){
-		casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
-
-			var newTopic = require("./testsuite/newTopic.js");
-			var x = require('casper').selectXPath;
-			newTopic.featureTest(casper, casper.test, x);
-		
-			casper.run(function(){
-				test.done();
-			});
-		});
-	});
+	
 //HIDE CATEGORY
 	casper.wait(5000, function(){
 		casper.test.begin('Verify hide/un-hide category functionlity ', function(test) {
@@ -67,3 +56,16 @@ casper.options.logLevel = config.app.logLevel;
 		});
 	});
 
+//TOPIC
+/*casper.wait(5000, function(){
+casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+
+		var newTopic = require("./testsuite/newTopic.js");
+		var x = require('casper').selectXPath;
+		newTopic.featureTest(casper, casper.test, x);
+		
+		casper.run(function(){
+			test.done();
+		});
+	});
+});*/

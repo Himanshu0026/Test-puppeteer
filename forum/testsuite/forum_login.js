@@ -126,24 +126,23 @@ forumLogin.featureTest = function(casper, test) {
 // method for login to application by passing username and password
 forumLogin.loginToApp = function(username, password, driver,callback) {
 	try{
+		driver.test.assertExists('#td_tab_login');
 		driver.click('#td_tab_login');
 		driver.fill('form[name="frmLogin"]', {
 			'member': username,
 			'pw' : password
 		}, false);
+		try {
+			driver.test.assertExists('form[name="frmLogin"] input[type="submit"]');
+			driver.click('form[name="frmLogin"] input[type="submit"]');
+		}catch(e) {
+			driver.test.assertExists('form[name="frmLogin"] button[type="submit"]');
+			driver.click('form[name="frmLogin"] button[type="submit"]');
+		}
 	}catch(e) {
-		driver.fill('form[name="frmLogin"]', {
-			'member': username,
-			'pw' : password
-		}, false);
+		driver.echo("The user is already logged-in.", 'INFO');
 	}	 
-	try {
-		driver.test.assertExists('form[name="frmLogin"] input[type="submit"]');
-		driver.click('form[name="frmLogin"] input[type="submit"]');
-	}catch(e) {
-		driver.test.assertExists('form[name="frmLogin"] button[type="submit"]');
-		driver.click('form[name="frmLogin"] button[type="submit"]');
-	}
+	
 	return callback();
 };
 
