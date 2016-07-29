@@ -22,7 +22,13 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 					casper.echo('---------------------------------------------------------------------------');		
 				});
 			});
-
+			
+			//login to backend url (rm)
+			/*casper.then(function() {
+				forumRegister.loginToForumBackEnd(casper, test, function() {
+					casper.echo('User has been successfuly login to backend', 'INFO');
+				});
+			});*/
 			//go to user group permission
 			casper.then(function() {
 				utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
@@ -78,14 +84,18 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 
 			// edit topic title when permission false	
 			casper.then(function(){
+				casper.echo('edit topic titel when permission is disable', 'INFO');
 				this.click('form[name="posts"] h4 a');
 				test.assertDoesntExist('#editTopic');
+				casper.echo('you have not permission to edit title', 'INFO');
 				casper.echo('---------------------------------------------------------------------------');	
 			});
 
 			// edit topic content when permission false
 			casper.then(function(){
+				casper.echo('edit post when permission is disable', 'INFO');
 				test.assertDoesntExist('a#edit_post_request');
+				casper.echo('you have not the permission to edit posts', 'INFO');
 				casper.echo('---------------------------------------------------------------------------');
 			});
 
@@ -140,11 +150,22 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 				casper.echo('Hit on URL : '+config.url, 'INFO');
 			});
 		
-			//getting screenshot of forum url
-			casper.wait(7000, function() {
-				this.capture(screenShotsDir+'forumUrl.png');
-			});		
-
+			//create new topic to perform edit title and edit post		
+			casper.then(function() {
+				gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+					casper.echo('go to new topic', 'INFO');
+				});
+			});
+			casper.then(function() {
+				this.click('#post_submit');
+				this.wait(7000, function() {
+					this.capture(screenShotsDir+ 'postPage.png');
+				});
+			});
+			casper.thenOpen(config.url, function() {
+				casper.echo('go to topic listing page : ', 'INFO');
+			});
+			
 			// Verify error message when user try edit with blank title
 			casper.then(function() {	 
 				this.on('remote.alert', testAlert1);
@@ -152,8 +173,9 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 
 			//Edit topic title with blank data
 			casper.then(function(){
+				casper.echo('Edit topic title with blank data', 'INFO');
 				editTopicTitle(json.editTopic.blankTitle.title, casper, function() {
-					casper.log('editing topic title', 'INFO');		
+					casper.log('editing topic title with invalid data', 'INFO');		
 				});
 			});
 	
@@ -163,14 +185,19 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 			});
 
 			//Getting Screenshot After edited Topic title 
-			casper.wait(10000,function(){
+			casper.wait(7000,function(){
 				this.capture(screenShotsDir+ 'editedBlankTopicTitle.png');
+			});
+
+			casper.thenOpen(config.url, function() {
+				casper.echo('go to topic listing page : ', 'INFO');
 			});
 
 			//Edit topic title with valid data
 			casper.then(function(){
+				casper.echo('Edit topic title with valid data', 'INFO');
 				editTopicTitle(json.editTopic.validTitle.title, casper, function() {
-					casper.echo('editing topic title', 'INFO');		
+					casper.echo('editing topic title with valid data', 'INFO');		
 				});
 			});
 
@@ -216,7 +243,7 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 	
 			//Edit Topic Content With Valid Data
 			casper.thenOpen(config.url, function() {
-				casper.log('Hit on url : '+config.url);
+				casper.echo('go to topic listing page : ', 'INFO');
 			});
 
 			casper.then(function(){
@@ -265,15 +292,16 @@ var editTopicTitle = function(title, driver, callback){
 	casper.echo("title : "+title, 'INFO');
 	try{
 		driver.click('form[name="posts"] h4 a');
-
-		driver.then(function(){
-			driver.click('#editTopic');
-			this.capture(screenShotsDir+ 'editTopicTitle.png');
-		});
 	} catch(err) {
-		casper.echo('Exception : '+err, 'INFO');
+
 	}
 	
+		driver.then(function(){
+			driver.click('#editTopic');
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'editTopicTitle.png');
+			});
+		});
 	
 		driver.then(function(){
 				driver.sendKeys('.input-sm', title, {reset:true});
@@ -325,6 +353,36 @@ var editTopicContent = function(content, driver, callback){
 		driver.then(function(){
 			this.click('div.form-group input.btn-primary');	
 		});
+
+	return callback();
+};
+
+// method for go to new poll to application
+
+var gotoNewTopic = function(data, driver, callback) {
+	driver.click('#links-nav');
+	driver.click('#latest_topics_show');
+	driver.click('a[href="/post/printadd"]');
+	driver.wait(7000, function() {
+		this.capture(screenShotsDir+ 'startTopic.png');
+	});
+	driver.then(function() {
+         	 this.sendKeys('input[name="subject"]', data.title, {reset:true});
+		 this.withFrame('message_ifr', function() {
+			this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
+			this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
+	 		this.sendKeys('#tinymce', data.content);
+			this.capture(screenShotsDir+ 'content.png');	
+		});	
+		driver.wait(3000, function() {
+			this.click('#all_forums_dropdown');
+			var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
+			this.fill('form[name="PostTopic"]',{
+				'forum' : val.trim()
+			},false);
+			this.capture(screenShotsDir+ 'fillTopic.png');
+		});
+	});
 
 	return callback();
 };

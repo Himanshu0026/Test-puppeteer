@@ -842,11 +842,11 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		});
 		
 		//delete newely created topic
-		/*casper.then(function() {
+		casper.then(function() {
 			deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
 				casper.echo('newely created topic is deleted ', 'INFO');		
 			});
-		});*/
+		});
 	});
 
 	/*****Add New topic by enable pin check box and verify unpin topic option on topic listing page for sub category topic *****/
@@ -965,11 +965,11 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		});
 
 		//delete newely created topic
-		/*casper.then(function() {
+		casper.then(function() {
 			deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
 				casper.echo('newely created topic is deleted ', 'INFO');		
 			});
-		});*/
+		});
 
 	});
 
@@ -988,23 +988,30 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 				});
 			});
 		});
-		this.then(function() {
-			var postTitle = json['pin/unPin'].topicTitle;
-			casper.echo('pin topic title : ' +postTitle, 'INFO');
-			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-			selectTopic(classVal, 'pin', 'Pin/Un-pin', casper, function() {});
-		});
+		if(this.exists('span.alert-info')){
+			var info = this.fetchText('span.alert-info');
+			test.assertEquals(info.trim(), 'There are currently no topics to display.', info.trim()+' info message is verified');
+		} else { 
+			this.then(function() {
+				var postTitle = json['pin/unPin'].topicTitle;
+				casper.echo('pin topic title : ' +postTitle, 'INFO');
+				var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+				selectTopic(classVal, 'pin', 'Pin/Un-pin', casper, function() {});
+			});
+
+			//verify pin topic
+			casper.then(function() {
+				var postTitle = json['pin/unPin'].topicTitle;
+				var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+				var href = this.getElementAttribute(classVal, "href");
+				test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
+				casper.echo('pin topic is verified', 'INFO');
+				casper.echo('---------------------------------------------------------------------------');
+			});
+		}
 	});
 
-	//verify pin topic
-	casper.then(function() {
-		var postTitle = json['pin/unPin'].topicTitle;
-		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-		var href = this.getElementAttribute(classVal, "href");
-		test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
-		casper.echo('pin topic is verified', 'INFO');
-		casper.echo('---------------------------------------------------------------------------');
-	});
+	
 
 	/*****Un-Pin any topic and Verify Pin icon of  topic listing page under sub category*****/
 	casper.then(function() {
@@ -1021,23 +1028,28 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 				});
 			});
 		});
-		this.then(function() {
-			var postTitle = json['pin/unPin'].topicTitle;
-			casper.echo('unpin topic title : ' +postTitle, 'INFO');
-			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-			selectTopic(classVal, 'unpin', 'Pin/Un-pin', casper, function() {});
-		});
+		if(this.exists('span.alert-info')){
+			var info = this.fetchText('span.alert-info');
+			test.assertEquals(info.trim(), 'There are currently no topics to display.', info.trim()+' info message is verified');
+		} else {
+			this.then(function() {
+				var postTitle = json['pin/unPin'].topicTitle;
+				casper.echo('unpin topic title : ' +postTitle, 'INFO');
+				var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+				selectTopic(classVal, 'unpin', 'Pin/Un-pin', casper, function() {});
+			});
+			//verify unPin topic
+			casper.then(function() {
+				var postTitle = json['pin/unPin'].topicTitle;
+				var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+				var href = this.getElementAttribute(classVal, "href");
+				test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
+				casper.echo('unPin topic is verified', 'INFO');
+				casper.echo('---------------------------------------------------------------------------');
+			});
+		}
 	});
 
-	//verify unPin topic
-	casper.then(function() {
-		var postTitle = json['pin/unPin'].topicTitle;
-		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-		var href = this.getElementAttribute(classVal, "href");
-		test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
-		casper.echo('unPin topic is verified', 'INFO');
-		casper.echo('---------------------------------------------------------------------------');
-	});
 
 	/*****Pin any topic and Verify Pin icon of  category search page *****/
 	casper.then(function() {
