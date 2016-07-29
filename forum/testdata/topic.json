@@ -175,7 +175,7 @@
 	},
 
 	"hideUnHideCategory" : {
-		"categoryName" : "Automation",
+		"categoryName" : "Category4abcd",
 		"infoMessage" : "Deselect the categories you would like to stop hiding."
 	}
 }

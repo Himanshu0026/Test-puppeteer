@@ -10,7 +10,7 @@ var hideCategory = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'hideUnHide/';
 
 hideCategory.hideCategoryFeature = function(casper, test, x) {
-
+	var selectCategory = json.hideUnHideCategory.categoryName;
 	//start from forum url
 	casper.start(config.url, function() {
 		casper.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -39,9 +39,19 @@ hideCategory.hideCategoryFeature = function(casper, test, x) {
 			});
 		});
 		this.then(function() {
-			var selectCategory = json.hideUnHideCategory.categoryName;
 			var classVal = x('//a/span[text()="'+selectCategory+'"]/parent::a');
 			var href = this.getElementAttribute(classVal, "href");
+			if(!href){
+				this.echo("Not found href for category: "+selectCategory);
+				selectCategory = this.evaluate(function(){
+					return document.querySelector('.tab-content ul li:nth-child(1) span.forum-title').innerText;;
+				});
+				this.echo("selectCategory : "+selectCategory);
+				var classVal = x('//a/span[text()="'+selectCategory+'"]/parent::a');
+				href = this.getElementAttribute(classVal, "href");
+				this.echo("current href : "+ href);
+			}
+			this.echo("current href : "+href);	
 			test.assertExists('a[href="'+href+'"]');
 			var hideButtonId = href.split('=');
 			casper.echo('hideButtonId : ' +hideButtonId[1]);
@@ -88,7 +98,7 @@ hideCategory.hideCategoryFeature = function(casper, test, x) {
 
 		//verify un-hide category
 		this.then(function() {
-			var selectCategory = json.hideUnHideCategory.categoryName;
+			//var selectCategory = json.hideUnHideCategory.categoryName;
 			test.assertExists(x('//a/span[text()="'+selectCategory+'"]'));
 			casper.echo('successfully verified category is un-hide', 'INFO');
 			this.capture(screenShotsDir+ 'verifyOnCategoryPage.png');
@@ -98,7 +108,7 @@ hideCategory.hideCategoryFeature = function(casper, test, x) {
 	
 	/*****Check Clear Filter functionality to stop hiding hidded category*****/
 	casper.then(function() {
-		var selectCategory = json.hideUnHideCategory.categoryName;
+		//var selectCategory = json.hideUnHideCategory.categoryName;
 		var classVal = x('//a/span[text()="'+selectCategory+'"]/parent::a');
 		var href = this.getElementAttribute(classVal, "href");
 		test.assertExists('a[href="'+href+'"]');
@@ -141,7 +151,7 @@ hideCategory.hideCategoryFeature = function(casper, test, x) {
 
 			//verify un-hide category
 			this.then(function() {
-				var selectCategory = json.hideUnHideCategory.categoryName;
+				//var selectCategory = json.hideUnHideCategory.categoryName;
 				test.assertExists(x('//a/span[text()="'+selectCategory+'"]'));
 				casper.echo('successfully verified category is un-hide', 'INFO');
 				this.capture(screenShotsDir+ 'verifyOnCategoryPage.png');

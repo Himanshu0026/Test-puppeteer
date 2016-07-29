@@ -23,24 +23,47 @@ casper.options.logLevel = config.app.logLevel;
 
 //REGISTRATION
 	casper.wait(5000, function(){
-	casper.test.begin('REGISTRATION TEST', function(test) {
-		var forumRegister = require("./testsuite/register.js");
-		forumRegister.featureTest(casper, test);
-		casper.run(function(){
-			test.done();
-			test.assert(true);
+		casper.test.begin('REGISTRATION TEST', function(test) {
+			var forumRegister = require("./testsuite/register.js");
+			forumRegister.featureTest(casper, test);
+			casper.run(function(){
+				test.done();
+				test.assert(true);
+			});
 		});
-	});
 	});
 
 //LOGIN TESTING SECTION
 	casper.wait(5000, function(){
-        casper.test.begin('Verify login functionality from home page with all valid and invalid scenarios ', function(test) {
-		var forumLogin = require("./testsuite/forum_login.js");
-		forumLogin.featureTest(casper, casper.test);
-		casper.run(function(){
-			test.done();
+		casper.test.begin('Verify login functionality from home page with all valid and invalid scenarios ', function(test) {
+			var forumLogin = require("./testsuite/forum_login.js");
+			forumLogin.featureTest(casper, casper.test);
+			casper.run(function(){
+				test.done();
+			});
 		});
 	});
+	casper.wait(5000, function(){
+		casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+
+			var newTopic = require("./testsuite/newTopic.js");
+			var x = require('casper').selectXPath;
+			newTopic.featureTest(casper, casper.test, x);
+		
+			casper.run(function(){
+				test.done();
+			});
+		});
+	});
+//HIDE CATEGORY
+	casper.wait(5000, function(){
+		casper.test.begin('Verify hide/un-hide category functionlity ', function(test) {
+			 var hideCategory = require("./testsuite/hideCategory.js");
+			 var x = require('casper').selectXPath;
+			 hideCategory.hideCategoryFeature(casper, casper.test, x);
+			 casper.run(function(){
+				test.done();
+			 });
+		});
 	});
 
