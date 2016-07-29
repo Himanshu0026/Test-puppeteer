@@ -130,7 +130,7 @@
 	},
 	
 	"deleteTopic" : {
-		"topicName" : "ONEpluse"
+		"topicName" : "HolyDay"
 	},
 
 	
@@ -176,7 +176,7 @@
 	},
 
 	"hideUnHideCategory" : {
-		"categoryName" : "Category4abcd",
+		"categoryName" : "Category4",
 		"infoMessage" : "Deselect the categories you would like to stop hiding."
 	}
 }
