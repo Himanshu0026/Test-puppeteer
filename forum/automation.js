@@ -45,7 +45,7 @@ casper.options.logLevel = config.app.logLevel;
 	});
 	
 //HIDE CATEGORY
-	casper.wait(5000, function(){
+/*	casper.wait(5000, function(){
 		casper.test.begin('Verify hide/un-hide category functionlity ', function(test) {
 			 var hideCategory = require("./testsuite/hideCategory.js");
 			 var x = require('casper').selectXPath;
