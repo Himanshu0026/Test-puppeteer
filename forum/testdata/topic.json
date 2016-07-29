@@ -170,6 +170,7 @@
 
 	"moveTopic" : {
 		"topicName" : "HolyDay",
+		"newPostTitle" : "newPost",
 		"moveToCategory1" : "",
 		"moveToCategory2" : ""
 	},
