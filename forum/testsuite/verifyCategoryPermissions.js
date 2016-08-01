@@ -75,7 +75,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=7; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Registered Users') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -185,7 +185,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=7; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Unregistered / Not Logged In') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -282,7 +282,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=7; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Pending Email Verification') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -389,7 +389,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=6; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Registered Users') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -499,7 +499,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=7; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Unregistered / Not Logged In') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -596,7 +596,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=7; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Unregistered / Not Logged In') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -698,7 +698,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=6; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Pending Email Verification') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -808,7 +808,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=6; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Pending Email Verification') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -923,7 +923,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=6; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Registered Users') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -1049,7 +1049,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=7; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Unregistered / Not Logged In') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -1151,7 +1151,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=7; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Unregistered / Not Logged In') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -1253,7 +1253,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=6; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Pending Email Verification') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -1372,7 +1372,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=6; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Pending Email Verification') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -1491,7 +1491,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=6; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Registered Users') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -1611,7 +1611,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=6; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Registered Users') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -1731,7 +1731,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=6; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Registered Users') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -1865,7 +1865,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=6; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Registered Users') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -1999,7 +1999,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=6; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Registered Users') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -2114,7 +2114,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			for(var i=1; i<=6; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Registered Users') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
