@@ -306,8 +306,8 @@ forumRegister.registerWithSettings = function(casper, test) {
 							});
 						} else {
 							forumRegister.registerToApp(json['imIdBlankData'], casper, function() {
-								var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
-								verifyErrorMsg(errorMsg, 'Please enter your screen name.', 'BlankIM_ID', casper);
+								//var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+								//verifyErrorMsg(errorMsg, 'Please enter your screen name.', 'BlankIM_ID', casper);
 								casper.echo('Processing to registration on forum.....', 'INFO');
 							});
 							

@@ -39,7 +39,7 @@ inContextForumRegister.featureTest = function(casper, test) {
 			for(var i=1; i<=7; i++) {
 				var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 				if (x1.innerText == 'Unregistered / Not Logged In') {
-					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+					var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
 					return x2;
 				}
 			}
@@ -438,8 +438,19 @@ inContextForumRegister.featureTest = function(casper, test) {
 	
 	//Clicking On 'Username' Link Against First Topic In The List
 	casper.then(function() {
-		test.assertExists('form[name="posts"] a[href^="/profile/"]');
-		this.click('form[name="posts"] a.username.usergroup946060');
+		var username = this.evaluate(function () {
+			var element = document.querySelector('form[name="posts"] a[href^="/profile/"]');
+			return element;
+		});
+		
+		this.then(function() {
+			this.echo('username :::::111::::::::::: ' +username, 'INFO');
+			username = this.fetchText(username);
+			this.echo('username ::::::222:::::::::: ' +username, 'INFO');
+		});
+		//test.assertExists('form[name="posts"] a[href^="/profile/"]');
+		//this.click('form[name="posts"] a.username.usergroup946060');
+		
 	});
 	/*casper.then(function() {
 		//test.assertExists('form[name="posts"] a[href^="/profile/"]');
