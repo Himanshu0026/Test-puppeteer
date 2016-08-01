@@ -40,6 +40,10 @@ handler.on('push', function (event) {
 	commitDetails["branchName"] = branchName;
 	//Adding a new job in queue with commit details
 	queueServices.addNewJob(commitDetails);
+	/*utils.isValidJobToAdd(branchName, function(valid){
+		if(valid)
+			queueServices.addNewJob(commitDetails);
+	});*/
 });
 
 //Log details on any issue event
