@@ -669,7 +669,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 
 /************************************PRIVATE METHODS***********************************/
 
-// method for reply topic on any post
+// method for reply post on any topic
 
 var replyTopic = function(content, driver, callback) { 
 	
