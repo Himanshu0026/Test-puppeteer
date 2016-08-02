@@ -1492,16 +1492,29 @@ var disableUserNameForRegisteredUser = function(driver, test, callback) {
 				this.capture(screenShotsDir+ 'groupPermission.png');
 				//Clicking On 'Change Permissions' Link With Respect To 'Regostered Users'  
 				driver.then(function() {
-					var grpName = this.evaluate(function(){
-						for(var i=1; i<=7; i++) {
-							var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
-							if (x1.innerText == 'Registered Users') {
-								var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
-								return x2;
+					try {
+						var grpName = this.evaluate(function(){
+							for(var i=1; i<=7; i++) {
+								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+								if (x1.innerText == 'Registered Users') {
+									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+									return x2;
+								}
 							}
-						}
-					});
-					this.click('a[href="'+grpName+'"]');
+							this.click('a[href="'+grpName+'"]');
+						});
+					}catch(e) {
+						var grpName = this.evaluate(function(){
+							for(var i=1; i<=7; i++) {
+								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+								if (x1.innerText == 'Registered Users') {
+									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
+									return x2;
+								}
+							}
+							this.click('a[href="'+grpName+'"]');
+						});
+					}
 					this.wait(5000,function(){
 						this.capture(screenShotsDir + 'group_registred.png');
 						try {
@@ -1564,9 +1577,13 @@ editProfile.makeRegisteredUser = function(driver, test, callback) {
 					this.page.sendEvent("keypress", this.page.event.key.Enter);
 					driver.wait(3000, function() {
 						driver.then(function() {
-							this.fillSelectors('form[name="ugfrm"]', {
-								'select[name="usergroupid"]' :  '20237477'
-							}, true);
+							try {
+								this.fillSelectors('form[name="ugfrm"]', {
+									'select[name="usergroupid"]' :  '20237477'
+								}, true);
+							}catch(e) {
+								test.assertDoesntExist('form[name="ugfrm"]');
+							}
 						});
 						driver.wait(3000, function() {
 							this.capture(screenShotsDir + 'popUp.png');
@@ -1597,16 +1614,29 @@ var disableInvisibleModeForRegisteredUser = function(driver, test, callback) {
 				this.capture(screenShotsDir+ 'groupPermission.png');
 				//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
 				driver.then(function() {
-					var grpName = this.evaluate(function(){
-						for(var i=1; i<=7; i++) {
-							var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
-							if (x1.innerText == 'Registered Users') {
-								var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
-								return x2;
+					try {
+						var grpName = this.evaluate(function(){
+							for(var i=1; i<=7; i++) {
+								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+								if (x1.innerText == 'Registered Users') {
+									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+									return x2;
+								}
 							}
-						}
-					});
-					this.click('a[href="'+grpName+'"]');
+							this.click('a[href="'+grpName+'"]');
+						});
+					}catch(e) {
+						var grpName = this.evaluate(function(){
+							for(var i=1; i<=7; i++) {
+								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+								if (x1.innerText == 'Registered Users') {
+									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
+									return x2;
+								}
+							}
+							this.click('a[href="'+grpName+'"]');
+						});
+					}
 					this.wait(5000,function(){
 						this.capture(screenShotsDir + 'group_registered.png');
 						try {
@@ -1665,16 +1695,29 @@ var disableEditOwnProfileForRegisteredUser = function(driver, test, callback) {
 				this.capture(screenShotsDir+ 'groupPermission.png');
 				//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
 				driver.then(function() {
-					var grpName = this.evaluate(function(){
-						for(var i=1; i<=7; i++) {
-							var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
-							if (x1.innerText == 'Registered Users') {
-								var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
-								return x2;
+					try {
+						var grpName = this.evaluate(function(){
+							for(var i=1; i<=7; i++) {
+								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+								if (x1.innerText == 'Registered Users') {
+									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+									return x2;
+								}
 							}
-						}
-					});
-					this.click('a[href="'+grpName+'"]');
+							this.click('a[href="'+grpName+'"]');
+						});
+					}catch(e) {
+						var grpName = this.evaluate(function(){
+							for(var i=1; i<=7; i++) {
+								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+								if (x1.innerText == 'Registered Users') {
+									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
+									return x2;
+								}
+							}
+							this.click('a[href="'+grpName+'"]');
+						});
+					}
 					this.wait(5000,function(){
 						this.capture(screenShotsDir + 'group_registered.png');
 						try {
@@ -1732,16 +1775,29 @@ var disableCustomUserTitleForRegisteredUser = function(driver, test, callback) {
 				this.capture(screenShotsDir+ 'groupPermission.png');
 				//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
 				driver.then(function() {
-					var grpName = this.evaluate(function(){
-						for(var i=1; i<=7; i++) {
-							var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
-							if (x1.innerText == 'Registered Users') {
-								var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
-								return x2;
+					try {
+						var grpName = this.evaluate(function(){
+							for(var i=1; i<=7; i++) {
+								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+								if (x1.innerText == 'Registered Users') {
+									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+									return x2;
+								}
 							}
-						}
-					});
-					this.click('a[href="'+grpName+'"]');
+							this.click('a[href="'+grpName+'"]');
+						});
+					}catch(e) {
+						var grpName = this.evaluate(function(){
+							for(var i=1; i<=7; i++) {
+								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+								if (x1.innerText == 'Registered Users') {
+									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
+									return x2;
+								}
+							}
+							this.click('a[href="'+grpName+'"]');
+						});
+					}
 					this.wait(5000,function(){
 						this.capture(screenShotsDir + 'group_registered.png');
 						try {
