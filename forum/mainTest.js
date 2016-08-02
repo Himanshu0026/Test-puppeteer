@@ -169,7 +169,7 @@ switch (feature) {
 
 		var editTopic = require("./testsuite/editTopic.js");
 		var x = require('casper').selectXPath;
-		editTopic.featureTest(casper, casper.test, x);
+		editTopic.editTopicFeature(casper, casper.test, x);
 		casper.run(function(){
 			test.done();
 		});

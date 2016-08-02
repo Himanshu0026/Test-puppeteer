@@ -19,28 +19,28 @@
 			"blankTitle" : {
 				"title" : "",
 				"content" : "hey there..!!",
-				"ExpectedErrorMessage" : "Error: You must enter a title for your message.",
+				"ExpectedErrorMessage" : "You must enter a title for your message.",
 				"category" : "General"
 			},
 
 			"blankContent" : {
 				"title" : "ping",
 				"content" : "",
-				"ExpectedErrorMessage" : "Error: You must enter a message to post.",
+				"ExpectedErrorMessage" : "You must enter a message to post.",
 				"category" : "General"
 			},
 
 			"blankCategory" : {
 				"title" : "ping",
 				"content" : "hey there..!!",
-				"ExpectedErrorMessage" : "Error: You must select a category for your message.",
+				"ExpectedErrorMessage" : "You must select a category for your message.",
 				"category" : ""
 			},
 	
 			"blankField" : {
 				"title" : "",
 				"content" : "",
-				"ExpectedErrorMessage" : "Error: You must enter a title for your message.",
+				"ExpectedErrorMessage" : "You must enter a title for your message.",
 				"category" : ""
 			}
 	},
@@ -94,7 +94,7 @@
 		
 		"blankContent" : {
 			"content" : "",
-			"ExpectedErrorMessage" : "Error: You must enter a message to post."
+			"ExpectedErrorMessage" : "You must enter a message to post."
 		}
 		
 	},
@@ -172,7 +172,13 @@
 		"topicName" : "HolyDay",
 		"newPostTitle" : "newPost",
 		"moveToCategory1" : "",
-		"moveToCategory2" : ""
+		"moveToCategory2" : "",
+		
+		"ValidCredential" : {
+				"title" : "newPost",
+				"content" : "hey there..!!",
+				"category" : "General"
+			}
 	},
 
 	"hideUnHideCategory" : {

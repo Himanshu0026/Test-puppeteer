@@ -11,24 +11,24 @@ var config = require('../config/config.json');
 var editTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'editTopic/';
 
-editTopic.editTopicFeature = function(casper,test, x, callback) {
+editTopic.editTopicFeature = function(casper,test, x) {
 
 			//go to backend url
-			casper.thenOpen(config.backEndUrl,function() {
+			casper.start(config.backEndUrl,function() {
 				casper.echo('Login To Backend URL and disable start topic checkbox', 'INFO');
 				this.wait(7000, function() {
 					casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-					test.assertTitle('Website Toolbox', 'The page has correct title');
+					test.assertTitle('Website Toolbox - Account Login', 'The page has correct title');
 					casper.echo('---------------------------------------------------------------------------');		
 				});
 			});
 			
 			//login to backend url (rm)
-			/*casper.then(function() {
+			casper.then(function() {
 				forumRegister.loginToForumBackEnd(casper, test, function() {
 					casper.echo('User has been successfuly login to backend', 'INFO');
 				});
-			});*/
+			});
 			//go to user group permission
 			casper.then(function() {
 				utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
@@ -278,7 +278,7 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 				casper.echo('---------------------------------------------------------------------------');
 			};
 
-	return callback();
+	//return callback();
 };
 
 
