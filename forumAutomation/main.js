@@ -3,7 +3,8 @@
 'use strict';
 var http = require('http');
 var queueServices = require('./services/queueServices.js');
-
+var utils = require('./utils');
+var redisClient = utils.initRedisClient();
 //Creating github webhook handler
 var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: 'monika' });
