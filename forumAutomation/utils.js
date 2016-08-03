@@ -23,7 +23,7 @@ utils.initRedisClient = function(){
 
 
 
-utils.isValidJobToAdd = function(commitBranch, commitcallback){
+utils.isValidJobToAdd = function(commitBranch, commitDetails, callback){
 	
 	redisClient.get(commitBranch, function (err, value) {
 		if(value){

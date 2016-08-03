@@ -17,7 +17,7 @@ executorServices.executeJob = function(commitDetails, callback){
 	//Executing gitdeploy.sh to update Forum's code for given branch name
 //if(commitDetails.branchName == "automation"){
 	console.log("Executing gitdeploy.sh");
-	var gitDeployResult = executorServices.execute("sudo bash -c '/home/monika/gitdeploy.sh "+commitDetails.branchName+ "'");
+	/*var gitDeployResult = executorServices.execute("sudo bash -c '/home/monika/gitdeploy.sh "+commitDetails.branchName+ "'");
 	//Executing automation test script
 	var testResult = executorServices.execute("sudo bash -c '/home/monika/project/git/QA-automation/forumAutomation/bin/automation.sh'");
 	var automationLogFile = '/home/monika/project/git/QA-automation/forumAutomation/log/automation.txt';
@@ -58,7 +58,7 @@ executorServices.executeJob = function(commitDetails, callback){
 				}
 			}
 		}
-	});
+	});*/
 
 
 /*}else{
