@@ -3,12 +3,15 @@
 'use strict';
 var http = require('http');
 var queueServices = require('./services/queueServices.js');
+var gitBranchServices = require('./services/gitBranchServices');
 var utils = require('./utils');
 var redisClient = utils.initRedisClient();
 //Creating github webhook handler
 var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: 'monika' });
 
+gitBranchServices.managePendingCommits(redisClient);
+//var PENDING_BRANCH_SET = "pendingBranches";
 //Creating server to listen on port 8081
 http.createServer(function (req, res) {
   handler(req, res, function (err) {
@@ -41,10 +44,10 @@ handler.on('push', function (event) {
 	commitDetails["branchName"] = branchName;
 	//Adding a new job in queue with commit details
 	queueServices.addNewJob(commitDetails);
-	/*utils.isValidJobToAdd(branchName, function(valid){
+	utils.isValidJobToAdd(branchName, function(valid){
 		if(valid)
 			queueServices.addNewJob(commitDetails);
-	});*/
+	});
 });
 
 //Log details on any issue event
