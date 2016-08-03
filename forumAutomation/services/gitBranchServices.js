@@ -1,6 +1,6 @@
 'use strict';
 var redisClient;
-var gitBranchServices = module.export = {};
+var gitBranchServices = module.exports = {};
 
 gitBranchServices.deleteMatureCommitBranch = function(redisClient, callback){
 	redisClient.keys('pendingCommit*', function(err, pendingCommits){

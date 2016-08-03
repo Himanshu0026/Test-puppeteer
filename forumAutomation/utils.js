@@ -2,7 +2,7 @@
 
 var redis = require('redis');
 var moment = require('moment');
-var utils = module.export = {};
+var utils = module.exports = {};
 var redisClient;
 
 utils.initRedisClient = function(){
