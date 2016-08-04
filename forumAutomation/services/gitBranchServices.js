@@ -7,7 +7,7 @@ gitBranchServices.deleteMatureCommitBranch = function(){
 		if(pendingCommits && pendingCommits.length>0){
 			pendingCommits.forEach(function ( pc, index){
 				redisClient.hgetall(pc, function(err, commit){
-					if(moment().diff(commit.entryTime)>=180000){
+					if(moment().diff(moment(commit.entryTime))>=180000){
 						queueServices.addNewJob(commitDetails);
 						redisClient.del(pc);
 					}

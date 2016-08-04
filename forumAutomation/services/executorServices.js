@@ -27,6 +27,7 @@ executorServices.executeJob = function(commitDetails, callback){
 			if (err.code == 'ENOENT') {
 				console.log('fail.log does not exist.');
 			}
+			return callback();
 		} else {
 			if (fileStat) {
 				var fileSize = fileStat.size;
@@ -55,7 +56,11 @@ executorServices.executeJob = function(commitDetails, callback){
 						console.log("Commit specific log files deleted.");
 						return callback();
 					});
+				}else{
+					return callback();
 				}
+			}else{
+				return callback();
 			}
 		}
 	});
