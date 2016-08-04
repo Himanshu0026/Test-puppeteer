@@ -43,7 +43,7 @@ handler.on('push', function (event) {
 	var branchName = tempArr[tempArr.length-1];
 	commitDetails["branchName"] = branchName;
 	//Adding a new job in queue with commit details
-	queueServices.addNewJob(commitDetails);
+	//queueServices.addNewJob(commitDetails);
 	utils.isValidJobToAdd(branchName, commitDetails, function(valid){
 		if(valid)
 			queueServices.addNewJob(commitDetails);

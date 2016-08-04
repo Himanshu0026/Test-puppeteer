@@ -33,7 +33,7 @@ utils.isValidJobToAdd = function(commitBranch, commitDetails, callback){
 				redisClient.set(commitBranch, moment(new Date()));
 				return callback(true);
 			}else{
-				redisClient.exists(commitBranch, function(err, isExist){
+				redisClient.exists("pendingCommit_"+commitBranch, function(err, isExist){
 					if(!isExist)
 						redisClient.hmset("pendingCommit_"+commitBranch, {"branch": commitBranch, "commitDetails": commitDetails, "entryTime": moment(new Date())});	
 					else
