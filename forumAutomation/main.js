@@ -18,7 +18,7 @@ http.createServer(function (req, res) {
     res.statusCode = 404;
     res.end('no such location');
   });
-}).listen(80);
+}).listen(8081);
 
 //Log error message on any error event
 handler.on('error', function (err) {
