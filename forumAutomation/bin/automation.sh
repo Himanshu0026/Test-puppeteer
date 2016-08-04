@@ -1,5 +1,5 @@
 #!/bin/sh
-AUTOMATION_HOME='/home/monika/websitetoolbox/git/QA-automation/forumAutomation'
+AUTOMATION_HOME='/home/monika/git/QA-automation/forumAutomation'
 cd $AUTOMATION_HOME
 casperjs test ../forum/automation.js --feature=login> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 5
