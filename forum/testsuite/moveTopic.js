@@ -11,19 +11,19 @@ var config = require('../config/config.json');
 var moveTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'moveTopic/';
 
-moveTopic.moveTopicFeature = function(casper, test, x) {
+moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	var hrefVal = "";
 	//start from forum url
-	casper.start(config.url, function() {
+	casper.thenOpen(config.url, function() {
 		casper.echo('Title of the page :' +this.getTitle(), 'INFO');
 	});
 		
-	//Login To App (rm)
+	/*//Login To App (rm)
 	casper.then(function() {
 		forumLogin.loginToApp(json['newTopic'].adminUname, json['newTopic'].adminPass, casper, function() {
 			casper.echo('Admin has been successfuly login to application', 'INFO');
 		});
-	});
+	});*/
 
 	//Getting Screenshot After Clicking On 'Log In' Link 
 	casper.wait(7000, function() {
@@ -497,17 +497,16 @@ moveTopic.moveTopicFeature = function(casper, test, x) {
 		casper.echo('Login To Backend URL and disable move topic checkbox', 'INFO');
 		this.wait(7000, function() {
 			casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-			test.assertTitle('Website Toolbox - Account Login', 'The page has correct title');
 			casper.echo('---------------------------------------------------------------------------');		
 		});
 	});
 		
-	//login to backend url
+	/*//login to backend url (rm)
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('User has been successfuly login to backend', 'INFO');
 		});
-	});
+	});*/
 
 	//go to user permission
 	casper.then(function() {
@@ -604,9 +603,9 @@ moveTopic.moveTopicFeature = function(casper, test, x) {
 	});
 
 	
-	/*****Verify move topic from the topic listing page under sub category (own post for registered user when enable "move topic" permission)*****/
+	/*****Verify move topic from the topic listing page under sub category (own post for registered user when disable "move topic" permission)*****/
 	casper.then(function() {
-		casper.echo('Verify move topic from the topic listing page under sub category (own post for registered user when enable "move topic" permission)', 'INFO');
+		casper.echo('Verify move topic from the topic listing page under sub category (own post for registered user when disable "move topic" permission)', 'INFO');
 		this.then(function() {
 			test.assertExists('a[href="/categories"]');
 			this.click('a[href="/categories"]');
@@ -1170,7 +1169,7 @@ moveTopic.moveTopicFeature = function(casper, test, x) {
 	//test cases for move post.
 	casper.then(function() {
 		casper.echo('test cases for move post.', 'INFO');
-		/*//Login To App (rm)
+		//Login To App (rm)
 		casper.then(function() {
 			forumLogin.loginToApp(json['newTopic'].adminUname, json['newTopic'].adminPass, casper, function() {
 				casper.echo('Admin has been successfuly login to application', 'INFO');
@@ -1180,7 +1179,7 @@ moveTopic.moveTopicFeature = function(casper, test, x) {
 		//Getting Screenshot After Clicking On 'Log In' Link 
 		casper.wait(7000, function() {
 			this.capture(screenShotsDir+ 'login.png');
-		});*/
+		});
 	});
 
 	/*****Verify move post from the profile page into the new topic*****/
@@ -1768,10 +1767,9 @@ moveTopic.moveTopicFeature = function(casper, test, x) {
 
 	//go to backend url
 	casper.thenOpen(config.backEndUrl,function() {
-		casper.echo('Login To Backend URL and disable Approve New Posts', 'INFO');
+		casper.echo('Login To Backend URL and enable(All Posts) Approve New Posts', 'INFO');
 		this.wait(7000, function() {
 			casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-			test.assertTitle('Website Toolbox - Account Login', 'The page has correct title');
 			casper.echo('---------------------------------------------------------------------------');		
 		});
 	});
@@ -1800,6 +1798,9 @@ moveTopic.moveTopicFeature = function(casper, test, x) {
 		this.then(function() {
 			test.assertExists('button[type="submit"]');
 			this.click('button[type="submit"]');
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+ 'saveApproveNewPost.png');
+			});
 		});
 	});
 
@@ -2632,8 +2633,28 @@ moveTopic.moveTopicFeature = function(casper, test, x) {
 			test.assertExists('button[type="submit"]');
 			this.click('button[type="submit"]');
 		});
+		this.wait(7000, function() {
+			this.capture(screenShotsDir+ 'saveApproveNewPosts.png');
+		});
 	});
-	//return callback();
+	
+	//go to forum url
+	casper.thenOpen(config.url, function() {
+		casper.echo('go to forum url', 'INFO');
+	});
+
+	//Logout From App
+	casper.then(function() {
+		forumLogin.logoutFromApp(casper, function() {
+			casper.echo('Successfully logout from application', 'INFO');
+		});
+	});
+
+	//Getting Screenshot After Clicking On 'Logout' Link
+	casper.wait(7000, function() {
+		this.capture(screenShotsDir+ 'logout.png');
+	});
+	return callback();
 };
 
 /************************************PRIVATE METHODS***********************************/
@@ -2715,13 +2736,6 @@ var deleteNewlyCreatedTopic = function(href, eleStatus, driver, callback){
 	return callback();
 };
 
-var alertMessage = function(callback) {
-	casper.on('remote.alert', function(message) {
-		casper.echo('############################# inside remote22');
-		this.echo('alert message: ' + message);
- 	});
-	return callback();
-};
 
 // method for reply topic on any post
 

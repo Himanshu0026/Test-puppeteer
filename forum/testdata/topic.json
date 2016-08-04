@@ -107,7 +107,7 @@
 
 		"blankTitle" : {
 			"title" : "",
-			"ExpectedErrorMessage" : "Error: You must enter a subject for your message."
+			"ExpectedErrorMessage" : "You must enter a subject for your message."
 		},
 
 		"validContent" : {
@@ -116,7 +116,7 @@
 
 		"blankContent" : {
 			"content" : "",
-			"ExpectedErrorMessage" : "Error: You must enter a message to post."
+			"ExpectedErrorMessage" : "You must enter a message to post."
 		}
 		
 	},

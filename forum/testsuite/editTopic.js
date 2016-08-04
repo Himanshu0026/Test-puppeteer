@@ -11,24 +11,23 @@ var config = require('../config/config.json');
 var editTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'editTopic/';
 
-editTopic.editTopicFeature = function(casper,test, x) {
+editTopic.editTopicFeature = function(casper,test, x, callback) {
 
 			//go to backend url
-			casper.start(config.backEndUrl,function() {
+			casper.thenOpen(config.backEndUrl,function() {
 				casper.echo('Login To Backend URL and disable start topic checkbox', 'INFO');
 				this.wait(7000, function() {
 					casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-					test.assertTitle('Website Toolbox - Account Login', 'The page has correct title');
 					casper.echo('---------------------------------------------------------------------------');		
 				});
 			});
 			
 			//login to backend url (rm)
-			casper.then(function() {
+			/*casper.then(function() {
 				forumRegister.loginToForumBackEnd(casper, test, function() {
 					casper.echo('User has been successfuly login to backend', 'INFO');
 				});
-			});
+			});*/
 			//go to user group permission
 			casper.then(function() {
 				utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
@@ -268,17 +267,17 @@ editTopic.editTopicFeature = function(casper,test, x) {
 
 			function testAlert1(message) {
 				casper.echo('message: '+message, 'INFO');
-		    		this.test.assertEquals(message, json.editTopic.blankTitle.ExpectedErrorMessage.trim(), 'Error Message is verified');
+		    		this.test.assertEquals(message.trim(), json.editTopic.blankTitle.ExpectedErrorMessage.trim(), 'Error Message is verified');
 				casper.echo('---------------------------------------------------------------------------');
 			};
 
 			function testAlert2(message) {
 				casper.echo('message : '+message, 'INFO');
-		    		this.test.assertEquals(message, json.editTopic.blankContent.ExpectedErrorMessage.trim(), 'Error Message is verified');
+		    		this.test.assertEquals(message.trim(), json.editTopic.blankContent.ExpectedErrorMessage.trim(), 'Error Message is verified');
 				casper.echo('---------------------------------------------------------------------------');
 			};
 
-	//return callback();
+	return callback();
 };
 
 
