@@ -1,4 +1,3 @@
-11
 var execSync = require('child_process').execSync;
 execSync("touch 1.txt");
 execSync("touch 2.txt");
