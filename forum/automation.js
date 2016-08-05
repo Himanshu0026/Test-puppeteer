@@ -11,7 +11,7 @@ casper.options.logLevel = config.app.logLevel;
 
 var feature = casper.cli.get('feature');
 if(feature){
-	casper.echo("Started testing for the feature: " + feature +"\n");
+	casper.echo("Started testing for the feature:  " + feature +"\n");
 }else{
 	casper.echo("It seems, you have not given any option.");
 }
