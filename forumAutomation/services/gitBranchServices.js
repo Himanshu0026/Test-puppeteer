@@ -1,5 +1,4 @@
 'use strict';
-var moment = require('moment');
 var queueServices = require('./queueServices.js');
 var redisClient;
 var gitBranchServices = module.exports = {};
@@ -9,8 +8,9 @@ gitBranchServices.deleteMatureCommitBranch = function(){
 		if(pendingCommits && pendingCommits.length>0){
 			pendingCommits.forEach(function ( pc, index){
 				redisClient.hgetall(pc, function(err, commit){
-					var currentTime = moment(new Date());
-					if(currentTime.diff(moment(commit.entryTime))>=180000){
+					var currentTime = new Date();
+					var timeDiff = currentTime - new Date(commit.entryTime);
+					if(timeDiff >= 180000){
 						queueServices.addNewJob(commit.commitDetails);
 						redisClient.del(pc);
 					}
