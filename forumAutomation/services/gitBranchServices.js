@@ -1,5 +1,6 @@
 'use strict';
 var moment = require('moment');
+var queueServices = require('./queueServices.js');
 var redisClient;
 var gitBranchServices = module.exports = {};
 
