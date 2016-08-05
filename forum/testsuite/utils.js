@@ -38,12 +38,12 @@ utils.gotoEditUserGroupPermissionpage = function(x,userType, driver, callback) {
 			
 	});
 
-	driver.waitForSelector(x('//td[text()="'+userType+'"]/following::td[3]/a'), function(){
-		this.click(x('//td[text()="'+userType+'"]/following::td[3]/a'));
-		casper.echo("***inner text*** : "+this.fetchText(x('//td[text()="'+userType+'"]/following::td[3]/a')));
+	driver.waitForSelector(x('//td[text()="'+userType+'"]/following::td[2]/a'), function(){
+		this.click(x('//td[text()="'+userType+'"]/following::td[2]/a'));
+		casper.echo("***inner text*** : "+this.fetchText(x('//td[text()="'+userType+'"]/following::td[2]/a')));
 		this.wait(3000, function(){
-			this.click(x('//td[text()="'+userType+'"]/parent::tr/td[4]/div/a[1]'));
-			casper.echo("** Sublinks ** : "+this.fetchText(x('//td[text()="'+userType+'"]/parent::tr/td[4]/div/a[1]')));	
+			this.click(x('//td[text()="'+userType+'"]/parent::tr/td[3]/div/a[1]'));
+			casper.echo("** Sublinks ** : "+this.fetchText(x('//td[text()="'+userType+'"]/parent::tr/td[3]/div/a[1]')));	
 		});
 	});
 	return callback();

@@ -27,15 +27,15 @@ utils.isValidJobToAdd = function(commitBranch, commitDetails, callback){
 	
 	redisClient.get(commitBranch, function (err, value) {
 		if(value){
-			var diff = moment().diff(value);
+			var diff = moment().diff(moment(value));
 			console.log("The automation had been run for the "+ commitBranch +" branch "+diff+" ms ago.");
 			if(diff >= 180000){
-				redisClient.set(commitBranch, moment(new Date()));
+				redisClient.set(commitBranch, moment());
 				return callback(true);
 			}else{
 				redisClient.exists("pendingCommit_"+commitBranch, function(err, isExist){
 					if(!isExist)
-						redisClient.hmset("pendingCommit_"+commitBranch, {"branch": commitBranch, "commitDetails": commitDetails, "entryTime": moment(new Date())});	
+						redisClient.hmset("pendingCommit_"+commitBranch, {"branch": commitBranch, "commitDetails": commitDetails, "entryTime": moment()});	
 					else
 						redisClient.hset("pendingCommit_"+commitBranch, "commitDetails", commitDetails);
 				});
@@ -43,7 +43,7 @@ utils.isValidJobToAdd = function(commitBranch, commitDetails, callback){
 			}
 		}else{
 			console.log("First time automation execution request received for the branch "+commitBranch); 
-			redisClient.set(commitBranch, moment(new Date()));
+			redisClient.set(commitBranch, moment());
 			return callback(true);
 		}		
 	});

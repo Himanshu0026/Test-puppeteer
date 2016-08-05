@@ -219,6 +219,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 				this.capture(screenShotsDir+ 'clickLockTopic.png');	
 			});
 		});
+
 		//casper.reload();
 		casper.then(function() {
 			test.assertExists('.alert-warning');
