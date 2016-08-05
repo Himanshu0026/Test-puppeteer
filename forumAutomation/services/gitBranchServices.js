@@ -1,4 +1,5 @@
 'use strict';
+var moment = require('moment');
 var redisClient;
 var gitBranchServices = module.exports = {};
 
