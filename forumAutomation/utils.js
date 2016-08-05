@@ -33,7 +33,7 @@ utils.isValidJobToAdd = function(commitBranch, commitDetails, callback){
 			console.log("The automation had been run for the "+ commitBranch +" branch "+diff+" ms ago.");
 			if(diff >= 180000){
 				
-				redisClient.sadd(commitBranch, moment(new Date()));
+				redisClient.hset(commitBranch, moment(new Date()));
 				return callback(true);
 			}else{
 				redisClient.exists("pendingCommit_"+commitBranch, function(err, isExist){
@@ -46,7 +46,7 @@ utils.isValidJobToAdd = function(commitBranch, commitDetails, callback){
 			}
 		}else{
 			console.log("First time automation execution request received for the branch "+commitBranch); 
-			redisClient.sadd(commitBranch, moment(new Date()));
+			redisClient.hset(commitBranch, moment(new Date()));
 			return callback(true);
 		}		
 	});
