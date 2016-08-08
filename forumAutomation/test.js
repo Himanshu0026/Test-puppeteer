@@ -1,15 +1,5 @@
-/*var execSync = require('child_process').execSync;
-execSync("touch 1.txt");
-execSync("touch 2.txt");
-execSync("touch 3.txt");
-execSync("touch 1.txt");
-execSync("touch 1.txt");
-execSync("touch 1.txt");
-execSync("touch 1.txt");*/
-var moment = require('moment');
-var currentTime = new Date();
-	var timeString = currentTime.toString();
-var diff = currentTime - new Date("Fri Aug 05 2016 06:28:24 GMT-0400");
-console.log("timeString : "+timeString);
-			console.log("The automation had been run for the  branch "+diff+" ms ago.")
+var childProcess = require('child_process');
+var testResult = childProcess.spawnSync("sudo bash -c '/home/monika/websitetoolbox/git/QA-automation/forumAutomation/bin/automation.sh'");
+console.log('testResult : ' + testResult.pid);
+	childProcess.kill(testResult.pid);
 
