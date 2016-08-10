@@ -109,7 +109,7 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Change Permission From Back-End And Disable View Forum
 	casper.then(function() {
-		viewChangePermission(casper, test, function() {
+		generalPermission.viewChangePermission(casper, test, function() {
 			casper.wait(5000, function() {
 				this.capture(screenShotsDir+ '2_backEndChangePermission.png');
 				this.capture(screenShotsDir+ 'demo4.png');
@@ -221,7 +221,7 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Change Permission From Back-End And Enablie View Forum
 	casper.then(function() {
-		viewChangePermission(casper, test, function() {
+		generalPermission.viewChangePermission(casper, test, function() {
 			casper.wait(5000, function() {
 				this.capture(screenShotsDir+ '1_backEndChangePermission.png');
 				casper.echo('Opened Change Permission Page Successfully', 'INFO');
@@ -325,7 +325,7 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Change Permission From Back-End And Enablie View Profile
 	casper.then(function() {
-		viewChangePermission(casper, test, function() {
+		generalPermission.viewChangePermission(casper, test, function() {
 			casper.wait(5000, function() {
 				this.capture(screenShotsDir+ '3_backEndChangePermission.png');
 				casper.echo('Opened Change Permission Page Successfully', 'INFO');
@@ -459,7 +459,7 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Change Permission From Back-End And Enablie View Profile
 	casper.then(function() {
-		viewChangePermission(casper, test, function() {
+		generalPermission.viewChangePermission(casper, test, function() {
 			casper.wait(5000, function() {
 				this.capture(screenShotsDir+ '3_backEndChangePermission.png');
 				casper.echo('Opened Change Permission Page Successfully', 'INFO');
@@ -583,7 +583,7 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Change Permission From Back-End And Disable View Profile
 	casper.then(function() {
-		viewChangePermission(casper, test, function() {
+		generalPermission.viewChangePermission(casper, test, function() {
 			casper.wait(5000, function() {
 				this.capture(screenShotsDir+ '3_backEndChangePermission.png');
 				casper.echo('Opened Change Permission Page Successfully', 'INFO');
@@ -708,7 +708,7 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Change Permission From Back-End And Enablie View Profile
 	casper.then(function() {
-		viewChangePermission(casper, test, function() {
+		generalPermission.viewChangePermission(casper, test, function() {
 			casper.wait(5000, function() {
 				this.capture(screenShotsDir+ '3_backEndChangePermission.png');
 				casper.echo('Opened Change Permission Page Successfully', 'INFO');
@@ -834,7 +834,7 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Change Permission From Back-End And Disable View Invisible Member
 	casper.then(function() {
-		viewChangePermission(casper, test, function() {
+		generalPermission.viewChangePermission(casper, test, function() {
 			casper.wait(5000, function() {
 				this.capture(screenShotsDir+ '3_backEndChangePermission.png');
 				casper.echo('Opened Change Permission Page Successfully', 'INFO');
@@ -1035,7 +1035,7 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Change Permission From Back-End And Enablie View Invisible Member
 	casper.then(function() {
-		viewChangePermission(casper, test, function() {
+		generalPermission.viewChangePermission(casper, test, function() {
 			casper.wait(5000, function() {
 				this.capture(screenShotsDir+ '3_backEndChangePermission.png');
 				casper.echo('Opened Change Permission Page Successfully', 'INFO');
@@ -1242,7 +1242,7 @@ generalPermission.featureTest = function(casper, test, x) {
 //************************************PRIVATE METHODS***********************************
 
 //Method For Enabling View Profile For Registered User
-var viewChangePermission = function(driver, test, callback) {
+generalPermission.viewChangePermission = function(driver, test, callback) {
 	try {
 		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		driver.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
@@ -1253,16 +1253,75 @@ var viewChangePermission = function(driver, test, callback) {
 				this.capture(screenShotsDir+ 'groupPermission.png');
 				//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
 				driver.then(function() {
-					var grpName = this.evaluate(function(){
-						for(var i=1; i<=7; i++) {
-							var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
-							if (x1.innerText == 'Registered Users') {
-								var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
-								return x2;
+					try {
+						var grpName = this.evaluate(function(){
+							for(var i=1; i<=7; i++) {
+								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+								if (x1.innerText == 'Registered Users') {
+									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+									return x2;
+								}
 							}
-						}
-					});
-					this.click('a[href="'+grpName+'"]');
+						});
+						this.click('a[href="'+grpName+'"]');
+					}catch(e) {
+						var grpName = this.evaluate(function(){
+							for(var i=1; i<=7; i++) {
+								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+								if (x1.innerText == 'Registered Users') {
+									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
+									return x2;
+								}
+							}
+						});
+						this.click('a[href="'+grpName+'"]');
+					}
+					return callback();
+				});
+			});
+		}catch(e) {
+			test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+		}
+	}catch(e) {
+		test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+	}
+};
+
+//Method To Disable View Profile For Moderators
+generalPermission.viewChangePermissionForModerators = function(driver, test, callback) {
+	try {
+		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		driver.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		try {
+			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			driver.wait(5000,function() {
+				this.capture(screenShotsDir+ 'groupPermission.png');
+				//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
+				driver.then(function() {
+					try {
+						var grpName = this.evaluate(function(){
+							for(var i=1; i<=7; i++) {
+								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+								if (x1.innerText == 'Moderators') {
+									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+									return x2;
+								}
+							}
+						});
+						this.click('a[href="'+grpName+'"]');
+					}catch(e) {
+						var grpName = this.evaluate(function(){
+							for(var i=1; i<=7; i++) {
+								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+								if (x1.innerText == 'Moderators') {
+									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
+									return x2;
+								}
+							}
+						});
+						this.click('a[href="'+grpName+'"]');
+					}
 					return callback();
 				});
 			});

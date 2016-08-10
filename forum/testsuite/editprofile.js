@@ -1338,8 +1338,8 @@ var editToProfile = function(userData, driver, callback) {
 	}
 	driver.wait(3000, function() {
 		driver.then(function() {
-			driver.test.assertExists('form[action="/register"] button[name="submit"]');
-			this.click('form[action="/register"] button[name="submit"]');
+			driver.test.assertExists('form[action="/register"] button[type="submit"]');
+			this.click('form[action="/register"] button[type="submit"]');
 			driver.wait(3000, function() {
 				return callback();
 			});
