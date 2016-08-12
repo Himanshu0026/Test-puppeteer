@@ -6,6 +6,7 @@ var queueServices = require('./services/queueServices.js');
 var gitBranchServices = require('./services/gitBranchServices');
 var utils = require('./utils.js');
 var redisClient = utils.initRedisClient();
+var test = require('./test.js');
 //Creating github webhook handler
 var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: 'monika' });
