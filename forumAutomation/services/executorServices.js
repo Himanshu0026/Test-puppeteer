@@ -11,7 +11,7 @@ executorServices.execute = function(script){
 	var scriptResult = spawnSync(script);
 	var pid = scriptResult.pid;
 	console.log('scriptResult : ' + scriptResult.stdout);
-	utils.terminateProcess(pid);
+	//utils.terminateProcess(pid);
 	return scriptResult.stdout;
 };
 
