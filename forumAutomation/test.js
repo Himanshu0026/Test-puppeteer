@@ -3,7 +3,7 @@ var testResult = childProcess.spawnSync("sudo bash -c '/home/monika/websitetoolb
 console.log('testResult : ' + testResult.pid);
 	childProcess.kill(testResult.pid);*/
 
-var casper_nodejs = require('./node_modules/casper-nodejs/index.js');
+//var casper_nodejs = require('./node_modules/casper-nodejs/index.js');
 /*
 var url = "http://google.com";
 // load the page refered with 'url' with casper

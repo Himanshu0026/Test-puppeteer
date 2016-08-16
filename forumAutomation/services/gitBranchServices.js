@@ -31,6 +31,6 @@ gitBranchServices.deleteMatureCommitBranch = function(){
 gitBranchServices.managePendingCommits = function(redisStorageClient){
 	redisClient = redisStorageClient;
 	console.log("The service gitBranchServices.deleteMatureCommitBranch has been started.");
-	setInterval(gitBranchServices.deleteMatureCommitBranch, 30000);
+	setInterval(gitBranchServices.deleteMatureCommitBranch, 300000);
 };
 
