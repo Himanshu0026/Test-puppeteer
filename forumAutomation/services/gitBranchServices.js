@@ -14,7 +14,7 @@ gitBranchServices.deleteMatureCommitBranch = function(){
 					var currentTime = new Date();
 					var timeDiff = currentTime - new Date(commit.entryTime);
 					console.log(timeDiff + " ms ago commit had been made.");
-					if(timeDiff >= 180000){
+					if(timeDiff >= 1800000){
 						console.log("Now moving " + commit.branch + " in job queue.");
 						console.log("Last commit details: " + commit.commitDetails);
 						queueServices.addNewJob(commit.commitDetails);

@@ -31,7 +31,7 @@ utils.isValidJobToAdd = function(commitBranch, commitDetails, callback){
 		if(value){
 			var diff = currentTime - new Date(value);
 			console.log("The automation had been run for the "+ commitBranch +" branch "+diff+" ms ago.");
-			if(diff >= 180000){
+			if(diff >= 1800000){
 				console.log("Returning true to add in job queue");
 				redisClient.set(commitBranch, timeString);
 				return callback(true);

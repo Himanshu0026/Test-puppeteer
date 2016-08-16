@@ -20,7 +20,7 @@ executorServices.executeJob = function(commitDetails, callback){
 	//Executing gitdeploy.sh to update Forum's code for given branch name
 //if(commitDetails.branchName == "automation"){
 	console.log("Executing gitdeploy.sh");
-	//var gitDeployResult = executorServices.execute("sudo bash -c '/home/monika/gitdeploy.sh "+commitDetails.branchName+ "'");
+	var gitDeployResult = executorServices.execute("sudo bash -c '/home/monika/gitdeploy.sh "+commitDetails.branchName+ "'");
 	//kill(gitDeployResult.pid);
 	//Executing automation test script
 	console.log("Executing Automation script");
