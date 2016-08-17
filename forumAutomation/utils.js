@@ -41,9 +41,9 @@ utils.isValidJobToAdd = function(commitBranch, commitDetails, callback){
 				console.log("commitDetails: "+JSON.stringify(commitDetails));
 				redisClient.exists("pendingCommit_"+commitBranch, function(err, isExist){
 					if(!isExist)
-						redisClient.hmset("pendingCommit_"+commitBranch, {"branch": commitBranch, "commitDetails": commitDetails, "entryTime": timeString});	
+						redisClient.hmset("pendingCommit_"+commitBranch, {"branch": commitBranch, "commitDetails": JSON.stringify(commitDetails), "entryTime": timeString});	
 					else
-						redisClient.hset("pendingCommit_"+commitBranch, "commitDetails", commitDetails);
+						redisClient.hset("pendingCommit_"+commitBranch, "commitDetails", JSON.stringify(commitDetails));
 				});
 				return callback(false);
 			}

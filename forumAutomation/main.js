@@ -31,24 +31,25 @@ handler.on('push', function (event) {
 	console.log('Received a push event for %s to %s',
     	event.payload.repository.name,
     	event.payload.ref);
-	
-	//Preapring commit details from event's payload for further processing
-	var commitDetails = {};
 	var commitPayload = event.payload.head_commit;
-	commitDetails["commitId"] = commitPayload.id;
-	commitDetails["commitMessage"] = commitPayload.message;
-	commitDetails["commitUrl"] = commitPayload.url;
-	commitDetails["committerName"] = commitPayload.committer.name;
-	commitDetails["committerEmail"] = commitPayload.committer.email;
-	var tempArr = event.payload.ref.split("/");
-	var branchName = tempArr[tempArr.length-1];
-	commitDetails["branchName"] = branchName;
-	//Adding a new job in queue with commit details
-	//queueServices.addNewJob(commitDetails);
-	utils.isValidJobToAdd(branchName, commitDetails, function(valid){
-		if(valid)
-			queueServices.addNewJob(commitDetails);
-	});
+	if(commitPayload){
+		//Preapring commit details from event's payload for further processing
+		var commitDetails = {};
+		commitDetails["commitId"] = commitPayload.id;
+		commitDetails["commitMessage"] = commitPayload.message;
+		commitDetails["commitUrl"] = commitPayload.url;
+		commitDetails["committerName"] = commitPayload.committer.name;
+		commitDetails["committerEmail"] = commitPayload.committer.email;
+		var tempArr = event.payload.ref.split("/");
+		var branchName = tempArr[tempArr.length-1];
+		commitDetails["branchName"] = branchName;
+		//Adding a new job in queue with commit details
+		//queueServices.addNewJob(commitDetails);
+		utils.isValidJobToAdd(branchName, commitDetails, function(valid){
+			if(valid)
+				queueServices.addNewJob(commitDetails);
+		});
+	}
 });
 
 //Log details on any issue event
