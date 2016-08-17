@@ -27,8 +27,8 @@ executorServices.executeJob = function(commitDetails, callback){
 		//Executing automation test script
 		console.log("Executing Automation script");
 		var testResult = executorServices.execute("/etc/automation/forumAutomation/bin/automation.sh");
-		var automationLogFile = '/etc/automation/forumAutomation/log/automation.txt';
-		var failLogFile = '/etc/automation/forumAutomation/log/fail.txt';
+		var automationLogFile = '/etc/automation/log/automation.txt';
+		var failLogFile = '/etc/automation/log/fail.txt';
 		fs.stat(failLogFile, function(err, fileStat) {
 			if (err) {
 				if (err.code == 'ENOENT') {
