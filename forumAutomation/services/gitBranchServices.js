@@ -17,8 +17,9 @@ gitBranchServices.deleteMatureCommitBranch = function(){
 					if(timeDiff >= 1800000){
 						console.log("Now moving " + commit.branch + " in job queue.");
 						console.log("Last commit details: " + commit.commitDetails);
-						console.log("commitDetails: "+JSON.stringify(commit.commitDetails));
-						queueServices.addNewJob(commit.commitDetails);
+						var commitInfoJSON = JSON.parse(commit.commitDetails);
+						console.log("commitDetails: "+commitInfoJSON.branchName);
+						queueServices.addNewJob(commitInfoJSON);
 						redisClient.del(pc);
 					}
 				});

@@ -19,6 +19,7 @@ executorServices.execute = function(script){
 executorServices.executeJob = function(commitDetails, callback){
 	//Executing gitdeploy.sh to update Forum's code for given branch name
 //if(commitDetails.branchName == "automation"){
+	console.log("Starting execution for commitDetails : "+commitDetails);
 	if(commitDetails.branchName){
 		console.log("Executing gitdeploy.sh for "+commitDetails.branchName);
 		var gitDeployResult = executorServices.execute("/home/automation/gitdeploy.sh "+commitDetails.branchName);
