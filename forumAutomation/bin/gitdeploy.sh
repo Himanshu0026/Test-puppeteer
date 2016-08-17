@@ -20,14 +20,15 @@ if [ -d "$CLONE_DIR" ]; then
 	git pull
 	if [ $? -ne 0 ]; then
 		echo "git pull not succeeded."
+		cd /home/monika/
 		rm -rf $CLONE_DIR
-		git clone https://its4monika:9c34e09abf76b30fc4f9ac6dab11ad9d3a7c5acd@github.com/webtoolbox/Website-Toolbox.git
+		git clone https://automation@github.com/webtoolbox/Website-Toolbox.git
 		cd $CLONE_DIR
 	fi
 else
 	echo "in else condition"
 	#read -p "Enter your github username : " GITUSERNAME
-	git clone https://its4monika:9c34e09abf76b30fc4f9ac6dab11ad9d3a7c5acd@github.com/webtoolbox/Website-Toolbox.git
+	git clone https://automation@github.com/webtoolbox/Website-Toolbox.git
 	cd $CLONE_DIR
 fi
 pwd
