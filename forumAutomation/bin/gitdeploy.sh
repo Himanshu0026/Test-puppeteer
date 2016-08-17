@@ -10,8 +10,8 @@ fi
 
 
 
-CLONE_DIR="/home/monika/Website-Toolbox"
-cd /home/monika/
+CLONE_DIR="/home/automation/Website-Toolbox"
+cd /home/automation/
 echo "clone dir : $CLONE_DIR"
 #if clone exists then no need to create it again
 if [ -d "$CLONE_DIR" ]; then
@@ -20,7 +20,7 @@ if [ -d "$CLONE_DIR" ]; then
 	git pull
 	if [ $? -ne 0 ]; then
 		echo "git pull not succeeded."
-		cd /home/monika/
+		cd /home/automation/
 		rm -rf $CLONE_DIR
 		git clone https://automation@github.com/webtoolbox/Website-Toolbox.git
 		cd $CLONE_DIR
@@ -49,11 +49,11 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 # copy files into appropriate directories
-cp -r /home/monika/Website-Toolbox/cgi-bin/ /www/
-cp -r /home/monika/Website-Toolbox/data/ /www
-cp -r /home/monika/Website-Toolbox/modules/* /www/modules
-cp -r /home/monika/Website-Toolbox/templates/ /www/
-cp -r /home/monika/Website-Toolbox/command_line/ /www/
+cp -r /home/automation/Website-Toolbox/cgi-bin/ /www/
+cp -r /home/automation/Website-Toolbox/data/ /www
+cp -r /home/automation/Website-Toolbox/modules/* /www/modules
+cp -r /home/automation/Website-Toolbox/templates/ /www/
+cp -r /home/automation/Website-Toolbox/command_line/ /www/
 
 chmod -R --silent 777 /www
 chmod -R --silent 777 /www/modules/

@@ -1,5 +1,5 @@
 {
-	"screenShotsLocation": "../screenshots/",
+	"screenShotsLocation": "/etc/automation/screenshots/",
 	"url": "http://beta12.websitetoolbox.com/",
 	"backEndUrl": "https://beta12.websitetoolbox.com/tool/members/login",
 	"app": {	

@@ -1,5 +1,5 @@
 #!/bin/sh
-AUTOMATION_HOME='/home/monika/project/git/QA-automation/forumAutomation'
+AUTOMATION_HOME='/etc/automation/QA-automation/forumAutomation'
 cd $AUTOMATION_HOME
 echo "Tests executing for LOGIN" > "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ../forum/automation.js --feature=login >> "$AUTOMATION_HOME"/log/automation.txt

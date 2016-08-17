@@ -21,13 +21,13 @@ executorServices.executeJob = function(commitDetails, callback){
 //if(commitDetails.branchName == "automation"){
 	if(commitDetails.branchName){
 		console.log("Executing gitdeploy.sh for "+commitDetails.branchName);
-		var gitDeployResult = executorServices.execute("sudo bash -c '/home/monika/gitdeploy.sh "+commitDetails.branchName+ "'");
+		var gitDeployResult = executorServices.execute("/home/automation/gitdeploy.sh "+commitDetails.branchName);
 		//kill(gitDeployResult.pid);
 		//Executing automation test script
 		console.log("Executing Automation script");
-		var testResult = executorServices.execute("sudo bash -c '/home/monika/project/git/QA-automation/forumAutomation/bin/automation.sh'");
-		var automationLogFile = '/home/monika/project/git/QA-automation/forumAutomation/log/automation.txt';
-		var failLogFile = '/home/monika/project/git/QA-automation/forumAutomation/log/fail.txt';
+		var testResult = executorServices.execute("/etc/automation/forumAutomation/bin/automation.sh");
+		var automationLogFile = '/etc/automation/forumAutomation/log/automation.txt';
+		var failLogFile = '/etc/automation/forumAutomation/log/fail.txt';
 		fs.stat(failLogFile, function(err, fileStat) {
 			if (err) {
 				if (err.code == 'ENOENT') {
@@ -37,7 +37,7 @@ executorServices.executeJob = function(commitDetails, callback){
 			} else {
 				if (fileStat) {
 					var fileSize = fileStat.size;
-					console.log("fail.log size: "+fileSize);
+					console.log("fail.txt size: "+fileSize);
 					if(fileSize != 0){
 						//Adding test result with commit details
 						commitDetails['testResult'] = testResult;
