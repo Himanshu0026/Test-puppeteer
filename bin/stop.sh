@@ -1,3 +1,3 @@
 #!/bin/sh
 
-`sudo killall node`
+`killall node`
