@@ -10,8 +10,9 @@ fi
 
 
 
-CLONE_DIR="/home/automation/Website-Toolbox"
-cd /home/automation/
+CLONE_DIR="/home/${USER}/Website-Toolbox"
+HOME_DIR="/home/${USER}/"
+cd $HOME_DIR
 echo "clone dir : $CLONE_DIR"
 #if clone exists then no need to create it again
 if [ -d "$CLONE_DIR" ]; then
@@ -20,15 +21,15 @@ if [ -d "$CLONE_DIR" ]; then
 	git pull
 	if [ $? -ne 0 ]; then
 		echo "git pull not succeeded."
-		cd /home/automation/
+		cd $HOME_DIR
 		rm -rf $CLONE_DIR
-		git clone https://automation@github.com/webtoolbox/Website-Toolbox.git
+		git clone ssh://git@github.com/webtoolbox/Website-Toolbox.git
 		cd $CLONE_DIR
 	fi
 else
 	echo "in else condition"
 	#read -p "Enter your github username : " GITUSERNAME
-	git clone https://automation@github.com/webtoolbox/Website-Toolbox.git
+	git clone ssh://git@github.com/webtoolbox/Website-Toolbox.git
 	cd $CLONE_DIR
 fi
 pwd
@@ -49,11 +50,11 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 # copy files into appropriate directories
-cp -r /home/automation/Website-Toolbox/cgi-bin/ /www/
-cp -r /home/automation/Website-Toolbox/data/ /www
-cp -r /home/automation/Website-Toolbox/modules/* /www/modules
-cp -r /home/automation/Website-Toolbox/templates/ /www/
-cp -r /home/automation/Website-Toolbox/command_line/ /www/
+cp -r $CLONE_DIR/cgi-bin/ /www/
+cp -r $CLONE_DIR/data/ /www
+cp -r $CLONE_DIR/modules/* /www/modules
+cp -r $CLONE_DIR/templates/ /www/
+cp -r $CLONE_DIR/command_line/ /www/
 
 chmod -R --silent 777 /www
 chmod -R --silent 777 /www/modules/
