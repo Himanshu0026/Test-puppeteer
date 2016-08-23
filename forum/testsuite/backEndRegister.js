@@ -31,11 +31,6 @@ backEndForumRegister.featureTest = function(casper, test) {
 		this.click('div#ddUsers a[href="/tool/members/mb/addusers"]');
 	});
 	
-	//Getting Screenshot After Clicking On "New User" Tab Under Users 
-	casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'forum_newUser.png');
-	});
-	
 	//Fill Invalid Data For User Registration And Handle Errors 
 	casper.then(function() {
 		this.eachThen(backEndRegisterJSON['invalidInfo'], function(response) {
@@ -54,7 +49,7 @@ backEndForumRegister.featureTest = function(casper, test) {
 					errorMessage = casper.fetchText('.tooltip p');
 					msgTitle = 'BlankEmail';
 				} else if (response.data.errorType == 'existWithName') {
-					casper.wait('5000', function() {
+					casper.wait(1000, function() {
 						errorMessage = casper.fetchText('div[role="dialog"] div[id^="ui-id-"]');
 						expectedErrorMsg = responseData.expectedErrorMsg+ '"' +responseData.uname+ '".';
 						msgTitle = 'ExistUsername';
@@ -66,7 +61,7 @@ backEndForumRegister.featureTest = function(casper, test) {
 
 				//Called Method For Verifying Error Messages
 		
-				casper.wait('3000', function() {
+				casper.then(function() {
 					if(errorMessage && errorMessage != "") {
 						verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
 					}
@@ -83,12 +78,6 @@ backEndForumRegister.featureTest = function(casper, test) {
 		});
 	});
 
-	//Getting Screenshot After Submitting 'Register' Form  
-
-	casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'register_submit.png');
-	});
-	
 	//Handling Logout And Redirecting To The Respective Page
 			
 	casper.then(function() {
@@ -125,11 +114,6 @@ var redirectToBackEndLogout = function(driver, test, callback) {
 		test.assertDoesntExist('div.ui-dialog');
 		test.assertDoesntExist('.tooltip p');
 		driver.click('a[href="/tool/members/login?action=logout"]');
-		//Getting Screenshot After Clicking On 'Logout' Link  
-
-		driver.wait(5000, function() {
-			this.capture(screenShotsDir + 'logout.png');
-		});
 	}
 };
 

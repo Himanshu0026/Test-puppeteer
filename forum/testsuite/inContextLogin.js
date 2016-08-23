@@ -26,11 +26,6 @@ inContextLogin.featureTest = function(casper, test) {
 		this.click('div#topics a[href="/post/printadd"]');
 	});
 	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'startNewTopic.png');
-	});
-	
-	
 	//Filling Valid Data On login Form
 	
 	casper.then(function() {
@@ -39,10 +34,6 @@ inContextLogin.featureTest = function(casper, test) {
 		});
 	});
 
-	casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'login_submit.png');
-	});
-	
 	//Handling Logout And Redirecting To The Respective Page
 			
 	casper.then(function() {
@@ -61,10 +52,6 @@ inContextLogin.featureTest = function(casper, test) {
 		this.click('i.glyphicon.glyphicon-like-alt');
 	});
 	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'likePost.png');
-	});
-	
 	//Filling Valid Data On Login Form
 	
 	casper.then(function() {
@@ -73,10 +60,6 @@ inContextLogin.featureTest = function(casper, test) {
 		});
 	});
 
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'likePostSubmit.png');
-	});
-	
 	//Handling Logout And Redirecting To The Respective Page
 			
 	casper.then(function() {
@@ -95,19 +78,11 @@ inContextLogin.featureTest = function(casper, test) {
 		this.click('form[name="posts"] a.topic-title');
 	});
 	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'clickOnTopic.png');
-	});
-	
 	//Clicking On 'Like' This Post Icon
 	
 	casper.then(function() {
 		test.assertExists('i.glyphicon.glyphicon-like-alt');
 		this.click('i.glyphicon.glyphicon-like-alt');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'likePostFromTopicPage.png');
 	});
 	
 	//Filling Valid Data On Login Form
@@ -116,10 +91,6 @@ inContextLogin.featureTest = function(casper, test) {
 		forumLogin.loginToApp(json['validInfo'].username, json['validInfo'].password, casper, function() {
 			casper.echo('Processing to Login on forum.....', 'INFO');
 		});
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'likePostFromTopicPageSubmit.png');
 	});
 	
 	//Handling Logout And Redirecting To The Respective Page
@@ -140,19 +111,11 @@ inContextLogin.featureTest = function(casper, test) {
 		this.click('form[name="posts"] a.topic-title');
 	});
 	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'clickOnTopic.png');
-	});
-	
 	//Clicking On 'Dislike' This Post Icon
 	
 	casper.then(function() {
 		test.assertExists('a.dislike_post.text-muted');
 		this.click('a.dislike_post.text-muted');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'disLikePostFromTopicPage.png');
 	});
 	
 	//Filling Valid Data On Login Form
@@ -161,10 +124,6 @@ inContextLogin.featureTest = function(casper, test) {
 		forumLogin.loginToApp(json['validInfo'].username, json['validInfo'].password, casper, function() {
 			casper.echo('Processing to Login on forum.....', 'INFO');
 		});
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'dislikePostFromTopicPageSubmit.png');
 	});
 	
 	//Handling Logout And Redirecting To The Respective Page
@@ -185,19 +144,11 @@ inContextLogin.featureTest = function(casper, test) {
 		this.click('form[name="posts"] a.topic-title');
 	});
 	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'clickOnTopic.png');
-	});
-	
 	//Clicking On 'Quote Link' Present In Post List
 	
 	casper.then(function() {
 		test.assertExists('a.text-muted.quote');
 		this.click('a.text-muted.quote');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'quoteFromTopicPage.png');
 	});
 	
 	//Filling Valid Data On Login Form
@@ -206,10 +157,6 @@ inContextLogin.featureTest = function(casper, test) {
 		forumLogin.loginToApp(json['validInfo'].username, json['validInfo'].password, casper, function() {
 			casper.echo('Processing to Login on forum.....', 'INFO');
 		});
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'quoteFromTopicPageSubmit.png');
 	});
 	
 	//Handling Logout And Redirecting To The Respective Page
@@ -230,10 +177,6 @@ inContextLogin.featureTest = function(casper, test) {
 		this.click('form[name="posts"] a.topic-title');
 	});
 	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'clickOnTopic.png');
-	});
-	
 	//Clicking On 'create an account and log in' Link Present In Post List
 	
 	casper.then(function() {
@@ -247,20 +190,12 @@ inContextLogin.featureTest = function(casper, test) {
 		}
 	});
 	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'voteFromTopicPage.png');
-	});
-	
 	//Filling Valid Data On Login
 	
 	casper.then(function() {
 		forumLogin.loginToApp(json['validInfo'].username, json['validInfo'].password, casper, function() {
 			casper.echo('Processing to Login on forum.....', 'INFO');
 		});
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'voteFromTopicPageSubmit.png');
 	});
 	
 	//Handling Logout And Redirecting To The Respective Page
@@ -383,9 +318,9 @@ var redirectToLogout = function(driver, test, callback) {
 
 		//Getting Screenshot After Clicking On 'Back To Category' Link  
 
-		driver.wait(5000, function() {
+		/*driver.wait(5000, function() {
 			this.capture(screenShotsDir + 'backToCategory.png');
-		});
+		});*/
 		
 		//Click On Logout Link
 
@@ -396,9 +331,9 @@ var redirectToLogout = function(driver, test, callback) {
 
 			//Getting Screenshot After Clicking On 'Logout' Link  
 
-			this.wait(5000, function() {
+			/*this.wait(5000, function() {
 				this.capture(screenShotsDir + 'logout.png');
-			});
+			});*/
 		});
 	} catch(e) {
 		try {
@@ -419,9 +354,9 @@ var redirectToLogout = function(driver, test, callback) {
 
 				//Getting Screenshot After Clicking On 'Logout' Link  
 
-				this.wait(5000, function() {
+				/*this.wait(5000, function() {
 					this.capture(screenShotsDir + 'logout.png');
-				});
+				});*/
 			});
 		}
 	}
