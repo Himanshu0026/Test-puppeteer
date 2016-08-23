@@ -16,7 +16,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 	});
 	
-	/*casper.then(function() {
+	casper.then(function() {
 		casper.echo('                                      CASE 1', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('LIKE POST FROM TOPIC PAGE', 'INFO');
@@ -2022,9 +2022,9 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			test.assertExists('div#who_liked_dialog');
 			//this.click('div#who_liked_dialog');
 		});
-	});*/
+	});
 
-	casper.then(function() {
+	/*casper.then(function() {
 		casper.echo('                                      PENDING CASE 23', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('TO VERIFY REPUTATION COUNT OF FACEBOOK USER', 'INFO');
@@ -2259,7 +2259,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 				test.assertDoesntExist('button.button.btn-m.btn-blue');
 			}	
 		});
-	});
+	});*/
 };
 
 //*************************************************PRIVATE METHODS***********************************************

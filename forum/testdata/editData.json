@@ -14,7 +14,6 @@
 
     	"invalidDataForEditProfile" : [{		
 		"fullName" : "Hotam Singh",
-		"imType" : "Skype",
 		"imID" : "",
 		"birthday" : "04/15/1991",
 		"userTitle" : "REGISTERED USER",
@@ -24,7 +23,6 @@
 	
 	{	
 		"fullName" : "Hotam Singh",
-		"imType" : "Skype",
 		"imID" : "HSK123",
 		"birthday" : "",
 		"userTitle" : "REGISTERED USER",
@@ -34,7 +32,6 @@
 
 	{	
 		"fullName" : "Hotam Singh",
-		"imType" : "Skype",
 		"imID" : "HSK123",
 		"birthday" : "04/15/1991",
 		"userTitle" : "REGISTERED USER",
