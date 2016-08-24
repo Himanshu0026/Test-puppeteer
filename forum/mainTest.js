@@ -31,6 +31,7 @@ switch (feature) {
 			test.assert(true);
 		});
 	});
+	break;
 
     case "editProfileWithSettings":
 	casper.test.begin("Start 'Edit Profile With Setting' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
