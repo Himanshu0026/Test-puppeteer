@@ -19,8 +19,9 @@ forgotpwd.featureTest = function(casper, test) {
 	// verify title of the forgot password page
 	casper.then(function() {
 		forgotpwd.gotoForgotPasswordpage(casper, function(){
-			casper.wait(3000, function(){
-				test.assert(this.getTitle().indexOf("Lost Your Password?")>=0);
+			casper.then(function(){
+				casper.echo("casper.getTitle() : " +casper.getTitle(), 'info');
+				test.assert(casper.getTitle().indexOf("Lost Your Password?")>=0);
 				casper.echo("Forgot password link is verified", 'info');
 			});
 		});
@@ -39,7 +40,7 @@ forgotpwd.featureTest = function(casper, test) {
 					function success(){
 						ActualMessage = casper.getElementAttribute('form[name="lost_pw_form"] input[name="member"]', 'data-original-title');	
 						casper.echo("Actual error in tooltip --> "+ActualMessage.trim());			
-						test.assertEquals(ActualMessage.trim(),responseData.ExpectedMessage);
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 						casper.echo("Error message is verified while submit request with blank username and email");
 					}, function fail(){
 						casper.echo("Error Occurred", "ERROR");
@@ -53,8 +54,8 @@ forgotpwd.featureTest = function(casper, test) {
 					function success(){
 						ActualMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Actual error message is --> "+ActualMessage.trim());
-						casper.capture(screenShotsDir+"invalidUsername.png");				
-						test.assertEquals(ActualMessage.trim(),responseData.ExpectedMessage);
+						casper.capture(screenShotsDir+"invalidUsername.png");			
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);	
 						casper.echo("Error message in case of invalid username has been verified");
 					}, function fail(){
 						casper.echo("Error Occurred", "ERROR");
@@ -68,7 +69,7 @@ forgotpwd.featureTest = function(casper, test) {
 						ActualMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Actual error message is --> "+ActualMessage.trim());
 						casper.capture(screenShotsDir+"invalidEmail.png");				
-						test.assertEquals(ActualMessage.trim(),responseData.ExpectedMessage);
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 						casper.echo("Error message in case of invalid Email has been verified");
 					}, function fail(){
 						casper.echo("Error Occurred", "ERROR");
@@ -82,8 +83,8 @@ forgotpwd.featureTest = function(casper, test) {
 					function success(){
 						ActualMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Actual error message is --> "+ActualMessage.trim());
-						casper.capture(screenShotsDir+"invalidUsernameandEmail.png");				
-						test.assertEquals(ActualMessage.trim(),responseData.ExpectedMessage);
+						casper.capture(screenShotsDir+"invalidUsernameandEmail.png");		
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);		
 						casper.echo("Error message is verified while submitting request with invalid username and email");
 					}, function fail(){
 						casper.echo("Error Occurred", "ERROR");
@@ -119,7 +120,7 @@ forgotpwd.featureTest = function(casper, test) {
 						ActualMessage = ActualMessage.replace(ActualMessage1, "");
 						casper.echo("Actual success message is --> "+ActualMessage.trim());
 						casper.capture(screenShotsDir+"validEmail.png");
-						test.assertEquals(ActualMessage.trim(), responseData.ExpectedMessage);
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 						casper.waitForSelector('small a[href="/categories"]', function() {
 							this.click('small a[href="/categories"]');
 						});
@@ -129,7 +130,7 @@ forgotpwd.featureTest = function(casper, test) {
 							});
 						});
 					},function fail() {
-						test.assertEquals(ActualMessage.trim(), responseData.ExpectedMessage);
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 						casper.capture(screenShotsDir+"Error_validEmail.png");
 					});
 					
@@ -143,7 +144,7 @@ forgotpwd.featureTest = function(casper, test) {
 						ActualMessage = ActualMessage.replace(ActualMessage1, "");
 						casper.echo("Actual success message is --> "+ActualMessage.trim());
 						casper.capture(screenShotsDir+"validusername.png");
-						test.assertEquals(ActualMessage.trim(), responseData.ExpectedMessage);
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 						casper.waitForSelector('small a[href="/categories"]', function() {
 							this.click('small a[href="/categories"]');
 						});
@@ -153,7 +154,7 @@ forgotpwd.featureTest = function(casper, test) {
 							});
 						});
 					},function fail() {
-						test.assertEquals(ActualMessage.trim(), responseData.ExpectedMessage);
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 						casper.capture(screenShotsDir+"Error_validusername.png");
 					});
 					
@@ -167,7 +168,7 @@ forgotpwd.featureTest = function(casper, test) {
 						ActualMessage = ActualMessage.replace(ActualMessage1, "");
 						casper.echo("Actual success message is --> "+ActualMessage.trim());
 						casper.capture(screenShotsDir+"ValidEmailandUsername.png");
-						test.assertEquals(ActualMessage.trim(), responseData.ExpectedMessage);
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 						casper.waitForSelector('small a[href="/categories"]', function() {
 							this.click('small a[href="/categories"]');
 						});
@@ -177,7 +178,7 @@ forgotpwd.featureTest = function(casper, test) {
 							});
 						});
 					},function fail() {
-						test.assertEquals(ActualMessage.trim(), responseData.ExpectedMessage);
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 						casper.capture(screenShotsDir+"Error_ValidEmailandUsername.png");
 					});
 					casper.capture(screenShotsDir+"ValidEmailandUsername.png");
@@ -191,7 +192,7 @@ forgotpwd.featureTest = function(casper, test) {
 						ActualMessage = ActualMessage.replace(ActualMessage1, "");
 						casper.echo("Actual success message is --> "+ActualMessage.trim());
 						casper.capture(screenShotsDir+"validUsernameinvalidEmail.png");
-						test.assertEquals(ActualMessage.trim(), responseData.ExpectedMessage);
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 						casper.waitForSelector('small a[href="/categories"]', function() {
 							this.click('small a[href="/categories"]');
 						});
@@ -201,7 +202,7 @@ forgotpwd.featureTest = function(casper, test) {
 							});
 						});
 					},function fail() {
-						test.assertEquals(ActualMessage.trim(), responseData.ExpectedMessage);
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 						casper.capture(screenShotsDir+"Error_validUsernameinvalidEmail.png");
 					});
 
@@ -214,12 +215,12 @@ forgotpwd.featureTest = function(casper, test) {
 						ActualMessage = ActualMessage.replace(ActualMessage1, "");
 						casper.echo("Actual success message is --> "+ActualMessage.trim());
 						casper.capture(screenShotsDir+"ValidEmailInvalidUsername.png");
-						test.assertEquals(ActualMessage.trim(), responseData.ExpectedMessage);
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 						casper.waitForSelector('small a[href="/categories"]', function() {
 							this.click('small a[href="/categories"]');
 						});
 					},function fail() {
-						test.assertEquals(ActualMessage.trim(), responseData.ExpectedMessage);
+						test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 						casper.capture(screenShotsDir+"Error_ValidEmailInvalidUsername.png");
 					});	
 			  } 
@@ -244,19 +245,19 @@ forgotpwd.forgotPassword = function(data, driver, callback) {
 
 //method to verify forgot password link from home page
 forgotpwd.gotoForgotPasswordpage = function(driver, callback) {
-	try{
-		driver.assertDoesntExist('#td_tab_login');
-		forumLogin.logoutFromApp(driver, functtion(){
+	try {
+		driver.test.assertExists('#td_tab_login');
+		driver.click('#td_tab_login');
+		driver.click('#anchor_tab_forget_password');
+	} catch(e){
+		driver.test.assertDoesntExist('#td_tab_login');
+		forumLogin.logoutFromApp(driver, function(){
 			driver.assertExists('#td_tab_login');
 			driver.click('#td_tab_login');
 			driver.click('#anchor_tab_forget_password');
 		});
-	}catch(e){
-		driver.assertExists('#td_tab_login');
-		driver.click('#td_tab_login');
-		driver.click('#anchor_tab_forget_password');
-		return callback();
 	}
+	return callback();
 };
 
 

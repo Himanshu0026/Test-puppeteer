@@ -14,58 +14,56 @@ backEndForumRegister.featureTest = function(casper, test) {
 	//Login To Forum BackEnd 
 	casper.start(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-	
-	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
-		});
-	});
-	
-	//Clicking On 'New User' Tab Under Users 
-	
-	casper.then(function() {
-		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		test.assertExists('div#ddUsers a[href="/tool/members/mb/addusers"]');
-		this.click('div#ddUsers a[href="/tool/members/mb/addusers"]');
-	});
-	
-	//Fill Invalid Data For User Registration And Handle Errors 
-	casper.then(function() {
-		this.eachThen(backEndRegisterJSON['invalidInfo'], function(response) {
-			casper.log('Response Data : ' +JSON.stringify(response.data), 'INFO');
-			var responseData = response.data;
-			registerToBackEnd(response.data, casper, function() {
-				var errorMessage = '';
-				var msgTitle = '';
-				var expectedErrorMsg = '';
-				if (response.data.expectedErrorMsg)
-					expectedErrorMsg = response.data.expectedErrorMsg;
-				if (response.data.uname == '') {
-					errorMessage = casper.fetchText('.tooltip p');
-					msgTitle = 'BlankUsername';
-				} else if (response.data.uemail == '') {
-					errorMessage = casper.fetchText('.tooltip p');
-					msgTitle = 'BlankEmail';
-				} else if (response.data.errorType == 'existWithName') {
-					casper.wait(1000, function() {
-						errorMessage = casper.fetchText('div[role="dialog"] div[id^="ui-id-"]');
-						expectedErrorMsg = responseData.expectedErrorMsg+ '"' +responseData.uname+ '".';
-						msgTitle = 'ExistUsername';
-					});
-				} else if (response.data.errorType == 'invalidEmail') {
-					errorMessage = casper.fetchText('.tooltip p');
-					msgTitle = 'InvalidEmail';
-				}
+			//Clicking On 'New User' Tab Under Users 
+			casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function success(){
+				this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+				test.assertExists('div#ddUsers a[href="/tool/members/mb/addusers"]');
+				this.click('div#ddUsers a[href="/tool/members/mb/addusers"]');
+				
+				//Fill Invalid Data For User Registration And Handle Errors 
+				this.eachThen(backEndRegisterJSON['invalidInfo'], function(response) {
+					casper.log('Response Data : ' +JSON.stringify(response.data), 'INFO');
+					var responseData = response.data;
+					registerToBackEnd(response.data, casper, function(err) {
+						if (err) {
+							casper.echo("Error Occurred In Callback", "ERROR");
+						} else {
+							var errorMessage = '';
+							var msgTitle = '';
+							var expectedErrorMsg = '';
+							if (response.data.expectedErrorMsg)
+								expectedErrorMsg = response.data.expectedErrorMsg;
+							if (response.data.uname == '') {
+								errorMessage = casper.fetchText('.tooltip p');
+								msgTitle = 'BlankUsername';
+							} else if (response.data.uemail == '') {
+								errorMessage = casper.fetchText('.tooltip p');
+								msgTitle = 'BlankEmail';
+							} else if (response.data.errorType == 'existWithName') {
+								casper.wait(1000, function() {
+									errorMessage = casper.fetchText('div[role="dialog"] div[id^="ui-id-"]');
+									expectedErrorMsg = responseData.expectedErrorMsg+ '"' +responseData.uname+ '".';
+									msgTitle = 'ExistUsername';
+								});
+							} else if (response.data.errorType == 'invalidEmail') {
+								errorMessage = casper.fetchText('.tooltip p');
+								msgTitle = 'InvalidEmail';
+							}
 
-				//Called Method For Verifying Error Messages
+							//Called Method For Verifying Error Messages
 		
-				casper.then(function() {
-					if(errorMessage && errorMessage != "") {
-						verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
-					}
+							casper.then(function() {
+								if(errorMessage && errorMessage != "") {
+									verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper);
+								}
+							});
+						}
+					});
 				});
+			}, function fail(){
+				this.echo('Selector not found...........', 'ERROR');
 			});
 		});
 	});
@@ -73,15 +71,15 @@ backEndForumRegister.featureTest = function(casper, test) {
 	//Fill Valid Data On Registration Form
 	
 	casper.then(function() {
-		registerToBackEnd(backEndRegisterJSON['validInfo'], casper, function() {
-			casper.echo('Processing to registration on forum back end.....', 'INFO');
+		registerToBackEnd(backEndRegisterJSON['validInfo'], casper, function(err) {
+			if (err) {
+				casper.echo("Error Occurred In Callback", "ERROR");
+			} else {
+				casper.echo('Processing to registration on forum back end.....', 'INFO');
+				//Handling Logout And Redirecting To The Respective Page
+				redirectToBackEndLogout(casper, test, function() {});
+			}
 		});
-	});
-
-	//Handling Logout And Redirecting To The Respective Page
-			
-	casper.then(function() {
-		redirectToBackEndLogout(casper, test, function() {});
 	});
 };
 
@@ -99,7 +97,7 @@ var registerToBackEnd = function(data, driver, callback) {
 	
 	driver.test.assertExists('form[name="frmAddUser"] button');
 	driver.click('form[name="frmAddUser"] button');
-	return callback();
+	return callback(null);
 };
 
 //Logout To Forum Back End
