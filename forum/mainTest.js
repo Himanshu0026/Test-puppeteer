@@ -31,6 +31,7 @@ switch (feature) {
 			test.assert(true);
 		});
 	});
+	break;
 
     case "editProfileWithSettings":
 	casper.test.begin("Start 'Edit Profile With Setting' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
@@ -177,8 +178,8 @@ switch (feature) {
         break;
 	case "forgotpassword":
         casper.test.begin('Verify forgot your password functionality from home page ', function(test) {
-		var forumLogin = require("./testsuite/forgotPassword.js");
-		forumLogin.featureTest(casper, casper.test);
+		var forgotpwd = require("./testsuite/forgotPassword.js");
+		forgotpwd.featureTest(casper, casper.test);
 		casper.run(function(){
 			test.done();
 		});

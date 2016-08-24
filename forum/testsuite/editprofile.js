@@ -22,7 +22,7 @@ editProfile.featureTest = function(casper, test) {
 	
 	//Open Forum URL And Get Title 
 	casper.start(config.url, function() {
-		casper.wait(5000, function() {
+		casper.then(function() {
 			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		});
 	});
@@ -30,7 +30,7 @@ editProfile.featureTest = function(casper, test) {
 	//Logout From App
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
@@ -42,11 +42,11 @@ editProfile.featureTest = function(casper, test) {
 		try {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.loginData, casper, function() {
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.capture(screenShotsDir+ 'registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 					});
@@ -61,7 +61,7 @@ editProfile.featureTest = function(casper, test) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, casper, function() {
 			casper.echo('User logged-in successfully', 'INFO');
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'loggedIn_user.png');
 			});
 		});
@@ -73,7 +73,7 @@ editProfile.featureTest = function(casper, test) {
 			test.assertExists('.default-user');
 			this.click('.default-user');
 			this.echo('clicked on users icon successfully', 'INFO');
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'userIcon.png');
 			});
 		} catch (e) {
@@ -86,7 +86,7 @@ editProfile.featureTest = function(casper, test) {
 		try {
 			test.assertExists('a[href^="/register/register?edit="]');
 			this.click('a[href^="/register/register?edit="]');
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'useredit_form.png');
 				this.echo('clicked on user edit profile link successfully', 'INFO');
 			});
@@ -101,21 +101,27 @@ editProfile.featureTest = function(casper, test) {
 			casper.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
 			var responseData = response.data;
 			editToProfile(responseData, casper, function() {
-				var errorMessage = '';
-				var msgTitle = '';
-				if (responseData.expectedErrorMsg)
-					var expectedErrorMsg = responseData.expectedErrorMsg;
-				if (responseData.imID == '') {
-					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
-					msgTitle = 'BlankScreenName';
-				} else if (responseData.birthday == '') {
-					errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
-					msgTitle = 'BlankBirthDay';
-				} 
-					
-				//Called Method For Verifying Error Messages
-				if(errorMessage && errorMessage!= '')
-				verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper, function() {});
+				casper.then(function() {
+					this.capture(screenShotsDir+ '11.png');
+					var errorMessage = '';
+					var msgTitle = '';
+					if (responseData.expectedErrorMsg)
+						var expectedErrorMsg = responseData.expectedErrorMsg;
+					if (responseData.imID == '') {casper.echo("IMID..............");
+						test.assertExists('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+						errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+						casper.echo("errorMessage.............."+errorMessage);
+						msgTitle = 'BlankScreenName';
+					} else if (responseData.birthday == '') {
+						errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
+						msgTitle = 'BlankBirthDay';
+					} 
+					casper.echo('error msg : '+errorMessage, 'INFO');
+					casper.echo('expected error msg : '+responseData.expectedErrorMsg, 'INFO');	
+					//Called Method For Verifying Error Messages
+					if(errorMessage && errorMessage!= '')
+					verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper, function() {});
+				});
 			});
 		});
 	});
@@ -130,8 +136,8 @@ editProfile.featureTest = function(casper, test) {
 					this.echo('Actual Success Message : '+successMessage.trim(), 'INFO');
 					this.echo('Ecpected Success Message : '+json.validDataForEditProfile.expectedSuccessMsg, 'INFO');
 					test.assertEquals(successMessage.trim(),json.validDataForEditProfile.expectedSuccessMsg);
-					this.echo('Success message is verified when user try to edit with valid data', 'INFO');
-					casper.wait(5000,function(){
+					this.echo('Success message is verified when user try to edit profile with valid data', 'INFO');
+					casper.then(function() {
 						this.capture(screenShotsDir+ 'updatedEditProfile.png');
 						this.echo('Profile Updated Successfully', 'INFO');
 					});
@@ -148,7 +154,7 @@ editProfile.featureTest = function(casper, test) {
 			test.assertExists('a[href^="/register?action=preferences&userid="]');
 			this.click('a[href^="/register?action=preferences&userid="]');
 			this.echo('clicked on users account settings link successfully', 'INFO');
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'userAccountSetting_form.png');
 			});
 		} catch (e) {
@@ -196,15 +202,13 @@ editProfile.featureTest = function(casper, test) {
 	//Editing user's Account Setting With Valid Data	
 	casper.then(function() {
 		editAccountSetting(json.validDataForEditAccount, casper, function() {
-			casper.wait(3000, function() {
-
-				this.capture(screenShotsDir+ '11.png');
+			casper.then(function() {
 				try {
 					test.assertExists('div.alert.alert-success.text-center');
 					var successMessage = this.fetchText('div.alert.alert-success.text-center');
 					if(successMessage && successMessage != '' )
 					verifySuccessMsg(successMessage, json.validDataForEditAccount.expectedSuccessMsg, 'validAccountSetting', casper, function() {
-						casper.wait(5000, function() {
+						casper.then(function() {
 							this.capture(screenShotsDir+ 'updatedAccountSetting.png');
 							this.echo('account setting updated successfully', 'INFO');
 						});
@@ -223,7 +227,7 @@ editProfile.featureTest = function(casper, test) {
 editProfile.customFieldsTest = function(casper, test) {
 
 	// Methos For Verifying Alert Message
-	casper.on('remote.alert', function(message) {
+	/*casper.on('remote.alert', function(message) {
 		this.echo('alert message: ' + message, 'INFO');
 		var expectedErrorMsg = 'Please provide a signature.';
 		test.assertEquals(message, expectedErrorMsg);
@@ -232,7 +236,7 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Back-End URL And Get Title
 	casper.start(config.backEndUrl, function() {
-		casper.wait(5000, function() {
+		casper.then(function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		});	
 	});
@@ -241,7 +245,7 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
@@ -255,7 +259,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
 			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
-				casper.wait(5000, function() {
+				casper.then(function() {
 					this.echo('Title of the page :' +this.getTitle(), 'INFO');
 				});	
 			});
@@ -264,7 +268,7 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.then(function() {
 				try {
 					this.click('a[href="/tool/members/login?action=logout"]');
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.capture(screenShotsDir+ 'logoutFromBackend.png');
 					});
 				}catch(e) {
@@ -275,7 +279,7 @@ editProfile.customFieldsTest = function(casper, test) {
 			//Login To Forum BackEnd
 			casper.then(function() {
 				forumRegister.loginToForumBackEnd(casper, test, function() {
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.echo('Logged-in successfully from back-end', 'INFO');
 					});		
 				});
@@ -289,7 +293,7 @@ editProfile.customFieldsTest = function(casper, test) {
 					try {
 						test.assertExists('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
 						this.click('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
-						casper.wait(5000, function() {
+						casper.then(function() {
 							this.capture(screenShotsDir + 'forum_default_reg.png');
 						});
 					}catch(e) {
@@ -310,7 +314,7 @@ editProfile.customFieldsTest = function(casper, test) {
 					}, false);
 					test.assertExists('form[name="posts"] button');
 					this.click('form[name="posts"] button');
-					casper.wait(5000, function() {
+					casper.then(function() {
 					});
 				}catch(e) {
 					test.assertDoesntExist('form[name="posts"] button');
@@ -320,20 +324,20 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.then(function() {
 				this.capture(screenShotsDir + 'fullName_'+responseData.required+'_'+responseData.visibility+'.png');
 				this.thenOpen(config.url, function() {
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 					});
 					//Logout From App
 					casper.then(function() {
 						forumRegister.redirectToLogout(casper, test, function() {
-							casper.wait(5000, function() {
+							casper.then(function() {
 								this.capture(screenShotsDir+ 'logout.png');
 							});		
 						});
 			
 					});
 					loginToFrontEnd(casper, function() {
-						casper.wait(5000, function() {
+						casper.then(function() {
 							casper.echo('loaded edit profile page', 'INFO');	
 							casper.capture(screenShotsDir + 'fullName_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
 							if (responseData.visibility == '1') {
@@ -378,7 +382,7 @@ editProfile.customFieldsTest = function(casper, test) {
 								}
 							}
 						});
-						casper.wait(5000,function(){
+						casper.then(function() {
 							this.capture(screenShotsDir + 'register_submit.png');
 						});
 					});
@@ -393,7 +397,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
 			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
-				casper.wait(5000, function() {
+				casper.then(function() {
 					this.echo('Title of the page :' +this.getTitle(), 'INFO');
 				});	
 			});
@@ -402,7 +406,7 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.then(function() {
 				try {
 					this.click('a[href="/tool/members/login?action=logout"]');
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.capture(screenShotsDir+ 'logoutFromBackend.png');
 					});
 				}catch(e) {
@@ -413,7 +417,7 @@ editProfile.customFieldsTest = function(casper, test) {
 			//Login To Forum BackEnd
 			casper.then(function() {
 				forumRegister.loginToForumBackEnd(casper, test, function() {
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.echo('Logged-in successfully from back-end', 'INFO');		
 					});
 				});
@@ -427,7 +431,7 @@ editProfile.customFieldsTest = function(casper, test) {
 					try {
 						test.assertExists('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
 						this.click('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
-						casper.wait(5000, function() {
+						casper.then(function() {
 							this.capture(screenShotsDir + 'forum_default_reg.png');
 						});
 					}catch(e) {
@@ -448,7 +452,7 @@ editProfile.customFieldsTest = function(casper, test) {
 					}, false);
 					test.assertExists('form[name="posts"] button');
 					this.click('form[name="posts"] button');
-					casper.wait(5000, function() {
+					casper.then(function() {
 					});
 				}catch(e) {
 					test.assertDoesntExist('form[name="posts"] button');
@@ -458,20 +462,20 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.then(function() {
 				this.capture(screenShotsDir + 'instantMessaging_'+responseData.required+'_'+responseData.visibility+'.png');
 				this.thenOpen(config.url, function() {
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 					});
 					//Logout From App
 					casper.then(function() {
 						forumRegister.redirectToLogout(casper, test, function() {
-							casper.wait(5000, function() {
+							casper.then(function() {
 								this.capture(screenShotsDir+ 'logout.png');
 							});		
 						});
 			
 					});
 					loginToFrontEnd(casper, function() {
-						casper.wait(5000, function() {
+						casper.then(function() {
 							casper.echo('loaded edit profile page', 'INFO');	
 							casper.capture(screenShotsDir + 'instantMessaging_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
 							if (responseData.visibility == '1') {
@@ -519,7 +523,7 @@ editProfile.customFieldsTest = function(casper, test) {
 								}
 							}
 						});
-						casper.wait(5000,function(){
+						casper.then(function() {
 							this.capture(screenShotsDir + 'register_submit.png');
 						});
 					});
@@ -534,7 +538,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
 			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
-				casper.wait(5000, function() {
+				casper.then(function() {
 					this.echo('Title of the page :' +this.getTitle(), 'INFO');
 				});	
 			});
@@ -543,7 +547,7 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.then(function() {
 				try {
 					this.click('a[href="/tool/members/login?action=logout"]');
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.capture(screenShotsDir+ 'logoutFromBackend.png');
 					});
 				}catch(e) {
@@ -554,7 +558,7 @@ editProfile.customFieldsTest = function(casper, test) {
 			//Login To Forum BackEnd
 			casper.then(function() {
 				forumRegister.loginToForumBackEnd(casper, test, function() {
-					casper.wait(5000, function() {
+					casper.then(function() {
 						casper.echo('Logged-in successfully from back-end', 'INFO');		
 					});
 				});
@@ -568,7 +572,7 @@ editProfile.customFieldsTest = function(casper, test) {
 					try {
 						test.assertExists('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
 						this.click('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
-						casper.wait(5000, function() {
+						casper.then(function() {
 							this.capture(screenShotsDir + 'forum_default_reg.png');
 						});
 					}catch(e) {
@@ -589,7 +593,7 @@ editProfile.customFieldsTest = function(casper, test) {
 					}, false);
 					test.assertExists('form[name="posts"] button');
 					this.click('form[name="posts"] button');
-					casper.wait(5000, function() {
+					casper.then(function() {
 					});
 				}catch(e) {
 					test.assertDoesntExist('form[name="posts"] button');
@@ -599,20 +603,20 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.then(function() {
 				this.capture(screenShotsDir + 'birthday_'+responseData.required+'_'+responseData.visibility+'.png');
 				this.thenOpen(config.url, function() {
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 					});
 					//Logout From App
 					casper.then(function() {
 						forumRegister.redirectToLogout(casper, test, function() {
-							casper.wait(5000, function() {
+							casper.then(function() {
 								this.capture(screenShotsDir+ 'logout.png');
 							});		
 						});
 		
 					});
 					loginToFrontEnd(casper, function() {
-						casper.wait(5000, function() {
+						casper.then(function() {
 							casper.echo('loaded edit profile page', 'INFO');	
 							casper.capture(screenShotsDir + 'birthday_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
 							if (responseData.visibility == '1') {
@@ -657,7 +661,7 @@ editProfile.customFieldsTest = function(casper, test) {
 								}
 							}
 						});
-						casper.wait(5000,function(){
+						casper.then(function() {
 							this.capture(screenShotsDir + 'register_submit.png');
 						});
 					});
@@ -672,7 +676,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
 			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
-				casper.wait(5000, function() {
+				casper.then(function() {
 					this.echo('Title of the page :' +this.getTitle(), 'INFO');
 				});	
 			});
@@ -681,7 +685,7 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.then(function() {
 				try {
 					this.click('a[href="/tool/members/login?action=logout"]');
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.capture(screenShotsDir+ 'logoutFromBackend.png');
 					});
 				}catch(e) {
@@ -692,7 +696,7 @@ editProfile.customFieldsTest = function(casper, test) {
 			//Login To Forum BackEnd
 			casper.then(function() {
 				forumRegister.loginToForumBackEnd(casper, test, function() {
-					casper.wait(5000, function() {
+					casper.then(function() {
 						casper.echo('Logged-in successfully from back-end', 'INFO');
 					});		
 				});
@@ -706,7 +710,7 @@ editProfile.customFieldsTest = function(casper, test) {
 					try {
 						test.assertExists('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
 						this.click('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
-						casper.wait(5000, function() {
+						casper.then(function() {
 							this.capture(screenShotsDir + 'forum_default_reg.png');
 						});
 					}catch(e) {
@@ -727,7 +731,7 @@ editProfile.customFieldsTest = function(casper, test) {
 					}, false);
 					test.assertExists('form[name="posts"] button');
 					this.click('form[name="posts"] button');
-					casper.wait(5000, function() {});
+					casper.then(function() {
 				}catch(e) {
 					test.assertDoesntExist('form[name="posts"] button');
 				}
@@ -736,20 +740,20 @@ editProfile.customFieldsTest = function(casper, test) {
 			casper.then(function() {
 				this.capture(screenShotsDir + 'birthday_'+responseData.required+'_'+responseData.visibility+'.png');
 				this.thenOpen(config.url, function() {
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 					});
 					//Logout From App
 					casper.then(function() {
 						forumRegister.redirectToLogout(casper, test, function() {
-							casper.wait(5000, function() {
+							casper.then(function() {
 								this.capture(screenShotsDir+ 'logout.png');
 							});		
 						});
 			
 					});
 					loginToFrontEnd(casper, function() {
-						casper.wait(5000, function() {
+						casper.then(function() {
 							casper.echo('loaded edit profile page', 'INFO');	
 							casper.capture(screenShotsDir + 'birthday_required_'+responseData.required+'visibility_'+responseData.visibility+'.png');
 							if (responseData.visibility == '1') {
@@ -789,7 +793,7 @@ editProfile.customFieldsTest = function(casper, test) {
 								}
 							}
 						});
-						casper.wait(5000,function(){
+						casper.then(function() {
 							this.capture(screenShotsDir + 'register_submit.png');
 						});
 					});
@@ -800,7 +804,7 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		casper.wait(5000, function() {
+		casper.then(function() {
 			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		});
 	});
@@ -808,7 +812,7 @@ editProfile.customFieldsTest = function(casper, test) {
 	//Logout From App
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
@@ -820,11 +824,11 @@ editProfile.customFieldsTest = function(casper, test) {
 		try {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.capture(screenShotsDir+ 'registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 					});
@@ -837,7 +841,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.wait(5000, function() {
+		casper.then(function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		});	
 	});
@@ -846,7 +850,7 @@ editProfile.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
@@ -870,7 +874,7 @@ editProfile.customFieldsTest = function(casper, test) {
 	
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		casper.wait(5000, function() {
+		casper.then(function() {
 			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		});
 	});
@@ -878,7 +882,7 @@ editProfile.customFieldsTest = function(casper, test) {
 	//Logout From App
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
@@ -888,7 +892,7 @@ editProfile.customFieldsTest = function(casper, test) {
 	//Login To App And Verify User Name Visibility On Account Setting Page
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
@@ -898,7 +902,7 @@ editProfile.customFieldsTest = function(casper, test) {
 						try {
 							this.test.assertExists('span li a[href^="/register?action=preferences"]');
 							this.click('span li a[href^="/register?action=preferences"]');
-							casper.wait(5000, function() {
+							casper.then(function() {
 								this.capture(screenShotsDir+ 'profile.png');
 								casper.then(function() {
 									try {
@@ -921,7 +925,7 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		casper.wait(5000, function() {
+		casper.then(function() {
 			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		});
 	});
@@ -929,7 +933,7 @@ editProfile.customFieldsTest = function(casper, test) {
 	//Logout From App
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
@@ -941,11 +945,11 @@ editProfile.customFieldsTest = function(casper, test) {
 		try {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.capture(screenShotsDir+ 'registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 					});
@@ -961,7 +965,7 @@ editProfile.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			});	
 		});
@@ -970,7 +974,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		casper.then(function() {
 			try {
 				this.click('a[href="/tool/members/login?action=logout"]');
-				casper.wait(5000, function() {
+				casper.then(function() {
 					this.capture(screenShotsDir+ 'logoutFromBackend.png');
 				});
 			}catch(e) {
@@ -981,7 +985,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		casper.then(function() {
 			forumRegister.loginToForumBackEnd(casper, test, function() {
 				casper.echo('Logged-in successfully from back-end', 'INFO');
-				casper.wait(5000, function() {
+				casper.then(function() {
 					disableEditOwnProfileForRegisteredUser(casper, casper.test, function() {
 						casper.echo('permission changed for registered user', 'INFO');
 				
@@ -993,7 +997,7 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		casper.wait(5000, function() {
+		casper.then(function() {
 			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		});
 	});
@@ -1001,7 +1005,7 @@ editProfile.customFieldsTest = function(casper, test) {
 	//Logout From App
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
@@ -1013,11 +1017,11 @@ editProfile.customFieldsTest = function(casper, test) {
 		try {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.capture(screenShotsDir+ 'registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 					});
@@ -1033,7 +1037,7 @@ editProfile.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			});	
 		});
@@ -1042,7 +1046,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		casper.then(function() {
 			try {
 				this.click('a[href="/tool/members/login?action=logout"]');
-				casper.wait(5000, function() {
+				casper.then(function() {
 					this.capture(screenShotsDir+ 'logoutFromBackend.png');
 				});
 			}catch(e) {
@@ -1053,7 +1057,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		casper.then(function() {
 			forumRegister.loginToForumBackEnd(casper, test, function() {
 				casper.echo('Logged-in successfully from back-end', 'INFO');
-				casper.wait(5000, function() {
+				casper.then(function() {
 					disableInvisibleModeForRegisteredUser(casper, casper.test, function() {
 						casper.echo('permission changed for registered user', 'INFO');
 				
@@ -1065,7 +1069,7 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		casper.wait(5000, function() {
+		casper.then(function() {
 			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		});
 	});
@@ -1073,7 +1077,7 @@ editProfile.customFieldsTest = function(casper, test) {
 	//Logout From App
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
@@ -1083,7 +1087,7 @@ editProfile.customFieldsTest = function(casper, test) {
 	//Login To App And Verify User Name Visibility On Account Setting Page
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
@@ -1093,7 +1097,7 @@ editProfile.customFieldsTest = function(casper, test) {
 						try {
 							this.test.assertExists('span li a[href^="/register?action=preferences"]');
 							this.click('span li a[href^="/register?action=preferences"]');
-							casper.wait(5000, function() {
+							casper.then(function() {
 								this.capture(screenShotsDir+ 'profile.png');	
 								try {
 									test.assertExists('#INVS');
@@ -1114,7 +1118,7 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_End URL and Get Title
 	casper.thenOpen(config.url, function() {
-		casper.wait(5000, function() {
+		casper.then(function() {
 			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		});
 	});
@@ -1122,7 +1126,7 @@ editProfile.customFieldsTest = function(casper, test) {
 	//Logout From App
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
@@ -1134,11 +1138,11 @@ editProfile.customFieldsTest = function(casper, test) {
 		try {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
-					casper.wait(5000, function() {
+					casper.then(function() {
 						this.capture(screenShotsDir+ 'registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 					});
@@ -1154,7 +1158,7 @@ editProfile.customFieldsTest = function(casper, test) {
 
 		//Open Forum Backend URL And Get Title 
 		casper.thenOpen(config.backEndUrl, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			});	
 		});
@@ -1163,7 +1167,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		casper.then(function() {
 			try {
 				this.click('a[href="/tool/members/login?action=logout"]');
-				casper.wait(5000, function() {
+				casper.then(function() {
 					this.capture(screenShotsDir+ 'logoutFromBackend.png');
 				});
 			}catch(e) {
@@ -1174,7 +1178,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		casper.then(function() {
 			forumRegister.loginToForumBackEnd(casper, test, function() {
 				casper.echo('Logged-in successfully from back-end', 'INFO');
-				casper.wait(5000, function() {
+				casper.then(function() {
 					disableCustomUserTitleForRegisteredUser(casper, casper.test, function() {
 						casper.echo('permission changed for registered user', 'INFO');
 				
@@ -1186,7 +1190,7 @@ editProfile.customFieldsTest = function(casper, test) {
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
-		casper.wait(5000, function() {
+		casper.then(function() {
 			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		});
 	});
@@ -1194,7 +1198,7 @@ editProfile.customFieldsTest = function(casper, test) {
 	//Logout From App
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
@@ -1204,7 +1208,7 @@ editProfile.customFieldsTest = function(casper, test) {
 	//Login To App And Verify User Name Visibility On Account Setting Page
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
-			casper.wait(5000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
@@ -1214,7 +1218,7 @@ editProfile.customFieldsTest = function(casper, test) {
 						try {
 							this.test.assertExists('span li a[href^="/register/register?edit"]');
 							this.click('span li a[href^="/register/register?edit"]');
-							casper.wait(5000, function() {
+							casper.then(function() {
 								this.capture(screenShotsDir+ 'profile.png');	
 								try {
 									test.assertExists('div#custom_user_title .form-text.align-top.editable.editable-click');
@@ -1231,7 +1235,7 @@ editProfile.customFieldsTest = function(casper, test) {
 				});
 			});
 		});
-	});
+	});*/
 	
 };
 
@@ -1246,7 +1250,7 @@ var loginToFrontEnd = function(driver, callback) {
 			this.test.assertExists('#td_tab_login');
 			forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, driver, function() {
 				driver.echo('User logged-in successfully', 'INFO');
-				driver.wait(5000, function() {
+				driver.then(function() {
 					this.capture(screenShotsDir+ 'loggedIn_user.png');
 				});
 			});
@@ -1262,7 +1266,7 @@ var loginToFrontEnd = function(driver, callback) {
 			this.test.assertExists('.default-user');
 			this.click('.default-user');
 			this.echo('clicked on users icon successfully', 'INFO');
-			driver.wait(5000, function() {
+			driver.then(function() {
 				this.capture(screenShotsDir+ 'userIcon.png');
 			});
 		} catch (e) {
@@ -1276,7 +1280,7 @@ var loginToFrontEnd = function(driver, callback) {
 			this.test.assertExists('a[href^="/register/register?edit="]');
 			this.click('a[href^="/register/register?edit="]');
 			this.echo('clicked on user edit profile link successfully', 'INFO');
-			driver.wait(5000, function() {
+			driver.then(function() {
 				this.capture(screenShotsDir+ 'useredit_form.png');
 return callback();
 			});
@@ -1336,31 +1340,35 @@ var editToProfile = function(userData, driver, callback) {
 	} catch(e) {
 		driver.test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
 	}
-	driver.wait(3000, function() {
+	
+	driver.then(function() {
+		driver.test.assertExists('form[action="/register"] button[type="submit"]');
+		this.click('form[action="/register"] button[type="submit"]');
 		driver.then(function() {
-			driver.test.assertExists('form[action="/register"] button[name="submit"]');
-			this.click('form[action="/register"] button[name="submit"]');
-			driver.wait(3000, function() {
-				return callback();
-			});
+			return callback();
 		});
 	});
+	
 };
 
 //Method For Editing User's Account Settings
 var editAccountSetting = function(userData, driver, callback) {
 	try {
-		driver.test.assertExists('div#usrName .change-value');
-		driver.click('div#usrName .change-value');
+		driver.test.assertExists('div#usrName a.change-value small.text-muted.glyphicon.glyphicon-pencil');
+		driver.mouse.move('div#usrName');		
+		driver.then(function() {
+			this.click('div#usrName a.change-value small.text-muted.glyphicon.glyphicon-pencil');
+			this.capture(screenShotsDir+ '0.png');
+		});
 		driver.wait(5000, function() {
 			this.capture(screenShotsDir+ '1.png');
-			this.test.assertExists('div.editable-input input[maxlength="25"]');
-			this.sendKeys('div.editable-input input[maxlength="25"]', userData.new_username, {reset: true});
+			this.test.assertExists('div.editable-input input');
+			this.sendKeys('div.editable-input input', userData.new_username, {reset: true});
 			this.click('div.editable-buttons button[type="submit"]');
 			this.then(function() {
 			   	 this.on('remote.alert', testAlert2);
 			});
-			driver.wait(5000, function() {
+			driver.then(function() {
 				this.capture(screenShotsDir+ '2.png');
 				
 				driver.then(function() {
@@ -1375,8 +1383,11 @@ var editAccountSetting = function(userData, driver, callback) {
 				
 				try {
 		
-					driver.test.assertExists('div#usrPwd .change-value');
-					driver.click('div#usrPwd .change-value');
+					driver.test.assertExists('div#usrPwd a.change-value small.text-muted.glyphicon.glyphicon-pencil');
+					driver.mouse.move('div#usrPwd');
+					driver.then(function() {
+						this.click('div#usrPwd a.change-value small.text-muted.glyphicon.glyphicon-pencil');
+					});
 					try {
 						driver.wait(5000, function() {
 						this.capture(screenShotsDir+ '3.png');
@@ -1385,17 +1396,21 @@ var editAccountSetting = function(userData, driver, callback) {
 						if(userData.upass == '') {
 							return callback();			
 						}
+						driver.then(function() {
 						try {
-							driver.test.assertExists('div#usrEmail .change-value');
-							driver.click('div#usrEmail .change-value');
+							driver.test.assertExists('div#usrEmail a.change-value small.text-muted.glyphicon.glyphicon-pencil');
+							driver.mouse.move('div#usrEmail');		
+							driver.then(function() {
+								this.click('div#usrEmail a.change-value small.text-muted.glyphicon.glyphicon-pencil');
+							});
 							driver.wait(5000, function() {
 								this.capture(screenShotsDir+ '4.png');
-								driver.sendKeys('div.editable-input input[class="form-control input-small"]', userData.email, {reset: true});
+								driver.sendKeys('div.editable-input input', userData.email, {reset: true});
 								this.click('div.editable-buttons button[type="submit"]');
 								this.then(function() {
 									this.on('remote.alert', testAlert3);
 								});
-								driver.wait(5000, function () {
+								driver.then(function() {
 									driver.then(function() {
 										this.removeListener('remote.alert', testAlert3);
 									});
@@ -1427,6 +1442,7 @@ var editAccountSetting = function(userData, driver, callback) {
 						} catch (e) {
 							driver.test.assertDoesntExist('div#usrEmail .change-value');
 						}
+						});
 					});
 					} catch (e) {
 						driver.test.assertDoesntExist('div#usrEmail .change-value');
@@ -1488,7 +1504,7 @@ var disableUserNameForRegisteredUser = function(driver, test, callback) {
 		try {
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			driver.wait(5000,function() {
+			driver.then(function() {
 				this.capture(screenShotsDir+ 'groupPermission.png');
 				//Clicking On 'Change Permissions' Link With Respect To 'Regostered Users'  
 				driver.then(function() {
@@ -1515,7 +1531,7 @@ var disableUserNameForRegisteredUser = function(driver, test, callback) {
 							this.click('a[href="'+grpName+'"]');
 						});
 					}
-					this.wait(5000,function(){
+					driver.then(function() {
 						this.capture(screenShotsDir + 'group_registred.png');
 						try {
 							test.assertExists('#change_username');
@@ -1526,7 +1542,7 @@ var disableUserNameForRegisteredUser = function(driver, test, callback) {
 							try {
 								test.assertExists('button.button.btn-m.btn-blue');
 								this.click('button.button.btn-m.btn-blue');
-								driver.wait(5000, function() {
+								driver.then(function() {
 									this.capture(screenShotsDir+ 'updatedChangePermission.png');
 									try {
 										test.assertExists('font[color="red"]');
@@ -1569,15 +1585,16 @@ editProfile.makeRegisteredUser = function(driver, test, callback) {
 		try {
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			driver.wait(5000, function() {
+			driver.then(function() {
 				try {
 					this.test.assertExists('#autosuggest');
 					this.sendKeys('#autosuggest', 'hs1234', {keepFocus: true});
 					this.click('#autosuggest');
 					this.page.sendEvent("keypress", this.page.event.key.Enter);
-					driver.wait(3000, function() {
+					driver.then(function() {
 						driver.then(function() {
 							try {
+								this.capture(screenShotsDir + 'demo.png');
 								this.fillSelectors('form[name="ugfrm"]', {
 									'select[name="usergroupid"]' :  '20237477'
 								}, true);
@@ -1585,9 +1602,8 @@ editProfile.makeRegisteredUser = function(driver, test, callback) {
 								test.assertDoesntExist('form[name="ugfrm"]');
 							}
 						});
-						driver.wait(3000, function() {
+						driver.then(function() {
 							this.capture(screenShotsDir + 'popUp.png');
-							return callback();
 						});
 					});
 				}catch(e) {
@@ -1600,6 +1616,7 @@ editProfile.makeRegisteredUser = function(driver, test, callback) {
 	}catch(e) {
 		test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	}
+	return callback();
 };
 
 //Method For Disabling "Edit Own Profile" Permission For Registered User
@@ -1610,7 +1627,7 @@ var disableInvisibleModeForRegisteredUser = function(driver, test, callback) {
 		try {
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			driver.wait(5000,function() {
+			driver.then(function() {
 				this.capture(screenShotsDir+ 'groupPermission.png');
 				//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
 				driver.then(function() {
@@ -1637,7 +1654,7 @@ var disableInvisibleModeForRegisteredUser = function(driver, test, callback) {
 							this.click('a[href="'+grpName+'"]');
 						});
 					}
-					this.wait(5000,function(){
+					driver.then(function() {
 						this.capture(screenShotsDir + 'group_registered.png');
 						try {
 							test.assertExists('#allow_invisible');
@@ -1648,7 +1665,7 @@ var disableInvisibleModeForRegisteredUser = function(driver, test, callback) {
 							try {
 								test.assertExists('button.button.btn-m.btn-blue');
 								this.click('button.button.btn-m.btn-blue');
-								driver.wait(5000, function() {
+								driver.then(function() {
 									this.capture(screenShotsDir+ 'updatedChangePermission.png');
 									try {
 										test.assertExists('font[color="red"]');
@@ -1691,7 +1708,7 @@ var disableEditOwnProfileForRegisteredUser = function(driver, test, callback) {
 		try {
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			driver.wait(5000,function() {
+			driver.then(function() {
 				this.capture(screenShotsDir+ 'groupPermission.png');
 				//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
 				driver.then(function() {
@@ -1718,7 +1735,7 @@ var disableEditOwnProfileForRegisteredUser = function(driver, test, callback) {
 							this.click('a[href="'+grpName+'"]');
 						});
 					}
-					this.wait(5000,function(){
+					driver.then(function() {
 						this.capture(screenShotsDir + 'group_registered.png');
 						try {
 							test.assertExists('#edit_profile');
@@ -1729,7 +1746,7 @@ var disableEditOwnProfileForRegisteredUser = function(driver, test, callback) {
 							try {
 								test.assertExists('button.button.btn-m.btn-blue');
 								this.click('button.button.btn-m.btn-blue');
-								driver.wait(5000, function() {
+								driver.then(function() {
 									this.capture(screenShotsDir+ 'updatedChangePermission.png');
 									try {
 										test.assertExists('font[color="red"]');
@@ -1771,7 +1788,7 @@ var disableCustomUserTitleForRegisteredUser = function(driver, test, callback) {
 		try {
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			driver.wait(5000,function() {
+			driver.then(function() {
 				this.capture(screenShotsDir+ 'groupPermission.png');
 				//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
 				driver.then(function() {
@@ -1798,7 +1815,7 @@ var disableCustomUserTitleForRegisteredUser = function(driver, test, callback) {
 							this.click('a[href="'+grpName+'"]');
 						});
 					}
-					this.wait(5000,function(){
+					driver.then(function() {
 						this.capture(screenShotsDir + 'group_registered.png');
 						try {
 							test.assertExists('#allow_customtitle');
@@ -1809,7 +1826,7 @@ var disableCustomUserTitleForRegisteredUser = function(driver, test, callback) {
 							try {
 								test.assertExists('button.button.btn-m.btn-blue');
 								this.click('button.button.btn-m.btn-blue');
-								driver.wait(5000, function() {
+								driver.then(function() {
 									this.capture(screenShotsDir+ 'updatedChangePermission.png');
 									try {
 										test.assertExists('font[color="red"]');

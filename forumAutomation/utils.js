@@ -1,7 +1,7 @@
 'use strict';
 
 var redis = require('redis');
-var moment = require('moment');
+var psTree = require('ps-tree');
 var utils = module.exports = {};
 var redisClient;
 
@@ -24,27 +24,60 @@ utils.initRedisClient = function(){
 
 
 utils.isValidJobToAdd = function(commitBranch, commitDetails, callback){
-	
+	console.log("Executing isValidJobToAdd for "+commitBranch);
+	var currentTime = new Date();
+	var timeString = currentTime.toString();
 	redisClient.get(commitBranch, function (err, value) {
 		if(value){
-			var diff = moment().diff(moment(value));
+			var diff = currentTime - new Date(value);
 			console.log("The automation had been run for the "+ commitBranch +" branch "+diff+" ms ago.");
-			if(diff >= 180000){
-				redisClient.set(commitBranch, moment());
+			if(diff >= 1800000){
+				console.log("Returning true to add in job queue");
+				redisClient.set(commitBranch, timeString);
 				return callback(true);
 			}else{
+				console.log("Adding "+commitBranch +" to pending list.");
+				console.log("commitDetails: "+commitDetails);
+				console.log("commitDetails: "+JSON.stringify(commitDetails));
 				redisClient.exists("pendingCommit_"+commitBranch, function(err, isExist){
 					if(!isExist)
-						redisClient.hmset("pendingCommit_"+commitBranch, {"branch": commitBranch, "commitDetails": commitDetails, "entryTime": moment()});	
+						redisClient.hmset("pendingCommit_"+commitBranch, {"branch": commitBranch, "commitDetails": JSON.stringify(commitDetails), "entryTime": timeString});	
 					else
-						redisClient.hset("pendingCommit_"+commitBranch, "commitDetails", commitDetails);
+						redisClient.hset("pendingCommit_"+commitBranch, "commitDetails", JSON.stringify(commitDetails));
 				});
 				return callback(false);
 			}
 		}else{
 			console.log("First time automation execution request received for the branch "+commitBranch); 
-			redisClient.set(commitBranch, moment());
+			redisClient.set(commitBranch, timeString);
 			return callback(true);
 		}		
 	});
 };
+
+
+utils.terminateProcess = function(pid){
+	console.log("Terminating process with PID : "+pid);
+ 	var signal   = 'SIGKILL';
+    	var killTree = true;
+    	if(killTree) {
+        	psTree(pid, function (err, children) {
+            		[pid].concat(
+                		children.map(function (p) {
+                    			return p.PID;
+                		})
+            		).forEach(function (tpid) {
+                		try { process.kill(tpid, signal) }
+                		catch (ex) {
+					console.error("Exception occurred while terminating proess "+ tpid + ":" + ex);				
+				}
+            		});
+        	});
+    	} else {
+        	try { process.kill(pid, signal) }
+        	catch (ex) {
+			console.error("Exception occurred while terminating proess "+ tpid + ":" + ex);						
+		}
+    	}
+};
+

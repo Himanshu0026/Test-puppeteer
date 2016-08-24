@@ -17,20 +17,16 @@ inContextForumRegister.featureTest = function(casper, test) {
 		//Login To Forum BackEnd 
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+			
+			//Clicking On 'Group Permissions' Link Under 'Users' Tab 
+			casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function success(){
+				this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+				test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+				this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			}, function fail() {
+				casper.echo("Error Occurred", "ERROR");
+			});
 		});
-	});
-	
-	//Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.then(function() {
-		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-	});
-	
-	//Getting Screenshot After Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'group_permissions.png');
 	});
 	
 	//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
@@ -45,388 +41,240 @@ inContextForumRegister.featureTest = function(casper, test) {
 			}
 		});
 		casper.click('a[href="'+grpName+'"]');
-		casper.wait(5000,function(){
-			this.capture(screenShotsDir + 'group_un-Registered.png');
+		//Disabling 'Start Topics' Option And 'Save'
+		casper.waitForSelector('#post_threads', function success(){
+			test.assertExists('#post_threads');
+			utils.enableorDisableCheckbox('post_threads', false, casper, function() {
+				casper.echo("Start Topics Checkbox Has Been Disabled For Un-Registered User", 'INFO');
+				casper.click('button.button.btn-m.btn-blue');
+			
+				//Verifying 'Success Message' After Saving Settings
+				casper.waitForSelector('div#tab_wrapper .heading[color="red"]', function success(){
+					var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
+					var expectedErrorMsg = 'Your user group settings have been updated.';
+					test.assertEquals(message, expectedErrorMsg);
+					test.assertExists('a[href="/tool/members/login?action=logout"]');
+					this.click('a[href="/tool/members/login?action=logout"]');
+				}, function fail() {
+					casper.echo("Error Occurred", "ERROR");
+				});
+			});
+		}, function fail() {
+			casper.echo("Error Occurred", "ERROR");
 		});
-	});
-	
-	//Disabling 'Start Topics' Option And 'Save'
-	casper.then(function(){
-		test.assertExists('#post_threads');
-	});
-	
-	casper.then(function() {
-		utils.enableorDisableCheckbox('post_threads', false, casper, function() {
-			casper.echo("Start Topics Checkbox Has Been Disabled For Un-Registered User", 'INFO');
-		});
-	});
-	
-	casper.then(function() {
-		this.click('button.button.btn-m.btn-blue');
-		this.wait(5000,function(){
-			this.capture(screenShotsDir + 'actions_saved.png');
-		});
-	});
-	
-	//Verifying 'Success Message' After Saving Settings			
-	casper.then(function() {
-		var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
-		var expectedErrorMsg = 'Your user group settings have been updated.';
-		test.assertEquals(message, expectedErrorMsg);
-		test.assertExists('a[href="/tool/members/login?action=logout"]');
-		this.click('a[href="/tool/members/login?action=logout"]');
 	});
 	
 	//Open Forum Front End URL And Get Title 
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-	
-	casper.then(function() {
 		casper.echo('                                      CASE 1', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('INCONTEXT NEW REGISTRATION FROM START NEW TOPIC REGISTER LINK', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
-	});
-	
-	//Clicking On Start New Topic Button
-	casper.then(function() {
+		
+		//Clicking On Start New Topic Button
 		test.assertExists('div#topics a[href="/post/printadd"]');
 		this.click('div#topics a[href="/post/printadd"]');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'startNewTopic.png');
-	});
-	
-	//Clicking On Top 'Register' Link 
-	
-	casper.then(function() {
-		test.assertExists('form[name="frmLogin"] div[role="alert"] a[href="/register/register"]');
-		this.click('form[name="frmLogin"] div[role="alert"] a[href="/register/register"]');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'registerLink.png');
-	});
-	
-	//Filling Valid Data On Registration Form
-	
-	casper.then(function() {
-		forumRegister.registerToApp(inContextRegisterJSON['registerLink'], casper, function() {
-			casper.echo('Processing to registration on forum.....', 'INFO');
-		});
-	});
-
-	casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'register_submit.png');
-	});
-	
-	//Handling Logout And Redirecting To The Respective Page
+		
+		//Clicking On Top 'Register' Link 
+		casper.waitForSelector('form[name="frmLogin"] div[role="alert"] a[href="/register/register"]', function success(){
+			test.assertExists('form[name="frmLogin"] div[role="alert"] a[href="/register/register"]');
+			this.click('form[name="frmLogin"] div[role="alert"] a[href="/register/register"]');
+			casper.waitForSelector('form[name="PostTopic"]', function success(){
 			
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {});
+				//Filling Valid Data On Registration Form
+				forumRegister.registerToApp(inContextRegisterJSON['registerLink'], casper, function(err) {
+					if (err) {
+						casper.echo("Error Occurred In Callback", "ERROR");
+					} else {
+						casper.echo('Processing to registration on forum.....', 'INFO');
+					
+						//Handling Logout And Redirecting To The Respective Page
+						forumRegister.redirectToLogout(casper, test, function() {
+							casper.echo('                                      CASE 2', 'INFO');
+							casper.echo('************************************************************************************', 'INFO');
+							casper.echo('INCONTEXT NEW REGISTRATION FROM START NEW TOPIC WITH CREATE ACCOUNT BUTTON', 'INFO');
+							casper.echo('************************************************************************************', 'INFO');
+							casper.waitForSelector('i.icon.icon-menu', function success(){
+								this.click('i.icon.icon-menu');
+								test.assertExists('a[href="/latest"]');
+								this.click('a[href="/latest"]');
+								casper.waitForSelector('i.icon.icon-menu', function success(){
+									this.click('div#topics a[href="/post/printadd"]');
+									casper.waitForSelector('i.icon.icon-menu', function success(){
+										this.click('form[name="frmLogin"] div.form-group a[href="/register/register"]');
+									}, function fail() {
+										casper.echo("Error Occurred", "ERROR");
+									});
+								}, function fail() {
+									casper.echo("Error Occurred", "ERROR");
+								});
+							}, function fail() {
+								casper.echo("Error Occurred", "ERROR");
+							});
+						});
+					}
+				});
+			}, function fail() {
+				casper.echo("Error Occurred", "ERROR");
+			});
+		}, function fail() {
+			casper.echo("Error Occurred", "ERROR");
+		});
 	});
 	
-	casper.then(function() {
-		casper.echo('                                      CASE 2', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('INCONTEXT NEW REGISTRATION FROM START NEW TOPIC WITH CREATE ACCOUNT BUTTON', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-	});
+	//Filling Valid Data On Registration Form
 	
-	casper.then(function() {
-		test.assertExists('i.icon.icon-menu');
-		this.click('i.icon.icon-menu');
-		test.assertExists('a[href="/latest"]');
-		this.click('a[href="/latest"]');
+	casper.waitForSelector('form[name="PostTopic"]', function success(){
+		forumRegister.registerToApp(inContextRegisterJSON['createAccount'], casper, function(err) {
+			if (err) {
+				casper.echo("Error Occurred In Callback", "ERROR");
+			} else {
+				casper.echo('Processing to registration on forum.....', 'INFO');
+				forumRegister.redirectToLogout(casper, test, function() {
+					casper.echo('                                      CASE 3', 'INFO');
+					casper.echo('************************************************************************************', 'INFO');
+					casper.echo('INCONTEXT NEW REGISTRATION WHILE LIKE THIS TOPIC FROM LIST OF TOPICS', 'INFO');
+					casper.echo('************************************************************************************', 'INFO');
+					test.assertExists('i.icon.icon-menu');
+					casper.click('i.icon.icon-menu');
+					test.assertExists('a[href="/latest"]');
+					casper.click('a[href="/latest"]');
+				});
+			}
+		});
+	}, function fail() {
+		casper.echo("Error Occurred", "ERROR");
 	});
 
-	//Clicking On Start New Topic Button
-	
-	casper.then(function() {
-		test.assertExists('div#topics a[href="/post/printadd"]');
-		this.click('div#topics a[href="/post/printadd"]');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'startNewTopic.png');
-	});
-	
-	//Clicking On 'Create new Account' Button 
-	
-	casper.then(function() {
-		test.assertExists('form[name="frmLogin"] div.form-group a[href="/register/register"]');
-		this.click('form[name="frmLogin"] div.form-group a[href="/register/register"]');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'registerLink.png');
-	});
-	
-	//Filling Valid Data On Registration Form
-	
-	casper.then(function() {
-		forumRegister.registerToApp(inContextRegisterJSON['createAccount'], casper, function() {
-			casper.echo('Processing to registration on forum.....', 'INFO');
+	casper.waitForSelector('i.glyphicon.glyphicon-like-alt', function success(){
+		casper.click('i.glyphicon.glyphicon-like-alt');
+		registerToApp(inContextRegisterJSON['likePost'], casper, function(err) {
+			if (err) {
+				casper.echo("Error Occurred In Callback", "ERROR");
+			} else {
+				casper.echo('Processing to registration on forum.....', 'INFO');
+				forumRegister.redirectToLogout(casper, test, function() {
+					casper.echo('                                      CASE 4', 'INFO');
+					casper.echo('************************************************************************************', 'INFO');
+					casper.echo('INCONTEXT NEW REGISTRATION WHILE LIKE POST FROM TOPIC PAGE', 'INFO');
+					casper.echo('************************************************************************************', 'INFO');
+					test.assertExists('i.icon.icon-menu');
+					casper.click('i.icon.icon-menu');
+					test.assertExists('a[href="/latest"]');
+					casper.click('a[href="/latest"]');
+					casper.waitForSelector('form[name="posts"] a.topic-title', function success(){
+						this.click('form[name="posts"] a.topic-title');
+						test.assertExists('i.glyphicon.glyphicon-like-alt');
+						this.click('i.glyphicon.glyphicon-like-alt');
+						registerToApp(inContextRegisterJSON['likePostFromTopicPage'], casper, function(err) {
+							if (err) {
+								casper.echo("Error Occurred In Callback", "ERROR");
+							} else {
+								casper.echo('Processing to registration on forum.....', 'INFO');
+								forumRegister.redirectToLogout(casper, test, function() {
+									casper.echo('                                      CASE 5', 'INFO');
+									casper.echo('************************************************************************************', 'INFO');
+									casper.echo('INCONTEXT NEW REGISTRATION WHILE DISLIKE POST FROM TOPIC PAGE', 'INFO');
+									casper.echo('************************************************************************************', 'INFO');
+									test.assertExists('i.icon.icon-menu');
+									casper.click('i.icon.icon-menu');
+									test.assertExists('a[href="/latest"]');
+									casper.click('a[href="/latest"]');
+								});
+							}
+						});
+					}, function fail() {
+						casper.echo("Error Occurred", "ERROR");
+					});
+				});
+			}
 		});
-	});
-
-	casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'register_createAccount.png');
-	});
-	
-	//Handling Logout And Redirecting To The Respective Page
-			
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {});
-	});
-	
-	casper.then(function() {
-		casper.echo('                                      CASE 3', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('INCONTEXT NEW REGISTRATION WHILE LIKE THIS TOPIC FROM LIST OF TOPICS', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-	});
-	
-	casper.then(function() {
-		test.assertExists('i.icon.icon-menu');
-		this.click('i.icon.icon-menu');
-		test.assertExists('a[href="/latest"]');
-		this.click('a[href="/latest"]');
-	});
-	
-	//Clicking On 'Like' This Post Icon
-	casper.then(function() {
-		test.assertExists('i.glyphicon.glyphicon-like-alt');
-		this.click('i.glyphicon.glyphicon-like-alt');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'likePost.png');
-	});
-	
-	//Filling Valid Data On Registration Form
-	casper.then(function() {
-		registerToApp(inContextRegisterJSON['likePost'], casper, function() {
-			casper.echo('Processing to registration on forum.....', 'INFO');
-		});
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'likePostSubmit.png');
-	});
-	
-	//Handling Logout And Redirecting To The Respective Page
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {});
-	});
-	
-	casper.then(function() {
-		casper.echo('                                      CASE 4', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('INCONTEXT NEW REGISTRATION WHILE LIKE POST FROM TOPIC PAGE', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-	});
-	
-	casper.then(function() {
-		test.assertExists('i.icon.icon-menu');
-		this.click('i.icon.icon-menu');
-		test.assertExists('a[href="/latest"]');
-		this.click('a[href="/latest"]');
+	}, function fail() {
+		casper.echo("Error Occurred", "ERROR");
 	});
 	
 	//Clicking On Any Topic Present In The List
-	casper.then(function() {
-		test.assertExists('form[name="posts"] a.topic-title');
+	casper.waitForSelector('form[name="posts"] a.topic-title', function success(){
 		this.click('form[name="posts"] a.topic-title');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'clickOnTopic.png');
-	});
-	
-	//Clicking On 'Like' This Post Icon
-	casper.then(function() {
-		test.assertExists('i.glyphicon.glyphicon-like-alt');
-		this.click('i.glyphicon.glyphicon-like-alt');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'likePostFromTopicPage.png');
-	});
-	
-	//Filling Valid Data On Registration Form
-	casper.then(function() {
-		registerToApp(inContextRegisterJSON['likePostFromTopicPage'], casper, function() {
-			casper.echo('Processing to registration on forum.....', 'INFO');
+		casper.waitForSelector('a.dislike_post.text-muted', function success(){
+			this.click('a.dislike_post.text-muted');
+			registerToApp(inContextRegisterJSON['dislikePostFromTopicPage'], casper, function(err) {
+				if (err) {
+					casper.echo("Error Occurred In Callback", "ERROR");
+				} else {
+					casper.echo('Processing to registration on forum.....', 'INFO');
+					forumRegister.redirectToLogout(casper, test, function() {
+						casper.echo('                                      CASE 6', 'INFO');
+						casper.echo('************************************************************************************', 'INFO');
+						casper.echo('INCONTEXT NEW REGISTRATION FROM QUOTE ON POST FROM POST LIST', 'INFO');
+						casper.echo('************************************************************************************', 'INFO');
+						test.assertExists('i.icon.icon-menu');
+						casper.click('i.icon.icon-menu');
+						test.assertExists('a[href="/latest"]');
+						casper.click('a[href="/latest"]');
+					});
+				}
+			});
+		}, function fail() {
+			casper.echo("Error Occurred", "ERROR");
 		});
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'likePostFromTopicPageSubmit.png');
-	});
-	
-	//Handling Logout And Redirecting To The Respective Page
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {});
-	});
-	
-	casper.then(function() {
-		casper.echo('                                      CASE 5', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('INCONTEXT NEW REGISTRATION WHILE DISLIKE POST FROM TOPIC PAGE', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-	});
-	
-	casper.then(function() {
-		test.assertExists('i.icon.icon-menu');
-		this.click('i.icon.icon-menu');
-		test.assertExists('a[href="/latest"]');
-		this.click('a[href="/latest"]');
+	}, function fail() {
+		casper.echo("Error Occurred", "ERROR");
 	});
 	
 	//Clicking On Any Topic Present In The List
-	casper.then(function() {
-		test.assertExists('form[name="posts"] a.topic-title');
+	casper.waitForSelector('form[name="posts"] a.topic-title', function success(){
 		this.click('form[name="posts"] a.topic-title');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'clickOnTopic.png');
-	});
-	
-	//Clicking On 'Dislike' This Post Icon
-	casper.then(function() {
-		test.assertExists('a.dislike_post.text-muted');
-		this.click('a.dislike_post.text-muted');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'disLikePostFromTopicPage.png');
-	});
-	
-	//Filling Valid Data On Registration Form
-	casper.then(function() {
-		registerToApp(inContextRegisterJSON['dislikePostFromTopicPage'], casper, function() {
-			casper.echo('Processing to registration on forum.....', 'INFO');
+		casper.waitForSelector('a.text-muted.quote', function success(){
+			this.click('a.text-muted.quote');
+			registerToApp(inContextRegisterJSON['quoteFromTopicPage'], casper, function(err) {
+				if (err) {
+					casper.echo("Error Occurred In Callback", "ERROR");
+				} else {
+					casper.echo('Processing to registration on forum.....', 'INFO');
+					forumRegister.redirectToLogout(casper, test, function() {
+						casper.echo('                                      CASE 7', 'INFO');
+						casper.echo('************************************************************************************', 'INFO');
+						casper.echo('INCONTEXT NEW REGISTRATION FROM VOTE ON POST FROM POST LIST', 'INFO');
+						casper.echo('************************************************************************************', 'INFO');
+						test.assertExists('i.icon.icon-menu');
+						casper.click('i.icon.icon-menu');
+						test.assertExists('a[href="/latest"]');
+						casper.click('a[href="/latest"]');
+						casper.waitForSelector('form[name="posts"] a.topic-title', function success(){
+							casper.click('form[name="posts"] a.topic-title');
+						}, function fail() {
+							casper.echo("Error Occurred", "ERROR");
+						});
+					});
+				}
+			});
+		}, function fail() {
+			casper.echo("Error Occurred", "ERROR");
 		});
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'dislikePostFromTopicPageSubmit.png');
-	});
-	
-	//Handling Logout And Redirecting To The Respective Page
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {});
-	});
-	
-	casper.then(function() {
-		casper.echo('                                      CASE 6', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('INCONTEXT NEW REGISTRATION FROM QUOTE ON POST FROM POST LIST', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-	});
-	
-	casper.then(function() {
-		test.assertExists('i.icon.icon-menu');
-		this.click('i.icon.icon-menu');
-		test.assertExists('a[href="/latest"]');
-		this.click('a[href="/latest"]');
-	});
-	
-	//Clicking On Any Topic Present In The List
-	casper.then(function() {
-		test.assertExists('form[name="posts"] a.topic-title');
-		this.click('form[name="posts"] a.topic-title');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'clickOnTopic.png');
-	});
-	
-	//Clicking On 'Quote Link' Present In Post List
-	casper.then(function() {
-		test.assertExists('a.text-muted.quote');
-		this.click('a.text-muted.quote');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'quoteFromTopicPage.png');
-	});
-	
-	//Filling Valid Data On Registration Form
-	casper.then(function() {
-		registerToApp(inContextRegisterJSON['quoteFromTopicPage'], casper, function() {
-			casper.echo('Processing to registration on forum.....', 'INFO');
-		});
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'quoteFromTopicPageSubmit.png');
-	});
-	
-	//Handling Logout And Redirecting To The Respective Page
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {});
-	});
-	
-	casper.then(function() {
-		casper.echo('                                      CASE 7', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('INCONTEXT NEW REGISTRATION FROM VOTE ON POST FROM POST LIST', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-	});
-	
-	casper.then(function() {
-		test.assertExists('i.icon.icon-menu');
-		this.click('i.icon.icon-menu');
-		test.assertExists('a[href="/latest"]');
-		this.click('a[href="/latest"]');
-	});
-	
-	//Clicking On Any Topic Present In The List
-	casper.then(function() {
-		test.assertExists('form[name="posts"] a.topic-title');
-		this.click('form[name="posts"] a.topic-title');
-	});
-	
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'clickOnTopic.png');
+	}, function fail() {
+		casper.echo("Error Occurred", "ERROR");
 	});
 	
 	//Clicking On 'create an account and log in' Link Present In Post List
-	casper.then(function() {
-		try {
+	casper.waitForSelector('a#guest_user_vote', function success(){
 			test.assertExists('a#guest_user_vote');
 			this.click('a#guest_user_vote');
 			this.echo('You have clicked on create an account and log-in link...', 'INFO');
 			
-			this.wait(5000, function() {
-				this.capture(screenShotsDir + 'voteFromTopicPage.png');
-			});
-			
 			//Filling Valid Data On Registration Form
-			this.then(function() {
-				registerToApp(inContextRegisterJSON['voteFromTopicPage'], casper, function() {
+			registerToApp(inContextRegisterJSON['voteFromTopicPage'], casper, function(err) {
+				if (err) {
+					casper.echo("Error Occurred In Callback", "ERROR");
+				} else {
 					casper.echo('Processing to registration on forum.....', 'INFO');
-				});
+					forumRegister.redirectToLogout(casper, test, function() {});
+				}
 			});
-
-			this.wait(5000, function() {
-				this.capture(screenShotsDir + 'voteFromTopicPageSubmit.png');
-			});
-			
-			//Handling Logout And Redirecting To The Respective Page
-			this.then(function() {
-				forumRegister.redirectToLogout(casper, test, function() {});
-			});
-			
-		} catch(e) {
-			test.assertDoesntExist('a#guest_user_vote');
-			this.echo('You did not find create an account and log-in link...', 'INFO');
-		}
+	}, function fail() {
+		test.assertDoesntExist('a#guest_user_vote');
+		this.echo('You did not find create an account and log-in link...', 'INFO');
 	});
 	
 	/*casper.then(function() {
@@ -511,6 +359,6 @@ var registerToApp = function(data, driver, callback) {
 		'pw' : data.upass
 	}, true);
 	
-	return callback();
+	return callback(null);
 	
 };
