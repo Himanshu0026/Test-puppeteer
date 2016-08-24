@@ -45,7 +45,8 @@ calendar.featureTest = function(casper, test, x) {
 			});
 		});
 	});
-	
+
+
 	// test case to disable calander checkbox from GEneral SEttings page
 	casper.then(function() {
 		calendar.gotoGeneralSettingspage(casper, function(){
@@ -55,7 +56,7 @@ calendar.featureTest = function(casper, test, x) {
 		});
 		this.waitForSelector('#enable_calendar', function() {
 			utils.enableorDisableCheckbox('enable_calendar', false, casper, function() {
-				casper.echo("calendar checkbox has been disabled", 'info');
+				casper.echo("calendar checkbox has been disabled", 'INFO');
 			});
 		});
 		this.waitForSelector('button[type="submit"]', function(){
@@ -164,12 +165,328 @@ calendar.featureTest = function(casper, test, x) {
 			this.wait(3000, function(){
 				test.assertExists('p[align="center"]');
 				var updationMsg = this.fetchText('p[align="center"]');
-				test.assertEquals(updationMsg, 'Your user group settings have been updated.');
+				test.assertEquals(updationMsg.trim(), 'Your user group settings have been updated.');
 				this.capture(screenShotsDir+'updateCalendarpermission.png');
 				casper.echo("*****************************************************************", "INFO");
 			});
 		});
 
+	});
+
+	//go to change calendar setting content	
+	casper.then(function() {
+		calendar.updateCalendarSettingsContents(x, casper, function() {
+			casper.echo("Navigated to content calender Settings page", "INFO");
+		});
+		this.waitForSelector('input[name="view_calendar"]', function() {
+			utils.enableorDisableCheckbox('o', true, casper, function() {
+				casper.echo("calendar checkbox has been enabled", 'INFO');
+			});
+		});
+		this.waitForSelector('button[type="submit"]', function(){
+			this.click('button[type="submit"]');
+			this.wait(3000, function() {
+				this.capture(screenShotsDir+'updatecalendaronGeneralSetting.png');
+			});
+		});
+	});
+
+	/*****to verify visibility of single ,multiple and no calendar from backend(for registered user)*****/
+	casper.thenOpen(config.url);
+	casper.then(function() {
+		casper.echo("to verify visibility of single ,multiple and no calendar from backend(for registered user)", "INFO");
+		test.assertExists('#links-nav');
+		this.click('#links-nav');
+		this.wait(3000, function() {
+			test.assertExists('a[href="/calendar"]');
+			this.click('a[href="/calendar"]');
+		});
+		this.then(function() {
+			test.assertExists('select[name="calendarid"]');
+			casper.echo('verified visibility of single ,multiple and no calendar from backend(for registered user)', 'INFO');
+		});
+	});
+
+	//go to backed url to disable the birthday
+	casper.thenOpen(config.backEndUrl, function(){
+		casper.echo("Title of the page : "+this.getTitle(), 'info');
+	});
+
+	//go to change calendar setting content	
+	casper.then(function() {
+		calendar.updateCalendarSettingsContents(x, casper, function() {
+			casper.echo("Navigated to content calender Settings page", "INFO");
+		});
+		this.then(function() {
+			test.assertExists('a[href="/tool/members/mb/calendar"]');
+			this.click('a[href="/tool/members/mb/calendar"]');
+		});
+		this.then(function() {
+			test.assertExists(x('//td/a[text()="abc"]/following::td[1]/a'));
+			this.click(x('//td/a[text()="abc"]/following::td[1]/a'));
+		});
+		this.then(function() {
+			test.assertExists('a[href^="/tool/members/mb/calendar?action=edit"]');
+			this.click('a[href^="/tool/members/mb/calendar?action=edit"]');
+		});
+		this.waitForSelector('input[name="show_birthdays"]', function() {
+			utils.enableorDisableCheckbox('h', false, casper, function() {
+				casper.echo("calendar show birthday checkbox has been disabled", 'INFO');
+			});
+		});
+		this.waitForSelector('button[type="submit"]', function(){
+			this.click('button[type="submit"]');
+			this.wait(3000, function() {
+				this.capture(screenShotsDir+'updatecalendaronGeneralSetting.png');
+			});
+		});
+	});
+
+	/*****to verify the visibility of birthday on calendar when permission disable*****/
+	casper.thenOpen(config.url);
+	casper.then(function() {
+		casper.echo("to verify the visibility of birthday on calendar when permission disable", "INFO");
+		test.assertExists('#links-nav');
+		this.click('#links-nav');
+		this.wait(3000, function() {
+			test.assertExists('a[href="/calendar"]');
+			this.click('a[href="/calendar"]');
+		});
+		this.then(function() {
+			test.assertDoesntExist('a small.icon-gift');
+			casper.echo('verified the visibility of birthday on calendar when permission disable', 'INFO');
+		});
+	});
+
+	//go to backed url to enable the birthday
+	casper.thenOpen(config.backEndUrl, function(){
+		casper.echo("Title of the page : "+this.getTitle(), 'info');
+	});
+
+	//go to change calendar setting content	
+	casper.then(function() {
+		calendar.updateCalendarSettingsContents(x, casper, function() {
+			casper.echo("Navigated to content calender Settings page", "INFO");
+		});
+		this.then(function() {
+			test.assertExists('a[href="/tool/members/mb/calendar"]');
+			this.click('a[href="/tool/members/mb/calendar"]');
+		});
+		this.then(function() {
+			test.assertExists(x('//td/a[text()="abc"]/following::td[1]/a'));
+			this.click(x('//td/a[text()="abc"]/following::td[1]/a'));
+		});
+		this.then(function() {
+			test.assertExists('a[href^="/tool/members/mb/calendar?action=edit"]');
+			this.click('a[href^="/tool/members/mb/calendar?action=edit"]');
+		});
+		this.waitForSelector('input[name="show_birthdays"]', function() {
+			utils.enableorDisableCheckbox('h', true, casper, function() {
+				casper.echo("calendar show birthday checkbox has been enabled", 'INFO');
+			});
+		});
+		this.waitForSelector('button[type="submit"]', function(){
+			this.click('button[type="submit"]');
+			this.wait(3000, function() {
+				this.capture(screenShotsDir+'updatecalendaronGeneralSetting.png');
+			});
+		});
+	});
+
+	/*****to verify the visibility of birthday(with registered bithday date) on calendar when permission enable*****/
+	casper.thenOpen(config.url);
+	casper.then(function() {
+		casper.echo("to verify the visibility of birthday(with registered bithday date) on calendar when permission enable", "INFO");
+		test.assertExists('#links-nav');
+		this.click('#links-nav');
+		this.wait(3000, function() {
+			test.assertExists('a[href="/calendar"]');
+			this.click('a[href="/calendar"]');
+		});
+		this.then(function() {
+			test.assertExists('a small.icon-gift');
+			casper.echo('verified the visibility of birthday(with registered bithday date) on calendar when permission enable', 'INFO');
+		});
+	});
+
+	//go to backed url to enable show upcoming events
+	casper.thenOpen(config.backEndUrl, function(){
+		casper.echo("Title of the page : "+this.getTitle(), 'info');
+	});
+
+	//go to change calendar setting content	
+	casper.then(function() {
+		calendar.updateCalendarSettingsContents(x, casper, function() {
+			casper.echo("Navigated to content calender Settings page", "INFO");
+		});
+		this.then(function() {
+			test.assertExists('a[href="/tool/members/mb/calendar"]');
+			this.click('a[href="/tool/members/mb/calendar"]');
+		});
+		this.then(function() {
+			test.assertExists(x('//td/a[text()="abc"]/following::td[1]/a'));
+			this.click(x('//td/a[text()="abc"]/following::td[1]/a'));
+		});
+		this.then(function() {
+			test.assertExists('a[href^="/tool/members/mb/calendar?action=edit"]');
+			this.click('a[href^="/tool/members/mb/calendar?action=edit"]');
+		});
+		this.waitForSelector('input[name="upcoming_events"]', function() {
+			utils.enableorDisableCheckbox('g', true, casper, function() {
+				casper.echo("calendar show upcoming event checkbox has been enabled", 'INFO');
+			});
+		});
+		this.waitForSelector('button[type="submit"]', function(){
+			this.click('button[type="submit"]');
+			this.wait(3000, function() {
+				this.capture(screenShotsDir+'updatecalendaronGeneralSetting.png');
+			});
+		});
+	});
+
+	// go to general setting to enalbe upcoming events
+	casper.then(function() {
+		test.assertExists('a[data-tooltip-elm="ddGeneral"]');
+		this.click('a[data-tooltip-elm="ddGeneral"]');
+		this.then(function() {
+			test.assertExists('a[href="/tool/members/mb/settings?tab=General"]');
+			this.click('a[href="/tool/members/mb/settings?tab=General"]');
+		});
+		this.then(function() {
+			utils.enableorDisableCheckbox('show_upcoming_events', true, casper, function() {
+				casper.echo("calendar show upcoming event checkbox has been enabled from general settings page", 'INFO');
+			});
+		});
+	});
+	/*****to verify the functionality of show upcoming event when permission enable from backend.*****/
+	casper.thenOpen(config.url);
+	casper.then(function() {
+		casper.echo("to verify the functionality of show upcoming event when permission enable from backend.", "INFO");
+		test.assertExists('a[href="/categories"]');
+		this.click('a[href="/categories"]');
+		this.then(function() {
+			test.assertExists('div.events');
+			casper.echo('verified the functionality of show upcoming event when permission enable from backend.', 'INFO');
+		});
+	});
+
+	//go to backed url to disable show upcoming events
+	casper.thenOpen(config.backEndUrl, function(){
+		casper.echo("Title of the page : "+this.getTitle(), 'info');
+	});
+
+	//go to change calendar setting content	
+	casper.then(function() {
+		calendar.updateCalendarSettingsContents(x, casper, function() {
+			casper.echo("Navigated to content calender Settings page", "INFO");
+		});
+		this.then(function() {
+			test.assertExists('a[href="/tool/members/mb/calendar"]');
+			this.click('a[href="/tool/members/mb/calendar"]');
+		});
+		this.then(function() {
+			test.assertExists(x('//td/a[text()="abc"]/following::td[1]/a'));
+			this.click(x('//td/a[text()="abc"]/following::td[1]/a'));
+		});
+		this.then(function() {
+			test.assertExists('a[href^="/tool/members/mb/calendar?action=edit"]');
+			this.click('a[href^="/tool/members/mb/calendar?action=edit"]');
+		});
+		this.waitForSelector('input[name="upcoming_events"]', function() {
+			utils.enableorDisableCheckbox('g', false, casper, function() {
+				casper.echo("calendar show upcoming events checkbox has been disabled", 'INFO');
+			});
+		});
+		this.waitForSelector('button[type="submit"]', function(){
+			this.click('button[type="submit"]');
+			this.wait(3000, function() {
+				this.capture(screenShotsDir+'updatecalendaronGeneralSetting.png');
+			});
+		});
+	});
+
+	/*****to verify the functionality of show upcoming event when permission disable from backend.*****/
+	casper.thenOpen(config.url);
+	casper.then(function() {
+		casper.echo("to verify the functionality of show upcoming event when permission disable from backend.", "INFO");
+		test.assertExists('a[href="/categories"]');
+		this.click('a[href="/categories"]');
+		this.then(function() {
+			test.assertDoesntExist('div.events');
+			casper.echo('verified the functionality of show upcoming event when permission disable from backend.', 'INFO');
+		});
+	});
+
+	//go to backed url to set the title of calendar
+	casper.thenOpen(config.backEndUrl, function(){
+		casper.echo("Title of the page : "+this.getTitle(), 'info');
+	});
+
+	//go to change calendar setting content	
+	casper.then(function() {
+		calendar.updateCalendarSettingsContents(x, casper, function() {
+			casper.echo("Navigated to content calender Settings page", "INFO");
+		});
+		this.then(function() {
+			test.assertExists('a[href="/tool/members/mb/calendar"]');
+			this.click('a[href="/tool/members/mb/calendar"]');
+		});
+		this.then(function() {
+			test.assertExists(x('//td/a[text()="abc"]/following::td[1]/a'));
+			this.click(x('//td/a[text()="abc"]/following::td[1]/a'));
+		});
+		this.then(function() {
+			test.assertExists('a[href^="/tool/members/mb/calendar?action=edit"]');
+			this.click('a[href^="/tool/members/mb/calendar?action=edit"]');
+		});
+		this.then(function() {
+			this.sendKeys('form[name="PostCalender"] input[name="title"]', 'abc');
+		});
+		this.waitForSelector('button[type="submit"]', function(){
+			this.click('button[type="submit"]');
+			this.wait(3000, function() {
+				this.capture(screenShotsDir+'updatecalendaronGeneralSetting.png');
+			});
+		});
+	});
+
+	/*****to verify the title of calendar , set from the backend.*****/
+	casper.thenOpen(config.url);
+	casper.then(function() {
+		casper.echo("to verify the title of calendar , set from the backend.", "INFO");
+		test.assertExists('#links-nav');
+		this.click('#links-nav');
+		this.wait(3000, function() {
+			test.assertExists('a[href="/calendar"]');
+			this.click('a[href="/calendar"]');
+		});
+		this.then(function() {
+			test.assertExists('select[name="calendarid"] option[value="40303"]');
+			casper.echo('verified the title of calendar , set from the backend.', 'INFO');
+		});
+	});
+
+	//go to backed url to reset default setting of calender
+	casper.thenOpen(config.backEndUrl, function(){
+		casper.echo("Title of the page : "+this.getTitle(), 'info');
+	});
+
+	//go to change calendar setting content	
+	casper.then(function() {
+		calendar.updateCalendarSettingsContents(x, casper, function() {
+			casper.echo("Navigated to content calender Settings page", "INFO");
+		});
+		
+		this.then(function() {
+			this.click('a[href="/tool/members/mb/usergroup?action=calpermission"]');
+		});
+		this.then(function(){
+			test.assertExists('a[href^="/tool/members/mb/usergroup?action=reset&calendarid"]');
+			this.click('a[href^="/tool/members/mb/usergroup?action=reset&calendarid"]');
+			this.wait(7000, function() {
+				this.capture(screenShotsDir+'resetDefaultCalendarSetting.png');
+			});
+		});
 	});
 
 	casper.thenOpen(config.url);
@@ -265,7 +582,7 @@ calendar.featureTest = function(casper, test, x) {
 				year = this.fetchText('form[action="/calendar/display"] div a span');
 				month = (month.replace(year, '')).trim()+' ' +year.trim();
 				casper.echo("*** Current month is *** : "+month);
-				test.assertEquals(month, (moment.months(moment().month())+' '+moment().year()));
+				test.assertEquals(month.trim(), (moment.months(moment().month())+' '+moment().year()));
 				this.capture(screenShotsDir+'calendarview_month.png');
 				casper.echo("*****************************************************************", "INFO");
 
@@ -314,7 +631,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message in case of blank title is : "+casper.fetchText('div.alert.alert-danger'));
 						casper.capture(screenShotsDir+'createEventablankTitle.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("****************************************************************************", "INFO");
 					});
 					
@@ -323,7 +640,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message in case of blank description is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEventBlankdesc.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Allday with Previous Date") {
@@ -331,7 +648,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message for allDay with Previous date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEventallDay_prevDate.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Start date greater than end Date") {
@@ -339,7 +656,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message for end date older than Start date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_greaterStartDate.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Start date older than current Date") {
@@ -347,7 +664,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message for Start date older than current Date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_OldCurrentDate.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Daily Recurssion with blank day") {
@@ -355,7 +672,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message for Start date older than current Date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_DailywithBlankDay.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("****************************************************************************", "INFO");
 					});
 				}else if(responseData.validationType == "Weekly Recurssion with blank day") {
@@ -363,7 +680,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message for Start date older than current Date is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_WeeklywithBlankDay.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Weekly Recurssion with current date but passed time") {
@@ -371,7 +688,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message for Weekly Recurssion with current date but passed time is : "+casper.fetchText('div.alert.alert-danger') , "INFO");
 						casper.capture(screenShotsDir+'createEvent_WeeklywithcurrentDaypassedTime.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Weekly Recurssion without selecting Weekday") {
@@ -379,7 +696,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message for Weekly Recurssion without selecting Weekday is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_WeeklywithoutWeekday.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with blank day") {
@@ -387,7 +704,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message for Monthly Recurssion with blank day is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_MonthlywithBlankDay.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("***************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with blank months") {
@@ -395,7 +712,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message for Monthly Recurssion with blank months is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_MonthlywithBlankmonths.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("**************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with less than 1 months") {
@@ -403,7 +720,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message for Monthly Recurssion with less than 1 months is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_Monthlyless1month.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Monthly Recurssion with The Period with blank months") {
@@ -411,7 +728,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message for Monthly Recurssion with The Period with blank months is : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_MonthlyTheperiodBlankmonths.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("****************************************************************************", "INFO");
 					});
 				} else if(responseData.validationType == "Yearly Recurssion with Every Period with blank years") {
@@ -419,7 +736,7 @@ calendar.featureTest = function(casper, test, x) {
 						var ActualErrMessage = casper.fetchText('div.alert.alert-danger');
 						casper.echo("Error message for Yearly Recurssion with Every Period with blank years : "+casper.fetchText('div.alert.alert-danger'), "INFO");
 						casper.capture(screenShotsDir+'createEvent_Yearly_blankyears.png');
-						test.assertEquals(ActualErrMessage, responseData.ExpectedErrMessage);
+						test.assertEquals(ActualErrMessage.trim(), responseData.ExpectedErrMessage);
 						casper.echo("****************************************************************************", "INFO");
 					});
 				}
@@ -582,21 +899,7 @@ calendar.featureTest = function(casper, test, x) {
 
 						});
 					});
-				} else if(responseData.validationType == "Invalid Date of month") {
-					casper.wait(7000, function() {
-						calendar.verifyCreatedEvent(responseData, casper, function(){
-							casper.capture(screenShotsDir+"CreateEventwithInvalidDateAllday.png");
-							calendar.gethrefofCreatedEvent(responseData, casper, function() {
-								casper.echo("href value is : "+ responseData.calender_href, "INFO");
-							});
-							casper.echo("*****************************************************************", "INFO");
-							casper.waitForSelector('a.btn.btn-sm.btn-primary', function() {
-								this.click('a.btn.btn-sm.btn-primary');	
-							});
-
-						});
-					});
-				}
+				} 
 			});
 
 			}catch(err){
@@ -623,11 +926,18 @@ calendar.featureTest = function(casper, test, x) {
 	});
 
 	casper.then(function(){
-		this.click('a[href="'+json["DeleteEvent"][0].calender_href+'"]');
+		this.click('a[href="'+json["validInfo"][0].calender_href+'"]');
+		this.wait(5000, function() {
+			casper.capture(screenShotsDir+"00.png");
+		});
 		this.waitForSelector('i.glyphicon.glyphicon-chevron-down', function() {
 		//this.wait(3000, function() {
 			this.click('i.glyphicon.glyphicon-chevron-down');
-			test.assertDoesntExist('a[id^="event_delete"]');
+			this.wait(5000, function() {
+				casper.capture(screenShotsDir+"11.png");
+				test.assertDoesntExist('a[id^="event_delete"]');
+			});
+			
 		});
 	});
 
@@ -689,6 +999,9 @@ calendar.featureTest = function(casper, test, x) {
 
 
 };
+
+
+/**********************************************************************************************************/
 
 //function to go to general settings page in backend
 calendar.gotoGeneralSettingspage = function(driver, callback) {
@@ -875,17 +1188,18 @@ calendar.createEvent = function(data, driver, callback) {
 calendar.verifyCreatedEvent = function(data, driver, callback) {
 	driver.waitForSelector('span h3 strong', function(){
 		var title = driver.fetchText('span h3 strong');
-		this.test.assertEquals(title, data.Title, "Verified title of event after creating cal event");
+		this.test.assertEquals(title.trim(), data.Title, "Verified title of event after creating cal event");
 	});
 	driver.waitForSelector('.event-description.clearfix.text-block', function(){
 		var description = driver.fetchText('.event-description.clearfix.text-block');
-		driver.test.assertEquals(description, data.description, 'Verify description of the event');	
+		driver.test.assertEquals(description.trim(), data.description, 'Verify description of the event');	
 	});
 
-	if (data.Allday){
+	driver.then(function() {
+		if (data.Allday){
 		var date = moment(new Date(data.startDate)).format("MMM DD");
 		var eventstartDate = driver.fetchText('small span time');
-		driver.test.assertEquals(eventstartDate, date, 'Event date is verified');	
+		driver.test.assertEquals(eventstartDate.trim(), date, 'Event date is verified');	
 	} else {
 		var eventstartDate = moment(new Date(data.startDate+', '+data.startTime)).format('MMM DD, YYYY, HH:mm');
 		var eventendDate = moment(new Date(data.endDate+', '+data.endTime)).format('MMM DD, YYYY, HH:mm');
@@ -960,6 +1274,7 @@ calendar.verifyCreatedEvent = function(data, driver, callback) {
 	
 		}
 	}
+	});
 	return callback();
 
 };
@@ -975,7 +1290,7 @@ calendar.gethrefofCreatedEvent = function(data, driver, callback) {
 	var cal_id =  cal_href[1].split("&");
 	event_href = cal_href[0]+"?"+cal_id[2]+"&"+cal_id[0]+"&"+cal_id[1];
 	//casper.echo("href value is : "+ event_href, "INFO");
-	var read_data = fs.read(filePath)
+	var read_data = fs.read(filePath);
   	var result = read_data.replace(data.calender_href, event_href);
 	fs.write(filePath, result, 'w');
 
@@ -993,7 +1308,7 @@ calendar.deleteEvent = function(event_href, driver, callback) {
 	driver.waitForSelector(('a#event_delete_'+href[1]), function() {
 		this.click('a#event_delete_'+href[1]);
 	});
-	callback();
+	return callback();
 
 };
 
@@ -1012,7 +1327,7 @@ calendar.updateCalendarSettings = function(x, checkbox_id, status, driver, callb
 			this.wait(3000, function(){
 				this.test.assertExists('p[align="center"]');
 				var updationMsg = this.fetchText('p[align="center"]');
-				this.test.assertEquals(updationMsg, 'Your user group settings have been updated.');
+				this.test.assertEquals(updationMsg.trim(), 'Your user group settings have been updated.');
 				casper.echo("******************************************************************");
 			});
 		});
@@ -1021,6 +1336,35 @@ calendar.updateCalendarSettings = function(x, checkbox_id, status, driver, callb
 	return callback();
 
 };
+
+calendar.updateCalendarSettingsContents = function(x, driver, callback){
+	driver.test.assertExists('a[data-tooltip-elm="ddContent"]');
+	driver.click('a[data-tooltip-elm="ddContent"]');
+	driver.wait(2000, function() {
+		driver.test.assertExists('a[href="/tool/members/mb/calendar"]');
+		driver.click('a[href="/tool/members/mb/calendar"]');
+	});
+	driver.wait(7000, function() {
+		this.capture(screenShotsDir+"calenderContentSettingPage.png");		
+	});
+	driver.then(function() {
+		this.test.assertExists('a[href="/tool/members/mb/usergroup?action=calpermission"]');
+		this.click('a[href="/tool/members/mb/usergroup?action=calpermission"]');
+	});
+	
+	driver.then(function() {
+		this.test.assertExists(x('//td/li[text()="Registered Users"]/following::td[1]/a'));
+		this.click(x('//td/li[text()="Registered Users"]/following::td[1]/a'));
+		
+	});
+};
+
+
+
+
+
+
+
 
 
 

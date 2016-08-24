@@ -5,22 +5,22 @@
 
 
 	"invalidInfo" : [{
-	"validationType" : "Blank Title",
-	"Title" : "",
-	"Allday" : true,
-	"startDate" : "06/27/2016",
-	"description" : "I've got a script in casperjs that goes to a website checks a box if available and then click on a button to continue with the script",
-	"ExpectedErrMessage" : "Error: Please enter the title."
-	},
-
-	{
 	"validationType" : "Blank Description",
 	"Title" : "new event",
 	"Allday" : true,
 	"startDate" : "06/27/2016",
 	"timeZone" : "+5.5",
 	"description" : "",
-	"ExpectedErrMessage" : "Error: Please enter the description."
+	"ExpectedErrMessage" : "Please enter the description."
+	},
+
+	{
+	"validationType" : "Blank Title",
+	"Title" : "",
+	"Allday" : true,
+	"startDate" : "06/27/2016",
+	"description" : "I've got a script in casperjs that goes to a website checks a box if available and then click on a button to continue with the script",
+	"ExpectedErrMessage" : "Please enter the title."
 	},
 
 	{
@@ -30,7 +30,7 @@
 	"startDate" : "06/24/2016",
 	"timeZone" : "+5.5",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
-	"ExpectedErrMessage" : "Error: The Event date can not fall before the current date."
+	"ExpectedErrMessage" : "The Event date can not fall before the current date."
 	},
 
 	{
@@ -43,7 +43,7 @@
 	"endTime" : "09:00 am",
 	"timeZone" : "+5.5",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
-	"ExpectedErrMessage" : "Error: The end date can not fall before the start date."
+	"ExpectedErrMessage" : "The end date can not fall before the start date."
 	},
 
 	{
@@ -56,7 +56,7 @@
 	"endTime" : "09:00 am",
 	"timeZone" : "+5.5",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
-	"ExpectedErrMessage" : "Error: The Event date can not fall before the current date."
+	"ExpectedErrMessage" : "The Event date can not fall before the current date."
 	},
 
 	{
@@ -72,7 +72,7 @@
 	"recurrence" : "Daily",
 	"days" : "",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
-	"ExpectedErrMessage" : "Error: Please enter numeric days."
+	"ExpectedErrMessage" : "Please enter numeric days."
 	},
 
 	{
@@ -89,7 +89,7 @@
 	"weeks" : "",
 	"weekday" : ["Sunday", "Monday"],
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
-	"ExpectedErrMessage" : "Error: Please enter numeric days."
+	"ExpectedErrMessage" : "Please enter numeric days."
 	},
 
 	{
@@ -106,7 +106,7 @@
 	"weeks" : "1",
 	"weekday" : ["Sunday"],
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
-	"ExpectedErrMessage" : "Error: The Event date can not fall before the current date."
+	"ExpectedErrMessage" : "The Event date can not fall before the current date."
 	},
 
 	{
@@ -123,7 +123,7 @@
 	"weeks" : "1",
 	"weekday" : [""],
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
-	"ExpectedErrMessage" : "Error: No event will occur for the date range you specified."
+	"ExpectedErrMessage" : "No event will occur for the date range you specified."
 	},
 
 	{
@@ -141,7 +141,7 @@
 	"days" : "",
 	"months" : "1",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
-	"ExpectedErrMessage" : "Error: Please enter numeric days."
+	"ExpectedErrMessage" : "Please enter numeric days."
 	},
 
 	{
@@ -159,7 +159,7 @@
 	"days" : "5",
 	"months" : "",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and ",
-	"ExpectedErrMessage" : "Error: Please enter numeric days."
+	"ExpectedErrMessage" : "Please enter numeric days."
 	},
 
 	{
@@ -177,7 +177,7 @@
 	"days" : "5",
 	"months" : "1",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and",
-	"ExpectedErrMessage" : "Error: No event will occur for the date range you specified."
+	"ExpectedErrMessage" : "No event will occur for the date range you specified."
 	},
 
 	{
@@ -196,7 +196,7 @@
 	"weekday" : "Friday",
 	"months" : "",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and",
-	"ExpectedErrMessage" : "Error: Please enter numeric days."
+	"ExpectedErrMessage" : "Please enter numeric days."
 	},
 
 	{
@@ -214,7 +214,7 @@
 	"monthname" : "February",
 	"years" : "",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and",
-	"ExpectedErrMessage" : "Error: Please enter numeric days."
+	"ExpectedErrMessage" : "Please enter numeric days."
 	}],
 
 
@@ -222,10 +222,10 @@
 	"validationType" : "Create event with Allday",
 	"Title" : "Create event with Allday",
 	"Allday" : true,
-	"startDate" : "07/15/2016",
+	"startDate" : "08/15/2016",
 	"timeZone" : "+5.5",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and then click on a button to continue with the script",
-	"calender_href" : "/calendar/eventdetail?date=2016-7-15&eventid=27093&calendarid=40303"
+	"calender_href" : "/calendar/eventdetail?date=2016-8-15&eventid=27574&calendarid=40303"
 	},
 
 	{
@@ -233,20 +233,20 @@
 	"Title" : "Create event with ranged date",
 	"Allday" : false,
 	"timeZone" : "+5.5",
-	"startDate" : "07/15/2016",
-	"endDate" : "07/22/2016",
+	"startDate" : "08/15/2016",
+	"endDate" : "08/22/2016",
 	"startTime" : "07:00 PM",
 	"endTime" : "11:30 PM",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and then click on a button to continue with the script",
-	"calender_href" : "/calendar/eventdetail?date=2016-7-15&eventid=27094&calendarid=40303"
+	"calender_href" : "/calendar/eventdetail?date=2016-8-15&eventid=27575&calendarid=40303"
 	},
 	
 	{
 	"validationType" : "Daily Recurssion",
 	"Title" : "Daily Recurssion",
 	"Allday" : false,
-	"startDate" : "07/15/2016",
-	"endDate" : "07/30/2016",
+	"startDate" : "08/15/2016",
+	"endDate" : "08/30/2016",
 	"startTime" : "07:00 PM",
 	"endTime" : "09:00 PM",
 	"timeZone" : "+5.5",
@@ -254,14 +254,14 @@
 	"recurrence" : "Daily",
 	"days" : "3",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available",
-	"calender_href" : "/calendar/eventdetail?date=2016-7-15&eventid=27095&calendarid=40303"
+	"calender_href" : "/calendar/eventdetail?date=2016-8-15&eventid=27576&calendarid=40303"
 	},
 
 	{
 	"validationType" : "Weekly Recurssion",
 	"Title" : "Weekly Recurssion",
 	"Allday" : false,
-	"startDate" : "07/15/2016",
+	"startDate" : "08/15/2016",
 	"endDate" : "09/30/2016",
 	"startTime" : "05:30 PM",
 	"endTime" : "08:30 PM",
@@ -271,14 +271,14 @@
 	"weeks" : "2",
 	"weekday" : ["Wednesday", "Sunday"],
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and",
-	"calender_href" : "/calendar/eventdetail?date=2016-7-15&eventid=27096&calendarid=40303"
+	"calender_href" : "/calendar/eventdetail?date=2016-8-15&eventid=27577&calendarid=40303"
 	},
 
 	{
 	"validationType" : "Monthly Recurssion with Day Period",
 	"Title" : "Monthly Recurssion with Day Period",
 	"Allday" : false,
-	"startDate" : "07/15/2016",
+	"startDate" : "08/15/2016",
 	"endDate" : "12/28/2016",
 	"startTime" : "07:00 AM",
 	"endTime" : "09:00 AM",
@@ -289,14 +289,14 @@
 	"days" : "5",
 	"months" : "1",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and",
-	"calender_href" : "/calendar/eventdetail?date=2016-7-15&eventid=27097&calendarid=40303"
+	"calender_href" : "/calendar/eventdetail?date=2016-8-15&eventid=27578&calendarid=40303"
 	},
 
 	{
 	"validationType" : "Monthly Recurssion with The Period",
 	"Title" : "Monthly Recurssion with The Period",
 	"Allday" : false,
-	"startDate" : "07/15/2016",
+	"startDate" : "08/15/2016",
 	"endDate" : "12/28/2016",
 	"startTime" : "07:00 AM",
 	"endTime" : "09:00 AM",
@@ -308,14 +308,14 @@
 	"weekday" : "Friday",
 	"months" : "1",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and",
-	"calender_href" : "/calendar/eventdetail?date=2016-7-15&eventid=27098&calendarid=40303"
+	"calender_href" : "/calendar/eventdetail?date=2016-8-15&eventid=27579&calendarid=40303"
 	},
 
 	{
 	"validationType" : "Yearly Recurssion with Every Period",
 	"Title" : "Yearly Recurssion with Every Period",
 	"Allday" : false,
-	"startDate" : "07/15/2016",
+	"startDate" : "08/15/2016",
 	"endDate" : "10/20/2018",
 	"startTime" : "07:00 AM",
 	"endTime" : "09:00 AM",
@@ -326,14 +326,14 @@
 	"monthname" : "February",
 	"monthday" : "10",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and",
-	"calender_href" : "/calendar/eventdetail?date=2016-7-15&eventid=27099&calendarid=40303"
+	"calender_href" : "/calendar/eventdetail?date=2016-8-15&eventid=27580&calendarid=40303"
 	},
 
 	{
 	"validationType" : "Yearly Recurssion with The Period",
 	"Title" : "Yearly Recurssion with The Period",
 	"Allday" : false,
-	"startDate" : "07/15/2016",
+	"startDate" : "08/15/2016",
 	"endDate" : "11/28/2018",
 	"startTime" : "07:00 AM",
 	"endTime" : "09:00 AM",
@@ -345,21 +345,11 @@
 	"weekday" : "Friday",
 	"monthname" : "April",
 	"description" : "I've got a script in casperjs that goes to a website checks a box if available and",
-	"calender_href" : "/calendar/eventdetail?date=2016-7-15&eventid=27100&calendarid=40303"
-	},
-
-	{
-	"validationType" : "Invalid Date of month",
-	"Title" : "Invalid Date of month with Allday",
-	"Allday" : true,
-	"startDate" : "09/31/2016",
-	"timeZone" : "+5.5",
-	"description" : "I've got a script in casperjs that goes to a website checks a box if available and",
-	"calender_href" : "/calendar/eventdetail?date=2016-10-1&eventid=27105&calendarid=40303"
+	"calender_href" : "/calendar/eventdetail?date=2016-8-15&eventid=27581&calendarid=40303"
 	}],
 
 	"DeleteEvent" :[{
-	"calender_href" : "/calendar/eventdetail?date=2016-7-1&eventid=26983&calendarid=40303"
+	"calender_href" : "/calendar/eventdetail?date=2016-8-3&eventid=27096&calendarid=40303"
 	}]
 
 }
