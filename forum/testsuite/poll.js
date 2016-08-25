@@ -19,12 +19,12 @@ poll.pollFeature = function(casper, test, x, callback) {
 		this.emit('title');
 	});
 		
-	/*//login to backend url
-	casper.then(function() {
+	//login to backend url (rm)
+	/*casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('User has been successfuly login to backend', 'INFO');
 		});
-	});*/
+	});*/													
 
 	//go to user permission
 	casper.then(function() {
@@ -66,8 +66,8 @@ poll.pollFeature = function(casper, test, x, callback) {
 		this.emit('title');
 	});
 		
-	/*//Login To App
-	casper.then(function() {
+	//Login To App (rm)
+	/*casper.then(function() {
 		forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
 			casper.echo('User has been successfuly login to application with register user', 'INFO');
 		});
@@ -165,14 +165,24 @@ poll.pollFeature = function(casper, test, x, callback) {
 
 	//verify error message
 	casper.then(function() {
-		test.assertExists('.alert-info');
-		casper.echo('---------------------------------------------------------------------------');
-		var errMsg = this.fetchText('div.panel-default div.alert-info');
+		this.mouse.move('#poll_question');
+		var errMsg = this.evaluate(function() {
+			var element = document.querySelector('#poll_question');
+			return element.getAttribute('data-original-title');
+		});
+		casper.echo('*********** error message : ' +errMsg);
 		test.assertEquals(errMsg.trim(), json.poll.blankPollQues.ExpectedErrorMessage.trim(), errMsg.trim()+' and verified error message');
 		casper.echo('---------------------------------------------------------------------------');
 	});
 	
 	/*****test case to submit poll by leaving option1 field blank and verify error message*****/
+	/*casper.on('remote.alert', function(message) {
+		test.assertEquals(message, json.poll.blankOption1.ExpectedErrorMessage.trim(), message+' and verified error message');
+		casper.echo('---------------------------------------------------------------------------');
+	});*/	
+	casper.then(function() {	 
+			this.on('remote.alert', testAlert1);
+	});
 	//Post Poll Data 
 	casper.then(function() {
 		savePollPage(json['poll'].blankOption1, casper, function() {
@@ -183,17 +193,22 @@ poll.pollFeature = function(casper, test, x, callback) {
 			this.capture(screenShotsDir+ 'errorMessage.png');
 		});
 	});
-
+	
 	//verify error message
-	casper.then(function() {
+	/*casper.then(function() {
 		test.assertExists('.alert-info');
 		casper.echo('---------------------------------------------------------------------------');
 		var errMsg = this.fetchText('div.panel-default div.alert-info');
 		test.assertEquals(errMsg.trim(), json.poll.blankOption1.ExpectedErrorMessage.trim(), errMsg.trim()+' and verified error message');
 		casper.echo('---------------------------------------------------------------------------');
+	});*/
+	casper.then(function() {
+		this.removeListener('remote.alert', testAlert1);
 	});
-
 	/*****test case to submit poll by leaving option2 field blank and verify error message*****/
+	casper.then(function() {
+		    this.on('remote.alert', testAlert2);
+	});
 	//Post Poll Data 
 	casper.then(function() {
 		savePollPage(json['poll'].blankOption2, casper, function() {
@@ -204,24 +219,30 @@ poll.pollFeature = function(casper, test, x, callback) {
 			this.capture(screenShotsDir+ 'errorMessage.png');
 		});
 	});
-
-	//verify error message
+	//wait for 3 second to remove listener2
+	casper.wait(3000, function() {});
 	casper.then(function() {
+		this.removeListener('remote.alert', testAlert2);
+	});
+	//verify error message
+	/*casper.then(function() {
 		test.assertExists('.alert-info');
 		casper.echo('---------------------------------------------------------------------------');
 		var errMsg = this.fetchText('div.panel-default div.alert-info');
 		test.assertEquals(errMsg.trim(), json.poll.blankOption2.ExpectedErrorMessage.trim(), errMsg.trim()+' and verified error message');
 		casper.echo('---------------------------------------------------------------------------');
-	});
+	});*/
+
 
 	/*****test case to submit poll by filling with all contents with valid credintial and verify posted polls*****/
 	//Post Poll Data 
 	casper.then(function() {
+		casper.echo('test case to submit poll by filling with all contents with valid credintial and verify posted polls', 'INFO');
 		savePollPage(json['poll'].vadidCredintial, casper, function() {
 			casper.log('poll posted successfully', 'info');
 		});
 		//Getting Screenshot After Clicking On 'Save Poll' Link
-		casper.then(function() {
+		casper.waitForSelector('form[action="/poll/pollvotesave"] h2', function() {
 			this.capture(screenShotsDir+ 'savePoll.png');
 		});
 	});
@@ -247,6 +268,18 @@ poll.pollFeature = function(casper, test, x, callback) {
 			this.capture(screenShotsDir+ 'logout.png');
 		});
 	});
+
+	function testAlert1(message) {
+		casper.echo('message: '+message, 'INFO');
+  		test.assertEquals(message, json.poll.blankOption1.ExpectedErrorMessage.trim(), message+' and verified error message');
+		casper.echo('---------------------------------------------------------------------------');
+	};
+
+	function testAlert2(message) {
+		casper.echo('message : '+message, 'INFO');
+    		test.assertEquals(message, json.poll.blankOption1.ExpectedErrorMessage.trim(), message+' and verified error message');
+		casper.echo('---------------------------------------------------------------------------');
+	};
 	return callback();
 };
 

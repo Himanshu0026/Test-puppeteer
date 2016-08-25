@@ -190,7 +190,7 @@ case "deletetopic":
 
 		var deleteTopic = require("./testsuite/deleteTopic.js");
 		var x = require('casper').selectXPath;
-		deleteTopic.featureTest(casper, casper.test, x);		
+		deleteTopic.deleteTopicFeature(casper, casper.test, x);		
 		casper.run(function(){
 			test.done();
 		});

@@ -11,10 +11,10 @@ var config = require('../config/config.json');
 var postAReply = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'postAReply/';
 
-postAReply.postAReplyFeature = function(casper, test, x) {
+postAReply.postAReplyFeature = function(casper, test, x, callback) {
 
 	//Login To Backend URL and disable Reply Topic and Reply Own Topic checkbox
-		casper.start(config.backEndUrl,function() {
+		casper.thenOpen(config.backEndUrl, function() {
 			casper.echo('Login To Backend URL and disable Reply Topic and Reply Own Topic checkbox', 'INFO');
 			this.then(function() {
 				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -23,11 +23,11 @@ postAReply.postAReplyFeature = function(casper, test, x) {
 		});
 		
 		//login to backend url (rm)
-		casper.then(function() {
+		/*casper.then(function() {
 			forumRegister.loginToForumBackEnd(casper, test, function() {
 				casper.echo('User has been successfuly login to backend', 'INFO');
 			});
-		});
+		});*/
 
 		//go to user group permission
 		casper.then(function() {
@@ -398,7 +398,7 @@ postAReply.postAReplyFeature = function(casper, test, x) {
 
 		//Edit Topic Content With blank Data
 		casper.then(function(){
-			casper.then(function(){
+			casper.wait(7000, function(){
 				this.withFrame('message1_ifr', function() {
 					casper.echo('*****enter message in iframe', 'INFO');
 					this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
@@ -436,7 +436,7 @@ postAReply.postAReplyFeature = function(casper, test, x) {
 		});
 		
 		casper.then(function(){
-			casper.then(function(){
+			casper.wait(7000, function(){
 				this.withFrame('message1_ifr', function() {
 					casper.echo('*****enter message in iframe', 'INFO');
 					this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
@@ -450,7 +450,7 @@ postAReply.postAReplyFeature = function(casper, test, x) {
 		});
 
 		//Getting Screenshot After editing topic content 
-		casper.then(function(){
+		casper.wait(5000, function(){
 			this.capture(screenShotsDir+ 'editedPost.png');
 		});
 
@@ -648,7 +648,7 @@ postAReply.postAReplyFeature = function(casper, test, x) {
 	});
 
 	//Getting Screenshot After Clicking On 'POST' Link 
-	casper.wait(7000, function( ){
+	casper.wait(5000, function( ){
 		this.capture(screenShotsDir+ 'replyTopic.png');
 	});
 
@@ -666,7 +666,7 @@ postAReply.postAReplyFeature = function(casper, test, x) {
 		casper.echo('---------------------------------------------------------------------------');
 	});
 	};
-	//return callback();
+	return callback();
 };
 
 

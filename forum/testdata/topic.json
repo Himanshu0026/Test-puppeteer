@@ -62,7 +62,7 @@
 			"option2" : "NO",
 			"multiple" : false,
 			"timeoutFormat": 3,
-			"ExpectedErrorMessage" : "Please specify at least two options for the poll."
+			"ExpectedErrorMessage" : "Please enter at least two options for your poll."
 		},
 		"blankOption2" : {
 			"pollQues" : "Are U Happy",
@@ -71,7 +71,7 @@
 			"option2" : "",
 			"multiple" : false,
 			"timeoutFormat": 3,
-			"ExpectedErrorMessage" : "Please specify at least two options for the poll."
+			"ExpectedErrorMessage" : "Please enter at least two options for your poll."
 		},
 		"vadidCredintial" : {
 			"pollQues" : "Are U Happy",

@@ -18,10 +18,16 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 		casper.echo('Login To Backend URL and disable Delete Own Topic checkbox', 'INFO');
 			this.then(function() {
 				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-				test.assertTitle('Website Toolbox', 'The page has correct title');
 				casper.echo('---------------------------------------------------------------------------');		
 			});
 	});
+
+	//login to backend url (rm)
+	/*casper.then(function() {
+		forumRegister.loginToForumBackEnd(casper, test, function() {
+			casper.echo('User has been successfuly login to backend', 'INFO');
+		});
+	});*/
 
 	//go to edit user group setting permission
 	casper.then(function() {
@@ -77,7 +83,6 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 		casper.echo('Login To Backend URL and enable start topic checkbox', 'INFO');
 		this.then(function() {
 			casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-			test.assertTitle('Website Toolbox', 'The page has correct title');		
 			casper.echo('---------------------------------------------------------------------------');
 		});
 	});	
@@ -198,6 +203,7 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 			this.capture(screenShotsDir+ 'logout.png');
 		});
 	});
+	return callback();
 };
 
 /************************************PRIVATE METHODS***********************************/

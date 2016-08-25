@@ -560,7 +560,7 @@ newTopic.featureTest = function(casper, test, x) {
 		});
 
 		//start post a reply feature and share, edit and delete post		
-		/*casper.then(function() {
+		casper.then(function() {
 			casper.echo('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
 			casper.echo('start post a reply feature and share, edit and delete post', 'INFO');
 			postAReply.postAReplyFeature(casper,test, x, function(){
@@ -575,7 +575,7 @@ newTopic.featureTest = function(casper, test, x) {
 			deleteTopic.deleteTopicFeature(casper,test, x, function(){
 				casper.echo('Delete Topic Feature', 'INFO');
 			});
-		});*/
+		});
 };
 
 
