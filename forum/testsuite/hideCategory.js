@@ -33,15 +33,7 @@ hideCategory.hideCategoryFeature = function(casper, test, x) {
 		this.wait(7000, function() {
 			this.capture(screenShotsDir+ 'category.png');
 		});
-		var categoryExists = this.evaluate(function(){
-			var category = document.querySelector('.tab-content ul li');
-			if(category)
-				return true;
-			else
-				return false;
-		});
-		casper.echo("The category count = "+ categoryExists);
-		if(categoryExists)
+		if(this.exists(x('//a/span[text()="'+selectCategory+'"]/parent::a')))
 		{
 			/*****Hide category and verify hidden category in Modify filter*****/
 			casper.then(function() {
@@ -52,7 +44,7 @@ hideCategory.hideCategoryFeature = function(casper, test, x) {
 					if(!href){
 						this.echo("Not found href for category: "+selectCategory);
 						selectCategory = this.evaluate(function(){
-							return document.querySelector('.tab-content ul li:nth-child(1) span.forum-title').innerText;
+							return document.querySelector('.tab-content ul li:nth-child(1) span.forum-title').innerText;;
 						});
 						this.echo("selectCategory : "+selectCategory);
 						var classVal = x('//a/span[text()="'+selectCategory+'"]/parent::a');

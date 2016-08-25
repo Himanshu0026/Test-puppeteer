@@ -14,7 +14,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 	
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		this.log('Title of the page :' +this.getTitle());
+		casper.echo('Title of the page :' +this.getTitle(), 'INFO');
 	});
 
 	//Login to app
@@ -22,13 +22,12 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 		forumLogin.loginToApp(json['newTopic'].adminUname, json['newTopic'].adminPass, casper, function() {
 			casper.log('Admin has successfully login to application with valid username and password', 'INFO');
 		});
+		//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.then(function() {
+			this.capture(screenShotsDir+ 'login.png');
+		});
 	});
 	
-	//Getting Screenshot After Clicking On 'Log In' Link 
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'login.png');
-	});
-
 	/*****Lock any topic and Verify Lock option of topic listing page[Home page]*****/
 	casper.then(function() {
 		casper.echo('Lock any topic and Verify Lock option of topic listing page[Home page]', 'INFO');
@@ -80,7 +79,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 		test.assertExists('a[href="/categories"]');
 		casper.echo('---------------------------------------------------------------------------');
 		this.click('a[href="/categories"]');
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+ 'category.png');
 		});
 		casper.then(function() {
@@ -90,11 +89,10 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			casper.echo('---------------------------------------------------------------------------');
 			this.click('h3 a[href="'+href+'"]');
 		});
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+ 'categoryTopicList.png');
 		});
 		casper.then(function() {
-		
 			var postTitle = json['lock/unLock'].topicTitle;
 			casper.echo('lock topic title : ' +postTitle, 'INFO');
 			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
@@ -110,7 +108,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 		var href = this.getElementAttribute(classVal, "href");
 		href = href.split('=');
 		var id = 'first_post_vote_'+href[1];
-			casper.echo('id : '+id);
+		casper.echo('id : '+id, 'INFO');
 		test.assertExists(x('//a[@id="'+id+'"]/following::i'));
 		casper.echo('Locked topic is verified', 'INFO');
 		casper.echo('---------------------------------------------------------------------------');
@@ -152,14 +150,14 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 		test.assertExists('span.user-nav-panel li a[href^="/profile"]');
 		casper.echo('---------------------------------------------------------------------------');
 		this.click('span.user-nav-panel li a[href^="/profile"]');
-		this.wait(7000, function() {
+		this.then(function() {
 			this.capture(screenShotsDir+ 'profile.png');
 		});
 		casper.then(function() {
 			test.assertExists('#Topics_Started');
 			casper.echo('---------------------------------------------------------------------------');
 			this.click('#Topics_Started');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'topicsStarted.png');
 			});
 		});
@@ -193,29 +191,27 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			forumLogin.logoutFromApp(casper, function() {
 				casper.echo('Successfully logout from application', 'INFO');
 			});
+			//Getting Screenshot After Clicking On 'Logout' Link
+			casper.then(function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});
 		});
 
-		//Getting Screenshot After Clicking On 'Logout' Link
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+ 'logout.png');
-		});
-		
 		//Login to app with register user
 		casper.then(function(){
 			forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
 				casper.log('register user has successfully login to application with valid username and password', 'INFO');
 			});
+			//Getting Screenshot After Clicking On 'Log In' Link 
+			casper.then(function() {
+				this.capture(screenShotsDir+ 'login.png');
+			});
 		});
 	
-		//Getting Screenshot After Clicking On 'Log In' Link 
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+ 'login.png');
-		});
-		
 		casper.then(function() {
 			var postTitle = json['lock/unLock'].topicTitle;
 			this.click(x("//a[text()='"+postTitle+"']"));
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'clickLockTopic.png');	
 			});
 		});
@@ -245,12 +241,11 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			forumLogin.logoutFromApp(casper, function() {
 				casper.echo('Successfully logout from application', 'INFO');
 			});
+			//Getting Screenshot After Clicking On 'Logout' Link
+			casper.then(function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});
 		});
-
-		//Getting Screenshot After Clicking On 'Logout' Link
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+ 'logout.png');
-		});	
 	});
 
 	
@@ -262,13 +257,12 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			forumLogin.loginToApp(json['newTopic'].adminUname, json['newTopic'].adminPass, casper, function() {
 				casper.log('Admin has successfully login to application with valid username and password', 'INFO');
 			});
+			//Getting Screenshot After Clicking On 'Log In' Link 
+			casper.then(function() {
+				this.capture(screenShotsDir+ 'login.png');
+			});
 		});
 	
-		//Getting Screenshot After Clicking On 'Log In' Link 
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+ 'login.png');
-		});
-		
 		casper.then(function() {
 			test.assertExists('li.user-panel .dropdown-toggle');		
 			casper.echo('---------------------------------------------------------------------------');
@@ -277,7 +271,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			test.assertExists('span.user-nav-panel li a[href^="/profile"]');
 			casper.echo('---------------------------------------------------------------------------');
 			this.click('span.user-nav-panel li a[href^="/profile"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'profile.png');
 			});
 		});
@@ -286,7 +280,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			test.assertExists('#Topics_Started');
 			casper.echo('---------------------------------------------------------------------------');
 			this.click('#Topics_Started');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'topicsStarted.png');
 			});
 		});
@@ -320,7 +314,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 		test.assertExists(x("//a[text()='"+postTitle+"']"));
 		casper.echo('---------------------------------------------------------------------------');
 		this.click(x("//a[text()='"+postTitle+"']"));
-		this.wait(7000, function() {
+		this.then(function() {
 			this.capture(screenShotsDir+ 'selectedTopic.png');	
 			test.assertDoesntExist('.alert-warning');
 			casper.echo('---------------------------------------------------------------------------');
@@ -332,27 +326,29 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 	casper.then(function() {
 		casper.echo('Add New topic by enable lock check box and verify lock topic  on forum listing page', 'INFO');
 		var href = "";
-		casper.thenOpen(config.url, function() {
-			casper.echo('Hit on url : ' +config.url);
+		this.thenOpen(config.url, function() {
+			casper.echo('Hit on url : ' +config.url, 'INFO');
 		});
 
 		//go to start new topic
-		casper.then(function() {
+		this.then(function() {
 			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
 				casper.echo('go to new topic', 'INFO');
 			});
 		});
 	
-		casper.then(function() {
+		this.then(function() {
 			this.click('#LCK');
-			this.wait(2000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'checkedLock.png');
 			});
 			this.then(function() {
 				this.click('#post_submit');
 			});
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+			});
+			this.then(function() {
 				var url = this.getCurrentUrl();
 				casper.echo('url : ' +url);
 				url = url.split('#');
@@ -362,16 +358,16 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 		});
 
 		//Verify lock topic option on post page
-		casper.then(function() {
+		this.then(function() {
 			test.assertExists('.alert-warning');
 			var warningMsg = this.fetchText('.alert-warning');
 			test.assertEquals(warningMsg.trim(), json['lock/unLock'].ExpectedWarningMessage, warningMsg.trim()+' and message is verified');
 		});
-		casper.thenOpen(config.url, function() {
+		this.thenOpen(config.url, function() {
 			casper.echo('go to topic listing page to delete newly created topic ', 'INFO');
 		});
 		//delete newely created topic
-		casper.then(function() {
+		this.then(function() {
 			deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
 				casper.echo('newely created topic is deleted ', 'INFO');		
 			});
@@ -394,14 +390,16 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 		});
 	
 		casper.then(function() {
-			this.wait(2000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'unCheckedLock.png');
 			});
 			this.then(function() {
 				this.click('#post_submit');
 			});
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+			});
+			this.then(function() {
 				var url = this.getCurrentUrl();
 				casper.echo('url : ' +url);
 				url = url.split('#');
@@ -442,16 +440,17 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 		});
 	
 		casper.then(function() {
-			var href = "";
 			this.click('#LCK');
-			this.wait(2000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'checkedLock.png');
 			});
 			this.then(function() {
 				this.click('#post_submit');
 			});
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+			});
+			this.then(function() {
 				var url = this.getCurrentUrl();
 				url = url.split('#');
 				href = url[0].split('.com');
@@ -476,10 +475,10 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 
 			//delete newely created topic
 			casper.then(function() {
-			deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
-				casper.echo('newely created topic is deleted ', 'INFO');		
+				deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
+					casper.echo('newely created topic is deleted ', 'INFO');		
+				});
 			});
-		});
 		});
 	});
 	
@@ -500,14 +499,16 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 	
 		casper.then(function() {
 			var href ="";
-			this.wait(2000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'unCheckedLock.png');
 			});
 			this.then(function() {
 				this.click('#post_submit');
 			});
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+			});
+			this.then(function() {
 				var url = this.getCurrentUrl();
 				url = url.split('#');
 				href = url[0].split('.com');
@@ -550,7 +551,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 			});
 			casper.then(function() {
 				this.click('#LCK');
-				this.wait(2000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'checkedLock.png');
 				});
 			});
@@ -564,7 +565,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 		});
 
 		//Getting Screenshot After Clicking On 'Poll' Link 
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+ 'newPoll.png');
 		});
 		
@@ -576,8 +577,10 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 		});
 
 		//Getting Screenshot After Clicking On 'Save Poll' Link
-		casper.wait(7000,function() {
+		this.then(function() {
 			this.capture(screenShotsDir+ 'savePoll.png');
+		});
+		casper.then(function() {
 			var url = this.getCurrentUrl();
 			casper.echo('url : ' +url);
 			url = url.split('#');
@@ -602,7 +605,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 				casper.echo('id : ' +id[1]);
 				test.assertExists('input[value="'+id[1]+'"]');
 				this.click('input[value="'+id[1]+'"]');
-				this.wait(2000, function() {
+				this.then(function() {
 					this.click('#delete');
 					casper.echo('newely created topic is deleted ', 'INFO');
 				});
@@ -618,7 +621,7 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 	});
 
 	//Getting Screenshot After Clicking On 'Logout' Link
-	casper.wait(7000, function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+ 'logout.png');
 	});	
 	return callback();
@@ -632,7 +635,7 @@ var selectTopic = function(topicVal, eleStatus, driver, callback) {
 	href = href.split('-');
 	var id = href[1].split('?');
 	driver.click('input[value="'+id[0]+'"]');
-	driver.wait(2000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'checked.png');
 	});
 	driver.then(function() {
@@ -643,7 +646,7 @@ var selectTopic = function(topicVal, eleStatus, driver, callback) {
 		casper.echo('---------------------------------------------------------------------------');
 		this.click('#' +eleStatus);
 	});
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir +eleStatus +'.png');
 	});
 	return callback();
@@ -655,7 +658,7 @@ var gotoNewTopic = function(data, driver, callback) {
 	driver.click('#links-nav');
 	driver.click('#latest_topics_show');
 	driver.click('a[href="/post/printadd"]');
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'startTopic.png');
 	});
 	driver.then(function() {
@@ -666,7 +669,7 @@ var gotoNewTopic = function(data, driver, callback) {
 	 		this.sendKeys('#tinymce', data.content);
 			this.capture(screenShotsDir+ 'content.png');	
 		});	
-		driver.wait(3000, function() {
+		driver.then(function() {
 			this.click('#all_forums_dropdown');
 			var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
 			this.fill('form[name="PostTopic"]',{
@@ -700,7 +703,7 @@ var savePollPage = function(data, driver, callback) {
 		this.click('a[href="#poll-timeout"] small.text-muted');
 	});
 	driver.then(function() {
-		driver.wait(5000, function() {
+		driver.then(function() {
 			this.capture(screenShotsDir+ 'fillPoll.png');
 		});
 	});
@@ -715,7 +718,7 @@ var deleteNewlyCreatedTopic = function(href, eleStatus, driver, callback){
 	href = href.split('-');
 	var id = href[1].split('?');
 	driver.click('input[value="'+id[0]+'"]');
-	driver.wait(3000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'checked.png');
 	});
 	driver.then(function() {
@@ -723,7 +726,7 @@ var deleteNewlyCreatedTopic = function(href, eleStatus, driver, callback){
 		casper.echo('---------------------------------------------------------------------------');
 		this.click('#' +eleStatus);
 	});
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir +eleStatus +'.png');
 	});
 	return callback();

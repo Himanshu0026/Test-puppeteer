@@ -11,23 +11,29 @@ var config = require('../config/config.json');
 var postAReply = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'postAReply/';
 
-postAReply.postAReplyFeature = function(casper, test, x, callback) {
+postAReply.postAReplyFeature = function(casper, test, x) {
 
 	//Login To Backend URL and disable Reply Topic and Reply Own Topic checkbox
-		casper.thenOpen(config.backEndUrl,function() {
+		casper.start(config.backEndUrl,function() {
 			casper.echo('Login To Backend URL and disable Reply Topic and Reply Own Topic checkbox', 'INFO');
-			this.wait(7000, function() {
+			this.then(function() {
 				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-				test.assertTitle('Website Toolbox', 'The page has correct title');
 				casper.echo('---------------------------------------------------------------------------');		
 			});
 		});
 		
+		//login to backend url (rm)
+		casper.then(function() {
+			forumRegister.loginToForumBackEnd(casper, test, function() {
+				casper.echo('User has been successfuly login to backend', 'INFO');
+			});
+		});
+
 		//go to user group permission
 		casper.then(function() {
 			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 				casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
-				casper.wait(4000, function(){
+				casper.then(function(){
 					this.capture(screenShotsDir+'EditUserPermissionpage.png');
 				});
 			});
@@ -62,7 +68,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		});
 		
 		//getting screenshot after change permission
-		casper.wait(2000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+'afterChangePermission.png');
 		});		
 		
@@ -85,23 +91,21 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 			forumLogin.logoutFromApp(casper, function() {
 				casper.echo('Successfully logout from application', 'INFO');
 			});
+			//Getting Screenshot After Clicking On 'Logout' Link
+			casper.then(function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});
 		});
 	
-		//Getting Screenshot After Clicking On 'Logout' Link
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+ 'logout.png');
-		});
-
 		//Login To App with other user
 		casper.then(function() {
 			forumLogin.loginToApp(json['newTopic'].username1, json['newTopic'].password1, casper, function() {
 				casper.echo('User has been successfuly login to application with register user', 'INFO');
 			});
-		});
-
-		//Getting Screenshot After Clicking On 'Log In' Link 
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+ 'login.png');
+			//Getting Screenshot After Clicking On 'Log In' Link 
+			casper.then(function() {
+				this.capture(screenShotsDir+ 'login.png');
+			});
 		});
 
 		// post reply on others Topic when permission false	
@@ -115,9 +119,8 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 	// reopen Backend URL and enable Reply Topic and Reply Own Topic checkbox
 		casper.thenOpen(config.backEndUrl,function() {
 			casper.echo('Login To Backend URL and enable Reply Topic and Reply Own Topic checkbox', 'INFO');
-			this.wait(7000, function() {
+			this.then(function() {
 				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-				test.assertTitle('Website Toolbox', 'The page has correct title');		
 				casper.echo('---------------------------------------------------------------------------');
 			});
 		});
@@ -126,7 +129,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		casper.then(function() {
 			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 				casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
-				casper.wait(4000, function(){
+				casper.then(function(){
 					this.capture(screenShotsDir+'EditUserPermissionpage.png');
 				});
 			});
@@ -161,7 +164,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		});
 
 		//getting screenshot after change permission
-		casper.wait(2000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+'afterChangePermission.png');
 		});		
 
@@ -171,7 +174,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		});
 
 		//getting screenshot after hit on forum
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+'forumUrl.png');
 		});		
 		
@@ -186,23 +189,21 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 			forumLogin.logoutFromApp(casper, function() {
 				casper.echo('Successfully logout from application', 'INFO');
 			});
+			//Getting Screenshot After Clicking On 'Logout' Link
+			casper.then(function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});
 		});
 	
-		//Getting Screenshot After Clicking On 'Logout' Link
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+ 'logout.png');
-		});
-
 		//Login To App with other user to post reply on own topic
 		casper.then(function() {
 			forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
 				casper.echo('User has been successfuly login to application with register user', 'INFO');
 			});
-		});
-
-		//Getting Screenshot After Clicking On 'Log In' Link 
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+ 'login.png');
+			//Getting Screenshot After Clicking On 'Log In' Link 
+			casper.then(function() {
+				this.capture(screenShotsDir+ 'login.png');
+			});
 		});
 
 		// post reply on own topic with valid and invalid contents
@@ -216,13 +217,12 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 			forumLogin.logoutFromApp(casper, function() {
 				casper.echo('Successfully logout from application', 'INFO');
 			});
+			//Getting Screenshot After Clicking On 'Logout' Link
+			casper.then(function() {
+				this.capture(screenShotsDir+ 'logout.png');
+			});
 		});
 	
-		//Getting Screenshot After Clicking On 'Logout' Link
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+ 'logout.png');
-		});
-
 		//Login To App
 		casper.then(function() {
 			forumLogin.loginToApp(json['newTopic'].username1, json['newTopic'].password1, casper, function() {
@@ -232,12 +232,15 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 
 		//share post
 		casper.then(function() {
-			clickOnDropdown(x, json.sharePost.username, json.sharePost.content, casper, function() {  
-				casper.echo('click on dropdown', 'INFO');
+			this.then(function() {
+				clickOnDropdown(x, json.sharePost.username, json.sharePost.content, casper, function() {  
+					casper.echo('click on dropdown', 'INFO');
+				});
 			});
-
-			shareOn(json.sharePost.email,json.sharePost.password, casper, function() {
-				casper.echo('sharing on facebook', 'INFO');		
+			this.then(function() {
+				shareOn(json.sharePost.email,json.sharePost.password, casper, function() {
+					casper.echo('sharing on facebook', 'INFO');		
+				});
 			});
 		});
 
@@ -245,9 +248,8 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 	// reopen Backend URL and disable edit own post checkbox
 		casper.thenOpen(config.backEndUrl,function() {
 			casper.echo('Login To Backend URL and disable Edit Own Post checkbox', 'INFO');
-			this.wait(7000, function() {
+			this.then(function() {
 				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-				test.assertTitle('Website Toolbox', 'The page has correct title');		
 				casper.echo('---------------------------------------------------------------------------');
 			});
 		});
@@ -256,7 +258,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		casper.then(function() {
 			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 				casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
-				casper.wait(4000, function(){
+				casper.then(function(){
 					this.capture(screenShotsDir+'EditUserPermissionpage.png');
 				});
 			});
@@ -284,27 +286,29 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		});
 
 		//getting screenshot after change permission
-		casper.wait(2000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+'afterChangePermission.png');
 		});	
 
 		//reopen forum url for edit own post after change permission
 		casper.thenOpen(config.url, function() {
 			casper.echo('Hit on URL : '+config.url, 'INFO');
-		});
 
-		//getting screenshot after hit on forum url
-		casper.wait(7000, function() {
-			this.capture(screenShotsDir+'forumUrl.png');
-		});	
+			//getting screenshot after hit on forum url
+			casper.then(function() {
+				this.capture(screenShotsDir+'forumUrl.png');
+			});	
+		});
 
 		//click on dropdown
 		casper.then(function() {
-			clickOnDropdown(x, json.sharePost.username, json.sharePost.content, casper, function() {  
-				casper.echo('click on dropdown', 'INFO');
+			this.then(function() {
+				clickOnDropdown(x, json.sharePost.username, json.sharePost.content, casper, function() {  
+					casper.echo('click on dropdown', 'INFO');
+				});
 			});
 			
-			casper.wait(2000, function() {
+			casper.then(function() {
 				/*var pid = json.deletePost.dataPid;
 				test.assertDoesntExist('a[data-pid="'+pid+'"]');
 				this.click('a[data-pid="'+pid+'"]');*/
@@ -317,9 +321,8 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 	// reopen Backend URL and enabled edit own post checkbox
 		casper.thenOpen(config.backEndUrl,function() {
 			casper.echo('Login To Backend URL and enable Edit Own Post checkbox', 'INFO');
-			this.wait(7000, function() {
+			this.then(function() {
 				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-				test.assertTitle('Website Toolbox', 'The page has correct title');		
 				casper.echo('---------------------------------------------------------------------------');
 			});
 		});
@@ -328,7 +331,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		casper.then(function() {
 			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 				casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
-				casper.wait(4000, function(){
+				casper.then(function(){
 					this.capture(screenShotsDir+'EditUserPermissionpage.png');
 				});
 			});
@@ -356,7 +359,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		});
 
 		//getting screenshot after change permission
-		casper.wait(2000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+'afterChangePermission.png');
 		});	
  		
@@ -366,7 +369,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		});
 
 		//getting screenshot after hit on forum url
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+'forumUrl.png');
 		});	
 
@@ -376,7 +379,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 				casper.echo('clicked on dropdown', 'INFO');
 			});
 			
-			casper.wait(2000, function() {
+			casper.then(function() {
 				var pid = json.deletePost.dataPid;
 				test.assertExists('a[data-pid="'+pid+'"]');
 				casper.echo('---------------------------------------------------------------------------');
@@ -395,7 +398,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 
 		//Edit Topic Content With blank Data
 		casper.then(function(){
-			casper.wait(5000, function(){
+			casper.then(function(){
 				this.withFrame('message1_ifr', function() {
 					casper.echo('*****enter message in iframe', 'INFO');
 					this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
@@ -409,7 +412,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		});
 	
 		//Getting Screenshot After editing topic content 
-		casper.wait(7000,function(){
+		casper.then(function(){
 			this.capture(screenShotsDir+ 'editedPostBlank.png');
 		});
 		
@@ -420,11 +423,12 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 
 		//click on dropdown
 		casper.then(function() {
-			clickOnDropdown(x, json.sharePost.username, json.sharePost.content, casper, function() {  
-				casper.echo('clicked on dropdown', 'INFO');
+			this.then(function() {
+				clickOnDropdown(x, json.sharePost.username, json.sharePost.content, casper, function() {  
+					casper.echo('clicked on dropdown', 'INFO');
+				});
 			});
-			
-			casper.wait(2000, function() {
+			this.then(function() {
 				var pid = json.deletePost.dataPid;
 				test.assertExists('a[data-pid="'+pid+'"]');
 				this.click('a[data-pid="'+pid+'"]');
@@ -432,7 +436,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		});
 		
 		casper.then(function(){
-			casper.wait(5000, function(){
+			casper.then(function(){
 				this.withFrame('message1_ifr', function() {
 					casper.echo('*****enter message in iframe', 'INFO');
 					this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
@@ -446,7 +450,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		});
 
 		//Getting Screenshot After editing topic content 
-		casper.wait(7000,function(){
+		casper.then(function(){
 			this.capture(screenShotsDir+ 'editedPost.png');
 		});
 
@@ -463,9 +467,8 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 	// reopen Backend URL and disable delete own post checkbox
 		casper.thenOpen(config.backEndUrl,function() {
 			casper.echo('Login To Backend URL and disable Delete Own Post checkbox', 'INFO');
-			this.wait(7000, function() {
+			this.then(function() {
 				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-				test.assertTitle('Website Toolbox', 'The page has correct title');
 				casper.echo('---------------------------------------------------------------------------');		
 			});
 		});
@@ -474,7 +477,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		casper.then(function() {
 			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 				casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
-				casper.wait(4000, function(){
+				casper.then(function(){
 					this.capture(screenShotsDir+'EditUserPermissionpage.png');
 				});
 			});
@@ -502,7 +505,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		});
 
 		//getting screenshot after change permission
-		casper.wait(2000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+'afterChangePermission.png');
 		});	
  		
@@ -512,17 +515,18 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		});
 
 		//getting screenshot after hit on forum url
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+'forumUrl.png');
 		});	
 
 		//click on dropdown
 		casper.then(function() {
-			clickOnDropdown(x, json.deletePost.username, json.deletePost.content, casper, function() {  
-				casper.echo('clicked on dropdown', 'INFO');
+			this.then(function() {
+				clickOnDropdown(x, json.deletePost.username, json.deletePost.content, casper, function() {  
+					casper.echo('clicked on dropdown', 'INFO');
+				});
 			});
-			
-			casper.wait(2000, function() {
+			this.then(function() {
 				test.assertDoesntExist('#delete_post_request');
 				casper.echo('you can not delete post go to user permission and change the settings', 'INFO');
 				casper.echo('---------------------------------------------------------------------------');
@@ -532,9 +536,8 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 	// reopen Backend URL and enable delete own post checkbox
 		casper.thenOpen(config.backEndUrl,function() {
 			casper.echo('Login To Backend URL and enable Delete Own Post checkbox', 'INFO');
-			this.wait(7000, function() {
+			this.then(function() {
 				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-				test.assertTitle('Website Toolbox', 'The page has correct title');		
 				casper.echo('---------------------------------------------------------------------------');
 			});
 		});
@@ -543,7 +546,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		casper.then(function() {
 			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 				casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
-				casper.wait(4000, function(){
+				casper.then(function(){
 					this.capture(screenShotsDir+'EditUserPermissionpage.png');
 				});
 			});
@@ -571,7 +574,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		});
 
 		//getting screenshot after 
-		casper.wait(2000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+'afterChangePermission.png');
 		});	
  		
@@ -581,7 +584,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		});
 
 		//getting screenshot after hit on url
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+'forumUrl.png');
 		});	
 
@@ -591,12 +594,12 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 				casper.echo('clicked on dropdown', 'INFO');
 			});
 			
-			casper.wait(2000, function() {
+			casper.then(function() {
 				var pid = json.deletePost.dataPid;
 				test.assertExists('a[data-pid="'+pid+'"][id="delete_post_request"]');
 				casper.echo('---------------------------------------------------------------------------');
 				this.click('a[data-pid="'+pid+'"][id="delete_post_request"]');
-				casper.wait(7000, function() {
+				casper.then(function() {
 					this.capture(screenShotsDir+'deletePost.png');
 				});
 			});
@@ -645,7 +648,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 	});
 
 	//Getting Screenshot After Clicking On 'POST' Link 
-	casper.wait(7000,function( ){
+	casper.wait(7000, function( ){
 		this.capture(screenShotsDir+ 'replyTopic.png');
 	});
 
@@ -663,7 +666,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		casper.echo('---------------------------------------------------------------------------');
 	});
 	};
-	return callback();
+	//return callback();
 };
 
 
@@ -691,8 +694,8 @@ var replyTopic = function(content, driver, callback) {
 	});
 
 	
-	driver.then(function(){
-			driver.click('#reply_submit');
+	driver.waitForSelector('#reply_submit', function(){
+		this.click('#reply_submit');
 	});	
 	return callback();
 };
@@ -720,7 +723,7 @@ var clickOnDropdown = function(x, username, content, driver, callback){
 		this.click('#'+id);
 	});
 	
-	driver.wait(1000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'dropdown.png');
 	});
 
@@ -732,7 +735,7 @@ var shareOn = function(email, password, driver, callback) {
 	driver.then(function() {
 		this.click('.openShareDialog');
 	});
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'sharePostPage.png');
 	});
 	var elehref = "";
@@ -747,7 +750,7 @@ var shareOn = function(email, password, driver, callback) {
 		this.page.content = '<a href="'+elehref+'">myfacebook</a>';
     		this.clickLabel('myfacebook');
 	});
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'facebookLogin.png');		
 	});
 	driver.then(function() {
@@ -757,7 +760,7 @@ var shareOn = function(email, password, driver, callback) {
 		casper.echo('successfully login to facebook', 'INFO');
 	});
 
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'fb.png');
 	});
 	driver.then(function() {
@@ -768,7 +771,7 @@ var shareOn = function(email, password, driver, callback) {
 		this.click('button[name="__CONFIRM__"]');
 		casper.echo('successfully posted on facebook', 'INFO');
 	});
-	casper.wait(1000, function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+ 'fbPost.png');
 	});
 };
