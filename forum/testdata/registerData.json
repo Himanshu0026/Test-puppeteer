@@ -95,7 +95,7 @@
         "usignature" : "This is my signature 18",
         "namePrivate" : true,
         "errorType" : "existWithEmail",
-        "expectedErrorMsg" : "It looks like you already have a forum account!"
+        "expectedErrorMsg" : "It looks like you are already registered"
     },
     
     {

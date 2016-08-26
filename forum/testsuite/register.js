@@ -108,7 +108,7 @@ forumRegister.featureTest = function(casper, test) {
 						} catch(e) {
 							test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
 							errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
-							expectedErrorMsg = 'Error: It looks like you already have a forum account!';
+							expectedErrorMsg = 'It looks like you already have a forum account!';
 						}
 						msgTitle = 'InvalidBday';
 					});
