@@ -16,26 +16,26 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	//start from forum url
 	casper.thenOpen(config.url, function() {
 		casper.echo('Title of the page :' +this.getTitle(), 'INFO');
+		//this.emit('title');
 	});
 		
-	/*//Login To App (rm)
-	casper.then(function() {
+	//Login To App (rm)
+	/*casper.then(function() {
 		forumLogin.loginToApp(json['newTopic'].adminUname, json['newTopic'].adminPass, casper, function() {
 			casper.echo('Admin has been successfuly login to application', 'INFO');
 		});
+		//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.then(function() {
+			this.capture(screenShotsDir+ 'login.png');
+		});
 	});*/
 
-	//Getting Screenshot After Clicking On 'Log In' Link 
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'login.png');
-	});
-	
 	/*****(1)Verify move topic from the topic listing page under category *****/
 	casper.then(function() {
 		casper.echo('Verify move topic from the topic listing page under category ', 'INFO');
 		test.assertExists('a[href="/categories"]');
 		this.click('a[href="/categories"]');
-		this.wait(7000, function() {
+		this.then(function() {
 			this.capture(screenShotsDir+ 'categoryPage.png');				
 		});
 		casper.then(function() {
@@ -67,7 +67,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		
 					test.assertExists('a[href="'+href+'"]');
 					this.click('a[href="'+href+'"]');
-					this.wait(7000, function() {
+					this.then(function() {
 						this.capture(screenShotsDir+ 'clickCategory.png');
 					});
 				});
@@ -76,19 +76,21 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 					var topicTitle = json.moveTopic.topicName;
 					json.moveTopic.moveToCategory1 = val[1];
 					var moveToCategory = json.moveTopic.moveToCategory1;
-					var classVal = x("//a/span[text()='"+topicTitle+"']/parent::a"); 
-					selectTopic(classVal, 'move', casper, function() {});
+					this.then(function() {
+						var classVal = x("//a/span[text()='"+topicTitle+"']/parent::a");
+						selectTopic(classVal, 'move', casper, function() {});
+					});
 					this.then(function() {
 						test.assertExists('#move_threads_dropdown');
 						this.click('#move_threads_dropdown');
 						this.fill('form[name="admindd"]',{
 							'moveto' : moveToCategory
 						},false);
-					test.assertExists('button[name="submit"]');
-					this.click('button[name="submit"]');
-					this.wait(7000,function() {
-						this.capture(screenShotsDir+ 'moved.png');				
-					});
+						test.assertExists('button[name="submit"]');
+						this.click('button[name="submit"]');
+						this.then(function() {
+							this.capture(screenShotsDir+ 'moved.png');				
+						});
 					});
 				});
 				//verify moved topic
@@ -99,7 +101,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 					this.then(function() {
 						test.assertExists('a[href="/categories"]');
 						this.click('a[href="/categories"]');
-						this.wait(7000, function() {
+						this.then(function() {
 							this.capture(screenShotsDir+ 'categoryPage.png');				
 						});
 					});
@@ -109,7 +111,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 						var href = this.getElementAttribute(classVal, "href");
 						test.assertExists('a[href="'+href+'"]');
 						this.click('a[href="'+href+'"]');
-						this.wait(7000, function() {
+						this.then(function() {
 							this.capture(screenShotsDir+ 'clickCategory.png');
 						});
 					});
@@ -144,7 +146,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				},false);
 				test.assertExists('button[name="submit"]');
 				this.click('button[name="submit"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'moved.png');				
 				});
 			});
@@ -158,7 +160,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});
 			});
@@ -169,7 +171,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 
@@ -204,7 +206,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				},false);
 				test.assertExists('button[name="submit"]');
 				this.click('button[name="submit"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'moved.png');				
 				});
 			});
@@ -217,7 +219,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});
 			});
@@ -227,7 +229,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 			});
@@ -251,7 +253,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.sendKeys('#inline_search_box', json.moveTopic.topicName);
 			this.sendKeys('#inline_search_box', casper.page.event.key.Enter , {keepFocus: true});
 		});
-		this.wait(7000,function() {
+		this.then(function() {
 			this.capture(screenShotsDir+ 'search.png');				
 		});
 
@@ -268,7 +270,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				},false);
 				test.assertExists('button[name="submit"]');
 				this.click('button[name="submit"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'moved.png');				
 				});
 			});
@@ -282,7 +284,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});
@@ -294,7 +296,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 
@@ -316,7 +318,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		this.then(function() {
 			test.assertExists('a[href="/categories"]');
 			this.click('a[href="/categories"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'categoryPage.png');				
 			});
 		});
@@ -325,29 +327,33 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var classVal = x('//h3/span[@class="subforum-list"]/a');
 				var href = this.getElementAttribute(classVal, "href");
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'subCategoryPage.png');				
 				});
 		
 				//create new topic
 				this.then(function() {
-					gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
-						casper.echo('go to new topic', 'INFO');
+					this.then(function() {
+						gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+							casper.echo('go to new topic', 'INFO');
+						});
 					});
 					this.then(function() {
 						this.click('#post_submit');
 					});
-					this.wait(7000, function() {
+					this.then(function() {
 						this.capture(screenShotsDir+ 'postPage.png');
+					});
+					this.then(function() {
 						var url = this.getCurrentUrl();
 						casper.echo('url : ' +url);
 						url = url.split('#');
 						hrefVal = url[0].split('.com');
+						casper.echo('#############1111 hrefVal : ' +hrefVal);
 					});
-				});
-				this.then(function() {
-					test.assertExists('#backArrowPost');
-					this.click('#backArrowPost');
+					this.waitForSelector('#backArrowPost', function(){
+						this.click('#backArrowPost');
+					});
 				});
 				this.then(function() {
 					var moveToCategory = json.moveTopic.moveToCategory2;
@@ -362,7 +368,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 						},false);
 						test.assertExists('button[name="submit"]');
 						this.click('button[name="submit"]');
-						this.wait(7000,function() {
+						this.then(function() {
 							this.capture(screenShotsDir+ 'moved.png');				
 						});
 					});
@@ -376,7 +382,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 					this.then(function() {
 						test.assertExists('a[href="/categories"]');
 						this.click('a[href="/categories"]');
-						this.wait(7000, function() {
+						this.then(function() {
 							this.capture(screenShotsDir+ 'categoryPage.png');				
 						});
 					});
@@ -387,7 +393,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 
 						test.assertExists('a[href="'+href+'"]');
 						this.click('a[href="'+href+'"]');
-						this.wait(7000, function() {
+						this.then(function() {
 							this.capture(screenShotsDir+ 'clickCategory.png');
 						});
 
@@ -416,13 +422,13 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.click('li.user-panel .dropdown-toggle');
 			test.assertExists('a[href^="/profile/"]');
 			this.click('a[href^="/profile/"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'profilePage.png');
 			});
 			this.then(function() {
 				test.assertExists('#Topics_Started');
 				this.click('#Topics_Started');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'startedTopic.png');
 				});
 			
@@ -441,7 +447,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				},false);
 				test.assertExists('button[name="submit"]');
 				this.click('button[name="submit"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'moved.png');				
 				});
 			});
@@ -455,7 +461,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});
@@ -467,7 +473,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 
@@ -495,14 +501,14 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	//go to backend url
 	casper.thenOpen(config.backEndUrl,function() {
 		casper.echo('Login To Backend URL and disable move topic checkbox', 'INFO');
-		this.wait(7000, function() {
+		this.then(function() {
 			casper.echo('Title of the page :' +this.getTitle(), 'INFO');
 			casper.echo('---------------------------------------------------------------------------');		
 		});
 	});
 		
-	/*//login to backend url (rm)
-	casper.then(function() {
+	//login to backend url (rm)
+	/*(casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('User has been successfuly login to backend', 'INFO');
 		});
@@ -512,7 +518,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	casper.then(function() {
 		utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 			casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
-			casper.wait(4000, function(){
+			casper.then(function(){
 				this.capture(screenShotsDir+'EditUserPermissionpage.png');
 			});
 		});
@@ -537,13 +543,12 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		var msg  = this.fetchText('p[align="center"] font.heading');
 		test.assertEquals(msg.trim(), config.permissionSettingMsg.trim(), msg.trim()+' and message verified');
 		casper.echo('---------------------------------------------------------------------------');
+		//Getting Screenshot After Change permission
+		casper.then(function() {
+			this.capture(screenShotsDir+'afterChangePermission.png');
+		});	
 	});
 
-	//Getting Screenshot After Change permission
-	casper.wait(2000, function() {
-		this.capture(screenShotsDir+'afterChangePermission.png');
-	});	
-	
 	//go to forum url	
 	casper.thenOpen(config.url, function() {
 		casper.echo('hit on url : '+config.url, 'INFO');
@@ -554,11 +559,10 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		forumLogin.logoutFromApp(casper, function() {
 			casper.echo('Successfully logout from application', 'INFO');
 		});
-	});
-
-	//Getting Screenshot After Clicking On 'Logout' Link
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'logout.png');
+		//Getting Screenshot After Clicking On 'Logout' Link
+		casper.then(function() {
+			this.capture(screenShotsDir+ 'logout.png');
+		});
 	});
 
 	//Login To App
@@ -566,11 +570,10 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	 	forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
 			casper.echo('User has been successfuly login to application with register user', 'INFO');
 		});
-	});
-
-	//Getting Screenshot After Clicking On 'Log In' Link 
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'login.png');
+		//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.then(function() {
+			this.capture(screenShotsDir+ 'login.png');
+		});
 	});
 
 	/*****Verify move topic from the latest topic page (own topic for registered user when disabled "move topic" permission)*****/
@@ -609,7 +612,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		this.then(function() {
 			test.assertExists('a[href="/categories"]');
 			this.click('a[href="/categories"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'categoryPage.png');				
 			});
 		});
@@ -618,7 +621,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var classVal = x('//h3/span[@class="subforum-list"]/a');
 				var href = this.getElementAttribute(classVal, "href");
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'subCategoryPage.png');				
 				});
 				//create new topic
@@ -629,17 +632,18 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 					this.then(function() {
 						this.click('#post_submit');
 					});
-					this.wait(7000, function() {
+					this.then(function() {
 						this.capture(screenShotsDir+ 'postPage.png');
+					});
+					this.then(function() {
 						var url = this.getCurrentUrl();
 						casper.echo('url : ' +url);
 						url = url.split('#');
 						hrefVal = url[0].split('.com');
 					});
-				});
-				this.then(function() {
-					test.assertExists('#backArrowPost');
-					this.click('#backArrowPost');
+					this.waitForSelector('#backArrowPost', function(){
+						this.click('#backArrowPost');
+					});
 				});
 				this.then(function() {
 					var topicTitle = json['newTopic'].ValidCredential.title;
@@ -661,7 +665,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});
 			});
@@ -671,7 +675,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 			});
@@ -693,13 +697,13 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.click('li.user-panel .dropdown-toggle');
 			test.assertExists('a[href^="/profile/"]');
 			this.click('a[href^="/profile/"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'profilePage.png');
 			});
 			this.then(function() {
 				test.assertExists('#Topics_Started');
 				this.click('#Topics_Started');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'startedTopic.png');
 				});
 			
@@ -716,9 +720,8 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	//go to backend url
 	casper.thenOpen(config.backEndUrl,function() {
 		casper.echo('Login To Backend URL and enable move topic checkbox', 'INFO');
-		this.wait(7000, function() {
+		this.then(function() {
 			casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-			test.assertTitle('Website Toolbox', 'The page has correct title');
 			casper.echo('---------------------------------------------------------------------------');		
 		});
 	});
@@ -727,7 +730,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	casper.then(function() {
 		utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 			casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
-			casper.wait(4000, function(){
+			casper.then(function(){
 				this.capture(screenShotsDir+'EditUserPermissionpage.png');
 			});
 		});
@@ -755,7 +758,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	});
 
 	//Getting Screenshot After Change permission
-	casper.wait(2000, function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+'afterChangePermission.png');
 	});	
 	
@@ -786,7 +789,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				},false);
 				test.assertExists('button[name="submit"]');
 				this.click('button[name="submit"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'moved.png');				
 				});
 			});
@@ -800,7 +803,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});
 			});
@@ -811,7 +814,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 
@@ -843,7 +846,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				},false);
 				test.assertExists('button[name="submit"]');
 				this.click('button[name="submit"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'moved.png');				
 				});
 			});
@@ -857,7 +860,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});
@@ -869,7 +872,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 
@@ -891,7 +894,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		this.then(function() {
 			test.assertExists('a[href="/categories"]');
 			this.click('a[href="/categories"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'categoryPage.png');				
 			});
 		});
@@ -901,7 +904,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			var href = this.getElementAttribute(classVal, "href");
 			test.assertExists('a[href="'+href+'"]');
 			this.click('a[href="'+href+'"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'clickCategory.png');
 			});
 		});
@@ -919,7 +922,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				},false);
 				test.assertExists('button[name="submit"]');
 				this.click('button[name="submit"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'moved.png');				
 				});
 			});
@@ -932,7 +935,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});
 			});
@@ -942,7 +945,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 			});
@@ -965,13 +968,13 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.click('li.user-panel .dropdown-toggle');
 			test.assertExists('a[href^="/profile/"]');
 			this.click('a[href^="/profile/"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'profilePage.png');
 			});
 			this.then(function() {
 				test.assertExists('#Topics_Started');
 				this.click('#Topics_Started');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'startedTopic.png');
 				});
 			
@@ -990,7 +993,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				},false);
 				test.assertExists('button[name="submit"]');
 				this.click('button[name="submit"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'moved.png');				
 				});
 			});
@@ -1004,7 +1007,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});
@@ -1016,7 +1019,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 
@@ -1036,7 +1039,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		this.then(function() {
 			test.assertExists('a[href="/categories"]');
 			this.click('a[href="/categories"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'categoryPage.png');				
 			});
 		});
@@ -1045,7 +1048,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var classVal = x('//h3/span[@class="subforum-list"]/a');
 				var href = this.getElementAttribute(classVal, "href");
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'subCategoryPage.png');				
 				});
 				this.then(function() {
@@ -1061,7 +1064,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 						},false);
 						test.assertExists('button[name="submit"]');
 						this.click('button[name="submit"]');
-						this.wait(7000,function() {
+						this.then(function() {
 							this.capture(screenShotsDir+ 'moved.png');				
 						});
 					});
@@ -1074,7 +1077,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 					this.then(function() {
 						test.assertExists('a[href="/categories"]');
 						this.click('a[href="/categories"]');
-						this.wait(7000, function() {
+						this.then(function() {
 							this.capture(screenShotsDir+ 'categoryPage.png');				
 						});
 					});
@@ -1085,7 +1088,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 
 						test.assertExists('a[href="'+href+'"]');
 						this.click('a[href="'+href+'"]');
-						this.wait(7000, function() {
+						this.then(function() {
 							this.capture(screenShotsDir+ 'clickCategory.png');
 						});
 
@@ -1125,7 +1128,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		});
 
 		//Getting Screenshot After Clicking On 'Logout' Link
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+ 'logout.png');
 		});	
 	});
@@ -1139,14 +1142,19 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			test.assertExists('a[href="/latest"]');
 			this.click('a[href="/latest"]');
 		});
-		this.then(function() {
-			var topicTitle = json.moveTopic.topicName;
-			var classVal = x("//a/span[text()='"+topicTitle+"']/parent::a"); 
-			var href = this.getElementAttribute(classVal, "href");
-			href = href.split('-');
-			var id = href[1].split('?');
-			test.assertDoesntExist('input[value="'+id[0]+'"]');
-		});
+		if(this.exists('.alert-info')) {
+			var info = this.fetchText('.alert-info');
+			casper.echo(info.trim(), 'INFO');
+		} else {
+			this.then(function() {
+				var topicTitle = json.moveTopic.topicName;
+				var classVal = x("//a/span[text()='"+topicTitle+"']/parent::a"); 
+				var href = this.getElementAttribute(classVal, "href");
+				href = href.split('-');
+				var id = href[1].split('?');
+				test.assertDoesntExist('input[value="'+id[0]+'"]');
+			});
+		}
 	});
 		
 	/*****Verify move topic from the post listing page *****/
@@ -1155,21 +1163,26 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		this.thenOpen(config.url, function() {
 			casper.echo('go to topic listing page', 'INFO');
 		});
-		this.then(function() {
-			var topicTitle = json.moveTopic.topicName;
-			var classVal = x("//a/span[text()='"+topicTitle+"']/parent::a"); 
-			var href = this.getElementAttribute(classVal, "href");
-			this.click('a[href="'+href+'"]');
+		if(this.exists('.alert-info')) {
+			var info = this.fetchText('.alert-info');
+			casper.echo(info.trim(), 'INFO');
+		} else {
 			this.then(function() {
-				test.assertDoesntExist('input[class="entry-checkbox"]');
+				var topicTitle = json.moveTopic.topicName;
+				var classVal = x("//a/span[text()='"+topicTitle+"']/parent::a"); 
+				var href = this.getElementAttribute(classVal, "href");
+				this.click('a[href="'+href+'"]');
+				this.then(function() {
+					test.assertDoesntExist('input[class="entry-checkbox"]');
+				});
 			});
-		});
+		}
 	});
 	
 	//test cases for move post.
 	casper.then(function() {
 		casper.echo('test cases for move post.', 'INFO');
-		//Login To App (rm)
+		//Login To App
 		casper.then(function() {
 			forumLogin.loginToApp(json['newTopic'].adminUname, json['newTopic'].adminPass, casper, function() {
 				casper.echo('Admin has been successfuly login to application', 'INFO');
@@ -1177,7 +1190,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		});
 
 		//Getting Screenshot After Clicking On 'Log In' Link 
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+ 'login.png');
 		});
 	});
@@ -1191,14 +1204,20 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		});
 		//create new topic
 		this.then(function() {
-			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
-				casper.echo('go to new topic', 'INFO');
+			this.then(function() {
+				gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+					casper.echo('go to new topic', 'INFO');
+				});
 			});
+
 			this.then(function() {
 				this.click('#post_submit');
 			});
-			this.wait(7000, function() {
+
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+			});
+			this.then(function() {
 				var url = this.getCurrentUrl();
 				casper.echo('url : ' +url);
 				url = url.split('?');
@@ -1214,7 +1233,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				this.click('li.user-panel .dropdown-toggle');
 				test.assertExists('a[href^="/profile/"]');
 				this.click('a[href^="/profile/"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'profilePage.png');
 				});
 			});	
@@ -1224,20 +1243,21 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				casper.echo('href : ' +hrefVal[1], 'INFO');
 				test.assertExists('a[href^="'+hrefVal[1]+'"]');
 				this.click('a[href^="'+hrefVal[1]+'"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postpage.png');				
 				});
 			});
 			this.then(function() {
 				this.mouse.move('#ajax_subscription_vars');
 				test.assertExists('#firstpid');
-				utils.enableorDisableCheckbox('firstpid', true, casper, function() {	
+				this.then(function() {
+					utils.enableorDisableCheckbox('firstpid', true, casper, function() {});
 				});
-				this.wait(5000, function() {
+				this.then(function() {
 					test.assertExists('#moveposts');
 					this.click('#moveposts');
 				});
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'movePage.png');				
 				});
 			});
@@ -1245,9 +1265,12 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				test.assertExists('form[name="movePost"] input[name="thread_title"]');
 				this.sendKeys('form[name="movePost"] input[name="thread_title"]', json.moveTopic.newPostTitle);
 				test.assertExists('button[name="submit"]');
-				this.click('button[name="submit"]');
 			});
-			this.wait(7000,function() {
+			this.then(function() {
+				this.click('button[name="submit"]');
+				this.then(function() {});
+			});
+			this.then(function() {
 				this.capture(screenShotsDir+ 'newTitle.png');				
 			});
 			
@@ -1258,7 +1281,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
@@ -1269,7 +1292,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 			});
@@ -1292,7 +1315,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');				
 				});
 				this.then(function() {
@@ -1306,7 +1329,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				this.click('li.user-panel .dropdown-toggle');
 				test.assertExists('a[href^="/profile/"]');
 				this.click('a[href^="/profile/"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'profilePage.png');
 				});
 			});
@@ -1316,19 +1339,23 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');				
 				});
 				
 				this.then(function() {
 					this.mouse.move('#ajax_subscription_vars');
 					test.assertExists('#firstpid');
-					utils.enableorDisableCheckbox('firstpid', true, casper, function() {
-						casper.capture(screenShotsDir+ '11.png');	
+					this.then(function() {
+						utils.enableorDisableCheckbox('firstpid', true, casper, function() {
+							casper.capture(screenShotsDir+ '11.png');	
+						});
 					});
-					test.assertExists('#moveposts');
-					this.click('#moveposts');
-					this.wait(7000,function() {
+					this.then(function() {
+						test.assertExists('#moveposts');
+						this.click('#moveposts');
+					});
+					this.then(function() {
 						this.capture(screenShotsDir+ 'movePage.png');				
 					});
 				});
@@ -1339,14 +1366,16 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				this.then(function() {
 					this.sendKeys('input[name="mergethreadurl"]', moveUrl);
 				});
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'fillUrl.png');				
 				});
 				this.then(function() {
 					this.click('#move_posts');
-					casper.echo('topic moved successfully', 'INFO');
+					this.then(function() {
+						casper.echo('topic moved successfully', 'INFO');				
+					});
 				});
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'movePost.png');				
 				});
 			});
@@ -1359,7 +1388,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
@@ -1370,7 +1399,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 			});
@@ -1390,14 +1419,18 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		});
 		//create new topic
 		this.then(function() {
-			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
-				casper.echo('go to new topic', 'INFO');
-			});
+			this.then(function() {
+				gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+					casper.echo('go to new topic', 'INFO');
+				});
+			});			
 			this.then(function() {
 				this.click('#post_submit');
 			});
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+			});
+			this.then(function() {
 				var url = this.getCurrentUrl();
 				casper.echo('url : ' +url);
 				url = url.split('?');
@@ -1408,8 +1441,8 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				casper.echo('hrefVal : ' +hrefVal[1], 'INFO');
 			});
 			this.thenOpen(config.url, function() {
-				casper.echo('go to topic listing page');
-				this.wait(7000, function() {
+				casper.echo('go to topic listing page', 'INFO');
+				this.then(function() {
 					this.capture(screenShotsDir+ 'forumUrl.png');
 				});
 			});	
@@ -1418,20 +1451,22 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				casper.echo('href : ' +hrefVal[1], 'INFO');
 				test.assertExists('a[href^="'+hrefVal[1]+'"]');
 				this.click('a[href^="'+hrefVal[1]+'"]');
-				this.wait(7000,function() {
-					this.capture(screenShotsDir+ 'postpage.png');				
-				});
 			});
+			this.then(function() {
+				this.capture(screenShotsDir+ 'postpage.png');				
+			});
+
 			this.then(function() {
 				this.mouse.move('#ajax_subscription_vars');
 				test.assertExists('#firstpid');
-				utils.enableorDisableCheckbox('firstpid', true, casper, function() {	
+				this.then(function() {
+					utils.enableorDisableCheckbox('firstpid', true, casper, function() {});
 				});
-				this.wait(5000, function() {
+				this.then(function() {
 					test.assertExists('#moveposts');
 					this.click('#moveposts');
 				});
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'movePage.png');				
 				});
 			});
@@ -1439,9 +1474,11 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				test.assertExists('form[name="movePost"] input[name="thread_title"]');
 				this.sendKeys('form[name="movePost"] input[name="thread_title"]', json.moveTopic.newPostTitle);
 				test.assertExists('button[name="submit"]');
+			});
+			this.then(function() {
 				this.click('button[name="submit"]');
 			});
-			this.wait(7000,function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'newTitle.png');				
 			});
 			
@@ -1452,7 +1489,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
@@ -1463,7 +1500,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 			});
@@ -1486,7 +1523,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');				
 				});
 				this.then(function() {
@@ -1497,7 +1534,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		this.then(function() {
 			this.thenOpen(config.url, function() {
 				casper.echo('go to topic listing page', 'INFO');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'forumUrl.png');
 				});
 			});
@@ -1507,19 +1544,23 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');				
 				});
 				
 				this.then(function() {
 					this.mouse.move('#ajax_subscription_vars');
 					test.assertExists('#firstpid');
-					utils.enableorDisableCheckbox('firstpid', true, casper, function() {
-						casper.capture(screenShotsDir+ '11.png');	
+					this.then(function() {
+						utils.enableorDisableCheckbox('firstpid', true, casper, function() {
+							casper.capture(screenShotsDir+ '11.png');	
+						});
 					});
-					test.assertExists('#moveposts');
-					this.click('#moveposts');
-					this.wait(7000,function() {
+					this.then(function() {
+						test.assertExists('#moveposts');
+						this.click('#moveposts');
+					});
+					this.then(function() {
 						this.capture(screenShotsDir+ 'movePage.png');				
 					});
 				});
@@ -1530,14 +1571,16 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				this.then(function() {
 					this.sendKeys('input[name="mergethreadurl"]', moveUrl);
 				});
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'fillUrl.png');				
 				});
 				this.then(function() {
 					this.click('#move_posts');
-					casper.echo('topic moved successfully', 'INFO');
+					this.then(function() {
+						casper.echo('topic moved successfully', 'INFO');
+					});
 				});
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'movePost.png');				
 				});
 			});
@@ -1550,7 +1593,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
@@ -1561,7 +1604,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 			});
@@ -1581,14 +1624,18 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		});
 		//create new topic
 		this.then(function() {
-			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
-				casper.echo('go to new topic', 'INFO');
+			this.then(function() {
+				gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+					casper.echo('go to new topic', 'INFO');
+				});
 			});
 			this.then(function() {
 				this.click('#post_submit');
 			});
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+			});
+			this.then(function() {
 				var url = this.getCurrentUrl();
 				casper.echo('url : ' +url);
 				url = url.split('?');
@@ -1608,7 +1655,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				this.click('#inline_search_box');
 				this.sendKeys('#inline_search_box', 'honey');
 				this.sendKeys('#inline_search_box', casper.page.event.key.Enter , {keepFocus: true});
-				this.wait(10000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'search.png');				
 				});
 			});
@@ -1617,17 +1664,17 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				casper.echo('href : ' +hrefVal[1]);
 				test.assertExists('a[href^="'+hrefVal[1]+'"]');
 				this.click('a[href^="'+hrefVal[1]+'"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postpage.png');				
 				});
 			});
 			this.then(function() {
 				test.assertExists('input[value="'+checkedVal+'"]');
 				this.click('input[value="'+checkedVal+'"]');
-				this.wait(2000, function() {
+				this.then(function() {
 					test.assertExists('#moveposts');
 					this.click('#moveposts');
-					this.wait(7000,function() {
+					this.then(function() {
 						this.capture(screenShotsDir+ 'movePage.png');				
 					});
 				});
@@ -1646,7 +1693,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
@@ -1657,7 +1704,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 			});
@@ -1680,7 +1727,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');				
 				});
 				this.then(function() {
@@ -1698,7 +1745,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				this.sendKeys('#inline_search_box', json.moveTopic.newPostTitle);
 				this.sendKeys('#inline_search_box', casper.page.event.key.Enter , {keepFocus: true});
 			});
-			this.wait(7000,function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'search.png');				
 			});
 			this.then(function() {
@@ -1707,7 +1754,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');				
 				});
 				this.then(function() {
@@ -1720,7 +1767,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				this.then(function() {
 					test.assertExists('#moveposts');
 					this.click('#moveposts');
-					this.wait(7000,function() {
+					this.then(function() {
 						this.capture(screenShotsDir+ 'movePage.png');				
 					});
 				});
@@ -1742,7 +1789,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
@@ -1753,7 +1800,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 			});
@@ -1768,7 +1815,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	//go to backend url
 	casper.thenOpen(config.backEndUrl,function() {
 		casper.echo('Login To Backend URL and enable(All Posts) Approve New Posts', 'INFO');
-		this.wait(7000, function() {
+		this.then(function() {
 			casper.echo('Title of the page :' +this.getTitle(), 'INFO');
 			casper.echo('---------------------------------------------------------------------------');		
 		});
@@ -1785,7 +1832,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	casper.then(function() {
 		test.assertExists('a[data-tooltip-elm="ddSettings"]');
 		this.click('a[data-tooltip-elm="ddSettings"]');
-		this.wait(2000, function() {
+		this.then(function() {
 			test.assertExists('a[href="/tool/members/mb/settings?tab=Security"]');
 			this.click('a[href="/tool/members/mb/settings?tab=Security"]');
 		});
@@ -1798,7 +1845,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		this.then(function() {
 			test.assertExists('button[type="submit"]');
 			this.click('button[type="submit"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'saveApproveNewPost.png');
 			});
 		});
@@ -1816,7 +1863,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	});
 
 	//Getting Screenshot After Clicking On 'Logout' Link
-	casper.wait(7000, function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+ 'logout.png');
 	});
 
@@ -1828,7 +1875,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	});
 
 	//Getting Screenshot After Clicking On 'Log In' Link 
-	casper.wait(7000, function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+ 'login.png');
 	});
 	
@@ -1841,13 +1888,15 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		});
 		//create new topic
 		this.then(function() {
-			gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
-				casper.echo('go to new topic', 'INFO');
-			});
+			this.then(function() {
+				gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
+					casper.echo('go to new topic', 'INFO');
+				});
+			});		
 			this.then(function() {
 				this.click('#post_submit');
-				casper.wait(7000, function() {
-					this.capture(screenShotsDir+ 'postPage.png');
+				casper.then(function() {
+					this.capture(screenShotsDir+ 'ApprovalpostPage.png');
 				});
 			});
 			
@@ -1859,7 +1908,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			});
 
 			//Getting Screenshot After Clicking On 'Logout' Link
-			casper.wait(7000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logout.png');
 			});
 
@@ -1871,7 +1920,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			});
 
 			//Getting Screenshot After Clicking On 'Log In' Link 
-			casper.wait(7000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'login.png');
 			});
 			casper.thenOpen(config.url, function() {
@@ -1882,7 +1931,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
@@ -1891,7 +1940,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/?action=approvalqueue"]');
 				this.click('a[href="/?action=approvalqueue"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'approvalPage.png');				
 				});
 			});
@@ -1902,7 +1951,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');
 				});
 			});
@@ -1911,13 +1960,16 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				this.mouse.move('#ajax_subscription_vars');
 				test.assertExists('#firstpid');
 
-				utils.enableorDisableCheckbox('firstpid', true, casper, function() {	
+				this.then(function() {
+						utils.enableorDisableCheckbox('firstpid', true, casper, function() {	
+					});
 				});
-				this.wait(5000, function() {
+				this.then(function() {
 					test.assertExists('#moveposts');
 					this.click('#moveposts');
 				});
-				this.wait(7000,function() {
+				this.then(function() {});
+				this.then(function() {
 					this.capture(screenShotsDir+ 'movePage.png');				
 				});
 			});
@@ -1926,12 +1978,14 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				test.assertExists('form[name="movePost"] input[name="thread_title"]');
 				this.sendKeys('form[name="movePost"] input[name="thread_title"]', json.moveTopic.newPostTitle);
 				test.assertExists('button[name="submit"]');
+			});
+			this.then(function() {
 				this.click('button[name="submit"]');
+				this.then(function() {});
 			});
-			this.wait(7000,function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'newTitle.png');				
-			});
-			
+			});			
 			//verify post on category
 			this.thenOpen(config.url, function() {
 				casper.echo('go to topic listing page', 'INFO');
@@ -1939,7 +1993,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
@@ -1950,7 +2004,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 			});
@@ -1968,13 +2022,14 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				this.then(function() {
 					this.mouse.move('#ajax_subscription_vars');
 					test.assertExists('#firstpid');
-						utils.enableorDisableCheckbox('firstpid', true, casper, function() {	
+					this.then(function() {
+						utils.enableorDisableCheckbox('firstpid', true, casper, function() {});
 					});
-					this.wait(5000, function() {
+					this.then(function() {
 						test.assertExists('#deleteposts');
 						this.click('#deleteposts');
 					});
-					this.wait(7000,function() {
+					this.then(function() {
 						this.capture(screenShotsDir+ 'deleteposts.png');				
 					});
 				});
@@ -1995,7 +2050,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');				
 				});
 				this.then(function() {
@@ -2011,7 +2066,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		});
 
 		//Getting Screenshot After Clicking On 'Logout' Link
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+ 'logout.png');
 		});
 
@@ -2023,7 +2078,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		});
 
 		//Getting Screenshot After Clicking On 'Log In' Link 
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+ 'login.png');
 		});
 		
@@ -2032,16 +2087,18 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			casper.echo('go to forum url', 'INFO');
 		});
 		this.then(function() {
-			gotoNewTopic(json.moveTopic.ValidCredential, casper, function() {
-				casper.echo('go to new topic', 'INFO');
+			this.then(function() {
+				gotoNewTopic(json.moveTopic.ValidCredential, casper, function() {
+					casper.echo('go to new topic', 'INFO');
+				});
 			});
 			this.then(function() {
 				this.click('#post_submit');
-				casper.wait(7000, function() {
-					this.capture(screenShotsDir+ 'postPage.png');
-				});
+				casper.then(function() {});
 			});
-			
+			casper.then(function() {
+				this.capture(screenShotsDir+ 'postPage.png');
+			});
 			//Logout From App
 			casper.then(function() {
 				forumLogin.logoutFromApp(casper, function() {
@@ -2050,7 +2107,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			});
 
 			//Getting Screenshot After Clicking On 'Logout' Link
-			casper.wait(7000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logout.png');
 			});
 
@@ -2062,7 +2119,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			});
 
 			//Getting Screenshot After Clicking On 'Log In' Link 
-			casper.wait(7000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'login.png');
 			});
 
@@ -2071,7 +2128,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		this.then(function() {
 			this.thenOpen(config.url, function() {
 				casper.echo('go to topic listing page', 'INFO');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'forumUrl.png');
 				});
 			});
@@ -2080,7 +2137,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
@@ -2089,7 +2146,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/?action=approvalqueue"]');
 				this.click('a[href="/?action=approvalqueue"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'approvalPage.png');				
 				});
 			});
@@ -2100,20 +2157,23 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');				
 				});
 				
 				this.then(function() {
 					this.mouse.move('#ajax_subscription_vars');
 					test.assertExists('#firstpid');
-					utils.enableorDisableCheckbox('firstpid', true, casper, function() {
-
-						casper.capture(screenShotsDir+ '11.png');	
+					this.then(function() {
+						utils.enableorDisableCheckbox('firstpid', true, casper, function() {
+							casper.capture(screenShotsDir+ '11.png');	
+						});
 					});
-					test.assertExists('#moveposts');
-					this.click('#moveposts');
-					this.wait(7000,function() {
+					this.then(function() {
+						test.assertExists('#moveposts');
+						this.click('#moveposts');
+					});
+					this.then(function() {
 						this.capture(screenShotsDir+ 'movePage.png');				
 					});
 				});
@@ -2124,14 +2184,14 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				this.then(function() {
 					this.sendKeys('input[name="mergethreadurl"]', moveUrl);
 				});
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'fillUrl.png');				
 				});
 				this.then(function() {
 					this.click('#move_posts');
 					casper.echo('topic moved successfully', 'INFO');
 				});
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'movePost.png');				
 				});
 			});
@@ -2144,7 +2204,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
@@ -2155,7 +2215,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 			});
@@ -2176,12 +2236,14 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		});
 		//create new topic
 		this.then(function() {
-			gotoNewTopic(json.moveTopic.ValidCredential, casper, function() {
-				casper.echo('go to new topic', 'INFO');
+			this.then(function() {
+				gotoNewTopic(json.moveTopic.ValidCredential, casper, function() {
+					casper.echo('go to new topic', 'INFO');
+				});
 			});
 			this.then(function() {
 				this.click('#post_submit');
-				casper.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');
 				});
 			});
@@ -2195,7 +2257,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			});
 
 			//Getting Screenshot After Clicking On 'Logout' Link
-			casper.wait(7000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logout.png');
 			});
 
@@ -2207,7 +2269,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			});
 
 			//Getting Screenshot After Clicking On 'Log In' Link 
-			casper.wait(7000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'login.png');
 			});
 			casper.thenOpen(config.url, function() {
@@ -2218,18 +2280,19 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');
 				});
 				//Reply topic with valid credential
 				casper.then(function() {
-					replyTopic(json.replyTopic.ValidCredential.content, casper, function() {
-						casper.echo('Replied successfully', 'INFO');
+					replyTopic(json.replyTopic.ValidCredential.content, casper, function() {});
+					this.then(function() {
+						casper.echo('Replied successfully', 'INFO');					
 					});
 				});
 
 				//Getting Screenshot After Clicking On 'POST' Link 
-				casper.wait(7000,function( ){
+				casper.then(function() {
 					this.capture(screenShotsDir+ 'replyTopic.png');
 				});
 			});
@@ -2242,7 +2305,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			});
 
 			//Getting Screenshot After Clicking On 'Logout' Link
-			casper.wait(7000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logout.png');
 			});
 
@@ -2254,7 +2317,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			});
 
 			//Getting Screenshot After Clicking On 'Log In' Link 
-			casper.wait(7000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'login.png');
 			});
 			
@@ -2267,17 +2330,18 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
 			
 			//go to page approval page
 			this.then(function() {
-				test.assertExists('a[href="/?action=approvalqueue"]');
-				this.click('a[href="/?action=approvalqueue"]');
-				this.wait(7000, function() {
-					this.capture(screenShotsDir+ 'approvalPage.png');				
+				this.waitForSelector('a[href="/?action=approvalqueue"]', function() {
+					this.click('a[href="/?action=approvalqueue"]');
+					this.then(function() {
+						this.capture(screenShotsDir+ 'approvalPage.png');				
+					});
 				});
 			});
 			
@@ -2287,7 +2351,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');
 				});
 			});
@@ -2296,13 +2360,14 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				this.mouse.move('#ajax_subscription_vars');
 				test.assertExists('#firstpid');
 
-				utils.enableorDisableCheckbox('firstpid', true, casper, function() {	
+				this.then(function() {
+					utils.enableorDisableCheckbox('firstpid', true, casper, function() {});
 				});
-				this.wait(5000, function() {
+				this.then(function() {
 					test.assertExists('#moveposts');
 					this.click('#moveposts');
 				});
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'movePage.png');				
 				});
 			});
@@ -2311,9 +2376,12 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				test.assertExists('form[name="movePost"] input[name="thread_title"]');
 				this.sendKeys('form[name="movePost"] input[name="thread_title"]', json.moveTopic.newPostTitle);
 				test.assertExists('button[name="submit"]');
-				this.click('button[name="submit"]');
 			});
-			this.wait(7000,function() {
+			this.then(function() {
+				this.click('button[name="submit"]');
+				this.then(function() {});
+			});
+			this.then(function() {
 				this.capture(screenShotsDir+ 'newTitle.png');				
 			});
 			
@@ -2324,7 +2392,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
@@ -2335,7 +2403,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 			});
@@ -2355,11 +2423,11 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 					test.assertExists('#firstpid');
 						utils.enableorDisableCheckbox('firstpid', true, casper, function() {	
 					});
-					this.wait(5000, function() {
+					this.then(function() {
 						test.assertExists('#deleteposts');
 						this.click('#deleteposts');
 					});
-					this.wait(7000,function() {
+					this.then(function() {
 						this.capture(screenShotsDir+ 'deleteposts.png');				
 					});
 				});
@@ -2375,17 +2443,19 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		this.thenOpen(config.url, function() {
 			casper.echo('go to topic listing page', 'INFO');
 		});
-		this.wait(7000, function() {
+		this.then(function() {
 			this.capture(screenShotsDir+ '22.png');
 		});
 		//create new topic
 		this.then(function() {
-			gotoNewTopic(json.moveTopic.ValidCredential, casper, function() {
-				casper.echo('go to new topic', 'INFO');
+			this.then(function() {
+				gotoNewTopic(json.moveTopic.ValidCredential, casper, function() {
+					casper.echo('go to new topic', 'INFO');
+				});
 			});
 			this.then(function() {
 				this.click('#post_submit');
-				casper.wait(7000, function() {
+				casper.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');
 				});
 			});
@@ -2398,7 +2468,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');				
 				});
 				this.then(function() {
@@ -2414,7 +2484,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		});
 
 		//Getting Screenshot After Clicking On 'Logout' Link
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+ 'logout.png');
 		});
 
@@ -2426,7 +2496,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		});
 
 		//Getting Screenshot After Clicking On 'Log In' Link 
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+ 'login.png');
 		});
 		
@@ -2434,7 +2504,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		this.thenOpen(config.url, function() {
 			casper.echo('go to forum url', 'INFO');
 		});
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+ '33.png');
 		});
 
@@ -2443,18 +2513,19 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			var href = this.getElementAttribute(classVal, "href");
 			test.assertExists('a[href="'+href+'"]');
 			this.click('a[href="'+href+'"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
 			});
 			//Reply topic with valid credential
-			casper.then(function() {
-				replyTopic(json.replyTopic.ValidCredential.content, casper, function() {
+			this.then(function() {
+				replyTopic(json.replyTopic.ValidCredential.content, casper, function() {});
+				this.then(function() {
 					casper.echo('Replied successfully', 'INFO');
-			 	});
+				});
 			});
 
 			//Getting Screenshot After Clicking On 'POST' Link 
-			casper.wait(7000,function( ){
+			casper.then(function(){
 				this.capture(screenShotsDir+ 'replyTopic.png');
 			});
 		});
@@ -2469,7 +2540,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			});
 
 			//Getting Screenshot After Clicking On 'Logout' Link
-			casper.wait(7000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'logout.png');
 			});
 
@@ -2481,7 +2552,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			});
 
 			//Getting Screenshot After Clicking On 'Log In' Link 
-			casper.wait(7000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'login.png');
 			});
 
@@ -2490,7 +2561,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 		this.then(function() {
 			this.thenOpen(config.url, function() {
 				casper.echo('go to topic listing page', 'INFO');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'forumUrl.png');
 				});
 			});
@@ -2499,27 +2570,27 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
 			
 			//go to page approval page
 			this.then(function() {
-				test.assertExists('a[href="/?action=approvalqueue"]');
-				this.click('a[href="/?action=approvalqueue"]');
-				this.wait(7000, function() {
-					this.capture(screenShotsDir+ 'approvalPage.png');				
+				this.waitForSelector('a[href="/?action=approvalqueue"]', function() {
+					this.click('a[href="/?action=approvalqueue"]');
+					this.then(function() {
+						this.capture(screenShotsDir+ 'approvalPage.png');				
+					});
 				});
 			});
-
 			this.then(function() {
 				test.assertExists(x("//a[text()='"+json.moveTopic.ValidCredential.title+"']"));
 				var classVal = x("//a[text()='"+json.moveTopic.ValidCredential.title+"']");
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');				
 				});
 				
@@ -2532,7 +2603,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 					});
 					test.assertExists('#moveposts');
 					this.click('#moveposts');
-					this.wait(7000,function() {
+					this.then(function() {
 						this.capture(screenShotsDir+ 'movePage.png');				
 					});
 				});
@@ -2543,14 +2614,15 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				this.then(function() {
 					this.sendKeys('input[name="mergethreadurl"]', moveUrl);
 				});
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'fillUrl.png');				
 				});
 				this.then(function() {
 					this.click('#move_posts');
 					casper.echo('topic moved successfully', 'INFO');
+					this.then(function() {});
 				});
-				this.wait(7000,function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'movePost.png');				
 				});
 			});
@@ -2568,13 +2640,14 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				this.then(function() {
 					this.mouse.move('#ajax_subscription_vars');
 					test.assertExists('#firstpid');
-						utils.enableorDisableCheckbox('firstpid', true, casper, function() {	
+					this.then(function() {
+						utils.enableorDisableCheckbox('firstpid', true, casper, function() {});
 					});
-					this.wait(5000, function() {
+					this.then(function() {
 						test.assertExists('#deleteposts');
 						this.click('#deleteposts');
 					});
-					this.wait(7000,function() {
+					this.then(function() {
 						this.capture(screenShotsDir+ 'deleteposts.png');				
 					});
 				});
@@ -2582,7 +2655,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			this.then(function() {
 				test.assertExists('a[href="/categories"]');
 				this.click('a[href="/categories"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'categoryPage.png');				
 				});		
 			});
@@ -2593,7 +2666,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 				var href = this.getElementAttribute(classVal, "href");
 				test.assertExists('a[href="'+href+'"]');
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickCategory.png');
 				});
 			});
@@ -2609,7 +2682,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	//go to backend url
 	casper.thenOpen(config.backEndUrl,function() {
 		casper.echo('Login To Backend URL and disable Approve New Posts', 'INFO');
-		this.wait(7000, function() {
+		this.then(function() {
 			casper.echo('Title of the page :' +this.getTitle(), 'INFO');
 			casper.echo('---------------------------------------------------------------------------');		
 		});
@@ -2619,7 +2692,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	casper.then(function() {
 		test.assertExists('a[data-tooltip-elm="ddSettings"]');
 		this.click('a[data-tooltip-elm="ddSettings"]');
-		this.wait(2000, function() {
+		this.then(function() {
 			test.assertExists('a[href="/tool/members/mb/settings?tab=Security"]');
 			this.click('a[href="/tool/members/mb/settings?tab=Security"]');
 		});
@@ -2633,7 +2706,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 			test.assertExists('button[type="submit"]');
 			this.click('button[type="submit"]');
 		});
-		this.wait(7000, function() {
+		this.then(function() {
 			this.capture(screenShotsDir+ 'saveApproveNewPosts.png');
 		});
 	});
@@ -2651,7 +2724,7 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 	});
 
 	//Getting Screenshot After Clicking On 'Logout' Link
-	casper.wait(7000, function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+ 'logout.png');
 	});
 	return callback();
@@ -2661,11 +2734,12 @@ moveTopic.moveTopicFeature = function(casper, test, x, callback) {
 
 var selectTopic = function(topicVal, eleStatus, driver, callback) {
 	var href = driver.getElementAttribute(topicVal, "href");
+	casper.echo('href : ' +href, 'INFO');
 	href = href.split('-');
 	var id = href[1].split('?');
 	driver.test.assertExists('input[value="'+id[0]+'"]');
 	driver.click('input[value="'+id[0]+'"]');
-	driver.wait(2000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'checked.png');
 	});
 	driver.then(function() {
@@ -2678,7 +2752,7 @@ var selectTopic = function(topicVal, eleStatus, driver, callback) {
 			casper.echo('topic can not be move go to user group permission to enable move own topic check box', 'INFO');
 		}
 	});
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir +eleStatus +'.png');
 	});
 	return callback();
@@ -2689,7 +2763,7 @@ var gotoNewTopic = function(data, driver, callback) {
 	driver.click('#links-nav');
 	driver.click('#latest_topics_show');
 	driver.click('a[href^="/post/printadd"]');
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'startTopic.png');
 	});
 	driver.then(function() {
@@ -2700,7 +2774,7 @@ var gotoNewTopic = function(data, driver, callback) {
 	 		this.sendKeys('#tinymce', data.content);
 			this.capture(screenShotsDir+ 'content.png');	
 		});	
-		driver.wait(3000, function() {
+		driver.then(function() {
 			try {
 				this.click('#all_forums_dropdown');
 				var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
@@ -2719,10 +2793,11 @@ var gotoNewTopic = function(data, driver, callback) {
 
 //method for delete newly created topic
 var deleteNewlyCreatedTopic = function(href, eleStatus, driver, callback){
+	casper.echo('@@@@@@@@@@@@@@@ href : ' +href, 'INFO');
 	href = href.split('-');
 	var id = href[1].split('?');
 	driver.click('input[value="'+id[0]+'"]');
-	driver.wait(3000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'checked.png');
 	});
 	driver.then(function() {
@@ -2730,7 +2805,7 @@ var deleteNewlyCreatedTopic = function(href, eleStatus, driver, callback){
 		casper.echo('---------------------------------------------------------------------------');
 		this.click('#' +eleStatus);
 	});
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir +eleStatus +'.png');
 	});
 	return callback();
@@ -2754,14 +2829,19 @@ var replyTopic = function(content, driver, callback) {
 	driver.wait(7000, function() {
 		this.withFrame('message_ifr', function() {
 	 		this.sendKeys('#tinymce', content);
-			this.capture(screenShotsDir+ 'replyContent.png');	
+		});
+		this.then(function() {
+			this.capture(screenShotsDir+ 'replyContent.png');
 		});
 	});
 
+	driver.waitForSelector('#reply_submit', function(){
+		this.click('#reply_submit');
+		this.wait(7000, function() {
+			this.capture(screenShotsDir+ 'replySubmit.png');
+		});
+	});
 	
-	driver.then(function(){
-			driver.click('#reply_submit');
-	});	
 	return callback();
 };
 

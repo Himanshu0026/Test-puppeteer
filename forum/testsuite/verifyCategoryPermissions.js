@@ -36,10 +36,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 		test.assertExists('div#ddSettings a[href="/tool/members/mb/settings?tab=Display"]');
 		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Display"]');
 		this.echo('Successfully open forum settings form.....', 'INFO');
-	});
-	
-	//Getting Screenshot After Clicking On "Display" Tab Under Settings 
-	casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'forum_settings.png');
 	});
 	
@@ -62,10 +58,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-	});
-	
-	//Getting Screenshot After Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'group_permissions.png');
 	});
 	
@@ -81,9 +73,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			}
 		});
 		casper.click('a[href="'+grpName+'"]');
-		casper.wait(5000,function(){
-			this.capture(screenShotsDir + 'group_Registered.png');
-		});
+		this.capture(screenShotsDir + 'group_Registered.png');
 	});
 	
 	//Disabling 'View Category' Option And 'Save'
@@ -99,9 +89,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	casper.then(function() {
 		this.click('button.button.btn-m.btn-blue');
-		this.wait(5000,function(){
-			this.capture(screenShotsDir + 'actions_saved.png');
-		});
+		this.capture(screenShotsDir + 'actions_saved.png');
 	});
 	
 	//Verifying 'Success Message' After Saving Settings			
@@ -121,10 +109,8 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	//Login To App
 	casper.then(function() {
 		forumLogin.loginToApp('100', '1234', casper, function() {
-			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedIn_user.png');
-				casper.echo('User logged-in successfully', 'INFO');
-			});
+			casper.capture(screenShotsDir+ 'loggedIn_user.png');
+			casper.echo('User logged-in successfully', 'INFO');
 		});
 	});
 
@@ -132,10 +118,9 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	casper.then(function() {
 		test.assertExists('a[href="/categories"]');
 		this.click('a[href="/categories"]');
-	});
-
-	casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'registered_category.png');
+		this.then(function() {
+			this.capture(screenShotsDir + 'registered_category.png');
+		});
 	});
 
 	//Verifying 'Error Messages' And Then Logout From Application
@@ -172,10 +157,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-	});
-	
-	//Getting Screenshot After Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'group_permissions.png');
 	});
 	
@@ -191,9 +172,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			}
 		});
 		casper.click('a[href="'+grpName+'"]');
-		casper.wait(5000,function(){
-			this.capture(screenShotsDir + 'group_un-Registered.png');
-		});
+		this.capture(screenShotsDir + 'group_un-Registered.png');
 	});
 	
 	//Disabling 'View Category' Option And 'Save'
@@ -209,9 +188,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	casper.then(function() {
 		this.click('button.button.btn-m.btn-blue');
-		this.wait(5000,function(){
-			this.capture(screenShotsDir + 'actions_saved.png');
-		});
+		this.capture(screenShotsDir + 'actions_saved.png');
 	});
 	
 	//Verifying 'Success Message' After Saving Settings			
@@ -232,9 +209,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	casper.then(function() {
 		test.assertExists('a[href="/categories"]');
 		this.click('a[href="/categories"]');
-	});
-
-	casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'unregistered_category.png');
 	});
 
@@ -269,10 +243,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-	});
-	
-	//Getting Screenshot After Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'group_permissions.png');
 	});
 	
@@ -288,9 +258,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			}
 		});
 		casper.click('a[href="'+grpName+'"]');
-		casper.wait(5000,function(){
-			this.capture(screenShotsDir + 'group_Pending.png');
-		});
+		this.capture(screenShotsDir + 'group_Pending.png');
 	});
 	
 	//Disabling 'View Category' Option And 'Save'
@@ -306,9 +274,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	casper.then(function() {
 		this.click('button.button.btn-m.btn-blue');
-		this.wait(5000,function(){
-			this.capture(screenShotsDir + 'actions_saved.png');
-		});
+		this.capture(screenShotsDir + 'actions_saved.png');
 	});
 	
 	//Verifying 'Success Message' After Saving Settings			
@@ -328,10 +294,8 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	//Login To App
 	casper.then(function() {
 		forumLogin.loginToApp('90', '1234', casper, function() {
-			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedIn_user.png');
-				casper.echo('User logged-in successfully', 'INFO');
-			});
+			casper.capture(screenShotsDir+ 'loggedIn_user.png');
+			casper.echo('User logged-in successfully', 'INFO');
 		});
 	});
 
@@ -339,9 +303,6 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	casper.then(function() {
 		test.assertExists('a[href="/categories"]');
 		this.click('a[href="/categories"]');
-	});
-
-	casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'Pending_Email_Verification_category.png');
 	});
 
@@ -376,12 +337,13 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+		this.capture(screenShotsDir + 'group_permissions.png');
 	});
 	
 	//Getting Screenshot After Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.wait(5000,function(){
+	/*casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'group_permissions.png');
-	});
+	});*/
 	
 	//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
 	casper.then(function() {
@@ -395,9 +357,9 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			}
 		});
 		casper.click('a[href="'+grpName+'"]');
-		casper.wait(5000,function(){
-			this.capture(screenShotsDir + 'group_Registered.png');
-		});
+		//casper.wait(5000,function(){
+		this.capture(screenShotsDir + 'group_Registered.png');
+		//});
 	});
 	
 	//Disabling 'Start Topics' Option And 'Save'
@@ -413,9 +375,9 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	casper.then(function() {
 		this.click('button.button.btn-m.btn-blue');
-		this.wait(5000,function(){
+		//this.wait(5000,function(){
 			this.capture(screenShotsDir + 'actions_saved.png');
-		});
+		//});
 	});
 	
 	//Verifying 'Success Message' After Saving Settings			
@@ -435,22 +397,24 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	//Login To App
 	casper.then(function() {
 		forumLogin.loginToApp('100', '1234', casper, function() {
-			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedIn_user.png');
-				this.echo('User Logged-In Successfully', 'INFO');
-			});
+			//casper.wait(5000, function() {
+			casper.capture(screenShotsDir+ 'loggedIn_user.png');
+			casper.echo('User Logged-In Successfully', 'INFO');
+			//});
 		});
 	});
 
 	//Clicking On 'Categories' Tab
 	casper.then(function() {
 		test.assertExists('a[href="/post/printadd"]');
-		this.click('a[href="/post/printadd"]');
+		this.then(function() {
+			this.click('a[href="/post/printadd"]');
+		});
 	});
 
-	casper.wait(5000,function(){
+	/*casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'registered_topics.png');
-	});
+	});*/
 
 	//Verifying 'Error Messages' And Then Logout From Application
 	casper.then(function() {
@@ -486,12 +450,13 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+		this.capture(screenShotsDir + 'group_permissions.png');
 	});
 	
 	//Getting Screenshot After Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.wait(5000,function(){
+	/*casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'group_permissions.png');
-	});
+	});*/
 		
 	//Clicking On 'Change Permissions' Link With Respect To 'Un-Registered Users'  
 	casper.then(function() {
@@ -505,9 +470,9 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			}
 		});
 		this.click('a[href="'+grpName+'"]');
-		this.wait(5000,function(){
+		//this.wait(5000,function(){
 			this.capture(screenShotsDir + 'group_un-registered.png');
-		});
+		//});
 	});
 	
 	//Disabling 'Start Topics' Option And 'Save'
@@ -523,9 +488,9 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	
 	casper.then(function() {
 		this.click('button.button.btn-m.btn-blue');
-		this.wait(5000,function(){
+		//this.wait(5000,function(){
 			this.capture(screenShotsDir + 'actions_saved.png');
-		});
+		//});
 	});
 	
 	//Verifying 'Success Message' After Saving Settings			
@@ -545,12 +510,16 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 	//Clicking On 'Categories' Tab
 	casper.then(function() {
 		test.assertExists('a[href="/post/printadd"]');
-		this.click('a[href="/post/printadd"]');
+		//this.then(function() {
+			this.click('a[href="/post/printadd"]');
+			//this.capture(screenShotsDir + 'unregistered_topics.png');
+		//});
+		
 	});
 
-	casper.wait(5000,function(){
+	/*casper.wait(5000,function(){
 		this.capture(screenShotsDir + 'unregistered_topics.png');
-	});
+	});*/
 
 	//Verifying 'Error Messages' And Then Logout From Application
 	casper.then(function() {
@@ -559,7 +528,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 		test.assert(message.indexOf(expectedMsg) > -1);
 	});
 	
-	casper.then(function() {
+	/*casper.then(function() {
 		casper.echo('                                      CASE 6', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('ENABLE START TOPICS FOR  UN-REGISTERED USER FROM GROUP PERMISSION', 'INFO');
@@ -2190,5 +2159,5 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 		forumLogin.logoutFromApp(casper, function() {
 			casper.echo('Successfully Logout From Application', 'INFO');
 		});
-	});
+	});*/
 };

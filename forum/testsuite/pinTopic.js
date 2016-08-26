@@ -13,7 +13,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 	
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		this.log('Title of the page :' +this.getTitle());
+		this.emit('title');
 	});
 
 	//Login to app
@@ -21,13 +21,12 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		forumLogin.loginToApp(json['newTopic'].adminUname, json['newTopic'].adminPass, casper, function() {
 			casper.log('Admin has successfully login to application with valid username and password', 'INFO');
 		});
+		//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.then(function() {
+			this.capture(screenShotsDir+ 'login.png');
+		});
 	});
 	
-	//Getting Screenshot After Clicking On 'Log In' Link 
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'login.png');
-	});
-
 	/*****Pin any topic and Verify Pin icon of topic listing page[Home page]*****/
 	casper.then(function() {
 		casper.echo('Pin any topic and Verify Pin icon of topic listing page[Home page]', 'INFO');
@@ -84,17 +83,17 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
 			var href = this.getElementAttribute(classVal, "href");
 			this.click('a[href="'+href+'"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
 			});
 		});
 		this.then(function() {
 			test.assertExists('a.dropdown-toggle i.icon-shield');
 			this.click('a.dropdown-toggle i.icon-shield');
-			this.wait(1000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'dropdown.png');
+				this.click('a[href^="/mbactions/pin?"]');
 			});
-			this.click('a[href^="/mbactions/pin?"]');
 		});
 	});
 
@@ -120,17 +119,17 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
 			var href = this.getElementAttribute(classVal, "href");
 			this.click('a[href="'+href+'"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
 			});
 		});
 		this.then(function() {
 			test.assertExists('a.dropdown-toggle i.icon-shield');
 			this.click('a.dropdown-toggle i.icon-shield');
-			this.wait(1000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'dropdown.png');
+				this.click('a[href^="/mbactions/unpin?"]');
 			});
-			this.click('a[href^="/mbactions/unpin?"]');
 		});
 	});
 
@@ -139,12 +138,14 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		this.thenOpen(config.url, function() {
 			casper.echo('go to topic listing page', 'INFO');
 		});
-		var postTitle = json['pin/unPin'].topicTitle;
-		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-		var href = this.getElementAttribute(classVal, "href");
-		test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
-		casper.echo('unPin topic is verified', 'INFO');
-		casper.echo('---------------------------------------------------------------------------');
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			var href = this.getElementAttribute(classVal, "href");
+			test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
+			casper.echo('unPin topic is verified', 'INFO');
+			casper.echo('---------------------------------------------------------------------------');
+		});
 	});
 
 	/*****Pin any topic and Verify Pin icon of  latest topic page*****/
@@ -152,7 +153,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		casper.echo('Pin any topic and Verify Pin icon of  latest topic page', 'INFO');
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.click('a[href="/latest"]');
 			});
 		});
@@ -179,7 +180,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		casper.echo('Un- Pin any topic and Verify Pin icon of  latest topic page', 'INFO');
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.click('a[href="/latest"]');
 			});
 		});
@@ -206,7 +207,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		casper.echo('Pin any topic and Verify Pin icon of latest topic from moderator shield icon', 'INFO');
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.click('a[href="/latest"]');
 			});
 		});
@@ -216,17 +217,17 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
 			var href = this.getElementAttribute(classVal, "href");
 			this.click('a[href="'+href+'"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
 			});
 		});
 		this.then(function() {
 			test.assertExists('a.dropdown-toggle i.icon-shield');
 			this.click('a.dropdown-toggle i.icon-shield');
-			this.wait(1000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'dropdown.png');
+				this.click('a[href^="/mbactions/pin?"]');
 			});
-			this.click('a[href^="/mbactions/pin?"]');
 		});
 	});
 
@@ -234,16 +235,18 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 	casper.then(function() {
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.click('a[href="/latest"]');
 			});
 		});
-		var postTitle = json['pin/unPin'].topicTitle;
-		var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-		var href = this.getElementAttribute(classVal, "href");
-		test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
-		casper.echo('pin topic is verified', 'INFO');
-		casper.echo('---------------------------------------------------------------------------');
+		this.then(function() {
+			var postTitle = json['pin/unPin'].topicTitle;
+			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+			var href = this.getElementAttribute(classVal, "href");
+			test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
+			casper.echo('pin topic is verified', 'INFO');
+			casper.echo('---------------------------------------------------------------------------');
+		});
 	});
 
 	/*****Un-Pin any topic and Verify Pin icon of latest topic from moderator shield icon*****/
@@ -255,17 +258,17 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
 			var href = this.getElementAttribute(classVal, "href");
 			this.click('a[href="'+href+'"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
 			});
 		});
 		this.then(function() {
 			test.assertExists('a.dropdown-toggle i.icon-shield');
 			this.click('a.dropdown-toggle i.icon-shield');
-			this.wait(1000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'dropdown.png');
+				this.click('a[href^="/mbactions/unpin?"]');
 			});
-			this.click('a[href^="/mbactions/unpin?"]');
 		});
 	});
 
@@ -273,7 +276,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 	casper.then(function() {
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.click('a[href="/latest"]');
 			});
 		});
@@ -293,7 +296,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		test.assertExists('a[href="/categories"]');
 		casper.echo('---------------------------------------------------------------------------');
 		this.click('a[href="/categories"]');
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+ 'category.png');
 		});
 		casper.then(function() {
@@ -303,27 +306,27 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			casper.echo('---------------------------------------------------------------------------');
 			this.click('h3 a[href="'+href+'"]');
 		});
-		casper.wait(7000, function() {
+		this.then(function() {
 			this.capture(screenShotsDir+ 'categoryTopicList.png');
 		});
-		casper.then(function() {
+		this.then(function() {
 		
 			var postTitle = json['pin/unPin'].topicTitle;
 			casper.echo('pin topic title : ' +postTitle, 'INFO');
 			var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
 			var href = this.getElementAttribute(classVal, "href");
 			this.click('a[href="'+href+'"]');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
 			});
 		});
 		this.then(function() {
 			test.assertExists('a.dropdown-toggle i.icon-shield');
 			this.click('a.dropdown-toggle i.icon-shield');
-			this.wait(1000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'dropdown.png');
+				this.click('a[href^="/mbactions/pin?"]');
 			});
-			this.click('a[href^="/mbactions/pin?"]');
 		});
 	});
 
@@ -331,7 +334,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 	casper.then(function() {
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.click('a[href="/latest"]');
 			});
 		});
@@ -352,7 +355,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			test.assertExists('a[href="/categories"]');
 			casper.echo('---------------------------------------------------------------------------');
 			this.click('a[href="/categories"]');
-			casper.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'category.png');
 			});
 			casper.then(function() {
@@ -362,7 +365,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 				casper.echo('---------------------------------------------------------------------------');
 				this.click('h3 a[href="'+href+'"]');
 			});
-			casper.wait(7000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+ 'categoryTopicList.png');
 			});
 			this.then(function() {
@@ -371,7 +374,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 				var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
 				var href = this.getElementAttribute(classVal, "href");
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
 				});
 			});
@@ -379,10 +382,10 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		this.then(function() {
 			test.assertExists('a.dropdown-toggle i.icon-shield');
 			this.click('a.dropdown-toggle i.icon-shield');
-			this.wait(1000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'dropdown.png');
+				this.click('a[href^="/mbactions/unpin?"]');
 			});
-			this.click('a[href^="/mbactions/unpin?"]');
 		});
 	});
 
@@ -390,7 +393,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 	casper.then(function() {
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.click('a[href="/latest"]');
 			});
 		});
@@ -410,7 +413,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		test.assertExists('a[href="/categories"]');
 		casper.echo('---------------------------------------------------------------------------');
 		this.click('a[href="/categories"]');
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+ 'category.png');
 		});
 		casper.then(function() {
@@ -420,7 +423,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			casper.echo('---------------------------------------------------------------------------');
 			this.click('h3 a[href="'+href+'"]');
 		});
-		casper.wait(7000, function() {
+		casper.then(function() {
 			this.capture(screenShotsDir+ 'categoryTopicList.png');
 		});
 		casper.then(function() {
@@ -471,12 +474,12 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		casper.echo('Pin any topic and Verify Pin icon under sub category page from moderator shield icon', 'INFO');
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(2000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'linkTab.png');
 			});
 			this.then(function() {
 				this.click('li i.icon-right-dir');
-				this.wait(2000, function() {
+				this.then(function() {
 					this.click('li a');
 				});
 			});
@@ -492,17 +495,17 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 				var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
 				var href = this.getElementAttribute(classVal, "href");
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
 				});
 			});
 			this.then(function() {
 				test.assertExists('a.dropdown-toggle i.icon-shield');
 				this.click('a.dropdown-toggle i.icon-shield');
-				this.wait(1000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'dropdown.png');
+					this.click('a[href^="/mbactions/pin?"]');
 				});
-				this.click('a[href^="/mbactions/pin?"]');
 			});
 			this.thenOpen(config.url, function() {
 				casper.echo('go to topic listing page : ');
@@ -525,12 +528,12 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		casper.echo('Un-Pin any topic and Verify Pin icon under sub category page from moderator shield icon', 'INFO');
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(2000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'linkTab.png');
 			});
 			this.then(function() {
 				this.click('li i.icon-right-dir');
-				this.wait(2000, function() {
+				this.then(function() {
 					this.click('li a');
 				});
 			});
@@ -545,17 +548,17 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 				var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
 				var href = this.getElementAttribute(classVal, "href");
 				this.click('a[href="'+href+'"]');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'clickOnTopic'+postTitle+'.png');
 				});
 			});
 			this.then(function() {
 				test.assertExists('a.dropdown-toggle i.icon-shield');
 				this.click('a.dropdown-toggle i.icon-shield');
-				this.wait(1000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'dropdown.png');
+					this.click('a[href^="/mbactions/unpin?"]');
 				});
-				this.click('a[href^="/mbactions/unpin?"]');
 			});
 			this.thenOpen(config.url, function() {
 				casper.echo('go to topic listing page : ');
@@ -582,14 +585,14 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		test.assertExists('span.user-nav-panel li a[href^="/profile"]');
 		casper.echo('---------------------------------------------------------------------------');
 		this.click('span.user-nav-panel li a[href^="/profile"]');
-		this.wait(7000, function() {
+		this.then(function() {
 			this.capture(screenShotsDir+ 'profile.png');
 		});
 		casper.then(function() {
 			test.assertExists('#Topics_Started');
 			casper.echo('---------------------------------------------------------------------------');
 			this.click('#Topics_Started');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'topicsStarted.png');
 			});
 		});
@@ -652,15 +655,17 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			});
 			this.then(function() {
 				this.click('#Pin');
-				this.wait(2000, function() {
-					this.capture(screenShotsDir+ 'checkedLock.png');
+				this.then(function() {
+					this.capture(screenShotsDir+ 'checkedPin.png');
 				});
 			});
 			this.then(function() {
 				this.click('#post_submit');
 			});
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+			});
+			this.then(function() {
 				var url = this.getCurrentUrl();
 				casper.echo('url : ' +url);
 				url = url.split('#');
@@ -701,15 +706,17 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 				casper.echo('go to new topic', 'INFO');
 			});
 			this.then(function() {
-				this.wait(2000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'checkedLock.png');
 				});
 			});
 			this.then(function() {
 				this.click('#post_submit');
 			});
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+			});
+			this.then(function() {
 				var url = this.getCurrentUrl();
 				casper.echo('url : ' +url);
 				url = url.split('#');
@@ -747,7 +754,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		});
 		this.then(function() {
 			this.click('a[href="/categories"]');
-			this.wait(2000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'category.png');
 			});
 		});
@@ -757,15 +764,17 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			});
 			this.then(function() {
 				this.click('#Pin');
-				this.wait(2000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'checkedLock.png');
 				});
 			});
 			this.then(function() {
 				this.click('#post_submit');
 			});
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+			});
+			this.then(function() {
 				var url = this.getCurrentUrl();
 				casper.echo('url : ' +url);
 				url = url.split('#');
@@ -803,7 +812,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		});
 		this.then(function() {
 			this.click('a[href="/categories"]');
-			this.wait(2000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'category.png');
 			});
 		});
@@ -812,15 +821,17 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 				casper.echo('go to new topic', 'INFO');
 			});
 			this.then(function() {
-				this.wait(2000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'checkedLock.png');
 				});
 			});
 			this.then(function() {
 				this.click('#post_submit');
 			});
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+			});
+			this.then(function() {
 				var url = this.getCurrentUrl();
 				casper.echo('url : ' +url);
 				url = url.split('#');
@@ -858,12 +869,12 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		});
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(2000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'linkTab.png');
 			});
 			this.then(function() {
 				this.click('li i.icon-right-dir');
-				this.wait(2000, function() {
+				this.then(function() {
 					this.click('li a');
 				});
 			});
@@ -874,15 +885,17 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			});
 			this.then(function() {
 				this.click('#Pin');
-				this.wait(2000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'checkedLock.png');
 				});
 			});
 			this.then(function() {
 				this.click('#post_submit');
 			});
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+			});
+			this.then(function() {
 				var url = this.getCurrentUrl();
 				casper.echo('url : ' +url);
 				url = url.split('#');
@@ -920,12 +933,12 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		});
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(2000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'linkTab.png');
 			});
 			this.then(function() {
 				this.click('li i.icon-right-dir');
-				this.wait(2000, function() {
+				this.then(function() {
 					this.click('li a');
 				});
 			});
@@ -935,20 +948,23 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 				casper.echo('go to new topic', 'INFO');
 			});
 			this.then(function() {
-				this.wait(2000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'checkedLock.png');
 				});
 			});
 			this.then(function() {
 				this.click('#post_submit');
 			});
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'postPage.png');
+			});
+			this.then(function() {
 				var url = this.getCurrentUrl();
 				casper.echo('url : ' +url);
 				url = url.split('#');
 				href = url[0].split('.com');
 			});
+
 		});
 
 		//verify pin icon is not showing on topic listion page
@@ -978,12 +994,12 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		casper.echo('Pin any topic and Verify Pin icon of  topic listing page under sub category', 'INFO');
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(2000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'linkTab.png');
 			});
 			this.then(function() {
 				this.click('li i.icon-right-dir');
-				this.wait(2000, function() {
+				this.then(function() {
 					this.click('li a');
 				});
 			});
@@ -1018,12 +1034,12 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		casper.echo('Un-Pin any topic and Verify Pin icon of  topic listing page under sub category', 'INFO');
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(2000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'linkTab.png');
 			});
 			this.then(function() {
 				this.click('li i.icon-right-dir');
-				this.wait(2000, function() {
+				this.then(function() {
 					this.click('li a');
 				});
 			});
@@ -1056,7 +1072,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		casper.echo('Pin any topic and Verify Pin icon of  category search page ', 'INFO');
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.click('a[href="/latest"]');
 			});
 		});
@@ -1089,7 +1105,7 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		casper.echo('Un-Pin any topic and Verify Pin icon of  category search page ', 'INFO');
 		this.then(function() {
 			this.click('#links-nav');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.click('a[href="/latest"]');
 			});
 		});
@@ -1130,7 +1146,7 @@ var selectTopic = function(topicVal, eleStatus, dropdownTitle, driver, callback)
 	href = href.split('-');
 	var id = href[1].split('?');
 	driver.click('input[value="'+id[0]+'"]');
-	driver.wait(3000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'checked.png');
 	});
 	driver.then(function() {
@@ -1141,7 +1157,7 @@ var selectTopic = function(topicVal, eleStatus, dropdownTitle, driver, callback)
 		casper.echo('---------------------------------------------------------------------------');
 		this.click('#' +eleStatus);
 	});
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir +eleStatus +'.png');
 	});
 	return callback();
@@ -1152,7 +1168,7 @@ var deleteNewlyCreatedTopic = function(href, eleStatus, driver, callback){
 	href = href.split('-');
 	var id = href[1].split('?');
 	driver.click('input[value="'+id[0]+'"]');
-	driver.wait(3000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'checked.png');
 	});
 	driver.then(function() {
@@ -1160,7 +1176,7 @@ var deleteNewlyCreatedTopic = function(href, eleStatus, driver, callback){
 		casper.echo('---------------------------------------------------------------------------');
 		this.click('#' +eleStatus);
 	});
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir +eleStatus +'.png');
 	});
 	return callback();
@@ -1172,7 +1188,7 @@ var gotoNewTopic = function(data, driver, callback) {
 	driver.click('#links-nav');
 	driver.click('#latest_topics_show');
 	driver.click('a[href="/post/printadd"]');
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'startTopic.png');
 	});
 	driver.then(function() {
@@ -1181,16 +1197,15 @@ var gotoNewTopic = function(data, driver, callback) {
 			this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
 			this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
 	 		this.sendKeys('#tinymce', data.content);
-			this.capture(screenShotsDir+ 'content.png');	
 		});	
-		driver.wait(3000, function() {
+		driver.then(function() {
 			try {
 				this.click('#all_forums_dropdown');
 				var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
 				this.fill('form[name="PostTopic"]',{
 					'forum' : val.trim()
 				},false);
-				this.capture(screenShotsDir+ 'fillTopic.png');
+				this.capture(screenShotsDir+ 'content.png');
 			} catch(err) {
 
 			}

@@ -16,25 +16,21 @@ poll.pollFeature = function(casper, test, x, callback) {
 	//go to backend url
 	casper.thenOpen(config.backEndUrl,function() {
 		casper.echo('Login To Backend URL and disable post poll checkbox', 'INFO');
-		this.wait(7000, function() {
-			casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-			test.assertTitle('Website Toolbox', 'The page has correct title');
-		casper.echo('---------------------------------------------------------------------------');		
-		});
+		this.emit('title');
 	});
 		
-	/*//login to backend url
-	casper.then(function() {
+	//login to backend url (rm)
+	/*casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('User has been successfuly login to backend', 'INFO');
 		});
-	});*/
+	});*/													
 
 	//go to user permission
 	casper.then(function() {
 		utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 			casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
-			casper.wait(4000, function(){
+			casper.then(function(){
 				this.capture(screenShotsDir+'EditUserPermissionpage.png');
 			});
 		});
@@ -59,28 +55,26 @@ poll.pollFeature = function(casper, test, x, callback) {
 		var msg  = this.fetchText('p[align="center"] font.heading');
 		test.assertEquals(msg.trim(), config.permissionSettingMsg.trim(), msg.trim()+' and message verified');
 		casper.echo('---------------------------------------------------------------------------');
+		//Getting Screenshot After Change permission
+		casper.then(function() {
+			this.capture(screenShotsDir+'afterChangePermission.png');
+		});		
 	});
-
-	//Getting Screenshot After Change permission
-	casper.wait(2000, function() {
-		this.capture(screenShotsDir+'afterChangePermission.png');
-	});		
-		
+	
 	//start from forum url
 	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +this.getTitle(), 'INFO');
+		this.emit('title');
 	});
 		
-	/*//Login To App
-	casper.then(function() {
+	//Login To App (rm)
+	/*casper.then(function() {
 		forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
 			casper.echo('User has been successfuly login to application with register user', 'INFO');
 		});
-	});
-
-	//Getting Screenshot After Clicking On 'Log In' Link 
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'login.png');
+		//Getting Screenshot After Clicking On 'Log In' Link 
+		casper.then(function() {
+			this.capture(screenShotsDir+ 'login.png');
+		});
 	});*/
 
 	/*****test case to verify poll tab, register user can not post polls after disabling permission*****/
@@ -94,18 +88,14 @@ poll.pollFeature = function(casper, test, x, callback) {
 	//go to backend url enable post poll feature
 	casper.thenOpen(config.backEndUrl,function() {
 		casper.echo('Login To Backend URL and enable post poll checkbox', 'INFO');
-		this.wait(7000, function() {
-			casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-			test.assertTitle('Website Toolbox', 'The page has correct title');
-		casper.echo('---------------------------------------------------------------------------');		
-		});
+		this.emit('title');
 	});
 		
 	//go to user permission
 	casper.then(function() {
 		utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 			casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
-			casper.wait(4000, function(){
+			casper.then(function(){
 				this.capture(screenShotsDir+'EditUserPermissionpage.png');
 			});
 		});
@@ -130,16 +120,15 @@ poll.pollFeature = function(casper, test, x, callback) {
 		var msg  = this.fetchText('p[align="center"] font.heading');
 		test.assertEquals(msg.trim(), config.permissionSettingMsg.trim(), msg.trim()+' and message verified');
 		casper.echo('---------------------------------------------------------------------------');
+		//Getting Screenshot After Change permission
+		casper.then(function() {
+			this.capture(screenShotsDir+'afterChangePermission.png');
+		});		
 	});
-
-	//Getting Screenshot After Change permission
-	casper.wait(2000, function() {
-		this.capture(screenShotsDir+'afterChangePermission.png');
-	});		
-		
+	
 	//start from forum url
 	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +this.getTitle(), 'INFO');
+		this.emit('title');
 	});
 		
 	/*****test case to submit poll by leaving poll question field blank and verify error message*****/
@@ -158,7 +147,7 @@ poll.pollFeature = function(casper, test, x, callback) {
 	});
 
 	//Getting Screenshot After Clicking On 'Poll' Link 
-	casper.wait(7000, function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+ 'newPoll.png');
 	});
 
@@ -170,75 +159,92 @@ poll.pollFeature = function(casper, test, x, callback) {
 	});
 
 	//Getting Screenshot After Clicking On 'Save Poll' Link
-	casper.wait(7000,function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+ 'errorMessage.png');
 	});
 
 	//verify error message
 	casper.then(function() {
-		test.assertExists('.alert-info');
-		casper.echo('---------------------------------------------------------------------------');
-		var errMsg = this.fetchText('div.panel-default div.alert-info');
+		this.mouse.move('#poll_question');
+		var errMsg = this.evaluate(function() {
+			var element = document.querySelector('#poll_question');
+			return element.getAttribute('data-original-title');
+		});
+		casper.echo('*********** error message : ' +errMsg);
 		test.assertEquals(errMsg.trim(), json.poll.blankPollQues.ExpectedErrorMessage.trim(), errMsg.trim()+' and verified error message');
 		casper.echo('---------------------------------------------------------------------------');
 	});
 	
 	/*****test case to submit poll by leaving option1 field blank and verify error message*****/
+	/*casper.on('remote.alert', function(message) {
+		test.assertEquals(message, json.poll.blankOption1.ExpectedErrorMessage.trim(), message+' and verified error message');
+		casper.echo('---------------------------------------------------------------------------');
+	});*/	
+	casper.then(function() {	 
+			this.on('remote.alert', testAlert1);
+	});
 	//Post Poll Data 
 	casper.then(function() {
 		savePollPage(json['poll'].blankOption1, casper, function() {
 			casper.log('poll posted successfully', 'INFO');
 		});
+		//Getting Screenshot After Clicking On 'Save Poll' Link
+		casper.then(function() {
+			this.capture(screenShotsDir+ 'errorMessage.png');
+		});
 	});
-
-	//Getting Screenshot After Clicking On 'Save Poll' Link
-	casper.wait(7000,function() {
-		this.capture(screenShotsDir+ 'errorMessage.png');
-	});
-
+	
 	//verify error message
-	casper.then(function() {
+	/*casper.then(function() {
 		test.assertExists('.alert-info');
 		casper.echo('---------------------------------------------------------------------------');
 		var errMsg = this.fetchText('div.panel-default div.alert-info');
 		test.assertEquals(errMsg.trim(), json.poll.blankOption1.ExpectedErrorMessage.trim(), errMsg.trim()+' and verified error message');
 		casper.echo('---------------------------------------------------------------------------');
+	});*/
+	casper.then(function() {
+		this.removeListener('remote.alert', testAlert1);
 	});
-
 	/*****test case to submit poll by leaving option2 field blank and verify error message*****/
+	casper.then(function() {
+		    this.on('remote.alert', testAlert2);
+	});
 	//Post Poll Data 
 	casper.then(function() {
 		savePollPage(json['poll'].blankOption2, casper, function() {
 			casper.log('poll posted successfully', 'INFO');
 		});
+		//Getting Screenshot After Clicking On 'Save Poll' Link
+		casper.then(function() {
+			this.capture(screenShotsDir+ 'errorMessage.png');
+		});
 	});
-
-	//Getting Screenshot After Clicking On 'Save Poll' Link
-	casper.wait(7000,function() {
-		this.capture(screenShotsDir+ 'errorMessage.png');
-	});
-
-	//verify error message
+	//wait for 3 second to remove listener2
+	casper.wait(3000, function() {});
 	casper.then(function() {
+		this.removeListener('remote.alert', testAlert2);
+	});
+	//verify error message
+	/*casper.then(function() {
 		test.assertExists('.alert-info');
 		casper.echo('---------------------------------------------------------------------------');
 		var errMsg = this.fetchText('div.panel-default div.alert-info');
 		test.assertEquals(errMsg.trim(), json.poll.blankOption2.ExpectedErrorMessage.trim(), errMsg.trim()+' and verified error message');
 		casper.echo('---------------------------------------------------------------------------');
-	});
+	});*/
+
 
 	/*****test case to submit poll by filling with all contents with valid credintial and verify posted polls*****/
 	//Post Poll Data 
 	casper.then(function() {
-		
+		casper.echo('test case to submit poll by filling with all contents with valid credintial and verify posted polls', 'INFO');
 		savePollPage(json['poll'].vadidCredintial, casper, function() {
 			casper.log('poll posted successfully', 'info');
 		});
-	});
-
-	//Getting Screenshot After Clicking On 'Save Poll' Link
-	casper.wait(7000,function() {
-		this.capture(screenShotsDir+ 'savePoll.png');
+		//Getting Screenshot After Clicking On 'Save Poll' Link
+		casper.waitForSelector('form[action="/poll/pollvotesave"] h2', function() {
+			this.capture(screenShotsDir+ 'savePoll.png');
+		});
 	});
 
 	//verify posted poll
@@ -257,12 +263,23 @@ poll.pollFeature = function(casper, test, x, callback) {
 		forumLogin.logoutFromApp(casper, function() {
 			casper.log('Successfully logout from application', 'info');
 		});
+		//Getting Screenshot After Clicking On 'Logout' Link
+		casper.then(function() {
+			this.capture(screenShotsDir+ 'logout.png');
+		});
 	});
 
-	//Getting Screenshot After Clicking On 'Logout' Link
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'logout.png');
-	});
+	function testAlert1(message) {
+		casper.echo('message: '+message, 'INFO');
+  		test.assertEquals(message, json.poll.blankOption1.ExpectedErrorMessage.trim(), message+' and verified error message');
+		casper.echo('---------------------------------------------------------------------------');
+	};
+
+	function testAlert2(message) {
+		casper.echo('message : '+message, 'INFO');
+    		test.assertEquals(message, json.poll.blankOption1.ExpectedErrorMessage.trim(), message+' and verified error message');
+		casper.echo('---------------------------------------------------------------------------');
+	};
 	return callback();
 };
 
@@ -274,7 +291,7 @@ var gotoNewTopic = function(data, driver, callback) {
 	driver.click('#links-nav');
 	driver.click('#latest_topics_show');
 	driver.click('a[href="/post/printadd"]');
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'startTopic.png');
 	});
 	driver.then(function() {
@@ -283,15 +300,14 @@ var gotoNewTopic = function(data, driver, callback) {
 			this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
 			this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
 	 		this.sendKeys('#tinymce', data.content);
-			this.capture(screenShotsDir+ 'content.png');	
 		});	
-		driver.wait(3000, function() {
+		driver.then(function() {
 			this.click('#all_forums_dropdown');
 			var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
 			this.fill('form[name="PostTopic"]',{
 				'forum' : val.trim()
 			},false);
-			this.capture(screenShotsDir+ 'fillTopic.png');
+			this.capture(screenShotsDir+ 'content.png');
 		});
 	});
 
@@ -319,7 +335,7 @@ var savePollPage = function(data, driver, callback) {
 		this.click('a[href="#poll-timeout"] small.text-muted');
 	});
 	driver.then(function() {
-		driver.wait(5000, function() {
+		driver.then(function() {
 			this.capture(screenShotsDir+ 'fillPoll.png');
 		});
 	});

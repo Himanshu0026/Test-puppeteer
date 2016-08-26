@@ -16,7 +16,7 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 			//go to backend url
 			casper.thenOpen(config.backEndUrl,function() {
 				casper.echo('Login To Backend URL and disable start topic checkbox', 'INFO');
-				this.wait(7000, function() {
+				this.then(function() {
 					casper.echo('Title of the page :' +this.getTitle(), 'INFO');
 					casper.echo('---------------------------------------------------------------------------');		
 				});
@@ -32,7 +32,7 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 			casper.then(function() {
 				utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 					casper.echo("Successfully navigated to Edit User group Permission page", 'INFO');
-					casper.wait(4000, function(){
+					casper.then(function(){
 						this.capture(screenShotsDir+'EditUserPermissionpage.png');
 					});
 				});
@@ -60,7 +60,7 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 			});
 
 			//getting a screenshot after change the permission
-			casper.wait(2000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+'afterChangePermission.png');
 			});		
 		
@@ -74,11 +74,10 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 				forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
 					casper.echo('User has been successfuly login to application with register user', 'INFO');
 				});
-			});
-
-			//Getting Screenshot After Clicking On 'Log In' Link 
-			casper.wait(7000, function() {
-				this.capture(screenShotsDir+ 'login.png');
+				//Getting Screenshot After Clicking On 'Log In' Link 
+				casper.then(function() {
+					this.capture(screenShotsDir+ 'login.png');
+				});
 			});
 
 			// edit topic title when permission false	
@@ -101,9 +100,8 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 			// reopen backend to enable permission
 			casper.thenOpen(config.backEndUrl,function() {
 				casper.echo('Login To Backend URL and enable start topic checkbox', 'INFO');
-				this.wait(7000, function() {
+				this.then(function() {
 					casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-					test.assertTitle('Website Toolbox', 'The page has correct title');
 					casper.echo('---------------------------------------------------------------------------');		
 				});
 			});
@@ -112,7 +110,7 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 			casper.then(function() {
 				utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 					casper.echo("Successfully navigated to Edit User group Permission page", 'INFO');
-					casper.wait(4000, function(){
+					casper.then(function(){
 						this.capture(screenShotsDir+'EditUserPermissionpage.png');
 					});
 				});
@@ -140,7 +138,7 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 			});
 
 			//getting screenshot after change permission
-			casper.wait(2000, function() {
+			casper.then(function() {
 				this.capture(screenShotsDir+'afterChangePermission.png');
 			});		
 
@@ -157,7 +155,7 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 			});
 			casper.then(function() {
 				this.click('#post_submit');
-				this.wait(7000, function() {
+				this.then(function() {
 					this.capture(screenShotsDir+ 'postPage.png');
 				});
 			});
@@ -184,7 +182,7 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 			});
 
 			//Getting Screenshot After edited Topic title 
-			casper.wait(7000,function(){
+			casper.then(function(){
 				this.capture(screenShotsDir+ 'editedBlankTopicTitle.png');
 			});
 
@@ -201,7 +199,7 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 			});
 
 			//Getting Screenshot After edited Topic title 
-			casper.wait(7000,function(){
+			casper.then(function(){
 				this.capture(screenShotsDir+ 'editedTopicTitle.png');
 			});
 
@@ -221,13 +219,14 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 
 			//Edit Topic Content With blank Data
 			casper.then(function(){
+				casper.echo('Edit Topic Content With blank Data', 'INFO');
 				editTopicContent(json.editTopic.blankContent.content, casper, function() {
 					casper.log('edited topic content', 'INFO');
 				});
 			});
 
 			//wait for 3 second to remove alert1 listener	
-			casper.wait(3000);
+			casper.wait(3000, function() {});
 
 			casper.then(function() {
 				this.removeListener('remote.alert', testAlert2);
@@ -235,13 +234,14 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 	
 			//Getting Screenshot After editing topic content 
 
-			casper.wait(7000,function(){
+			casper.then(function(){
 				this.capture(screenShotsDir+ 'editedTopicContent.png');
 			});
 
 	
 			//Edit Topic Content With Valid Data
 			casper.thenOpen(config.url, function() {
+				casper.echo('Edit Topic Content With Valid Data', 'INFO');
 				casper.echo('go to topic listing page : ', 'INFO');
 			});
 
@@ -252,13 +252,14 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 			});
 
 			//Getting Screenshot After editing topic content 
-			casper.wait(7000,function(){
+			casper.wait(7000, function(){
 				this.capture(screenShotsDir+ 'editedTopicContent.png');
 			});
 
 
 			//Verify Edit Topic Content With Valid data
 			casper.then(function() {
+				casper.echo('Verify Edit Topic Content With Valid data', 'INFO');
 				var getContent = this.fetchText('div.post-body-content span[id^="post_message_"]');
 				test.assertEquals(getContent.trim(), json.editTopic.validContent.content.trim(), getContent.trim()+' and content verified');
 				casper.echo('content successfully verified with valid content', 'INFO');
@@ -297,7 +298,7 @@ var editTopicTitle = function(title, driver, callback){
 	
 		driver.then(function(){
 			driver.click('#editTopic');
-			this.wait(7000, function() {
+			this.then(function() {
 				this.capture(screenShotsDir+ 'editTopicTitle.png');
 			});
 		});
@@ -308,7 +309,6 @@ var editTopicTitle = function(title, driver, callback){
 		});
 		driver.then(function(){
 				driver.click('div.editable-buttons .editable-submit');
-				
 		});
 	
 	
@@ -329,14 +329,14 @@ var editTopicContent = function(content, driver, callback){
 
 		driver.then(function(){
 			this.click('div.post-body .panel-dropdown .pull-right a.dropdown-toggle');
-			this.wait(7000, function(){
+			this.then(function(){
 				driver.capture(screenShotsDir+ 'editPopUp.png');
 			});
 		});
 	
 		driver.then(function(){
 			this.click('div.post-body .panel-dropdown .pull-right ul.dropdown-menu li a#edit_post_request');
-			this.wait(7000, function(){
+			this.then(function(){
 				driver.capture(screenShotsDir+ 'edit.png');
 			});		
 		});	
@@ -362,7 +362,7 @@ var gotoNewTopic = function(data, driver, callback) {
 	driver.click('#links-nav');
 	driver.click('#latest_topics_show');
 	driver.click('a[href="/post/printadd"]');
-	driver.wait(7000, function() {
+	driver.then(function() {
 		this.capture(screenShotsDir+ 'startTopic.png');
 	});
 	driver.then(function() {
@@ -373,7 +373,7 @@ var gotoNewTopic = function(data, driver, callback) {
 	 		this.sendKeys('#tinymce', data.content);
 			this.capture(screenShotsDir+ 'content.png');	
 		});	
-		driver.wait(3000, function() {
+		driver.then(function() {
 			this.click('#all_forums_dropdown');
 			var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
 			this.fill('form[name="PostTopic"]',{

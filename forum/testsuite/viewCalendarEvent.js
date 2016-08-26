@@ -149,7 +149,7 @@ viewCalendarEvent.ViewEvent = function(data, driver, callback) {
 							driver.test.assertExists('a[href="'+calendar_href+'"]');
 							this.click('a[href="'+calendar_href+'"]');
 							this.wait(3000, function() {
-								this.capture(screenShotsDir+data_href+'DailyEvent.png')
+								this.capture(screenShotsDir+data_href+'DailyEvent.png');
 								this.click('a.btn.btn-default[href^="/calendar?"]');
 							});
 						});	

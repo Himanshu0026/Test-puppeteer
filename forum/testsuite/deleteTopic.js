@@ -13,24 +13,27 @@ var screenShotsDir = config.screenShotsLocation + 'deleteTopic/';
 
 deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 		
-
-
 	//Open Forum URL And Get Title 
-
 	casper.thenOpen(config.backEndUrl,function() {
 		casper.echo('Login To Backend URL and disable Delete Own Topic checkbox', 'INFO');
-			this.wait(7000, function() {
+			this.then(function() {
 				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-				test.assertTitle('Website Toolbox', 'The page has correct title');
 				casper.echo('---------------------------------------------------------------------------');		
 			});
 	});
+
+	//login to backend url (rm)
+	/*casper.then(function() {
+		forumRegister.loginToForumBackEnd(casper, test, function() {
+			casper.echo('User has been successfuly login to backend', 'INFO');
+		});
+	});*/
 
 	//go to edit user group setting permission
 	casper.then(function() {
 		utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 			casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
-			casper.wait(4000, function(){
+			casper.then(function(){
 				this.capture(screenShotsDir+'EditUserPermissionpage.png');
 			});
 		});
@@ -58,7 +61,7 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 	});
 
 	//getting screenshot after change permission
-	casper.wait(2000, function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+'afterChangePermission.png');
 	});		
 		
@@ -78,9 +81,8 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 	// reopen backend to enable permission
 	casper.thenOpen(config.backEndUrl,function() {
 		casper.echo('Login To Backend URL and enable start topic checkbox', 'INFO');
-		this.wait(7000, function() {
+		this.then(function() {
 			casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-			test.assertTitle('Website Toolbox', 'The page has correct title');		
 			casper.echo('---------------------------------------------------------------------------');
 		});
 	});	
@@ -89,7 +91,7 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 	casper.then(function() {
 		utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
 			casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
-			casper.wait(4000, function(){
+			casper.then(function(){
 				this.capture(screenShotsDir+'EditUserPermissionpage.png');
 			});
 		});
@@ -117,7 +119,7 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 	});
 
 	//getting screenshot after change permission
-	casper.wait(2000, function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+'afterChangePermission.png');
 	});		
 
@@ -127,7 +129,7 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 	});
 
 	//getting screenshot after hit on  forum url
-	casper.wait(7000, function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+'forumUrl.png');
 	});		
 
@@ -146,7 +148,7 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 	});
 
 	//Getting Screenshot After Clicking On 'Logout' Link
-	casper.wait(7000, function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+ 'logout.png');
 	});
 
@@ -158,7 +160,7 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 	});
 
 	//Getting Screenshot After Clicking On 'Log In' Link 
-	casper.wait(7000, function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+ 'login.png');
 	});
 	
@@ -170,7 +172,7 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 	});
 	
 	//Getting Screenshot After Clicking On 'Delete' Icon
-	casper.wait(7000,function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+ 'deletedTopic.png');
 	});
 	
@@ -186,7 +188,7 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 	
 	//Getting Screenshot After Clicking On 'Delete' Icon
  
-	casper.wait(10000,function() {
+	casper.then(function() {
 		this.capture(screenShotsDir+ 'deletedAllTopic.png');
 	});*/
 
@@ -195,12 +197,13 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 		forumLogin.logoutFromApp(casper, function() {
 			casper.echo('Successfully logout from application', 'INFO');
 		});
-	});
 
-	//Getting Screenshot After Clicking On 'Logout' Link
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'logout.png');
+		//Getting Screenshot After Clicking On 'Logout' Link
+		casper.then(function() {
+			this.capture(screenShotsDir+ 'logout.png');
+		});
 	});
+	return callback();
 };
 
 /************************************PRIVATE METHODS***********************************/
@@ -211,7 +214,7 @@ var deleteTopic = function(x, topicName, driver, callback){
 	
 	var href = "";
 	driver.click(x('//a/span[text()="'+topicName+'"]'));
-	driver.wait(7000, function() {
+	driver.then(function() {
 		var url = this.getCurrentUrl();
 		href = url.split('.com');
 	});
@@ -232,7 +235,7 @@ var deleteTopic = function(x, topicName, driver, callback){
 		}
 	});
 	driver.then(function() {
-		this.wait(5000, function() {
+		this.then(function() {
 			driver.capture(screenShotsDir+ 'Delete.png');
 		});
 	});
