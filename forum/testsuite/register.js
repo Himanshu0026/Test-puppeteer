@@ -15,39 +15,31 @@ forumRegister.featureTest = function(casper, test) {
 	//Login To Forum BackEnd 
 	casper.start(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-	
-	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+			
+			//Clicking On "General" Tab Under Settings 
+			casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function success() {
+				casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+				test.assertExists('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
+				casper.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
+				casper.echo('Successfully open forum settings form.....', 'INFO');
+				
+				//Getting 'User Accounts' Field Value, If, Enabled, Then Filling Data For Testing
+				casper.waitForSelector('#REQreg', function success() {
+					utils.enableorDisableCheckbox('REQreg', true, casper, function() {
+						casper.echo("User Accounts Checkbox Has Been Enabled For Registered User", 'INFO');
+					});
+					test.assertExists('.button.btn-m.btn-blue');
+					this.click('.button.btn-m.btn-blue');
+				}, function fail() {
+					this.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}, function fail() {
+				this.echo('ERROR OCCURRED', 'ERROR');
+			});
+			
 		});
-	});
-	
-	//Clicking On "General" Tab Under Settings 
-	casper.then(function() {
-		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-		test.assertExists('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
-		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
-		this.echo('Successfully open forum settings form.....', 'INFO');
-	});
-	
-	//Getting Screenshot After Clicking On "General" Tab Under Settings 
-	casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'forum_settings.png');
-	});
-	
-	//Getting 'User Accounts' Field Value, If, Enabled, Then Filling Data For Testing
-	casper.then(function(){
-		test.assertExists('#REQreg');
-		utils.enableorDisableCheckbox('REQreg', true, casper, function() {
-			casper.echo("User Accounts Checkbox Has Been Enabled For Registered User", 'INFO');
-		});
-	});
-		
-	casper.then(function(){
-		test.assertExists('.button.btn-m.btn-blue');
-		this.click('.button.btn-m.btn-blue');
 	});
 	
 	casper.thenOpen(config.url, function() {
@@ -55,13 +47,9 @@ forumRegister.featureTest = function(casper, test) {
 		test.assertExists('.pull-right a[href="/register/register"]');
 		this.click('.pull-right a[href="/register/register"]');
 		this.echo('Successfully open register form.....', 'INFO');
-	});
+	//});
 			
-	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'register_form.png');
-	});
-			
-	casper.then(function() {
+	//casper.then(function() {
 		this.eachThen(json['invalidInfo'], function(response) {
 			casper.log('Response Data : ' +JSON.stringify(response.data), 'INFO');
 			var responseData = response.data;
@@ -138,29 +126,20 @@ forumRegister.featureTest = function(casper, test) {
 			});
 		});
 		
+		//Fill Valid Data On Registration Form
+		casper.then(function() {
+			forumRegister.registerToApp(json['validInfo'], casper, function() {
+				casper.echo('Processing to registration on forum.....', 'INFO');
+				forumRegister.redirectToLogout(casper, test, function() {});
+			});
+		});
+	
 		//Handling 'Alert' While Submitting The Form
 		casper.on('remote.alert', function(message) {
 			var expectedErrorMsg = "Please provide a signature.";
 			test.assertEquals(message, expectedErrorMsg);
 			this.capture(screenShotsDir + 'Error_RegisterWithsignature.png');
 		});
-	});
-			
-	//Fill Valid Data On Registration Form
-	casper.then(function() {
-		forumRegister.registerToApp(json['validInfo'], casper, function() {
-			casper.echo('Processing to registration on forum.....', 'INFO');
-		});
-	});
-
-	//Getting Screenshot After Submitting 'Register' Form  
-	casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'register_submit.png');
-	});
-			
-	//Handling Logout And Redirecting To The Respective Page
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {});
 	});
 };
 
@@ -569,11 +548,11 @@ forumRegister.registerToApp = function(data, driver, callback) {
 		driver.test.assertDoesntExist('form[name="PostTopic"] input[name="rules_checkbox"]');
 	}
 	
-	driver.evaluate(function() {         
+	/*driver.evaluate(function() {         
 		document.querySelector('form[name="PostTopic"]').action = '/register/create_account?apikey=4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q';     
-	});
-	//driver.test.assertExists('form[name="PostTopic"] button');
-	//driver.click('form[name="PostTopic"] button');
+	});*/
+	driver.test.assertExists('form[name="PostTopic"] button');
+	driver.click('form[name="PostTopic"] button');
 	return callback();
 };
 

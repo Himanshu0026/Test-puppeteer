@@ -81,7 +81,7 @@
         "usignature" : "This is my signature 18",
         "namePrivate" : true,
         "errorType" : "existWithName",
-        "errorMsg1" : "Error: The username ",
+        "errorMsg1" : "The username ",
         "errorMsg2" : " has already been taken."
     },
     
@@ -95,7 +95,7 @@
         "usignature" : "This is my signature 18",
         "namePrivate" : true,
         "errorType" : "existWithEmail",
-        "expectedErrorMsg" : "Error: It looks like you are already registered"
+        "expectedErrorMsg" : "It looks like you already have a forum account!"
     },
     
     {
@@ -108,7 +108,7 @@
         "usignature" : "This is my signature 18",
         "namePrivate" : true,
         "errorType" : "existWithUsernameAndEmail",
-        "expectedErrorMsg" : "Error: It looks like you already have a forum account! A forum account for that username and email address combination already exists!"
+        "expectedErrorMsg" : "It looks like you already have a forum account! A forum account for that username and email address combination already exists!"
     },
     
     {
@@ -121,7 +121,7 @@
         "usignature" : "This is my signature 18",
         "namePrivate" : true,
         "errorType" : "invalidBirthday",
-        "expectedErrorMsg" : "Error: Valid years for your Birthday are from 1900 to 2016."
+        "expectedErrorMsg" : "Valid years for your Birthday are from 1900 to 2016."
     },
     
     {
@@ -138,8 +138,8 @@
     }],
     
     "validInfo" : {
-    	"uname" : "800",
-        "uemail" : "800@wt.com",
+    	"uname" : "801",
+        "uemail" : "801@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",
