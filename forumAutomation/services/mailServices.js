@@ -21,7 +21,7 @@ mailServices.sendMail = function(emailDetails, callback){
 		from: 'noresponse@websitetoolbox.com', // sender address 
 		to: emailDetails.committerEmail, // list of receivers 
 		subject: "Forum test result", // Subject line 
-		html: 'Hello ' + emailDetails.committerName+",</br></br> <b>Automation test result:</b> "+emailDetails.testResult+"</br></br>Please find details of the automation test result attached herewith. " , // plaintext body 
+		text: 'Hello ' + emailDetails.committerName+",\n\n Following is the automation test result: \n"+emailDetails.testResult+"\nPlease find details of the automation test result attached herewith. \n" , // plaintext body 
 		attachments: emailDetails.attachments //attachments
 	};
 	console.log("mailOptions : "+JSON.stringify(mailOptions));
