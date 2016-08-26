@@ -19,23 +19,25 @@ inContextLogin.featureTest = function(casper, test) {
 		this.echo('Incontext Login From Start New Topic Register Link', 'INFO');
 		
 		//Clicking On Start New Topic Button
-		test.assertExists('div#topics a[href="/post/printadd"]');
-		this.click('div#topics a[href="/post/printadd"]');
+		this.waitForSelector('div#topics a[href="/post/printadd"]', function success() {
+			this.click('div#topics a[href="/post/printadd"]');
+			//Filling Valid Data On login Form
+			loginToApp(json['validInfo'].username, json['validInfo'].password, casper, function(err) {
+				if (err) {
+					casper.echo("Error Occurred In Callback", "ERROR");
+				} else {
+					casper.echo('Processing to Login on forum.....', 'INFO');
+					redirectToLogout(casper, test, function(err) {
+						if (err) {
+							casper.echo("Error Occurred In Callback", "ERROR");
+						} else {
+							casper.echo("User logged-out successfully", "INFO");
+						}
+					});
+				}
+			});
+		}, function fail() {
 		
-		//Filling Valid Data On login Form
-		loginToApp(json['validInfo'].username, json['validInfo'].password, casper, function(err) {
-			if (err) {
-				casper.echo("Error Occurred In Callback", "ERROR");
-			} else {
-				casper.echo('Processing to Login on forum.....', 'INFO');
-				redirectToLogout(casper, test, function(err) {
-					if (err) {
-						casper.echo("Error Occurred In Callback", "ERROR");
-					} else {
-						casper.echo("User logged-out successfully", "INFO");
-					}
-				});
-			}
 		});
 	});
 	
