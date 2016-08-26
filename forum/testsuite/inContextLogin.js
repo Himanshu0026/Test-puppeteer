@@ -95,26 +95,31 @@ inContextLogin.featureTest = function(casper, test) {
 		casper.echo('Incontext Login While Dislike Post From Topic Page', 'INFO');
 		
 		//Clicking On Any Topic Present In The List
-		test.assertExists('form[name="posts"] a.topic-title');
-		this.click('form[name="posts"] a.topic-title');
+		casper.waitForSelector('form[name="posts"] a.topic-title', function success() {
+			//test.assertExists('form[name="posts"] a.topic-title');
+			this.click('form[name="posts"] a.topic-title');
 		
 		//Clicking On 'Dislike' This Post Icon
-		casper.waitForSelector('a.dislike_post.text-muted', function success() {
-			this.click('a.dislike_post.text-muted');
-			//Filling Valid Data On Login Form
-			forumLogin.loginToApp(json['validInfo'].username, json['validInfo'].password, casper, function(err) {
-				if (err) {
-					casper.echo("Error Occurred In Callback", "ERROR");
-				} else {
-					casper.echo('Processing to Login on forum.....', 'INFO');
-					redirectToLogout(casper, test, function(err) {
-						if (err) {
-							casper.echo("Error Occurred In Callback", "ERROR");
-						} else {
-							casper.echo("User logged-out successfully", "INFO");
-						}
-					});
-				}
+			casper.waitForSelector('a.dislike_post.text-muted', function success() {
+				test.assertExists('a.dislike_post.text-muted');
+				this.click('a.dislike_post.text-muted');
+				//Filling Valid Data On Login Form
+				forumLogin.loginToApp(json['validInfo'].username, json['validInfo'].password, casper, function(err) {
+					if (err) {
+						casper.echo("Error Occurred In Callback", "ERROR");
+					} else {
+						casper.echo('Processing to Login on forum.....', 'INFO');
+						redirectToLogout(casper, test, function(err) {
+							if (err) {
+								casper.echo("Error Occurred In Callback", "ERROR");
+							} else {
+								casper.echo("User logged-out successfully", "INFO");
+							}
+						});
+					}
+				});
+			}, function fail() {
+				casper.echo("Error Occurred", "ERROR");
 			});
 		}, function fail() {
 			casper.echo("Error Occurred", "ERROR");
@@ -158,33 +163,35 @@ inContextLogin.featureTest = function(casper, test) {
 		casper.echo('Incontext Login From Vote On Post From Post List', 'INFO');
 		
 		//Clicking On Any Topic Present In The List
-		test.assertExists('form[name="posts"] a.topic-title');
-		this.click('form[name="posts"] a.topic-title');
-		
-		//Clicking On 'create an account and log in' Link Present In Post List
-		try {
-			test.assertExists('a#guest_user_vote');
-			this.click('a#guest_user_vote');
-			this.echo('You have clicked on create an account and log-in link...', 'INFO');
-		} catch(e) {
-			test.assertDoesntExist('a#guest_user_vote');
-			this.echo('You did not find create an account and log-in link...', 'INFO');
-		}
-		
-		//Filling Valid Data On Login
-		forumLogin.loginToApp(json['validInfo'].username, json['validInfo'].password, casper, function(err) {
-			if (err) {
-				casper.echo("Error Occurred In Callback", "ERROR");
-			} else {
-				casper.echo('Processing to Login on forum.....', 'INFO');
-				redirectToLogout(casper, test, function(err) {
-					if (err) {
-						casper.echo("Error Occurred In Callback", "ERROR");
-					} else {
-						casper.echo("User logged-out successfully", "INFO");
-					}
-				});
+		casper.waitForSelector('form[name="posts"] a.topic-title', function success() {
+			this.click('form[name="posts"] a.topic-title');
+			//Clicking On 'create an account and log in' Link Present In Post List
+			try {
+				test.assertExists('a#guest_user_vote');
+				this.click('a#guest_user_vote');
+				this.echo('You have clicked on create an account and log-in link...', 'INFO');
+			} catch(e) {
+				test.assertDoesntExist('a#guest_user_vote');
+				this.echo('You did not find create an account and log-in link...', 'INFO');
 			}
+			
+			//Filling Valid Data On Login
+			forumLogin.loginToApp(json['validInfo'].username, json['validInfo'].password, casper, function(err) {
+				if (err) {
+					casper.echo("Error Occurred In Callback", "ERROR");
+				} else {
+					casper.echo('Processing to Login on forum.....', 'INFO');
+					redirectToLogout(casper, test, function(err) {
+						if (err) {
+							casper.echo("Error Occurred In Callback", "ERROR");
+						} else {
+							casper.echo("User logged-out successfully", "INFO");
+						}
+					});
+				}
+			});
+		}, function fail() {
+		
 		});
 	});
 	
