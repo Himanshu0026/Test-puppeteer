@@ -579,14 +579,16 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 							casper.click('a[href="/post/printadd"]');
 							
 							//Verifying 'Error Messages' And Then Logout From Application
-							casper.waitForSelector('div.alert.alert-info.text-center', function success() {
-								var message = this.fetchText('div.alert.alert-info.text-center');
+							casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {casper.echo('success', 'INFO');
+							casper.capture(screenShotsDir + '1.png');
+								var message = this.fetchText('div.text-center.bmessage.alert-info.text-danger');
 								var expectedMsg = "Sorry! You don't have permission to perform this action. Please check your email for instructions on how to begin using your account. You can resend the email if you didn't receive it.";
 								test.assert(message.indexOf(expectedMsg) > -1);
 								forumLogin.logoutFromApp(casper, function() {
 									casper.echo('Successfully Logout From Application', 'INFO');
 								});
-							}, function fail() {
+							}, function fail() {casper.echo('fail', 'INFO');
+								casper.capture(screenShotsDir + '1.png');
 								this.echo('ERROR OCCURRED', 'ERROR');
 							});
 							//});
