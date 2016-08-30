@@ -3,7 +3,7 @@ var utils = module.exports = {};
 // method for click on user's edit profile
 utils.clickOnElement = function(driver, element, callback) {
 	driver.click(element);
-	return callback();
+	return callback(null);
 };
 
 
@@ -23,7 +23,7 @@ utils.enableorDisableCheckbox = function(element, status, driver, callback){
 			}
 		}
 
-	return callback();
+	return callback(null);
 
 };
 
@@ -46,7 +46,7 @@ utils.gotoEditUserGroupPermissionpage = function(x,userType, driver, callback) {
 			casper.echo("** Sublinks ** : "+this.fetchText(x('//td[text()="'+userType+'"]/parent::tr/td[3]/div/a[1]')));	
 		});
 	});
-	return callback();
+	return callback(null);
 };
 
 
