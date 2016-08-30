@@ -13,7 +13,7 @@ var screenShotsDir = config.screenShotsLocation + 'verifyCategoryPermissions/';
 
 verifyCategoryPermissions.featureTest = function(casper, test) {
 	
-	casper.echo('                                      CASE 1                                                 ', 'INFO');
+	casper.echo('                                      CASE 1', 'INFO');
 	casper.echo('************************************************************************************', 'INFO');
 	casper.echo('DISABLE VIEW CATEGORY FOR REGISTERED USER FROM GROUP PERMISSION', 'INFO');
 	casper.echo('CHECK PERMISSION TO VIEW CATEGORY AFTER DISABLEING PERMISSION FOR REGISTERED USER', 'INFO');
@@ -26,39 +26,35 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 		//Login To Forum BackEnd 
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+			
+			//Clicking On "General" Tab Under Settings
+			casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function success() {
+				this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+				test.assertExists('div#ddSettings a[href="/tool/members/mb/settings?tab=Display"]');
+				this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Display"]');
+				this.echo('Successfully open forum settings form.....', 'INFO');
+				
+				//Getting 'Show Private Forums' Field Value
+				casper.waitForSelector('#show_private_forums', function success() {
+					test.assertExists('#show_private_forums');
+					utils.enableorDisableCheckbox('show_private_forums', false, casper, function() {
+						casper.echo("Show Private Forums Has Been Disabled For Registered User", 'INFO');
+						test.assertExists('.button.btn-m.btn-blue');
+						casper.click('.button.btn-m.btn-blue');
+						
+						//Clicking On 'Group Permissions' Link Under 'Users' Tab 
+						test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+						casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+						test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+						casper.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+					});
+				}, function fail() {
+					this.echo('ERROR OCCURRED', 'ERROR');
+				}); 
+			}, function fail() {
+				this.echo('ERROR OCCURRED', 'ERROR');
+			}); 
 		});
-	});
-	
-	//Clicking On "General" Tab Under Settings 
-	casper.then(function() {
-		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-		test.assertExists('div#ddSettings a[href="/tool/members/mb/settings?tab=Display"]');
-		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Display"]');
-		this.echo('Successfully open forum settings form.....', 'INFO');
-		this.capture(screenShotsDir + 'forum_settings.png');
-	});
-	
-	//Getting 'Show Private Forums' Field Value
-	casper.then(function(){
-		test.assertExists('#show_private_forums');
-		utils.enableorDisableCheckbox('show_private_forums', false, casper, function() {
-			casper.echo("Show Private Forums Has Been Disabled For Registered User", 'INFO');
-		});
-	});
-	
-	casper.then(function(){
-		test.assertExists('.button.btn-m.btn-blue');
-		this.click('.button.btn-m.btn-blue');
-	});
-	
-	//Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.then(function() {
-		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		this.capture(screenShotsDir + 'group_permissions.png');
 	});
 	
 	//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
@@ -73,91 +69,77 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			}
 		});
 		casper.click('a[href="'+grpName+'"]');
-		this.capture(screenShotsDir + 'group_Registered.png');
-	});
-	
-	//Disabling 'View Category' Option And 'Save'
-	casper.then(function(){
-		test.assertExists('#view_forum');
-	});
-	
-	casper.then(function() {
-		utils.enableorDisableCheckbox('view_forum', false, casper, function() {
-			casper.echo("View Category Checkbox Has Been Disabled For Registered User", 'INFO');
-		});
-	});
-	
-	casper.then(function() {
-		this.click('button.button.btn-m.btn-blue');
-		this.capture(screenShotsDir + 'actions_saved.png');
-	});
-	
-	//Verifying 'Success Message' After Saving Settings			
-	casper.then(function() {
-		var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
-		var expectedErrorMsg = 'Your user group settings have been updated.';
-		test.assertEquals(message, expectedErrorMsg);
-		test.assertExists('a[href="/tool/members/login?action=logout"]');
-		this.click('a[href="/tool/members/login?action=logout"]');
-	});
 		
-	// start from forum url
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		//Disabling 'View Category' Option And 'Save'
+		casper.waitForSelector('#view_forum', function success() {
+			utils.enableorDisableCheckbox('view_forum', false, casper, function() {
+				casper.echo("View Category Checkbox Has Been Disabled For Registered User", 'INFO');
+				casper.click('button.button.btn-m.btn-blue');
+				
+				//Verifying 'Success Message' After Saving Settings	
+				casper.waitForSelector('div#tab_wrapper .heading[color="red"]', function success() {
+					var message = casper.fetchText('div#tab_wrapper .heading[color="red"]');
+					var expectedErrorMsg = 'Your user group settings have been updated.';
+					test.assertEquals(message, expectedErrorMsg);
+					test.assertExists('a[href="/tool/members/login?action=logout"]');
+					casper.click('a[href="/tool/members/login?action=logout"]');
+					
+					// start from forum url
+					casper.thenOpen(config.url, function() {
+						this.echo('Title of the page :' +this.getTitle(), 'INFO');
+						
+						//Login To App
+						forumLogin.loginToApp('100', '1234', casper, function() {
+							casper.echo('User logged-in successfully', 'INFO');
+							
+							//Clicking On 'Categories' Tab
+							test.assertExists('a[href="/categories"]');
+							casper.click('a[href="/categories"]');
+							
+							//Verifying 'Error Messages' And Then Logout From Application
+							casper.waitForSelector('span.alert.alert-info p', function success() {
+								var message = casper.fetchText('span.alert.alert-info p');
+								var expectedMsg = 'There are currently no categories to display.';
+								test.assertEquals(message, expectedMsg);
+								forumLogin.logoutFromApp(casper, function() {
+									casper.echo('Successfully logout from application', 'INFO');
+								});
+							}, function fail() {
+								this.echo('ERROR OCCURRED', 'ERROR');
+							});
+						});
+					});
+				}, function fail() {
+					this.echo('ERROR OCCURRED', 'ERROR');
+				});
+			});
+		}, function fail() {
+			this.echo('ERROR OCCURRED', 'ERROR');
+		});
 	});
 	
-	//Login To App
-	casper.then(function() {
-		forumLogin.loginToApp('100', '1234', casper, function() {
-			casper.capture(screenShotsDir+ 'loggedIn_user.png');
-			casper.echo('User logged-in successfully', 'INFO');
-		});
-	});
-
-	//Clicking On 'Categories' Tab
-	casper.then(function() {
-		test.assertExists('a[href="/categories"]');
-		this.click('a[href="/categories"]');
-		this.then(function() {
-			this.capture(screenShotsDir + 'registered_category.png');
-		});
-	});
-
-	//Verifying 'Error Messages' And Then Logout From Application
-	casper.then(function() {
-		var message = this.fetchText('span.alert.alert-info p');
-		var expectedMsg = 'There are currently no categories to display.';
-		test.assertEquals(message, expectedMsg);
-		forumLogin.logoutFromApp(casper, function() {
-			casper.echo('Successfully logout from application', 'INFO');
-		});
-	});
-	
-	casper.then(function() {
-		casper.echo('                                      CASE 2                                                 ', 'INFO');
+	//Login To Forum BackEnd 
+	/*casper.thenOpen(config.backEndUrl, function() {
+		casper.echo('                                      CASE 2', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('DISABLE VIEW CATEGORY FOR  UN-REGISTERED USER FROM GROUP PERMISSION', 'INFO');
 		casper.echo('CHECK PERMISSION TO VIEW CATEGORY AFTER DISABLEING PERMISSION FOR UN-REGISTERED USER', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
-	});
-	
-	//Login To Forum BackEnd 
-	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 		
 		//Login To Forum BackEnd 
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+			
+			//Clicking On 'Group Permissions' Link Under 'Users' Tab 
+			casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function success() {
+				this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+				test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+				this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			}, function fail() {
+				this.echo('ERROR OCCURRED', 'ERROR');
+			});
 		});
-	});
-	
-	//Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.then(function() {
-		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		this.capture(screenShotsDir + 'group_permissions.png');
 	});
 	
 	//Clicking On 'Change Permissions' Link With Respect To 'Un-Registered Users'  
@@ -172,78 +154,69 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			}
 		});
 		casper.click('a[href="'+grpName+'"]');
-		this.capture(screenShotsDir + 'group_un-Registered.png');
-	});
-	
-	//Disabling 'View Category' Option And 'Save'
-	casper.then(function(){
-		test.assertExists('#view_forum');
-	});
-	
-	casper.then(function() {
-		utils.enableorDisableCheckbox('view_forum', false, casper, function() {
-			casper.echo("View Category Checkbox Has Been Disabled For Un-Registered User", 'INFO');
-		});
-	});
-	
-	casper.then(function() {
-		this.click('button.button.btn-m.btn-blue');
-		this.capture(screenShotsDir + 'actions_saved.png');
-	});
-	
-	//Verifying 'Success Message' After Saving Settings			
-	casper.then(function() {
-		var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
-		var expectedErrorMsg = 'Your user group settings have been updated.';
-		test.assertEquals(message, expectedErrorMsg);
-		test.assertExists('a[href="/tool/members/login?action=logout"]');
-		this.click('a[href="/tool/members/login?action=logout"]');
-	});
 		
-	// start from forum url
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-	
-	//Clicking On 'Categories' Tab
-	casper.then(function() {
-		test.assertExists('a[href="/categories"]');
-		this.click('a[href="/categories"]');
-		this.capture(screenShotsDir + 'unregistered_category.png');
-	});
-
-	//Verifying 'Error Messages' And Then Logout From Application
-	casper.then(function() {
-		var message = this.fetchText('span.alert.alert-info p');
-		var expectedMsg = 'There are currently no categories to display.';
-		test.assertEquals(message, expectedMsg);
-	});
-	
-	casper.then(function() {
-		casper.echo('                                      CASE 3                                                 ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('DISABLE VIEW CATEGORY FOR  PENDING EMAIL VERIFICATION USER FROM GROUP PERMISSION', 'INFO');
-		casper.echo('CHECK PERMISSION TO VIEW CATEGORY AFTER DISABLEING PERMISSION FOR PENDING EMAIL VERIFICATION USER', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
+		//Disabling 'View Category' Option And 'Save'
+		casper.waitForSelector('#view_forum', function success() {
+			utils.enableorDisableCheckbox('view_forum', false, casper, function() {
+				casper.echo("View Category Checkbox Has Been Disabled For Un-Registered User", 'INFO');
+				casper.click('button.button.btn-m.btn-blue');
+				
+				//Verifying 'Success Message' After Saving Settings
+				casper.waitForSelector('div#tab_wrapper .heading[color="red"]', function success() {	
+					var message = casper.fetchText('div#tab_wrapper .heading[color="red"]');
+					var expectedErrorMsg = 'Your user group settings have been updated.';
+					test.assertEquals(message, expectedErrorMsg);
+					test.assertExists('a[href="/tool/members/login?action=logout"]');
+					casper.click('a[href="/tool/members/login?action=logout"]');
+					
+					// start from forum url
+					casper.thenOpen(config.url, function() {
+						this.echo('Title of the page :' +this.getTitle(), 'INFO');
+						
+						//Clicking On 'Categories' Tab
+						test.assertExists('a[href="/categories"]');
+						this.click('a[href="/categories"]');
+						
+						//Verifying 'Error Messages' And Then Logout From Application
+						casper.waitForSelector('span.alert.alert-info p', function success() {
+							var message = this.fetchText('span.alert.alert-info p');
+							var expectedMsg = 'There are currently no categories to display.';
+							test.assertEquals(message, expectedMsg);
+						}, function fail() {
+							this.echo('ERROR OCCURRED', 'ERROR');
+						});
+					});
+				}, function fail() {
+					this.echo('ERROR OCCURRED', 'ERROR');
+				});
+			});
+		}, function fail() {
+			this.echo('ERROR OCCURRED', 'ERROR');
+		});
 	});
 	
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
+		casper.echo('                                      CASE 3', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('DISABLE VIEW CATEGORY FOR  PENDING EMAIL VERIFICATION USER FROM GROUP PERMISSION', 'INFO');
+		casper.echo('CHECK PERMISSION TO VIEW CATEGORY AFTER DISABLEING PERMISSION FOR PENDING EMAIL VERIFICATION USER', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 		
 		//Login To Forum BackEnd 
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+			
+			//Clicking On 'Group Permissions' Link Under 'Users' Tab 
+			casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function success() {
+				this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+				test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+				this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			}, function fail() {
+				this.echo('ERROR OCCURRED', 'ERROR');
+			});
 		});
-	});
-	
-	//Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.then(function() {
-		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		this.capture(screenShotsDir + 'group_permissions.png');
 	});
 	
 	//Clicking On 'Change Permissions' Link With Respect To 'Pending Users'  
@@ -258,92 +231,76 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			}
 		});
 		casper.click('a[href="'+grpName+'"]');
-		this.capture(screenShotsDir + 'group_Pending.png');
-	});
-	
-	//Disabling 'View Category' Option And 'Save'
-	casper.then(function(){
-		test.assertExists('#view_forum');
-	});
-	
-	casper.then(function() {
-		utils.enableorDisableCheckbox('view_forum', false, casper, function() {
-			casper.echo("View Category Checkbox Has Been Disabled For Pending User", 'INFO');
-		});
-	});
-	
-	casper.then(function() {
-		this.click('button.button.btn-m.btn-blue');
-		this.capture(screenShotsDir + 'actions_saved.png');
-	});
-	
-	//Verifying 'Success Message' After Saving Settings			
-	casper.then(function() {
-		var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
-		var expectedErrorMsg = 'Your user group settings have been updated.';
-		test.assertEquals(message, expectedErrorMsg);
-		test.assertExists('a[href="/tool/members/login?action=logout"]');
-		this.click('a[href="/tool/members/login?action=logout"]');
-	});
 		
-	// start from forum url
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-	
-	//Login To App
-	casper.then(function() {
-		forumLogin.loginToApp('90', '1234', casper, function() {
-			casper.capture(screenShotsDir+ 'loggedIn_user.png');
-			casper.echo('User logged-in successfully', 'INFO');
+		//Disabling 'View Category' Option And 'Save'
+		casper.waitForSelector('#view_forum', function success() {
+			utils.enableorDisableCheckbox('view_forum', false, casper, function() {
+				casper.echo("View Category Checkbox Has Been Disabled For Pending User", 'INFO');
+				casper.click('button.button.btn-m.btn-blue');
+				
+				//Verifying 'Success Message' After Saving Settings
+				casper.waitForSelector('div#tab_wrapper .heading[color="red"]', function success() {
+					var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
+					var expectedErrorMsg = 'Your user group settings have been updated.';
+					test.assertEquals(message, expectedErrorMsg);
+					test.assertExists('a[href="/tool/members/login?action=logout"]');
+					this.click('a[href="/tool/members/login?action=logout"]');
+					
+					//start from forum url
+					casper.thenOpen(config.url, function() {
+						this.echo('Title of the page :' +this.getTitle(), 'INFO');
+						
+						//Login To App
+						forumLogin.loginToApp('90', '1234', casper, function() {
+							casper.echo('User logged-in successfully', 'INFO');
+							
+							//Clicking On 'Categories' Tab
+							test.assertExists('a[href="/categories"]');
+							casper.click('a[href="/categories"]');
+							
+							//Verifying 'Error Messages' And Then Logout From Application
+							casper.waitForSelector('span.alert.alert-info p', function success() {
+								var message = casper.fetchText('span.alert.alert-info p');
+								var expectedMsg = 'There are currently no categories to display.';
+								test.assertEquals(message, expectedMsg);
+							}, function fail() {
+								this.echo('ERROR OCCURRED', 'ERROR');
+							});
+						});
+					});
+				}, function fail() {
+					this.echo('ERROR OCCURRED', 'ERROR');
+				});
+			});
+		}, function fail() {
+			this.echo('ERROR OCCURRED', 'ERROR');
 		});
 	});
 
-	//Clicking On 'Categories' Tab
-	casper.then(function() {
-		test.assertExists('a[href="/categories"]');
-		this.click('a[href="/categories"]');
-		this.capture(screenShotsDir + 'Pending_Email_Verification_category.png');
-	});
-
-	//Verifying 'Error Messages' And Then Logout From Application
-	casper.then(function() {
-		var message = this.fetchText('span.alert.alert-info p');
-		var expectedMsg = 'There are currently no categories to display.';
-		test.assertEquals(message, expectedMsg);
-	});
-					
-	casper.then(function() {
+	//Login To Forum BackEnd 
+	casper.thenOpen(config.backEndUrl, function() {
 		casper.echo('                                      CASE 4', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('DISABLE START TOPICS FOR REGISTERED USER FROM GROUP PERMISSION', 'INFO');
 		casper.echo('CHECK PERMISSION TO START TOPICS AFTER DISABLEING PERMISSION FOR REGISTERED USER', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
-	});
-	
-	//Login To Forum BackEnd 
-	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 		
 		//Login To Forum BackEnd 
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+			
+			//Clicking On 'Group Permissions' Link Under 'Users' Tab 
+			casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function success() {
+				test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+				casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+				test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+				casper.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			}, function fail() {
+				this.echo('ERROR OCCURRED', 'ERROR');
+			});
 		});
 	});
-	
-	//Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.then(function() {
-		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		this.capture(screenShotsDir + 'group_permissions.png');
-	});
-	
-	//Getting Screenshot After Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	/*casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'group_permissions.png');
-	});*/
 	
 	//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
 	casper.then(function() {
@@ -357,107 +314,78 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			}
 		});
 		casper.click('a[href="'+grpName+'"]');
-		//casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'group_Registered.png');
-		//});
-	});
-	
-	//Disabling 'Start Topics' Option And 'Save'
-	casper.then(function(){
-		test.assertExists('#post_threads');
-	});
-	
-	casper.then(function() {
-		utils.enableorDisableCheckbox('post_threads', false, casper, function() {
-			casper.echo("Start Topic Checkbox Has Been Disabled For Registered User", 'INFO');
-		});
-	});
-	
-	casper.then(function() {
-		this.click('button.button.btn-m.btn-blue');
-		//this.wait(5000,function(){
-			this.capture(screenShotsDir + 'actions_saved.png');
-		//});
-	});
-	
-	//Verifying 'Success Message' After Saving Settings			
-	casper.then(function() {
-		var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
-		var expectedErrorMsg = 'Your user group settings have been updated.';
-		test.assertEquals(message, expectedErrorMsg);
-		test.assertExists('a[href="/tool/members/login?action=logout"]');
-		this.click('a[href="/tool/members/login?action=logout"]');
-	});
 		
-	// start from forum url
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-	
-	//Login To App
-	casper.then(function() {
-		forumLogin.loginToApp('100', '1234', casper, function() {
-			//casper.wait(5000, function() {
-			casper.capture(screenShotsDir+ 'loggedIn_user.png');
-			casper.echo('User Logged-In Successfully', 'INFO');
-			//});
+		//Disabling 'Start Topics' Option And 'Save'
+		casper.waitForSelector('#post_threads', function success() {
+			utils.enableorDisableCheckbox('post_threads', false, casper, function() {
+				casper.echo("Start Topic Checkbox Has Been Disabled For Registered User", 'INFO');
+				casper.click('button.button.btn-m.btn-blue');
+				
+				//Verifying 'Success Message' After Saving Settings
+				casper.waitForSelector('div#tab_wrapper .heading[color="red"]', function success() {
+					var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
+					var expectedErrorMsg = 'Your user group settings have been updated.';
+					test.assertEquals(message, expectedErrorMsg);
+					test.assertExists('a[href="/tool/members/login?action=logout"]');
+					casper.click('a[href="/tool/members/login?action=logout"]');
+					
+					// start from forum url
+					casper.thenOpen(config.url, function() {
+						this.echo('Title of the page :' +this.getTitle(), 'INFO');
+						
+						//Login To App
+						forumLogin.loginToApp('100', '1234', casper, function() {
+							casper.echo('User Logged-In Successfully', 'INFO');
+							
+							casper.click('a[href="/post/printadd"]');
+							
+							//Verifying 'Error Messages' And Then Logout From Application
+							casper.waitForSelector('div.alert.alert-info.text-center', function success() {
+								var message = casper.fetchText('div.alert.alert-info.text-center');
+								var expectedMsg = "Sorry! You don't have permission to perform this action.";
+								test.assert(message.indexOf(expectedMsg) > -1);
+								forumLogin.logoutFromApp(casper, function() {
+									casper.echo('Successfully Logout From Application', 'INFO');
+								});
+							}, function fail() {
+								this.echo('ERROR OCCURRED', 'ERROR');
+							});
+						});
+					});
+				}, function fail() {
+					this.echo('ERROR OCCURRED', 'ERROR');
+				});
+			});
+		}, function fail() {
+			this.echo('ERROR OCCURRED', 'ERROR');
 		});
 	});
 
-	//Clicking On 'Categories' Tab
-	casper.then(function() {
-		test.assertExists('a[href="/post/printadd"]');
-		this.then(function() {
-			this.click('a[href="/post/printadd"]');
-		});
-	});
-
-	/*casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'registered_topics.png');
-	});*/
-
-	//Verifying 'Error Messages' And Then Logout From Application
-	casper.then(function() {
-		var message = this.fetchText('div.text-center.bmessage.text-danger');
-		var expectedMsg = "Sorry! You don't have permission to perform this action.";
-		test.assert(message.indexOf(expectedMsg) > -1);
-		forumLogin.logoutFromApp(casper, function() {
-			casper.echo('Successfully Logout From Application', 'INFO');
-		});
-	});
-	
-	casper.then(function() {
+	//Login To Forum BackEnd 
+	casper.thenOpen(config.backEndUrl, function() {
 		casper.echo('                                      CASE 5', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('DISABLE START TOPICS FOR  UN-REGISTERED USER FROM GROUP PERMISSION', 'INFO');
 		casper.echo('CHECK PERMISSION TO START TOPICS AFTER DISABLEING PERMISSION FOR UN-REGISTERED USER', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
-	});
-	
-	//Login To Forum BackEnd 
-	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title Of The Page :' +this.getTitle(), 'INFO');
 		
 		//Login To Forum BackEnd 
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+			
+			//Clicking On 'Group Permissions' Link Under 'Users' Tab 
+			casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function success() {
+				test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+				casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+				test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+				casper.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			}, function fail() {
+				this.echo('ERROR OCCURRED', 'ERROR');
+			});
 		});
 	});
 	
-	//Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.then(function() {
-		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		this.capture(screenShotsDir + 'group_permissions.png');
-	});
-	
-	//Getting Screenshot After Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	/*casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'group_permissions.png');
-	});*/
-		
 	//Clicking On 'Change Permissions' Link With Respect To 'Un-Registered Users'  
 	casper.then(function() {
 		var grpName = this.evaluate(function(){
@@ -470,95 +398,68 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			}
 		});
 		this.click('a[href="'+grpName+'"]');
-		//this.wait(5000,function(){
-			this.capture(screenShotsDir + 'group_un-registered.png');
-		//});
-	});
-	
-	//Disabling 'Start Topics' Option And 'Save'
-	casper.then(function(){
-		test.assertExists('#post_threads');
-	});
-	
-	casper.then(function() {
-		utils.enableorDisableCheckbox('post_threads', false, casper, function() {
-			casper.echo("Start Topic Checkbox Has Been Disabled For Un-Registered User", 'INFO');
+		
+		//Disabling 'Start Topics' Option And 'Save'
+		casper.waitForSelector('#post_threads', function success() {
+			utils.enableorDisableCheckbox('post_threads', false, casper, function() {
+				casper.echo("Start Topic Checkbox Has Been Disabled For Un-Registered User", 'INFO');
+				casper.click('button.button.btn-m.btn-blue');
+				
+				//Verifying 'Success Message' After Saving Settings
+				casper.waitForSelector('div#tab_wrapper .heading[color="red"]', function success() {
+					var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
+					var expectedErrorMsg = 'Your user group settings have been updated.';
+					test.assertEquals(message, expectedErrorMsg);
+					test.assertExists('a[href="/tool/members/login?action=logout"]');
+					this.click('a[href="/tool/members/login?action=logout"]');
+					
+					// start from forum url
+					casper.thenOpen(config.url, function() {
+						this.echo('Title of the page :' +this.getTitle(), 'INFO');
+						this.click('a[href="/post/printadd"]');
+						
+						//Verifying 'Error Messages' And Then Logout From Application
+						casper.waitForSelector('div.alert.alert-info.text-center', function success() {
+							var message = this.fetchText('div.alert.alert-info.text-center');
+							var expectedMsg = "Please login or register";
+							test.assert(message.indexOf(expectedMsg) > -1);
+						}, function fail() {
+							this.echo('ERROR OCCURRED', 'ERROR');
+						});
+					});
+				}, function fail() {
+					this.echo('ERROR OCCURRED', 'ERROR');
+				});
+			});
+		}, function fail() {
+			this.echo('ERROR OCCURRED', 'ERROR');
 		});
-	});
-	
-	casper.then(function() {
-		this.click('button.button.btn-m.btn-blue');
-		//this.wait(5000,function(){
-			this.capture(screenShotsDir + 'actions_saved.png');
-		//});
-	});
-	
-	//Verifying 'Success Message' After Saving Settings			
-	casper.then(function() {
-		var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
-		var expectedErrorMsg = 'Your user group settings have been updated.';
-		test.assertEquals(message, expectedErrorMsg);
-		test.assertExists('a[href="/tool/members/login?action=logout"]');
-		this.click('a[href="/tool/members/login?action=logout"]');
-	});
-		
-	// start from forum url
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-	
-	//Clicking On 'Categories' Tab
-	casper.then(function() {
-		test.assertExists('a[href="/post/printadd"]');
-		//this.then(function() {
-			this.click('a[href="/post/printadd"]');
-			//this.capture(screenShotsDir + 'unregistered_topics.png');
-		//});
-		
-	});
-
-	/*casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'unregistered_topics.png');
-	});*/
-
-	//Verifying 'Error Messages' And Then Logout From Application
-	casper.then(function() {
-		var message = this.fetchText('div.alert.alert-danger.text-center');
-		var expectedMsg = "Please login or register";
-		test.assert(message.indexOf(expectedMsg) > -1);
-	});
-	
-	/*casper.then(function() {
-		casper.echo('                                      CASE 6', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('ENABLE START TOPICS FOR  UN-REGISTERED USER FROM GROUP PERMISSION', 'INFO');
-		casper.echo('CHECK PERMISSION TO START TOPICS AFTER ENABLEING PERMISSION FOR UN-REGISTERED USER', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
 	});
 		
 	//Login To Forum BackEnd 
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		casper.echo('                                      CASE 6', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('ENABLE START TOPICS FOR  UN-REGISTERED USER FROM GROUP PERMISSION', 'INFO');
+		casper.echo('CHECK PERMISSION TO START TOPICS AFTER ENABLEING PERMISSION FOR UN-REGISTERED USER', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
 
 		//Login To Forum BackEnd 
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+			
+			//Clicking On 'Group Permissions' Link Under 'Users' Tab 
+			casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function success() {
+				this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+				test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+				this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			}, function fail() {
+				this.echo('ERROR OCCURRED', 'ERROR');
+			});
 		});
 	});
 
-	//Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.then(function() {
-		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-	});
-		
-	//Getting Screenshot After Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'group_permissions.png');
-	});
-	
 	//Clicking On 'Change Permissions' Link With Respect To 'Un-Registered Users'  
 	casper.then(function() {
 		var grpName = this.evaluate(function() {
@@ -571,96 +472,72 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			}
 		});
 		this.click('a[href="'+grpName+'"]');
-		this.wait(5000,function(){
-			this.capture(screenShotsDir + 'group_un-registered.png');
-		});
-	});
 		
-	//Enabling 'Start Topics' Option And 'Save'
-	casper.then(function(){
-		test.assertExists('#post_threads');
-	});
-	
-	casper.then(function() {
-		utils.enableorDisableCheckbox('view_forum', true, casper, function() {
-			casper.echo("View Category Checkbox Has Been Enabled For Un-Registered User", 'INFO');
+		//Enabling 'Start Topics' Option And 'Save'
+		casper.waitForSelector('#post_threads', function success() {
+			utils.enableorDisableCheckbox('view_forum', true, casper, function() {
+				casper.echo("View Category Checkbox Has Been Enabled For Un-Registered User", 'INFO');
+				utils.enableorDisableCheckbox('post_threads', true, casper, function() {
+					casper.echo("Start Topic Checkbox Has Been Enabled For Un-Registered User", 'INFO');
+					casper.click('button.button.btn-m.btn-blue');
+					
+					//Verifying 'Success Message' After Saving Settings	
+					casper.waitForSelector('div#tab_wrapper .heading[color="red"]', function success() {
+						var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
+						var expectedErrorMsg = 'Your user group settings have been updated.';
+						test.assertEquals(message, expectedErrorMsg);
+						test.assertExists('a[href="/tool/members/login?action=logout"]');
+						this.click('a[href="/tool/members/login?action=logout"]');
+						
+						// start from forum url
+						casper.thenOpen(config.url, function() {
+							this.echo('Title of the page :' +this.getTitle(), 'INFO');
+							
+							test.assertExists('a[href="/post/printadd"]');
+							this.click('a[href="/post/printadd"]');
+							
+							//Verifying 'Topic Details' Page
+							casper.waitForSelector('form[id="PostTopic"]', function success() {
+								test.assertExists('form[id="PostTopic"]');
+								this.echo('POST TOPIC PAGE DISPLAYED................', 'INFO');
+							}, function fail() {
+								this.echo('ERROR OCCURRED', 'ERROR');
+							});
+						});
+					}, function fail() {
+						this.echo('ERROR OCCURRED', 'ERROR');
+					});
+				});
+			});
+		}, function fail() {
+			this.echo('ERROR OCCURRED', 'ERROR');
 		});
-	});
+	});*/
 	
-	casper.then(function() {
-		utils.enableorDisableCheckbox('post_threads', true, casper, function() {
-			casper.echo("Start Topic Checkbox Has Been Enabled For Un-Registered User", 'INFO');
-		});
-	});
-	
-	casper.then(function() {
-		this.click('button.button.btn-m.btn-blue');
-		this.wait(5000,function(){
-			this.capture(screenShotsDir + 'actions_saved.png');
-		});
-	});
-	
-	//Verifying 'Success Message' After Saving Settings			
-	casper.then(function() {
-		var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
-		var expectedErrorMsg = 'Your user group settings have been updated.';
-		test.assertEquals(message, expectedErrorMsg);
-		test.assertExists('a[href="/tool/members/login?action=logout"]');
-		this.click('a[href="/tool/members/login?action=logout"]');
-	});
-		
-	// start from forum url
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-	
-	//Clicking On 'Categories' Tab
-	casper.then(function() {
-		test.assertExists('a[href="/post/printadd"]');
-		this.click('a[href="/post/printadd"]');
-	});
-
-	casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'unregistered_topics.png');
-	});
-	
-	//Verifying 'Topic Details' Page
-	casper.then(function() {
-		test.assertExists('form[id="PostTopic"]');
-		this.echo('POST TOPIC PAGE DISPLAYED................', 'INFO');
-	});
-	
-	casper.then(function() {
+	//Login To Forum BackEnd 
+	casper.thenOpen(config.backEndUrl, function() {
 		casper.echo('                                      CASE 7', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('DISABLE START TOPICS FOR PENDING EMAIL VERIFICATION USER FROM GROUP PERMISSION', 'INFO');
 		casper.echo('CHECK PERMISSION TO START TOPICS AFTER DISABLEING PERMISSION FOR PENDING EMAIL VERIFICATION USER', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
-	});
-	
-	//Login To Forum BackEnd 
-	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 
 		//Login To Forum BackEnd 
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
+			
+			//Clicking On 'Group Permissions' Link Under 'Users' Tab 
+			casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function success() {
+				this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+				test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+				this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			}, function fail() {
+				this.echo('ERROR OCCURRED', 'ERROR');
+			});
 		});
 	});
 
-	//Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.then(function() {
-		test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-	});
-		
-	//Getting Screenshot After Clicking On 'Group Permissions' Link Under 'Users' Tab 
-	casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'group_permissions.png');
-	});
-	
 	//Clicking On 'Change Permissions' Link With Respect To 'Pending Email Verification'  
 	casper.then(function() {
 		var grpName = this.evaluate(function(){
@@ -673,74 +550,63 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 			}
 		});
 		this.click('a[href="'+grpName+'"]');
-		this.wait(5000,function(){
-			this.capture(screenShotsDir + 'group_Pending_Email_Verification.png');
-		});
-	});
-
-	//Disabling 'Start Topics' Option And 'Save'
-	casper.then(function(){
-		test.assertExists('#post_threads');
-	});
-	
-	casper.then(function() {
-		utils.enableorDisableCheckbox('post_threads', false, casper, function() {
-			casper.echo("Start Topic Checkbox Has Been Disabled For Pending User", 'INFO');
-		});
-	});
-	
-	casper.then(function() {
-		this.click('button.button.btn-m.btn-blue');
-		this.wait(5000,function(){
-			this.capture(screenShotsDir + 'actions_saved.png');
-		});
-	});
-	
-	//Verifying 'Success Message' After Saving Settings			
-	casper.then(function() {
-		var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
-		var expectedErrorMsg = 'Your user group settings have been updated.';
-		test.assertEquals(message, expectedErrorMsg);
-		test.assertExists('a[href="/tool/members/login?action=logout"]');
-		this.click('a[href="/tool/members/login?action=logout"]');
-	});
 		
-	// start from forum url
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-	
-	//Login To App
-	casper.then(function() {
-		forumLogin.loginToApp('90', '1234', casper, function() {
-			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedIn_user.png');
-				casper.echo('User logged-in successfully', 'INFO');
+		//Disabling 'Start Topics' Option And 'Save'
+		casper.waitForSelector('#post_threads', function success() {
+			utils.enableorDisableCheckbox('post_threads', false, casper, function() {
+				casper.echo("Start Topic Checkbox Has Been Disabled For Pending User", 'INFO');
+				casper.click('button.button.btn-m.btn-blue');
+				
+				//Verifying 'Success Message' After Saving Settings
+				casper.waitForSelector('div#tab_wrapper .heading[color="red"]', function success() {
+					var message = this.fetchText('div#tab_wrapper .heading[color="red"]');
+					var expectedErrorMsg = 'Your user group settings have been updated.';
+					test.assertEquals(message, expectedErrorMsg);
+					test.assertExists('a[href="/tool/members/login?action=logout"]');
+					this.click('a[href="/tool/members/login?action=logout"]');
+					
+					// start from forum url
+					casper.thenOpen(config.url, function() {
+						this.echo('Title of the page :' +this.getTitle(), 'INFO');
+						
+						//Login To App
+						forumLogin.loginToApp('90', '1234', casper, function() {
+							//casper.wait(5000, function() {
+							casper.echo('User logged-in successfully', 'INFO');
+							
+							//Clicking On 'Start New Topic' Tab
+							test.assertExists('a[href="/post/printadd"]');
+							casper.click('a[href="/post/printadd"]');
+							
+							//Verifying 'Error Messages' And Then Logout From Application
+							casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {casper.echo('success', 'INFO');
+							casper.capture(screenShotsDir + '1.png');
+								var message = this.fetchText('div.text-center.bmessage.alert-info.text-danger');
+								var expectedMsg = "Sorry! You don't have permission to perform this action. Please check your email for instructions on how to begin using your account. You can resend the email if you didn't receive it.";
+								test.assert(message.indexOf(expectedMsg) > -1);
+								forumLogin.logoutFromApp(casper, function() {
+									casper.echo('Successfully Logout From Application', 'INFO');
+								});
+							}, function fail() {casper.echo('fail', 'INFO');
+								casper.capture(screenShotsDir + '1.png');
+								this.echo('ERROR OCCURRED', 'ERROR');
+							});
+							//});
+						});
+					});
+					
+					
+				}, function fail() {
+					this.echo('ERROR OCCURRED', 'ERROR');
+				});
 			});
+		}, function fail() {
+			this.echo('ERROR OCCURRED', 'ERROR');
 		});
 	});
 
-	//Clicking On 'Start New Topic' Tab
-	casper.then(function() {
-		test.assertExists('a[href="/post/printadd"]');
-		this.click('a[href="/post/printadd"]');
-	});
-
-	casper.wait(5000,function(){
-		this.capture(screenShotsDir + 'Pending_Email_Verification_topics.png');
-	});
-
-	//Verifying 'Error Messages' And Then Logout From Application
-	casper.then(function() {
-		var message = this.fetchText('div.text-center.bmessage.text-danger');
-		var expectedMsg = "Sorry! You don't have permission to perform this action. Please check your email for instructions on how to begin using your account. You can resend the email if you didn't receive it.";
-		test.assert(message.indexOf(expectedMsg) > -1);
-		forumLogin.logoutFromApp(casper, function() {
-			casper.echo('Successfully Logout From Application', 'INFO');
-		});
-	});
 		
-	casper.then(function() {
+	/*casper.then(function() {
 		casper.echo('                                      CASE 8', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('ENABLE START TOPICS FOR PENDING EMAIL VERIFICATION USER FROM GROUP PERMISSION', 'INFO');
@@ -1083,7 +949,7 @@ verifyCategoryPermissions.featureTest = function(casper, test) {
 		});	
 	});
 	
-	casper.then(function() {
+	/*casper.then(function() {
 		casper.echo('                                      CASE 11', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('ENABLE REPLY TOPICS FOR  UN-REGISTERED USER FROM GROUP PERMISSION', 'INFO');

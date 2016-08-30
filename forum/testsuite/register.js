@@ -478,7 +478,7 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 		this.capture(screenShotsDir + 'login_submit.png');
 	});
 	}
-	return callback();
+	return callback(null);
 };
 
 
@@ -553,7 +553,7 @@ forumRegister.registerToApp = function(data, driver, callback) {
 	});*/
 	driver.test.assertExists('form[name="PostTopic"] button');
 	driver.click('form[name="PostTopic"] button');
-	return callback();
+	return callback(null);
 };
 
 //Method For Verifying Error Message On Registration Form After Submitting Form
@@ -610,7 +610,7 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 			var expectedErrorMsg = "It looks like you already have a forum account!";
 			driver.test.assert(errorMessage.indexOf(expectedErrorMsg) > -1);
 			driver.echo('USER ALREADY REGISTERED ON FORUM.....', 'INFO');
-			return callback();
+			return callback(null);
 		} catch(e1) {
 			driver.echo('Successfully done registration on forum.....', 'INFO');
 			
@@ -629,6 +629,6 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 			});
 		}
 	}
-	return callback();
+	return callback(null);
 };
 

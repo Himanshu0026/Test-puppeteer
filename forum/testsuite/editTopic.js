@@ -13,270 +13,225 @@ var screenShotsDir = config.screenShotsLocation + 'editTopic/';
 
 editTopic.editTopicFeature = function(casper,test, x, callback) {
 
-			//go to backend url
-			casper.thenOpen(config.backEndUrl,function() {
-				casper.echo('Login To Backend URL and disable start topic checkbox', 'INFO');
-				this.then(function() {
-					casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-					casper.echo('---------------------------------------------------------------------------');		
-				});
-			});
 			
-			//login to backend url (rm)
-			/*casper.then(function() {
-				forumRegister.loginToForumBackEnd(casper, test, function() {
-					casper.echo('User has been successfuly login to backend', 'INFO');
+	//Login To Backend URL and disable edit post checkbox
+	casper.thenOpen(config.backEndUrl,function() {
+		casper.echo('Login To Backend URL and disable post poll checkbox', 'INFO');
+		casper.echo('title of the page : ' +this.getTitle());
+		//forumRegister.loginToForumBackEnd(casper, test, function(err) { //(rm)
+			//if(!err) { 
+				casper.echo('User has been successfuly login to backend', 'INFO');
+				//go to user permission
+				utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function(err) {
+					if(!err) {
+						casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
+						//click on checkbox
+						casper.waitForSelector('#edit_posts', function success() {
+							utils.enableorDisableCheckbox('edit_posts', false, casper, function(err) {	
+								if(!err) {
+									casper.echo("edit posts checkbox has been disabled", 'INFO');
+									//click on save button
+									utils.clickOnElement(casper, '.btn-blue', function(err) {
+										if(!err) {
+											casper.echo('Saving Changes', 'INFO');
+											//verify Permission Setting Message
+											casper.waitForSelector('p[align="center"] font.heading', function success() {
+												verifyPermissionSettingMsg(casper, function(err) {
+													if(!err) {
+														casper.echo('verifying Permission Setting Message', 'INFO');	
+													}
+												});
+											}, function fail(err){
+												casper.echo(err);						
+											});
+										}
+									});
+								}
+							});
+						}, function fail(err) {
+							casper.echo(err);
+						});
+					}
 				});
-			});*/
-			//go to user group permission
-			casper.then(function() {
-				utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
-					casper.echo("Successfully navigated to Edit User group Permission page", 'INFO');
-					casper.then(function(){
-						this.capture(screenShotsDir+'EditUserPermissionpage.png');
-					});
-				});
-			});	
-
-			// click on checkbox
-			casper.then(function() {
-				utils.enableorDisableCheckbox('edit_posts', false, casper, function() {
-					casper.echo("Edit Tpoic checkbox has been disabled", 'INFO');
-				});
-			});
-
-			//click on save button
-			casper.then(function() {
-				utils.clickOnElement(casper, '.btn-blue', function() {
-					casper.echo('Saving Changes', 'INFO');
-				});
-			});
-
-			//verify update setting permission
-			casper.then(function() {
-				var msg  = this.fetchText('p[align="center"] font.heading');
-				test.assertEquals(msg.trim(), config.permissionSettingMsg.trim(), msg.trim()+' and verified update message');
-				casper.echo('---------------------------------------------------------------------------');
-			});
-
-			//getting a screenshot after change the permission
-			casper.then(function() {
-				this.capture(screenShotsDir+'afterChangePermission.png');
-			});		
-		
-			// start from forum url
-			casper.thenOpen(config.url, function() {
-				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-				casper.echo('---------------------------------------------------------------------------');
-			});
-			//Login To App
-			casper.then(function() {
-				forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function() {
-					casper.echo('User has been successfuly login to application with register user', 'INFO');
-				});
-				//Getting Screenshot After Clicking On 'Log In' Link 
-				casper.then(function() {
-					this.capture(screenShotsDir+ 'login.png');
-				});
-			});
-
-			// edit topic title when permission false	
-			casper.then(function(){
-				casper.echo('edit topic titel when permission is disable', 'INFO');
-				this.click('form[name="posts"] h4 a');
-				test.assertDoesntExist('#editTopic');
-				casper.echo('you have not permission to edit title', 'INFO');
-				casper.echo('---------------------------------------------------------------------------');	
-			});
-
-			// edit topic content when permission false
-			casper.then(function(){
-				casper.echo('edit post when permission is disable', 'INFO');
-				test.assertDoesntExist('a#edit_post_request');
-				casper.echo('you have not the permission to edit posts', 'INFO');
-				casper.echo('---------------------------------------------------------------------------');
-			});
-
-			// reopen backend to enable permission
-			casper.thenOpen(config.backEndUrl,function() {
-				casper.echo('Login To Backend URL and enable start topic checkbox', 'INFO');
-				this.then(function() {
-					casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-					casper.echo('---------------------------------------------------------------------------');		
-				});
-			});
-		
-			//go to user group permission
-			casper.then(function() {
-				utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
-					casper.echo("Successfully navigated to Edit User group Permission page", 'INFO');
-					casper.then(function(){
-						this.capture(screenShotsDir+'EditUserPermissionpage.png');
-					});
-				});
-			});	
-		
-			//click on checkbox
-			casper.then(function() {
-				utils.enableorDisableCheckbox('edit_posts', true, casper, function() {
-					casper.echo("Edit Tpoic checkbox has been enabled", 'INFO');
-				});
-			});
-
-			//click on save button
-			casper.then(function() {
-				utils.clickOnElement(casper, '.btn-blue', function() {
-					casper.echo('Saving Changes', 'INFO');
-				});
-			});
-
-			//verify update setting message
-			casper.then(function() {
-				var msg  = this.fetchText('p[align="center"] font.heading');
-				test.assertEquals(msg.trim(), config.permissionSettingMsg.trim(), msg.trim()+' and verified update message');
-				casper.echo('---------------------------------------------------------------------------');
-			});
-
-			//getting screenshot after change permission
-			casper.then(function() {
-				this.capture(screenShotsDir+'afterChangePermission.png');
-			});		
-
-			//start from forum url
-			casper.thenOpen(config.url, function() {
-				casper.echo('Hit on URL : '+config.url, 'INFO');
-			});
-		
-			//create new topic to perform edit title and edit post		
-			casper.then(function() {
-				gotoNewTopic(json['newTopic'].ValidCredential, casper, function() {
-					casper.echo('go to new topic', 'INFO');
-				});
-			});
-			casper.then(function() {
-				this.click('#post_submit');
-				this.then(function() {
-					this.capture(screenShotsDir+ 'postPage.png');
-				});
-			});
-			casper.thenOpen(config.url, function() {
-				casper.echo('go to topic listing page : ', 'INFO');
-			});
+			//}
+		//});
+	});		
 			
-			// Verify error message when user try edit with blank title
-			casper.then(function() {	 
-				this.on('remote.alert', testAlert1);
-			});
-
-			//Edit topic title with blank data
-			casper.then(function(){
-				casper.echo('Edit topic title with blank data', 'INFO');
-				editTopicTitle(json.editTopic.blankTitle.title, casper, function() {
-					casper.log('editing topic title with invalid data', 'INFO');		
+	/*****test case to edit topic title and topic content when permission is disable*****/
+	casper.thenOpen(config.url, function() {
+		casper.echo('test case to edit topic titel and topic content when permission is disable', 'INFO');
+		casper.echo('Title of the page :' +this.getTitle(), 'INFO');
+		//login with register user
+		forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function(err) {
+			if(!err) {
+				casper.echo('User has been successfuly login to application with register user', 'INFO');
+				casper.waitForSelector('form[name="posts"]', function success() {
+					test.assertExists('form[name="posts"] h4 a');
+					casper.click('form[name="posts"] h4 a');
+					casper.waitForSelector('#editable_subjuct', function success() {
+						test.assertDoesntExist('#editTopic');
+						casper.echo('you have not permission to edit title', 'INFO');
+						casper.echo('---------------------------------------------------------------------------');
+						test.assertDoesntExist('a#edit_post_request');
+						casper.echo('you have not the permission to edit posts', 'INFO');
+						casper.echo('---------------------------------------------------------------------------');
+					}, function fail(err) {
+						casper.echo(err);				
+					});
+				}, function fail(err) {
+					casper.echo("selector not found" +err);
 				});
-			});
+			}
+		});
+	});	
 	
-			// removing listner alert1
-			casper.then(function() {
-					this.removeListener('remote.alert', testAlert1);
-			});
-
-			//Getting Screenshot After edited Topic title 
-			casper.then(function(){
-				this.capture(screenShotsDir+ 'editedBlankTopicTitle.png');
-			});
-
-			casper.thenOpen(config.url, function() {
-				casper.echo('go to topic listing page : ', 'INFO');
-			});
-
-			//Edit topic title with valid data
-			casper.then(function(){
-				casper.echo('Edit topic title with valid data', 'INFO');
-				editTopicTitle(json.editTopic.validTitle.title, casper, function() {
-					casper.echo('editing topic title with valid data', 'INFO');		
+	//Login To Backend URL and enable edit post checkbox
+	casper.thenOpen(config.backEndUrl,function() {
+		casper.echo('Login To Backend URL and enable edit post checkbox', 'INFO');
+		casper.echo('title of the page : ' +this.getTitle());
+		casper.echo('User has been successfuly login to backend', 'INFO');
+		//go to user permission
+		utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function(err) {
+			if(!err) {
+				casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
+				//click on checkbox
+				casper.waitForSelector('#edit_posts', function success() {
+					utils.enableorDisableCheckbox('edit_posts', true, casper, function(err) {	
+						if(!err) {
+							casper.echo("edit post checkbox has been enabled", 'INFO');
+							//click on save button
+							utils.clickOnElement(casper, '.btn-blue', function(err) {
+								if(!err) {
+									casper.echo('Saving Changes', 'INFO');
+									//verify Permission Setting Message
+									casper.waitForSelector('p[align="center"] font.heading', function success() {
+										verifyPermissionSettingMsg(casper, function(err) {
+											if(!err) {
+												casper.echo('verifying Permission Setting Message', 'INFO');	
+											}
+										});
+									}, function fail(err){
+										casper.echo(err);						
+									});
+								}
+							});
+						}
+					});
+				}, function fail(err) {
+					casper.echo(err);
 				});
-			});
-
-			//Getting Screenshot After edited Topic title 
-			casper.then(function(){
-				this.capture(screenShotsDir+ 'editedTopicTitle.png');
-			});
-
-
-			//Verify Topic Title With valid data
-			casper.then(function(){
-				var getTitle = this.fetchText('#editable_subjuct');
-				test.assertEquals(getTitle.trim(), json.editTopic.validTitle.title.trim(), getTitle.trim()+' and verified title');
-				casper.echo('title is verified with valid data', 'INFO');
-				casper.echo('---------------------------------------------------------------------------');
-			});
-
-			//Verify eerror message  for Edit Topic Content With blank data
-			casper.then(function() {
-			    this.on('remote.alert', testAlert2);
-			});	
-
-			//Edit Topic Content With blank Data
-			casper.then(function(){
-				casper.echo('Edit Topic Content With blank Data', 'INFO');
-				editTopicContent(json.editTopic.blankContent.content, casper, function() {
-					casper.log('edited topic content', 'INFO');
-				});
-			});
-
-			//wait for 3 second to remove alert1 listener	
-			casper.wait(3000, function() {});
-
-			casper.then(function() {
-				this.removeListener('remote.alert', testAlert2);
-			});
+			}
+		});
+	});		
 	
-			//Getting Screenshot After editing topic content 
-
-			casper.then(function(){
-				this.capture(screenShotsDir+ 'editedTopicContent.png');
+	/*****test case to Edit topic title with blank data*****/
+	casper.thenOpen(config.url, function() {
+		casper.echo('test case to Edit topic title with blank data', 'INFO');
+		casper.echo('title of the page : ' +this.getTitle(), 'INFO');
+		casper.waitForSelector('a[href="/post/printadd"]', function success() {
+			gotoNewTopic(json['newTopic'].ValidCredential, casper, function(err) {
+				if(!err) {
+					casper.echo('START NEW TOPIC with valid credential', 'INFO');
+					casper.wait(7000, function() {
+						casper.thenOpen(config.url, function() {
+							casper.echo('go to topic listing page : ', 'INFO');
+							casper.waitForSelector('form[name="posts"] h4 a', function success() {
+								casper.on('remote.alert', testAlert1);
+								editTopicTitle(json.editTopic.blankTitle.title, casper, function() {
+									casper.log('editing topic title with invalid data', 'INFO');
+									// removing listner alert1
+									casper.removeListener('remote.alert', testAlert1);		
+								});
+							}, function fail(err) {
+								casper.echo(err);
+							});
+						});
+					});
+				}
 			});
+		}, function fail(err) {
+			casper.echo(err);
+		});
+	});			
+
+	/*****test case to Edit topic title with valid data*****/
+	casper.thenOpen(config.url, function() {
+		casper.echo('test case to Edit topic title with valid data', 'INFO');
+		casper.echo('title of the page : ' +this.getTitle(), 'INFO');
+		casper.waitForSelector('a[href="/post/printadd"]', function success() {
+			editTopicTitle(json.editTopic.validTitle.title, casper, function() {
+				casper.echo('editing topic title with valid data', 'INFO');
+				casper.waitForSelector('#editable_subjuct', function success() {
+					var getTitle = this.fetchText('#editable_subjuct');
+					test.assertEquals(getTitle.trim(), json.editTopic.validTitle.title.trim(), getTitle.trim()+' and verified title');
+					casper.echo('title is verified with valid data', 'INFO');
+					casper.echo('---------------------------------------------------------------------------');
+				}, function fail(err) {
+					casper.echo(err);
+				});		
+			});
+		}, function fail(err) {
+			casper.echo(err);
+		});
+	});	
 
 	
-			//Edit Topic Content With Valid Data
-			casper.thenOpen(config.url, function() {
-				casper.echo('Edit Topic Content With Valid Data', 'INFO');
-				casper.echo('go to topic listing page : ', 'INFO');
-			});
+	/*****Verify error message  for Edit Topic Content With blank data*****/
+	casper.then(function() {
+		casper.echo('Verify error message  for Edit Topic Content With blank data', 'INFO');
+		this.on('remote.alert', testAlert2);
+		editTopicContent(json.editTopic.blankContent.content, casper, function() {
+			casper.log('edited topic content with blank data', 'INFO');
+		});
+	});	
 
-			casper.then(function(){
-				editTopicContent(json.editTopic.validContent.content, casper, function() {
-					casper.log('edited topic content', 'INFO');
+	//wait for 3 second to remove alert1 listener	
+	casper.wait(3000, function() {
+		this.removeListener('remote.alert', testAlert2);
+	});
+
+	/*****test case to Edit Topic Content With Valid Data*****/
+	casper.thenOpen(config.url, function() {
+		casper.echo('test case to Edit Topic Content With Valid Data', 'INFO');
+		casper.waitForSelector('a[href="/post/printadd"]', function success() {
+			editTopicContent(json.editTopic.validContent.content, casper, function() {
+				casper.echo('edited topic content', 'INFO');
+				//Verify Edit Topic Content With Valid data
+				casper.waitForSelector('#quickReplyPost', function success() {
+					verifyEditTopicContent(casper, function(err) {
+						if(!err) {
+							casper.echo('content successfully verified with valid content', 'INFO');
+						}
+					});
+				}, function fail(err) {
+					casper.echo(err);
 				});
 			});
+		}, function fail(err) {
+			casper.echo(err);
+		});
+	});
 
-			//Getting Screenshot After editing topic content 
-			casper.wait(7000, function(){
-				this.capture(screenShotsDir+ 'editedTopicContent.png');
-			});
+	//Logout From App
+	casper.then(function() {
+		forumLogin.logoutFromApp(casper, function(err) {
+			if(!err) {
+				casper.log('Successfully logout from application', 'info');
+			}
+		});
+	});
 
+	function testAlert1(message) {
+		casper.echo('message: '+message, 'INFO');
+    		this.test.assertEquals(message.trim(), json.editTopic.blankTitle.ExpectedErrorMessage.trim(), 'Error Message is verified');
+		casper.echo('---------------------------------------------------------------------------');
+	};
 
-			//Verify Edit Topic Content With Valid data
-			casper.then(function() {
-				casper.echo('Verify Edit Topic Content With Valid data', 'INFO');
-				var getContent = this.fetchText('div.post-body-content span[id^="post_message_"]');
-				test.assertEquals(getContent.trim(), json.editTopic.validContent.content.trim(), getContent.trim()+' and content verified');
-				casper.echo('content successfully verified with valid content', 'INFO');
-				casper.echo('---------------------------------------------------------------------------');
-			});
-
-			function testAlert1(message) {
-				casper.echo('message: '+message, 'INFO');
-		    		this.test.assertEquals(message.trim(), json.editTopic.blankTitle.ExpectedErrorMessage.trim(), 'Error Message is verified');
-				casper.echo('---------------------------------------------------------------------------');
-			};
-
-			function testAlert2(message) {
-				casper.echo('message : '+message, 'INFO');
-		    		this.test.assertEquals(message.trim(), json.editTopic.blankContent.ExpectedErrorMessage.trim(), 'Error Message is verified');
-				casper.echo('---------------------------------------------------------------------------');
-			};
+	function testAlert2(message) {
+		casper.echo('message : '+message, 'INFO');
+    		this.test.assertEquals(message.trim(), json.editTopic.blankContent.ExpectedErrorMessage.trim(), 'Error Message is verified');
+		casper.echo('---------------------------------------------------------------------------');
+	};
 
 	return callback();
 };
@@ -298,9 +253,6 @@ var editTopicTitle = function(title, driver, callback){
 	
 		driver.then(function(){
 			driver.click('#editTopic');
-			this.then(function() {
-				this.capture(screenShotsDir+ 'editTopicTitle.png');
-			});
 		});
 	
 		driver.then(function(){
@@ -310,8 +262,6 @@ var editTopicTitle = function(title, driver, callback){
 		driver.then(function(){
 				driver.click('div.editable-buttons .editable-submit');
 		});
-	
-	
 	return callback();
 };
 
@@ -327,32 +277,28 @@ var editTopicContent = function(content, driver, callback){
 
 	}
 
-		driver.then(function(){
-			this.click('div.post-body .panel-dropdown .pull-right a.dropdown-toggle');
-			this.then(function(){
-				driver.capture(screenShotsDir+ 'editPopUp.png');
-			});
-		});
-	
-		driver.then(function(){
-			this.click('div.post-body .panel-dropdown .pull-right ul.dropdown-menu li a#edit_post_request');
-			this.then(function(){
-				driver.capture(screenShotsDir+ 'edit.png');
-			});		
-		});	
+	driver.then(function(){
+		this.click('div.post-body .panel-dropdown .pull-right a.dropdown-toggle');
+		this.click('div.post-body .panel-dropdown .pull-right ul.dropdown-menu li a#edit_post_request');
+	});	
 
-		driver.wait(7000, function(){
-			this.withFrame('message1_ifr', function() {
-				casper.echo('*****enter message in iframe', 'INFO');
-				driver.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
-				driver.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true}); 					driver.sendKeys('#tinymce', content);
-				driver.capture(screenShotsDir+ 'editedTopicContent.png');	
-			});
-		});	
-		driver.then(function(){
-			this.click('div.form-group input.btn-primary');	
+	driver.wait(7000, function(){
+		this.withFrame('message1_ifr', function() {
+			casper.echo('*****enter message in iframe', 'INFO');
+			driver.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
+			driver.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
+			driver.sendKeys('#tinymce', content);
+			driver.capture(screenShotsDir+ 'editedTopicContent.png');	
 		});
+	});	
+	driver.then(function(){
+		this.click('div.form-group input.btn-primary');	
+	});
 
+	//wait for 7 second for post
+	driver.wait(7000, function(){
+			driver.capture(screenShotsDir+ '11.png');	
+	});			
 	return callback();
 };
 
@@ -362,9 +308,7 @@ var gotoNewTopic = function(data, driver, callback) {
 	driver.click('#links-nav');
 	driver.click('#latest_topics_show');
 	driver.click('a[href="/post/printadd"]');
-	driver.then(function() {
-		this.capture(screenShotsDir+ 'startTopic.png');
-	});
+	
 	driver.then(function() {
          	 this.sendKeys('input[name="subject"]', data.title, {reset:true});
 		 this.withFrame('message_ifr', function() {
@@ -383,6 +327,26 @@ var gotoNewTopic = function(data, driver, callback) {
 		});
 	});
 
+	driver.then(function() {
+		this.click('#post_submit');
+	});
 	return callback();
 };
+// verify edit topic content
+var verifyEditTopicContent = function(driver, callback) {
+	casper.echo('Verify Edit Topic Content With Valid data', 'INFO');
+	var getContent = driver.fetchText('span[id^="post_message_"]');
+	casper.echo("*************getContent : "+getContent);
+	driver.test.assertEquals(getContent.trim(), json.editTopic.validContent.content.trim(), getContent.trim()+' and content verified');
+	casper.echo('---------------------------------------------------------------------------');
+	return callback(null);
+};
 
+//verify permission settings message
+var verifyPermissionSettingMsg = function(driver, callback) {
+	driver.capture(screenShotsDir+'Permission.png');
+	var msg  = driver.fetchText('p[align="center"] font.heading');
+	driver.test.assertEquals(msg.trim(), config.permissionSettingMsg.trim(), msg.trim()+' and message verified');
+	casper.echo('---------------------------------------------------------------------------');
+	return callback(null);
+}; 

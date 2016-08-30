@@ -42,7 +42,7 @@ switch (feature) {
 			test.assert(true);
 		});
 	});
-        
+        break;
     case "deleteAccount":
 	casper.test.begin("Start 'Delete Account' functionality from home page & verify content with all scenarios", function(test) {
 
@@ -54,7 +54,7 @@ switch (feature) {
 			test.assert(true);
 		});
 	});
-		
+	break;	
     case "deleteAccountWithSettings":
 	casper.test.begin("Start 'Delete Account With Setting' functionality from home page & verify content with all scenarios", function(test) {
 
@@ -141,7 +141,7 @@ switch (feature) {
 		});
 	});
         break;
-	case "topic":
+	case "generalTopic":
 	casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 
 		var newTopic = require("./testsuite/newTopic.js");
@@ -154,6 +154,21 @@ switch (feature) {
 	});
         
         break;
+	
+	case "adminTopic":
+	casper.test.begin("Start pin Topic, move Topic and lock/un-lock topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+
+		var newTopic = require("./testsuite/adminTopic.js");
+		var x = require('casper').selectXPath;
+		newTopic.featureTest(casper, casper.test, x);
+		
+		casper.run(function(){
+			test.done();
+		});
+	});
+        
+        break;
+
     case "postreply":
         casper.test.begin("Start reply topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 
@@ -283,7 +298,8 @@ case "deletetopic":
 	casper.echo("	backEndRegistration");
 	casper.echo("	verifyCategoryPermissions");
 	casper.echo("	login");
-	casper.echo("	topic");
+	casper.echo("	generalTopic\n");
+	casper.echo("	adminTopic\n");
 	casper.echo("	postreply\n");
 	casper.echo("	edittopic\n");
 	casper.echo("	deletetopic\n");
