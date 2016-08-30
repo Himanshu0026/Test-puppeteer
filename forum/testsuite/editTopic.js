@@ -341,6 +341,8 @@ var verifyEditTopicContent = function(driver, callback) {
 	casper.echo('---------------------------------------------------------------------------');
 	return callback(null);
 };
+
+//verify permission settings message
 var verifyPermissionSettingMsg = function(driver, callback) {
 	driver.capture(screenShotsDir+'Permission.png');
 	var msg  = driver.fetchText('p[align="center"] font.heading');

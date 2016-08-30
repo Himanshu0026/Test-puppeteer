@@ -11,67 +11,85 @@ var config = require('../config/config.json');
 var postAReply = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'postAReply/';
 
-postAReply.postAReplyFeature = function(casper, test, x, callback) {
+postAReply.postAReplyFeature = function(casper, test, x) {
 
 	//Login To Backend URL and disable Reply Topic and Reply Own Topic checkbox
-		casper.thenOpen(config.backEndUrl, function() {
-			casper.echo('Login To Backend URL and disable Reply Topic and Reply Own Topic checkbox', 'INFO');
-			this.then(function() {
-				casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-				casper.echo('---------------------------------------------------------------------------');		
-			});
-		});
-		
-		//login to backend url (rm)
-		/*casper.then(function() {
-			forumRegister.loginToForumBackEnd(casper, test, function() {
+	casper.start(config.backEndUrl,function() {
+		casper.echo('Login To Backend URL and disable Reply Topic and Reply Own Topic checkbox', 'INFO');
+		casper.echo('title of the page : ' +this.getTitle());
+		forumRegister.loginToForumBackEnd(casper, test, function(err) { //(rm)
+			if(!err) { 
 				casper.echo('User has been successfuly login to backend', 'INFO');
-			});
-		});*/
-
-		//go to user group permission
-		casper.then(function() {
-			utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function() {
-				casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
-				casper.then(function(){
-					this.capture(screenShotsDir+'EditUserPermissionpage.png');
+				//go to user permission
+				utils.gotoEditUserGroupPermissionpage(x, "Registered Users", casper, function(err) {
+					if(!err) {
+						casper.echo('Successfully navigated to Edit User group Permission page', 'INFO');
+						//click on checkbox
+						casper.waitForSelector('#post_replies', function success() {
+							utils.enableorDisableCheckbox('post_replies', false, casper, function(err) {	
+								if(!err) {
+									casper.echo("Reply Topic checkbox has been disabled", 'INFO');
+									utils.enableorDisableCheckbox('other_post_replies', false, casper, function(err) {
+										if(!err) {
+											casper.echo("Reply own Topic checkbox has been disabled", 'INFO');
+											//click on save button
+											utils.clickOnElement(casper, '.btn-blue', function(err) {
+												if(!err) {
+													casper.echo('Saving Changes', 'INFO');
+													//verify Permission Setting Message
+													casper.waitForSelector('p[align="center"] font.heading', function success() {
+														verifyPermissionSettingMsg(casper, function(err) {
+															if(!err) {
+																casper.echo('verifying Permission Setting Message', 'INFO');	
+															}
+														});
+													}, function fail(err){
+														casper.echo(err);						
+													});
+												}
+											});
+										}
+									});
+									
+								}
+							});
+						}, function fail(err) {
+							casper.echo(err);
+						});
+					}
 				});
-			});
-		});	
+			}
+		});
+	});		
 		
-		//click on checkbox set false
-		casper.then(function() {
-			utils.enableorDisableCheckbox('post_replies', false, casper, function() {
-				casper.echo("Reply Topic checkbox has been disabled", 'INFO');
-			});
+	/*****test case to post reply on own Topics when permission false*****/
+	casper.thenOpen(config.url, function() {
+		casper.echo('test case to post reply on own Topics when permission false', 'INFO');
+		casper.echo('Title of the page :' +this.getTitle(), 'INFO');
+		//login with register user
+		forumLogin.loginToApp(json['newTopic'].username, json['newTopic'].password, casper, function(err) {
+			if(!err) {
+				casper.echo('User has been successfuly login to application with register user', 'INFO');
+				casper.waitForSelector('form[name="posts"]', function success() {
+					test.assertExists('form[name="posts"] h4 a');
+					casper.click('form[name="posts"] h4 a');
+					casper.waitForSelector('#editable_subjuct', function success() {
+						test.assertDoesntExist('#editTopic');
+						casper.echo('you have not permission to edit title', 'INFO');
+						casper.echo('---------------------------------------------------------------------------');
+						test.assertDoesntExist('a#edit_post_request');
+						casper.echo('you have not the permission to edit posts', 'INFO');
+						casper.echo('---------------------------------------------------------------------------');
+					}, function fail(err) {
+						casper.echo(err);				
+					});
+				}, function fail(err) {
+					casper.echo("selector not found" +err);
+				});
+			}
 		});
+	});	
 
-		//click on check box set false
-		casper.then(function() {
-			utils.enableorDisableCheckbox('other_post_replies', false, casper, function() {
-				casper.echo("Reply own Topic checkbox has been disabled", 'INFO');
-			});
-		});
-
-		//click on save button
-		casper.then(function() {
-			utils.clickOnElement(casper, '.btn-blue', function() {
-				casper.echo('Saving Changes', 'INFO');
-			});
-		});
-
-		//verify update setting message
-		casper.then(function() {
-			var msg  = this.fetchText('p[align="center"] font.heading');
-			test.assertEquals(msg.trim(), config.permissionSettingMsg.trim(), msg.trim()+' and message verified');
-			casper.echo('---------------------------------------------------------------------------');
-		});
-		
-		//getting screenshot after change permission
-		casper.then(function() {
-			this.capture(screenShotsDir+'afterChangePermission.png');
-		});		
-		
 		// start from forum url
 		casper.thenOpen(config.url, function() {
 			casper.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -666,7 +684,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 		casper.echo('---------------------------------------------------------------------------');
 	});
 	};
-	return callback();
+	//return callback();
 };
 
 
@@ -776,7 +794,14 @@ var shareOn = function(email, password, driver, callback) {
 	});
 };
 
-
+//verify permission settings message
+var verifyPermissionSettingMsg = function(driver, callback) {
+	driver.capture(screenShotsDir+'Permission.png');
+	var msg  = driver.fetchText('p[align="center"] font.heading');
+	driver.test.assertEquals(msg.trim(), config.permissionSettingMsg.trim(), msg.trim()+' and message verified');
+	casper.echo('---------------------------------------------------------------------------');
+	return callback(null);
+}; 
 
 
 
