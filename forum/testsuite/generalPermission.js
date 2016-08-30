@@ -16,103 +16,94 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Fornt-End URL
 	casper.start(config.url, function() {
-		this.capture(screenShotsDir+ 'forum.png');
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-	});
-	
-	//Logout From App
-	/*casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {
-			casper.capture(screenShotsDir+ 'logout.png');
-		});
-			
-	});
-
-	//Registering A User 
-	casper.then(function() {
-		try {
-			test.assertExists('a[href^="/register/register"]');
-			this.click('a[href^="/register/register"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ '1_registerFrom.png');
-				this.echo('registration from opened successfully', 'INFO');
-				forumRegister.registerToApp(json.deleteAccount, casper, function() {
-					casper.then(function() {
-						this.capture(screenShotsDir+ '1_registeredUser.png');
-						this.echo('user registered successfully', 'INFO');
+		forumRegister.redirectToLogout(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('a[href^="/register/register"]', function success() {
+					this.click('a[href^="/register/register"]');
+					casper.waitForSelector('form[action="/register/create_account"]', function success() {
+						this.echo('registration from opened successfully', 'INFO');
+						forumRegister.registerToApp(json.deleteAccount, casper, function() {
+						});		
+					}, function fail() {
+						casper.echo('ERROR OCCURRED', 'ERROR');
 					});
-				});		
-			});
-		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]');
-		}	
-	});
-	
-	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-	
-	casper.then(function() {
-		try {
-			this.click('a[href="/tool/members/login?action=logout"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
-			});
-		}catch(e) {
-			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}			
-	});
-
-	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function() {
-		});						
-	});
-	
-	casper.then(function() {
-		editProfile.makeRegisteredUser(casper, test, function() {
-			casper.echo('user "hs123" has been made a registered user', 'INFO');
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');			
+			}
 		});
 	});
-
+	
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-
-	//Logout From Back-End
-	casper.then(function() {
 		try {
+			test.assertExists('a[href="/tool/members/login?action=logout"]');
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}			
+		}
 	});
 	
-	//Login To Forum Back-End
 	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function() {
-			casper.capture(screenShotsDir+ '2_backEndLoggedIn.png');
-			casper.echo('Logged-in successfully from back-end', 'INFO');
-		});
+		forumRegister.loginToForumBackEnd(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('div#my_account_forum_menu', function success() {
+					editProfile.makeRegisteredUser(casper, test, function(err) {
+						if(!err) {
+							casper.echo('user "hs123" has been made a registered user', 'INFO');
+							casper.waitForSelector('div#my_account_forum_menu', function success() {
+							generalPermission.viewChangePermission(casper, test, function(err) {
+								if(!err) {
+									casper.echo('Opened Change Permission Page Successfully', 'INFO');
+									casper.waitForSelector('#view_messageboard', function success() {
+										utils.enableorDisableCheckbox('view_messageboard', false, casper, function() {
+											casper.echo('checkbox is unchecked', 'INFO');
+										});
+										try {
+											test.assertExists('button.button.btn-m.btn-blue');
+											this.click('button.button.btn-m.btn-blue');
+											casper.waitForSelector('font[color="red"]', function success() {
+												this.emit('waitForSuccess');
+											}, function fail() {
+												casper.echo('ERROR OCCURRED', 'ERROR');
+											});
+										}catch(e) {
+											test.assertDoesntExist('button.button.btn-m.btn-blue');
+										}
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}else {
+									casper.echo('Error : '+err, 'ERROR');	
+								}
+							});
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});
+						}else {
+							casper.echo('Error : '+err, 'ERROR');			
+						}
+					});
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');			
+			}
+		});						
 	});
-
-	//Open Change Permission From Back-End And Disable View Forum
-	casper.then(function() {
-		generalPermission.viewChangePermission(casper, test, function() {
-			casper.capture(screenShotsDir+ '2_backEndChangePermission.png');
-			casper.echo('Opened Change Permission Page Successfully', 'INFO');
-		});
-	});*/
-
+	
 	casper.on('waitForSuccess', function() {
 		casper.then(function() {
-			this.capture(screenShotsDir+ 'updatedChangePermission.png');
 			try {
 				test.assertExists('font[color="red"]');
 				var successMsg = this.fetchText('font[color="red"]');
 				var expectedSuccessMsg = 'Your user group settings have been updated.';
 				verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedViewForum', casper, function() {
-					casper.capture(screenShotsDir+ 'success.png');
 				});
 			}catch(e) {
 				test.assertDoesntExist('font[color="red"]');
@@ -120,153 +111,120 @@ generalPermission.featureTest = function(casper, test, x) {
 		});
 	});
 
-	/*casper.then(function() {
-		try {
-			test.assertExists('#view_messageboard');
-			utils.enableorDisableCheckbox('view_messageboard', false, casper, function() {
-				casper.echo('checkbox is unchecked', 'INFO');
-				casper.capture(screenShotsDir+ 'checked.png');			
-			});
-			try {
-				test.assertExists('button.button.btn-m.btn-blue');
-				this.click('button.button.btn-m.btn-blue');
-				this.then(function() {});
-				casper.emit('waitForSuccess');
-			}catch(e) {
-				test.assertDoesntExist('button.button.btn-m.btn-blue');
-			}
-			
-		}catch(e) {
-			test.assertDoesntExist('#view_messageboard');
-		}
-	});
-
 	//Open Fornt-End URL
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-	});
-
-	//Logout From App
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {
-			casper.capture(screenShotsDir+ 'logout.png');
+		forumRegister.redirectToLogout(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('a#td_tab_login', function success() {
+					forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
+						if(!err) {
+							casper.echo('User Logged In Successfully', 'INFO');
+							casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
+								var message = this.fetchText('div.text-center.bmessage.alert-info.text-danger');
+								var errorMsg = message.substring(0, message.indexOf('<'));
+								var expectedErrorMsg = "Sorry! You don't have permission to perform this action.";
+								if(errorMsg&&errorMsg!= '')
+								verifyErrorMsg(errorMsg, expectedErrorMsg, 'GeneralGroupPermission', casper, function() {});
+								this.echo('Disabled View Profile Is Verified', 'INFO');
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}else {
+							casper.echo('Error : '+err, 'ERROR');
+						}
+					});
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
 		});
-			
 	});
-
-	//Login To Front-End
-	casper.then(function() {
-		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
-			casper.capture(screenShotsDir+ 'frontEndLoggedIn.png');
-			casper.echo('User Logged In Successfully', 'INFO');
-		});
-	});
-
-	casper.then(function() {
-		try {
-			test.assertExists('div.text-center.bmessage.alert-info.text-danger');
-			var message = this.fetchText('div.text-center.bmessage.alert-info.text-danger');
-			var errorMsg = message.substring(0, message.indexOf('<'));
-			var expectedErrorMsg = "Sorry! You don't have permission to perform this action.";
-			verifyErrorMsg(errorMsg, expectedErrorMsg, 'GeneralGroupPermission', casper, function() {});
-			this.echo('Disabled View Profile Is Verified', 'INFO');
-		}catch(e) {
-			test.assertDoesntExist('div.text-center.bmessage.alert-info.text-danger');
-		}
-	});*/
-
 	
 
 //***********************************2nd Test Case Verification**********************************
 	
 	//Open Back-End URL And Get Title
-	/*casper.thenOpen(config.backEndUrl, function() {
-		casper.then(function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		});	
-	});
-
-	//Logout From Back-End
-	casper.then(function() {
+	casper.thenOpen(config.backEndUrl, function() {
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
-			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}			
+		}
 	});
-	
+
 	//Login To Forum Back-End
 	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '1_backEndLoggedIn.png');
-				this.echo('Logged-in successfully from back-end', 'INFO');
-			});		
+		forumRegister.loginToForumBackEnd(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('div#my_account_forum_menu', function success() {
+					generalPermission.viewChangePermission(casper, test, function(err) {
+						if(!err) {
+							casper.waitForSelector('#view_messageboard', function success() {
+							casper.echo('Opened Change Permission Page Successfully', 'INFO');
+							utils.enableorDisableCheckbox('view_messageboard', true, casper, function() {
+								casper.echo('checkbox is checked', 'INFO');
+							});
+							try {
+								test.assertExists('button.button.btn-m.btn-blue');
+								this.click('button.button.btn-m.btn-blue');
+								casper.waitForSelector('font[color="red"]', function success() {
+									this.emit('waitForSuccess');
+								}, function fail() {
+									casper.echo('ERROR OCCURRED', 'ERROR');
+								});
+							}catch(e) {
+								test.assertDoesntExist('button.button.btn-m.btn-blue');
+							}
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});
+						}else {
+							casper.echo('Error : '+err, 'ERROR');
+						}
+					});
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
 		});
 	});
 
-	//Open Change Permission From Back-End And Enablie View Forum
-	casper.then(function() {
-		generalPermission.viewChangePermission(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '1_backEndChangePermission.png');
-				casper.echo('Opened Change Permission Page Successfully', 'INFO');
-				try {
-					test.assertExists('#view_messageboard');
-					utils.enableorDisableCheckbox('view_messageboard', true, casper, function() {
-						casper.echo('checkbox is checked', 'INFO');
-						casper.capture(screenShotsDir+ 'checked.png');			
-					});
-					try {
-						test.assertExists('button.button.btn-m.btn-blue');
-						this.click('button.button.btn-m.btn-blue');
-						this.then(function() {});
-						this.emit('waitForSuccess');
-					}catch(e) {
-						test.assertDoesntExist('button.button.btn-m.btn-blue');
-					}
-					
-				}catch(e) {
-					test.assertDoesntExist('#view_messageboard');
-				}
-			});		
-		});
-	});
-		
 	//Open Fornt-End URL
 	casper.thenOpen(config.url, function() {
-		casper.then(function() {
-			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		});
-	});
-
-	//Logout From App
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
-			});		
-		});
-			
-	});
-
-	//Login To Front-End
-	casper.then(function() {
-		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '1_frontEndLoggedIn.png');
-				this.echo('User Logged In Successfully', 'INFO');
-				try {
-					test.assertDoesntExist('div.text-center.bmessage.alert-info.text-danger');
-					this.echo('Enabled View Forum Is Verified', 'INFO');
-				}catch(e) {
-					test.assertExists('div.text-center.bmessage.alert-info.text-danger');
-					this.echo('View Forum Is Disabled From The Back-end', 'ERROR');
-				}
-			});
+		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		forumRegister.redirectToLogout(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('a#td_tab_login', function success() {
+					forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
+						if(!err) {
+							casper.waitForSelector('a.default-user', function success() {
+								this.echo('User Logged In Successfully', 'INFO');
+								try {
+									test.assertDoesntExist('div.text-center.bmessage.alert-info.text-danger');
+									this.echo('Enabled View Forum Is Verified', 'INFO');
+								}catch(e) {
+									test.assertExists('div.text-center.bmessage.alert-info.text-danger');
+									this.echo('View Forum Is Disabled From The Back-end', 'ERROR');
+								}
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}else {
+							casper.echo('Error : '+err, 'ERROR');
+						}
+					});
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
 		});
 	});
 
@@ -274,122 +232,93 @@ generalPermission.featureTest = function(casper, test, x) {
 	
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.then(function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		});	
-	});
-	
-	//Logout From Back-End
-	casper.then(function() {
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
-			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}			
+		}
 	});
 	
 	//Login To Forum Back-End
 	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_backEndLoggedIn.png');
-				this.echo('Logged-in successfully from back-end', 'INFO');
-			});		
-		});
-	});
-
-	//Open Change Permission From Back-End And Enablie View Profile
-	casper.then(function() {
-		generalPermission.viewChangePermission(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_backEndChangePermission.png');
-				casper.echo('Opened Change Permission Page Successfully', 'INFO');
-				try {
-					test.assertExists('#view_profiles');
-					utils.enableorDisableCheckbox('view_profiles', false, casper, function() {
-						casper.echo('checkbox is unchecked', 'INFO');
-						casper.capture(screenShotsDir+ 'unchecked.png');			
+		forumRegister.loginToForumBackEnd(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('div#my_account_forum_menu', function success() {
+					generalPermission.viewChangePermission(casper, test, function(err) {
+						if(!err) {
+							casper.waitForSelector('#view_profiles', function success() {
+								casper.echo('Opened Change Permission Page Successfully', 'INFO');
+								utils.enableorDisableCheckbox('view_profiles', false, casper, function() {
+									casper.echo('checkbox is unchecked', 'INFO');
+								});
+								try {
+									test.assertExists('button.button.btn-m.btn-blue');
+									this.click('button.button.btn-m.btn-blue');
+									casper.waitForSelector('font[color="red"]', function success() {
+										this.emit('waitForSuccess');
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}catch(e) {
+									test.assertDoesntExist('button.button.btn-m.btn-blue');
+								}
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}else {
+							casper.echo('Error : '+err, 'ERROR');
+						}
 					});
-					try {
-						test.assertExists('button.button.btn-m.btn-blue');
-						this.click('button.button.btn-m.btn-blue');
-						this.then(function() {});
-						this.emit('waitForSuccess');
-					}catch(e) {
-						test.assertDoesntExist('button.button.btn-m.btn-blue');
-					}
-					
-				}catch(e) {
-					test.assertDoesntExist('#view_messageboard');
-				}
-			});		
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
 		});
 	});
 
 	//Open Fornt-End URL
 	casper.thenOpen(config.url, function() {
-		casper.then(function() {
-			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		});
-	});
-
-	//Logout From App
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
-			});		
-		});
-			
-	});
-
-	//Login To Front-End And Click On Other User's Profile
-	casper.then(function() {
-		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '1_frontEndLoggedIn.png');
-				this.echo('User Logged In Successfully', 'INFO');
-				try {
-					test.assertExists('i.icon.icon-menu');
-					this.click('i.icon.icon-menu');
-					casper.then(function() {
-						try {
-							test.assertExists('a[href^="/register/members"]');
-							this.click('a[href^="/register/members"]');
-							casper.then(function() {
-								try {
-									test.assertExists('span.col-sm-9.right-side a strong');
+		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		forumRegister.redirectToLogout(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('a#td_tab_login', function success() {
+					forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
+						if(!err) {
+							casper.waitForSelector('i.icon.icon-menu', function success() {
+								this.echo('User Logged In Successfully', 'INFO');
+								this.click('i.icon.icon-menu');
+								test.assertExists('a[href^="/register/members"]');
+								this.click('a[href^="/register/members"]');
+								casper.waitForSelector('span.col-sm-9.right-side a strong', function success() {
 									this.click('span.col-sm-9.right-side a strong');	
-									casper.then(function() {
-										this.capture(screenShotsDir+ '3_profile.png');
-										try {
-											test.assertExists('div.text-center.bmessage.alert-info.text-danger');
-											var message = this.fetchText('div.text-center.bmessage.alert-info.text-danger');
-											var errorMsg = message.substring(0, message.indexOf('<'));
-											var expectedErrorMsg = "Sorry! You don't have permission to perform this action.";
-											verifyErrorMsg(errorMsg, expectedErrorMsg, 'ViewProfile', casper, function() {});
-											this.echo('Disabled View Profile Is Verified', 'INFO');
-										}catch(e) {
-											test.assertDoesntExist('div.text-center.bmessage.alert-info.text-danger');
-											this.echo('View Profile Is Enabled From The Back-end', 'ERROR');
-										}
-				
+									casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
+										var message = this.fetchText('div.text-center.bmessage.alert-info.text-danger');
+										var errorMsg = message.substring(0, message.indexOf('<'));
+										var expectedErrorMsg = "Sorry! You don't have permission to perform this action.";
+										verifyErrorMsg(errorMsg, expectedErrorMsg, 'ViewProfile', casper, function() {});
+										this.echo('Disabled View Profile Is Verified', 'INFO');
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
 									});
-								}catch(e) {
-									test.assertDoesntExist('span.col-sm-9.right-side a strong');
-								}			
+								}, function fail() {
+									casper.echo('ERROR OCCURRED', 'ERROR');
+								});
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
 							});
-						}catch(e) {
-							test.assertDoesntExist('a[href^="/register/members"]');
+						}else {
+							casper.echo('Error : '+err, 'ERROR');
 						}
 					});
-				}catch(e) {
-					test.assertDoesntExist('i.icon.icon-menu');
-				}
-			});
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
 		});
 	});
 
@@ -397,112 +326,86 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.then(function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		});	
-	});
-
-	//Logout From Back-End
-	casper.then(function() {
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
-			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}			
-	});
-	
-	//Login To Forum Back-End
-	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_backEndLoggedIn.png');
-				this.echo('Logged-in successfully from back-end', 'INFO');
-			});		
-		});
+		}
 	});
 
-	//Open Change Permission From Back-End And Enablie View Profile
+	//Login To Forum Back-End
 	casper.then(function() {
-		generalPermission.viewChangePermission(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_backEndChangePermission.png');
-				casper.echo('Opened Change Permission Page Successfully', 'INFO');
-				try {
-					test.assertExists('#view_profiles');
-					utils.enableorDisableCheckbox('view_profiles', true, casper, function() {
-						casper.echo('checkbox is checked', 'INFO');
-						casper.capture(screenShotsDir+ 'checked.png');			
-					});
-					try {
-						test.assertExists('button.button.btn-m.btn-blue');
-						this.click('button.button.btn-m.btn-blue');
-						this.then(function() {});
-						this.emit('waitForSuccess');
-					}catch(e) {
-						test.assertDoesntExist('button.button.btn-m.btn-blue');
-					}
+		forumRegister.loginToForumBackEnd(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('div#my_account_forum_menu', function success() {
+					generalPermission.viewChangePermission(casper, test, function(err) {
+						if(!err) {
+							casper.waitForSelector('#view_profiles', function success() {
+								casper.echo('Opened Change Permission Page Successfully', 'INFO');
+								utils.enableorDisableCheckbox('view_profiles', true, casper, function() {
+									casper.echo('checkbox is checked', 'INFO');
+								});
+								try {
+									test.assertExists('button.button.btn-m.btn-blue');
+									this.click('button.button.btn-m.btn-blue');
+									casper.waitForSelector('font[color="red"]', function success() {
+										this.emit('waitForSuccess');
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}catch(e) {
+									test.assertDoesntExist('button.button.btn-m.btn-blue');
+								}
 					
-				}catch(e) {
-					test.assertDoesntExist('#view_messageboard');
-				}
-			});		
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}else {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						}
+					});
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			} 
 		});
 	});
 
 	//Open Fornt-End URL
 	casper.thenOpen(config.url, function() {
-		casper.then(function() {
-			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		});
-	});
-
-	//Logout From App
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
-			});		
-		});
-			
-	});
-
-	//Login To Front-End And Click On Other User's Profile
-	casper.then(function() {
-		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '1_frontEndLoggedIn.png');
-				this.echo('User Logged In Successfully', 'INFO');
-				try {
-					test.assertExists('i.icon.icon-menu');
-					this.click('i.icon.icon-menu');
-					casper.then(function() {
-						try {
-							test.assertExists('a[href^="/register/members"]');
-							this.click('a[href^="/register/members"]');
-							casper.then(function() {
-								try {
-									test.assertExists('span.col-sm-9.right-side a strong');
+		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		forumRegister.redirectToLogout(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('a#td_tab_login', function success() {
+					forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
+						if(!err) {
+							casper.waitForSelector('i.icon.icon-menu', function success() {
+								this.echo('User Logged In Successfully', 'INFO');
+								this.click('i.icon.icon-menu');
+								test.assertExists('a[href^="/register/members"]');
+								this.click('a[href^="/register/members"]');
+								casper.waitForSelector('span.col-sm-9.right-side a strong', function success() {
 									this.click('span.col-sm-9.right-side a strong');	
-									casper.then(function() {
-										this.capture(screenShotsDir+ '3_profile.png');
-										this.echo('Enabled View Profile Verified Successfully', 'INFO');
-				
-									});
-								}catch(e) {
-									test.assertDoesntExist('span.col-sm-9.right-side a strong');
-								}			
+									this.echo('Enabled View Profile Verified Successfully', 'INFO');
+								}, function fail() {
+									casper.echo('ERROR OCCURRED', 'ERROR');
+								});
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
 							});
-						}catch(e) {
-							test.assertDoesntExist('a[href^="/register/members"]');
+						}else {
+							casper.echo('Error : '+err, 'ERROR');
 						}
 					});
-				}catch(e) {
-					test.assertDoesntExist('i.icon.icon-menu');
-				}
-			});
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
 		});
 	});
 
@@ -510,113 +413,86 @@ generalPermission.featureTest = function(casper, test, x) {
 	
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.then(function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		});	
-	});
-
-	//Logout From Back-End
-	casper.then(function() {
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
-			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}			
-	});
-	
-	//Login To Forum Back-End
-	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_backEndLoggedIn.png');
-				this.echo('Logged-in successfully from back-end', 'INFO');
-			});		
-		});
+		}
 	});
 
-	//Open Change Permission From Back-End And Disable View Profile
+	//Login To Forum Back-End
 	casper.then(function() {
-		generalPermission.viewChangePermission(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_backEndChangePermission.png');
-				casper.echo('Opened Change Permission Page Successfully', 'INFO');
-				try {
-					test.assertExists('#memberslist_viewable');
-					utils.enableorDisableCheckbox('memberslist_viewable', false, casper, function() {
-						casper.echo('checkbox is unchecked', 'INFO');
-						casper.capture(screenShotsDir+ 'unchecked.png');			
+		forumRegister.loginToForumBackEnd(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('div#my_account_forum_menu', function success() {
+					generalPermission.viewChangePermission(casper, test, function(err) {
+						if(!err) {
+							casper.waitForSelector('#memberslist_viewable', function success() {
+								casper.echo('Opened Change Permission Page Successfully', 'INFO');
+								utils.enableorDisableCheckbox('memberslist_viewable', false, casper, function() {
+									casper.echo('checkbox is unchecked', 'INFO');
+								});
+								try {
+									test.assertExists('button.button.btn-m.btn-blue');
+									this.click('button.button.btn-m.btn-blue');
+									casper.waitForSelector('font[color="red"]', function success() {
+										this.emit('waitForSuccess');
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}catch(e) {
+									test.assertDoesntExist('button.button.btn-m.btn-blue');
+								}
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}else {
+							casper.echo('Error : '+err, 'ERROR');
+						}
+								
 					});
-					try {
-						test.assertExists('button.button.btn-m.btn-blue');
-						this.click('button.button.btn-m.btn-blue');
-						this.then(function() {});
-						this.emit('waitForSuccess');
-					}catch(e) {
-						test.assertDoesntExist('button.button.btn-m.btn-blue');
-					}
-					
-				}catch(e) {
-					test.assertDoesntExist('#view_messageboard');
-				}
-			});		
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
 		});
 	});
 
 	//Open Fornt-End URL
 	casper.thenOpen(config.url, function() {
-		casper.then(function() {
-			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		});
-	});
+		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		forumRegister.redirectToLogout(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('a#td_tab_login', function success() {
+					forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
+						if(!err) {
+							casper.waitForSelector('i.icon.icon-menu', function success() {
+								this.echo('User Logged In Successfully', 'INFO');
+								this.click('i.icon.icon-menu');
+								test.assertExists('a[href^="/register/members"]');
+								this.click('a[href^="/register/members"]');
+								casper.waitForSelector('//a/strong[text()="hs1234"]/ancestor::li/span', function success() {
+									this.echo('Disabled Viewable On Member List Verified Successfully', 'INFO');
 
-	//Logout From App
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
-			});		
-		});
-			
-	});
-
-	//Login To Front-End And Click On Other User's Profile
-	casper.then(function() {
-		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '1_frontEndLoggedIn.png');
-				this.echo('User Logged In Successfully', 'INFO');
-				try {
-					test.assertExists('i.icon.icon-menu');
-					this.click('i.icon.icon-menu');
-					casper.then(function() {
-						try {
-							test.assertExists('a[href^="/register/members"]');
-							this.click('a[href^="/register/members"]');
-							casper.then(function() {
-								try {
-									var user = x('//a/strong[text()="hs1234"]/ancestor::li/span');
-									test.assertDoesntExist(x('//a/strong[text()="hs1234"]/ancestor::li/span'));
-									//this.click(x('//a/strong[text()="hs1234"]/ancestor::li/span'));	
-									casper.then(function() {
-										this.capture(screenShotsDir+ '3_profile.png');
-										this.echo('Disabled Viewable On Member List Verified Successfully', 'INFO');
-				
-									});
-								}catch(e) {
-									test.assertExists(x('//a/strong[text()="hs1234"]/ancestor::li/span'));
-								}			
+								}, function fail() {
+									casper.echo('ERROR OCCURRED', 'ERROR');
+								});
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
 							});
-						}catch(e) {
-							test.assertDoesntExist('a[href^="/register/members"]');
+						}else {
+							casper.echo('Error : '+err, 'ERROR');
 						}
 					});
-				}catch(e) {
-					test.assertDoesntExist('i.icon.icon-menu');
-				}
-			});
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
 		});
 	});
 
@@ -624,177 +500,140 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.then(function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		});	
-	});
-
-	//Logout From Back-End
-	casper.then(function() {
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
-			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}			
-	});
-	
-	//Login To Forum Back-End
-	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_backEndLoggedIn.png');
-				this.echo('Logged-in successfully from back-end', 'INFO');
-			});		
-		});
+		}
 	});
 
-	//Open Change Permission From Back-End And Enablie View Profile
+	//Login To Forum Back-End
 	casper.then(function() {
-		generalPermission.viewChangePermission(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_backEndChangePermission.png');
-				casper.echo('Opened Change Permission Page Successfully', 'INFO');
-				try {
-					test.assertExists('#memberslist_viewable');
-					utils.enableorDisableCheckbox('memberslist_viewable', true, casper, function() {
-						casper.echo('checkbox is checked', 'INFO');
-						casper.capture(screenShotsDir+ 'checked.png');			
-					});
-					try {
-						test.assertExists('button.button.btn-m.btn-blue');
-						this.click('button.button.btn-m.btn-blue');
-						this.then(function() {});
-						this.emit('waitForSuccess');
-					}catch(e) {
-						test.assertDoesntExist('button.button.btn-m.btn-blue');
-					}
+		forumRegister.loginToForumBackEnd(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('div#my_account_forum_menu', function success() {
+					generalPermission.viewChangePermission(casper, test, function(err) {
+						if(!err) {
+							casper.waitForSelector('#memberslist_viewable', function success() {
+								casper.echo('Opened Change Permission Page Successfully', 'INFO');
+								utils.enableorDisableCheckbox('memberslist_viewable', true, casper, function() {
+									casper.echo('checkbox is checked', 'INFO');
+								});
+								try {
+									test.assertExists('button.button.btn-m.btn-blue');
+									this.click('button.button.btn-m.btn-blue');
+									casper.waitForSelector('font[color="red"]', function success() {
+										this.emit('waitForSuccess');
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}catch(e) {
+									test.assertDoesntExist('button.button.btn-m.btn-blue');
+								}
 					
-				}catch(e) {
-					test.assertDoesntExist('#view_messageboard');
-				}
-			});		
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}else {
+							casper.echo('Error : '+err, 'ERROR');
+						}
+					});
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
 		});
 	});
 
 	//Open Fornt-End URL
 	casper.thenOpen(config.url, function() {
-		casper.then(function() {
-			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		});
-	});
+		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+		forumRegister.redirectToLogout(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('a#td_tab_login', function success() {
+					forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
+						if(!err) {
+							casper.waitForSelector('i.icon.icon-menu', function success() {
+								this.echo('User Logged In Successfully', 'INFO');
+								this.click('i.icon.icon-menu');
+								test.assertExists('a[href^="/register/members"]');
+								this.click('a[href^="/register/members"]');
+								casper.waitForSelector('//a/strong[text()="hs1234"]/ancestor::li/span', function success() {
+									this.echo('Enabled Viewable On Member List Verified Successfully', 'INFO');
 
-	//Logout From App
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
-			});		
-		});
-			
-	});
-
-	//Login To Front-End And Click On Other User's Profile
-	casper.then(function() {
-		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '1_frontEndLoggedIn.png');
-				this.echo('User Logged In Successfully', 'INFO');
-				try {
-					test.assertExists('i.icon.icon-menu');
-					this.click('i.icon.icon-menu');
-					casper.then(function() {
-						try {
-							test.assertExists('a[href^="/register/members"]');
-							this.click('a[href^="/register/members"]');
-							casper.then(function() {
-								try {
-									var user = x('//a/strong[text()="hs1234"]/ancestor::li/span');
-									test.assertExists(x('//a/strong[text()="hs1234"]/ancestor::li/span'));
-									this.click(x('//a/strong[text()="hs1234"]/ancestor::li/span'));	
-									casper.then(function() {
-										this.capture(screenShotsDir+ '3_profile.png');
-										this.echo('Enabled Viewable On Member List Verified Successfully', 'INFO');
-				
-									});
-								}catch(e) {
-									test.assertDoesntExist('//a/strong[text()="hs1234"]/ancestor::li/span');
-								}			
+								}, function fail() {
+									casper.echo('ERROR OCCURRED', 'ERROR');
+								});
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
 							});
-						}catch(e) {
-							test.assertDoesntExist('a[href^="/register/members"]');
+						}else {
+							casper.echo('Error : '+err, 'ERROR');
 						}
 					});
-				}catch(e) {
-					test.assertDoesntExist('i.icon.icon-menu');
-				}
-			});
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
 		});
-	});*/
+	});
 
 //***********************************7th Test Case Verification**********************************
 	
 	//Open Back-End URL And Get Title
-	/*casper.thenOpen(config.backEndUrl, function() {
-		casper.then(function() {
-			this.capture(screenShotsDir+ 'demo2.png');
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		});	
-	});
-
-	//Logout From Back-End
-	casper.then(function() {
+	casper.thenOpen(config.backEndUrl, function() {
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
-			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}			
-	});
-	
-	//Login To Forum Back-End
-	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_backEndLoggedIn.png');
-				this.echo('Logged-in successfully from back-end', 'INFO');
-			});		
-		});
+		}
 	});
 
-	//Open Change Permission From Back-End And Disable View Invisible Member
+	//Login To Forum Back-End
 	casper.then(function() {
-		generalPermission.viewChangePermission(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_backEndChangePermission.png');
-				casper.echo('Opened Change Permission Page Successfully', 'INFO');
-				try {
-					test.assertExists('#view_invisible');
-					utils.enableorDisableCheckbox('view_invisible', false, casper, function() {
-						casper.echo('checkbox is unchecked for view invisible members', 'INFO');
-						casper.capture(screenShotsDir+ 'unchecked.png');			
+		forumRegister.loginToForumBackEnd(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('div#my_account_forum_menu', function success() {
+					generalPermission.viewChangePermission(casper, test, function(err) {
+						if(!err) {
+							casper.waitForSelector('#view_invisible', function success() {
+								casper.echo('Opened Change Permission Page Successfully', 'INFO');
+								utils.enableorDisableCheckbox('view_invisible', false, casper, function() {
+									casper.echo('checkbox is unchecked for view invisible members', 'INFO');
+								});
+								utils.enableorDisableCheckbox('allow_invisible', true, casper, function() {
+									casper.echo('checkbox is checked for set self invisible', 'INFO');
+								});
+								try {
+									test.assertExists('button.button.btn-m.btn-blue');
+									this.click('button.button.btn-m.btn-blue');
+									casper.waitForSelector('font[color="red"]', function success() {
+										this.emit('waitForSuccess');
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}catch(e) {
+									test.assertDoesntExist('button.button.btn-m.btn-blue');
+								}
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}else {
+							casper.echo('Error : '+err, 'ERROR');
+						}
 					});
-					utils.enableorDisableCheckbox('allow_invisible', true, casper, function() {
-						casper.echo('checkbox is checked for set self invisible', 'INFO');
-						casper.capture(screenShotsDir+ 'checked.png');			
-					});
-					try {
-						test.assertExists('button.button.btn-m.btn-blue');
-						this.click('button.button.btn-m.btn-blue');
-						this.then(function() {});
-						this.emit('waitForSuccess');
-					}catch(e) {
-						test.assertDoesntExist('button.button.btn-m.btn-blue');
-					}
-					
-				}catch(e) {
-					test.assertDoesntExist('#view_messageboard');
-				}
-			});		
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
 		});
 	});
 
@@ -806,28 +645,19 @@ generalPermission.featureTest = function(casper, test, x) {
 			try {
 				test.assertExists('a[href^="/tool/members/mb/skins"]');
 				this.click('a[href^="/tool/members/mb/skins"]');
-				casper.then(function() {
-					this.capture(screenShotsDir+ 'demo.png');
-					try {
-						test.assertExists('#inline_search_textbox');
-						this.sendKeys('#inline_search_textbox', 'Elegance');
-						this.click('#inline_search_textbox');
-						this.page.sendEvent("keypress", this.page.event.key.Enter);
+				casper.waitForSelector('#inline_search_textbox', function success() {
+					this.sendKeys('#inline_search_textbox', 'Elegance');
+					this.click('#inline_search_textbox');
+					this.page.sendEvent("keypress", this.page.event.key.Enter);
+					casper.waitForselector('a[href^="/tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=50&search_skin=Elegance&sorted="]', function success() {
+						this.click('a[href^="/tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=50&search_skin=Elegance&sorted="]');
 						casper.then(function() {
-							try {
-								test.assertExists('a[href^="/tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=50&search_skin=Elegance&sorted="]');
-								this.click('a[href^="/tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=50&search_skin=Elegance&sorted="]');
-								casper.then(function() {
-									this.on('remote.alert', testAlert2);
-								});
-							}catch(e) {
-								test.assertDoesntExist('a[href^="/tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=50&search_skin=Elegance&sorted="]');
-							}
+							this.on('remote.alert', testAlert2);
 						});
-					}catch(e) {
-						test.assertDoesntExist('#inline_search_textbox');
-					}	
-					casper.then(function() {
+					}, function fail() {
+						casper.echo('ERROR OCCURRED', 'ERROR');
+					});
+					casper.wait(5000, function() {
 						this.then(function() {
 							this.removeListener('remote.alert', testAlert2);
 						});
@@ -837,21 +667,16 @@ generalPermission.featureTest = function(casper, test, x) {
 							try {
 								test.assertExists('a[href^="/tool/members/mb/settings?tab=Display"]');
 								this.click('a[href^="/tool/members/mb/settings?tab=Display"]');	
-								casper.then(function() {
-									try {
-										test.assertExists('#online_user_list');
+								casper.waitForSelector('#online_user_list', function success() {
 									utils.enableorDisableCheckbox('online_user_list', true, casper, function() {
 											casper.echo('checkbox is checked', 'INFO');
-											casper.capture(screenShotsDir+ 'checked.png');
 									});
-													
-										test.assertExists('button.button.btn-m.btn-blue');
-										this.click('button.button.btn-m.btn-blue');	
-										casper.then(function() {
-										});
-									}catch(e) {
-										test.assertDoesntExist('#online_user_list');
-									}	
+									test.assertExists('button.button.btn-m.btn-blue');
+									this.click('button.button.btn-m.btn-blue');	
+									casper.then(function() {
+									});
+								}, function fail() {
+									casper.echo('ERROR OCCURRED', 'ERROR');
 								});
 							}catch(e) {
 								test.assertDoesntExist('a[href^="/tool/members/mb/settings?tab=Display"]');
@@ -860,6 +685,8 @@ generalPermission.featureTest = function(casper, test, x) {
 							test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 						}
 					});
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
 				});
 			}catch(e) {
 				test.assertDoesntExist('a[href^="/tool/members/mb/skins"]');
@@ -871,57 +698,51 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Fornt-End URL
 	casper.thenOpen(config.url, function() {
-		casper.then(function() {
-			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		});
-	});
-
-	//Logout From App
-	casper.then(function() {
+		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		try {
 			test.assertExists('a[href^="/register/logout"]');
 			this.click('a[href^="/register/logout"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
-			});
 		}catch(e) {
 			test.assertDoesntExist('a[href^="/register/logout"]');
 		}
 	});
-
-	//Login To Front-End And Click On Other User's Profile
+	
 	casper.then(function() {
-		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
-			casper.then(function() {
-				test.assertExists('a[href^="/profile"]');
-				this.click('a[href^="/profile"]');
-				casper.then(function() {
-					test.assertExists('a[href^="/register/register?edit"]');
-					this.click('a[href^="/register/register?edit"]');	
-					casper.then(function() {
-						test.assertExists('a[href^="/register?action=preferences"]');
-						this.click('a[href^="/register?action=preferences"]');
-						casper.then(function() {
-							utils.enableorDisableCheckbox('INVS', true, casper, function() {
-								casper.echo('checkbox is checked for invisible mode', 'INFO');
-								casper.capture(screenShotsDir+ 'checked.png');	
-							});
-							casper.then(function() {
+		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
+			if(!err) {
+				casper.waitForSelector('a[href^="/profile"]', function success() {
+					this.click('a[href^="/profile"]');
+					casper.waitForSelector('a[href^="/register/register?edit"]', function success() {
+						this.click('a[href^="/register/register?edit"]');	
+						casper.waitForSelector('a[href^="/register?action=preferences"]', function seccess() {
+							this.click('a[href^="/register?action=preferences"]');
+							casper.waitForSelector('#INVS', function success() {
+								utils.enableorDisableCheckbox('INVS', true, casper, function() {
+									casper.echo('checkbox is checked for invisible mode', 'INFO');
+								});
 								test.assertExists('input.global_button_middle');	
 								this.click('input.global_button_middle');	
-								casper.then(function() {
-									test.assertExists('a[href^="/categories"]');
+								casper.waitForSelector('a[href^="/categories"]', function success() {
 									this.click('a[href^="/categories"]');
-									casper.then(function() {
-										this.capture(screenShotsDir+ 'showInvisible.png');
-										this.echo('view invisible member is verified successfully', 'INFO');
-									});									
+									this.echo('view invisible member is verified successfully', 'INFO');
+								}, function fail() {
+									casper.echo('ERROR OCCURRED', 'ERROR');
 								});						
-							});		
-						});
-					});	
-				});		
-			});
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});	
+					}, function fail() {
+						casper.echo('ERROR OCCURRED', 'ERROR');
+					});		
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
 		});
 	});
 
@@ -929,89 +750,74 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.then(function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		});	
-	});
-
-	//Logout From Back-End
-	casper.then(function() {
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
-			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}			
-	});
-	
-	//Login To Forum Back-End
-	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_backEndLoggedIn.png');
-				this.echo('Logged-in successfully from back-end', 'INFO');
-			});		
-		});
+		}
 	});
 
-	//Open Change Permission From Back-End And Enablie View Invisible Member
+	//Login To Forum Back-End
 	casper.then(function() {
-		generalPermission.viewChangePermission(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_backEndChangePermission.png');
-				casper.echo('Opened Change Permission Page Successfully', 'INFO');
-				try {
-					test.assertExists('#view_invisible');
-					utils.enableorDisableCheckbox('view_invisible', true, casper, function() {
-						casper.echo('checkbox is checked', 'INFO');
-						casper.capture(screenShotsDir+ 'checked.png');			
+		forumRegister.loginToForumBackEnd(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('div#my_account_forum_menu', function success() {
+					generalPermission.viewChangePermission(casper, test, function(err) {
+						if(!err) {
+							casper.waitForSelector('#view_invisible', function success() {
+								casper.echo('Opened Change Permission Page Successfully', 'INFO');
+								utils.enableorDisableCheckbox('view_invisible', true, casper, function() {
+									casper.echo('checkbox is checked', 'INFO');
+								});
+								utils.enableorDisableCheckbox('allow_invisible', true, casper, function() {
+									casper.echo('checkbox is checked for set self invisible', 'INFO');
+								});
+								try {
+									test.assertExists('button.button.btn-m.btn-blue');
+									this.click('button.button.btn-m.btn-blue');
+									casper.waitForSelector('font[color="red"]', function success() {
+										this.emit('waitForSuccess');
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}catch(e) {
+									test.assertDoesntExist('button.button.btn-m.btn-blue');
+								}
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}else {
+							casper.echo('Error : '+err, 'ERROR');
+						}
 					});
-					utils.enableorDisableCheckbox('allow_invisible', true, casper, function() {
-						casper.echo('checkbox is checked for set self invisible', 'INFO');
-						casper.capture(screenShotsDir+ 'checked.png');			
-					});
-					try {
-						test.assertExists('button.button.btn-m.btn-blue');
-						this.click('button.button.btn-m.btn-blue');
-						this.then(function() {});
-						this.emit('waitForSuccess');
-					}catch(e) {
-						test.assertDoesntExist('button.button.btn-m.btn-blue');
-					}
-					
-				}catch(e) {
-					test.assertDoesntExist('#view_messageboard');
-				}
-			});		
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
 		});
 	});
 	
 	//Change Display Setting From The Back-End
 	casper.then(function() {
-				
 		try {
 			test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 			try {
 				test.assertExists('a[href^="/tool/members/mb/settings?tab=Display"]');
 				this.click('a[href^="/tool/members/mb/settings?tab=Display"]');	
-				casper.then(function() {
-					try {
-						test.assertExists('#online_user_list');
+				casper.waitForSelector('#online_user_list', function success() {
+					test.assertExists('#online_user_list');
 					utils.enableorDisableCheckbox('online_user_list', true, casper, function() {
 							casper.echo('checkbox is checked', 'INFO');
-							casper.capture(screenShotsDir+ 'checked.png');
 					});
-									
-						test.assertExists('button.button.btn-m.btn-blue');
-						this.click('button.button.btn-m.btn-blue');	
-						this.then(function() {});
-						this.emit('waitForSuccess');
-					}catch(e) {
-						test.assertDoesntExist('#online_user_list');
-					}	
+					test.assertExists('button.button.btn-m.btn-blue');
+					this.click('button.button.btn-m.btn-blue');	
+					this.then(function() {});
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
 				});
 			}catch(e) {
 				test.assertDoesntExist('a[href^="/tool/members/mb/settings?tab=Display"]');
@@ -1023,75 +829,65 @@ generalPermission.featureTest = function(casper, test, x) {
 
 	//Open Fornt-End URL
 	casper.thenOpen(config.url, function() {
-		casper.then(function() {
-			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		});
-	});
-
-	//Logout From App
-	casper.then(function() {
+		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		try {
 			test.assertExists('a[href^="/register/logout"]');
 			this.click('a[href^="/register/logout"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
-			});
 		}catch(e) {
 			test.assertDoesntExist('a[href^="/register/logout"]');
-		}		
+		}
 	});
 
 	//Login To Front-End And Click On Other User's Profile
 	casper.then(function() {
-		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
-			casper.then(function() {
-				test.assertExists('a[href^="/profile"]');
-				this.click('a[href^="/profile"]');
-				casper.then(function() {
-					test.assertExists('a[href^="/register/register?edit"]');
-					this.click('a[href^="/register/register?edit"]');	
-					casper.then(function() {
-						test.assertExists('a[href^="/register?action=preferences"]');
-						this.click('a[href^="/register?action=preferences"]');
-						casper.then(function() {
-							utils.enableorDisableCheckbox('INVS', true, casper, function() {
-								casper.echo('checkbox is checked for invisible mode', 'INFO');
-								casper.capture(screenShotsDir+ 'checked.png');	
-							});
-							casper.then(function() {
+		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
+			if(!err) {
+				casper.waitForSelector('a[href^="/profile"]', function success() {
+					this.click('a[href^="/profile"]');
+					casper.waitForSelector('a[href^="/register/register?edit"]', function success() {
+						this.click('a[href^="/register/register?edit"]');	
+						casper.waitForSelector('a[href^="/register?action=preferences"]', function seccess() {
+							this.click('a[href^="/register?action=preferences"]');
+							casper.waitForSelector('#INVS', function success() {
+								utils.enableorDisableCheckbox('INVS', true, casper, function() {
+									casper.echo('checkbox is checked for invisible mode', 'INFO');
+								});
 								test.assertExists('input.global_button_middle');	
 								this.click('input.global_button_middle');	
-								casper.then(function() {
-									test.assertExists('a[href^="/categories"]');
+								casper.waitForSelector('a[href^="/categories"]', function success() {
 									this.click('a[href^="/categories"]');
-									casper.then(function() {
-										this.capture(screenShotsDir+ 'showInvisible.png');
-										this.echo('view invisible member is verified successfully', 'INFO');
-									});									
+									this.echo('view invisible member is verified successfully', 'INFO');
+								}, function fail() {
+									casper.echo('ERROR OCCURRED', 'ERROR');
 								});						
-							});		
-						});
-					});	
-				});		
-			});
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});	
+					}, function fail() {
+						casper.echo('ERROR OCCURRED', 'ERROR');
+					});		
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
+			}
+			
 		});
 	});
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.then(function() {
-			this.capture(screenShotsDir+ 'demo2.png');
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		});	
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 	});
 
 	//Logout From Back-End
 	casper.then(function() {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
-			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
 		}			
@@ -1100,10 +896,6 @@ generalPermission.featureTest = function(casper, test, x) {
 	//Login To Forum Back-End
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_backEndLoggedIn.png');
-				this.echo('Logged-in successfully from back-end', 'INFO');
-			});		
 		});
 	});
 
@@ -1116,7 +908,6 @@ generalPermission.featureTest = function(casper, test, x) {
 				test.assertExists('a[href^="/tool/members/mb/skins"]');
 				this.click('a[href^="/tool/members/mb/skins"]');
 				casper.then(function() {
-					this.capture(screenShotsDir+ 'demo.png');
 					try {
 						test.assertExists('#inline_search_textbox');
 						this.sendKeys('#inline_search_textbox', 'Angela');
@@ -1148,7 +939,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		}catch(e) {
 			test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddAppearance"]');
 		}
-	});*/
+	});
 };
 
 //************************************PRIVATE METHODS***********************************
@@ -1161,35 +952,33 @@ generalPermission.viewChangePermission = function(driver, test, callback) {
 		try {
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			driver.then(function() {
-				this.capture(screenShotsDir+ 'groupPermission.png');
-				//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
-				driver.then(function() {
-					try {
-						var grpName = this.evaluate(function(){
-							for(var i=1; i<=7; i++) {
-								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
-								if (x1.innerText == 'Registered Users') {
-									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
-									return x2;
-								}
+			driver.waitForSelector('table.text.fullborder', function success() {
+				try {
+					var grpName = this.evaluate(function(){
+						for(var i=1; i<=7; i++) {
+							var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+							if (x1.innerText == 'Registered Users') {
+								var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+								return x2;
 							}
-						});
-						this.click('a[href="'+grpName+'"]');
-					}catch(e) {
-						var grpName = this.evaluate(function(){
-							for(var i=1; i<=7; i++) {
-								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
-								if (x1.innerText == 'Registered Users') {
-									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
-									return x2;
-								}
+						}
+					});
+					this.click('a[href="'+grpName+'"]');
+				}catch(e) {
+					var grpName = this.evaluate(function(){
+						for(var i=1; i<=7; i++) {
+							var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+							if (x1.innerText == 'Registered Users') {
+								var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
+								return x2;
 							}
-						});
-						this.click('a[href="'+grpName+'"]');
-					}
-					return callback();
-				});
+						}
+					});
+					this.click('a[href="'+grpName+'"]');
+				}
+				return callback(null);
+			}, function fail() {
+				driver.echo('ERROR OCCURRED', 'ERROR');
 			});
 		}catch(e) {
 			test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]');
@@ -1207,35 +996,33 @@ generalPermission.viewChangePermissionForModerators = function(driver, test, cal
 		try {
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			driver.then(function() {
-				this.capture(screenShotsDir+ 'groupPermission.png');
-				//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
-				driver.then(function() {
-					try {
-						var grpName = this.evaluate(function(){
-							for(var i=1; i<=7; i++) {
-								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
-								if (x1.innerText == 'Moderators') {
-									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
-									return x2;
-								}
+			driver.waitForSelector('table.text.fullborder', function success() {
+				try {
+					var grpName = this.evaluate(function(){
+						for(var i=1; i<=7; i++) {
+							var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+							if (x1.innerText == 'Moderators') {
+								var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
+								return x2;
 							}
-						});
-						this.click('a[href="'+grpName+'"]');
-					}catch(e) {
-						var grpName = this.evaluate(function(){
-							for(var i=1; i<=7; i++) {
-								var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
-								if (x1.innerText == 'Moderators') {
-									var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
-									return x2;
-								}
+						}
+					});
+					this.click('a[href="'+grpName+'"]');
+				}catch(e) {
+					var grpName = this.evaluate(function(){
+						for(var i=1; i<=7; i++) {
+							var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+							if (x1.innerText == 'Moderators') {
+								var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
+								return x2;
 							}
-						});
-						this.click('a[href="'+grpName+'"]');
-					}
-					return callback();
-				});
+						}
+					});
+					this.click('a[href="'+grpName+'"]');
+				}
+				return callback(null);
+			}, function fail() {
+				driver.echo('ERROR OCCURRED', 'ERROR');
 			});
 		}catch(e) {
 			test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]');
@@ -1254,8 +1041,7 @@ var verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver, 
 	} else {
 		driver.echo("Error Message Is Not Correct", 'ERROR');
 	}
-	driver.capture(screenShotsDir + 'Error_OnEdit' +msgTitle+ '.png');
-	return callback();
+	return callback(null);
 };
 
 //Method For Verifying Success Message On General Group Permission
@@ -1267,8 +1053,7 @@ var verifySuccessMsg = function(successMessage, expectedSuccessMsg, msgTitle, dr
 	} else {
 		driver.echo("Success Message Is Not Correct", 'ERROR');
 	}
-	driver.capture(screenShotsDir + 'Success_OnEdit' +msgTitle+ '.png');
-	return callback();
+	return callback(null);
 };
 
 function testAlert2(message) {

@@ -2894,7 +2894,7 @@ var deleteAccount = function(driver, callback) {
 	}catch(e) {
 		driver.test.assertDoesntExist('#deleteAccountDialog');
 	}
-	return callback();
+	return callback(null);
 };
 
 //Method For Deleting User's Account 
@@ -2913,7 +2913,7 @@ var delAccount = function(driver, callback) {
 	}catch(e) {
 		driver.test.assertDoesntExist('i.glyphicon.glyphicon-trash', 'delete account button not found');
 	}
-	return callback();
+	return callback(null);
 };
 
 //Method For Do Not Delete User's Account
@@ -2932,7 +2932,7 @@ var doNotDeleteAccount = function(driver, callback) {
 	}catch(e) {
 		driver.test.assertDoesntExist('#deleteAccountDialog');
 	}
-	return callback();
+	return callback(null);
 };
 
 //Method for Verifying Success Message
@@ -2945,7 +2945,7 @@ var verifySuccessMsg = function(successMsg, expectedSuccessMsg, driver, callback
 	}catch(e) {
 		driver.echo('success message is not verified when user change permission from back-end for pending email verification user', 'ERROR');
 	}
-	return callback();
+	return callback(null);
 };
 
 //Method For Changing User Group To Admin User
@@ -2974,7 +2974,7 @@ var makeAnAdminUser = function(driver, test, callback) {
 						});
 						driver.then(function() {
 							this.capture(screenShotsDir + 'popUp.png');
-							return callback();
+							return callback(null);
 						});
 					});
 				}catch(e) {
@@ -3045,7 +3045,7 @@ var enableDeleteOwnProfileForRegisteredUser = function(driver, test, callback) {
 											driver.capture(screenShotsDir+ 'success.png');
 											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
-												return callback();					
+												return callback(null);					
 											});
 										});
 									}catch(e) {
@@ -3125,7 +3125,7 @@ var enableDeleteOwnProfileForPendingUser = function(driver, test, callback) {
 											var expectedSuccessMsg = 'Your user group settings have been updated.';
 											verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
 												driver.capture(screenShotsDir+ 'success.png');
-												return callback();
+												return callback(null);
 											});
 										}catch(e) {
 											test.assertDoesntExist('font[color="red"]');
@@ -3208,7 +3208,7 @@ var disableDeleteOwnProfileForRegisteredUser = function(driver, test, callback) 
 											driver.capture(screenShotsDir+ 'success.png');
 											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
-												return callback();					
+												return callback(null);					
 											});
 										});
 									}catch(e) {
@@ -3288,7 +3288,7 @@ var disableDeleteOwnProfileForPendingUser = function(driver, test, callback) {
 											var expectedSuccessMsg = 'Your user group settings have been updated.';
 											verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
 												driver.capture(screenShotsDir+ 'success.png');
-												return callback();
+												return callback(null);
 											});
 										}catch(e) {
 											test.assertDoesntExist('font[color="red"]');
@@ -3322,7 +3322,7 @@ var gotoNewTopicpage = function(driver, callback) {
 	driver.then(function() {
 		this.capture(screenShotsDir+ 'startTopic.png');
 	});
-	return callback();
+	return callback(null);
 };
 
 
@@ -3348,5 +3348,5 @@ var postTopicpage = function(data, driver, callback) {
 		driver.click('#post_submit');
 	});
 	
-	return callback();
+	return callback(null);
 };
