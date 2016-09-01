@@ -474,9 +474,12 @@ generalPermission.featureTest = function(casper, test, x) {
 								this.click('i.icon.icon-menu');
 								test.assertExists('a[href^="/register/members"]');
 								this.click('a[href^="/register/members"]');
-								casper.waitForSelector('//a/strong[text()="hs1234"]/ancestor::li/span', function success() {
-									this.echo('Disabled Viewable On Member List Verified Successfully', 'INFO');
-
+								casper.waitForSelector('a[href^="/register/members?sort=joindate&reverse=true&list=&search=&fieldid_fields="]', function success() {
+									this.click('a[href^="/register/members?sort=joindate&reverse=true&list=&search=&fieldid_fields="]');
+									casper.then(function() {
+										test.assertExists(x('//a/strong[text()="hs1234"]/ancestor::li/span'));
+										this.echo('Disabled Viewable On Member List Verified Successfully', 'INFO');
+									});
 								}, function fail() {
 									casper.echo('ERROR OCCURRED', 'ERROR');
 								});
@@ -561,11 +564,14 @@ generalPermission.featureTest = function(casper, test, x) {
 								this.click('i.icon.icon-menu');
 								test.assertExists('a[href^="/register/members"]');
 								this.click('a[href^="/register/members"]');
-								casper.waitForSelector('//a/strong[text()="hs1234"]/ancestor::li/span', function success() {
-									this.echo('Enabled Viewable On Member List Verified Successfully', 'INFO');
-
+								casper.waitForSelector('a[href^="/register/members?sort=joindate&reverse=true&list=&search=&fieldid_fields="]', function success() {
+									this.click('a[href^="/register/members?sort=joindate&reverse=true&list=&search=&fieldid_fields="]');
+									casper.then(function() {
+										test.assertExists(x('//a/strong[text()="hs1234"]/ancestor::li/span'));
+										this.echo('Disabled Viewable On Member List Verified Successfully', 'INFO');
+									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+
 								});
 							}, function fail() {
 								casper.echo('ERROR OCCURRED', 'ERROR');
@@ -645,11 +651,11 @@ generalPermission.featureTest = function(casper, test, x) {
 			try {
 				test.assertExists('a[href^="/tool/members/mb/skins"]');
 				this.click('a[href^="/tool/members/mb/skins"]');
-				casper.waitForSelector('#inline_search_textbox', function success() {
-					this.sendKeys('#inline_search_textbox', 'Elegance');
-					this.click('#inline_search_textbox');
+				casper.waitForSelector('form[name="frmSkinSearch"] input#inline_search_textbox', function success() {
+					this.sendKeys('form[name="frmSkinSearch"] input#inline_search_textbox', 'Elegance');
+					this.click('form[name="frmSkinSearch"] input#inline_search_textbox');
 					this.page.sendEvent("keypress", this.page.event.key.Enter);
-					casper.waitForselector('a[href^="/tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=50&search_skin=Elegance&sorted="]', function success() {
+					casper.waitForSelector('a[href^="/tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=50&search_skin=Elegance&sorted="]', function success() {
 						this.click('a[href^="/tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=50&search_skin=Elegance&sorted="]');
 						casper.then(function() {
 							this.on('remote.alert', testAlert2);
@@ -720,8 +726,8 @@ generalPermission.featureTest = function(casper, test, x) {
 								utils.enableorDisableCheckbox('INVS', true, casper, function() {
 									casper.echo('checkbox is checked for invisible mode', 'INFO');
 								});
-								test.assertExists('input.global_button_middle');	
-								this.click('input.global_button_middle');	
+								test.assertExists('td input.global_button_middle');	
+								this.click('td input.global_button_middle');	
 								casper.waitForSelector('a[href^="/categories"]', function success() {
 									this.click('a[href^="/categories"]');
 									this.echo('view invisible member is verified successfully', 'INFO');
@@ -852,8 +858,8 @@ generalPermission.featureTest = function(casper, test, x) {
 								utils.enableorDisableCheckbox('INVS', true, casper, function() {
 									casper.echo('checkbox is checked for invisible mode', 'INFO');
 								});
-								test.assertExists('input.global_button_middle');	
-								this.click('input.global_button_middle');	
+								test.assertExists('td input.global_button_middle');	
+								this.click('td input.global_button_middle');	
 								casper.waitForSelector('a[href^="/categories"]', function success() {
 									this.click('a[href^="/categories"]');
 									this.echo('view invisible member is verified successfully', 'INFO');
@@ -882,63 +888,80 @@ generalPermission.featureTest = function(casper, test, x) {
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-
-	//Logout From Back-End
-	casper.then(function() {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}			
-	});
-	
-	//Login To Forum Back-End
-	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function() {
-		});
+		}
 	});
 
-	//Change Theme From The Back-End
+	//Login To Forum Back-End
 	casper.then(function() {
-		try {
-			test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddAppearance"]');
-			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddAppearance"]');
-			try {
-				test.assertExists('a[href^="/tool/members/mb/skins"]');
-				this.click('a[href^="/tool/members/mb/skins"]');
-				casper.then(function() {
+		forumRegister.loginToForumBackEnd(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('div#my_account_forum_menu', function success() {
 					try {
-						test.assertExists('#inline_search_textbox');
-						this.sendKeys('#inline_search_textbox', 'Angela');
-						this.click('#inline_search_textbox');
-						this.page.sendEvent("keypress", this.page.event.key.Enter);
-						casper.then(function() {
-							try {
-								test.assertExists('a[href^="/tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=51&search_skin=angela&sorted="]');
-								this.click('a[href^="/tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=51&search_skin=angela&sorted="]');
-								casper.then(function() {
-									this.on('remote.alert', testAlert2);
+						test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddAppearance"]');
+						this.click('div#my_account_forum_menu a[data-tooltip-elm="ddAppearance"]');
+						try {
+							test.assertExists('a[href^="/tool/members/mb/skins"]');
+							this.click('a[href^="/tool/members/mb/skins"]');
+							casper.waitForSelector('form[name="frmSkinSearch"] input#inline_search_textbox', function success() {
+								this.sendKeys('form[name="frmSkinSearch"] input#inline_search_textbox', 'Angela');
+								this.click('form[name="frmSkinSearch"] input#inline_search_textbox');
+								this.page.sendEvent("keypress", this.page.event.key.Enter);
+								casper.waitForSelector('a[href^="/tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=51&search_skin=Angela&sorted="]', function success() {
+									this.click('a[href^="/tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=51&search_skin=Angela&sorted="]');
+									casper.then(function() {
+										this.on('remote.alert', testAlert2);
+									});
+								}, function fail() {
+									casper.echo('ERROR OCCURRED', 'ERROR');
 								});
-							}catch(e) {
-								test.assertDoesntExist('a[href^="/tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=51&search_skin=angela&sorted="]');
-							}
-						});
+								casper.wait(5000, function() {
+									this.then(function() {
+										this.removeListener('remote.alert', testAlert2);
+									});
+									try {
+										test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+										this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+										try {
+											test.assertExists('a[href^="/tool/members/mb/settings?tab=Display"]');
+											this.click('a[href^="/tool/members/mb/settings?tab=Display"]');	
+											casper.waitForSelector('#online_user_list', function success() {
+												utils.enableorDisableCheckbox('online_user_list', true, casper, function() {
+														casper.echo('checkbox is checked', 'INFO');
+												});
+												test.assertExists('button.button.btn-m.btn-blue');
+												this.click('button.button.btn-m.btn-blue');	
+												casper.then(function() {
+												});
+											}, function fail() {
+												casper.echo('ERROR OCCURRED', 'ERROR');
+											});
+										}catch(e) {
+											test.assertDoesntExist('a[href^="/tool/members/mb/settings?tab=Display"]');
+										}
+									}catch(e) {
+										test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+									}
+								});
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}catch(e) {
+							test.assertDoesntExist('a[href^="/tool/members/mb/skins"]');
+						}
 					}catch(e) {
-						test.assertDoesntExist('#inline_search_textbox');
-					}	
-					casper.then(function() {
-						this.then(function() {
-							this.removeListener('remote.alert', testAlert2);
-						});
-					});
+						test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddAppearance"]');
+					}
+				}, function fail() {
+					casper.echo('ERROR OCCURRED', 'ERROR');
 				});
-			}catch(e) {
-				test.assertDoesntExist('a[href^="/tool/members/mb/skins"]');
+			}else {
+				casper.echo('Error : '+err, 'ERROR');
 			}
-		}catch(e) {
-			test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddAppearance"]');
-		}
+		});
 	});
 };
 
@@ -953,29 +976,16 @@ generalPermission.viewChangePermission = function(driver, test, callback) {
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.waitForSelector('table.text.fullborder', function success() {
-				try {
-					var grpName = this.evaluate(function(){
-						for(var i=1; i<=7; i++) {
-							var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
-							if (x1.innerText == 'Registered Users') {
-								var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
-								return x2;
-							}
+				var grpName = this.evaluate(function(){
+					for(var i=1; i<=7; i++) {
+						var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+						if (x1.innerText == 'Registered Users') {
+							var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
+							return x2;
 						}
-					});
-					this.click('a[href="'+grpName+'"]');
-				}catch(e) {
-					var grpName = this.evaluate(function(){
-						for(var i=1; i<=7; i++) {
-							var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
-							if (x1.innerText == 'Registered Users') {
-								var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
-								return x2;
-							}
-						}
-					});
-					this.click('a[href="'+grpName+'"]');
-				}
+					}
+				});
+				this.click('a[href="'+grpName+'"]');
 				return callback(null);
 			}, function fail() {
 				driver.echo('ERROR OCCURRED', 'ERROR');
@@ -997,29 +1007,16 @@ generalPermission.viewChangePermissionForModerators = function(driver, test, cal
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.waitForSelector('table.text.fullborder', function success() {
-				try {
-					var grpName = this.evaluate(function(){
-						for(var i=1; i<=7; i++) {
-							var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
-							if (x1.innerText == 'Moderators') {
-								var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(4) div.tooltipMenu a').getAttribute('href');
-								return x2;
-							}
+				var grpName = this.evaluate(function(){
+					for(var i=1; i<=7; i++) {
+						var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
+						if (x1.innerText == 'Moderators') {
+							var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
+							return x2;
 						}
-					});
-					this.click('a[href="'+grpName+'"]');
-				}catch(e) {
-					var grpName = this.evaluate(function(){
-						for(var i=1; i<=7; i++) {
-							var x1 = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
-							if (x1.innerText == 'Moderators') {
-								var x2 = document.querySelector('tr:nth-child('+i+') td:nth-child(3) div.tooltipMenu a').getAttribute('href');
-								return x2;
-							}
-						}
-					});
-					this.click('a[href="'+grpName+'"]');
-				}
+					}
+				});
+				this.click('a[href="'+grpName+'"]');
 				return callback(null);
 			}, function fail() {
 				driver.echo('ERROR OCCURRED', 'ERROR');

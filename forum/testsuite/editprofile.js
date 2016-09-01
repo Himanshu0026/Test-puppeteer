@@ -77,7 +77,7 @@ editProfile.featureTest = function(casper, test) {
 					} 
 					//Called Method For Verifying Error Messages
 					if(errorMessage && errorMessage!= '')
-					verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper, function(err) {});
+						verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper, function(err) {});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
 				}
@@ -143,7 +143,7 @@ editProfile.featureTest = function(casper, test) {
 
 					//Called Method For Verifying Error Messages
 					if(errorMessage && errorMessage!= '')
-					verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper, function() {});
+						verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, casper, function() {});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
 				}
@@ -158,9 +158,9 @@ editProfile.featureTest = function(casper, test) {
 				casper.waitForSelector('div.alert.alert-success.text-center', function success() {
 					var successMessage = this.fetchText('div.alert.alert-success.text-center');
 					if(successMessage && successMessage != '' )
-					verifySuccessMsg(successMessage, json.validDataForEditAccount.expectedSuccessMsg, 'validAccountSetting', casper, function() {
+						verifySuccessMsg(successMessage, json.validDataForEditAccount.expectedSuccessMsg, 'validAccountSetting', casper, function() {
 							casper.echo('account setting updated successfully', 'INFO');
-					});
+						});
 				}, function fail() {
 					casper.echo('ERROR OCCURRED', 'ERROR');
 				});
@@ -183,9 +183,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		test.assertEquals(message, expectedErrorMsg);
 		this.echo('Alert message is verified', 'INFO');
 	});
-
 	casper.start();
-
 	//Set Different Value For 'Full Name' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
 	casper.then(function() {
 		casper.echo('/*************************VERIFYING ALL CASES OF FULL NAME********************', 'INFO');
@@ -400,7 +398,7 @@ editProfile.customFieldsTest = function(casper, test) {
 														if(!err) {
 															var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
 															if(errorMsg && errorMsg!= '')
-															verifyErrorMsg(errorMsg, "Please enter your screen name.", 'blankImIDWithRequired', casper, function() {});
+																verifyErrorMsg(errorMsg, "Please enter your screen name.", 'blankImIDWithRequired', casper, function() {});
 														}else {
 															casper.echo('Error : '+err, 'INFO');
 														}
@@ -410,7 +408,7 @@ editProfile.customFieldsTest = function(casper, test) {
 														if(!err) {
 															var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
 															if(errorMsg && errorMsg!= '')
-															verifyErrorMsg(errorMsg, 'Please enter your screen name.', 'BlankIM_ID', casper, function() {});
+																verifyErrorMsg(errorMsg, 'Please enter your screen name.', 'BlankIM_ID', casper, function() {});
 															casper.echo('Processing to registration on forum.....', 'INFO');
 														}else {
 															casper.echo('Error : '+err, 'INFO');
@@ -422,7 +420,7 @@ editProfile.customFieldsTest = function(casper, test) {
 																test.assertExists('#moderator-panel div[role="alert"]');
 																var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
 																if(successMessage && successMessage != "") {
-																verifySuccessMsg(successMessage, 'Your settings have been updated.', 'successIM_ID', casper, function() {
+																	verifySuccessMsg(successMessage, 'Your settings have been updated.', 'successIM_ID', casper, function() {
 																	});
 																}
 															}catch(e) {
@@ -536,7 +534,7 @@ editProfile.customFieldsTest = function(casper, test) {
 														if(!err) {
 															var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
 															if(errorMsg && errorMsg!= '')
-															verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper, function() {});
+																verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper, function() {});
 														}else {
 															casper.echo('Error : '+err, 'INFO');
 														}
@@ -546,7 +544,7 @@ editProfile.customFieldsTest = function(casper, test) {
 														if(!err) {
 															var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
 															if(errorMsg && errorMsg!= '')
-															verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper, function() {});
+																verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper, function() {});
 														}else {
 															casper.echo('Error : '+err, 'INFO');
 														}
@@ -558,7 +556,7 @@ editProfile.customFieldsTest = function(casper, test) {
 																test.assertExists('#moderator-panel div[role="alert"]');
 																var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
 																if(successMessage && successMessage != "") {
-																verifySuccessMsg(successMessage, 'Your settings have been updated.', 'successWithBirthday', casper, function() {
+																	verifySuccessMsg(successMessage, 'Your settings have been updated.', 'successWithBirthday', casper, function() {
 																	});
 																}
 															}catch(e) {
@@ -601,8 +599,6 @@ editProfile.customFieldsTest = function(casper, test) {
 				this.echo('Title of the page :' +this.getTitle(), 'INFO');
 				try {
 					this.click('a[href="/tool/members/login?action=logout"]');
-					casper.then(function() {
-					});
 				}catch(e) {
 					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
 				}
@@ -684,7 +680,7 @@ editProfile.customFieldsTest = function(casper, test) {
 																test.assertExists('#moderator-panel div[role="alert"]');
 																var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
 																if(successMessage && successMessage != "") {
-																verifySuccessMsg(successMessage, 'Your settings have been updated.', 'fullNameWithRequired', casper, function() {
+																	verifySuccessMsg(successMessage, 'Your settings have been updated.', 'fullNameWithRequired', casper, function() {
 																	});
 																}
 															}catch(e) {
