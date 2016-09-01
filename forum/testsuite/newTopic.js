@@ -330,7 +330,11 @@ newTopic.featureTest = function(casper, test, x) {
 		//test case to make follow post to unfollow post
 		casper.then(function() {
 			casper.echo('make follow post to unfollow post', 'INFO');
-			this.click('span.topic-content h4 a.topic-title');
+			this.waitForSelector('span.topic-content h4 a.topic-title', function success() {
+				this.click('span.topic-content h4 a.topic-title');
+			}, function fail(err) {
+				casper.echo(err);
+			});
 			this.waitForSelector('.glyphicon-minus', function success() {
 				this.click('.glyphicon-minus');
 				// verify new unFollowed content
@@ -581,25 +585,29 @@ var gotoNewTopicpage = function(driver, callback) {
 // method for goto New Topic page to application
 
 var postTopicpage = function(data, driver, callback) {
-	driver.sendKeys('input[name="subject"]', data.title, {reset:true});
-	 driver.withFrame('message_ifr', function() {
-		this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
-		this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
- 		this.sendKeys('#tinymce', data.content);
+	driver.waitForSelector('#message_ifr', function success(){
+		driver.sendKeys('input[name="subject"]', data.title, {reset:true});
+		 driver.withFrame('message_ifr', function() {
+			this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
+			this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
+	 		this.sendKeys('#tinymce', data.content);
+		});
+	}, function fail(err) {
+		casper.echo(err);
 	});	
-	driver.then(function() {
+
+	driver.waitForSelector('#all_forums_dropdown', function success() {
 		if(data.category) {
 			driver.click('#all_forums_dropdown');
 			var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
 			driver.fill('form[name="PostTopic"]',{
 				'forum' : val.trim()
 			},false);
-			driver.capture(screenShotsDir+ 'content.png');
+			driver.click('#post_submit');
 		}
+	}, function fail() {
+		casper.echo(err);
 	});	
-	driver.then(function() {
-		driver.click('#post_submit');
-	});
 	
 	return callback(null);
 };
@@ -617,41 +625,35 @@ var verifyPostContent = function(content, driver, callback) {
 // method for follow content on follow content page to application
 
 var verifyFollowContent = function(driver, callback) {
-		var url = driver.getCurrentUrl();
-		url = url.split("#");
-		url= url[0].split(".com");			
-		driver.click('li.user-panel .dropdown-toggle');
-		driver.capture(screenShotsDir+ 'dropdown.png');
-		driver.click('span.user-nav-panel li a[href^="/search"]');
-		driver.then(function() {
-			this.capture(screenShotsDir+ 'followedContent.png');
-		});
-		driver.then(function() {
-			casper.echo('a[href="'+url[1]+'"]','INFO');
-			this.test.assertExists('span.topic-content h4 a[href="'+url[1]+'"]');
-			casper.echo('---------------------------------------------------------------------------');
-		});
+	var url = driver.getCurrentUrl();
+	url = url.split("#");
+	url= url[0].split(".com");			
+	driver.click('li.user-panel .dropdown-toggle');
+	driver.click('span.user-nav-panel li a[href^="/search"]');
+	driver.waitForSelector('span.topic-content', function success() {
+		casper.echo('a[href="'+url[1]+'"]','INFO');
+		this.test.assertExists('span.topic-content h4 a[href="'+url[1]+'"]');
+		casper.echo('---------------------------------------------------------------------------');
+	}, function fail(err) {
+		casper.echo(err);
+	});
 	return callback(null);
 };
 
 // method for verify unFollow content on follow content page to application
 
 var verifyUnFollowContent = function(driver, callback) {
-		var url = driver.getCurrentUrl();
-		url = url.split("#");
-		url= url[0].split(".com");
-		driver.click('li.user-panel .dropdown-toggle');
-		driver.capture(screenShotsDir+ 'dropdown.png');
-		driver.click('span.user-nav-panel li a[href^="/search"]');
-		driver.then(function() {
-			this.capture(screenShotsDir+ 'followedContent.png');
-		});
-		driver.then(function() {
-			this.test.assertDoesntExist('span.topic-content h4 a[href="'+url[1]+'"]');
-			casper.echo('---------------------------------------------------------------------------');
-		});
-			json.newTopic.tempHref = 'a[href="'+url[1]+'"]';
-		
+	var url = driver.getCurrentUrl();
+	url = url.split("#");
+	url= url[0].split(".com");
+	driver.click('li.user-panel .dropdown-toggle');
+	driver.click('span.user-nav-panel li a[href^="/search"]');
+	driver.then(function() {
+		this.test.assertDoesntExist('span.topic-content h4 a[href="'+url[1]+'"]');
+		casper.echo('---------------------------------------------------------------------------');
+	});
+	json.newTopic.tempHref = 'a[href="'+url[1]+'"]';
+	
 	return callback(null);
 };
 
@@ -668,7 +670,6 @@ var verifyWarningMsg = function(warningMsg, driver, callback){
 
 //verify message after update users group setting
 var verifyPermissionSettingMsg = function(driver, callback) {
-	driver.capture(screenShotsDir+'Permission.png');
 	var msg  = driver.fetchText('p[align="center"] font.heading');
 	driver.test.assertEquals(msg.trim(), config.permissionSettingMsg.trim(), msg.trim()+' and message verified');
 	casper.echo('---------------------------------------------------------------------------');

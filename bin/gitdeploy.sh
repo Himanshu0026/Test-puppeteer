@@ -2,12 +2,26 @@
 # This script auto-deploy code on the server from Git hub.
 # User can execute this script "./gitdeploy.sh BRANCH_NAME" in his  /home/${USER}/ directory (BRANCH_NAME is the name of the branch).
 
+while getopts  "b:p:" flag
+do
+	case "$flag" in
+		"b") branch=$OPTARG 
+	   	;;
+	  	"p") protocol=$OPTARG 
+	   	;;
+	esac
+done
+
 # if branch name not provided then exit
-if [ $# -eq 0 ]; then
+if [ -z "$branch" ]; then
 	echo "No branch name provided."
 	exit 1
 fi
 
+# if protocol is not provided then assigning default value
+if [ -z "$protocol" ]; then
+	protocol="http"
+fi
 
 
 CLONE_DIR="/home/${USER}/Website-Toolbox"
@@ -23,16 +37,26 @@ if [ -d "$CLONE_DIR" ]; then
 		echo "git pull not succeeded."
 		cd $HOME_DIR
 		rm -rf $CLONE_DIR
-		git clone ssh://git@github.com/webtoolbox/Website-Toolbox.git
+		#Checking for given protocol
+		if [ "$protocol" == "ssh" ]
+			git clone ssh://git@github.com/webtoolbox/Website-Toolbox.git
+		else
+			read -p "Enter your github username : " GITUSERNAME
+			git clone https://${GITUSERNAME}@github.com/webtoolbox/Website-Toolbox.git
+		fi
 		cd $CLONE_DIR
 	fi
 else
-	echo "in else condition"
-	#read -p "Enter your github username : " GITUSERNAME
-	git clone ssh://git@github.com/webtoolbox/Website-Toolbox.git
+	#Checking for given protocol
+	if [ "$protocol" == "ssh" ]
+		git clone ssh://git@github.com/webtoolbox/Website-Toolbox.git
+	else
+		read -p "Enter your github username : " GITUSERNAME
+		git clone https://${GITUSERNAME}@github.com/webtoolbox/Website-Toolbox.git
+	fi
 	cd $CLONE_DIR
 fi
-pwd
+
 echo "cloned code"
 # if authentication failed then exit
 if [ $? -ne 0 ]; then

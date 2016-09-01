@@ -192,14 +192,6 @@ poll.pollFeature = function(casper, test, x, callback) {
 		});
 	});
 
-	//Post Poll Data 
-	casper.then(function() {
-		//Getting Screenshot After Clicking On 'Save Poll' Link
-		casper.then(function() {
-			this.capture(screenShotsDir+ 'errorMessage.png');
-		});
-	});
-
 	//wait for 3 second to remove listener2
 	casper.wait(3000, function() {});
 	casper.then(function() {
@@ -260,29 +252,30 @@ var gotoNewTopic = function(data, driver, callback) {
 	driver.click('#links-nav');
 	driver.click('#latest_topics_show');
 	driver.click('a[href="/post/printadd"]');
-	driver.then(function() {
+	driver.waitForSelector('#message_ifr', function success() {
 	 	this.sendKeys('input[name="subject"]', data.title, {reset:true});
 		this.withFrame('message_ifr', function() {
 			this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
 			this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
 	 		this.sendKeys('#tinymce', data.content);
 		});	
-		driver.then(function() {
+		driver.waitForSelector('#all_forums_dropdown', function success() {
 			this.click('#all_forums_dropdown');
 			var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
 			this.fill('form[name="PostTopic"]',{
 				'forum' : val.trim()
 			},false);
-			this.capture(screenShotsDir+ 'content.png');
+		}, function fail() {
+			casper.echo(err);
 		});
+	}, function fail() {
+		casper.echo(err);
 	});
-
 	return callback(null);
 };
 
 var gotoNewPollpage = function(driver, callback) {
 	driver.then(function() {
-		this.capture(screenShotsDir+ 'TopicDetails.png');
 		this.test.assertExists('ul li a[href="#poll"]');
 		casper.echo('---------------------------------------------------------------------------');
 		this.click('ul li a[href="#poll"]');
@@ -297,18 +290,16 @@ var savePollPage = function(data, driver, callback) {
 	driver.sendKeys('input[name="public"]', data.publicCheckbox);
 	driver.sendKeys('#poll_option_1 div input', data.option1, {reset:true});
 	driver.sendKeys('#poll_option_2 div input', data.option2, {reset:true});
-	driver.then(function(){
-		this.click('a[href="#poll-timeout"] small.text-muted');
-	});
-	driver.then(function() {
+	driver.click('a[href="#poll-timeout"] small.text-muted');
+	
+	//driver.then(function() {
 		driver.click('#save_poll');
-	});
+	//});
 	return callback(null);
 };
 
 //verify message after update users group setting
 var verifyPermissionSettingMsg = function(driver, callback) {
-	driver.capture(screenShotsDir+'Permission.png');
 	var msg  = driver.fetchText('p[align="center"] font.heading');
 	driver.test.assertEquals(msg.trim(), config.permissionSettingMsg.trim(), msg.trim()+' and message verified');
 	casper.echo('---------------------------------------------------------------------------');

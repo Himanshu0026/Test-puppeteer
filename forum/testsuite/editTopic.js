@@ -200,7 +200,7 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 				casper.waitForSelector('#quickReplyPost', function success() {
 					verifyEditTopicContent(casper, function(err) {
 						if(!err) {
-							casper.echo('content successfully verified with valid content', 'INFO');
+							casper.echo(' verifying content with valid content', 'INFO');
 						}
 					});
 				}, function fail(err) {
@@ -251,17 +251,13 @@ var editTopicTitle = function(title, driver, callback){
 
 	}
 	
-		driver.then(function(){
-			driver.click('#editTopic');
-		});
-	
-		driver.then(function(){
-				driver.sendKeys('.input-sm', title, {reset:true});
-				this.capture(screenShotsDir+ 'setTopicTitle.png');
-		});
-		driver.then(function(){
-				driver.click('div.editable-buttons .editable-submit');
-		});
+	driver.waitForSelector('#editTopic', function success() {
+		driver.click('#editTopic');
+		driver.sendKeys('.input-sm', title, {reset:true});
+		driver.click('div.editable-buttons .editable-submit');
+	}, function fail() {
+		casper.echo(err);
+	});
 	return callback();
 };
 
@@ -277,28 +273,27 @@ var editTopicContent = function(content, driver, callback){
 
 	}
 
-	driver.then(function(){
+	driver.waitForSelector('div.post-body .panel-dropdown .pull-right a.dropdown-toggle', function success() {
 		this.click('div.post-body .panel-dropdown .pull-right a.dropdown-toggle');
 		this.click('div.post-body .panel-dropdown .pull-right ul.dropdown-menu li a#edit_post_request');
-	});	
+	}, function fail() {
+		casper.echo(err);
+	});
 
-	driver.wait(7000, function(){
+	driver.waitForSelector('#message1_ifr', function success() {
 		this.withFrame('message1_ifr', function() {
 			casper.echo('*****enter message in iframe', 'INFO');
 			driver.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
 			driver.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
-			driver.sendKeys('#tinymce', content);
-			driver.capture(screenShotsDir+ 'editedTopicContent.png');	
+			driver.sendKeys('#tinymce', content);	
 		});
-	});	
-	driver.then(function(){
-		this.click('div.form-group input.btn-primary');	
-	});
+	}, function fail(err) {
 
-	//wait for 7 second for post
-	driver.wait(7000, function(){
-			driver.capture(screenShotsDir+ '11.png');	
-	});			
+	});
+	driver.then(function() {
+		this.click('div.form-group input.btn-primary');
+	});
+	driver.wait(4000);			
 	return callback();
 };
 
@@ -309,42 +304,44 @@ var gotoNewTopic = function(data, driver, callback) {
 	driver.click('#latest_topics_show');
 	driver.click('a[href="/post/printadd"]');
 	
-	driver.then(function() {
+	driver.waitForSelector('#message_ifr', function success() {
          	 this.sendKeys('input[name="subject"]', data.title, {reset:true});
 		 this.withFrame('message_ifr', function() {
 			this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
 			this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
-	 		this.sendKeys('#tinymce', data.content);
-			this.capture(screenShotsDir+ 'content.png');	
+	 		this.sendKeys('#tinymce', data.content);	
 		});	
-		driver.then(function() {
-			this.click('#all_forums_dropdown');
+	}, function fail() {
+		casper.echo(err);
+	});
+	driver.waitForSelector('#all_forums_dropdown', function success() {
+		if(data.category) {
+			driver.click('#all_forums_dropdown');
 			var val = this.fetchText('#all_forums_dropdown option[value="188757"]');
-			this.fill('form[name="PostTopic"]',{
+			driver.fill('form[name="PostTopic"]',{
 				'forum' : val.trim()
 			},false);
-			this.capture(screenShotsDir+ 'fillTopic.png');
-		});
-	});
-
-	driver.then(function() {
-		this.click('#post_submit');
-	});
+			driver.click('#post_submit');
+		}
+	}, function fail() {
+		casper.echo(err);
+	});	
 	return callback();
 };
 // verify edit topic content
 var verifyEditTopicContent = function(driver, callback) {
-	casper.echo('Verify Edit Topic Content With Valid data', 'INFO');
-	var getContent = driver.fetchText('span[id^="post_message_"]');
-	casper.echo("*************getContent : "+getContent);
-	driver.test.assertEquals(getContent.trim(), json.editTopic.validContent.content.trim(), getContent.trim()+' and content verified');
-	casper.echo('---------------------------------------------------------------------------');
+	casper.waitForSelector('span[id^="post_message_"]', function success() {
+		casper.echo('Verify Edit Topic Content With Valid data', 'INFO');
+		var getContent = driver.fetchText('span[id^="post_message_"]');
+		casper.echo("*************getContent : "+getContent);
+		driver.test.assertEquals(getContent.trim(), json.editTopic.validContent.content.trim(), getContent.trim()+' and content verified');
+		casper.echo('---------------------------------------------------------------------------');
+	}, function() {});
 	return callback(null);
 };
 
 //verify permission settings message
 var verifyPermissionSettingMsg = function(driver, callback) {
-	driver.capture(screenShotsDir+'Permission.png');
 	var msg  = driver.fetchText('p[align="center"] font.heading');
 	driver.test.assertEquals(msg.trim(), config.permissionSettingMsg.trim(), msg.trim()+' and message verified');
 	casper.echo('---------------------------------------------------------------------------');
