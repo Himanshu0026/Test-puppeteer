@@ -116,7 +116,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 
 			});
 		});
-	});*/
+	});
 	
 	casper.then(function() {
 		casper.echo('                                      CASE 4', 'INFO');
@@ -128,184 +128,176 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-
-	//Logout From Back-End
-	casper.then(function() {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}			
+		}
 	});
 
 	//Login To Forum Back-end 
 	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function() {
-		});
-	});
-	
-	//Open Change Permission From Back-End And Disable View Profile
-	casper.then(function() {
-		generalPermission.viewChangePermission(casper, test, function() {
-			casper.then(function() {
-				casper.echo('Opened Change Permission Page Successfully', 'INFO')
-				try {
-					test.assertExists('#view_profiles');
-					utils.enableorDisableCheckbox('view_profiles', false, casper, function() {
-						casper.echo('checkbox is unchecked', 'INFO');
-					});
-					try {
-						test.assertExists('button.button.btn-m.btn-blue');
-						this.click('button.button.btn-m.btn-blue');
-						casper.waitForSelector('font[color="red"]', function() {
-							var successMsg = this.fetchText('font[color="red"]');
-							var expectedSuccessMsg = 'Your user group settings have been updated.';
-							if(successMsg && successMsg!= '')
-							verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedViewProfile', casper, function() {
-							});
-						});
-					}catch(e) {
-						test.assertDoesntExist('button.button.btn-m.btn-blue');
-					}
+		forumRegister.loginToForumBackEnd(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('div#my_account_forum_menu', function success() {
+					generalPermission.viewChangePermission(casper, test, function(err) {
+						if(!err) {
+							casper.waitForSelector('#view_profiles', function success() {
+								casper.echo('Opened Change Permission Page Successfully', 'INFO')
+								try {
+									utils.enableorDisableCheckbox('view_profiles', false, casper, function() {
+										casper.echo('checkbox is unchecked', 'INFO');
+									});
+									try {
+										test.assertExists('button.button.btn-m.btn-blue');
+										this.click('button.button.btn-m.btn-blue');
+										casper.waitForSelector('font[color="red"]', function() {
+											var successMsg = this.fetchText('font[color="red"]');
+											var expectedSuccessMsg = 'Your user group settings have been updated.';
+											if(successMsg && successMsg!= '')
+												verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedViewProfile', casper, function() {
+											});
+										});
+									}catch(e) {
+										test.assertDoesntExist('button.button.btn-m.btn-blue');
+									}
 					
-				}catch(e) {
-					test.assertDoesntExist('#view_messageboard');
-				}
-			});
-		});
-	});
+								}catch(e) {
+									test.assertDoesntExist('#view_messageboard');
+								}
+							}, function fail() {
 
-	//Open Front-End URL And Get Title
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
+							});
+						}else {
 
-	//Logout From App
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {
-		});
-			
-	});
-
-	//Login To App
-	casper.then(function() {
-		forumLogin.loginToApp('hsk', 'hsk', casper, function() {
-		});
-	});
-		
-	//Click on Topic
-	casper.then(function() {
-		test.assertExists('i.icon.icon-menu');
-		this.click('i.icon.icon-menu');
-		test.assertExists('a[href="/latest"]');
-		this.click('a[href="/latest"]');
-		casper.waitForSelector('form[name="posts"] a.topic-title', function success() {
-			this.click('form[name="posts"] a.topic-title');
-			try {
-				test.assertExists('a[href^="#likes-modal"]');
-				this.click('a[href^="#likes-modal"]');
-				casper.waitForSelector('li.col-xs-3 a[href^="/profile/"]', function success() {
-					this.click('li.col-xs-3 a[href^="/profile/"]');
-					casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
-						var message = this.fetchText('div.text-center.bmessage.alert-info.text-danger');
-						var errorMsg = message.substring(0, message.indexOf('<'));
-						if(errorMsg && errorMsg!= '')
-							verifyErrorMsg(errorMsg, "Sorry! You don't have permission to perform this action.", 'ThumsUpDown', casper, function() {});
-					}, function fail() {
-
+						}
 					});
 				}, function fail() {
 
 				});
-			}catch(err) {
-				test.assertExists('a i.glyphicon.glyphicon-like-alt');
-				this.click('a i.glyphicon.glyphicon-like-alt');
-			}
-		}, function fail() {
+			}else {
 
+			}
 		});
 	});
 	
-	//Click On Likers/Disliker's User Name	
-	casper.then(function() {
-		casper.wait(5000, function() {
-			test.assertExists('a[href^="#likes-modal"]');
-			this.click('a[href^="#likes-modal"]');
-			casper.wait(3000, function() {
-				test.assertExists('li.col-xs-3 a[href^="/profile/"]');
-				this.click('li.col-xs-3 a[href^="/profile/"]');
-				casper.wait(5000, function() {
-					test.assertExists('div.text-center.bmessage.alert-info.text-danger');
-					var message = this.fetchText('div.text-center.bmessage.alert-info.text-danger');
-					var errorMsg = message.substring(0, message.indexOf('<'));
-					if(errorMsg && errorMsg!= '')
-						verifyErrorMsg(errorMsg, "Sorry! You don't have permission to perform this action.", 'ThumsUpDown', casper, function() {});
+	//Open Front-End URL And Get Title
+	casper.thenOpen(config.url, function() {
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		forumRegister.redirectToLogout(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('a#td_tab_login', function success() {
+					forumLogin.loginToApp('hsk', 'hsk', casper, function(err) {
+						if(!err) {
+							casper.waitForSelector('i.icon.icon-menu', function success() {
+								this.click('i.icon.icon-menu');
+								test.assertExists('a[href="/latest"]');
+								this.click('a[href="/latest"]');
+								casper.waitForSelector('form[name="posts"] a.topic-title', function success() {
+									this.click('form[name="posts"] a.topic-title');
+									casper.waitForSelector('i.glyphicon.glyphicon-like-alt', function success() {
+										try {
+											test.assertExists('a.login_dialog.text-muted.voted-yes');
+										}catch(e) {
+											this.click('i.glyphicon.glyphicon-like-alt');
+										}
+										casper.waitForSelector('a[href^="#likes-modal"]', function success() {
+											this.click('a[href^="#likes-modal"]');
+											casper.waitForSelector('li.col-xs-3 a[href^="/profile/"]', function success() {
+												this.click('li.col-xs-3 a[href^="/profile/"]');
+												casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
+													var message = this.fetchText('div.text-center.bmessage.alert-info.text-danger');
+													var errorMsg = message.substring(0, message.indexOf('<'));
+													if(errorMsg && errorMsg!= '')
+														verifyErrorMsg(errorMsg, "Sorry! You don't have permission to perform this action.", 'ThumsUpDown', casper, function() {});
+												}, function fail() {
+
+												});
+											}, function fail() {
+
+											});
+										}, function fail() {
+
+										});	
+									}, function fail() {
+
+									});
+								}, function fail() {
+
+								});
+							}, function fail() {
+
+							});
+						}else {
+
+						}
+					});
+				}, function fail() {
+
 				});
-			});
+			}else {
+
+			}
 		});
 	});
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.wait(5000, function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		});	
-	});
-
-	//Logout From Back-End
-	casper.then(function() {
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
-			casper.wait(5000, function() {
-			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}			
+		}
 	});
 
 	//Login To Forum Back-end 
 	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function() {
-			casper.wait(5000, function() {
-				casper.echo('Logged-in successfully from back-end', 'INFO');
-			});
-		});
-	});
-	
-	//Open Change Permission From Back-End And Disable View Profile
-	casper.then(function() {
-		generalPermission.viewChangePermission(casper, test, function() {
-			casper.wait(5000, function() {
-				casper.echo('Opened Change Permission Page Successfully', 'INFO')
-				try {
-					test.assertExists('#view_profiles');
-					utils.enableorDisableCheckbox('view_profiles', true, casper, function() {
-						casper.echo('checkbox is checked', 'INFO');
-					});
-					try {
-						test.assertExists('button.button.btn-m.btn-blue');
-						this.click('button.button.btn-m.btn-blue');
-						casper.wait(5000, function() {
-							test.assertExists('font[color="red"]');
-							var successMsg = this.fetchText('font[color="red"]');
-							var expectedSuccessMsg = 'Your user group settings have been updated.';
-							if(successMsg && successMsg!= '')
-							verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedViewProfile', casper, function() {
-							});
-						});
-					}catch(e) {
-						test.assertDoesntExist('button.button.btn-m.btn-blue');
-					}
-					
-				}catch(e) {
-					test.assertDoesntExist('#view_messageboard');
-				}
-			});
-		});
-	});
+		forumRegister.loginToForumBackEnd(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('div#my_account_forum_menu', function success() {
+					casper.echo('Logged-in successfully from back-end', 'INFO');
+					generalPermission.viewChangePermission(casper, test, function(err) {
+						if(!err) {
+							casper.waitForSelector('#view_profiles', function success() {
+								casper.echo('Opened Change Permission Page Successfully', 'INFO')
+								utils.enableorDisableCheckbox('view_profiles', true, casper, function() {
+									casper.echo('checkbox is checked', 'INFO');
+								});
+								try {
+									test.assertExists('button.button.btn-m.btn-blue');
+									this.click('button.button.btn-m.btn-blue');
+									casper.waitForSelector('font[color="red"]', function success() {
+										test.assertExists('font[color="red"]');
+										var successMsg = this.fetchText('font[color="red"]');
+										var expectedSuccessMsg = 'Your user group settings have been updated.';
+										if(successMsg && successMsg!= '')
+										verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedViewProfile', casper, function() {
+										});
+									}, function fail() {
 
-	/*casper.then(function() {
+									});
+								}catch(e) {
+									test.assertDoesntExist('button.button.btn-m.btn-blue');
+								}
+					
+							}, function fail() {
+
+							});
+						}else {
+
+						}
+					});
+				}, function fail() {
+
+				});
+			}else {
+
+			}
+		});
+	});*/
+	
+	casper.then(function() {
 		casper.echo('                                      CASE 5', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('TO VERIFY WITH CLICK ON LIKERS/DISLIKERS USERNAME IN CASE OF REGISTERED USER', 'INFO');
@@ -314,98 +306,79 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 
 	//Open Front-End URL And Get Title
 	casper.thenOpen(config.url, function() {
-		casper.wait(5000, function() {
-			this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		});		
-	});
-
-	//Logout From App
-	casper.then(function() {
-		forumRegister.redirectToLogout(casper, test, function() {
-			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
-			});		
-		});
-			
-	});
-
-	//Login To App
-	casper.then(function() {
-		forumLogin.loginToApp('hsk', 'hsk', casper, function() {
-			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
-				this.echo('User logged-in successfully', 'INFO');
-			});
-		});
-	});
-		
-	//Click on Topic
-	casper.then(function() {
-		test.assertExists('i.icon.icon-menu');
-		this.click('i.icon.icon-menu');
-		test.assertExists('a[href="/latest"]');
-		this.click('a[href="/latest"]');
-	});
-
-	casper.then(function() {
-		test.assertExists('a.default-user');
-		this.click('a.default-user');
-		casper.wait(5000, function() {
-			test.assertExists('a[href^="/profile"]');
-			this.click('a[href^="/profile"]');
-			casper.wait(5000, function() {
-				//Click on Topic
-				casper.then(function() {
-					test.assertExists('i.icon.icon-menu');
-					this.click('i.icon.icon-menu');
-					test.assertExists('a[href="/latest"]');
-					this.click('a[href="/latest"]');
-				});
-				var id = this.getElementAttribute('input[type="hidden"][name="userid"]', 'value');
-				//this.echo(id, 'INFO');
-				casper.wait(5000, function() {
-					test.assertExists('a.topic-title span');
-					this.click('a.topic-title span');
-					casper.wait(5000, function() {
-						this.capture(screenShotsDir+ '1.png');
-						try {
-				
-							test.assertExists('.voted-yes');
-							test.assertExists('a[href^="#likes-modal"]');
-							this.click('a[href^="#likes-modal"]');
-							casper.wait(3000, function() {
-								test.assertExists('a[href^="/profile/'+id+'"]');
-								this.click('a[href^="/profile/'+id+'"]');
-								casper.wait(5000, function() {
-									this.capture(screenShotsDir+ '2.png');
-									test.assertDoesntExist('div.text-center.bmessage.alert-info.text-danger');
-								});
-							});
-						}catch(e) {
-							test.assertExists('i.glyphicon.glyphicon-like-alt');
-							this.click('i.glyphicon.glyphicon-like-alt');
-							casper.wait(3000, function() {
-								this.capture(screenShotsDir+ '2.png');
-								//test.assertExists('a.text-muted.voted-yes');
-								test.assertExists('a[href^="#likes-modal"]');
-								this.click('a[href^="#likes-modal"]');
-								casper.wait(3000, function() {
-									test.assertExists('a[href^="/profile/'+id+'"]');
-									this.click('a[href^="/profile/'+id+'"]');
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		forumRegister.redirectToLogout(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('a#td_tab_login', function success() {
+					forumLogin.loginToApp('hsk', 'hsk', casper, function() {
+						casper.echo('User logged-in successfully', 'INFO');
+						casper.waitForSelector('a.default-user', function success() {
+							this.click('a.default-user');
+							//casper.wait(5000, function() {
+								test.assertExists('a[href^="/profile"]');
+								this.click('a[href^="/profile"]');
+								casper.waitForSelector('i.icon.icon-menu', function success() {
+									var id = this.getElementAttribute('input[type="hidden"][name="userid"]', 'value');
+									//Click on Topic
+									//casper.then(function() {
+										test.assertExists('i.icon.icon-menu');
+										this.click('i.icon.icon-menu');
+										test.assertExists('a[href="/latest"]');
+										this.click('a[href="/latest"]');
+									//});
+									//this.echo(id, 'INFO');
 									casper.wait(5000, function() {
-										this.capture(screenShotsDir+ '2.png');
-										test.assertDoesntExist('div.text-center.bmessage.alert-info.text-danger');
+										test.assertExists('a.topic-title span');
+										this.click('a.topic-title span');
+										casper.wait(5000, function() {
+											try {
+				
+												test.assertExists('.voted-yes');
+												test.assertExists('a[href^="#likes-modal"]');
+												this.click('a[href^="#likes-modal"]');
+												casper.wait(3000, function() {
+													test.assertExists('a[href^="/profile/'+id+'"]');
+													this.click('a[href^="/profile/'+id+'"]');
+													casper.wait(5000, function() {
+														test.assertDoesntExist('div.text-center.bmessage.alert-info.text-danger');
+													});
+												});
+											}catch(e) {
+												test.assertExists('i.glyphicon.glyphicon-like-alt');
+												this.click('i.glyphicon.glyphicon-like-alt');
+												casper.wait(3000, function() {
+													//test.assertExists('a.text-muted.voted-yes');
+													test.assertExists('a[href^="#likes-modal"]');
+													this.click('a[href^="#likes-modal"]');
+													casper.wait(3000, function() {
+														test.assertExists('a[href^="/profile/'+id+'"]');
+														this.click('a[href^="/profile/'+id+'"]');
+														casper.wait(5000, function() {
+															test.assertDoesntExist('div.text-center.bmessage.alert-info.text-danger');
+														});
+													});
+												});
+											}
+										});
 									});
+								}, function fail() {
+
 								});
-							});
-						}
+							//});
+						}, function fail() {
+
+						});
 					});
+				}, function fail() {
+
 				});
-			});
+			}else {
+
+			}
 		});
 	});
 
-	casper.then(function() {
+	/*casper.then(function() {
 		casper.echo('                                      CASE 6', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('TO VERIFY WITH CLICK ON LIKERS/DISLIKERS USERNAME IN CASE OF MODERATORS', 'INFO');
@@ -424,7 +397,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -436,7 +408,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.wait(5000, function() {
 				casper.echo('Logged-in successfully from back-end', 'INFO');
-				this.capture(screenShotsDir+ 'backEndLoggedIn.png');
 			});
 		});
 	});
@@ -445,25 +416,21 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		generalPermission.viewChangePermissionForModerators(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ '2_backEndChangePermission.png');
 				casper.echo('Opened Change Permission Page Successfully', 'INFO')
 				try {
 					test.assertExists('#view_profiles');
 					utils.enableorDisableCheckbox('view_profiles', false, casper, function() {
 						casper.echo('checkbox is unchecked', 'INFO');
-						casper.capture(screenShotsDir+ 'unchecked.png');			
 					});
 					try {
 						test.assertExists('button.button.btn-m.btn-blue');
 						this.click('button.button.btn-m.btn-blue');
 						casper.wait(5000, function() {
-							this.capture(screenShotsDir+ '3_updatedChangePermission.png');
 							test.assertExists('font[color="red"]');
 							var successMsg = this.fetchText('font[color="red"]');
 							var expectedSuccessMsg = 'Your user group settings have been updated.';
 							if(successMsg && successMsg!= '')
 							verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedViewProfile', casper, function() {
-								casper.capture(screenShotsDir+ 'success.png');
 							});
 						});
 					}catch(e) {
@@ -488,7 +455,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -498,7 +464,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp('hs1', 'hh', casper, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
 				this.echo('User logged-in successfully', 'INFO');
 			});
 		});
@@ -523,7 +488,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	});
 	
 	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'clickOnTopic.png');
 	});
 	
 	//Click On Likers/Disliker's User Name	
@@ -531,15 +495,12 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		//test.assertExists('i.glyphicon.glyphicon-step-backward');
 		//this.click('i.glyphicon.glyphicon-step-backward');
 		casper.wait(5000, function() {
-			this.capture(screenShotsDir+ '1.png');
 			test.assertExists('a[href^="#likes-modal"]');
 			this.click('a[href^="#likes-modal"]');
 			casper.wait(3000, function() {
-				this.capture(screenShotsDir+ '2.png');
 				test.assertExists('li.col-xs-3 a[href^="/profile/"]');
 				this.click('li.col-xs-3 a[href^="/profile/"]');
 				casper.wait(5000, function() {
-					this.capture(screenShotsDir + 'uncheckedViewProfile.png');
 					test.assertExists('div.text-center.bmessage.alert-info.text-danger');
 					var message = this.fetchText('div.text-center.bmessage.alert-info.text-danger');
 					var errorMsg = message.substring(0, message.indexOf('<'));
@@ -562,7 +523,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -574,7 +534,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.wait(5000, function() {
 				casper.echo('Logged-in successfully from back-end', 'INFO');
-				this.capture(screenShotsDir+ 'backEndLoggedIn.png');
 			});
 		});
 	});
@@ -583,25 +542,21 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		generalPermission.viewChangePermissionForModerators(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ '2_backEndChangePermission.png');
 				casper.echo('Opened Change Permission Page Successfully', 'INFO')
 				try {
 					test.assertExists('#view_profiles');
 					utils.enableorDisableCheckbox('view_profiles', true, casper, function() {
 						casper.echo('checkbox is unchecked', 'INFO');
-						casper.capture(screenShotsDir+ 'unchecked.png');			
 					});
 					try {
 						test.assertExists('button.button.btn-m.btn-blue');
 						this.click('button.button.btn-m.btn-blue');
 						casper.wait(5000, function() {
-							this.capture(screenShotsDir+ '3_updatedChangePermission.png');
 							test.assertExists('font[color="red"]');
 							var successMsg = this.fetchText('font[color="red"]');
 							var expectedSuccessMsg = 'Your user group settings have been updated.';
 							if(successMsg && successMsg!= '')
 							verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedViewProfile', casper, function() {
-								casper.capture(screenShotsDir+ 'success.png');
 							});
 						});
 					}catch(e) {
@@ -633,7 +588,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -643,7 +597,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp('hs1', 'hh', casper, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
 				this.echo('User logged-in successfully', 'INFO');
 			});
 		});
@@ -663,7 +616,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	});
 	
 	casper.wait(5000, function() {
-		this.capture(screenShotsDir + 'clickOnTopic.png');
 	});
 
 	casper.then(function() {
@@ -686,7 +638,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 					test.assertExists('a[href^="/post/holyday"]');
 					this.click('a[href^="/post/holyday"]');
 					casper.wait(5000, function() {
-						this.capture(screenShotsDir+ '1.png');
 						try {
 				
 							test.assertExists('.voted-yes');
@@ -696,7 +647,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 								test.assertExists('a[href^="/profile/'+id+'"]');
 								this.click('a[href^="/profile/'+id+'"]');
 								casper.wait(5000, function() {
-									this.capture(screenShotsDir+ '2.png');
 									test.assertDoesntExist('div.text-center.bmessage.alert-info.text-danger');
 								});
 							});
@@ -704,7 +654,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 							test.assertExists('i.glyphicon.glyphicon-like-alt');
 							this.click('i.glyphicon.glyphicon-like-alt');
 							casper.wait(3000, function() {
-								this.capture(screenShotsDir+ '2.png');
 								//test.assertExists('a.text-muted.voted-yes');
 								test.assertExists('a[href^="#likes-modal"]');
 								this.click('a[href^="#likes-modal"]');
@@ -712,7 +661,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 									test.assertExists('a[href^="/profile/'+id+'"]');
 									this.click('a[href^="/profile/'+id+'"]');
 									casper.wait(5000, function() {
-										this.capture(screenShotsDir+ '2.png');
 										test.assertDoesntExist('div.text-center.bmessage.alert-info.text-danger');
 									});
 								});
@@ -742,7 +690,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -752,7 +699,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp('hsk', 'hsk', casper, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
 				this.echo('User logged-in successfully', 'INFO');
 			});
 		});
@@ -771,7 +717,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		test.assertExists('span.topic-content p.text-muted.preview-text a');
 		this.click('span.topic-content p.text-muted.preview-text a');
 		casper.wait(5000, function() {
-			this.capture(screenShotsDir+ 'reputationBeforeLike.png');
 			test.assertExists('li.reputation span.profile-count');
 			var profileCount = this.fetchText('li.reputation span.profile-count');	
 			this.echo('reputaions before like : '+profileCount, 'INFO');
@@ -780,7 +725,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			casper.wait(5000, function() {
 				this.reload();
 				casper.wait(5000, function() {
-					this.capture(screenShotsDir+ 'reputationAfterLike.png');
 					test.assertExists('li.reputation span.profile-count');
 					var profileCount = this.fetchText('li.reputation span.profile-count');	
 					this.echo('reputaions after like : '+profileCount, 'INFO');
@@ -807,7 +751,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -817,7 +760,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp('hsk', 'hsk', casper, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
 				this.echo('User logged-in successfully', 'INFO');
 			});
 		});
@@ -836,7 +778,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		test.assertExists('span.topic-content p.text-muted.preview-text a');
 		this.click('span.topic-content p.text-muted.preview-text a');
 		casper.wait(5000, function() {
-			this.capture(screenShotsDir+ 'reputationBeforeLike.png');
 			test.assertExists('li.reputation span.profile-count');
 			var profileCount = this.fetchText('li.reputation span.profile-count');	
 			this.echo('reputaions before dislike : '+profileCount, 'INFO');
@@ -845,7 +786,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			casper.wait(5000, function() {
 				this.reload();
 				casper.wait(5000, function() {
-					this.capture(screenShotsDir+ 'reputationAfterLike.png');
 					test.assertExists('li.reputation span.profile-count');
 					var profileCount = this.fetchText('li.reputation span.profile-count');	
 					this.echo('reputaions after dislike : '+profileCount, 'INFO');
@@ -873,7 +813,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -885,7 +824,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.wait(5000, function() {
 				casper.echo('Logged-in successfully from back-end', 'INFO');
-				this.capture(screenShotsDir+ 'backEndLoggedIn.png');
 			});
 		});
 	});
@@ -900,13 +838,11 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			test.assertExists('#reputation');
 			utils.enableorDisableCheckbox('reputation', false, casper, function() {
 				casper.echo('checkbox is unchecked', 'INFO');
-				casper.capture(screenShotsDir+ 'unchecked.png');			
 			});
 			try {
 				test.assertExists('button.button.btn-m.btn-blue');
 				this.click('button.button.btn-m.btn-blue');
 				casper.wait(5000, function() {
-					this.capture(screenShotsDir+ 'updatedChangePermission.png');
 					this.echo('changes are saved successfully', 'INFO');
 				});
 			}catch(e) {
@@ -926,7 +862,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -936,7 +871,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp('hsk', 'hsk', casper, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
 				this.echo('User logged-in successfully', 'INFO');
 			});
 		});
@@ -955,7 +889,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		test.assertExists('span.topic-content p.text-muted.preview-text a');
 		this.click('span.topic-content p.text-muted.preview-text a');
 		casper.wait(5000, function() {
-			this.capture(screenShotsDir+ 'reputationBeforeLike.png');
 			test.assertDoesntExist('div.pull-left.profile-menu li.reputation');
 			this.echo("Reputation link not found on user's Profile", 'INFO');
 			test.assertDoesntExist('i.glyphicon.glyphicon-like-alt');
@@ -976,7 +909,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -988,7 +920,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.wait(5000, function() {
 				casper.echo('Logged-in successfully from back-end', 'INFO');
-				this.capture(screenShotsDir+ 'backEndLoggedIn.png');
 			});
 		});
 	});
@@ -1003,13 +934,11 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			test.assertExists('#reputation');
 			utils.enableorDisableCheckbox('reputation', true, casper, function() {
 				casper.echo('checkbox is checked', 'INFO');
-				casper.capture(screenShotsDir+ 'checked.png');			
 			});
 			try {
 				test.assertExists('button.button.btn-m.btn-blue');
 				this.click('button.button.btn-m.btn-blue');
 				casper.wait(5000, function() {
-					this.capture(screenShotsDir+ 'updatedChangePermission.png');
 					this.echo('changes are saved successfully', 'INFO');
 				});
 			}catch(e) {
@@ -1036,7 +965,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1046,7 +974,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp('hsk', 'hsk', casper, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
 				this.echo('User logged-in successfully', 'INFO');
 			});
 		});
@@ -1065,7 +992,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		test.assertExists('form[name="posts"] a.topic-title');
 		this.click('form[name="posts"] a.topic-title');
 		casper.wait(5000, function() {
-			this.capture(screenShotsDir+ 'reputationBeforeLike.png');
 			test.assertExists('a[href^="#likes-modal"]');
 			var profileCount = this.fetchText('a[href^="#likes-modal"]');	
 			this.echo('count before like : '+profileCount, 'INFO');
@@ -1074,7 +1000,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			casper.wait(5000, function() {
 				this.reload();
 				casper.wait(5000, function() {
-					this.capture(screenShotsDir+ 'reputationAfterLike.png');
 					test.assertExists('a[href^="#likes-modal"]');
 					var profileCount = this.fetchText('a[href^="#likes-modal"]');	
 					this.echo('count after like : '+profileCount, 'INFO');
@@ -1101,7 +1026,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1111,7 +1035,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp('hsk', 'hsk', casper, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
 				this.echo('User logged-in successfully', 'INFO');
 			});
 		});
@@ -1131,7 +1054,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		this.click('form[name="posts"] a.topic-title');
 		casper.wait(5000, function() {
 			try {
-				this.capture(screenShotsDir+ 'reputationBeforeLike.png');
 				test.assertExists('.voted-no');
 				var profileCount = this.fetchText('span.text-muted:nth-child(5)');
 				var profileCount = this.fetchText('span.text-muted:nth-child(5)');	
@@ -1141,7 +1063,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 				casper.wait(5000, function() {
 					this.reload();
 					casper.wait(5000, function() {
-						this.capture(screenShotsDir+ 'reputationAfterLike.png');
 						test.assertExists('span.text-muted:nth-child(5)');
 						var profileCount = this.fetchText('span.text-muted:nth-child(5)');	
 						this.echo('count after dislike : '+profileCount, 'INFO');
@@ -1150,7 +1071,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			}catch(e) {
 				test.assertExists('a i.glyphicon.glyphicon-dislike-alt');
 				this.click('a i.glyphicon.glyphicon-dislike-alt');
-				this.capture(screenShotsDir+ 'reputationBeforeLike.png');
 				var profileCount = this.fetchText('span.text-muted:nth-child(5)');	
 				this.echo('count before dislike : '+profileCount, 'INFO');
 				test.assertExists('a i.glyphicon.glyphicon-dislike-alt');
@@ -1158,7 +1078,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 				casper.wait(5000, function() {
 					this.reload();
 					casper.wait(5000, function() {
-						this.capture(screenShotsDir+ 'reputationAfterLike.png');
 						test.assertExists('span.text-muted:nth-child(5)');
 						var profileCount = this.fetchText('span.text-muted:nth-child(5)');	
 						this.echo('count after dislike : '+profileCount, 'INFO');
@@ -1186,7 +1105,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1196,7 +1114,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp('hsk', 'hsk', casper, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
 				this.echo('User logged-in successfully', 'INFO');
 			});
 		});
@@ -1215,7 +1132,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		test.assertExists('form[name="posts"] a.topic-title');
 		this.click('form[name="posts"] a.topic-title');
 		casper.wait(5000, function() {
-			this.capture(screenShotsDir+ 'reputationBeforeLike.png');
 			test.assertExists('a[href^="#likes-modal"]');
 			var profileCount = this.fetchText('a[href^="#likes-modal"]');	
 			this.echo('count after like : '+profileCount, 'INFO');
@@ -1225,7 +1141,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			casper.wait(5000, function() {
 				this.reload();
 				casper.wait(5000, function() {
-					this.capture(screenShotsDir+ 'reputationAfterLike.png');
 					test.assertExists('a[href^="#likes-modal"]');
 					var profileCount = this.fetchText('a[href^="#likes-modal"]');	
 					this.echo('count after like : '+profileCount, 'INFO');
@@ -1260,7 +1175,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1270,7 +1184,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp('rajatk2', 'rk@123', casper, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
 				this.echo('User logged-in successfully', 'INFO');
 			});
 		});
@@ -1319,7 +1232,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1331,7 +1243,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.wait(5000, function() {
 				casper.echo('Logged-in successfully from back-end', 'INFO');
-				this.capture(screenShotsDir+ 'backEndLoggedIn.png');
 			});
 		});
 	});
@@ -1346,13 +1257,11 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			test.assertExists('#REQreg');
 			utils.enableorDisableCheckbox('REQreg', false, casper, function() {
 				casper.echo('checkbox is unchecked', 'INFO');
-				casper.capture(screenShotsDir+ 'unchecked.png');			
 			});
 			try {
 				test.assertExists('button.button.btn-m.btn-blue');
 				this.click('button.button.btn-m.btn-blue');
 				casper.wait(5000, function() {
-					this.capture(screenShotsDir+ 'updatedChangePermission.png');
 					this.echo('changes are saved successfully', 'INFO');
 				});
 			}catch(e) {
@@ -1372,7 +1281,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1400,7 +1308,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1412,7 +1319,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.wait(5000, function() {
 				casper.echo('Logged-in successfully from back-end', 'INFO');
-				this.capture(screenShotsDir+ 'backEndLoggedIn.png');
 			});
 		});
 	});
@@ -1427,13 +1333,11 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			test.assertExists('#REQreg');
 			utils.enableorDisableCheckbox('REQreg', true, casper, function() {
 				casper.echo('checkbox is checked', 'INFO');
-				casper.capture(screenShotsDir+ 'checked.png');			
 			});
 			try {
 				test.assertExists('button.button.btn-m.btn-blue');
 				this.click('button.button.btn-m.btn-blue');
 				casper.wait(5000, function() {
-					this.capture(screenShotsDir+ 'updatedChangePermission.png');
 					this.echo('changes are saved successfully', 'INFO');
 				});
 			}catch(e) {
@@ -1460,7 +1364,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1470,7 +1373,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp('hsk', 'hsk', casper, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
 				this.echo('User logged-in successfully', 'INFO');
 			});
 		});
@@ -1504,7 +1406,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1514,7 +1415,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp('rajatk2', 'rk@123', casper, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
 				this.echo('User logged-in successfully', 'INFO');
 			});
 		});
@@ -1525,7 +1425,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		test.assertExists('p.text-muted.preview-text a[href^="/profile"]');
 		this.click('p.text-muted.preview-text a[href^="/profile"]');
 		casper.wait(5000, function() {
-			this.capture(screenShotsDir+ '1.png');
 			test.assertExists('li.reputation span.profile-count');
 			var profileCount = this.fetchText('li.reputation span.profile-count');	
 			this.echo('reputaions before like : '+profileCount, 'INFO');
@@ -1542,7 +1441,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			});
 		});
 		casper.then(function() {
-			this.capture(screenShotsDir+ '1.png');
 			test.assertExists('li.reputation span.profile-count');
 			var profileCount = this.fetchText('li.reputation span.profile-count');	
 			this.echo('reputaions before like : '+profileCount, 'INFO');
@@ -1578,7 +1476,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1611,7 +1508,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1625,7 +1521,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			casper.then(function() {
 				forumRegister.redirectToLogout(casper, test, function() {
 					casper.wait(5000, function() {
-						this.capture(screenShotsDir+ 'logout.png');
 					});		
 				});
 			
@@ -1636,7 +1531,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 				this.click('i.glyphicon.glyphicon-like-alt');
 				forumLogin.loginToApp('rajatk2', 'rk@123', casper, function() {
 					casper.wait(5000, function() {
-						this.capture(screenShotsDir+ 'loggedInUser.png');
 						this.echo('User logged-in successfully', 'INFO');
 					});
 				});
@@ -1645,7 +1539,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			casper.then(function() {
 				forumRegister.redirectToLogout(casper, test, function() {
 					casper.wait(5000, function() {
-						this.capture(screenShotsDir+ 'logout.png');
 					});		
 				});
 			
@@ -1656,7 +1549,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 				this.click('i.glyphicon.glyphicon-dislike-alt');
 				forumLogin.loginToApp('rajatk2', 'rk@123', casper, function() {
 					casper.wait(5000, function() {
-						this.capture(screenShotsDir+ 'loggedInUser.png');
 						this.echo('User logged-in successfully', 'INFO');
 					});
 				});
@@ -1682,7 +1574,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1722,7 +1613,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1763,7 +1653,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1775,7 +1664,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.wait(5000, function() {
 				casper.echo('Logged-in successfully from back-end', 'INFO');
-				this.capture(screenShotsDir+ 'backEndLoggedIn.png');
 			});
 		});
 	});
@@ -1790,13 +1678,11 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			test.assertExists('#new_user_registration');
 			utils.enableorDisableCheckbox('new_user_registration', false, casper, function() {
 				casper.echo('checkbox is unchecked', 'INFO');
-				casper.capture(screenShotsDir+ 'unchecked.png');			
 			});
 			try {
 				test.assertExists('button.button.btn-m.btn-blue');
 				this.click('button.button.btn-m.btn-blue');
 				casper.wait(5000, function() {
-					this.capture(screenShotsDir+ 'updatedChangePermission.png');
 					this.echo('changes are saved successfully', 'INFO');
 				});
 			}catch(e) {
@@ -1816,7 +1702,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1847,7 +1732,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1879,7 +1763,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1891,7 +1774,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.wait(5000, function() {
 				casper.echo('Logged-in successfully from back-end', 'INFO');
-				this.capture(screenShotsDir+ 'backEndLoggedIn.png');
 			});
 		});
 	});
@@ -1906,13 +1788,11 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			test.assertExists('#new_user_registration');
 			utils.enableorDisableCheckbox('new_user_registration', true, casper, function() {
 				casper.echo('checkbox is checked', 'INFO');
-				casper.capture(screenShotsDir+ 'checked.png');			
 			});
 			try {
 				test.assertExists('button.button.btn-m.btn-blue');
 				this.click('button.button.btn-m.btn-blue');
 				casper.wait(5000, function() {
-					this.capture(screenShotsDir+ 'updatedChangePermission.png');
 					this.echo('changes are saved successfully', 'INFO');
 				});
 			}catch(e) {
@@ -1939,7 +1819,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1949,7 +1828,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp('rajatk2', 'rk@123', casper, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
 				this.echo('User logged-in successfully', 'INFO');
 			});
 		});
@@ -1994,7 +1872,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2006,7 +1883,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.wait(5000, function() {
 				casper.echo('Logged-in successfully from back-end', 'INFO');
-				this.capture(screenShotsDir+ 'backEndLoggedIn.png');
 			});
 		});
 	});
@@ -2021,13 +1897,11 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			test.assertExists('#facebook_connect');
 			utils.enableorDisableCheckbox('facebook_connect', true, casper, function() {
 				casper.echo('checkbox is checked', 'INFO');
-				casper.capture(screenShotsDir+ 'checked.png');			
 			});
 			try {
 				test.assertExists('button.button.btn-m.btn-blue');
 				this.click('button.button.btn-m.btn-blue');
 				casper.wait(5000, function() {
-					this.capture(screenShotsDir+ 'updatedChangePermission.png');
 					this.echo('changes are saved successfully', 'INFO');
 				});
 			}catch(e) {
@@ -2047,7 +1921,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -2058,7 +1931,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		test.assertExists('a#fb_login');
 		this.click('a#fb_login');
 		casper.wait(5000, function() {
-			this.capture(screenShotsDir+ '11.png');
 			this.fill('form[id="login_form"]', {
 				'email': "8954743384",
 				'pass' : "8954743384"
@@ -2123,7 +1995,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -2133,7 +2004,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp('hsk', 'hsk', casper, function() {
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'loggedInUser.png');
 				this.echo('User logged-in successfully', 'INFO');
 			});
 		});
@@ -2170,7 +2040,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.wait(5000, function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2182,7 +2051,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.wait(5000, function() {
 				casper.echo('Logged-in successfully from back-end', 'INFO');
-				this.capture(screenShotsDir+ 'backEndLoggedIn.png');
 			});
 		});
 	});
@@ -2197,13 +2065,11 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 			test.assertExists('#facebook_connect');
 			utils.enableorDisableCheckbox('facebook_connect', false, casper, function() {
 				casper.echo('checkbox is unchecked', 'INFO');
-				casper.capture(screenShotsDir+ 'unchecked.png');			
 			});
 			try {
 				test.assertExists('button.button.btn-m.btn-blue');
 				this.click('button.button.btn-m.btn-blue');
 				casper.wait(5000, function() {
-					this.capture(screenShotsDir+ 'updatedChangePermission.png');
 					this.echo('changes are saved successfully', 'INFO');
 				});
 			}catch(e) {
@@ -2224,7 +2090,6 @@ var verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver, 
 	} else {
 		driver.echo("Error Message Is Not Correct", 'ERROR');
 	}
-	driver.capture(screenShotsDir + 'Error_OnEdit' +msgTitle+ '.png');
 	return callback(null);
 };
 
@@ -2237,7 +2102,6 @@ var verifySuccessMsg = function(successMsg, expectedSuccessMsg, msgTitle, driver
 	} else {
 		driver.echo("Error Message Is Not Correct", 'ERROR');
 	}
-	driver.capture(screenShotsDir + 'Error_OnEdit' +msgTitle+ '.png');
 	return callback(null);
 };
 
@@ -2246,9 +2110,6 @@ var gotoNewTopicpage = function(driver, callback) {
 	driver.click('i.icon.icon-menu');
 	driver.click('a[href^="/latest"]');
 	driver.click('a[href="/post/printadd"]');
-	driver.wait(7000, function() {
-		this.capture(screenShotsDir+ 'startTopic.png');
-	});
 	return callback(null);
 };
 
@@ -2262,7 +2123,6 @@ var postTopicpage = function(data, driver, callback) {
 		this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
 		this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
  		this.sendKeys('#tinymce', data.content);
-		this.capture(screenShotsDir+ 'content.png');	
 	});	
 		driver.wait(3000);
 		driver.click('#all_forums_dropdown');
