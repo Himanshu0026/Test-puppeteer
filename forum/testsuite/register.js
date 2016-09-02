@@ -501,7 +501,8 @@ forumRegister.registerToApp = function(data, driver, callback) {
 	driver.fill('form[name="PostTopic"]', {
 		'member' : data.uname,
 		'email': data.uemail,
-		'pw' : data.upass
+		'pw' : data.upass,
+		'cist' : '1'
 	}, false);
 	
 	try {
