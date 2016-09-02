@@ -2,15 +2,29 @@
 # This script auto-deploy code on the server from Git hub.
 # User can execute this script "./gitdeploy.sh BRANCH_NAME" in his  /home/${USER}/ directory (BRANCH_NAME is the name of the branch).
 
-while getopts  "b:p:" flag
-do
-	case "$flag" in
-		"b") branch=$OPTARG 
-	   	;;
-	  	"p") protocol=$OPTARG 
-	   	;;
-	esac
-done
+#Checking for number of arguments
+if [ $# -eq 0 ]; then
+	echo "No branch name provided."
+	exit 1
+fi
+
+
+if [ $# -eq 1 ]; then
+	#if number of arguments is 1, then it will be branch name
+	branch=$1
+else
+	#if more than 1 arguments provided, then find protocol value
+	while getopts "p:" flag
+	do
+		case "$flag" in
+			"p") protocol=$OPTARG 
+		   	;;
+		esac
+		echo $OPTARG 
+	done
+	#3rd argument should be branch name
+	branch=$3
+fi
 
 # if branch name not provided then exit
 if [ -z "$branch" ]; then
@@ -18,10 +32,13 @@ if [ -z "$branch" ]; then
 	exit 1
 fi
 
-# if protocol is not provided then assigning default value
+# if protocol name not provided, then assign default to "http"
 if [ -z "$protocol" ]; then
-	protocol="http"
+	protocol="https"
 fi
+
+echo "branch name : $branch"
+echo "protocol : $protocol"
 
 
 CLONE_DIR="/home/${USER}/Website-Toolbox"
@@ -38,7 +55,7 @@ if [ -d "$CLONE_DIR" ]; then
 		cd $HOME_DIR
 		rm -rf $CLONE_DIR
 		#Checking for given protocol
-		if [ "$protocol" == "ssh" ]
+		if [ "$protocol" == "ssh" ]; then
 			git clone ssh://git@github.com/webtoolbox/Website-Toolbox.git
 		else
 			read -p "Enter your github username : " GITUSERNAME
@@ -48,7 +65,7 @@ if [ -d "$CLONE_DIR" ]; then
 	fi
 else
 	#Checking for given protocol
-	if [ "$protocol" == "ssh" ]
+	if [ "$protocol" == "ssh" ]; then
 		git clone ssh://git@github.com/webtoolbox/Website-Toolbox.git
 	else
 		read -p "Enter your github username : " GITUSERNAME
@@ -63,10 +80,8 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-echo "Branch:$1"
-
 # switch to branch
-git checkout $1
+git checkout $branch
 
 # if error occurred during checkout then aborted (sometimes checkout aborted due to design_src/data/img/wtbfeatures_cus.ai file which  changed in clone process.)
 if [ $? -ne 0 ]; then
