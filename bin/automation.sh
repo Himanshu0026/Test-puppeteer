@@ -28,6 +28,24 @@ sleep 1
 printf "\nTests executing for EDIT PROFILE WITH SETTINGS: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./forum/automation.js --feature=editProfileWithSettings >> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
+printf "\nTests executing for EDIT PROFILE WITH FULL NAME: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./forum/automation.js --feature=editProfileWithFullName >> "$AUTOMATION_HOME"/log/automation.txt
+sleep 1
+printf "\nTests executing for EDIT PROFILE WITH INSTANT MESSAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./forum/automation.js --feature=editProfileWithInstantMsg >> "$AUTOMATION_HOME"/log/automation.txt
+sleep 1
+printf "\nTests executing for EDIT PROFILE WITH BIRTHDAY: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./forum/automation.js --feature=editProfileWithBirthday >> "$AUTOMATION_HOME"/log/automation.txt
+sleep 1
+printf "\nTests executing for EDIT PROFILE WITH SIGNATURE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./forum/automation.js --feature=editProfileWithSignature >> "$AUTOMATION_HOME"/log/automation.txt
+sleep 1
+#printf "\nTests executing for THUMPS UP AND DOWN: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./forum/automation.js --feature=thumpsUpDown >> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
+#printf "\nTests executing for GENERAL PERMISSION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./forum/automation.js --feature=generalPermission >> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
 cat "$AUTOMATION_HOME"/log/automation.txt | grep FAIL > "$AUTOMATION_HOME"/log/fail.txt 
 cat "$AUTOMATION_HOME"/log/automation.txt | grep -i "tests execut" > "$AUTOMATION_HOME"/log/result.txt
 cat "$AUTOMATION_HOME"/log/result.txt

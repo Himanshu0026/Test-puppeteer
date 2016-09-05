@@ -502,7 +502,7 @@ forumRegister.registerToApp = function(data, driver, callback) {
 		'member' : data.uname,
 		'email': data.uemail,
 		'pw' : data.upass,
-		'cist' : '1'
+		'cist' : 1
 	}, false);
 	
 	try {
@@ -548,10 +548,11 @@ forumRegister.registerToApp = function(data, driver, callback) {
 	} catch(e) {
 		driver.test.assertDoesntExist('form[name="PostTopic"] input[name="rules_checkbox"]');
 	}
-	
-	/*driver.evaluate(function() {         
-		document.querySelector('form[name="PostTopic"]').action = '/register/create_account?apikey=4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q';     
-	});*/
+	/*var actionValue = driver.evaluate(function() {   
+		document.querySelector('form[name="PostTopic"]').setAttribute('action', '/register/create_account?apikey=4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q&type=json');
+		return document.querySelector('form[name="PostTopic"]').getAttribute('action');     
+	});
+	driver.echo("actionValue : " +actionValue, "ERROR");*/
 	driver.test.assertExists('form[name="PostTopic"] button');
 	driver.click('form[name="PostTopic"] button');
 	return callback(null);
