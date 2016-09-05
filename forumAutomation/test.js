@@ -1,3 +1,17 @@
+require('shelljs/global');
+console.log("process started"); 
+
+// Run external tool synchronously 
+if (exec('casperjs test ../forum/mainTest.js --feature=login').code !== 0) {
+  echo('Error: Git commit failed');
+  exit(1);
+}
+
+
+
+
+
+
 /*var childProcess = require('child_process');
 var testResult = childProcess.spawnSync("sudo bash -c '/home/monika/websitetoolbox/git/QA-automation/forumAutomation/bin/automation.sh'");
 console.log('testResult : ' + testResult.pid);
