@@ -477,8 +477,12 @@ generalPermission.featureTest = function(casper, test, x) {
 								casper.waitForSelector('a[href^="/register/members?sort=joindate&reverse=true&list=&search=&fieldid_fields="]', function success() {
 									this.click('a[href^="/register/members?sort=joindate&reverse=true&list=&search=&fieldid_fields="]');
 									casper.then(function() {
-										test.assertExists(x('//a/strong[text()="hs1234"]/ancestor::li/span'));
-										this.echo('Disabled Viewable On Member List Verified Successfully', 'INFO');
+										try {
+											test.assertExists(x('//a/strong[text()="hs1234"]/ancestor::li/span'));
+											this.echo('Disabled Viewable On Member List Verified Successfully', 'INFO');
+										}catch(e) {
+											test.assertDoesntExist(x('//a/strong[text()="hs1234"]/ancestor::li/span'));
+										}
 									});
 								}, function fail() {
 									casper.echo('ERROR OCCURRED', 'ERROR');
@@ -567,8 +571,12 @@ generalPermission.featureTest = function(casper, test, x) {
 								casper.waitForSelector('a[href^="/register/members?sort=joindate&reverse=true&list=&search=&fieldid_fields="]', function success() {
 									this.click('a[href^="/register/members?sort=joindate&reverse=true&list=&search=&fieldid_fields="]');
 									casper.then(function() {
-										test.assertExists(x('//a/strong[text()="hs1234"]/ancestor::li/span'));
-										this.echo('Disabled Viewable On Member List Verified Successfully', 'INFO');
+										try {
+											test.assertExists(x('//a/strong[text()="hs1234"]/ancestor::li/span'));
+											this.echo('Disabled Viewable On Member List Verified Successfully', 'INFO');
+										}catch(e) {
+											test.assertDoesntExist(x('//a/strong[text()="hs1234"]/ancestor::li/span'));
+										}
 									});
 								}, function fail() {
 

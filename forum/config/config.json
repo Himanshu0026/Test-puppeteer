@@ -4,7 +4,7 @@
 	"backEndUrl": "https://beta12.websitetoolbox.com/tool/members/login",
 	"app": {	
 		"verbose" : true,
-	 	"logLevel" : "info",
+	 	"logLevel" : "debug",
 		"waitTimeout" : "10000",
 		"viewportSize": { 
 			"width": 1024, 
