@@ -31,12 +31,51 @@ switch (feature) {
 			test.assert(true);
 		});
 	});
-	break;
 
     case "editProfileWithSettings":
 	casper.test.begin("Start 'Edit Profile With Setting' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 		var editProfile = require("./testsuite/editprofile.js");
 		editProfile.customFieldsTest(casper, casper.test);
+		casper.run(function() {
+			test.done();
+			test.assert(true);
+		});
+	});
+
+    case "editProfileWithFullName":
+	casper.test.begin("Start 'Edit Profile With Full Name' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+		var editProfile = require("./testsuite/editprofile.js");
+		editProfile.fullNameFieldsTest(casper, casper.test);
+		casper.run(function() {
+			test.done();
+			test.assert(true);
+		});
+	});
+
+    case "editProfileWithInstantMsg":
+	casper.test.begin("Start 'Edit Profile With Instant Message' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+		var editProfile = require("./testsuite/editprofile.js");
+		editProfile.instantMsgFieldsTest(casper, casper.test);
+		casper.run(function() {
+			test.done();
+			test.assert(true);
+		});
+	});
+
+    case "editProfileWithBirthday":
+	casper.test.begin("Start 'Edit Profile With Birthday' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+		var editProfile = require("./testsuite/editprofile.js");
+		editProfile.birthdayFieldsTest(casper, casper.test);
+		casper.run(function() {
+			test.done();
+			test.assert(true);
+		});
+	});
+
+    case "editProfileWithSignature":
+	casper.test.begin("Start 'Edit Profile With Signature' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+		var editProfile = require("./testsuite/editprofile.js");
+		editProfile.signatureFieldsTest(casper, casper.test);
 		casper.run(function() {
 			test.done();
 			test.assert(true);

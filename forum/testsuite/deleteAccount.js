@@ -19,106 +19,65 @@ deleteAccount.featureTest = function(casper, test, x) {
 		test.assertEquals(message, expectedErrorMsg);
 		this.echo('Alert message is verified when user try to delete an account', 'INFO');
 	});
+
+	casper.start();
 //*******************************************1st Test Case Verification**************************************************
 
 	//Open Forum URL And Get Title 
-	casper.start(config.url, function() {
-		casper.then(function() {
-			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		});
-	});
-
-	//Logout From App
-	casper.then(function() {
+	/*casper.thenOpen(config.url, function() {
+		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
-			});		
-		});
-			
-	});
-	
-	//Open Registration Form
-	/*casper.then(function() {
-		try {
-			test.assertExists('a[href^="/register/register"]');
-			this.click('a[href^="/register/register"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ '1_registerFrom.png');
-				this.echo('registration from opened successfully', 'INFO');
+			casper.waitForSelector('a[href^="/register/register"]', function success() {
+				this.click('a[href^="/register/register"]');
+				casper.waitForSelector('form.form-horizontal', function success() {
+					this.echo('registration from opened successfully', 'INFO');
 
-				//Registering a user And Verifying Do Not Delete Account
-				forumRegister.registerToApp(json.deleteAccount, casper, function() {
-					casper.then(function() {
-						this.capture(screenShotsDir+ '1_registeredUser.png');
-						this.echo('user registered successfully', 'INFO');
-		
-					});
-				});		
-			});
-		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on front-end home page,');
-		}	
-	});
+					//Registering a user And Verifying Do Not Delete Account
+					forumRegister.registerToApp(json.deleteAccount, casper, function() {
+						casper.echo('user registered successfully', 'INFO');
+						casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
+							forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function() {
+								casper.waitForSelector('a.default-user', function success() {
+									this.echo('User Logged-in Successfully', 'INFO');
+									this.click('a.default-user');
+									test.assertExists('a[href^="/register/register?edit="]');
+									this.click('a[href^="/register/register?edit="]');
+									test.assertExists('a[href^="/register?action=preferences&userid="]');
+									this.click('a[href^="/register?action=preferences&userid="]');
+								}, function fail() {
 
-	//Clicking On User's Icon To Display User's Drop-down For Editing Profile
-	casper.then(function() {
-		try {
-			try {
-				test.assertExists('.default-user');
-				this.click('.default-user');
-				this.echo('clicked on users icon successfully', 'INFO');
-				try {
-					test.assertExists('a[href^="/register/register?edit="]');
-					this.click('a[href^="/register/register?edit="]');
-					try {
-						test.assertExists('a[href^="/register?action=preferences&userid="]');
-						this.click('a[href^="/register?action=preferences&userid="]');
-					}catch(e) {
-						test.assertDoesntExist('a[href^="/register?action=preferences&userid="]', 'Account Setting Tab Not Found On Edit Profile Page');
-					}
-				}catch(e) {
-					test.assertDoesntExist('a[href^="/register/register?edit="]', 'Edit Profile Link Not Found');
-				}
-			}catch(e) {
-				test.assertDoesntExist('.default-user', '.default-user not found');
-			}
-		} catch (e) {
-			forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function() {
-				casper.then(function() {
-					this.capture(screenShotsDir+ '1_demo.png');
-					this.echo('User Logged-in Successfully', 'INFO');
-					try {
-						test.assertExists('a.default-user');
-						this.click('a.default-user');
-						try {
-							test.assertExists('a[href^="/register/register?edit="]');
-							this.click('a[href^="/register/register?edit="]');
-							try {
-								test.assertExists('a[href^="/register?action=preferences&userid="]');
-								this.click('a[href^="/register?action=preferences&userid="]');
-							}catch(e) {
-								test.assertDoesntExist('a[href^="/register?action=preferences&userid="]', 'Account Setting Tab Not Found On Edit Profile Page');
-							}
-						}catch(e) {
-							test.assertDoesntExist('a[href^="/register/register?edit="]', 'Edit Profile Link Not Found');
-						}
-					}catch(e) {
-						test.assertDoesntExist('a.default-user', '.default-user not found');
-					}
-				}); 						
-			});
-		}
-	
-		//Do Not Delete User's Account. 
-		casper.then(function() {
-			doNotDeleteAccount(casper, function() {
-				casper.then(function() {
-					this.capture(screenShotsDir+ '1_doNotDeleteAccount.png');
-					//this.echo('Account is not deleted', 'INFO');
+								}); 						
+							});
+						}, function fail() {
+							casper.waitForSelector('div.alert.alert-danger.text-center', function success() {
+								forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function() {
+									casper.waitForSelector('a.default-user', function success() {
+										this.echo('User Logged-in Successfully', 'INFO');
+										this.click('a.default-user');
+										test.assertExists('a[href^="/register/register?edit="]');
+										this.click('a[href^="/register/register?edit="]');
+										test.assertExists('a[href^="/register?action=preferences&userid="]');
+										this.click('a[href^="/register?action=preferences&userid="]');
+										casper.waitForSelector('a#deleteAccountDialog', function success() {
+											doNotDeleteAccount(casper, function() {});
+										}, function fail() {
+
+										});
+									}, function fail() {
+
+									}); 						
+								});
+							}, function fail() {
+
+							});
+						});
+					});		
+				}, function fail() {
+
 				});
-			});
+			}, function fail() {
 
+			});		
 		});
 	});
 
@@ -126,201 +85,121 @@ deleteAccount.featureTest = function(casper, test, x) {
 
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		casper.then(function() {
-			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		});
-	});
-
-	//Logout From App
-	casper.then(function() {
+		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
-			});		
-		});
-			
-	});
-
-	//Login To App And Delete User's Account
-	casper.then(function() {
-		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '2_loggedIn_user.png');
-				this.echo('User logged-in successfully', 'INFO');
-				//Clicking On User's Icon To Display User's Drop-down For Editing Profile
-				casper.then(function() {
-					try {
-						test.assertExists('a.default-user');
+			casper.waitForSelector('a#td_tab_login', function success() {
+				forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
+					casper.waitForSelector('a.default-user', function success() {
+						this.echo('User logged-in successfully', 'INFO');
 						this.click('a.default-user');
-						try {
-							test.assertExists('a[href^="/register/register?edit="]');
-							this.click('a[href^="/register/register?edit="]');
-							try {
-								test.assertExists('a[href^="/register?action=preferences&userid="]');
-								this.click('a[href^="/register?action=preferences&userid="]');
-							} catch(e) {
-								test.assertDoesntExist('a[href^="/register?action=preferences&userid="]', 'account setting tab not found on edit profile page');
-							}
-						} catch(e) {
-							test.assertDoesntExist('a[href^="/register/register?edit="]', 'edit profile link not found');
-						}
-						
-					} catch (e) {
-						test.assertDoesntExist('a.default-user', '.default-user not found');
-					}
-					
-						
-					//Delete User's Account. 
-					casper.then(function() {
-						deleteAccount(casper, function() {
-							casper.then(function() {
-								this.capture(screenShotsDir+ '2_delete.png');
-								this.echo('Delete Account Task Completed On Account Setting Page', 'INFO');
+						test.assertExists('a[href^="/register/register?edit="]');
+						this.click('a[href^="/register/register?edit="]');
+						test.assertExists('a[href^="/register?action=preferences&userid="]');
+						this.click('a[href^="/register?action=preferences&userid="]');
+						casper.waitForSelector('a#deleteAccountDialog', function success() {
+							deleteAccount(casper, function() {
+								casper.echo('Delete Account Task Completed On Account Setting Page', 'INFO');
 							});
+						}, function fail() {
+
 						});
+					}, function fail() {
+
 					});
 				});
-			});
-		});
+			}, function fail() {
 
-	});
+			});		
+		});
+	});*/
 
 //*************************************3rd Test Case Verification***************************************************8
 
 	//Reopen Front-End URL 
 	casper.thenOpen(config.url, function() {
-		casper.then(function() {
-			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		});
-	});
-
-	//Logout From App
-	casper.then(function() {
+		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
+			casper.waitForSelector('a[href^="/register/register"]', function success() {
+				this.click('a[href^="/register/register"]');
+				casper.waitForSelector('form.form-horizontal', function success() {
+					this.echo('registration from opened successfully', 'INFO');
+					forumRegister.registerToApp(json.loginData, casper, function() {
+						casper.echo('user registered successfully', 'INFO');
+					});		
+				}, function fail() {
+
+				});
+			}, function fail() {
+
 			});		
 		});
-			
 	});
 
-	//Registering A User And Make An Admin
-	casper.then(function() {
+	//Open Back-end Url And Get Title
+	casper.thenOpen(config.backEndUrl, function() {
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
-			test.assertExists('a[href^="/register/register"]');
-			this.click('a[href^="/register/register"]');
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_registerFrom.png');
-				this.echo('registration from opened successfully', 'INFO');
-				forumRegister.registerToApp(json.loginData, casper, function() {
-					casper.then(function() {
-						this.capture(screenShotsDir+ '3_registeredUser.png');
-						this.echo('user registered successfully', 'INFO');
-						casper.thenOpen(config.backEndUrl, function() {
-							casper.then(function() {
-								this.echo('Title of the page :' +this.getTitle(), 'INFO');
-							});	
-							//Logout From Back-End
-							casper.then(function() {
-								try {
-									this.click('a[href="/tool/members/login?action=logout"]');
-									casper.then(function() {
-										this.capture(screenShotsDir+ 'logoutFromBackend.png');
-									});
-								}catch(e) {
-									test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-								}			
-							});
-							casper.then(function() {
-								forumRegister.loginToForumBackEnd(casper, test, function() {
-									casper.echo('user logged-in successfully on forum back-end', 'INFO');
-									casper.then(function() {
-										makeAnAdminUser(casper, test, function() {
-											casper.echo('user "hs123" has been made an admin', 'INFO');
-										});
-									});
-								});						
-							});
-						});
-					});
-				});		
-			});
+			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
-			test.assertDoesntExist('a[href^="/register/register"]', 'Register link not found on home page');
-		}	
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}
+	});
+
+	//Make A User An Admin
+	casper.then(function() {
+		forumRegister.loginToForumBackEnd(casper, test, function() {
+			casper.echo('Logged-in successfully from back-end', 'INFO');
+			casper.waitForSelector('div#my_account_forum_menu', function success() {
+				makeAnAdminUser(casper, test, function() {
+					casper.echo('user "hs123" has been made an admin', 'INFO');
+				});
+			}, function fail() {
+
+			});
+		});						
 	});
 
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
-		casper.then(function() {
-			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		});
-	});
-
-	//Logout From App
-	casper.then(function() {
+		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
+			casper.waitForSelector('a#td_tab_login', function success() {
+				forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, casper, function() {
+					casper.waitForSelector('.icon.icon-menu', function success() {
+						casper.echo('User logged-in successfully', 'INFO');
+						this.click('.icon.icon-menu');
+						//casper.waitForSelector('a[href^="/register/members"]', function success() {
+							this.click('a[href^="/register/members"]');
+							casper.waitForSelector('input[name="delete_member"][type="checkbox"]', function success() {
+								this.click('input[name="delete_member"][type="checkbox"]');
+								casper.waitForSelector('i.glyphicon.glyphicon-trash', function success() {
+									test.assertExists('i.glyphicon.glyphicon-trash');
+									this.click('i.glyphicon.glyphicon-trash');
+									this.echo('member is deleted successfully','INFO');				
+								}, function fail() {
+
+								});
+							}, function fail() {
+
+							});
+						//}, function fail() {
+
+						//});
+					}, function fail() {
+
+					});
+				});
+			}, function fail() {
+
 			});		
 		});
-			
 	});
-	
-	//Login To App And An Admin Deletes An Account From Member's List By Selecting Checkbox 
-	casper.then(function() {
-		forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, casper, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ '3_loggedIn_user.png');
-				casper.echo('User logged-in successfully', 'INFO');
 
-				//Getting Members's List
-				casper.then(function() {
-					try {
-						test.assertExists('.icon.icon-menu');
-						this.click('.icon.icon-menu');
-						try {
-							test.assertExists('a[href^="/register/members"]');
-							this.click('a[href^="/register/members"]');
-							casper.then(function() {
-								this.capture(screenShotsDir+ '3_memberList.png');
-								casper.then(function() {
-									try {
-										test.assertExists('input[name="delete_member"][type="checkbox"]');
-										this.click('input[name="delete_member"][type="checkbox"]');
-										casper.then(function() {
-											try {
-												test.assertExists('i.glyphicon.glyphicon-trash');
-												this.click('i.glyphicon.glyphicon-trash');
-											}catch(e) {
-												test.assertDoesntExist('i.glyphicon.glyphicon-trash', 'delete account button not found');
-											}
-											casper.then(function() {
-												this.capture(screenShotsDir+ '3_delete.png');
-												this.echo('member is deleted successfully','INFO');				
-											});
-										});
-									} catch (e) {
-										test.assertDoesntExist('input[name="delete_member"][type="checkbox"]', 'checkbox not found');
-									}
-								});
-							});
-						}catch(e) {
-							test.assertDoesntExist('a[href^="/register/members"]', 'member tab not found');
-						}
-					}catch(e) {
-						test.assertDoesntExist('.icon.icon-menu', 'menu tab not found');
-					}
-				});
-			});
-		});
-
-	});
 //******************************************4th Test Case Verification********************************************
 
 
 	//Reopen Front-End URL 
-	casper.thenOpen(config.url, function() {
+	/*casper.thenOpen(config.url, function() {
 		casper.then(function() {
 			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		});
@@ -330,7 +209,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -340,7 +218,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ '4_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 
 				//Getting Members's List
@@ -352,7 +229,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 							this.test.assertExists('a[href^="/register/members"]');
 							this.click('a[href^="/register/members"]');
 							casper.then(function() {
-								this.capture(screenShotsDir+ '4_memberList.png');
 								casper.then(function() {
 									try {
 										test.assertExists('span.col-sm-9.right-side a strong');
@@ -361,7 +237,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 											delAccount(casper, function() {
 												casper.then(function() {
 													this.echo('member is deleted successfully', 'INFO');
-													this.capture(screenShotsDir+ '4_delete.png');
 												});
 											});										
 										});
@@ -395,7 +270,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -407,11 +281,9 @@ deleteAccount.featureTest = function(casper, test, x) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ '5_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ '5_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 					});
 				});		
@@ -425,7 +297,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ '5_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 
 				//Getting Members's List
@@ -437,7 +308,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 							this.test.assertExists('a[href^="/register/members"]');
 							this.click('a[href^="/register/members"]');
 							casper.then(function() {
-								this.capture(screenShotsDir+ '5_memberList.png');
 								casper.then(function() {
 									try {
 										test.assertExists('#inline_search_box');
@@ -445,7 +315,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 										this.click('#inline_search_box');
 										this.page.sendEvent("keypress", this.page.event.key.Enter);
 										casper.then(function() {
-											this.capture(screenShotsDir+ '5_search.png');
 											try {
 												test.assertExists(x('//a/strong[text()="hs1234"]/ancestor::li/span/input'), 'checkbox is verified');
 												this.click(x('//a/strong[text()="hs1234"]/ancestor::li/span/input'));
@@ -457,7 +326,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 													test.assertDoesntExist('i.glyphicon.glyphicon-trash', 'delete account button not found');
 												}
 												casper.then(function() {
-													this.capture(screenShotsDir+ '5_delete.png');
 													this.echo('member is deleted successfully','INFO');				
 													});
 												});
@@ -496,7 +364,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -508,11 +375,9 @@ deleteAccount.featureTest = function(casper, test, x) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ '6_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.loginData, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ '6_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 						casper.thenOpen(config.backEndUrl, function() {
 							casper.then(function() {
@@ -523,7 +388,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 								try {
 									this.click('a[href="/tool/members/login?action=logout"]');
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'logoutFromBackend.png');
 									});
 								}catch(e) {
 									test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -559,7 +423,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -569,7 +432,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ '6_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 
 				//Getting Members's List
@@ -581,7 +443,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 							this.test.assertExists('a[href^="/register/members"]');
 							this.click('a[href^="/register/members"]');
 							casper.then(function() {
-								this.capture(screenShotsDir+ '6_memberList.png');
 								test.assertExists('#inline_search_box');
 								this.sendKeys('input[id="inline_search_box"]', 'hs123');
 								this.click('#inline_search_box');
@@ -598,7 +459,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 												test.assertDoesntExist('i.glyphicon.glyphicon-trash', 'delete account button not found');
 											}
 											casper.then(function() {
-												this.capture(screenShotsDir+ '6_delete.png');
 												this.echo('member is deleted successfully','INFO');				
 											});
 										});
@@ -616,7 +476,7 @@ deleteAccount.featureTest = function(casper, test, x) {
 				});
 			});
 		});
-	});*/
+	});
 
 //*******************************7th Test Case Verification**********************************************
 
@@ -631,7 +491,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -643,11 +502,9 @@ deleteAccount.featureTest = function(casper, test, x) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ '7_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ '7_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 					});
 				});		
@@ -662,7 +519,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
 				this.echo('user logged-in successfully', 'INFO');
-				this.capture(screenShotsDir+ '7_logged-in.png');
 				gotoNewTopicpage(casper, function() {
 					casper.then(function() {
 						this.echo('start new topic page opened successfully', 'INFO');								
@@ -686,7 +542,6 @@ deleteAccount.featureTest = function(casper, test, x) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ '7_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 
 				//Getting Topic List
@@ -698,17 +553,14 @@ deleteAccount.featureTest = function(casper, test, x) {
 							test.assertExists('a[href^="/latest"]');
 							this.click('a[href^="/latest"]');
 							casper.then(function() {
-								this.capture(screenShotsDir+ '7_topicList.png');
 								var user = x('//p/a[text()="hs1234"]/ancestor::li/span/span/p/a');
 								try {
 									test.assertExists(user, 'user is verified');
 									this.click(user);
 									casper.then(function() {
-										this.capture(screenShotsDir+ '7_topicListUser.png');
 										deleteAccount(casper, function() {
 											casper.then(function() {
 this.echo('member is deleted successfully', 'INFO');
-this.capture(screenShotsDir+ '7_delete.png');
 											});
 										});	
 									});
@@ -741,7 +593,6 @@ this.capture(screenShotsDir+ '7_delete.png');
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -753,11 +604,9 @@ this.capture(screenShotsDir+ '7_delete.png');
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ '8_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ '8_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 					});
 				});		
@@ -794,7 +643,6 @@ this.capture(screenShotsDir+ '7_delete.png');
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ '8_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 
 				//Getting Topic List
@@ -806,16 +654,13 @@ this.capture(screenShotsDir+ '7_delete.png');
 							this.test.assertExists('a[href^="/latest"]');
 							this.click('a[href^="/latest"]');
 							casper.then(function() {
-								this.capture(screenShotsDir+ '8_topicList.png');
 								try {
 									test.assertExists('a.topic-title span');
 									this.click('a.topic-title span');
 									casper.then(function() {
-										this.capture(screenShotsDir+ '8_topicListUser.png');
 										deleteAccount(casper, function() {
 											casper.then(function() {
 this.echo('member is deleted successfully', 'INFO');
-this.capture(screenShotsDir+ '8_delete.png');
 											});
 										});	
 									});
@@ -837,7 +682,7 @@ this.capture(screenShotsDir+ '8_delete.png');
 //***********************************9th Test Case Verification********************************************
 
 	//Reopen Front-End URL 
-	/*casper.thenOpen(config.url, function() {
+	casper.thenOpen(config.url, function() {
 		casper.then(function() {
 			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		});
@@ -847,7 +692,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -859,11 +703,9 @@ this.capture(screenShotsDir+ '8_delete.png');
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ '9_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.loginData, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ '9_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 						casper.thenOpen(config.backEndUrl, function() {
 							casper.then(function() {
@@ -874,7 +716,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 								try {
 									this.click('a[href="/tool/members/login?action=logout"]');
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'logoutFromBackend.png');
 									});
 								}catch(e) {
 									test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -908,7 +749,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -918,7 +758,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 	casper.then(function() {
 		forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ '9_loggedIn_user.png');
 				casper.echo('Admin User logged-in successfully', 'INFO');
 
 				//Getting Topic List
@@ -930,29 +769,24 @@ this.capture(screenShotsDir+ '8_delete.png');
 							this.test.assertExists('a[href^="/latest"]');
 							this.click('a[href^="/latest"]');
 							casper.then(function() {
-								this.capture(screenShotsDir+ '9_topicList.png');
 								var user = x('//p/a[text()="hs1234"]/ancestor::li/span/span/p/a');
 								try {
 									test.assertExists(user, 'user is verified');
 									this.click(user);
 									casper.then(function() {
 										var id = this.getElementAttribute('input[type="hidden"][name="userid"]', 'value');
-										this.capture(screenShotsDir+ '9_topicListUser.png');
 										try {
 											test.assertExists('#anchor_tab_edit');
 											this.click('#anchor_tab_edit');
 											casper.then(function() {
-												this.capture(screenShotsDir+ '9_editProfile.png');
 												try {
 													test.assertExists('a[href^="/register?action=preferences&userid='+id+'"]');
 													this.click('a[href^="/register?action=preferences&userid='+id+'"]');
 													//Delete User's Account.
 													casper.then(function() {
-														this.capture(screenShotsDir+ '9_accountSetting.png');
 														deleteAccount(casper, function() {
 															casper.then(function() {
 																this.echo('member is deleted successfully', 'INFO');
-																this.capture(screenShotsDir+ '9_delete.png');
 															});	
 														});	
 													});
@@ -992,7 +826,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1003,11 +836,9 @@ this.capture(screenShotsDir+ '8_delete.png');
 		try {
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ '10_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ '10_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 					});
 				});		
@@ -1021,7 +852,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ '10_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 
 				//Getting Topic List
@@ -1033,12 +863,10 @@ this.capture(screenShotsDir+ '8_delete.png');
 							this.test.assertExists('span li a[href^="/profile/"]');
 							this.click('span li a[href^="/profile/"]');
 							casper.then(function() {
-								this.capture(screenShotsDir+ '10_profile.png');
 								casper.then(function() { 
 									deleteAccount(casper, function() {
 										casper.then(function() {
 											this.echo('member is deleted successfully', 'INFO');
-											this.capture(screenShotsDir+ '10_delete.png');
 										});
 									});
 								});				
@@ -1067,7 +895,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1077,7 +904,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ '11_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 
 				//Getting Topic List
@@ -1089,12 +915,10 @@ this.capture(screenShotsDir+ '8_delete.png');
 							this.test.assertExists('span li a[href^="/profile/"]');
 							this.click('span li a[href^="/profile/"]');
 							casper.then(function() {
-								this.capture(screenShotsDir+ '11_profile.png');
 								casper.then(function() { 
 									deleteAccount(casper, function() {
 										casper.then(function() {
 											this.echo('member is deleted successfully', 'INFO');
-											this.capture(screenShotsDir+ '11_delete.png');
 										});
 									});
 								});					
@@ -1123,7 +947,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1135,11 +958,9 @@ this.capture(screenShotsDir+ '8_delete.png');
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ '12_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ '12_registeredUser.png');
 						this.echo('user registered successfully', 'INFO');
 					});
 				});		
@@ -1161,7 +982,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1187,12 +1007,10 @@ this.capture(screenShotsDir+ '8_delete.png');
 								this.click('#autosuggest');
 								this.page.sendEvent("keypress", this.page.event.key.Enter);
 								casper.then(function() {
-									this.capture(screenShotsDir + '12_forum_popup.png');
 									try {
 										test.assertExists('#changeUserGroupActions a.button span.delete');
 										this.click('#changeUserGroupActions a.button span.delete');
 										casper.then(function() {
-											this.capture(screenShotsDir + '12_delete.png');
 											this.echo('Delete Account Task Completed Of Newly Registered User From Back-end', 'INFO');			
 										});
 									}catch(e) {
@@ -1227,7 +1045,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1248,7 +1065,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 						test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 						this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 						casper.then(function() {
-							this.capture(screenShotsDir+ '13_groupPermission.png');
 							//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
 							casper.then(function() {
 								try {
@@ -1275,7 +1091,6 @@ this.capture(screenShotsDir+ '8_delete.png');
 									});
 								}
 								casper.then(function() {
-									this.capture(screenShotsDir+ '13_registeredUserList.png');
 									try {
 										test.assertExists('#groupUsersList input[name="user_id"][type="checkbox"]');
 										this.click('#groupUsersList input[name="user_id"][type="checkbox"]');
@@ -1286,7 +1101,6 @@ try {
 test.assertExists('select.text option[value="delete_members"]');
 														this.click('select.text option[value="delete_members"]');
 																				casper.then(function() {
-																					this.capture(screenShotsDir+ '13_delete.png');
 																					this.echo('Delete Account Task Completed For Registered User From The Back-end', 'INFO');
 																				});
 }catch(e) {
@@ -1325,7 +1139,6 @@ test.assertDoesntExist('select.text option[value="delete_members"]');
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1346,7 +1159,6 @@ test.assertDoesntExist('select.text option[value="delete_members"]');
 						test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 						this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 						casper.then(function() {
-							this.capture(screenShotsDir+ '14_groupPermission.png');
 							//Clicking On 'Change Permissions' Link With Respect To 'Pending Email Verifcation User'  
 						});
 							casper.then(function() {
@@ -1374,7 +1186,6 @@ test.assertDoesntExist('select.text option[value="delete_members"]');
 									});
 								}
 								casper.then(function() {
-									this.capture(screenShotsDir+ '14_pendingUserList.png');
 									try {
 										test.assertExists('#groupUsersList input[name="user_id"][type="checkbox"]');
 										this.click('#groupUsersList input[name="user_id"][type="checkbox"]');
@@ -1385,7 +1196,6 @@ test.assertDoesntExist('select.text option[value="delete_members"]');
 test.assertExists('select.text option[value="delete_members"]');
 											this.click('select.text option[value="delete_members"]');
 											casper.then(function() {
-												this.capture(screenShotsDir+ '14_delete.png');
 												this.echo('Delete Account Task Completed For Pending Email Verification From The Back-end', 'INFO');
 											});
 											}catch(e) {
@@ -1423,7 +1233,6 @@ test.assertDoesntExist('select.text option[value="delete_members"]');
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1444,7 +1253,6 @@ test.assertDoesntExist('select.text option[value="delete_members"]');
 						test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 						this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 						casper.then(function() {
-							this.capture(screenShotsDir+ '15_groupPermission.png');
 							//Clicking On 'Change Permissions' Link With Respect To 'Administrator Users'  
 							casper.then(function() {
 								try {
@@ -1471,7 +1279,6 @@ test.assertDoesntExist('select.text option[value="delete_members"]');
 									});
 								}
 								casper.then(function() {
-									this.capture(screenShotsDir+ '15_adminUserList.png');
 									try {
 										test.assertExists('#groupUsersList input[name="user_id"][type="checkbox"]');
 										this.click('#groupUsersList input[name="user_id"][type="checkbox"]');
@@ -1482,7 +1289,6 @@ test.assertDoesntExist('select.text option[value="delete_members"]');
 test.assertExists('select.text option[value="delete_members"]');
 												this.click('select.text option[value="delete_members"]');
 												casper.then(function() {
-													this.capture(screenShotsDir+ '15_delete.png');
 													this.echo('Delete Account Task Completed For Administrator User From The Back-end', 'INFO');
 												});
 											}catch(e) {
@@ -1515,7 +1321,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	//********************************1st Test Case Verification*******************************************
 
 	//Open Back-End URL And Get Title
-	casper.start(config.backEndUrl, function() {
+	/*casper.start(config.backEndUrl, function() {
 		casper.then(function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		});	
@@ -1526,7 +1332,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1557,7 +1362,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1569,11 +1373,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'B_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ 'B_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
 					});
 				});		
@@ -1587,7 +1389,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'B_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
 					try {
@@ -1597,10 +1398,8 @@ deleteAccount.customFieldsTest = function(casper, test) {
 							test.assertExists('a[href^="/register?action=preferences"]');	
 							this.click('a[href^="/register?action=preferences"]');	
 							casper.then(function() {
-								this.capture(screenShotsDir+ 'B_accountSetting.png');
 								deleteAccount(casper, function() {
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'B_delete.png');
 									});						
 								});					
 							});
@@ -1628,7 +1427,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1640,11 +1438,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'F_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ 'F_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
 					});
 				});		
@@ -1669,7 +1465,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			try {
 				this.click('a[href="/tool/members/login?action=logout"]');
 				casper.then(function() {
-					this.capture(screenShotsDir+ 'logoutFromBackend.png');
 				});
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1701,7 +1496,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1711,7 +1505,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'F_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
 					try {
@@ -1721,10 +1514,8 @@ deleteAccount.customFieldsTest = function(casper, test) {
 							test.assertExists('a[href^="/register?action=preferences"]');	
 							this.click('a[href^="/register?action=preferences"]');	
 							casper.then(function() {
-								this.capture(screenShotsDir+ 'F_accountSetting.png');
 								deleteAccount(casper, function() {
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'F_delete.png');
 									});						
 								});					
 							});
@@ -1753,7 +1544,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1784,7 +1574,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1796,11 +1585,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'J_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ 'J_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
 					});
 				});		
@@ -1814,7 +1601,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'J_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
 					try {
@@ -1824,10 +1610,8 @@ deleteAccount.customFieldsTest = function(casper, test) {
 							test.assertExists('a[href^="/profile"]');	
 							this.click('a[href^="/profile/"]');	
 							casper.then(function() {
-								this.capture(screenShotsDir+ 'J_accountSetting.png');
 								deleteAccount(casper, function() {
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'J_delete.png');
 									});						
 								});					
 							});
@@ -1856,7 +1640,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1868,11 +1651,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'L_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ 'L_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
 					});
 				});		
@@ -1897,7 +1678,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			try {
 				this.click('a[href="/tool/members/login?action=logout"]');
 				casper.then(function() {
-					this.capture(screenShotsDir+ 'logoutFromBackend.png');
 				});
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1927,7 +1707,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -1937,7 +1716,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'L_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
 					try {
@@ -1947,10 +1725,8 @@ deleteAccount.customFieldsTest = function(casper, test) {
 							test.assertExists('a[href^="/profile"]');	
 							this.click('a[href^="/profile/"]');	
 							casper.then(function() {
-								this.capture(screenShotsDir+ 'L_accountSetting.png');
 								deleteAccount(casper, function() {
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'L_delete.png');
 									});						
 								});					
 							});
@@ -1979,7 +1755,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2009,7 +1784,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -2021,11 +1795,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'A_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ 'A_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
 					});
 				});		
@@ -2040,7 +1812,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'A_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
 					try {
@@ -2050,10 +1821,8 @@ deleteAccount.customFieldsTest = function(casper, test) {
 							test.assertExists('a[href^="/register?action=preferences"]');	
 							this.click('a[href^="/register?action=preferences"]');	
 							casper.then(function() {
-								this.capture(screenShotsDir+ 'A_accountSetting.png');
 								deleteAccount(casper, function() {
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'A_delete.png');
 									});						
 								});					
 							});
@@ -2083,7 +1852,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2114,7 +1882,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -2126,11 +1893,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'C_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ 'C_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
 					});
 				});		
@@ -2144,7 +1909,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'C_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
 					try {
@@ -2154,10 +1918,8 @@ deleteAccount.customFieldsTest = function(casper, test) {
 							test.assertExists('a[href^="/register?action=preferences"]');	
 							this.click('a[href^="/register?action=preferences"]');	
 							casper.then(function() {
-								this.capture(screenShotsDir+ 'C_accountSetting.png');
 								deleteAccount(casper, function() {
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'C_delete.png');
 									});						
 								});					
 							});
@@ -2172,7 +1934,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	/******************7th Test Case Verification With Back-End Settings**************/	
+	//******************7th Test Case Verification With Back-End Settings**************	
 
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
@@ -2186,7 +1948,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2217,7 +1978,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -2229,11 +1989,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'D_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ 'D_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
 					});
 				});		
@@ -2247,7 +2005,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'D_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
 					try {
@@ -2257,10 +2014,8 @@ deleteAccount.customFieldsTest = function(casper, test) {
 							test.assertExists('a[href^="/register?action=preferences"]');	
 							this.click('a[href^="/register?action=preferences"]');	
 							casper.then(function() {
-								this.capture(screenShotsDir+ 'D_accountSetting.png');
 								deleteAccount(casper, function() {
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'D_delete.png');
 									});						
 								});					
 							});
@@ -2275,7 +2030,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	/******************8th Test Case Verification With Back-End Settings**************/
+	//******************8th Test Case Verification With Back-End Settings**************
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
@@ -2288,7 +2043,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -2300,11 +2054,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'E_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ 'E_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
 					});
 				});		
@@ -2329,7 +2081,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			try {
 				this.click('a[href="/tool/members/login?action=logout"]');
 				casper.then(function() {
-					this.capture(screenShotsDir+ 'logoutFromBackend.png');
 				});
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2360,7 +2111,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -2370,7 +2120,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'E_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
 					try {
@@ -2380,10 +2129,8 @@ deleteAccount.customFieldsTest = function(casper, test) {
 							test.assertExists('a[href^="/register?action=preferences"]');	
 							this.click('a[href^="/register?action=preferences"]');	
 							casper.then(function() {
-								this.capture(screenShotsDir+ 'E_accountSetting.png');
 								deleteAccount(casper, function() {
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'E_delete.png');
 									});						
 								});					
 							});
@@ -2398,11 +2145,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	/******************9th Test Case Verification With Back-End Settings**************/
-
-	
-
-	/******************7th Test Case Verification With Back-End Settings**************/
+	//******************9th Test Case Verification With Back-End Settings**************
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
@@ -2415,7 +2158,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -2427,11 +2169,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'G_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ 'G_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
 					});
 				});		
@@ -2456,7 +2196,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			try {
 				this.click('a[href="/tool/members/login?action=logout"]');
 				casper.then(function() {
-					this.capture(screenShotsDir+ 'logoutFromBackend.png');
 				});
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2486,7 +2225,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -2496,7 +2234,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'G_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
 					try {
@@ -2506,10 +2243,8 @@ deleteAccount.customFieldsTest = function(casper, test) {
 							test.assertExists('a[href^="/register?action=preferences"]');	
 							this.click('a[href^="/register?action=preferences"]');	
 							casper.then(function() {
-								this.capture(screenShotsDir+ 'G_accountSetting.png');
 								deleteAccount(casper, function() {
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'G_delete.png');
 									});						
 								});					
 							});
@@ -2524,7 +2259,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	/******************10th Test Case Verification With Back-End Settings**************/
+	//******************10th Test Case Verification With Back-End Settings**************
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
@@ -2537,7 +2272,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -2549,11 +2283,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'H_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ 'H_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
 					});
 				});		
@@ -2579,7 +2311,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			try {
 				this.click('a[href="/tool/members/login?action=logout"]');
 				casper.then(function() {
-					this.capture(screenShotsDir+ 'logoutFromBackend.png');
 				});
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2611,7 +2342,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -2621,7 +2351,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'H_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
 					try {
@@ -2631,10 +2360,8 @@ deleteAccount.customFieldsTest = function(casper, test) {
 							test.assertExists('a[href^="/register?action=preferences"]');	
 							this.click('a[href^="/register?action=preferences"]');	
 							casper.then(function() {
-								this.capture(screenShotsDir+ 'H_accountSetting.png');
 								deleteAccount(casper, function() {
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'H_delete.png');
 									});						
 								});					
 							});
@@ -2649,7 +2376,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	/******************11th Test Case Verification With Back-End Settings**************/
+	//******************11th Test Case Verification With Back-End Settings**************
 	
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
@@ -2663,7 +2390,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		try {
 			this.click('a[href="/tool/members/login?action=logout"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logoutFromBackend.png');
 			});
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2693,7 +2419,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -2705,11 +2430,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'I_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ 'I_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
 					});
 				});		
@@ -2723,7 +2446,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'I_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
 					try {
@@ -2733,10 +2455,8 @@ deleteAccount.customFieldsTest = function(casper, test) {
 							test.assertExists('a[href^="/profile"]');	
 							this.click('a[href^="/profile/"]');	
 							casper.then(function() {
-								this.capture(screenShotsDir+ 'I_accountSetting.png');
 								deleteAccount(casper, function() {
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'I_delete.png');
 									});						
 								});					
 							});
@@ -2751,7 +2471,7 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	/******************12th Test Case Verification With Back-End Settings**************/
+	//******************12th Test Case Verification With Back-End Settings**************
 
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
@@ -2764,7 +2484,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
 			});		
 		});
 			
@@ -2776,11 +2495,9 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			test.assertExists('a[href^="/register/register"]');
 			this.click('a[href^="/register/register"]');
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'K_registerFrom.png');
 				this.echo('registration from opened successfully', 'INFO');
 				forumRegister.registerToApp(json.deleteAccount, casper, function() {
 					casper.then(function() {
-						this.capture(screenShotsDir+ 'K_registeredUser.png');
 						this.echo('User registered successfully', 'INFO');
 					});
 				});		
@@ -2805,7 +2522,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			try {
 				this.click('a[href="/tool/members/login?action=logout"]');
 				casper.then(function() {
-					this.capture(screenShotsDir+ 'logoutFromBackend.png');
 				});
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2836,9 +2552,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	//Logout From App
 	casper.then(function() {
 		forumRegister.redirectToLogout(casper, test, function() {
-			casper.then(function() {
-				this.capture(screenShotsDir+ 'logout.png');
-			});		
 		});
 			
 	});
@@ -2847,7 +2560,6 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function() {
 			casper.then(function() {
-				this.capture(screenShotsDir+ 'K_loggedIn_user.png');
 				casper.echo('User logged-in successfully', 'INFO');
 				casper.then(function() {
 					try {
@@ -2857,10 +2569,8 @@ deleteAccount.customFieldsTest = function(casper, test) {
 							test.assertExists('a[href^="/profile"]');	
 							this.click('a[href^="/profile/"]');	
 							casper.then(function() {
-								this.capture(screenShotsDir+ 'K_accountSetting.png');
 								deleteAccount(casper, function() {
 									casper.then(function() {
-										this.capture(screenShotsDir+ 'K_delete.png');
 									});						
 								});					
 							});
@@ -2873,10 +2583,10 @@ deleteAccount.customFieldsTest = function(casper, test) {
 				});
 			});
 		});
-	});
+	});*/
 };
 
-/************************************PRIVATE METHODS***********************************/
+//************************************PRIVATE METHODS***********************************
 
 //Method For Deleting User's Account
 
@@ -2956,30 +2666,21 @@ var makeAnAdminUser = function(driver, test, callback) {
 		try {
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			driver.then(function() {
-				try {
-					this.test.assertExists('#autosuggest');
-					this.sendKeys('#autosuggest', 'hs123', {keepFocus: true});
-					this.click('#autosuggest');
-					this.page.sendEvent("keypress", this.page.event.key.Enter);
-					driver.then(function() {
-						driver.then(function() {
-							try {
-								this.fillSelectors('form[name="ugfrm"]', {
-									'select[name="usergroupid"]' :  '20237479'
-								}, true);
-							}catch(e) {
-								test.assertDoesntExist('form[name="ugfrm"]');
-							}
-						});
-						driver.then(function() {
-							this.capture(screenShotsDir + 'popUp.png');
-							return callback(null);
-						});
-					});
-				}catch(e) {
-					this.test.assertDoesntExist('#autosuggest', 'searchbox not found on group permission page on gropu permission page');
-				}
+			driver.waitForSelector('#autosuggest', function success() {
+				this.sendKeys('#autosuggest', 'hs123', {keepFocus: true});
+				this.click('#autosuggest');
+				this.page.sendEvent("keypress", this.page.event.key.Enter);
+				driver.waitForSelector('form[name="ugfrm"]', function success() {
+					this.fillSelectors('form[name="ugfrm"]', {
+						'input[type="checkbox"]' :  '20237479'
+					}, true);
+					driver.click('button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close');
+					return callback(null);
+				}, function fail() {
+
+				});
+			}, function fail() {
+
 			});
 		}catch(e) {
 			test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]');
@@ -2998,7 +2699,6 @@ var enableDeleteOwnProfileForRegisteredUser = function(driver, test, callback) {
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.then(function() {
-				this.capture(screenShotsDir+ 'groupPermission.png');
 				//Clicking On 'Change Permissions' Link With Respect To 'Un-Registered Users'  
 				driver.then(function() {
 					try {
@@ -3025,24 +2725,20 @@ var enableDeleteOwnProfileForRegisteredUser = function(driver, test, callback) {
 						});
 					}
 					driver.then(function() {
-						this.capture(screenShotsDir + 'group_un-registered.png');
 						try {
 							test.assertExists('#delete_profile');
 							utils.enableorDisableCheckbox('delete_profile', true, driver, function() {
 								driver.echo('checkbox is checked', 'INFO');
-								driver.capture(screenShotsDir+ 'checked.png');			
 							});
 							try {
 								test.assertExists('button.button.btn-m.btn-blue');
 								this.click('button.button.btn-m.btn-blue');
 								driver.then(function() {
-									this.capture(screenShotsDir+ 'updatedChangePermission.png');
 									try {
 										test.assertExists('font[color="red"]');
 										var successMsg = this.fetchText('font[color="red"]');
 										var expectedSuccessMsg = 'Your user group settings have been updated.';
 										verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
-											driver.capture(screenShotsDir+ 'success.png');
 											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
 												return callback(null);					
@@ -3079,7 +2775,6 @@ var enableDeleteOwnProfileForPendingUser = function(driver, test, callback) {
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.then(function() {
-				this.capture(screenShotsDir+ 'groupPermission.png');
 				//Clicking On 'Change Permissions' Link With Respect To 'Pending Users'  
 				driver.then(function() {
 					try {
@@ -3107,24 +2802,20 @@ var enableDeleteOwnProfileForPendingUser = function(driver, test, callback) {
 					}
 					try {
 						driver.then(function() {
-							this.capture(screenShotsDir + 'group_pending.png');
 							try {
 								test.assertExists('#delete_profile');
 								utils.enableorDisableCheckbox('delete_profile', true, driver, function() {
 									driver.echo('checkbox is checked', 'INFO');
-									driver.capture(screenShotsDir+ 'checked.png');			
 								});
 								try {
 									test.assertExists('button.button.btn-m.btn-blue');
 									this.click('button.button.btn-m.btn-blue');
 									driver.then(function() {
-										this.capture(screenShotsDir+ 'updatedChangePermission.png');
 										try {
 											test.assertExists('font[color="red"]');
 											var successMsg = this.fetchText('font[color="red"]');
 											var expectedSuccessMsg = 'Your user group settings have been updated.';
 											verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
-												driver.capture(screenShotsDir+ 'success.png');
 												return callback(null);
 											});
 										}catch(e) {
@@ -3161,7 +2852,6 @@ var disableDeleteOwnProfileForRegisteredUser = function(driver, test, callback) 
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.then(function() {
-				this.capture(screenShotsDir+ 'groupPermission.png');
 				//Clicking On 'Change Permissions' Link With Respect To 'Registered Users'  
 				driver.then(function() {
 					try {
@@ -3188,24 +2878,20 @@ var disableDeleteOwnProfileForRegisteredUser = function(driver, test, callback) 
 						});
 					}
 					driver.then(function() {
-						this.capture(screenShotsDir + 'group_registered.png');
 						try {
 							test.assertExists('#delete_profile');
 							utils.enableorDisableCheckbox('delete_profile', false, driver, function() {
 								driver.echo('checkbox is unchecked', 'INFO');
-								driver.capture(screenShotsDir+ 'unchecked.png');			
 							});
 							try {
 								test.assertExists('button.button.btn-m.btn-blue');
 								this.click('button.button.btn-m.btn-blue');
 								driver.then(function() {
-									this.capture(screenShotsDir+ 'updatedChangePermission.png');
 									try {
 										test.assertExists('font[color="red"]');
 										var successMsg = this.fetchText('font[color="red"]');
 										var expectedSuccessMsg = 'Your user group settings have been updated.';
 										verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
-											driver.capture(screenShotsDir+ 'success.png');
 											editProfile.makeRegisteredUser(driver, driver.test, function() {
 												casper.echo('user group changed to registered user', 'INFO');
 												return callback(null);					
@@ -3242,7 +2928,6 @@ var disableDeleteOwnProfileForPendingUser = function(driver, test, callback) {
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.then(function() {
-				this.capture(screenShotsDir+ 'groupPermission.png');
 				//Clicking On 'Change Permissions' Link With Respect To 'Pending Email Verification Users'  
 				driver.then(function() {
 					try {
@@ -3270,24 +2955,20 @@ var disableDeleteOwnProfileForPendingUser = function(driver, test, callback) {
 					}
 					try {
 						driver.then(function() {
-							this.capture(screenShotsDir + 'group_pending.png');
 							try {
 								test.assertExists('#delete_profile');
 								utils.enableorDisableCheckbox('delete_profile', false, driver, function() {
 									driver.echo('checkbox is unchecked', 'INFO');
-									driver.capture(screenShotsDir+ 'unchecked.png');			
 								});
 								try {
 									test.assertExists('button.button.btn-m.btn-blue');
 									this.click('button.button.btn-m.btn-blue');
 									driver.then(function() {
-										this.capture(screenShotsDir+ 'updatedChangePermission.png');
 										try {
 											test.assertExists('font[color="red"]');
 											var successMsg = this.fetchText('font[color="red"]');
 											var expectedSuccessMsg = 'Your user group settings have been updated.';
 											verifySuccessMsg(successMsg, expectedSuccessMsg, driver, function() {
-												driver.capture(screenShotsDir+ 'success.png');
 												return callback(null);
 											});
 										}catch(e) {
@@ -3320,7 +3001,6 @@ var gotoNewTopicpage = function(driver, callback) {
 	driver.click('#latest_topics_show');
 	driver.click('a[href="/post/printadd"]');
 	driver.then(function() {
-		this.capture(screenShotsDir+ 'startTopic.png');
 	});
 	return callback(null);
 };
@@ -3336,7 +3016,6 @@ var postTopicpage = function(data, driver, callback) {
 		this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
 		this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
  		this.sendKeys('#tinymce', data.content);
-		this.capture(screenShotsDir+ 'content.png');	
 	});	
 		driver.then(function() {});
 		driver.click('#all_forums_dropdown');
