@@ -184,534 +184,6 @@ editProfile.customFieldsTest = function(casper, test) {
 		this.echo('Alert message is verified', 'INFO');
 	});
 	casper.start();
-	//Set Different Value For 'Full Name' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
-	casper.then(function() {
-		casper.echo('/*************************VERIFYING ALL CASES OF FULL NAME********************', 'INFO');
-		this.eachThen(json['setDefaultBackendSetting'], function(response) {
-			//Open Back-End URL And Get Title
-			casper.thenOpen(config.backEndUrl, function() {
-				this.echo('Title of the page :' +this.getTitle(), 'INFO');
-				try {
-					this.click('a[href="/tool/members/login?action=logout"]');
-				}catch(e) {
-					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-				}
-			});
-			
-			//Login To Forum BackEnd
-			casper.then(function() {
-				forumRegister.loginToForumBackEnd(casper, test, function(err) {
-					if(!err) {
-						casper.waitForSelector('div#my_account_forum_menu', function success() {
-							this.echo('Logged-in successfully from back-end', 'INFO');
-							test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-							this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-							test.assertExists('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
-							this.click('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
-							casper.waitForSelector('form[name="posts"]', function success() {
-								try {
-									this.fillSelectors('form[name="posts"]', {
-										'select[name="required_name"]' :  responseData.required,
-										'select[name="visiblity_name"]' :  responseData.visibility
-									}, false);
-									test.assertExists('form[name="posts"] button');
-									this.click('form[name="posts"] button');
-									casper.waitForSelector('font[color="red"]', function success() {
-										var successMessage = this.fetchText('font[color="red"]').trim();
-										if(successMessage && successMessage != '' )
-											verifySuccessMsg(successMessage, 'Your profile fields have been updated.', 'DefaultRegistrationOptions', casper, function() {});
-									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
-									});
-								}catch(e) {
-									test.assertDoesntExist('form[name="posts"] button');
-								}
-							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
-							});
-						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
-						});
-					}else {
-						casper.echo('Error : '+err, 'INFO');
-					}
-				});
-			}); 
-			casper.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
-			var responseData = response.data;
-			casper.thenOpen(config.url, function() {
-				this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-				forumRegister.redirectToLogout(casper, test, function(err) {
-					if(!err) {
-						casper.waitForSelector('a[href^="/register/register"]', function success() {
-							loginToFrontEnd(casper, function(err) {
-								if(!err) {
-									casper.waitForSelector('form.form-horizontal', function success() {
-										casper.echo('loaded edit profile page', 'INFO');	
-										if (responseData.visibility == '1') {
-											try {
-												test.assertDoesntExist('form[name="PostTopic"] input[name="name"]');
-											}catch(e) {
-												test.assertExists('form[name="PostTopic"] input[name="name"]');
-												casper.echo('Full Name Field Is Enabled From Back-End', 'ERROR');
-											}
-										} else {
-											try {
-												test.assertExists('form[name="PostTopic"] input[name="name"]');
-												if (responseData.required == '1') {
-													editToProfile(json.blankFullnameData, casper, function(err) {
-														if(!err) {
-															try {
-																test.assertExists('#moderator-panel div[role="alert"]');
-																var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
-																if(successMessage && successMessage != "") {
-																	verifySuccessMsg(successMessage, 'Your settings have been updated.', 'blankFullNameWithRequired', 	casper, function() {
-																	});
-																}
-															}catch(e) {
-																test.assertDoesntExist('#moderator-panel div[role="alert"]');
-															}
-														}else {
-															casper.echo('Error : '+err, 'INFO');
-														}
-													});
-												} else {
-													editToProfile(json.fullnameData, casper, function(err) {
-														if(!err) {
-															try {
-																test.assertExists('#moderator-panel div[role="alert"]');
-																var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
-																if(successMessage && successMessage != "") {
-																	verifySuccessMsg(successMessage, 'Your settings have been updated.', 'fullNameWithRequired', 		casper, function() {});
-																}
-															}catch(e) {
-																test.assertDoesntExist('#moderator-panel div[role="alert"]');
-															}
-														}else {
-															casper.echo('Error : '+err, 'INFO');
-														}
-													});
-												}
-											}catch(e) {
-												test.assertDoesntExist('form[name="PostTopic"] input[name="name"]');
-												casper.echo('Full Name Field Is Disabled From Back-End', 'ERROR');
-											}
-										}
-									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
-									});
-								}else {
-									casper.echo('Error : '+err, 'INFO');
-								}
-							});
-						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
-						});
-					}else {
-
-					} 
-				});
-			});
-		});
-	});
-
-	//Set Different Value For 'Instant Messaging' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
-	casper.then(function() {
-		casper.echo('/*************************VERIFYING ALL CASES OF INSTANT MESSAGING********************', 'INFO');
-		this.eachThen(json['setDefaultBackendSetting'], function(response) {
-			//Open Back-End URL And Get Title
-			casper.thenOpen(config.backEndUrl, function() {
-				this.echo('Title of the page :' +this.getTitle(), 'INFO');
-				try {
-					this.click('a[href="/tool/members/login?action=logout"]');
-				}catch(e) {
-					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-				}
-			});
-
-			//Login To Forum BackEnd
-			casper.then(function() {
-				forumRegister.loginToForumBackEnd(casper, test, function(err) {
-					if(!err) {
-						casper.waitForSelector('div#my_account_forum_menu', function success() {
-							this.echo('Logged-in successfully from back-end', 'INFO');
-							test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-							this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-							test.assertExists('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
-							this.click('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
-							casper.waitForSelector('form[name="posts"]', function success() {
-								try {
-									this.fillSelectors('form[name="posts"]', {
-										'select[name="required_imType"]' :  responseData.required,
-										'select[name="visiblity_imType"]' :  responseData.visibility
-									}, false);
-									test.assertExists('form[name="posts"] button');
-									this.click('form[name="posts"] button');
-									casper.waitForSelector('font[color="red"]', function success() {
-										var successMessage = this.fetchText('font[color="red"]').trim();
-										if(successMessage && successMessage != '' )
-											verifySuccessMsg(successMessage, 'Your profile fields have been updated.', 'DefaultRegistrationOptions', casper, function() {});
-									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
-									});
-								}catch(e) {
-									test.assertDoesntExist('form[name="posts"] button');
-								}
-							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
-							});
-						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
-						});
-					}else {
-						casper.echo('Error : '+err, 'INFO');
-					}
-				});
-			});  
-
-			casper.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
-			var responseData = response.data;
-			casper.thenOpen(config.url, function() {
-				this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-				forumRegister.redirectToLogout(casper, test, function(err) {
-					if(!err) {
-						casper.waitForSelector('a[href^="/register/register"]', function success() {
-							loginToFrontEnd(casper, function(err) {
-								if(!err) {
-									casper.waitForSelector('form.form-horizontal', function success() {
-										casper.echo('loaded edit profile page', 'INFO');	
-										if (responseData.visibility == '1') {
-											try {
-												test.assertDoesntExist('form[name="PostTopic"] input[name="imType"]');
-											}catch(e) {
-												test.assertExists('form[name="PostTopic"] input[name="imType"]');
-												casper.echo('Instant Messaging Field Is Enabled From Back-End', 'ERROR');
-											}
-										} else {
-											try {
-												test.assertExists('form[name="PostTopic"] input[name="imID"]');
-												casper.fillSelectors('form[name="PostTopic"]', {
-													'select[name="imType"]' :  'Google'
-												}, false);
-												if (responseData.required == '1') {
-													editToProfile(json['imIdBlankData'], casper, function(err) {
-														if(!err) {
-															var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
-															if(errorMsg && errorMsg!= '')
-																verifyErrorMsg(errorMsg, "Please enter your screen name.", 'blankImIDWithRequired', casper, function() {});
-														}else {
-															casper.echo('Error : '+err, 'INFO');
-														}
-													});
-												} else {
-													editToProfile(json['imIdBlankData'], casper, function(err) {
-														if(!err) {
-															var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
-															if(errorMsg && errorMsg!= '')
-																verifyErrorMsg(errorMsg, 'Please enter your screen name.', 'BlankIM_ID', casper, function() {});
-															casper.echo('Processing to registration on forum.....', 'INFO');
-														}else {
-															casper.echo('Error : '+err, 'INFO');
-														}
-													});
-													editToProfile(json['imIdData'], casper, function(err) {
-														if(!err) {
-															try {
-																test.assertExists('#moderator-panel div[role="alert"]');
-																var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
-																if(successMessage && successMessage != "") {
-																	verifySuccessMsg(successMessage, 'Your settings have been updated.', 'successIM_ID', casper, function() {
-																	});
-																}
-															}catch(e) {
-																test.assertDoesntExist('#moderator-panel div[role="alert"]');
-															}
-														}else {
-															casper.echo('Error : '+err, 'INFO');
-														}
-													});
-												}
-											}catch(e) {
-												test.assertDoesntExist('form[name="PostTopic"] input[name="imID"]');
-												casper.echo('Instant Messaging Field Is Disabled From Back-End', 'ERROR');
-											}
-										}
-									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
-									});
-								}else {
-									casper.echo('Error : '+err, 'INFO');
-								}
-							});
-						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
-						});
-					}else {
-
-					}
-				});
-			});
-		});
-	});
-
-	//Set Different Value For 'Birthday' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
-	casper.then(function() {
-		casper.echo('/*************************VERIFYING ALL CASES OF BIRTH DAY********************', 'INFO');
-		this.eachThen(json['setDefaultBackendSetting'], function(response) {
-			//Open Back-End URL And Get Title
-			casper.thenOpen(config.backEndUrl, function() {
-				this.echo('Title of the page :' +this.getTitle(), 'INFO');
-				try {
-					this.click('a[href="/tool/members/login?action=logout"]');
-				}catch(e) {
-					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-				}
-			});
-
-			//Login To Forum BackEnd
-			casper.then(function() {
-				forumRegister.loginToForumBackEnd(casper, test, function(err) {
-					if(!err) {
-						casper.waitForSelector('div#my_account_forum_menu', function success() {
-							casper.echo('Logged-in successfully from back-end', 'INFO');
-							test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-							this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-							test.assertExists('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
-							this.click('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
-							casper.waitForSelector('form[name="posts"]', function success() {
-								try {
-									this.fillSelectors('form[name="posts"]', {
-										'select[name="required_dob"]' :  responseData.required,
-										'select[name="visiblity_dob"]' :  responseData.visibility
-									}, false);
-									test.assertExists('form[name="posts"] button');
-									this.click('form[name="posts"] button');
-									casper.waitForSelector('font[color="red"]', function success() {
-										var successMessage = this.fetchText('font[color="red"]').trim();
-										if(successMessage && successMessage != '' )
-											verifySuccessMsg(successMessage, 'Your profile fields have been updated.', 'DefaultRegistrationOptions', casper, function() {});
-									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
-									});
-								}catch(e) {
-									test.assertDoesntExist('form[name="posts"] button');
-								}
-							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
-							});
-						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
-						});
-					}else {
-						casper.echo('Error : '+err, 'INFO');
-					}
-				});
-			}); 
-
-			casper.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
-			var responseData = response.data;
-			casper.thenOpen(config.url, function() {
-				this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-				forumRegister.redirectToLogout(casper, test, function(err) {
-					if(!err) {
-						casper.waitForSelector('a[href^="/register/register"]', function success() {
-							loginToFrontEnd(casper, function(err) {
-								if(!err) {
-									casper.waitForSelector('form.form-horizontal', function success() {
-										casper.echo('loaded edit profile page', 'INFO');	
-										if (responseData.visibility == '1') {
-											try {
-												test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
-											}catch(e) {
-												test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
-												casper.echo('Instant Messaging Field Is Enabled From Back-End', 'ERROR');
-											}
-										} else {
-											try {
-												test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
-												if (responseData.required == '1') {
-													editToProfile(json['dobBlankData'], casper, function(err) {
-														if(!err) {
-															var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
-															if(errorMsg && errorMsg!= '')
-																verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper, function() {});
-														}else {
-															casper.echo('Error : '+err, 'INFO');
-														}
-													});
-												} else {
-													editToProfile(json['dobBlankData'], casper, function(err) {
-														if(!err) {
-															var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
-															if(errorMsg && errorMsg!= '')
-																verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper, function() {});
-														}else {
-															casper.echo('Error : '+err, 'INFO');
-														}
-													});
-						
-													editToProfile(json['dobData'], casper, function(err) {
-														if(!err) {
-															try {
-																test.assertExists('#moderator-panel div[role="alert"]');
-																var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
-																if(successMessage && successMessage != "") {
-																	verifySuccessMsg(successMessage, 'Your settings have been updated.', 'successWithBirthday', casper, function() {
-																	});
-																}
-															}catch(e) {
-																test.assertDoesntExist('#moderator-panel div[role="alert"]');
-															}
-														}else {
-															casper.echo('Error : '+err, 'INFO');
-														}
-													});
-												}
-											}catch(e) {
-												test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
-												casper.echo('Birthday Field Is Disabled From Back-End', 'ERROR');
-											}
-										}
-									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
-									});
-								}else {
-									casper.echo('Error : '+err, 'INFO');
-								}
-							});
-						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
-						});
-					}else {
-
-					}
-				});
-			});
-		});
-	});
-
-	//Set Different Value For 'Signature' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
-	casper.then(function() {
-		casper.echo('/*************************VERIFYING ALL CASES OF SIGNATURE********************', 'INFO');
-		this.eachThen(json['setDefaultBackendSetting'], function(response) {
-			//Open Back-End URL And Get Title
-			casper.thenOpen(config.backEndUrl, function() {
-				this.echo('Title of the page :' +this.getTitle(), 'INFO');
-				try {
-					this.click('a[href="/tool/members/login?action=logout"]');
-				}catch(e) {
-					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-				}
-			});
-		
-			//Login To Forum BackEnd
-			casper.then(function() {
-				forumRegister.loginToForumBackEnd(casper, test, function(err) {
-					if(!err) {
-						casper.waitForSelector('div#my_account_forum_menu', function success() {
-							casper.echo('Logged-in successfully from back-end', 'INFO');
-							test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-							this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-							test.assertExists('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
-							this.click('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
-							casper.waitForSelector('form[name="posts"]', function success() {
-								try {
-									this.fillSelectors('form[name="posts"]', {
-										'select[name="required_signature"]' :  responseData.required,
-										'select[name="visiblity_signature"]' :  responseData.visibility
-									}, false);
-									test.assertExists('form[name="posts"] button');
-									this.click('form[name="posts"] button');
-									casper.waitForSelector('font[color="red"]', function success() {
-										var successMessage = this.fetchText('font[color="red"]').trim();
-										if(successMessage && successMessage != '' )
-											verifySuccessMsg(successMessage, 'Your profile fields have been updated.', 'DefaultRegistrationOptions', casper, function() {});
-									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
-									});
-								}catch(e) {
-									test.assertDoesntExist('form[name="posts"] button');
-								}
-							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
-							});
-						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
-						});
-					}else {
-						casper.echo('Error : '+err, 'INFO');
-					}
-				});
-			}); 
-			casper.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
-			var responseData = response.data;
-			casper.thenOpen(config.url, function() {
-				this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-				forumRegister.redirectToLogout(casper, test, function(err) {
-					if(!err) {
-						casper.waitForSelector('a[href^="/register/register"]', function success() {
-							loginToFrontEnd(casper, function(err) {
-								if(!err) {
-									casper.waitForSelector('form.form-horizontal', function success() {
-										casper.echo('loaded edit profile page', 'INFO');	
-										if (responseData.visibility == '1') {
-											try {
-												test.assertDoesntExist('form[name="PostTopic"] div.sign-container');
-											}catch(e) {
-												test.assertExists('form[name="PostTopic"] div.sign-container');
-												casper.echo('Birthday Field Is Enabled From Back-End', 'ERROR');
-											}
-										} else {
-											try {
-												test.assertExists('form[name="PostTopic"] div.sign-container');
-												if (responseData.required == '1') {
-													editToProfile(json['signatureBlankData'], casper, function(err) {
-										
-							
-													});
-												} else {
-													editToProfile(json['signatureBlankData'], casper, function(err) {
-														casper.echo('Processing to registration on forum with blank signature.....', 'INFO');
-													});
-						
-													editToProfile(json['signatureData'], casper, function(err) {
-														if(!err) {
-															try {
-																test.assertExists('#moderator-panel div[role="alert"]');
-																var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
-																if(successMessage && successMessage != "") {
-																	verifySuccessMsg(successMessage, 'Your settings have been updated.', 'fullNameWithRequired', casper, function() {
-																	});
-																}
-															}catch(e) {
-																test.assertDoesntExist('#moderator-panel div[role="alert"]');
-															}
-														}else {
-															casper.echo('Error : '+err, 'INFO');
-														}
-													});
-												}
-											}catch(e) {
-												test.assertDoesntExist('form[name="PostTopic"] div.sign-container');
-											}
-										}
-									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
-									});
-								}else {
-									casper.echo('Error : '+err, 'INFO');
-								}
-							});
-						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
-						});
-					}else {
-						casper.echo('Error : '+err, 'INFO');
-					}
-				});
-			});
-		});
-	});
 
 	//Open Front_end URL and Get Title
 	casper.thenOpen(config.url, function() {
@@ -1021,6 +493,587 @@ editProfile.customFieldsTest = function(casper, test) {
 	});
 };
 
+/**************************Back-end Full Name Field Validation ********************************/
+
+editProfile.fullNameFieldsTest = function(casper, test) {
+
+	// Methos For Verifying Alert Message
+	casper.on('remote.alert', function(message) {
+		this.echo('alert message: ' + message, 'INFO');
+		var expectedErrorMsg = 'Please provide a signature.';
+		test.assertEquals(message, expectedErrorMsg);
+		this.echo('Alert message is verified', 'INFO');
+	});
+	casper.start();
+	//Set Different Value For 'Full Name' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
+	casper.then(function() {
+		casper.echo('/*************************VERIFYING ALL CASES OF FULL NAME********************', 'INFO');
+		this.eachThen(json['setDefaultBackendSetting'], function(response) {
+			//Open Back-End URL And Get Title
+			casper.thenOpen(config.backEndUrl, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				try {
+					this.click('a[href="/tool/members/login?action=logout"]');
+				}catch(e) {
+					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+				}
+			});
+			
+			//Login To Forum BackEnd
+			casper.then(function() {
+				forumRegister.loginToForumBackEnd(casper, test, function(err) {
+					if(!err) {
+						casper.waitForSelector('div#my_account_forum_menu', function success() {
+							this.echo('Logged-in successfully from back-end', 'INFO');
+							test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+							this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+							test.assertExists('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
+							this.click('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
+							casper.waitForSelector('form[name="posts"]', function success() {
+								try {
+									this.fillSelectors('form[name="posts"]', {
+										'select[name="required_name"]' :  responseData.required,
+										'select[name="visiblity_name"]' :  responseData.visibility
+									}, false);
+									test.assertExists('form[name="posts"] button');
+									this.click('form[name="posts"] button');
+									casper.waitForSelector('font[color="red"]', function success() {
+										var successMessage = this.fetchText('font[color="red"]').trim();
+										if(successMessage && successMessage != '' )
+											verifySuccessMsg(successMessage, 'Your profile fields have been updated.', 'DefaultRegistrationOptions', casper, function() {});
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}catch(e) {
+									test.assertDoesntExist('form[name="posts"] button');
+								}
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});
+					}else {
+						casper.echo('Error : '+err, 'INFO');
+					}
+				});
+			}); 
+			casper.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
+			var responseData = response.data;
+			casper.thenOpen(config.url, function() {
+				this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+				forumRegister.redirectToLogout(casper, test, function(err) {
+					if(!err) {
+						casper.waitForSelector('a[href^="/register/register"]', function success() {
+							loginToFrontEnd(casper, function(err) {
+								if(!err) {
+									casper.waitForSelector('form.form-horizontal', function success() {
+										casper.echo('loaded edit profile page', 'INFO');	
+										if (responseData.visibility == '1') {
+											try {
+												test.assertDoesntExist('form[name="PostTopic"] input[name="name"]');
+											}catch(e) {
+												test.assertExists('form[name="PostTopic"] input[name="name"]');
+												casper.echo('Full Name Field Is Enabled From Back-End', 'ERROR');
+											}
+										} else {
+											try {
+												test.assertExists('form[name="PostTopic"] input[name="name"]');
+												if (responseData.required == '1') {
+													editToProfile(json.blankFullnameData, casper, function(err) {
+														if(!err) {
+															try {
+																test.assertExists('#moderator-panel div[role="alert"]');
+																var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
+																if(successMessage && successMessage != "") {
+																	verifySuccessMsg(successMessage, 'Your settings have been updated.', 'blankFullNameWithRequired', 	casper, function() {
+																	});
+																}
+															}catch(e) {
+																test.assertDoesntExist('#moderator-panel div[role="alert"]');
+															}
+														}else {
+															casper.echo('Error : '+err, 'INFO');
+														}
+													});
+												} else {
+													editToProfile(json.fullnameData, casper, function(err) {
+														if(!err) {
+															try {
+																test.assertExists('#moderator-panel div[role="alert"]');
+																var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
+																if(successMessage && successMessage != "") {
+																	verifySuccessMsg(successMessage, 'Your settings have been updated.', 'fullNameWithRequired', 		casper, function() {});
+																}
+															}catch(e) {
+																test.assertDoesntExist('#moderator-panel div[role="alert"]');
+															}
+														}else {
+															casper.echo('Error : '+err, 'INFO');
+														}
+													});
+												}
+											}catch(e) {
+												test.assertDoesntExist('form[name="PostTopic"] input[name="name"]');
+												casper.echo('Full Name Field Is Disabled From Back-End', 'ERROR');
+											}
+										}
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}else {
+									casper.echo('Error : '+err, 'INFO');
+								}
+							});
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});
+					}else {
+
+					} 
+				});
+			});
+		});
+	});
+};
+
+/**************************Back-end Instant Message Field Validation ********************************/
+
+editProfile.instantMsgFieldsTest = function(casper, test) {
+
+	// Methos For Verifying Alert Message
+	casper.on('remote.alert', function(message) {
+		this.echo('alert message: ' + message, 'INFO');
+		var expectedErrorMsg = 'Please provide a signature.';
+		test.assertEquals(message, expectedErrorMsg);
+		this.echo('Alert message is verified', 'INFO');
+	});
+	casper.start();
+	//Set Different Value For 'Instant Messaging' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
+	casper.then(function() {
+		casper.echo('/*************************VERIFYING ALL CASES OF INSTANT MESSAGING********************', 'INFO');
+		this.eachThen(json['setDefaultBackendSetting'], function(response) {
+			//Open Back-End URL And Get Title
+			casper.thenOpen(config.backEndUrl, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				try {
+					this.click('a[href="/tool/members/login?action=logout"]');
+				}catch(e) {
+					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+				}
+			});
+
+			//Login To Forum BackEnd
+			casper.then(function() {
+				forumRegister.loginToForumBackEnd(casper, test, function(err) {
+					if(!err) {
+						casper.waitForSelector('div#my_account_forum_menu', function success() {
+							this.echo('Logged-in successfully from back-end', 'INFO');
+							test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+							this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+							test.assertExists('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
+							this.click('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
+							casper.waitForSelector('form[name="posts"]', function success() {
+								try {
+									this.fillSelectors('form[name="posts"]', {
+										'select[name="required_imType"]' :  responseData.required,
+										'select[name="visiblity_imType"]' :  responseData.visibility
+									}, false);
+									test.assertExists('form[name="posts"] button');
+									this.click('form[name="posts"] button');
+									casper.waitForSelector('font[color="red"]', function success() {
+										var successMessage = this.fetchText('font[color="red"]').trim();
+										if(successMessage && successMessage != '' )
+											verifySuccessMsg(successMessage, 'Your profile fields have been updated.', 'DefaultRegistrationOptions', casper, function() {});
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}catch(e) {
+									test.assertDoesntExist('form[name="posts"] button');
+								}
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});
+					}else {
+						casper.echo('Error : '+err, 'INFO');
+					}
+				});
+			});  
+
+			casper.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
+			var responseData = response.data;
+			casper.thenOpen(config.url, function() {
+				this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+				forumRegister.redirectToLogout(casper, test, function(err) {
+					if(!err) {
+						casper.waitForSelector('a[href^="/register/register"]', function success() {
+							loginToFrontEnd(casper, function(err) {
+								if(!err) {
+									casper.waitForSelector('form.form-horizontal', function success() {
+										casper.echo('loaded edit profile page', 'INFO');	
+										if (responseData.visibility == '1') {
+											try {
+												test.assertDoesntExist('form[name="PostTopic"] input[name="imType"]');
+											}catch(e) {
+												test.assertExists('form[name="PostTopic"] input[name="imType"]');
+												casper.echo('Instant Messaging Field Is Enabled From Back-End', 'ERROR');
+											}
+										} else {
+											try {
+												test.assertExists('form[name="PostTopic"] input[name="imID"]');
+												casper.fillSelectors('form[name="PostTopic"]', {
+													'select[name="imType"]' :  'Google'
+												}, false);
+												if (responseData.required == '1') {
+													editToProfile(json['imIdBlankData'], casper, function(err) {
+														if(!err) {
+															var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+															if(errorMsg && errorMsg!= '')
+																verifyErrorMsg(errorMsg, "Please enter your screen name.", 'blankImIDWithRequired', casper, function() {});
+														}else {
+															casper.echo('Error : '+err, 'INFO');
+														}
+													});
+												} else {
+													editToProfile(json['imIdBlankData'], casper, function(err) {
+														if(!err) {
+															var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+															if(errorMsg && errorMsg!= '')
+																verifyErrorMsg(errorMsg, 'Please enter your screen name.', 'BlankIM_ID', casper, function() {});
+															casper.echo('Processing to registration on forum.....', 'INFO');
+														}else {
+															casper.echo('Error : '+err, 'INFO');
+														}
+													});
+													editToProfile(json['imIdData'], casper, function(err) {
+														if(!err) {
+															try {
+																test.assertExists('#moderator-panel div[role="alert"]');
+																var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
+																if(successMessage && successMessage != "") {
+																	verifySuccessMsg(successMessage, 'Your settings have been updated.', 'successIM_ID', casper, function() {
+																	});
+																}
+															}catch(e) {
+																test.assertDoesntExist('#moderator-panel div[role="alert"]');
+															}
+														}else {
+															casper.echo('Error : '+err, 'INFO');
+														}
+													});
+												}
+											}catch(e) {
+												test.assertDoesntExist('form[name="PostTopic"] input[name="imID"]');
+												casper.echo('Instant Messaging Field Is Disabled From Back-End', 'ERROR');
+											}
+										}
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}else {
+									casper.echo('Error : '+err, 'INFO');
+								}
+							});
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});
+					}else {
+
+					}
+				});
+			});
+		});
+	});
+};
+
+/**************************Back-end Birthday Field Validation ********************************/
+
+editProfile.birthdayFieldsTest = function(casper, test) {
+
+	// Methos For Verifying Alert Message
+	casper.on('remote.alert', function(message) {
+		this.echo('alert message: ' + message, 'INFO');
+		var expectedErrorMsg = 'Please provide a signature.';
+		test.assertEquals(message, expectedErrorMsg);
+		this.echo('Alert message is verified', 'INFO');
+	});
+	casper.start();
+	//Set Different Value For 'Birthday' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
+	casper.then(function() {
+		casper.echo('/*************************VERIFYING ALL CASES OF BIRTH DAY********************', 'INFO');
+		this.eachThen(json['setDefaultBackendSetting'], function(response) {
+			//Open Back-End URL And Get Title
+			casper.thenOpen(config.backEndUrl, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				try {
+					this.click('a[href="/tool/members/login?action=logout"]');
+				}catch(e) {
+					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+				}
+			});
+
+			//Login To Forum BackEnd
+			casper.then(function() {
+				forumRegister.loginToForumBackEnd(casper, test, function(err) {
+					if(!err) {
+						casper.waitForSelector('div#my_account_forum_menu', function success() {
+							casper.echo('Logged-in successfully from back-end', 'INFO');
+							test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+							this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+							test.assertExists('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
+							this.click('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
+							casper.waitForSelector('form[name="posts"]', function success() {
+								try {
+									this.fillSelectors('form[name="posts"]', {
+										'select[name="required_dob"]' :  responseData.required,
+										'select[name="visiblity_dob"]' :  responseData.visibility
+									}, false);
+									test.assertExists('form[name="posts"] button');
+									this.click('form[name="posts"] button');
+									casper.waitForSelector('font[color="red"]', function success() {
+										var successMessage = this.fetchText('font[color="red"]').trim();
+										if(successMessage && successMessage != '' )
+											verifySuccessMsg(successMessage, 'Your profile fields have been updated.', 'DefaultRegistrationOptions', casper, function() {});
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}catch(e) {
+									test.assertDoesntExist('form[name="posts"] button');
+								}
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});
+					}else {
+						casper.echo('Error : '+err, 'INFO');
+					}
+				});
+			}); 
+
+			casper.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
+			var responseData = response.data;
+			casper.thenOpen(config.url, function() {
+				this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+				forumRegister.redirectToLogout(casper, test, function(err) {
+					if(!err) {
+						casper.waitForSelector('a[href^="/register/register"]', function success() {
+							loginToFrontEnd(casper, function(err) {
+								if(!err) {
+									casper.waitForSelector('form.form-horizontal', function success() {
+										casper.echo('loaded edit profile page', 'INFO');	
+										if (responseData.visibility == '1') {
+											try {
+												test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
+											}catch(e) {
+												test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
+												casper.echo('Instant Messaging Field Is Enabled From Back-End', 'ERROR');
+											}
+										} else {
+											try {
+												test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]');
+												if (responseData.required == '1') {
+													editToProfile(json['dobBlankData'], casper, function(err) {
+														if(!err) {
+															var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
+															if(errorMsg && errorMsg!= '')
+																verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper, function() {});
+														}else {
+															casper.echo('Error : '+err, 'INFO');
+														}
+													});
+												} else {
+													editToProfile(json['dobBlankData'], casper, function(err) {
+														if(!err) {
+															var errorMsg = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
+															if(errorMsg && errorMsg!= '')
+																verifyErrorMsg(errorMsg, 'Please enter birthday.', 'blankDobWithRequired', casper, function() {});
+														}else {
+															casper.echo('Error : '+err, 'INFO');
+														}
+													});
+						
+													editToProfile(json['dobData'], casper, function(err) {
+														if(!err) {
+															try {
+																test.assertExists('#moderator-panel div[role="alert"]');
+																var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
+																if(successMessage && successMessage != "") {
+																	verifySuccessMsg(successMessage, 'Your settings have been updated.', 'successWithBirthday', casper, function() {
+																	});
+																}
+															}catch(e) {
+																test.assertDoesntExist('#moderator-panel div[role="alert"]');
+															}
+														}else {
+															casper.echo('Error : '+err, 'INFO');
+														}
+													});
+												}
+											}catch(e) {
+												test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
+												casper.echo('Birthday Field Is Disabled From Back-End', 'ERROR');
+											}
+										}
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}else {
+									casper.echo('Error : '+err, 'INFO');
+								}
+							});
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});
+					}else {
+
+					}
+				});
+			});
+		});
+	});
+};
+
+/**************************Back-end Signature Field Validation ********************************/
+
+editProfile.signatureFieldsTest = function(casper, test) {
+
+	// Methos For Verifying Alert Message
+	casper.on('remote.alert', function(message) {
+		this.echo('alert message: ' + message, 'INFO');
+		var expectedErrorMsg = 'Please provide a signature.';
+		test.assertEquals(message, expectedErrorMsg);
+		this.echo('Alert message is verified', 'INFO');
+	});
+	casper.start();
+	//Set Different Value For 'Signature' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
+	casper.then(function() {
+		casper.echo('/*************************VERIFYING ALL CASES OF SIGNATURE********************', 'INFO');
+		this.eachThen(json['setDefaultBackendSetting'], function(response) {
+			//Open Back-End URL And Get Title
+			casper.thenOpen(config.backEndUrl, function() {
+				this.echo('Title of the page :' +this.getTitle(), 'INFO');
+				try {
+					this.click('a[href="/tool/members/login?action=logout"]');
+				}catch(e) {
+					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+				}
+			});
+		
+			//Login To Forum BackEnd
+			casper.then(function() {
+				forumRegister.loginToForumBackEnd(casper, test, function(err) {
+					if(!err) {
+						casper.waitForSelector('div#my_account_forum_menu', function success() {
+							casper.echo('Logged-in successfully from back-end', 'INFO');
+							test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+							this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+							test.assertExists('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
+							this.click('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
+							casper.waitForSelector('form[name="posts"]', function success() {
+								try {
+									this.fillSelectors('form[name="posts"]', {
+										'select[name="required_signature"]' :  responseData.required,
+										'select[name="visiblity_signature"]' :  responseData.visibility
+									}, false);
+									test.assertExists('form[name="posts"] button');
+									this.click('form[name="posts"] button');
+									casper.waitForSelector('font[color="red"]', function success() {
+										var successMessage = this.fetchText('font[color="red"]').trim();
+										if(successMessage && successMessage != '' )
+											verifySuccessMsg(successMessage, 'Your profile fields have been updated.', 'DefaultRegistrationOptions', casper, function() {});
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}catch(e) {
+									test.assertDoesntExist('form[name="posts"] button');
+								}
+							}, function fail() {
+								casper.echo('ERROR OCCURRED', 'ERROR');
+							});
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});
+					}else {
+						casper.echo('Error : '+err, 'INFO');
+					}
+				});
+			}); 
+			casper.echo('Response Data : ' +JSON.stringify(response.data), 'INFO');
+			var responseData = response.data;
+			casper.thenOpen(config.url, function() {
+				this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+				forumRegister.redirectToLogout(casper, test, function(err) {
+					if(!err) {
+						casper.waitForSelector('a[href^="/register/register"]', function success() {
+							loginToFrontEnd(casper, function(err) {
+								if(!err) {
+									casper.waitForSelector('form.form-horizontal', function success() {
+										casper.echo('loaded edit profile page', 'INFO');	
+										if (responseData.visibility == '1') {
+											try {
+												test.assertDoesntExist('form[name="PostTopic"] div.sign-container');
+											}catch(e) {
+												test.assertExists('form[name="PostTopic"] div.sign-container');
+												casper.echo('Birthday Field Is Enabled From Back-End', 'ERROR');
+											}
+										} else {
+											try {
+												test.assertExists('form[name="PostTopic"] div.sign-container');
+												if (responseData.required == '1') {
+													editToProfile(json['signatureBlankData'], casper, function(err) {
+										
+							
+													});
+												} else {
+													editToProfile(json['signatureBlankData'], casper, function(err) {
+														casper.echo('Processing to registration on forum with blank signature.....', 'INFO');
+													});
+						
+													editToProfile(json['signatureData'], casper, function(err) {
+														if(!err) {
+															try {
+																test.assertExists('#moderator-panel div[role="alert"]');
+																var successMessage = casper.fetchText('#moderator-panel div[role="alert"]');
+																if(successMessage && successMessage != "") {
+																	verifySuccessMsg(successMessage, 'Your settings have been updated.', 'fullNameWithRequired', casper, function() {
+																	});
+																}
+															}catch(e) {
+																test.assertDoesntExist('#moderator-panel div[role="alert"]');
+															}
+														}else {
+															casper.echo('Error : '+err, 'INFO');
+														}
+													});
+												}
+											}catch(e) {
+												test.assertDoesntExist('form[name="PostTopic"] div.sign-container');
+											}
+										}
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								}else {
+									casper.echo('Error : '+err, 'INFO');
+								}
+							});
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});
+					}else {
+						casper.echo('Error : '+err, 'INFO');
+					}
+				});
+			});
+		});
+	});
+};
+
 /*****************************************PRIVATE METHODS****************************************/
 
 //Method For Login To Front-end And Move To Edit Profile Page
@@ -1317,8 +1370,8 @@ editProfile.makeRegisteredUser = function(driver, test, callback) {
 					this.fillSelectors('form[name="ugfrm"]', {
 						'input[type="checkbox"]' :  '20237477'
 					}, true);
-						driver.click('button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close');
-						return callback(null);
+					driver.click('button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close');
+					return callback(null);
 				}, function fail() {
 					casper.echo('ERROR OCCURRED', 'ERROR');
 				});
