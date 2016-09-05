@@ -1477,7 +1477,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
 			if(!err) {
-				casper.waitForSelector('a#td_tab_login', function success() {
+				casper.waitForSelector('span a.topic-title', function success() {
 					this.click('span a.topic-title');
 					casper.waitForSelector('i.glyphicon.glyphicon-like-alt', function success() {
 						this.click('i.glyphicon.glyphicon-like-alt');
@@ -1512,7 +1512,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
 			if(!err) {
-				casper.waitForSelector('a#td_tab_login', function success() {
+				casper.waitForSelector('span a.topic-title', function success() {
 					this.click('span a.topic-title');
 					casper.waitForSelector('i.glyphicon.glyphicon-dislike-alt', function success() {
 						this.click('i.glyphicon.glyphicon-dislike-alt');
