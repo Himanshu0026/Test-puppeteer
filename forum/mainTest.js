@@ -156,7 +156,6 @@ switch (feature) {
 			test.done();
 		});
 	});
-        break;
         
 	case "generalPermission":
 		casper.test.begin("Start 'General Permission' functionality from home page & verify content with all scenarios", function(test) {
@@ -168,7 +167,6 @@ switch (feature) {
 				test.assert(true);
 			});
 		});
-	break;
 	
     case "deleteAccount":
 	casper.test.begin("Start 'Delete Account' functionality from home page & verify content with all scenarios", function(test) {
