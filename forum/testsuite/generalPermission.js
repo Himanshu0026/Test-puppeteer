@@ -14,7 +14,7 @@ generalPermission.featureTest = function(casper, test, x) {
 	
 //***********************************1st Test Case Verification**********************************
 
-	//Open Fornt-End URL
+	//Open Fornt-End URL And Register A User
 	casper.start(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -23,7 +23,20 @@ generalPermission.featureTest = function(casper, test, x) {
 					this.click('a[href^="/register/register"]');
 					casper.waitForSelector('form[action="/register/create_account"]', function success() {
 						this.echo('registration from opened successfully', 'INFO');
-						forumRegister.registerToApp(json.deleteAccount, casper, function() {
+						forumRegister.registerToApp(json.deleteAccount, casper, function(err) {
+							if(!err) {
+								casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
+									casper.echo('user registered successfully', 'INFO');
+								}, function fail() {
+									casper.waitForSelector('div.alert.alert-danger.text-center', function success() {
+										casper.echo('user registered successfully', 'INFO');
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								});
+							}else {
+								casper.echo('Error : '+err, 'INFO');
+							}
 						});		
 					}, function fail() {
 						casper.echo('ERROR OCCURRED', 'ERROR');
@@ -48,6 +61,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		}
 	});
 	
+	//Change Permissions From Back End
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function(err) {
 			if(!err) {
@@ -97,6 +111,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		});						
 	});
 	
+	//Method To Verify Success Message
 	casper.on('waitForSuccess', function() {
 		casper.then(function() {
 			try {
@@ -111,7 +126,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		});
 	});
 
-	//Open Fornt-End URL
+	//Open Fornt-End URL And Verify View Forum
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -156,7 +171,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		}
 	});
 
-	//Login To Forum Back-End
+	//Login To Forum Back-End And Change Permissions From Back End
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function(err) {
 			if(!err) {
@@ -195,7 +210,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		});
 	});
 
-	//Open Fornt-End URL
+	//Open Fornt-End URL And Verify View Forum
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -240,7 +255,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		}
 	});
 	
-	//Login To Forum Back-End
+	//Login To Forum Back-End And Change Permissions From back End
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function(err) {
 			if(!err) {
@@ -279,7 +294,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		});
 	});
 
-	//Open Fornt-End URL
+	//Open Fornt-End URL And Verify View Profile
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -334,7 +349,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		}
 	});
 
-	//Login To Forum Back-End
+	//Login To Forum Back-End And Change Permissions From Back End
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function(err) {
 			if(!err) {
@@ -374,7 +389,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		});
 	});
 
-	//Open Fornt-End URL
+	//Open Fornt-End URL And verify View Profile
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -421,7 +436,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		}
 	});
 
-	//Login To Forum Back-End
+	//Login To Forum Back-End And Change Permissions From Back End
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function(err) {
 			if(!err) {
@@ -461,7 +476,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		});
 	});
 
-	//Open Fornt-End URL
+	//Open Fornt-End URL Verify On Viewable on Member List
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -515,7 +530,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		}
 	});
 
-	//Login To Forum Back-End
+	//Login To Forum Back-End And Change Permissions From Back End
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function(err) {
 			if(!err) {
@@ -555,7 +570,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		});
 	});
 
-	//Open Fornt-End URL
+	//Open Fornt-End URL And Verify Viewable On Member List
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -609,7 +624,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		}
 	});
 
-	//Login To Forum Back-End
+	//Login To Forum Back-End And Change Permission from Back End
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function(err) {
 			if(!err) {
@@ -721,6 +736,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		}
 	});
 	
+	//Login To Forum And Verify View Invisible Member
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
 			if(!err) {
@@ -772,7 +788,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		}
 	});
 
-	//Login To Forum Back-End
+	//Login To Forum Back-End And Change Permission From Back End
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function(err) {
 			if(!err) {
@@ -852,7 +868,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		}
 	});
 
-	//Login To Front-End And Click On Other User's Profile
+	//Login To Front-End And Verify View Invisible Member
 	casper.then(function() {
 		forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
 			if(!err) {
@@ -903,7 +919,7 @@ generalPermission.featureTest = function(casper, test, x) {
 		}
 	});
 
-	//Login To Forum Back-End
+	//Login To Forum Back-End And Change Theme 
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function(err) {
 			if(!err) {

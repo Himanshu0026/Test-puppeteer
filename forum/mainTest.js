@@ -96,7 +96,6 @@ switch (feature) {
 				test.assert(true);
 			});
 		});
-	break;
 	
 	case "editProfileWithSettings":
 		casper.test.begin("Start 'Edit Profile With Setting' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
@@ -107,7 +106,6 @@ switch (feature) {
 				test.assert(true);
 			});
 		});
-	break;
 	
 	case "editProfileWithFullName":
 		casper.test.begin("Start 'Edit Profile With Full Name' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
@@ -118,7 +116,6 @@ switch (feature) {
 				test.assert(true);
 			});
 		});
-	break;
 	
 	case "editProfileWithInstantMsg":
 		casper.test.begin("Start 'Edit Profile With Instant Message' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
@@ -129,7 +126,6 @@ switch (feature) {
 				test.assert(true);
 			});
 		});
-	break;
 	
 	case "editProfileWithBirthday":
 		casper.test.begin("Start 'Edit Profile With Birthday' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
@@ -140,7 +136,6 @@ switch (feature) {
 				test.assert(true);
 			});
 		});
-	break;
 	
 	case "editProfileWithSignature":
 		casper.test.begin("Start 'Edit Profile With Signature' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
@@ -186,7 +181,18 @@ switch (feature) {
 			test.assert(true);
 		});
 	});
-	break;	
+	
+    case "deleteAccountFromBackend":
+	casper.test.begin("Start 'Delete Account From Back End' functionality from home page & verify content with all scenarios", function(test) {
+
+		var deleteAccount = require("./testsuite/deleteAccount.js");
+		var x = require('casper').selectXPath;
+		deleteAccount.backEndTest(casper, casper.test, x);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});	
     case "deleteAccountWithSettings":
 	casper.test.begin("Start 'Delete Account With Setting' functionality from home page & verify content with all scenarios", function(test) {
 
@@ -197,11 +203,20 @@ switch (feature) {
 			test.assert(true);
 		});
 	});
+	
+    case "deleteAccountWithSettings2":
+	casper.test.begin("Start 'Delete Account With Setting' functionality from home page & verify content with all scenarios", function(test) {
+
+		var deleteAccount = require("./testsuite/deleteAccount.js");
+		deleteAccount.customFieldsTest2(casper, casper.test);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});	
         
         break;
 
-    
-    
 	case "registerWithSettings":
     	casper.test.begin('REGISTRATION WITH SETTINGS TEST', function(test) {
 		var forumRegister = require("./testsuite/register.js");

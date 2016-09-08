@@ -135,7 +135,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		}
 	});
 
-	//Login To Forum Back-end 
+	//Login To Forum Back-end And Change Permissions From back End
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function(err) {
 			if(!err) {
@@ -181,7 +181,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		});
 	});
 	
-	//Open Front-End URL And Get Title
+	//Open Front-End URL 
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -448,9 +448,6 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 								test.assertExists('a[href="/latest"]');
 								this.click('a[href="/latest"]');
 								casper.waitForSelector('a[href^="/post/holyday"]', function success() {
-									//test.assertExists('form[name="posts"] a.topic-title');
-									//this.click('form[name="posts"] a.topic-title');
-									//var user = x('//a/span[text()="HolyDay"]/ancestor::li/span/span/h4/a');
 									test.assertExists('a[href^="/post/holyday"]');
 									this.click('a[href^="/post/holyday"]');
 									casper.waitForSelector('a[href^="#likes-modal"]', function success() {
@@ -1291,7 +1288,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 								gotoNewTopicpage(casper, function(err) {
 									if(!err) {
 										casper.echo('start new topic page opened successfully', 'INFO');
-										casper.then(function() {
+										casper.wait(5000, function() {
 											postTopicpage(json.newTopic, casper, function(err) {
 												if(!err) {
 													casper.echo('new topic created', 'INFO');

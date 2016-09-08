@@ -20,36 +20,64 @@ editProfile.featureTest = function(casper, test) {
 		this.echo('Alert message is verified', 'INFO');
 	});
 	
-	//Open Forum URL And Get Title 
+	//Open Forum URL And Register A user And Move To Edit Profile Page 
 	casper.start(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
 			if(!err) {
-				casper.waitForSelector('a[href^="/register/register"]', function() {
+				casper.waitForSelector('a[href^="/register/register"]', function success() {
 					this.click('a[href^="/register/register"]');
-					casper.waitForSelector('form[action="/register/create_account"]', function() {
+					casper.waitForSelector('form[action="/register/create_account"]', function success() {
 						this.echo('registration from opened successfully', 'INFO');
-						forumRegister.registerToApp(json.loginData, casper, function(err) {
+						forumRegister.registerToApp(json.deleteAccount, casper, function(err) {
 							if(!err) {
 								casper.echo('user registered successfully', 'INFO');
-								forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, casper, function(err) {
-									if(!err) {
-										casper.echo('User logged-in successfully', 'INFO');
-										casper.waitForSelector('.default-user', function() {
-											this.click('.default-user');
-											this.echo('clicked on users icon successfully', 'INFO');
-											this.click('a[href^="/register/register?edit="]');
-											this.echo('clicked on user edit profile link successfully', 'INFO');
+								casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
+									forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function(err) {
+										if(!err) {
+											casper.echo('User logged-in successfully', 'INFO');
+											casper.waitForSelector('.default-user', function() {
+												this.click('.default-user');
+												this.echo('clicked on users icon successfully', 'INFO');
+												this.click('a[href^="/register/register?edit="]');
+												this.echo('clicked on user edit profile link successfully', 'INFO');
+											}, function fail() {
+										
+											});
+										}else {
+											casper.echo('Error : '+err, 'INFO');
+										}
+									});
+								}, function fail() {
+									casper.waitForSelector('div.alert.alert-danger.text-center', function success() {
+										forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function(err) {
+											if(!err) {
+												casper.echo('User logged-in successfully', 'INFO');
+												casper.waitForSelector('.default-user', function() {
+													this.click('.default-user');
+													this.echo('clicked on users icon successfully', 'INFO');
+													this.click('a[href^="/register/register?edit="]');
+													this.echo('clicked on user edit profile link successfully', 'INFO');
+												}, function fail() {
+										
+												});
+											}else {
+												casper.echo('Error : '+err, 'INFO');
+											}
 										});
-									}else {
-										casper.echo('Error : '+err, 'INFO');
-									}
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
 								});
 							}else {
 								casper.echo('Error : '+err, 'INFO');
 							}
-						});		
+						});
+					}, function fail() {
+					
 					});
+				}, function fail() {
+				
 				});
 			}else {
 				casper.echo('Error : '+err, 'INFO');
@@ -194,7 +222,19 @@ editProfile.customFieldsTest = function(casper, test) {
 					this.click('a[href^="/register/register"]');
 					casper.waitForSelector('form[action="/register/create_account"]', function success() {
 						forumRegister.registerToApp(json.deleteAccount, casper, function(err) {
-							casper.echo('user registered successfully', 'INFO');	
+							if(!err) {
+								casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
+									casper.echo('user registered successfully', 'INFO');
+								}, function fail() {
+									casper.waitForSelector('div.alert.alert-danger.text-center', function success() {
+										casper.echo('user registered successfully', 'INFO');
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								});
+							}else {
+								casper.echo('Error : '+err, 'INFO');
+							}
 						});
 					}, function fail() {
 						casper.echo('ERROR OCCURRED', 'ERROR');
@@ -235,7 +275,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		
 	});
 	
-	//Open Front_end URL and Get Title
+	//Open Front End URL And Move to Account Setting Page
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -276,7 +316,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	//Open Front_end URL and Get Title
+	//Open Front End URL And Register A User
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -286,6 +326,19 @@ editProfile.customFieldsTest = function(casper, test) {
 					casper.waitForSelector('form.form-horizontal', function success() {
 						this.echo('registration from opened successfully', 'INFO');
 						forumRegister.registerToApp(json.deleteAccount, casper, function(err) {
+							if(!err) {
+								casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
+									casper.echo('user registered successfully', 'INFO');
+								}, function fail() {
+									casper.waitForSelector('div.alert.alert-danger.text-center', function success() {
+										casper.echo('user registered successfully', 'INFO');
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								});
+							}else {
+								casper.echo('Error : '+err, 'INFO');
+							}
 						});		
 					}, function fail() {
 						casper.echo('ERROR OCCURRED', 'ERROR');
@@ -311,6 +364,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		}
 	});
 
+	//Change Permission From back End
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function(err) {
 			if(!err) {
@@ -329,7 +383,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	//Open Front_end URL and Get Title
+	//Open Front End URL and Regsiter A User
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -338,7 +392,20 @@ editProfile.customFieldsTest = function(casper, test) {
 					this.click('a[href^="/register/register"]');
 					casper.waitForSelector('form.form-horizontal', function success() {
 						this.echo('registration from opened successfully', 'INFO');
-						forumRegister.registerToApp(json.deleteAccount, casper, function() {
+						forumRegister.registerToApp(json.deleteAccount, casper, function(err) {
+							if(!err) {
+								casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
+									casper.echo('user registered successfully', 'INFO');
+								}, function fail() {
+									casper.waitForSelector('div.alert.alert-danger.text-center', function success() {
+										casper.echo('user registered successfully', 'INFO');
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								});
+							}else {
+								casper.echo('Error : '+err, 'INFO');
+							}
 						});		
 					}, function fail() {
 						casper.echo('ERROR OCCURRED', 'ERROR');
@@ -362,6 +429,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		}
 	});
 
+	//Change Permissions From back End
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function(err) {
 			if(!err) {
@@ -379,7 +447,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	//Open Front_end URL and Get Title
+	//Open Front End URL And Move To Account Setting page
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -412,7 +480,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	//Open Front_End URL and Get Title
+	//Open Front End URL And Register A user
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -421,7 +489,20 @@ editProfile.customFieldsTest = function(casper, test) {
 					this.click('a[href^="/register/register"]');
 					casper.waitForSelector('form.form-horizontal', function success() {
 						this.echo('registration from opened successfully', 'INFO');
-						forumRegister.registerToApp(json.deleteAccount, casper, function() {
+						forumRegister.registerToApp(json.deleteAccount, casper, function(err) {
+							if(!err) {
+								casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
+									casper.echo('user registered successfully', 'INFO');
+								}, function fail() {
+									casper.waitForSelector('div.alert.alert-danger.text-center', function success() {
+										casper.echo('user registered successfully', 'INFO');
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
+									});
+								});
+							}else {
+								casper.echo('Error : '+err, 'INFO');
+							}
 						});		
 					}, function fail() {
 						casper.echo('ERROR OCCURRED', 'ERROR');
@@ -445,6 +526,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		}
 	});
 
+	//Change Permissions From Back End
 	casper.then(function() {
 		forumRegister.loginToForumBackEnd(casper, test, function(err) {
 			casper.echo('Logged-in successfully from back-end', 'INFO');
@@ -459,7 +541,7 @@ editProfile.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	//Open Front_end URL and Get Title
+	//Open Front End URL And Move To Edit Profile Page
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
 		forumRegister.redirectToLogout(casper, test, function(err) {
@@ -509,7 +591,6 @@ editProfile.fullNameFieldsTest = function(casper, test) {
 	casper.then(function() {
 		casper.echo('/*************************VERIFYING ALL CASES OF FULL NAME********************', 'INFO');
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
-			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
 				this.echo('Title of the page :' +this.getTitle(), 'INFO');
 				try {
@@ -518,8 +599,6 @@ editProfile.fullNameFieldsTest = function(casper, test) {
 					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
 				}
 			});
-			
-			//Login To Forum BackEnd
 			casper.then(function() {
 				forumRegister.loginToForumBackEnd(casper, test, function(err) {
 					if(!err) {
@@ -653,7 +732,6 @@ editProfile.instantMsgFieldsTest = function(casper, test) {
 	casper.then(function() {
 		casper.echo('/*************************VERIFYING ALL CASES OF INSTANT MESSAGING********************', 'INFO');
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
-			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
 				this.echo('Title of the page :' +this.getTitle(), 'INFO');
 				try {
@@ -662,8 +740,6 @@ editProfile.instantMsgFieldsTest = function(casper, test) {
 					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
 				}
 			});
-
-			//Login To Forum BackEnd
 			casper.then(function() {
 				forumRegister.loginToForumBackEnd(casper, test, function(err) {
 					if(!err) {
@@ -805,7 +881,6 @@ editProfile.birthdayFieldsTest = function(casper, test) {
 	casper.then(function() {
 		casper.echo('/*************************VERIFYING ALL CASES OF BIRTH DAY********************', 'INFO');
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
-			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
 				this.echo('Title of the page :' +this.getTitle(), 'INFO');
 				try {
@@ -814,8 +889,6 @@ editProfile.birthdayFieldsTest = function(casper, test) {
 					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
 				}
 			});
-
-			//Login To Forum BackEnd
 			casper.then(function() {
 				forumRegister.loginToForumBackEnd(casper, test, function(err) {
 					if(!err) {
@@ -954,7 +1027,6 @@ editProfile.signatureFieldsTest = function(casper, test) {
 	casper.then(function() {
 		casper.echo('/*************************VERIFYING ALL CASES OF SIGNATURE********************', 'INFO');
 		this.eachThen(json['setDefaultBackendSetting'], function(response) {
-			//Open Back-End URL And Get Title
 			casper.thenOpen(config.backEndUrl, function() {
 				this.echo('Title of the page :' +this.getTitle(), 'INFO');
 				try {
@@ -963,8 +1035,6 @@ editProfile.signatureFieldsTest = function(casper, test) {
 					test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
 				}
 			});
-		
-			//Login To Forum BackEnd
 			casper.then(function() {
 				forumRegister.loginToForumBackEnd(casper, test, function(err) {
 					if(!err) {
@@ -1314,7 +1384,6 @@ var disableUserNameForRegisteredUser = function(driver, test, callback) {
 					}
 				});
 				driver.click('a[href="'+grpName+'"]');
-				
 				driver.waitForSelector('#change_username', function success() {
 					try {
 						utils.enableorDisableCheckbox('change_username', false, driver, function(err) {
@@ -1363,21 +1432,26 @@ editProfile.makeRegisteredUser = function(driver, test, callback) {
 			test.assertExists('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			driver.waitForSelector('#autosuggest', function success() {
-				this.sendKeys('#autosuggest', 'hs1234', {keepFocus: true});
+				//this.sendKeys('#autosuggest', 'hs1234', {keepFocus: true});
+				driver.sendKeys('input[name="member"]', 'hs1234', {reset : true});
 				this.click('#autosuggest');
 				this.page.sendEvent("keypress", this.page.event.key.Enter);
 				driver.waitForSelector('form[name="ugfrm"]', function success() {
-					this.fillSelectors('form[name="ugfrm"]', {
-						'input[type="checkbox"]' :  '20237477'
-					}, true);
-					driver.click('button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close');
+					if(this.evaluate(function () {return document.getElementById('20237477').checked;})) {           
+					}else {
+						this.fillSelectors('form[name="ugfrm"]', {
+							'input[type="checkbox"]' :  '20237477'
+						}, true);    
+					}
+					//this.click('input[id="20237479"]');
+					//driver.click('button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close');
 					return callback(null);
 				}, function fail() {
-					casper.echo('ERROR OCCURRED', 'ERROR');
+					driver.echo('ERROR OCCURRED', 'ERROR');
 				});
 			}, function fail() {
-				casper.echo('ERROR OCCURRED', 'ERROR');
-			;});
+				driver.echo('ERROR OCCURRED', 'ERROR');
+			});
 		}catch(e) {
 			test.assertDoesntExist('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 		}
