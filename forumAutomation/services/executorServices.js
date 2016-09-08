@@ -23,7 +23,7 @@ if(commitDetails.branchName == "automation"){
 	console.log("Starting execution for commitDetails : "+commitDetails);
 	if(commitDetails.branchName){
 		console.log("Executing gitdeploy.sh for "+commitDetails.branchName);
-		if (exec("/home/automation/gitdeploy.sh "+commitDetails.branchName).code !== 0) {
+		if (exec("/home/automation/gitdeploy.sh -p ssh "+commitDetails.branchName).code !== 0) {
 			console.log('Error: gitdeploy.sh failed');
 			return callback();
 		}
