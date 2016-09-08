@@ -553,12 +553,10 @@ forumRegister.registerToApp = function(data, driver, callback) {
 		return document.querySelector('form[name="PostTopic"]').getAttribute('action');     
 	});
 	driver.echo("actionValue : " +actionValue, "ERROR");*/
-	driver.then(function() {
-	this.capture('1.png');
-driver.test.assertExists('form[name="PostTopic"] button');
+
+	driver.test.assertExists('form[name="PostTopic"] button');
 	driver.click('form[name="PostTopic"] button');
 	return callback(null);		
-	});
 };
 
 //Method For Verifying Error Message On Registration Form After Submitting Form
