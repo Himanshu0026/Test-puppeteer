@@ -33,7 +33,7 @@ editProfile.featureTest = function(casper, test) {
 							if(!err) {
 								casper.echo('user registered successfully', 'INFO');
 								casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
-									forumLogin.loginToApp(json.loginData.uname, json.deleteAccount.upass, casper, function(err) {
+									forumLogin.loginToApp(json.loginData.uname, json.loginData.upass, casper, function(err) {
 										if(!err) {
 											casper.echo('User logged-in successfully', 'INFO');
 											casper.waitForSelector('.default-user', function() {
@@ -50,7 +50,7 @@ editProfile.featureTest = function(casper, test) {
 									});
 								}, function fail() {
 									casper.waitForSelector('div.alert.alert-danger.text-center', function success() {
-										forumLogin.loginToApp(json.loginData.uname, json.deleteAccount.upass, casper, function(err) {
+										forumLogin.loginToApp(json.loginData.uname, json.loginData.upass, casper, function(err) {
 											if(!err) {
 												casper.echo('User logged-in successfully', 'INFO');
 												casper.waitForSelector('.default-user', function() {
