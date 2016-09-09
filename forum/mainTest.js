@@ -146,7 +146,6 @@ switch (feature) {
 				test.assert(true);
 			});
 		});
-	break;
 	
 	case "thumpsUpDown" :
 		 casper.test.begin('Verify thumps up/down functionlity ', function(test) {

@@ -49,24 +49,32 @@ editProfile.featureTest = function(casper, test) {
 										}
 									});
 								}, function fail() {
-									casper.waitForSelector('div.alert.alert-danger.text-center', function success() {
-										forumLogin.loginToApp(json.loginData.uname, json.loginData.upass, casper, function(err) {
-											if(!err) {
-												casper.echo('User logged-in successfully', 'INFO');
-												casper.waitForSelector('.default-user', function() {
-													this.click('.default-user');
-													this.echo('clicked on users icon successfully', 'INFO');
-													this.click('a[href^="/register/register?edit="]');
-													this.echo('clicked on user edit profile link successfully', 'INFO');
-												}, function fail() {
+									casper.thenOpen(config.url, function() {
+										this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+										forumRegister.redirectToLogout(casper, test, function(err) {
+											casper.waitForSelector('a[href^="/register/login"]', function success() {
+												forumLogin.loginToApp(json.loginData.uname, json.loginData.upass, casper, function(err) {
+													if(!err) {
+														casper.echo('User logged-in successfully', 'INFO');
+														casper.waitForSelector('.default-user', function() {
+															this.click('.default-user');
+															this.echo('clicked on users icon successfully', 'INFO');
+															this.click('a[href^="/register/register?edit="]');
+															this.echo('clicked on user edit profile link successfully', 'INFO');
+															casper.waitForSelector('form[action="/register"]', function success() {
+																this.capture('demo1.png');														
+															}, function fail() {
+															
+															});
+														}, function fail() {
 										
-												});
-											}else {
-												casper.echo('Error : '+err, 'INFO');
-											}
+														});
+													}else {
+														casper.echo('Error : '+err, 'INFO');
+													}
+												});								
+											});
 										});
-									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
 									});
 								});
 							}else {
@@ -1236,7 +1244,7 @@ var editToProfile = function(userData, driver, callback) {
 		driver.test.assertDoesntExist('form[name="PostTopic"] input[name="birthDatepicker"]');
 	}
 	
-	driver.then(function() {
+	driver.wait(5000, function() {
 		this.capture('1.png');
 		driver.test.assertExists('form[action="/register"] button[type="submit"]');
 		this.click('form[action="/register"] button[type="submit"]');

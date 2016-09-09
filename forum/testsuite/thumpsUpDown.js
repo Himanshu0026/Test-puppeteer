@@ -14,6 +14,17 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	//Open Forum Front End URL And Get Title 
 	casper.start(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		forumRegister.redirectToLogout(casper, test, function(err) {
+			if(!err) {
+				casper.waitForSelector('a[href^="/register/register"]', function success() {
+				
+				}, function fail() {
+				
+				});
+			}else {
+			
+			}
+		});
 	});
 	
 	casper.then(function() {
