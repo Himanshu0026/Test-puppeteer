@@ -1,5 +1,5 @@
 {
-    "invalidInfo" : [{
+    "blankUsername" : {
         "uname" : "",
         "uemail" : "blank_uname@wt.com",
         "upass" : "1234",
@@ -11,7 +11,7 @@
         "expectedErrorMsg" : "Please enter a username." 
     },
     
-    {
+    "blankEmail" : {
         "uname" : "blank_email",
         "uemail" : "",
         "upass" : "1234",
@@ -23,7 +23,7 @@
         "expectedErrorMsg" : "Please enter your email address." 
     },
 
-    {
+    "blankPassword" : {
         "uname" : "blank_password",
         "uemail" : "blank_password@wt.com",
         "upass" : "",
@@ -35,7 +35,7 @@
         "expectedErrorMsg" : "Please enter a password." 
     },
     
-    {
+    "blankImId" : {
         "uname" : "blank_imID",
         "uemail" : "blank_imID@wt.com",
         "upass" : "1234",
@@ -47,7 +47,7 @@
         "expectedErrorMsg" : "Please enter your screen name." 
     },
     
-    {
+    "blankBirthday" : {
         "uname" : "blank1_birthday",
         "uemail" : "blank_birthday@wt.com",
         "upass" : "1234",
@@ -59,7 +59,7 @@
         "expectedErrorMsg" : "Please enter birthday." 
     },
     
-    {
+    "blankSignature" : {
         "uname" : "blank_signature",
         "uemail" : "blank_signature@wt.com",
         "upass" : "1234",
@@ -71,9 +71,9 @@
         "expectedErrorMsg" : "Please provide a signature." 
     },
     
-    {
-    	"uname" : "shipra",
-        "uemail" : "45fdf4@wt.com",
+    "existUsername" :{
+    	"uname" : "35",
+        "uemail" : "dfsf@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",
@@ -85,9 +85,9 @@
         "errorMsg2" : " has already been taken."
     },
     
-    {
-    	"uname" : "jhgsdddgdg",
-        "uemail" : "35asasa@wt.com",
+    "existEmail" : {
+    	"uname" : "3rtertr",
+        "uemail" : "35@wt.com",
         "upass" : "1234",
         "fullName" : "18",
         "imID" : "18",
@@ -98,7 +98,7 @@
         "expectedErrorMsg" : "It looks like you are already registered"
     },
     
-    {
+    "existUsernameEmail" : {
     	"uname" : "100",
         "uemail" : "100@wt.com",
         "upass" : "1234",
@@ -111,7 +111,7 @@
         "expectedErrorMsg" : "It looks like you already have a forum account! A forum account for that username and email address combination already exists!"
     },
     
-    {
+    "invalidBirthday" : {
     	"uname" : "35ddf",
         "uemail" : "35wew@wt.com",
         "upass" : "1234",
@@ -124,7 +124,7 @@
         "expectedErrorMsg" : "Valid years for your Birthday are from 1900 to 2016."
     },
     
-    {
+    "invalidEmail" : {
         "uname" : "invalid_emailk",
         "uemail" : "aaaaa",
         "upass" : "1234",
@@ -135,7 +135,7 @@
         "namePrivate" : true,
         "errorType" : "invalidEmail",
         "expectedErrorMsg" : "You entered an invalid email address." 
-    }],
+    },
     
     "validInfo" : {
     	"uname" : "801",
