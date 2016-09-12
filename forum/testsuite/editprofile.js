@@ -62,7 +62,6 @@ editProfile.featureTest = function(casper, test) {
 															this.click('a[href^="/register/register?edit="]');
 															this.echo('clicked on user edit profile link successfully', 'INFO');
 															casper.waitForSelector('form[action="/register"]', function success() {
-																this.capture('demo1.png');														
 															}, function fail() {
 															
 															});
@@ -1245,7 +1244,6 @@ var editToProfile = function(userData, driver, callback) {
 	}
 	
 	driver.wait(5000, function() {
-		this.capture('1.png');
 		driver.test.assertExists('form[action="/register"] button[type="submit"]');
 		this.click('form[action="/register"] button[type="submit"]');
 		driver.then(function() {

@@ -1761,10 +1761,14 @@ var verifySuccessMsg = function(successMsg, expectedSuccessMsg, msgTitle, driver
 
 // method for goto New Topic page to application
 var gotoNewTopicpage = function(driver, callback) {
-	driver.click('i.icon.icon-menu');
-	driver.click('a[href^="/latest"]');
-	driver.click('a[href="/post/printadd"]');
-	return callback(null);
+	driver.test.assertExists('#links-nav');
+	driver.click('#links-nav');
+	driver.test.assertExists('#latest_topics_show');
+	driver.click('#latest_topics_show');
+	driver.waitForSelector('a[href="/post/printadd"]', function success() {
+		this.click('a[href="/post/printadd"]');
+		return callback(null);
+	});
 };
 
 // method for goto New Topic page to application
