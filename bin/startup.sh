@@ -11,5 +11,6 @@ else
 fi
 
 # Start the application through "automation" user
-sudo -H -u automation bash -c '/etc/automation/bin/init.sh'
+#sudo -H -u automation bash -c '/etc/automation/bin/init.sh'
+/etc/automation/bin/init.sh
 
