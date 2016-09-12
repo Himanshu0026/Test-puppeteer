@@ -19,7 +19,7 @@ executorServices.execute = function(script){
 //It executes job. Take job details as argument, executed the job and initiates mail sending.
 executorServices.executeJob = function(commitDetails, callback){
 	//Executing gitdeploy.sh to update Forum's code for given branch name
-if(commitDetails.branchName == "automation"){
+//if(commitDetails.branchName == "automation"){
 	console.log("Starting execution for commitDetails : "+commitDetails);
 	if(commitDetails.branchName){
 		console.log("Executing gitdeploy.sh for "+commitDetails.branchName);
@@ -88,7 +88,7 @@ if(commitDetails.branchName == "automation"){
 		return callback();
 	}
 
-}else{
+/*}else{
 	return callback();
-}
+}*/
 };
