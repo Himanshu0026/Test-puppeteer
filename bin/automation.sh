@@ -10,9 +10,9 @@ sleep 1
 printf "\nTests executing for REGISTRATION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./forum/automation.js --feature=register >> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
-printf "\nTests executing for IN-CONTEXT REGISTRATION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./forum/automation.js --feature=inContextRegistration >> "$AUTOMATION_HOME"/log/automation.txt
-sleep 1
+#printf "\nTests executing for IN-CONTEXT REGISTRATION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./forum/automation.js --feature=inContextRegistration >> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
 printf "\nTests executing for BACKEND REGISTRATION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./forum/automation.js --feature=backEndRegistration >> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
@@ -25,21 +25,20 @@ sleep 1
 printf "\nTests executing for EDIT PROFILE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./forum/automation.js --feature=editProfile >> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
-printf "\nTests executing for EDIT PROFILE WITH SETTINGS: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./forum/automation.js --feature=editProfileWithSettings >> "$AUTOMATION_HOME"/log/automation.txt
-sleep 1
-printf "\nTests executing for EDIT PROFILE WITH FULL NAME: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./forum/automation.js --feature=editProfileWithFullName >> "$AUTOMATION_HOME"/log/automation.txt
-sleep 1
-printf "\nTests executing for EDIT PROFILE WITH INSTANT MESSAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./forum/automation.js --feature=editProfileWithInstantMsg >> "$AUTOMATION_HOME"/log/automation.txt
-sleep 1
-printf "\nTests executing for EDIT PROFILE WITH BIRTHDAY: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./forum/automation.js --feature=editProfileWithBirthday >> "$AUTOMATION_HOME"/log/automation.txt
-sleep 1
-printf "\nTests executing for EDIT PROFILE WITH SIGNATURE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./forum/automation.js --feature=editProfileWithSignature >> "$AUTOMATION_HOME"/log/automation.txt
-sleep 1
+#printf "\nTests executing for EDIT PROFILE WITH SETTINGS: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./forum/automation.js --feature=editProfileWithSettings >> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
+#printf "\nTests executing for EDIT PROFILE WITH FULL NAME: \n" >> "$AUTOMATION_HOME"/log/automation.casperjs test ./forum/automation.js --feature=editProfileWithFullName >> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
+#printf "\nTests executing for EDIT PROFILE WITH INSTANT MESSAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./forum/automation.js --feature=editProfileWithInstantMsg >> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
+#printf "\nTests executing for EDIT PROFILE WITH BIRTHDAY: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./forum/automation.js --feature=editProfileWithBirthday >> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
+#printf "\nTests executing for EDIT PROFILE WITH SIGNATURE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./forum/automation.js --feature=editProfileWithSignature >> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
 #printf "\nTests executing for THUMPS UP AND DOWN: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./forum/automation.js --feature=thumpsUpDown >> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1
