@@ -5,7 +5,7 @@
 
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var lock_unLockTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'lockUnLock/';

@@ -6,7 +6,7 @@ var utils = require('./utils.js');
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
 var forumRegister = require('./register.js');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var poll = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'poll/';

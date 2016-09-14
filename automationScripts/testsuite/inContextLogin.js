@@ -2,7 +2,7 @@
 'use strict';
 var forumLogin = require('./forum_login.js');
 var json = require('../testdata/inContextLogin.json');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var inContextLogin = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'inContextLogin/';

@@ -13,7 +13,7 @@ var deleteTopic = require('./deleteTopic.js');
 var poll = require('./poll.js');
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var newTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'newTopic/';

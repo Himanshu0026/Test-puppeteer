@@ -17,6 +17,16 @@
     		"upass" : "test",
     		"apiKey" : "4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q"
 	},
+
+	"webhook" : {
+		"secret" : "monika",
+		"port" : 8081
+	},
+
+	"redis" : {
+		"host" : "127.0.0.1",
+		"port" : 6379
+	},
 	
 	"permissionSettingMsg" : "Your user group settings have been updated."
 }

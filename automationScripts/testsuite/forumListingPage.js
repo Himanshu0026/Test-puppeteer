@@ -4,7 +4,7 @@ var forumRegister = require('./register.js');
 var generalPermission = require('./generalPermission.js');
 var forumLogin = require('./forum_login.js');
 var config = require('../config/config.json');
-var json = require('../testdata/editData.json');
+var json = require('../../testdata/editData.json');
 
 var forumListingPage = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'forumListingPage/';

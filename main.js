@@ -2,24 +2,27 @@
  
 'use strict';
 var http = require('http');
+var config = require('./config/config.json');
 var queueServices = require('./services/queueServices.js');
 var gitBranchServices = require('./services/gitBranchServices');
-var utils = require('./utils.js');
+var utils = require('./services/utils.js');
+
+//Initializing Redis client
 var redisClient = utils.initRedisClient();
-//var test = require('./test.js');
+
 //Creating github webhook handler
 var createHandler = require('github-webhook-handler');
-var handler = createHandler({ path: '/webhook', secret: 'monika' });
+var handler = createHandler({ path: '/webhook', secret: config.webhook.secret });
 
 gitBranchServices.managePendingCommits(redisClient);
-//var PENDING_BRANCH_SET = "pendingBranches";
+
 //Creating server to listen on port 8081
 http.createServer(function (req, res) {
   handler(req, res, function (err) {
     res.statusCode = 404;
     res.end('no such location');
   });
-}).listen(8081);
+}).listen(config.webhook.port);
 
 //Log error message on any error event
 handler.on('error', function (err) {

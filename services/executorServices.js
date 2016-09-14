@@ -2,19 +2,8 @@
 'use strict';
 require('shelljs/global');
 var fs = require('fs');
-var utils = require('../utils.js');
 var mailServices = require('./mailServices.js');
-//var execSync = require('child_process').execSync;
 var executorServices = module.exports = {};
-
-//Execute the script in synchronous way and returns stdout as the output
-executorServices.execute = function(script){
-	var scriptResult = execSync(script);
-	//var pid = scriptResult.pid;
-	console.log('scriptResult : ' + scriptResult);
-	//utils.terminateProcess(pid);
-	return scriptResult;
-};
 
 //It executes job. Take job details as argument, executed the job and initiates mail sending.
 executorServices.executeJob = function(commitDetails, callback){
@@ -35,7 +24,6 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Program output:', stdout);
 			console.log('Program stderr:', stderr);
 			var testResult = stdout;
-			//var testResult = executorServices.execute("/etc/automation/bin/automation.sh");
 			var automationLogFile = '/etc/automation/log/automation.txt';
 			var failLogFile = '/etc/automation/log/fail.txt';
 			fs.stat(failLogFile, function(err, fileStat) {

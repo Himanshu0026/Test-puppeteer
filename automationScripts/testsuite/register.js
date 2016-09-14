@@ -3,7 +3,7 @@
 var utils = require('./utils.js');
 var forumLogin = require('./forum_login.js');
 var json = require('../testdata/registerData.json');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var forumRegister = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'register/';

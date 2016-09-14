@@ -3,7 +3,7 @@
 
 'use strict';
 var json = require('../testdata/forgotpasswordData.json');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var forgotpwd = module.exports = {};
 

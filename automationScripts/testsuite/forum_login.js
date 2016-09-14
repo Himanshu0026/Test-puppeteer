@@ -3,7 +3,7 @@
 
 'use strict';
 var json = require('../testdata/loginData.json');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var forumLogin = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + "login/";

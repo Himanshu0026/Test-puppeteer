@@ -1,12 +1,13 @@
 'use strict';
 
+var config = require('../config/config.json');
 var redis = require('redis');
 var psTree = require('ps-tree');
 var utils = module.exports = {};
 var redisClient;
 
 utils.initRedisClient = function(){
-	redisClient = redis.createClient(6379, "127.0.0.1");
+	redisClient = redis.createClient(config.redis.port, config.redis.host);
 	redisClient.on('error', function(err) {
 		console.error('RedisClient has got an error: %j : ', err);
 	});
@@ -55,29 +56,4 @@ utils.isValidJobToAdd = function(commitBranch, commitDetails, callback){
 	});
 };
 
-
-utils.terminateProcess = function(pid){
-	console.log("Terminating process with PID : "+pid);
- 	var signal   = 'SIGKILL';
-    	var killTree = true;
-    	if(killTree) {
-        	psTree(pid, function (err, children) {
-            		[pid].concat(
-                		children.map(function (p) {
-                    			return p.PID;
-                		})
-            		).forEach(function (tpid) {
-                		try { process.kill(tpid, signal) }
-                		catch (ex) {
-					console.error("Exception occurred while terminating proess "+ tpid + ":" + ex);				
-				}
-            		});
-        	});
-    	} else {
-        	try { process.kill(pid, signal) }
-        	catch (ex) {
-			console.error("Exception occurred while terminating proess "+ tpid + ":" + ex);						
-		}
-    	}
-};
 

@@ -3,7 +3,7 @@
 var utils = require('./utils.js');
 var forumRegister = require('./register.js');
 var inContextRegisterJSON = require('../testdata/inContextRegisterData.json');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var inContextForumRegister = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'inContextRegister/';

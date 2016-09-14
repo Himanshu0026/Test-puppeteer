@@ -4,7 +4,7 @@ var forumRegister = require('./register.js');
 var forumLogin = require('./forum_login.js');
 var utils = require('./utils.js');
 var json = require('../testdata/editData.json');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var editProfile = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'editProfile/';

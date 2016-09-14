@@ -1,4 +1,4 @@
-var config = require("./config/config.json");
+var config = require("../config/config.json");
 
 casper.options.viewportSize = config.app.viewportSize;
 casper.options.verbose = config.app.verbose;

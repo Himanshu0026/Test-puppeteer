@@ -5,7 +5,7 @@ var forumLogin = require('./forum_login.js');
 var utils = require('./utils.js');
 var editProfile = require('./editprofile.js');
 var json = require('../testdata/editData.json');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var generalPermission = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'generalPermission/';
