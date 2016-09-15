@@ -198,14 +198,14 @@ forgotpwd.featureTest = function(casper, test) {
 								test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 								casper.waitForSelector('small a[href="/categories"]', function() {
 									this.click('small a[href="/categories"]');
-								});
-								casper.waitForSelector('#startTopic', function() {
-									forgotpwd.gotoForgotPasswordpage(casper, function(err){
-										if (err) {
-											casper.echo("Error Occurred In Callback", "ERROR");
-										} else {
-											casper.echo("Forgot password page navigated");
-										}
+									casper.waitForSelector('#startTopic', function() {
+										forgotpwd.gotoForgotPasswordpage(casper, function(err){
+											if (err) {
+												casper.echo("Error Occurred In Callback", "ERROR");
+											} else {
+												casper.echo("Forgot password page navigated");
+											}
+										});
 									});
 								});
 							},function fail() {
