@@ -21,7 +21,6 @@ switch (feature) {
 				test.done();
 			});
 		});
-	break;
 	
 	case "incontextlogin" :
 		casper.test.begin('Verify inContext Login functionlity ', function(test) {
@@ -31,7 +30,6 @@ switch (feature) {
 				test.done();
 			});
 		});
-	break;
 	
 	case "register":
 		casper.test.begin('REGISTRATION TEST', function(test) {
@@ -42,7 +40,6 @@ switch (feature) {
 				test.assert(true);
 			});
 		});
-	break;
 	
 	case "inContextRegistration":
 		casper.test.begin('IN CONTEXT REGISTRATION TEST', function(test) {
@@ -53,7 +50,6 @@ switch (feature) {
 				test.assert(true);
 			});
 		});
-	break;
 	
 	case "backEndRegistration":
 		casper.test.begin('BACK END REGISTRATION TEST', function(test) {
@@ -64,7 +60,6 @@ switch (feature) {
 				test.assert(true);
 			});
 		});
-	break;
 	
 	case "forgotpassword":
 		casper.test.begin('Verify forgot your password functionality from home page ', function(test) {
@@ -74,7 +69,6 @@ switch (feature) {
 				test.done();
 			});
 		});
-	break;
 	
 	case "hidecategory" :
 		casper.test.begin('Verify hide/un-hide category functionlity ', function(test) {
@@ -85,7 +79,6 @@ switch (feature) {
 				test.done();
 			});
 		});
-	break;
         
 	case "editProfile":
 		casper.test.begin("Start 'Edit Profile' functionality from home page & verify content with all valid and invalid scenarios", function(test) {
@@ -146,28 +139,8 @@ switch (feature) {
 				test.assert(true);
 			});
 		});
-	
-	case "thumpsUpDown" :
-		 casper.test.begin('Verify thumps up/down functionlity ', function(test) {
-		 var thumpsUpDown = require("./testsuite/thumpsUpDown.js");
-		 thumpsUpDown.featureTest(casper, casper.test);
-		 casper.run(function(){
-			test.done();
-		});
-	});
-        
-	case "generalPermission":
-		casper.test.begin("Start 'General Permission' functionality from home page & verify content with all scenarios", function(test) {
-			var generalPermission = require("./testsuite/generalPermission.js");
-			var x = require('casper').selectXPath;
-			generalPermission.featureTest(casper, casper.test, x);
-			casper.run(function(){
-				test.done();
-				test.assert(true);
-			});
-		});
-	
-    case "deleteAccount":
+		
+	case "deleteAccount":
 	casper.test.begin("Start 'Delete Account' functionality from home page & verify content with all scenarios", function(test) {
 
 		var deleteAccount = require("./testsuite/deleteAccount.js");
@@ -210,9 +183,39 @@ switch (feature) {
 			test.done();
 			test.assert(true);
 		});
-	});	
+	});			
+	
+	case "thumpsUpDown" :
+		 casper.test.begin('Verify thumps up/down functionlity ', function(test) {
+		 var thumpsUpDown = require("./testsuite/thumpsUpDown.js");
+		 thumpsUpDown.featureTest(casper, casper.test);
+		 casper.run(function(){
+			test.done();
+		});
+	});
         
-        break;
+	case "generalPermission":
+		casper.test.begin("Start 'General Permission' functionality from home page & verify content with all scenarios", function(test) {
+			var generalPermission = require("./testsuite/generalPermission.js");
+			var x = require('casper').selectXPath;
+			generalPermission.featureTest(casper, casper.test, x);
+			casper.run(function(){
+				test.done();
+				test.assert(true);
+			});
+		});
+	
+        
+    case "forumListingPage":
+	casper.test.begin("Start 'Forum Listing Page' functionality from home page & verify content with all scenarios", function(test) {
+
+		var foeumListingPage = require("./testsuite/forumListingPage.js");
+		foeumListingPage.featureTest(casper, casper.test);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});        
 
 	case "registerWithSettings":
     	casper.test.begin('REGISTRATION WITH SETTINGS TEST', function(test) {

@@ -831,15 +831,23 @@ deleteAccount.featureTest = function(casper, test, x) {
 
 deleteAccount.backEndTest = function(casper, test, x) {
 	
+	casper.start();
+	
 	//Methos For Verifying Alert Message
 	casper.on('remote.alert', function(message) {
+		cleanup();
 		this.echo('alert message: ' + message, 'INFO');
 		//var expectedErrorMsg = 'Delete the selected user?';
 		//test.assertEquals(message, expectedErrorMsg);
 		this.echo('Alert message is verified when user try to delete an account', 'INFO');
+		function cleanup() {
+			// remove all event listeners created in this promise
+			stream.removeListener('remote.alert');
+			//stream.removeListener('error', onerror)
+			//stream.removeListener('end', cleanup)
+		  }
 	});
 
-	casper.start();
 
 //***********************************9th Test Case Verification********************************************
 
@@ -2908,9 +2916,12 @@ var gotoNewTopicpage = function(driver, callback) {
 	driver.click('#links-nav');
 	driver.test.assertExists('#latest_topics_show');
 	driver.click('#latest_topics_show');
-	driver.test.assertExists('a[href="/post/printadd"]');
-	driver.click('a[href="/post/printadd"]');
-	return callback(null);
+	driver.waitForSelector('a[href="/post/printadd"]', function success() {
+		this.click('a[href="/post/printadd"]');
+		return callback(null);
+	}, function fail() {
+		casper.echo('Error Occurred', 'ERROR');
+	});
 };
 
 
