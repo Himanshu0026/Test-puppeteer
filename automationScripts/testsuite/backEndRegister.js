@@ -2,7 +2,7 @@
 'use strict';
 var forumRegister = require('./register.js');
 var backEndRegisterJSON = require('../testdata/backEndRegisterData.json');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var backEndForumRegister = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'backEndRegister/';
