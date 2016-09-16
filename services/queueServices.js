@@ -36,7 +36,10 @@ jobQueue.process('pushRequest', function(job, done){
 //Adding new job in queue of "pushRequest" type
 queueServices.addNewJob = function(jobArg){
 	var job = jobQueue.create('pushRequest', jobArg).save( function(err){
-		if( !err ) console.log( job.id );
+		if( !err ) 
+			console.log( job.id );
+		else
+			console.log("Getting error while adding job in queue: "+err);			
 	});
 };
 
