@@ -52,6 +52,9 @@ handler.on('push', function (event) {
 			if(valid)
 				queueServices.addNewJob(commitDetails);
 		});
+	}else{
+		console.log("commitPayload not found");
+		console.log("Event payload : "+JSON.stringify(event.payload));
 	}
 });
 
