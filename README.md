@@ -19,7 +19,7 @@ Startup Procedure
 =
 
   Run the command “/etc/automation/bin/startup.sh” 
-(Logs are being written under in file "/var/log/scripts/automation.log".)
+(Logs are being written in file "/var/log/scripts/automation.log".)
 
 Stop Procedure
 =
