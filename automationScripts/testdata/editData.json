@@ -233,5 +233,10 @@
 		"title" : "hsk",
 		"content" : "hellloooooo!!!!!!!!!",
 		"category" : "General"
+	},
+	
+	"newTopicForForumListinPage" : {
+		"title" : "hsk",
+		"content" : "hellloooooo!!!!!!!!!"
 	}
 }  

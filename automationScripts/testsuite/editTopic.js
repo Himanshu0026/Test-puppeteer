@@ -6,7 +6,7 @@ var utils = require('./utils.js');
 var forumRegister = require('./register.js');
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
-var config = require('../../config/config.json');
+var config = require('../config/config.json');
 
 var editTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'editTopic/';
@@ -137,8 +137,10 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 							casper.echo('go to topic listing page : ', 'INFO');
 							casper.waitForSelector('form[name="posts"] h4 a', function success() {
 								casper.on('remote.alert', testAlert1);
-								editTopicTitle(json.editTopic.blankTitle.title, casper, function() {
-									casper.log('editing topic title with invalid data', 'INFO');
+								editTopicTitle(json.editTopic.blankTitle.title, casper, function(err) {
+									if(!err) {
+										casper.log('editing topic title with invalid data', 'INFO');
+									}
 									// removing listner alert1
 									casper.removeListener('remote.alert', testAlert1);		
 								});
@@ -159,16 +161,18 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 		casper.echo('test case to Edit topic title with valid data', 'INFO');
 		casper.echo('title of the page : ' +this.getTitle(), 'INFO');
 		casper.waitForSelector('a[href="/post/printadd"]', function success() {
-			editTopicTitle(json.editTopic.validTitle.title, casper, function() {
-				casper.echo('editing topic title with valid data', 'INFO');
-				casper.waitForSelector('#editable_subjuct', function success() {
-					var getTitle = this.fetchText('#editable_subjuct');
-					test.assertEquals(getTitle.trim(), json.editTopic.validTitle.title.trim(), getTitle.trim()+' and verified title');
-					casper.echo('title is verified with valid data', 'INFO');
-					casper.echo('---------------------------------------------------------------------------');
-				}, function fail(err) {
-					casper.echo(err);
-				});		
+			editTopicTitle(json.editTopic.validTitle.title, casper, function(err) {
+				if(!err) {
+					casper.echo('editing topic title with valid data', 'INFO');
+					casper.waitForSelector('#editable_subjuct', function success() {
+						var getTitle = this.fetchText('#editable_subjuct');
+						test.assertEquals(getTitle.trim(), json.editTopic.validTitle.title.trim(), getTitle.trim()+' and verified title');
+						casper.echo('title is verified with valid data', 'INFO');
+						casper.echo('---------------------------------------------------------------------------');
+					}, function fail(err) {
+						casper.echo(err);
+					});
+				}
 			});
 		}, function fail(err) {
 			casper.echo(err);
@@ -180,8 +184,10 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 	casper.then(function() {
 		casper.echo('Verify error message  for Edit Topic Content With blank data', 'INFO');
 		this.on('remote.alert', testAlert2);
-		editTopicContent(json.editTopic.blankContent.content, casper, function() {
-			casper.log('edited topic content with blank data', 'INFO');
+		editTopicContent(json.editTopic.blankContent.content, casper, function(err) {
+			if(!err) {
+				casper.log('edited topic content with blank data', 'INFO');
+			}
 		});
 	});	
 
@@ -194,18 +200,20 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 	casper.thenOpen(config.url, function() {
 		casper.echo('test case to Edit Topic Content With Valid Data', 'INFO');
 		casper.waitForSelector('a[href="/post/printadd"]', function success() {
-			editTopicContent(json.editTopic.validContent.content, casper, function() {
-				casper.echo('edited topic content', 'INFO');
-				//Verify Edit Topic Content With Valid data
-				casper.waitForSelector('#quickReplyPost', function success() {
-					verifyEditTopicContent(casper, function(err) {
-						if(!err) {
-							casper.echo(' verifying content with valid content', 'INFO');
-						}
+			editTopicContent(json.editTopic.validContent.content, casper, function(err) {
+				if(!err) {
+					casper.echo('edited topic content', 'INFO');
+					//Verify Edit Topic Content With Valid data
+					casper.waitForSelector('#quickReplyPost', function success() {
+						verifyEditTopicContent(casper, function(err) {
+							if(!err) {
+								casper.echo(' verifying content with valid content', 'INFO');
+							}
+						});
+					}, function fail(err) {
+						casper.echo(err);
 					});
-				}, function fail(err) {
-					casper.echo(err);
-				});
+				}
 			});
 		}, function fail(err) {
 			casper.echo(err);
@@ -258,7 +266,7 @@ var editTopicTitle = function(title, driver, callback){
 	}, function fail() {
 		casper.echo(err);
 	});
-	return callback();
+	return callback(null);
 };
 
 
@@ -273,10 +281,17 @@ var editTopicContent = function(content, driver, callback){
 
 	}
 
-	driver.waitForSelector('div.post-body .panel-dropdown .pull-right a.dropdown-toggle', function success() {
-		this.click('div.post-body .panel-dropdown .pull-right a.dropdown-toggle');
-		this.click('div.post-body .panel-dropdown .pull-right ul.dropdown-menu li a#edit_post_request');
-	}, function fail() {
+	driver.waitForSelector('div#ajax_subscription_vars', function success() {
+		driver.mouse.move('div#ajax_subscription_vars');
+		driver.waitForSelector('a.dropdown-toggle', function success() {
+			this.capture(screenShotsDir+ 'aa.png');
+			this.click('div.post-body .panel-dropdown .pull-right a.dropdown-toggle');
+			this.click('div.post-body .panel-dropdown .pull-right ul.dropdown-menu li a#edit_post_request');
+			this.capture(screenShotsDir+ 'bb.png');
+		}, function fail(err) {
+			casper.echo(err);
+		});
+	}, function fail(err) {
 		casper.echo(err);
 	});
 
@@ -291,10 +306,12 @@ var editTopicContent = function(content, driver, callback){
 
 	});
 	driver.then(function() {
+		this.capture(screenShotsDir+ '22.png');
 		this.click('div.form-group input.btn-primary');
+		driver.wait(4000);
 	});
-	driver.wait(4000);			
-	return callback();
+				
+	return callback(null);
 };
 
 // method for go to new poll to application
@@ -326,7 +343,7 @@ var gotoNewTopic = function(data, driver, callback) {
 	}, function fail() {
 		casper.echo(err);
 	});	
-	return callback();
+	return callback(null);
 };
 // verify edit topic content
 var verifyEditTopicContent = function(driver, callback) {

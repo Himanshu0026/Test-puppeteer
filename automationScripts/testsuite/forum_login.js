@@ -161,6 +161,21 @@ forumLogin.loginToApp = function(username, password, driver,callback) {
 //method for logout from application
 forumLogin.logoutFromApp = function(driver, callback) {
 	try {
+		driver.test.assertExists('ul.nav.pull-right span.caret');
+		driver.click('ul.nav.pull-right span.caret');
+		try {
+			driver.test.assertExists('#logout');
+			driver.click('#logout');
+		}catch(e) {
+			driver.test.assertDoesntExist('#logout');
+		}
+	}catch(e) {
+		driver.test.assertDoesntExist('ul.nav.pull-right span.caret');
+	}
+	return callback(null);
+};
+/*forumLogin.logoutFromApp = function(driver, callback) {
+	try {
 		driver.test.assertExists('a.default-user');
 		driver.click('a.default-user');
 		try {
@@ -173,7 +188,7 @@ forumLogin.logoutFromApp = function(driver, callback) {
 		driver.test.assertDoesntExist('a.default-user');
 	}
 	return callback(null);
-};
+};*/
 
 //Method For Verifying Error Message On Edit Profile/Account Setting Page After Submitting Form
 var verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver, callback) {

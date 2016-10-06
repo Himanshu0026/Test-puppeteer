@@ -206,17 +206,28 @@ switch (feature) {
 		});
 	
         
-    case "forumListingPage":
-	casper.test.begin("Start 'Forum Listing Page' functionality from home page & verify content with all scenarios", function(test) {
+	case "forumListingPage":
+		casper.test.begin("Start 'Forum Listing Page' functionality from home page & verify content with all scenarios", function(test) {
+			var forumListingPage = require("./testsuite/forumListingPage.js");
+			forumListingPage.featureTest(casper, casper.test);
+			casper.run(function(){
+				test.done();
+				test.assert(true);
+			});
+		});        
+	break;
+	case "forumListingPageForSubCategory":
+	casper.test.begin("Start 'Forum Listing Page For Sub Category' functionality from home page & verify content with all scenarios", function(test) {
 
-		var foeumListingPage = require("./testsuite/forumListingPage.js");
-		foeumListingPage.featureTest(casper, casper.test);
+		var forumListingPage = require("./testsuite/forumListingPage.js");
+		var x = require('casper').selectXPath;
+		forumListingPage.customFieldsTest(casper, casper.test, x);
 		casper.run(function(){
 			test.done();
 			test.assert(true);
 		});
-	});        
-
+	});
+	break;
 	case "registerWithSettings":
     	casper.test.begin('REGISTRATION WITH SETTINGS TEST', function(test) {
 		var forumRegister = require("./testsuite/register.js");

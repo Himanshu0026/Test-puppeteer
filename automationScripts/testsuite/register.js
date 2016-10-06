@@ -12,8 +12,78 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 
 forumRegister.featureTest = function(casper, test) {
 
+	casper.start();
+	
+	//Open Back-End URL And Get Title
+	casper.thenOpen(config.backEndUrl, function() {
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		try {
+			test.assertExists('a[href="/tool/members/login?action=logout"]');
+			this.click('a[href="/tool/members/login?action=logout"]');
+		}catch(e) {
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}
+	});
+
+	//Login To Forum BackEnd
+	casper.then(function() {
+		forumRegister.loginToForumBackEnd(casper, test, function(err) {
+			casper.echo('Logged-in successfully from back-end', 'INFO');
+			casper.waitForSelector('div#my_account_forum_menu', function success() {
+				test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+				this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+				test.assertExists('div#ddUsers a[href="/tool/members/mb/fields"]');
+				this.click('div#ddUsers a[href="/tool/members/mb/fields"]');
+				casper.waitForSelector('form[name="posts"]', function success() {
+					this.click('form#custom_fields_table input');
+					this.click('form#custom_fields_table button');
+					casper.waitForSelector('p:nth-child(4)', function success() {
+						this.capture('demo.png');
+						var msg = this.fetchText('p:nth-child(4)');
+						this.echo('Success Message: '+msg, 'INFO');
+						this.echo('all custom profile fields have been deleted', 'INFO');
+					}, function fail() {
+					
+					});
+				}, function fail() {
+				
+				});
+				casper.then(function() {
+					test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+					this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+					test.assertExists('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
+					this.click('div#ddUsers a[href="/tool/members/mb/fields?action=default_registration_option"]');
+					casper.waitForSelector('div.heading', function success() {
+						this.fill('form[name="posts"]', {
+							'required_name' : 1,
+							'required_imType' : 1,
+							'required_dob' : 1,
+							'required_signature' : 1
+						}, true);
+						this.click('form[name="posts"] button');
+						casper.waitForSelector('font[color="red"]', function success() {
+							var successMsg = this.fetchText('font[color="red"]');
+							this.echo('success message : '+successMsg, 'INFO');
+							this.echo('success message is verified', 'INFO');
+						}, function fail() {
+						
+						});
+					}, function fail() {
+			
+					});
+					casper.then(function() {
+			
+					});
+				});
+			}, function fail() {
+				casper.echo('ERROR OCCURRED', 'ERROR');
+			});
+		});
+		
+	});
+
 	//Login To Forum BackEnd 
-	casper.start(config.backEndUrl, function() {
+	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		forumRegister.loginToForumBackEnd(casper, test, function() {
 			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
@@ -62,9 +132,10 @@ forumRegister.featureTest = function(casper, test) {
 				casper.capture(screenShotsDir+ '1.png');
 				casper.waitForSelector('form[name="PostTopic"] input[name="member"]', function success() {
 					var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="member"]', 'data-original-title');
-					errorMessage = errorMessage.trim();
-					if(errorMessage && errorMessage!= '')
+					if(errorMessage && errorMessage!= '') {
+						errorMessage = errorMessage.trim();
 						verifyErrorMsg(errorMessage, 'Please enter a username.', 'blankUsername', casper, function() {});
+					}
 				}, function fail() {
 					casper.echo('ERROR OCCURRED', 'ERROR');
 				});
@@ -82,9 +153,10 @@ forumRegister.featureTest = function(casper, test) {
 				casper.capture(screenShotsDir+ '2.png');
 				casper.waitForSelector('form[name="PostTopic"] input[name="email"]', function success() {
 					var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="email"]', 'data-original-title');
-					errorMessage = errorMessage.trim();
-					if(errorMessage && errorMessage!= '')
+					if(errorMessage && errorMessage!= '') {
+						errorMessage = errorMessage.trim();
 						verifyErrorMsg(errorMessage, 'Please enter your email address.', 'blankEmail', casper, function() {});
+					}
 				}, function fail() {
 					casper.echo('ERROR OCCURRED', 'ERROR');
 				});
@@ -102,9 +174,10 @@ forumRegister.featureTest = function(casper, test) {
 				casper.capture(screenShotsDir+ '3.png');
 				casper.waitForSelector('form[name="PostTopic"] input[name="pw"]', function success() {
 					var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="pw"]', 'data-original-title');
-					errorMessage = errorMessage.trim();
-					if(errorMessage && errorMessage!= '')
+					if(errorMessage && errorMessage!= '') {
+						errorMessage = errorMessage.trim();
 						verifyErrorMsg(errorMessage, 'Please enter a password.', 'blankPassword', casper, function() {});
+					}
 				}, function fail() {
 					casper.echo('ERROR OCCURRED', 'ERROR');
 				});
@@ -122,9 +195,10 @@ forumRegister.featureTest = function(casper, test) {
 				casper.capture(screenShotsDir+ '4.png');
 				casper.waitForSelector('form[name="PostTopic"] input[name="imID"]', function success() {
 					var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
-					errorMessage = errorMessage.trim();
-					if(errorMessage && errorMessage!= '')
+					if(errorMessage && errorMessage!= '') {
+						errorMessage = errorMessage.trim();
 						verifyErrorMsg(errorMessage, 'Please enter your screen name.', 'blankImId', casper, function() {});
+					}
 				}, function fail() {
 					casper.echo('IM-ID field doesn\'t exists..', 'ERROR');
 					casper.capture(screenShotsDir+ '44.png');
@@ -156,9 +230,10 @@ forumRegister.featureTest = function(casper, test) {
 				casper.capture(screenShotsDir+ '5.png');
 				casper.waitForSelector('form[name="PostTopic"] input[name="birthDatepicker"]', function success() {
 					var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
-					errorMessage = errorMessage.trim();
-					if(errorMessage && errorMessage!= '')
+					if(errorMessage && errorMessage!= '') {
+						errorMessage = errorMessage.trim();
 						verifyErrorMsg(errorMessage, 'Please enter birthday.', 'blankBirthday', casper, function() {});
+					}
 				}, function fail() {
 					casper.echo('Birthday field doesn\'t exists..', 'ERROR');
 					casper.capture(screenShotsDir+ '55.png');
@@ -203,9 +278,10 @@ forumRegister.featureTest = function(casper, test) {
 				casper.capture(screenShotsDir+ '7.png');
 				casper.waitForSelector('#registerEditProfile div[role="alert"]', function success() {
 					var errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
-					errorMessage = errorMessage.trim();
-					if(errorMessage && errorMessage!= '')
+					if(errorMessage && errorMessage!= '') {
+						errorMessage = errorMessage.trim();
 						verifyErrorMsg(errorMessage, 'The username "35" has already been taken.', 'existWithName', casper, function() {});
+					}
 				}, function fail() {
 					casper.capture(screenShotsDir+ '77.png');
 					var pageJson = JSON.parse(this.getPageContent());
@@ -236,9 +312,10 @@ forumRegister.featureTest = function(casper, test) {
 				casper.capture(screenShotsDir+ '8.png');
 				casper.waitForSelector('#registerEditProfile div[role="alert"]', function success() {
 					var errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
-					errorMessage = errorMessage.trim();
-					if(errorMessage && errorMessage!= '')
+					if(errorMessage && errorMessage!= '') {
+						errorMessage = errorMessage.trim();
 						verifyErrorMsg(errorMessage, 'It looks like you are already registered', 'existEmail', casper, function() {});
+					}
 				}, function fail() {
 					casper.capture(screenShotsDir+ '88.png');
 					var pageJson = JSON.parse(this.getPageContent());
@@ -269,9 +346,10 @@ forumRegister.featureTest = function(casper, test) {
 				casper.capture(screenShotsDir+ '9.png');
 				casper.waitForSelector('#registerEditProfile div[role="alert"]', function success() {
 					var errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
-					errorMessage = errorMessage.trim();
-					if(errorMessage && errorMessage!= '')
+					if(errorMessage && errorMessage!= '') {
+						errorMessage = errorMessage.trim();
 						verifyErrorMsg(errorMessage, 'It looks like you already have a forum account! A forum account for that username and email address combination already exists!', 'existUsernameEmail', casper, function() {});
+					}
 				}, function fail() {
 					casper.capture(screenShotsDir+ '99.png');
 					var pageJson = JSON.parse(this.getPageContent());
@@ -302,9 +380,10 @@ forumRegister.featureTest = function(casper, test) {
 				casper.capture(screenShotsDir+ '10.png');
 				casper.waitForSelector('form[name="PostTopic"] input[name="email"]', function success() {
 					var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="email"]', 'data-original-title');
-					errorMessage = errorMessage.trim();
-					if(errorMessage && errorMessage!= '')
+					if(errorMessage && errorMessage!= '') {
+						errorMessage = errorMessage.trim();
 						verifyErrorMsg(errorMessage, 'You entered an invalid email address.', 'invalidEmail', casper, function() {});
+					}
 				}, function fail() {
 					casper.capture(screenShotsDir+ '1010.png');
 					var pageJson = JSON.parse(this.getPageContent());
@@ -525,7 +604,7 @@ forumRegister.redirectToLogout = function(driver, test, callback) {
 			driver.echo('USER ALREADY REGISTERED ON FORUM.....', 'INFO');
 			return callback(null);
 		} catch(e1) {
-			driver.echo('Successfully done registration on forum.....', 'INFO');
+			//driver.echo('Successfully done registration on forum.....', 'INFO');
 			
 			//Click On Logout Link
 
