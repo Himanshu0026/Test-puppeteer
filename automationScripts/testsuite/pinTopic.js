@@ -4,7 +4,7 @@
 
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var pinTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'pinTopic/';
@@ -608,8 +608,8 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 						var href = casper.getElementAttribute(classVal, "href");
 						href = href.split('-');
 						var id = href[1].split('?');
+						casper.mouse.move('#complete_post_' +id[0]);
 						test.assertExists('div.post-body .panel-dropdown div.dropdown');
-						casper.mouse.move('div.post-body .panel-dropdown div.dropdown');
 						this.click('div.post-body .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
 						this.test.assertExists('a[data-original-title="Pin/Un-Pin"]');
 						casper.echo('---------------------------------------------------------------------------');
@@ -653,8 +653,8 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 				var href = casper.getElementAttribute(classVal, "href");
 				href = href.split('-');
 				var id = href[1].split('?');
+				casper.mouse.move('#complete_post_' +id[0]);
 				test.assertExists('div.post-body .panel-dropdown div.dropdown');
-				casper.mouse.move('div.post-body .panel-dropdown div.dropdown');
 				this.click('div.post-body .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
 				this.test.assertExists('a[data-original-title="Pin/Un-Pin"]');
 				casper.echo('---------------------------------------------------------------------------');

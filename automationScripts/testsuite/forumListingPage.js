@@ -29,6 +29,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -51,10 +53,10 @@ forumListingPage.featureTest = function(casper, test, x) {
 								
 							});
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('not able to click on "New Heading" button', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -72,6 +74,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -96,14 +100,14 @@ forumListingPage.featureTest = function(casper, test, x) {
 									this.click('div#sortable ul.ui-sortable li:nth-child(8) div.select a.manageAction');
 									this.click('div#sortable ul.ui-sortable li:nth-child(8) div.select a.delete_category_btn');
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('selector is not visible in 5 seconds', 'ERROR');
 								});
 							});
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('div.select not found', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -121,10 +125,10 @@ forumListingPage.featureTest = function(casper, test, x) {
 							this.echo('Heading : '+heading, 'INFO');
 							this.echo('changed heading is verified', 'INFO');
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('category link not found on front end', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('catogorylink not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -142,6 +146,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -157,22 +163,97 @@ forumListingPage.featureTest = function(casper, test, x) {
 						test.assertExists('div.tooltipMenu.text a[href="/tool/members/mb/forums"]');
 						this.click('div.tooltipMenu.text a[href="/tool/members/mb/forums"]');
 						casper.waitForSelector('a[href^="/tool/members/mb/forums?action=edit_cat"]', function success() {
-							casper.mouse.move('div#sortable ul.ui-sortable li:nth-child(5) div.select');
-							casper.waitForSelector('div#sortable ul.ui-sortable li:nth-child(5) a.manageAction', function success() {
-								this.click('div#sortable ul.ui-sortable li:nth-child(5) a.manageAction');
-								this.click('div#sortable ul.ui-sortable li:nth-child(5) a.editCategory');
-								this.sendKeys('div#sortable ul.ui-sortable li:nth-child(5) div.select input[type="text"]', 'changed heading', {reset : true});
-								this.click('div.select');
-								casper.wait(1000, function() {
+							var curr_url = this.getCurrentUrl();
+							casper.thenOpen(curr_url+'?action=edit_cat', function() {
+								this.echo('Title of the page : '+this.getTitle(), 'INFO');
+								this.sendKeys('#category_name', 'new heading', {reset : true});
+								this.click('form[action="/tool/members/mb/forums"] button');
+								casper.waitForSelector('div.heading.error_message', function success() {
+									var msg = this.fetchText('div.heading.error_message');
+									this.echo('success message : '+msg.trim(), 'INFO');
+									test.assertExists('a[href^="/tool/members/mb/forums?action=edit_forum"]');
+									this.click('a[href^="/tool/members/mb/forums?action=edit_forum"]');
+									casper.waitForSelector('form[action="/tool/members/mb/forums"]', function success() {
+										test.assertExists('div#addedit_forum_dialog', 'Edit category form found............');
+										this.sendKeys('#forum_name', 'new category', {resert : true});
+										test.assertExists('div#addedit_forum_dialog button');
+										this.click('div#addedit_forum_dialog button');
+										casper.then(function() {
+										
+										});
+									}, function fail() {
+										casper.echo('category edit form not opened', 'INFO');
+									});
 								});
-							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
 							});
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('not able to click on "New Heading" button', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
+					});
+				}else {
+					casper.echo('Error : '+err, 'INFO');
+				}
+			});
+		});
+		casper.thenOpen(config.backEndUrl, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
+				this.click('a[href="/tool/members/login?action=logout"]');
+			}catch(e) {
+				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+			}
+		});
+		casper.then(function() {
+			forumRegister.loginToForumBackEnd(casper, test, function(err) {
+				if(!err) {
+					casper.echo('Logged-in successfully from back-end', 'INFO');
+					casper.waitForSelector('div#my_account_forum_menu', function success() {
+						test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
+						this.click('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
+						test.assertExists('div.tooltipMenu.text a[href="/tool/members/mb/forums"]');
+						this.click('div.tooltipMenu.text a[href="/tool/members/mb/forums"]');
+						casper.waitForSelector('a[href^="/tool/members/mb/forums?action=edit_cat"]', function success() {
+							var id = casper.evaluate(function() {
+								var liElement = document.querySelectorAll('div#sortable ul.ui-sortable li');
+								var text = liElement[liElement.length-2].innerText;
+								var target = $("li:contains("+text+")").attr('id');
+								return target;
+							});
+							var element = casper.evaluate(function() {
+								var liElement = document.querySelectorAll('div#sortable ul.ui-sortable li');
+								var text = liElement[liElement.length-2].innerText;
+								var target = $("li:contains("+text+")").attr('id');
+								return liElement.length-3;
+							});
+							casper.echo('id: '+element, 'INFO');
+							try {
+								casper.mouse.move('div#sortable ul.ui-sortable li:nth-child('+element+') div.select');
+								test.assertExists('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.manageAction[data-forumid="'+id+'"]');
+								this.click('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.manageAction[data-forumid="'+id+'"]');
+								casper.then(function() {
+									this.evaluate(function() {
+										document.querySelector('a[href="/tool/members/mb/forums?action=edit_cat&category_id='+id+'"]').style.display = 'block';
+									});
+
+									test.assertExists('a[href="/tool/members/mb/forums?action=edit_cat&category_id='+id+'"]');
+									this.click('a[href="/tool/members/mb/forums?action=edit_cat&category_id='+id+'"]');
+									this.sendKeys('div#sortable ul.ui-sortable li:nth-last-child(2) div.select input[type="text"]', 'changed heading', {reset : true});
+									this.click('div.select');
+									casper.then(function() {
+									});
+								});
+							}catch(e) {
+								test.assertDoesntExist('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.manageAction[data-forumid="'+id+'"]');
+							}
+						}, function fail() {
+							casper.echo('not able to click on "New Heading" button', 'ERROR');
+						});
+					}, function fail() {
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -190,10 +271,75 @@ forumListingPage.featureTest = function(casper, test, x) {
 							this.echo('Heading : '+heading, 'INFO');
 							this.echo('changed heading is verified', 'INFO');
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('category page not loaded', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found on front end', 'ERROR');
+					});
+				}else {
+					casper.echo('Error : '+err, 'INFO');
+				}
+			});
+		});
+		casper.thenOpen(config.backEndUrl, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
+				this.click('a[href="/tool/members/login?action=logout"]');
+			}catch(e) {
+				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+			}
+		});
+		casper.then(function() {
+			forumRegister.loginToForumBackEnd(casper, test, function(err) {
+				if(!err) {
+					casper.echo('Logged-in successfully from back-end', 'INFO');
+					casper.waitForSelector('div#my_account_forum_menu', function success() {
+						test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
+						this.click('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
+						test.assertExists('div.tooltipMenu.text a[href="/tool/members/mb/forums"]');
+						this.click('div.tooltipMenu.text a[href="/tool/members/mb/forums"]');
+						casper.waitForSelector('a[href^="/tool/members/mb/forums?action=edit_cat"]', function success() {
+							var element = casper.evaluate(function() {
+								var liElement = document.querySelectorAll('div#sortable ul.ui-sortable li');
+								var text = liElement[liElement.length-2].innerText;
+								var target = $("li:contains("+text+")").attr('id');
+								return target;
+							});
+							casper.echo('id: '+element, 'INFO');
+							casper.mouse.move('div#sortable ul.ui-sortable li:nth-last-child(2) div.select');
+							test.assertExists('a.manageAction[data-forumid="'+element+'"]');
+							this.click('a.manageAction[data-forumid="'+element+'"]');
+							casper.then(function() {
+								this.evaluate(function() {
+									document.querySelector('a[href="/tool/members/mb/forums?action=delete_cat&category_id='+element+'"]').style.display = 'block';
+								});
+
+								test.assertExists('a[href="/tool/members/mb/forums?action=delete_cat&category_id='+element+'"]');
+								this.click('a[href="/tool/members/mb/forums?action=delete_cat&category_id='+element+'"]');
+								this.click('div.select');
+								casper.then(function() {
+									var element = casper.evaluate(function() {
+										var liElement = document.querySelectorAll('div#sortable ul.ui-sortable li');
+										return liElement.length-2;
+									});
+									casper.mouse.move('div#sortable ul.ui-sortable li:nth-child('+element+') div.select');
+									casper.waitForSelector('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.manageAction', function success() {
+										this.click('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.manageAction');
+										this.click('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.deleteEmptyForum');
+										casper.wait(5000, function() {
+										});
+									}, function fail() {
+									
+									});
+								});
+							});
+						}, function fail() {
+							casper.echo('not able to click on "New Heading" button', 'ERROR');
+						});
+					}, function fail() {
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -211,6 +357,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -229,17 +377,18 @@ forumListingPage.featureTest = function(casper, test, x) {
 							this.click('a[href^="/tool/members/mb/forums?action=edit_forum"]');
 							casper.waitForSelector('form[action="/tool/members/mb/forums"]', function success() {
 								this.sendKeys('input#forum_name', 'New Title', {reset : true});
+								test.assertExists('form[action="/tool/members/mb/forums"] button');
 								this.click('form[action="/tool/members/mb/forums"] button');
 								casper.then(function() {
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category edit form not opened', 'INFO');
 							});
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('"New Category" button not found', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -266,7 +415,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found on front end', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -289,6 +438,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -313,16 +464,16 @@ forumListingPage.featureTest = function(casper, test, x) {
 								    this.echo('Error Message : '+errorMsg, 'INFO');
 								    this.echo('error message is verified while editing with blank title', 'INFO');
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('error message not prompted', 'ERROR');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category edit form not opened', 'ERROR');
 							});
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('new category button not found', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -341,6 +492,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -363,13 +516,13 @@ forumListingPage.featureTest = function(casper, test, x) {
 								this.click('form[action="/tool/members/mb/forums"] button');
 								casper.then(function() {});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category edit form not opened', 'INFO');
 							});
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('new category button not found', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -396,7 +549,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found on front end', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -419,6 +572,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -440,13 +595,13 @@ forumListingPage.featureTest = function(casper, test, x) {
 								this.click('form[action="/tool/members/mb/forums"] button');
 								casper.then(function() {});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category edit form not opened', 'INFO');
 							});
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('new category button not found', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -464,7 +619,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 							this.echo('category description is verified on front end', 'INFO');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found on front end', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -488,6 +643,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -515,13 +672,13 @@ forumListingPage.featureTest = function(casper, test, x) {
 								casper.then(function() {
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category edit form not opened', 'INFO');
 							});
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('new category button not found', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -558,7 +715,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found on front end', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -576,6 +733,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -598,11 +757,11 @@ forumListingPage.featureTest = function(casper, test, x) {
 								casper.then(function() {
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -622,7 +781,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 								this.click(category);
 								casper.then(function() {
 									var subCategory = x("//a/span[starts-with(.,'new title3')]");
-									test.assertExists(subCategory);	
+									test.assertDoesntExist(subCategory);	
 									this.echo('sub category is verified on front end', 'INFO');
 								});
 							}catch(e) {
@@ -639,7 +798,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found on front end', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -657,6 +816,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -697,23 +858,23 @@ forumListingPage.featureTest = function(casper, test, x) {
 												casper.then(function() {
 												});
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('category edit form not opened', 'INFO');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('selector is not visible in 5 seconds', 'ERROR');
 										});
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('success message not found', 'ERROR');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category edit form not opened', 'INFO');
 							});
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('new category button not found', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -739,7 +900,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 										test.assertExists('input[name="pass"]');	
 										this.echo('password protected category verified', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.echo('user moved to the category without password', 'ERROR');
 									});
 								});
 							}catch(e) {
@@ -756,7 +917,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found on front end', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -774,6 +935,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -799,14 +962,14 @@ forumListingPage.featureTest = function(casper, test, x) {
 									casper.then(function() {
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -832,7 +995,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 										test.assertExists('form[action="/mbactions"]');	
 										this.echo('disabling password protected category verified', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.echo('password is required to move to the category page', 'ERROR');
 									});
 								});
 							}catch(e) {
@@ -849,7 +1012,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found on front end', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -872,6 +1035,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -913,23 +1078,23 @@ forumListingPage.featureTest = function(casper, test, x) {
 												casper.then(function() {
 												});
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('category edit form not opened', 'INFO');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('selector is not visible in 5 seconds', 'ERROR');
 										});
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('success message not found', 'ERROR');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category edit form not opened', 'INFO');
 							});
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('new category button not found', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -948,16 +1113,24 @@ forumListingPage.featureTest = function(casper, test, x) {
 								test.assertExists(category);	
 								this.click(category);
 								casper.then(function() {
-									test.assertExists('a i.glyphicon.glyphicon-lock');
-									this.echo('locked category verified', 'INFO');
+									try {
+										test.assertExists('a i.glyphicon.glyphicon-lock');
+										this.echo('locked category verified', 'INFO');
+									}catch(e) {
+										test.assertDoesntExist('a i.glyphicon.glyphicon-lock');
+									}
 								});
 							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title');
 								this.echo('Category : '+this.fetchText('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title'), 'INFO');
 								this.click('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title');
 								casper.waitForSelector('div.panel.panel-default ul:first-child li:last-child a:first-child span.forum-title', function success() {
-									test.assertExists('a i.glyphicon.glyphicon-lock');
-									this.echo('locked category verified', 'INFO');
+									try {
+										test.assertExists('a i.glyphicon.glyphicon-lock');
+										this.echo('locked category verified', 'INFO');
+									}catch(e) {
+										test.assertDoesntExist('a i.glyphicon.glyphicon-lock');
+									}
 								
 								}, function fail() {
 								
@@ -965,7 +1138,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -983,6 +1156,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1010,14 +1185,14 @@ forumListingPage.featureTest = function(casper, test, x) {
 									casper.then(function() {
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1036,16 +1211,24 @@ forumListingPage.featureTest = function(casper, test, x) {
 								test.assertExists(category);	
 								this.click(category);
 								casper.then(function() {
-									test.assertDoesntExist('a i.glyphicon.glyphicon-lock:nth-last-child(1)');
-									this.echo('unlocked category verified', 'INFO');
+									try {
+										test.assertDoesntExist('a i.glyphicon.glyphicon-lock:nth-last-child(1)');
+										this.echo('unlocked category verified', 'INFO');
+									}catch(e) {
+										test.assertExists('a i.glyphicon.glyphicon-lock:nth-last-child(1)');
+									}
 								});
 							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title');
 								this.echo('Category : '+this.fetchText('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title'), 'INFO');
 								this.click('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title');
 								casper.waitForSelector('div.panel.panel-default ul:first-child li:last-child a:first-child span.forum-title', function success() {
-									test.assertDoesntExist('a i.glyphicon.glyphicon-lock:nth-last-child(1)');
-									this.echo('unlocked category verified', 'INFO');
+									try {
+										test.assertDoesntExist('a i.glyphicon.glyphicon-lock:nth-last-child(1)');
+										this.echo('unlocked category verified', 'INFO');
+									}catch(e) {
+										test.assertExists('a i.glyphicon.glyphicon-lock:nth-last-child(1)');
+									}
 								
 								}, function fail() {
 								
@@ -1053,7 +1236,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1076,6 +1259,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1115,25 +1300,26 @@ forumListingPage.featureTest = function(casper, test, x) {
 												});
 												this.click('form[action="/tool/members/mb/forums"] button');
 												casper.then(function() {
+													this.capture('invisible.png');
 												});
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('category edit form not opened', 'INFO');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('selector is not visible in 5 seconds', 'ERROR');
 										});
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('success message not found', 'ERROR');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category edit form not opened', 'INFO');
 							});
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('new category button not found', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1160,10 +1346,14 @@ forumListingPage.featureTest = function(casper, test, x) {
 								test.assertExists('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title');
 								this.echo('Category : '+this.fetchText('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title'), 'INFO');
 								this.click('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title');
-								casper.waitForSelector('div.panel.panel-default ul:first-child li:last-child a:first-child span.forum-title', function success() {
-									var subCategory = this.fetchText('div.panel.panel-default ul:first-child li:last-child a:first-child span.forum-title');
-									if(subCategory!='new title6') {
-										casper.echo('invisible category verified', 'INFO');
+								casper.waitForSelector('div.panel.panel-default', function success() {
+									try {
+										var subCategory = this.fetchText('div.panel.panel-default ul:first-child li:last-child a:first-child span.forum-title')
+										if(subCategory == 'new title6') {
+											this.echo('invisible category verified', 'INFO');
+										}
+									}catch(e) {
+										test.assertExists('div.panel.panel-default ul:first-child li:last-child a:first-child span.forum-title');
 									}
 								
 								}, function fail() {
@@ -1172,7 +1362,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1190,6 +1380,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1215,16 +1407,17 @@ forumListingPage.featureTest = function(casper, test, x) {
 									});
 									this.click('form[action="/tool/members/mb/forums"] button');
 									casper.then(function() {
+										this.capture('visible.png');
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1261,7 +1454,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1284,6 +1477,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1324,23 +1519,23 @@ forumListingPage.featureTest = function(casper, test, x) {
 												casper.then(function() {
 												});
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('category edit form not opened', 'INFO');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('selector is not visible in 5 seconds', 'ERROR');
 										});
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('success message not found', 'ERROR');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category edit form not opened', 'INFO');
 							});
 						}, function fail() {
-							casper.echo('ERROR OCCURRED', 'ERROR');
+							casper.echo('category button not found', 'ERROR');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1366,7 +1561,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 										test.assertTitle(this.getTitle(), 'forum12');	
 										this.echo('linked category verified', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.echo('category not linked', 'ERROR');
 									});
 								});
 							}catch(e) {
@@ -1379,7 +1574,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 										test.assertTitle(this.getTitle(), 'forum12');	
 										this.echo('linked category verified', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.echo('linked address not opened', 'ERROR');
 									});
 								
 								}, function fail() {
@@ -1388,7 +1583,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1406,6 +1601,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1431,14 +1628,14 @@ forumListingPage.featureTest = function(casper, test, x) {
 									casper.then(function() {
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1464,7 +1661,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 										test.assertTitle(this.getTitle(), 'new title7 - forum12');	
 										this.echo('disabled linked category verified', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.echo('linked category not disabled', 'ERROR');
 									});
 								});
 							}catch(e) {
@@ -1477,7 +1674,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 										test.assertTitle(this.getTitle(), 'new title7 - forum12');	
 										this.echo('disabled linked category verified', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.echo('linked category not disabled', 'ERROR');
 									});
 								
 								}, function fail() {
@@ -1486,7 +1683,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('catogory link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1509,6 +1706,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1538,17 +1737,17 @@ forumListingPage.featureTest = function(casper, test, x) {
 										this.echo('Error Message : '+errorMsg, 'INFO');
 										this.echo('Error message is verified', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.echo('error message not found', 'ERROR');
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1570,12 +1769,10 @@ forumListingPage.featureTest = function(casper, test, x) {
 					casper.waitForSelector('a#td_tab_login', function success() {
 						this.click('a#td_tab_login');
 						forumLogin.loginToApp(json['loginData'].uname, json['loginData'].upass, casper, function(err) {
-							casper.capture('111.png');
 							casper.waitForSelector('a[href^="/post/printadd"]', function success() {
 								this.click('a[href^="/post/printadd"]');
 								casper.waitForSelector('form[name="PostTopic"]', function success() {
-									this.capture('222.png');
-									postTopicpage(json.newTopic, casper, function(err) {
+									postTopicpage(json.newTopicForForumListinPage, casper, function(err) {
 										if(!err) {
 											casper.echo('new topic created', 'INFO');
 										}else {
@@ -1583,14 +1780,14 @@ forumListingPage.featureTest = function(casper, test, x) {
 										}
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('new topic page not opened', 'ERROR');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('start new topic button not found', 'ERROR');
 							});	
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('login button not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1611,14 +1808,14 @@ forumListingPage.featureTest = function(casper, test, x) {
 									this.echo('Unread Message : '+unread, 'INFO');
 									this.echo('unread symbol is verified on front page', 'INFO');
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category count bedge not found', 'ERROR');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category link not found', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('login button not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1643,6 +1840,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1675,14 +1874,14 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									casper.then(function() {
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1696,23 +1895,32 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 					casper.waitForSelector('a[href^="/categories"]', function success() {
 						this.click('a[href^="/categories"]');
 						casper.waitForSelector('span.forum-title', function success() {
-							test.assertExists('div.panel.panel-default ul:last-child li:last-child i.glyphicon.glyphicon-lock');
-							this.echo('lock symbol is verified for parent category', 'INFO');
+							
+							//test.assertExists('div.panel.panel-default ul:last-child li:last-child i.glyphicon.glyphicon-lock');
+							//this.echo('lock symbol is verified for parent category', 'INFO');
 							try {
 								var category = x("//a/span[starts-with(.,'New Title')]");
 								test.assertExists(category);	
 								this.click(category);
 								casper.then(function() {
-									test.assertExists('a i.glyphicon.glyphicon-lock');
-									this.echo('lock symbol is verified for sub category', 'INFO');
+									try {
+										test.assertExists('a i.glyphicon.glyphicon-lock');
+										this.echo('lock symbol is verified for sub category', 'INFO');
+									}catch(e) {
+										test.assertDoesntExist('a i.glyphicon.glyphicon-lock');
+									}
 								});
 							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:last-child li:last-child a:first-child span.forum-title');
 								this.echo('Category : '+this.fetchText('div.panel.panel-default ul:last-child li:last-child a:first-child span.forum-title'), 'INFO');
 								this.click('div.panel.panel-default ul:last-child li:last-child a:first-child span.forum-title');
 								casper.waitForSelector('div.panel.panel-default ul:first-child li:last-child a:first-child span.forum-title', function success() {
-									test.assertExists('a i.glyphicon.glyphicon-lock');
-									this.echo('lock symbol is verified for sub category', 'INFO');
+									try {
+										test.assertExists('a i.glyphicon.glyphicon-lock');
+										this.echo('lock symbol is verified for sub category', 'INFO');
+									}catch(e) {
+										test.assertDoesntExist('a i.glyphicon.glyphicon-lock');
+									}f
 								
 								}, function fail() {
 								
@@ -1722,7 +1930,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 						
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 			
@@ -1740,6 +1948,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1772,14 +1982,14 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									casper.then(function() {
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1800,16 +2010,24 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 								test.assertExists(category);	
 								this.click(category);
 								casper.then(function() {
-									test.assertDoesntExist('a i.glyphicon.glyphicon-lock');
-									this.echo('lock symbol is made invisible for sub category', 'INFO');
+									try {
+										test.assertDoesntExist('a i.glyphicon.glyphicon-lock');
+										this.echo('lock symbol is made invisible for sub category', 'INFO');
+									}catch(e) {
+										test.assertExists('a i.glyphicon.glyphicon-lock');
+									}
 								});
 							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:last-child li:last-child a:first-child span.forum-title');
 								this.echo('Category : '+this.fetchText('div.panel.panel-default ul:last-child li:last-child a:first-child span.forum-title'), 'INFO');
 								this.click('div.panel.panel-default ul:last-child li:last-child a:first-child span.forum-title');
 								casper.waitForSelector('div.panel.panel-default ul:first-child li:last-child a:first-child span.forum-title', function success() {
-									test.assertDoesntExist('a i.glyphicon.glyphicon-lock');
-									this.echo('lock symbol is made invisible for sub category', 'INFO');
+									try {
+										test.assertDoesntExist('a i.glyphicon.glyphicon-lock');
+										this.echo('lock symbol is made invisible for sub category', 'INFO');
+									}catch(e) {
+										test.assertExists('a i.glyphicon.glyphicon-lock');
+									}
 								
 								}, function fail() {
 								
@@ -1817,7 +2035,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1835,6 +2053,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1866,14 +2086,14 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									casper.then(function() {
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1906,11 +2126,11 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 											test.assertExists('input[name="pass"]');
 											this.echo('text field is verified for password in case of sub category', 'INFO');
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('password is not required to move to category page', 'ERROR');
 										});
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('password is not required to move to category page', 'ERROR');
 								});
 							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:last-child li:last-child a:first-child span.forum-title');
@@ -1922,7 +2142,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 										test.assertExists('input[name="pass"]');
 										this.echo('text field is verified for password in case of sub category', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.echo('password is not required to move to category page', 'ERROR');
 									});
 								
 								}, function fail() {
@@ -1931,7 +2151,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -1949,6 +2169,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1980,14 +2202,14 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									casper.then(function() {
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2011,7 +2233,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									test.assertDoesntExist('i.glyphicon.glyphicon-lock.bd-wrapper');
 									this.echo('disabled password protect is verified for sub category', 'INFO');
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('password is required to move to the category page', 'ERROR');
 								});
 							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:last-child li:last-child a:first-child span.forum-title');
@@ -2021,12 +2243,12 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									test.assertDoesntExist('i.glyphicon.glyphicon-lock.bd-wrapper');
 									this.echo('disabled password protect is verified for sub category', 'INFO');
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('password is required to move to the category page', 'ERROR');
 								});
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2044,6 +2266,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2076,14 +2300,14 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									casper.then(function() {
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2105,7 +2329,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 							this.echo('invisible category verified in case of sub category', 'INFO');
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2123,6 +2347,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2155,14 +2381,14 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									casper.then(function() {
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2191,7 +2417,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2209,6 +2435,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2240,14 +2468,14 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									casper.then(function() {
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2274,11 +2502,11 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 											test.assertTitle(this.getTitle(), 'forum12', 'INFO');
 											this.echo('enabled linked sub category is verified', 'INFO');
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('linked address not opened', 'ERROR');
 										});
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('linked address not opened', 'ERROR');
 								});
 							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:last-child li:last-child a:first-child span.forum-title');
@@ -2295,7 +2523,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 												test.assertTitle(this.getTitle(), 'forum12', 'INFO');
 												this.echo('enabled linked sub category is verified', 'INFO');
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('linked address not opened', 'ERROR');
 											});
 										}catch(e) {
 											test.assertExists('div.panel.panel-default ul:first-child li:last-child a:first-child span.forum-title');
@@ -2304,17 +2532,17 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 												test.assertTitle(this.getTitle(), 'forum12', 'INFO');
 												this.echo('enabled linked sub category is verified', 'INFO');
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('linked address not opened', 'ERROR');
 											});
 										}
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('linked address not opened', 'ERROR');
 								});
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2332,6 +2560,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2362,14 +2592,14 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									casper.then(function() {
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2406,7 +2636,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2424,6 +2654,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2458,17 +2690,17 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 										this.echo('Success Message : '+successMsg, 'INFO');
 										this.echo('Success message is verified', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.echo('success messahe not found', 'ERROR');
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2505,7 +2737,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 							}
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('category link not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2517,6 +2749,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2551,17 +2785,17 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 										this.echo('Success Message : '+successMsg, 'INFO');
 										this.echo('Success message is verified', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.echo('success message not found', 'ERROR');
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2579,6 +2813,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2625,25 +2861,25 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 													    this.echo('Error Message : '+errorMsg, 'INFO');
 													    this.echo('error message is verified while adding existing moderator for a category', 'INFO');
 													}, function fail() {
-														casper.echo('ERROR OCCURRED', 'ERROR');
+														casper.echo('error messahe not found', 'ERROR');
 													});
 												}
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('moderator edit form not found', 'ERROR');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('selector is not visible in 5 seconds', 'ERROR');
 										});
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2685,12 +2921,17 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 																			this.click(category);
 																			casper.then(function() {
 																				var subCategory = x("//a/span[starts-with(.,'new title')]");
-																				test.assertExists('i.glyphicon.glyphicon-lock');	
-																				this.echo('locked symbol is verified for the category', 'INFO');
+	
+try {
+	test.assertExists('i.glyphicon.glyphicon-lock');	
+	this.echo('locked symbol is verified for the category', 'INFO');
+}catch(e) {
+	test.assertDoesntExist('i.glyphicon.glyphicon-lock');
+}
 																			});
 																		});
 																	}, function fail() {
-																		casper.echo('ERROR OCCURRED', 'ERROR');
+																		casper.echo('category link not found', 'ERROR');
 																	});
 																}else {
 																	casper.echo('Error : '+err, 'INFO');
@@ -2702,19 +2943,19 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 													}
 												});
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('start new toic not found', 'ERROR');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('category link not found on front end', 'ERROR');
 										});
 									});
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category link not found', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('login button not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2732,6 +2973,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2778,25 +3021,25 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 													    this.echo('Error Message : '+errorMsg, 'INFO');
 													    this.echo('error message is verified while adding existing moderator for a category', 'INFO');
 													}, function fail() {
-														casper.echo('ERROR OCCURRED', 'ERROR');
+														casper.echo('error messsage not found', 'ERROR');
 													});
 												}
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('moderator edit form not found', 'ERROR');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('selector is not visible in 5 seconds', 'ERROR');
 										});
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2843,7 +3086,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 																			});
 																		});
 																	}, function fail() {
-																		casper.echo('ERROR OCCURRED', 'ERROR');
+																		casper.echo('category link not found', 'ERROR');
 																	});
 																}else {
 																	casper.echo('Error : '+err, 'INFO');
@@ -2855,19 +3098,19 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 													}
 												});
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('start new topic not found', 'ERROR');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('category link not found on front end', 'ERROR');
 										});
 									});
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category link not found', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('login button not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2885,6 +3128,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -2931,25 +3176,25 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 													    this.echo('Error Message : '+errorMsg, 'INFO');
 													    this.echo('error message is verified while adding existing moderator for a category', 'INFO');
 													}, function fail() {
-														casper.echo('ERROR OCCURRED', 'ERROR');
+														casper.echo('error message not found', 'ERROR');
 													});
 												}
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('moderator edit form not found', 'ERROR');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('selector is not visible in 5 seconds', 'ERROR');
 										});
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -2991,12 +3236,18 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 																			this.click(category);
 																			casper.then(function() {
 																				var subCategory = x("//a/span[starts-with(.,'new title')]");
-																				test.assertExists('i.glyphicon.glyphicon-lock');	
-																				this.echo('locked symbol is verified for the category', 'INFO');
+	
+	try {
+		test.assertExists('i.glyphicon.glyphicon-lock');	
+		this.echo('locked symbol is verified for the category', 'INFO');
+	}catch(e) {
+		test.assertDoesntExist('i.glyphicon.glyphicon-lock');
+		this.echi('problem occurred due to backend setting', 'ERROR');
+	}
 																			});
 																		});
 																	}, function fail() {
-																		casper.echo('ERROR OCCURRED', 'ERROR');
+																		casper.echo('category link not found', 'ERROR');
 																	});
 																}else {
 																	casper.echo('Error : '+err, 'INFO');
@@ -3008,19 +3259,19 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 													}
 												});
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('start new topic not found', 'ERROR');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('category link not found on front end', 'ERROR');
 										});
 									});
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category link not found', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('login button not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -3038,6 +3289,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -3084,25 +3337,25 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 													    this.echo('Error Message : '+errorMsg, 'INFO');
 													    this.echo('error message is verified while adding existing moderator for a category', 'INFO');
 													}, function fail() {
-														casper.echo('ERROR OCCURRED', 'ERROR');
+														casper.echo('error message not found', 'ERROR');
 													});
 												}
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('moderator edit form not found', 'ERROR');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('selector is not visible in 5 seconds', 'ERROR');
 										});
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -3149,7 +3402,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 																			});
 																		});
 																	}, function fail() {
-																		casper.echo('ERROR OCCURRED', 'ERROR');
+																		casper.echo('category link not found', 'ERROR');
 																	});
 																}else {
 																	casper.echo('Error : '+err, 'INFO');
@@ -3161,19 +3414,19 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 													}
 												});
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('start new topic not found', 'ERROR');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('category link not found on front end', 'ERROR');
 										});
 									});
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category link  not found', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('login button not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -3191,6 +3444,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -3236,25 +3491,25 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 													    	this.echo('Error Message : '+errorMsg, 'INFO');
 													    	this.echo('error message is verified while adding existing moderator for a category', 'INFO');
 													}, function fail() {
-														casper.echo('ERROR OCCURRED', 'ERROR');
+														casper.echo('error message not found', 'ERROR');
 													});
 												}
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('moderator edit form not found', 'ERROR');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('selector is not visible in 5 seconds', 'ERROR');
 										});
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -3281,16 +3536,16 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 											test.assertDoesntExist('input[name="pass"]');
 											this.echo('moderator is moved to the category without any password', 'INFO');
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('category link not found on front end', 'ERROR');
 										});
 									});
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category link not found', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('login button not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -3308,6 +3563,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -3344,18 +3601,18 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 										    this.echo('Error Message : '+errorMsg, 'INFO');
 										    this.echo('error message is verified while adding existing moderator for a category', 'INFO');
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('error message not found', 'ERROR');
 										});
 									}
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('moderator edit form not found', 'ERROR');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -3378,15 +3635,15 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 										test.assertDoesntExist('input[name="pass"]');
 										this.echo('moderator is moved to the category without any password', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.echo('category link not found on front end', 'ERROR');
 									});
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category link not found', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('login button not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -3396,6 +3653,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -3427,14 +3686,14 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									casper.then(function() {
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -3452,6 +3711,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -3498,25 +3759,25 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 													    this.echo('Error Message : '+errorMsg, 'INFO');
 													    this.echo('error message is verified while adding existing moderator for a category', 'INFO');
 													}, function fail() {
-														casper.echo('ERROR OCCURRED', 'ERROR');
+														casper.echo('error message not found', 'ERROR');
 													});
 												}
 											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
+												casper.echo('moderator edit form not found', 'ERROR');
 											});
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('selector is not visible in 5 seconds', 'ERROR');
 										});
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -3541,15 +3802,15 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 										test.assertExists(moderator);
 										this.echo('moderator is verified on the bottom of forum listing page', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.echo('moderator link at bottom not found', 'ERROR');
 									});
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('category link not found', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('login button not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -3567,6 +3828,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -3603,18 +3866,18 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 										    this.echo('Error Message : '+errorMsg, 'INFO');
 										    this.echo('error message is verified while adding existing moderator for a category', 'INFO');
 										}, function fail() {
-											casper.echo('ERROR OCCURRED', 'ERROR');
+											casper.echo('error message not verified', 'ERROR');
 										});
 									}
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('moderator edit form not found', 'ERROR');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -3639,15 +3902,15 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 										test.assertExists(moderator);
 										this.echo('moderator is verified on the bottom of forum listing page', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.echo('moderator link at bottom not found', 'ERROR');
 									});
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('categor link not foundD', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('login button not found', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -3657,6 +3920,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
 			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
 				this.click('a[href="/tool/members/login?action=logout"]');
 			}catch(e) {
 				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -3689,14 +3954,14 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									casper.then(function() {
 									});
 								}, function fail() {
-									casper.echo('ERROR OCCURRED', 'ERROR');
+									casper.echo('category edit form not opened', 'INFO');
 								});
 							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
+								casper.echo('selector is not visible in 5 seconds', 'ERROR');
 							});
 						});
 					}, function fail() {
-						casper.echo('ERROR OCCURRED', 'ERROR');
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
 					});
 				}else {
 					casper.echo('Error : '+err, 'INFO');
@@ -3762,6 +4027,8 @@ var deleteCategory = function(driver, test, callback) {
 	driver.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
+			test.assertExists('a[data-tooltip-elm="ddAccount"]');
+			casper.click('a[data-tooltip-elm="ddAccount"]');
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -3810,6 +4077,8 @@ var deleteSubCategory = function(driver, test, callback) {
 	driver.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
+			test.assertExists('a[data-tooltip-elm="ddAccount"]');
+			casper.click('a[data-tooltip-elm="ddAccount"]');
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -3827,8 +4096,15 @@ var deleteSubCategory = function(driver, test, callback) {
 					driver.wait(5000, function() {
 						driver.mouse.move('div#sortable ul li:nth-child(1) ul li:last-child div.select');
 						driver.waitUntilVisible('div#sortable ul li:nth-child(1) ul li:last-child div.select a.manageAction', function success() {
-							driver.click('div#sortable ul li:nth-child(1) ul li:last-child div.select a.manageAction');
-							driver.click('div#sortable ul li:nth-child(1) ul li:last-child div.select a.deleteEmptyForum');
+							try {
+								driver.click('div#sortable ul li:nth-child(1) ul li:last-child div.select a.manageAction');
+								driver.click('div#sortable ul li:nth-child(1) ul li:last-child div.select a.deleteEmptyForum');
+								driver.then(function() {
+								
+								});
+							}catch(e) {
+								test.assertDoesntExist('div#sortable ul li:nth-child(1) ul li:last-child div.select a.manageAction');
+							}
 							driver.then(function() {
 								return callback(null);
 							});

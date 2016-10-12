@@ -6,7 +6,7 @@ var utils = require('./utils.js');
 var forumRegister = require('./register.js');
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var deleteTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'deleteTopic/';
@@ -64,11 +64,9 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 			if(!err) {
 				casper.echo('User has been successfuly login to application with register user', 'INFO');
 				casper.waitForSelector('form[name="posts"]', function success() {
-					//casper.wait(7000, function() {
 						test.assertDoesntExist('div.panel-body input.entry-checkbox');
 						casper.echo('topic is not deleted go to backed and change the permission', 'INFO');
 						casper.echo('---------------------------------------------------------------------------');
-					//});
 				}, function fail(err) {
 					casper.echo(err);
 				});
@@ -125,11 +123,9 @@ deleteTopic.deleteTopicFeature = function(casper, test, x, callback) {
 				casper.echo('User has been successfuly login to application with register user', 'INFO');
 				casper.waitForSelector('form[name="posts"]', function success() {
 					//Delete others Topic
-					//casper.wait(7000, function() {
 						test.assertDoesntExist('div.panel-body input.entry-checkbox');
 						casper.echo('you can not delete others topic', 'INFO');
 						casper.echo('---------------------------------------------------------------------------');
-					//});
 				}, function fail(err) {
 					casper.echo(err);
 				});

@@ -13,7 +13,7 @@ var deleteTopic = require('./deleteTopic.js');
 var poll = require('./poll.js');
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var newTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'newTopic/';
@@ -63,6 +63,36 @@ newTopic.featureTest = function(casper, test, x) {
 			});
 		});
 		
+		//Login To Backend URL and disable Approve New Posts
+		casper.thenOpen(config.backEndUrl,function() {
+			casper.echo('Login To Backend URL and disable Approve New Posts', 'INFO');
+			casper.echo('Title of the page :' +this.getTitle(), 'INFO');
+			casper.echo('---------------------------------------------------------------------------');		
+			//setting page -> security page
+			casper.waitForSelector('a[data-tooltip-elm="ddSettings"]', function success() {
+				test.assertExists('a[data-tooltip-elm="ddSettings"]');
+				this.click('a[data-tooltip-elm="ddSettings"]');
+				this.waitForSelector('a[href="/tool/members/mb/settings?tab=Security"]', function success() {
+					test.assertExists('a[href="/tool/members/mb/settings?tab=Security"]');
+					this.click('a[href="/tool/members/mb/settings?tab=Security"]');
+				}, function fail(err) {
+					casper.echo(err);
+				});
+				this.waitForSelector('#post_approval', function success() {
+					test.assertExists('#post_approval');
+					this.click('#post_approval');
+					this.sendKeys('select[name="post_approval"] option[value="0"]', 'Disabled');
+					test.assertExists('button[type="submit"]');
+					this.click('button[type="submit"]');
+					this.wait(1000);
+				}, function fail() {
+					casper.echo(err);
+				});
+			}, function fail(err) {
+				casper.echo(err);
+			});
+		});
+
 		//Test case to verify START NEW TOPIC button is in-active when start topic permission is disable
 		casper.thenOpen(config.url, function() {
 			casper.echo('Test case to verify START NEW TOPIC button is in-active when start topic permission is disable :', 'INFO');
@@ -385,6 +415,7 @@ newTopic.featureTest = function(casper, test, x) {
 
 		// open config.url and click on newly posted topic and make unFollow post to follow post
 		casper.thenOpen(config.url,function() {
+			casper.echo('open config.url and click on newly posted topic and make unFollow post to follow post', 'INFO');
 			this.click(json.newTopic.tempHref);	
 			casper.waitForSelector('.glyphicon-plus', function success() {
 				casper.click('.glyphicon-plus');
@@ -406,7 +437,7 @@ newTopic.featureTest = function(casper, test, x) {
 		//verify warning message when no Topic is followed by user 
 
 		casper.thenOpen(config.url, function() {
-			casper.echo('go to forum url : '+config.url, 'INFO');
+			casper.echo('verify warning message when no Topic is followed by user', 'INFO');
 			this.waitForSelector('#posts', function success() {
 				//click on followed content link and verify expected Warning message
 				this.click('span.user-nav-panel li a[href^="/search"]');
@@ -449,14 +480,14 @@ newTopic.featureTest = function(casper, test, x) {
 		//test case to verify warning message when no category is followed by user 
 
 		casper.thenOpen(config.url, function() {
-			casper.echo('Hit on url : '+config.url, 'INFO');
+			casper.echo('test case to verify warning message when no category is followed by user', 'INFO');
 			casper.waitForSelector('a[href^="/post/"]', function success() {
 				//click on followed category link and verify expected Warning message
 				this.click('span.user-nav-panel li a[href^="/search"]');
 				casper.waitForSelector('ul.pull-left li#show_threads #anchor_tab_forum_subscriptions', function success() {
 					casper.click('ul.pull-left li#show_threads #anchor_tab_forum_subscriptions');
 					casper.waitForSelector('div.container.content-panel.topics-list', function success() {
-						if(casper.exists('.no-space')) { 
+						if(casper.exists('.alert.alert-info.text-center.no-space')) { 
 							verifyWarningMsg(json.followCategory.ExpectedWarningMessage, casper, function(err) {
 								if(!err) {
 									casper.echo('warning message is verified', 'INFO');
@@ -518,17 +549,8 @@ newTopic.featureTest = function(casper, test, x) {
 			});
 		});
 
-		//start move topic
-		/*casper.then(function() {
-			casper.echo('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-			casper.echo('start move topic ', 'INFO');
-			moveTopic.moveTopicFeature(casper,test, x, function(){
-				casper.echo('move Topic Feature', 'INFO');
-			});
-		});*/
-
 		//start lock/unLock topic
-		casper.then(function() {
+		/*casper.then(function() {
 			casper.echo('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
 			casper.echo('start Lock / unLock topic ', 'INFO');
 			lock_unLockTopic.lockUnLockFeature(casper,test, x, function(){
@@ -546,13 +568,13 @@ newTopic.featureTest = function(casper, test, x) {
 		});
 
 		//start post a reply feature and share, edit and delete post		
-		/*casper.then(function() {
+		casper.then(function() {
 			casper.echo('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
 			casper.echo('start post a reply feature and share, edit and delete post', 'INFO');
 			postAReply.postAReplyFeature(casper,test, x, function(){
 				casper.echo('Post A Reply Feature', 'INFO');
 			});
-		});*/
+		});
 
 		//start delete topic feature
 		casper.then(function() {
@@ -561,7 +583,7 @@ newTopic.featureTest = function(casper, test, x) {
 			deleteTopic.deleteTopicFeature(casper,test, x, function(){
 				casper.echo('Delete Topic Feature', 'INFO');
 			});
-		});
+		});*/
 };
 
 

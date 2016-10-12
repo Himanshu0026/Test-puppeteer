@@ -6,7 +6,7 @@ var utils = require('./utils.js');
 var forumRegister = require('./register.js');
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var editTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'editTopic/';
@@ -132,7 +132,7 @@ editTopic.editTopicFeature = function(casper,test, x, callback) {
 			gotoNewTopic(json['newTopic'].ValidCredential, casper, function(err) {
 				if(!err) {
 					casper.echo('START NEW TOPIC with valid credential', 'INFO');
-					casper.wait(7000, function() {
+					casper.wait(4000, function() {
 						casper.thenOpen(config.url, function() {
 							casper.echo('go to topic listing page : ', 'INFO');
 							casper.waitForSelector('form[name="posts"] h4 a', function success() {

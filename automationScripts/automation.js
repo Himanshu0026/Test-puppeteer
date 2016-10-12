@@ -259,18 +259,15 @@ switch (feature) {
 		break;
 
 	case "generalTopic":
-	casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
-
-		var newTopic = require("./testsuite/newTopic.js");
-		var x = require('casper').selectXPath;
-		newTopic.featureTest(casper, casper.test, x);
-		
-		casper.run(function(){
-			test.done();
+		casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
+			var newTopic = require("./testsuite/newTopic.js");
+			var x = require('casper').selectXPath;
+			newTopic.featureTest(casper, casper.test, x);
+			casper.run(function(){
+				test.done();
+			});
 		});
-	});
-        
-        break;
+		break;
 
 	case "calendar" :
 		 casper.test.begin('Verify calendar functionlity ', function(test) {

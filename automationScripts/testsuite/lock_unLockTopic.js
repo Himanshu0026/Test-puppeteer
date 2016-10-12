@@ -5,7 +5,7 @@
 
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
-var config = require('../config/config.json');
+var config = require('../../config/config.json');
 
 var lock_unLockTopic = module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'lockUnLock/';
@@ -15,17 +15,14 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 	//Open Forum URL And Get Title 
 	casper.thenOpen(config.url, function() {
 		casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-
-	//Login to app
-	casper.then(function(){
+		//Login to app
 		forumLogin.loginToApp(json['newTopic'].adminUname, json['newTopic'].adminPass, casper, function(err) {
 			if(err) {
 				casper.log('Admin has successfully login to application with valid username and password', 'INFO');
 			}
 		});
 	});
-	
+
 	/*****Lock any topic and Verify Lock option of topic listing page[Home page]*****/
 	casper.then(function() {
 		casper.echo('Lock any topic and Verify Lock option of topic listing page[Home page]', 'INFO');
@@ -172,8 +169,8 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 						var href = casper.getElementAttribute(classVal, "href");
 						href = href.split('-');
 						var id = href[1].split('?');
+						casper.mouse.move('#complete_post_' +id[0]);
 						test.assertExists('div.post-body .panel-dropdown div.dropdown');
-						casper.mouse.move('div.post-body .panel-dropdown div.dropdown');
 						this.click('div.post-body .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
 						this.test.assertExists('a[data-original-title="Lock/Un-lock"]');
 						casper.echo('---------------------------------------------------------------------------');
@@ -252,7 +249,6 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 					casper.echo('Successfully logout from application', 'INFO');
 				}
 			});
-			casper.wait(5000);
 		});
 	});
 
@@ -289,8 +285,8 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 							var href = casper.getElementAttribute(classVal, "href");
 							href = href.split('-');
 							var id = href[1].split('?');
+							casper.mouse.move('#complete_post_' +id[0]);
 							test.assertExists('div.post-body .panel-dropdown div.dropdown');
-							casper.mouse.move('div.post-body .panel-dropdown div.dropdown');
 							this.click('div.post-body .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
 							this.test.assertExists('a[data-original-title="Lock/Un-lock"]');
 							casper.echo('---------------------------------------------------------------------------');
