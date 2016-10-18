@@ -2167,18 +2167,19 @@ moveTopic.moveTopicFeature = function(casper, test, x) {
 			gotoNewTopic(json.moveTopic.ValidCredential, casper, function(err) {
 				if(!err) {
 					casper.echo('go to new topic', 'INFO');
+					casper.waitForSelector('#post_submit', function success() {
+						this.click('#post_submit');
+					}, function fail(err) {
+						casper.echo(err);		
+					});
 				}
-				casper.waitForSelector('#post_submit', function success() {
-					this.click('#post_submit');
-				}, function fail(err) {
-					casper.echo(err);		
-				});
 			});
 		}, function fail(err) {
 			casper.echo(err);
 		});
 
 		this.thenOpen(config.url, function() {
+			casper.capture('new.png');
 			casper.echo('go to topic listing page', 'INFO');
 			this.waitForSelector('a[href^="/post/"]', function() {
 				var classVal = x("//a/span[text()='"+json.moveTopic.topicName+"']/parent::a");
@@ -2217,6 +2218,7 @@ moveTopic.moveTopicFeature = function(casper, test, x) {
 		//go to config url
 		this.thenOpen(config.url, function() {
 			casper.echo('go to forum url', 'INFO');
+			casper.capture('post.png');
 			this.waitForSelector('a[href^="/post/"]', function() {
 				var classVal = x("//a/span[text()='"+json.moveTopic.ValidCredential.title+"']/parent::a");
 				var href = this.getElementAttribute(classVal, "href");

@@ -550,7 +550,7 @@ newTopic.featureTest = function(casper, test, x) {
 		});
 
 		//start lock/unLock topic
-		/*casper.then(function() {
+		casper.then(function() {
 			casper.echo('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
 			casper.echo('start Lock / unLock topic ', 'INFO');
 			lock_unLockTopic.lockUnLockFeature(casper,test, x, function(){
@@ -583,7 +583,7 @@ newTopic.featureTest = function(casper, test, x) {
 			deleteTopic.deleteTopicFeature(casper,test, x, function(){
 				casper.echo('Delete Topic Feature', 'INFO');
 			});
-		});*/
+		});
 };
 
 

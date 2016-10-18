@@ -269,6 +269,17 @@ switch (feature) {
 		});
 		break;
 
+	case "movetopic" :
+		casper.test.begin('Verify move topic functionlity ', function(test) {
+			var moveTopic = require("./testsuite/moveTopic.js");
+			var x = require('casper').selectXPath;
+			moveTopic.moveTopicFeature(casper, casper.test, x);
+			casper.run(function(){
+				test.done();
+			});
+		});
+		break;
+        
 	case "calendar" :
 		 casper.test.begin('Verify calendar functionlity ', function(test) {
 			 var x = require('casper').selectXPath;

@@ -214,8 +214,8 @@ switch (feature) {
 				test.done();
 				test.assert(true);
 			});
-		});        
-	break;
+		}); 
+		break;       
 	case "forumListingPageForSubCategory":
 	casper.test.begin("Start 'Forum Listing Page For Sub Category' functionality from home page & verify content with all scenarios", function(test) {
 

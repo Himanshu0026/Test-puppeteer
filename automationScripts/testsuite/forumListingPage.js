@@ -137,6 +137,69 @@ forumListingPage.featureTest = function(casper, test, x) {
 		});
 	});*/
 	
+	casper.then(function() {
+		casper.thenOpen(config.backEndUrl, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			try {
+				test.assertExists('a[data-tooltip-elm="ddAccount"]');
+				casper.click('a[data-tooltip-elm="ddAccount"]');
+				this.click('a[href="/tool/members/login?action=logout"]');
+			}catch(e) {
+				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+			}
+		});
+		casper.then(function() {
+			forumRegister.loginToForumBackEnd(casper, test, function(err) {
+				if(!err) {
+					casper.echo('Logged-in successfully from back-end', 'INFO');
+					casper.waitForSelector('div#my_account_forum_menu', function success() {
+						test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
+						this.click('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
+						test.assertExists('div.tooltipMenu.text a[href="/tool/members/mb/forums"]');
+						this.click('div.tooltipMenu.text a[href="/tool/members/mb/forums"]');
+						casper.waitForSelector('a.forumName.atree', function success() {
+							var element = casper.evaluate(function() {
+								var liElement = document.querySelectorAll('div#sortable ul.ui-sortable li');
+								//var text = liElement[liElement.length-2].innerText;
+								//var target = $("li:contains("+text+")").attr('id');
+								return liElement.length-2;
+							});
+							while(element>3) {
+								this.echo('length of list : '+element, 'INFO');
+								casper.mouse.move('div#sortable ul.ui-sortable li:nth-child('+element+') div.select');
+								this.capture('demo.png');
+								casper.click('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.manageAction');
+								if(element==4) {
+									try {
+										casper.click('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.delete_category_btn');
+									}catch(e) {
+										casper.click('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.deleteEmptyForum');
+									}
+								}else {
+									try {
+										casper.click('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.deleteEmptyForum');
+									}catch(e) {
+										casper.click('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.delete_category_btn');
+									}
+								}
+								casper.then(function() {
+									
+								});
+								element--;
+							}
+						}, function fail() {
+						
+						});
+					}, function fail() {
+						casper.echo('Back End Not Loaded in 5 seconds', 'ERROR');
+					});
+				}else {
+					casper.echo('Error : '+err, 'INFO');
+				}
+			});
+		});
+	});
+	
 	//*****************************VERIFY TO EDIT THE HEADING ON THE CATEGORY**********************************
 	casper.then(function() {
 		casper.echo('                                      CASE 3', 'INFO');
@@ -401,7 +464,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 				if(!err) {
 					casper.waitForSelector('a[href^="/categories"]', function success() {
 						this.click('a[href^="/categories"]');
-						casper.then(function() {
+						casper.waitForSelector('span.forum-title', function success() {
 							try {
 								var user = x("//a/span[starts-with(.,'New Title')]");
 								test.assertExists(user);
@@ -413,6 +476,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 								this.echo('Title : '+title.trim(), 'INFO');
 								this.echo('title is verified on fornt end', 'INFO');
 							}
+						}, function fail() {
+						
 						});
 					}, function fail() {
 						casper.echo('category link not found on front end', 'ERROR');
@@ -614,9 +679,16 @@ forumListingPage.featureTest = function(casper, test, x) {
 				if(!err) {
 					casper.waitForSelector('a[href^="/categories"]', function success() {
 						this.click('a[href^="/categories"]');
-						casper.then(function() {
-							test.assertDoesntExist('div.panel-body.table-responsive ul:nth-child(5) li:nth-child(9) p');
-							this.echo('category description is verified on front end', 'INFO');
+						casper.waitForSelector('span.forum-title', function success() {
+							try {
+								test.assertDoesntExist('div.panel-body.table-responsive ul:nth-child(5) li:nth-child(9) p');
+								this.echo('category description is verified on front end', 'INFO');
+							}catch(e) {
+								test.assertExists('div.panel-body.table-responsive ul:nth-child(5) li:nth-child(9) p');
+								this.echo('category description is not verified on front end', 'ERROR');
+							}
+						}, function fail() {
+						
 						});
 					}, function fail() {
 						casper.echo('category link not found on front end', 'ERROR');
@@ -780,9 +852,14 @@ forumListingPage.featureTest = function(casper, test, x) {
 								test.assertExists(category);	
 								this.click(category);
 								casper.then(function() {
-									var subCategory = x("//a/span[starts-with(.,'new title3')]");
-									test.assertDoesntExist(subCategory);	
-									this.echo('sub category is verified on front end', 'INFO');
+									try {
+										var subCategory = x("//a/span[starts-with(.,'new title3')]");
+										test.assertDoesntExist(subCategory);	
+										this.echo('sub category is verified on front end', 'INFO');
+									}catch(e) {
+										test.assertExists(subCategory);	
+										this.echo('sub category is not verified on front end', 'ERROR');
+									}
 								});
 							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title');
@@ -1118,6 +1195,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 										this.echo('locked category verified', 'INFO');
 									}catch(e) {
 										test.assertDoesntExist('a i.glyphicon.glyphicon-lock');
+										this.echo('locked category not verified', 'ERROR');
 									}
 								});
 							}catch(e) {
@@ -1130,6 +1208,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 										this.echo('locked category verified', 'INFO');
 									}catch(e) {
 										test.assertDoesntExist('a i.glyphicon.glyphicon-lock');
+										this.echo('locked category not verified', 'ERROR');
 									}
 								
 								}, function fail() {
@@ -1216,6 +1295,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 										this.echo('unlocked category verified', 'INFO');
 									}catch(e) {
 										test.assertExists('a i.glyphicon.glyphicon-lock:nth-last-child(1)');
+										this.echo('unlocked category not verified', 'ERROR');
 									}
 								});
 							}catch(e) {
@@ -1228,6 +1308,7 @@ forumListingPage.featureTest = function(casper, test, x) {
 										this.echo('unlocked category verified', 'INFO');
 									}catch(e) {
 										test.assertExists('a i.glyphicon.glyphicon-lock:nth-last-child(1)');
+										this.echo('unlocked category not verified', 'ERROR');
 									}
 								
 								}, function fail() {
@@ -1300,7 +1381,6 @@ forumListingPage.featureTest = function(casper, test, x) {
 												});
 												this.click('form[action="/tool/members/mb/forums"] button');
 												casper.then(function() {
-													this.capture('invisible.png');
 												});
 											}, function fail() {
 												casper.echo('category edit form not opened', 'INFO');
@@ -1338,9 +1418,14 @@ forumListingPage.featureTest = function(casper, test, x) {
 								test.assertExists(category);	
 								this.click(category);
 								casper.then(function() {
-									var subCategory = x("//a/span[starts-with(.,'new title6')]");
-									test.assertDoesntExist(subCategory);
-									this.echo('invisible category verified', 'INFO');
+									try {
+										var subCategory = x("//a/span[starts-with(.,'new title6')]");
+										test.assertDoesntExist(subCategory);
+										this.echo('invisible category verified', 'INFO');
+									}catch(e) {
+										test.assertExists(subCategory);
+										this.echo('invisible category not verified', 'ERROR');
+									}
 								});
 							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title');
@@ -1407,7 +1492,6 @@ forumListingPage.featureTest = function(casper, test, x) {
 									});
 									this.click('form[action="/tool/members/mb/forums"] button');
 									casper.then(function() {
-										this.capture('visible.png');
 									});
 								}, function fail() {
 									casper.echo('category edit form not opened', 'INFO');
@@ -1902,13 +1986,16 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 								var category = x("//a/span[starts-with(.,'New Title')]");
 								test.assertExists(category);	
 								this.click(category);
-								casper.then(function() {
+								casper.waitForSelector('span.forum-title', function success() {
 									try {
 										test.assertExists('a i.glyphicon.glyphicon-lock');
 										this.echo('lock symbol is verified for sub category', 'INFO');
 									}catch(e) {
 										test.assertDoesntExist('a i.glyphicon.glyphicon-lock');
+										this.echo('lock symbol is not verified for sub category', 'ERROR');
 									}
+								}, function fail() {
+								
 								});
 							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:last-child li:last-child a:first-child span.forum-title');
@@ -1920,6 +2007,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 										this.echo('lock symbol is verified for sub category', 'INFO');
 									}catch(e) {
 										test.assertDoesntExist('a i.glyphicon.glyphicon-lock');
+										this.echo('lock symbol is not verified for sub category', 'ERROR');
 									}f
 								
 								}, function fail() {
@@ -2002,20 +2090,28 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 				if(!err) {
 					casper.waitForSelector('a[href^="/categories"]', function success() {
 						this.click('a[href^="/categories"]');
-						casper.then(function() {
-							test.assertDoesntExist('div.panel.panel-default ul:nth-last-child(1) li:nth-last-child(1) i.glyphicon.glyphicon-lock');
+						casper.waitForSelector('span.forum-title', function success() {
+							try {
+								test.assertDoesntExist('div.panel.panel-default ul:nth-last-child(1) li:nth-last-child(1) i.glyphicon.glyphicon-lock');
+							}catch(e) {
+								test.assertExists('div.panel.panel-default ul:nth-last-child(1) li:nth-last-child(1) i.glyphicon.glyphicon-lock');
+								this.echo('category is not locked from the backend', 'ERROR');
+							}
 							this.echo('lock symbol is made invisible for parent category', 'INFO');
 							try {
 								var category = x("//a/span[starts-with(.,'New Title')]");
 								test.assertExists(category);	
 								this.click(category);
-								casper.then(function() {
+								casper.waitForSelector('span.forum-title', function success() {
 									try {
 										test.assertDoesntExist('a i.glyphicon.glyphicon-lock');
 										this.echo('lock symbol is made invisible for sub category', 'INFO');
 									}catch(e) {
 										test.assertExists('a i.glyphicon.glyphicon-lock');
+										this.echo('lock symbol is not made invisible for sub category', 'ERROR');
 									}
+								}, function fail() {
+								
 								});
 							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:last-child li:last-child a:first-child span.forum-title');
@@ -2027,12 +2123,15 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 										this.echo('lock symbol is made invisible for sub category', 'INFO');
 									}catch(e) {
 										test.assertExists('a i.glyphicon.glyphicon-lock');
+										this.echo('lock symbol is not made invisible for sub category', 'ERROR');
 									}
 								
 								}, function fail() {
 								
 								});
 							}
+						}, function fail() {
+						
 						});
 					}, function fail() {
 						casper.echo('category link not found', 'ERROR');
@@ -2106,7 +2205,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 				if(!err) {
 					casper.waitForSelector('a[href^="/categories"]', function success() {
 						this.click('a[href^="/categories"]');
-						casper.then(function() {
+						casper.waitForSelector('span.forum-title', function success() {
 							test.assertExists('div.panel.panel-default ul:nth-last-child(1) li:nth-last-child(1) span.forum-count.pull-right a');
 							var msg = casper.getElementAttribute('div.panel.panel-default ul:nth-last-child(1) li:nth-last-child(1) span.forum-count.pull-right a', 'data-original-title');
 							this.echo('Tooltip Message : '+msg.trim(), 'INFO');
@@ -2149,6 +2248,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 								
 								});
 							}
+						}, function fail() {
+						
 						});
 					}, function fail() {
 						casper.echo('category link not found', 'ERROR');
@@ -2222,7 +2323,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 				if(!err) {
 					casper.waitForSelector('a[href^="/categories"]', function success() {
 						this.click('a[href^="/categories"]');
-						casper.then(function() {
+						casper.waitForSelector('span.forum-title', function success() {
 							test.assertDoesntExist('i.glyphicon.glyphicon-lock.bd-wrapper');
 							this.echo('disabled password protect is verified for parent category', 'INFO');
 							try {
@@ -2246,6 +2347,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									casper.echo('password is required to move to the category page', 'ERROR');
 								});
 							}
+						}, function fail() {
+						
 						});
 					}, function fail() {
 						casper.echo('category link not found', 'ERROR');
@@ -2320,13 +2423,15 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 				if(!err) {
 					casper.waitForSelector('a[href^="/categories"]', function success() {
 						this.click('a[href^="/categories"]');
-						casper.then(function() {
+						casper.waitForSelector('span.forum-title', function success() {
 							var category = x("//a/span[starts-with(.,'New Title')]");
 							test.assertDoesntExist(category);
 							this.echo('invisible category verified in case of parent category', 'INFO');
 							var subCategory = x("//span/a[starts-with(.,'new title')]");
 							test.assertDoesntExist(subCategory);
 							this.echo('invisible category verified in case of sub category', 'INFO');
+						}, function fail() {
+						
 						});
 					}, function fail() {
 						casper.echo('category link not found', 'ERROR');
@@ -2401,7 +2506,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 				if(!err) {
 					casper.waitForSelector('a[href^="/categories"]', function success() {
 						this.click('a[href^="/categories"]');
-						casper.then(function() {
+						casper.waitForSelector('span.forum-title', function success() {
 							try {
 								var category = x("//a/span[starts-with(.,'New Title')]");
 								test.assertExists(category);
@@ -2415,6 +2520,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 								test.assertExists('div.panel.panel-default ul:last-child li:last-child a:nth-child(2) span.forum-title');
 								this.echo('visible category verified in case of sub category', 'INFO');
 							}
+						}, function fail() {
+						
 						});
 					}, function fail() {
 						casper.echo('category link not found', 'ERROR');
@@ -2488,7 +2595,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 				if(!err) {
 					casper.waitForSelector('a[href^="/categories"]', function success() {
 						this.click('a[href^="/categories"]');
-						casper.then(function() {
+						casper.waitForSelector('span.forum-title', function success() {
 							try {
 								var category = x("//a/span[starts-with(.,'New Title')]");
 								this.click(category);
@@ -2540,6 +2647,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 									casper.echo('linked address not opened', 'ERROR');
 								});
 							}
+						}, function fail() {
+						
 						});
 					}, function fail() {
 						casper.echo('category link not found', 'ERROR');
@@ -2612,15 +2721,17 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 				if(!err) {
 					casper.waitForSelector('a[href^="/categories"]', function success() {
 						this.click('a[href^="/categories"]');
-						casper.then(function() {
+						casper.waitForSelector('span.forum-title', function success() {
 							try {
 								var category = x("//a/span[starts-with(.,'New Title')]");
 								test.assertExists(category);
 								this.click(category);
-								casper.wait(5000, function() {
+								casper.waitForSelector('span.forum-title', function success() {
 									var subCategory = x("//a/span[starts-with(.,'new title')]");
 									test.assertExists(subCategory);
 									this.echo('disabled linked category as well as sub category is verified', 'INFO');
+								}, function fail() {
+								
 								});
 							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:last-child li:last-child a:first-child span.forum-title');
@@ -2634,6 +2745,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 								
 								});
 							}
+						}, function fail() {
+						
 						});
 					}, function fail() {
 						casper.echo('category link not found', 'ERROR');
@@ -2713,15 +2826,17 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 				if(!err) {
 					casper.waitForSelector('a[href^="/categories"]', function success() {
 						this.click('a[href^="/categories"]');
-						casper.then(function() {
+						casper.waitForSelector('span.forum-title', function success() {
 							try {
 								var category = x("//a/span[starts-with(.,'General')]");
 								test.assertExists(category);	
 								this.click(category);
-								casper.then(function() {
+								casper.waitForSelector('span.forum-title', function success() {
 									var subCategory = x("//a/span[starts-with(.,'new title')]");
 									test.assertExists(subCategory);	
 									this.echo('sub category is verified in another parent category', 'INFO');
+								}, function fail() {
+								
 								});
 							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title');
@@ -2735,6 +2850,8 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 								
 								});
 							}
+						}, function fail() {
+						
 						});
 					}, function fail() {
 						casper.echo('category link not found', 'ERROR');
@@ -2766,18 +2883,18 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 						test.assertExists('div.tooltipMenu.text a[href="/tool/members/mb/forums"]');
 						this.click('div.tooltipMenu.text a[href="/tool/members/mb/forums"]');
 						casper.wait(5000, function() {
-							var element = this.evaluate(function() {
+							var grpId = this.evaluate(function() {
 								var liElement = document.querySelectorAll('div#sortable ul.ui-sortable li');
-								return liElement.length-2;
+								return liElement[liElement.length-1].id;
 							});
-							casper.echo('List Element : '+element, 'INFO');
-							casper.mouse.move('div#sortable ul.ui-sortable li:nth-child(1) ul li:last-child div.select');
-							casper.waitUntilVisible('div#sortable ul.ui-sortable li:nth-child(1) ul li:last-child div.select a.manageAction', function success() {
-								casper.click('div#sortable ul.ui-sortable li:nth-child(1) ul li:last-child div.select a.manageAction');
-								casper.click('div#sortable ul.ui-sortable li:nth-child(1) ul li:last-child div.select a.editForum');
+							casper.echo('List Element : '+grpId, 'INFO');
+							casper.mouse.move('div#sortable ul.ui-sortable li:nth-child(1) ul li:first-child div.select');
+							casper.waitUntilVisible('div#sortable ul.ui-sortable li:nth-child(1) ul li:first-child div.select a.manageAction', function success() {
+								casper.click('div#sortable ul.ui-sortable li:nth-child(1) ul li:first-child div.select a.manageAction');
+								casper.click('div#sortable ul.ui-sortable li:nth-child(1) ul li:first-child div.select a.editForum');
 								casper.waitForSelector('form[action="/tool/members/mb/forums"]', function success() {
 									this.fillSelectors('form[name="frmOptions"]', {
-										'select[name="parentid"]' :  '192080'
+										'select[name="parentid"]' : grpId
 									}, true);
 									this.click('form[action="/tool/members/mb/forums"] button');
 									casper.waitForSelector('div.heading.error_message', function success() {
@@ -2894,15 +3011,35 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 						forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function(err) {
 							casper.waitForSelector('a[href^="/categories"]', function success() {
 								this.click('a[href^="/categories"]');
-								casper.then(function() {
-									var category = x("//a/span[starts-with(.,'New Title')]");
-									test.assertExists(category);	
-									this.click(category);
-									casper.then(function() {
-										var subCategory = x("//a/span[starts-with(.,'new title')]");
-										test.assertExists(subCategory);	
-										this.click(subCategory);
-										casper.waitForSelector('div.panel-heading', function success() {
+								casper.waitForSelector('span.forum-title', function success() {
+									try {
+										var category = x("//a/span[starts-with(.,'New Title')]");
+										test.assertExists(category);	
+										this.click(category);
+									}catch(e) {
+										var id = this.evaluate(function() {
+											var liElement = document.querySelectorAll('ul.slide-panel-content li');
+											return liElement[liElement.length-1].id;
+										});
+										test.assertExists('a[href^="/?forum='+id+'"]');
+										this.click('a[href^="/?forum='+id+'"]');
+									}
+									casper.waitForSelector('span.forum-title', function success() {
+										try {
+											var subCategory = x("//a/span[starts-with(.,'new title')]");
+											test.assertExists(subCategory);	
+											this.click(subCategory);
+										}catch(e) {
+											var id = this.evaluate(function() {
+												var liElement = document.querySelectorAll('div.panel.panel-default ul li');
+												return liElement[liElement.length-1].id;
+											});
+											id = id.split('_');
+											id = id[1];
+											test.assertExists('a[href^="/?forum='+id+'"]');
+											this.click('a[href^="/?forum='+id+'"]');
+										}
+										casper.waitForSelector('div.panel.panel-default', function success() {
 											var id = this.getElementAttribute('input[type="hidden"][name="unfiltered_forums"]', 'value');
 											this.click('a[href^="/post/printadd?forum='+id+'"]');
 											casper.waitForSelector('form[name="PostTopic"]', function success() {
@@ -2915,11 +3052,20 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 																if(!err) {
 																	casper.waitForSelector('a[href^="/categories"]', function success() {
 																		this.click('a[href^="/categories"]');
-																		casper.then(function() {
-																			var category = x("//a/span[starts-with(.,'New Title')]");
-																			test.assertExists(category);	
-																			this.click(category);
-																			casper.then(function() {
+																		casper.waitForSelector('span.forum-title', function success() {
+																			try {
+	var category = x("//a/span[starts-with(.,'New Title')]");
+	test.assertExists(category);	
+	this.click(category);
+}catch(e) {
+	var id = this.evaluate(function() {
+		var liElement = document.querySelectorAll('ul.slide-panel-content li');
+		return liElement[liElement.length-1].id;
+	});
+	test.assertExists('a[href^="/?forum='+id+'"]');
+	this.click('a[href^="/?forum='+id+'"]');
+}
+																			casper.waitForSelector('span.forum-title', function success() {
 																				var subCategory = x("//a/span[starts-with(.,'new title')]");
 	
 try {
@@ -2928,7 +3074,11 @@ try {
 }catch(e) {
 	test.assertDoesntExist('i.glyphicon.glyphicon-lock');
 }
+																			}, function fail() {
+																			
 																			});
+																		}, function fail() {
+																		
 																		});
 																	}, function fail() {
 																		casper.echo('category link not found', 'ERROR');
@@ -2948,7 +3098,11 @@ try {
 										}, function fail() {
 											casper.echo('category link not found on front end', 'ERROR');
 										});
+									}, function fail() {
+									
 									});
+								}, function fail() {
+								
 								});
 							}, function fail() {
 								casper.echo('category link not found', 'ERROR');
@@ -3054,15 +3208,35 @@ try {
 						forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function(err) {
 							casper.waitForSelector('a[href^="/categories"]', function success() {
 								this.click('a[href^="/categories"]');
-								casper.then(function() {
-									var category = x("//a/span[starts-with(.,'New Title')]");
-									test.assertExists(category);	
-									this.click(category);
-									casper.then(function() {
-										var subCategory = x("//a/span[starts-with(.,'new title')]");
-										test.assertExists(subCategory);	
-										this.click(subCategory);
-										casper.waitForSelector('div.panel-heading', function success() {
+								casper.waitForSelector('span.forum-title', function success() {
+									try {
+										var category = x("//a/span[starts-with(.,'New Title')]");
+										test.assertExists(category);	
+										this.click(category);
+									}catch(e) {
+										var id = this.evaluate(function() {
+											var liElement = document.querySelectorAll('ul.slide-panel-content li');
+											return liElement[liElement.length-1].id;
+										});
+										test.assertExists('a[href^="/?forum='+id+'"]');
+										this.click('a[href^="/?forum='+id+'"]');
+									}
+									casper.waitForSelector('span.forum-title', function success() {
+										try {
+											var subCategory = x("//a/span[starts-with(.,'new title')]");
+											test.assertExists(subCategory);	
+											this.click(subCategory);
+										}catch(e) {
+											var id = this.evaluate(function() {
+												var liElement = document.querySelectorAll('div.panel.panel-default ul li');
+												return liElement[liElement.length-1].id;
+											});
+											id = id.split('_');
+											id = id[1];
+											test.assertExists('a[href^="/?forum='+id+'"]');
+											this.click('a[href^="/?forum='+id+'"]');
+										}
+										casper.waitForSelector('div.panel.panel-default', function success() {
 											var id = this.getElementAttribute('input[type="hidden"][name="unfiltered_forums"]', 'value');
 											this.click('a[href^="/post/printadd?forum='+id+'"]');
 											casper.waitForSelector('form[name="PostTopic"]', function success() {
@@ -3075,15 +3249,28 @@ try {
 																if(!err) {
 																	casper.waitForSelector('a[href^="/categories"]', function success() {
 																		this.click('a[href^="/categories"]');
-																		casper.then(function() {
-																			var category = x("//a/span[starts-with(.,'New Title')]");
-																			test.assertExists(category);	
-																			this.click(category);
-																			casper.then(function() {
+																		casper.waitForSelector('span.forum-title', function success() {
+																			try {
+	var category = x("//a/span[starts-with(.,'New Title')]");
+	test.assertExists(category);	
+	this.click(category);
+}catch(e) {
+	var id = this.evaluate(function() {
+		var liElement = document.querySelectorAll('ul.slide-panel-content li');
+		return liElement[liElement.length-1].id;
+	});
+	test.assertExists('a[href^="/?forum='+id+'"]');
+	this.click('a[href^="/?forum='+id+'"]');
+}
+																			casper.waitForSelector('span.forum-title', function success() {
 																				var subCategory = x("//a/span[starts-with(.,'new title')]");
 																				test.assertDoesntExist('div.panel.panel-default ul li:nth-child(1) span span:nth-child(2) i.glyphicon.glyphicon-loc');	
 																				this.echo('invisible locked symbol is verified for the category', 'INFO');
+																			}, function fail() {
+																			
 																			});
+																		}, function fail() {
+																		
 																		});
 																	}, function fail() {
 																		casper.echo('category link not found', 'ERROR');
@@ -3103,7 +3290,11 @@ try {
 										}, function fail() {
 											casper.echo('category link not found on front end', 'ERROR');
 										});
+									}, function fail() {
+									
 									});
+								}, function fail() {
+								
 								});
 							}, function fail() {
 								casper.echo('category link not found', 'ERROR');
@@ -3209,15 +3400,35 @@ try {
 						forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function(err) {
 							casper.waitForSelector('a[href^="/categories"]', function success() {
 								this.click('a[href^="/categories"]');
-								casper.then(function() {
-									var category = x("//a/span[starts-with(.,'New Title')]");
-									test.assertExists(category);	
-									this.click(category);
-									casper.then(function() {
-										var subCategory = x("//a/span[starts-with(.,'new title')]");
-										test.assertExists(subCategory);	
-										this.click(subCategory);
-										casper.waitForSelector('div.panel-heading', function success() {
+								casper.waitForSelector('span.forum-title', function success() {
+									try {
+										var category = x("//a/span[starts-with(.,'New Title')]");
+										test.assertExists(category);	
+										this.click(category);
+									}catch(e) {
+										var id = this.evaluate(function() {
+											var liElement = document.querySelectorAll('ul.slide-panel-content li');
+											return liElement[liElement.length-1].id;
+										});
+										test.assertExists('a[href^="/?forum='+id+'"]');
+										this.click('a[href^="/?forum='+id+'"]');
+									}
+									casper.waitForSelector('span.forum-title', function success() {
+										try {
+											var subCategory = x("//a/span[starts-with(.,'new title')]");
+											test.assertExists(subCategory);	
+											this.click(subCategory);
+										}catch(e) {
+											var id = this.evaluate(function() {
+												var liElement = document.querySelectorAll('div.panel.panel-default ul li');
+												return liElement[liElement.length-1].id;
+											});
+											id = id.split('_');
+											id = id[1];
+											test.assertExists('a[href^="/?forum='+id+'"]');
+											this.click('a[href^="/?forum='+id+'"]');
+										}
+										casper.waitForSelector('div.panel.panel-default', function success() {
 											var id = this.getElementAttribute('input[type="hidden"][name="unfiltered_forums"]', 'value');
 											this.click('a[href^="/post/printadd?forum='+id+'"]');
 											casper.waitForSelector('form[name="PostTopic"]', function success() {
@@ -3230,11 +3441,20 @@ try {
 																if(!err) {
 																	casper.waitForSelector('a[href^="/categories"]', function success() {
 																		this.click('a[href^="/categories"]');
-																		casper.then(function() {
-																			var category = x("//a/span[starts-with(.,'New Title')]");
-																			test.assertExists(category);	
-																			this.click(category);
-																			casper.then(function() {
+																		casper.waitForSelector('span.forum-title', function success() {
+																			try {
+	var category = x("//a/span[starts-with(.,'New Title')]");
+	test.assertExists(category);	
+	this.click(category);
+}catch(e) {
+	var id = this.evaluate(function() {
+		var liElement = document.querySelectorAll('ul.slide-panel-content li');
+		return liElement[liElement.length-1].id;
+	});
+	test.assertExists('a[href^="/?forum='+id+'"]');
+	this.click('a[href^="/?forum='+id+'"]');
+}
+																			casper.waitForSelector('span.forum-title', function success() {
 																				var subCategory = x("//a/span[starts-with(.,'new title')]");
 	
 	try {
@@ -3244,7 +3464,11 @@ try {
 		test.assertDoesntExist('i.glyphicon.glyphicon-lock');
 		this.echi('problem occurred due to backend setting', 'ERROR');
 	}
+																			}, function fail() {
+																			
 																			});
+																		}, function fail() {
+																		
 																		});
 																	}, function fail() {
 																		casper.echo('category link not found', 'ERROR');
@@ -3264,7 +3488,11 @@ try {
 										}, function fail() {
 											casper.echo('category link not found on front end', 'ERROR');
 										});
+									}, function fail() {
+									
 									});
+								}, function fail() {
+								
 								});
 							}, function fail() {
 								casper.echo('category link not found', 'ERROR');
@@ -3370,15 +3598,35 @@ try {
 						forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function(err) {
 							casper.waitForSelector('a[href^="/categories"]', function success() {
 								this.click('a[href^="/categories"]');
-								casper.then(function() {
-									var category = x("//a/span[starts-with(.,'New Title')]");
-									test.assertExists(category);	
-									this.click(category);
-									casper.then(function() {
-										var subCategory = x("//a/span[starts-with(.,'new title')]");
-										test.assertExists(subCategory);	
-										this.click(subCategory);
-										casper.waitForSelector('div.panel-heading', function success() {
+								casper.waitForSelector('span.forum-title', function success() {
+									try {
+										var category = x("//a/span[starts-with(.,'New Title')]");
+										test.assertExists(category);	
+										this.click(category);
+									}catch(e) {
+										var id = this.evaluate(function() {
+											var liElement = document.querySelectorAll('ul.slide-panel-content li');
+											return liElement[liElement.length-1].id;
+										});
+										test.assertExists('a[href^="/?forum='+id+'"]');
+										this.click('a[href^="/?forum='+id+'"]');
+									}
+									casper.waitForSelector('span.forum-title', function success() {
+										try {
+											var subCategory = x("//a/span[starts-with(.,'new title')]");
+											test.assertExists(subCategory);	
+											this.click(subCategory);
+										}catch(e) {
+											var id = this.evaluate(function() {
+												var liElement = document.querySelectorAll('div.panel.panel-default ul li');
+												return liElement[liElement.length-1].id;
+											});
+											id = id.split('_');
+											id = id[1];
+											test.assertExists('a[href^="/?forum='+id+'"]');
+											this.click('a[href^="/?forum='+id+'"]');
+										}
+										casper.waitForSelector('div.panel.panel-default', function success() {
 											var id = this.getElementAttribute('input[type="hidden"][name="unfiltered_forums"]', 'value');
 											this.click('a[href^="/post/printadd?forum='+id+'"]');
 											casper.waitForSelector('form[name="PostTopic"]', function success() {
@@ -3391,15 +3639,28 @@ try {
 																if(!err) {
 																	casper.waitForSelector('a[href^="/categories"]', function success() {
 																		this.click('a[href^="/categories"]');
-																		casper.then(function() {
-																			var category = x("//a/span[starts-with(.,'New Title')]");
-																			test.assertExists(category);	
-																			this.click(category);
-																			casper.then(function() {
+																		casper.waitForSelector('span.forum-title', function success() {
+																			try {
+	var category = x("//a/span[starts-with(.,'New Title')]");
+	test.assertExists(category);	
+	this.click(category);
+}catch(e) {
+	var id = this.evaluate(function() {
+		var liElement = document.querySelectorAll('ul.slide-panel-content li');
+		return liElement[liElement.length-1].id;
+	});
+	test.assertExists('a[href^="/?forum='+id+'"]');
+	this.click('a[href^="/?forum='+id+'"]');
+}
+																			casper.waitForSelector('span.forum-title', function success() {
 																				var subCategory = x("//a/span[starts-with(.,'new title')]");
 																				test.assertDoesntExist('div.panel.panel-default ul li:nth-child(1) span.columns-wrapper span.col-xs-5 span.forum-count.pull-right a i.glyphicon.glyphicon-lock ');	
 																				this.echo('invisible locked symbol is verified for the category', 'INFO');
+																			}, function fail() {
+																			
 																			});
+																		}, function fail() {
+																		
 																		});
 																	}, function fail() {
 																		casper.echo('category link not found', 'ERROR');
@@ -3419,7 +3680,11 @@ try {
 										}, function fail() {
 											casper.echo('category link not found on front end', 'ERROR');
 										});
+									}, function fail() {
+									
 									});
+								}, function fail() {
+								
 								});
 							}, function fail() {
 								casper.echo('category link  not found', 'ERROR');
@@ -3524,22 +3789,55 @@ try {
 						forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function(err) {
 							casper.waitForSelector('a[href^="/categories"]', function success() {
 								this.click('a[href^="/categories"]');
-								casper.then(function() {
-									var category = x("//a/span[starts-with(.,'New Title')]");
-									test.assertExists(category);	
-									this.click(category);
-									casper.then(function() {
-										var subCategory = x("//a/span[starts-with(.,'new title')]");
-										test.assertExists(subCategory);	
-										this.click(subCategory);
-										casper.waitForSelector('div.panel-heading', function success() {
-											test.assertDoesntExist('input[name="pass"]');
-											this.echo('moderator is moved to the category without any password', 'INFO');
+								try {
+									casper.waitForSelector('span.forum-title', function success() {
+										var category = x("//a/span[starts-with(.,'New Title')]");
+										test.assertExists(category);	
+										this.click(category);
+										casper.waitForSelector('span.forum-title', function success() {
+											var subCategory = x("//a/span[starts-with(.,'new title')]");
+											test.assertExists(subCategory);	
+											this.click(subCategory);
+											casper.waitForSelector('div.panel-heading', function success() {
+												test.assertDoesntExist('input[name="pass"]');
+												this.echo('moderator is moved to the category without any password', 'INFO');
+											}, function fail() {
+												casper.echo('category link not found on front end', 'ERROR');
+											});
 										}, function fail() {
-											casper.echo('category link not found on front end', 'ERROR');
+										
+										});
+									}, function fail() {
+									
+									});
+								}catch(e) {
+									casper.then(function() {
+										var id = this.evaluate(function() {
+											var liElement = document.querySelectorAll('ul.slide-panel-content li');
+											return liElement[liElement.length-1].id;
+										});
+										test.assertExists('a[href^="/?forum='+id+'"]');
+										this.click('a[href^="/?forum='+id+'"]');
+										casper.waitForSelector('span.forum-title', function success() {
+											var id = this.evaluate(function() {
+												var liElement = document.querySelectorAll('div.panel.panel-default ul li');
+												return liElement[liElement.length-1].id;
+											});
+											id = id.split('_');
+											id = id[1];
+											test.assertExists('a[href^="/?forum='+id+'"]');
+											this.click('a[href^="/?forum='+id+'"]');
+											casper.waitForSelector('div.panel-heading', function success() {
+												test.assertDoesntExist('input[name="pass"]');
+												this.echo('moderator is moved to the category without any password', 'INFO');
+											}, function fail() {
+												casper.echo('category link not found on front end', 'ERROR');
+											});
+										}, function fail() {
+										
 										});
 									});
-								});
+								}
 							}, function fail() {
 								casper.echo('category link not found', 'ERROR');
 							});
@@ -3627,17 +3925,36 @@ try {
 						forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function(err) {
 							casper.waitForSelector('a[href^="/categories"]', function success() {
 								this.click('a[href^="/categories"]');
-								casper.then(function() {
-									var category = x("//a/span[starts-with(.,'New Title')]");
-									test.assertExists(category);	
-									this.click(category);
-									casper.waitForSelector('div.panel-heading', function success() {
-										test.assertDoesntExist('input[name="pass"]');
-										this.echo('moderator is moved to the category without any password', 'INFO');
+								try {
+									casper.waitForSelector('span.forum-title', function success() {
+										var category = x("//a/span[starts-with(.,'New Title')]");
+										test.assertExists(category);	
+										this.click(category);
+										casper.waitForSelector('span.forum-title', function success() {
+											test.assertDoesntExist('input[name="pass"]');
+											this.echo('moderator is moved to the category without any password', 'INFO');
+										}, function fail() {
+											casper.echo('category link not found on front end', 'ERROR');
+										});
 									}, function fail() {
-										casper.echo('category link not found on front end', 'ERROR');
+									
 									});
-								});
+								}catch(e) {
+									casper.then(function() {
+										var id = this.evaluate(function() {
+											var liElement = document.querySelectorAll('ul.slide-panel-content li');
+											return liElement[liElement.length-1].id;
+										});
+										test.assertExists('a[href^="/?forum='+id+'"]');
+										this.click('a[href^="/?forum='+id+'"]');
+										casper.waitForSelector('div.panel-heading', function success() {
+											test.assertDoesntExist('input[name="pass"]');
+											this.echo('moderator is moved to the category without any password', 'INFO');
+										}, function fail() {
+											casper.echo('category link not found on front end', 'ERROR');
+										});
+									});
+								}
 							}, function fail() {
 								casper.echo('category link not found', 'ERROR');
 							});
@@ -3792,19 +4109,40 @@ try {
 						forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function(err) {
 							casper.waitForSelector('a[href^="/categories"]', function success() {
 								this.click('a[href^="/categories"]');
-								casper.then(function() {
-									var category = x("//a/span[starts-with(.,'New Title')]");
-									test.assertExists(category);	
-									this.click(category);
-									casper.waitForSelector('a[href^="#moderators-modal"]', function success() {
-										this.click('a[href^="#moderators-modal"]');
-										var moderator = x("//li/a[starts-with(.,'hs1234')]");
-										test.assertExists(moderator);
-										this.echo('moderator is verified on the bottom of forum listing page', 'INFO');
+								try {
+									casper.waitForSelector('span.forum-title', function success() {
+										var category = x("//a/span[starts-with(.,'New Title')]");
+										test.assertExists(category);	
+										this.click(category);
+										casper.waitForSelector('a[href^="#moderators-modal"]', function success() {
+											this.click('a[href^="#moderators-modal"]');
+											var moderator = x("//li/a[starts-with(.,'hs1234')]");
+											test.assertExists(moderator);
+											this.echo('moderator is verified on the bottom of forum listing page', 'INFO');
+										}, function fail() {
+											casper.echo('moderator link at bottom not found', 'ERROR');
+										});
 									}, function fail() {
-										casper.echo('moderator link at bottom not found', 'ERROR');
+									
 									});
-								});
+								}catch(e) {
+									casper.then(function() {
+										var id = this.evaluate(function() {
+											var liElement = document.querySelectorAll('ul.slide-panel-content li');
+											return liElement[liElement.length-1].id;
+										});
+										test.assertExists('a[href^="/?forum='+id+'"]');
+										this.click('a[href^="/?forum='+id+'"]');
+										casper.waitForSelector('a[href^="#moderators-modal"]', function success() {
+											this.click('a[href^="#moderators-modal"]');
+											var moderator = x("//li/a[starts-with(.,'hs1234')]");
+											test.assertExists(moderator);
+											this.echo('moderator is verified on the bottom of forum listing page', 'INFO');
+										}, function fail() {
+											casper.echo('moderator link at bottom not found', 'ERROR');
+										});
+									});
+								}
 							}, function fail() {
 								casper.echo('category link not found', 'ERROR');
 							});
@@ -3892,19 +4230,40 @@ try {
 						forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function(err) {
 							casper.waitForSelector('a[href^="/categories"]', function success() {
 								this.click('a[href^="/categories"]');
-								casper.then(function() {
-									var category = x("//a/span[starts-with(.,'New Title')]");
-									test.assertExists(category);	
-									this.click(category);
-									casper.waitForSelector('a[href^="#moderators-modal"]', function success() {
-										this.click('a[href^="#moderators-modal"]');
-										var moderator = x("//li/a[starts-with(.,'hs1234')]");
-										test.assertExists(moderator);
-										this.echo('moderator is verified on the bottom of forum listing page', 'INFO');
+								try {
+									casper.waitForSelector('span.forum-title', function success() {
+										var category = x("//a/span[starts-with(.,'New Title')]");
+										test.assertExists(category);	
+										this.click(category);
+										casper.waitForSelector('a[href^="#moderators-modal"]', function success() {
+											this.click('a[href^="#moderators-modal"]');
+											var moderator = x("//li/a[starts-with(.,'hs1234')]");
+											test.assertExists(moderator);
+											this.echo('moderator is verified on the bottom of forum listing page', 'INFO');
+										}, function fail() {
+											casper.echo('moderator link at bottom not found', 'ERROR');
+										});
 									}, function fail() {
-										casper.echo('moderator link at bottom not found', 'ERROR');
+									
 									});
-								});
+								}catch(e) {
+									casper.then(function() {
+										var id = this.evaluate(function() {
+											var liElement = document.querySelectorAll('ul.slide-panel-content li');
+											return liElement[liElement.length-1].id;
+										});
+										test.assertExists('a[href^="/?forum='+id+'"]');
+										this.click('a[href^="/?forum='+id+'"]');
+										casper.waitForSelector('a[href^="#moderators-modal"]', function success() {
+											this.click('a[href^="#moderators-modal"]');
+											var moderator = x("//li/a[starts-with(.,'hs1234')]");
+											test.assertExists(moderator);
+											this.echo('moderator is verified on the bottom of forum listing page', 'INFO');
+										}, function fail() {
+											casper.echo('moderator link at bottom not found', 'ERROR');
+										});
+									});
+								}
 							}, function fail() {
 								casper.echo('categor link not foundD', 'ERROR');
 							});
@@ -4094,23 +4453,23 @@ var deleteSubCategory = function(driver, test, callback) {
 					test.assertExists('div.tooltipMenu.text a[href="/tool/members/mb/forums"]');
 					this.click('a[href="/tool/members/mb/forums"]');
 					driver.wait(5000, function() {
-						driver.mouse.move('div#sortable ul li:nth-child(1) ul li:last-child div.select');
-						driver.waitUntilVisible('div#sortable ul li:nth-child(1) ul li:last-child div.select a.manageAction', function success() {
-							try {
-								driver.click('div#sortable ul li:nth-child(1) ul li:last-child div.select a.manageAction');
-								driver.click('div#sortable ul li:nth-child(1) ul li:last-child div.select a.deleteEmptyForum');
-								driver.then(function() {
+						try {
+							driver.mouse.move('div#sortable ul li:nth-child(1) ul li:last-child div.select');
+							driver.waitUntilVisible('div#sortable ul li:nth-child(1) ul li:last-child div.select a.manageAction', function success() {
+									driver.click('div#sortable ul li:nth-child(1) ul li:last-child div.select a.manageAction');
+									driver.click('div#sortable ul li:nth-child(1) ul li:last-child div.select a.deleteEmptyForum');
+									driver.then(function() {
 								
+									});
+								driver.then(function() {
+									return callback(null);
 								});
-							}catch(e) {
-								test.assertDoesntExist('div#sortable ul li:nth-child(1) ul li:last-child div.select a.manageAction');
-							}
-							driver.then(function() {
-								return callback(null);
+							}, function fail() {
+								driver.echo('ERROR OCCURRED', 'ERROR');
 							});
-						}, function fail() {
-							driver.echo('ERROR OCCURRED', 'ERROR');
-						});
+						}catch(e) {
+							this.echo('there is no sub-category in general category to delete', 'ERROR');
+						}
 					});
 				}, function fail() {
 					driver.echo('ERROR OCCURRED', 'ERROR');
