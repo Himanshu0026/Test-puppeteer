@@ -45,18 +45,18 @@ sleep 1
 #printf "\nTests executing for GENERAL PERMISSION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./forum/automation.js --feature=generalPermission >> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1
-printf "\nTests executing for Start New Topic functionality from home page & verify content with all valid and invalid scenarios: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./automationScripts/automation.js --feature=generalTopic >> "$AUTOMATION_HOME"/log/automation.txt
-sleep 1
-printf "\nTests executing for Verify move topic functionlity : \n" >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./automationScripts/automation.js --feature=movetopic >> "$AUTOMATION_HOME"/log/automation.txt
-sleep 1
-printf "\nTests executing for Forum Listing Page: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./automationScripts/automation.js --feature=forumListingPage >> "$AUTOMATION_HOME"/log/automation.txt
-sleep 1
-printf "\nTests executing for Forum Listing Page For Sub Category: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./automationScripts/automation.js --feature=forumListingPageForSubCategory >> "$AUTOMATION_HOME"/log/automation.txt
-sleep 1
+#printf "\nTests executing for Start New Topic functionality from home page & verify content with all valid and invalid scenarios: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./automationScripts/automation.js --feature=generalTopic >> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
+#printf "\nTests executing for Verify move topic functionlity : \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./automationScripts/automation.js --feature=movetopic >> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
+#printf "\nTests executing for Forum Listing Page: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./automationScripts/automation.js --feature=forumListingPage >> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
+#printf "\nTests executing for Forum Listing Page For Sub Category: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./automationScripts/automation.js --feature=forumListingPageForSubCategory >> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
 cat "$AUTOMATION_HOME"/log/automation.txt | grep FAIL > "$AUTOMATION_HOME"/log/fail.txt 
 cat "$AUTOMATION_HOME"/log/automation.txt | grep -i "tests execut" > "$AUTOMATION_HOME"/log/result.txt
 cat "$AUTOMATION_HOME"/log/result.txt
