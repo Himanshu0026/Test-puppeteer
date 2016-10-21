@@ -8,12 +8,22 @@ var json = require('../testdata/editData.json');
 var config = require('../../config/config.json');
 
 var generalPermission = module.exports = {};
+generalPermission.errors = [];
 var screenShotsDir = config.screenShotsLocation + 'generalPermission/';
 
 generalPermission.featureTest = function(casper, test, x) {
 	
 //***********************************1st Test Case Verification**********************************
 
+	//Method For Verifying JavaScript Errors
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		generalPermission.errors.push(msg);
+	});
+	
 	//Open Fornt-End URL And Register A User
 	casper.start(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -118,7 +128,7 @@ generalPermission.featureTest = function(casper, test, x) {
 				test.assertExists('font[color="red"]');
 				var successMsg = this.fetchText('font[color="red"]');
 				var expectedSuccessMsg = 'Your user group settings have been updated.';
-				verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedViewForum', casper, function() {
+				generalPermission.verifySuccessMsg(successMsg, expectedSuccessMsg, 'UncheckedViewForum', casper, function() {
 				});
 			}catch(e) {
 				test.assertDoesntExist('font[color="red"]');
@@ -1009,8 +1019,11 @@ generalPermission.viewChangePermission = function(driver, test, callback) {
 						}
 					}
 				});
+				var id = grpName.split('=');
+				var id = id[2];
+				this.click('a[data-tooltip-elm="ugManage'+id+'"]');
 				this.click('a[href="'+grpName+'"]');
-				return callback(null);
+				return callback(null, id);
 			}, function fail() {
 				driver.echo('ERROR OCCURRED', 'ERROR');
 			});
@@ -1040,6 +1053,9 @@ generalPermission.viewChangePermissionForModerators = function(driver, test, cal
 						}
 					}
 				});
+				var id = grpName.split('=');
+				var id = id[2];
+				this.click('a[data-tooltip-elm="ugManage'+id+'"]');
 				this.click('a[href="'+grpName+'"]');
 				return callback(null);
 			}, function fail() {
@@ -1066,7 +1082,7 @@ var verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver, 
 };
 
 //Method For Verifying Success Message On General Group Permission
-var verifySuccessMsg = function(successMessage, expectedSuccessMsg, msgTitle, driver, callback) {
+generalPermission.verifySuccessMsg = function(successMessage, expectedSuccessMsg, msgTitle, driver, callback) {
 	driver.echo('Actual Success message : '+successMessage, 'INFO');
 	driver.echo('Expected Success message : '+expectedSuccessMsg, 'INFO');
 	if((successMessage == expectedSuccessMsg) || (successMessage.indexOf(expectedSuccessMsg) > -1)) {

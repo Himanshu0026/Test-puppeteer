@@ -7,6 +7,7 @@ var json = require('../testdata/editData.json');
 var config = require('../../config/config.json');
 
 var editProfile = module.exports = {};
+editProfile.errors = [];
 var screenShotsDir = config.screenShotsLocation + 'editProfile/';
 /**************************All Fields Required Validation****************************/
 
@@ -19,6 +20,15 @@ editProfile.featureTest = function(casper, test) {
 		var expectedErrorMsg = 'Please provide a signature.';
 		test.assertEquals(message, expectedErrorMsg);
 		this.echo('Alert message is verified', 'INFO');
+	});
+	
+	//Method For Verifying JavaScript Errors
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		editProfile.errors.push(msg);
 	});
 	
 	//Open Back-End URL And Get Title
@@ -168,10 +178,14 @@ editProfile.featureTest = function(casper, test) {
 			if(!err) {
 				casper.waitForSelector('#moderator-panel div[role="alert"]', function success() {
 					var successMessage = this.fetchText('#moderator-panel div[role="alert"]');
+					var expectedSuccessMsg = json.validDataForEditProfile.expectedSuccessMsg;
 					this.echo('Actual Success Message : '+successMessage.trim(), 'INFO');
 					this.echo('Ecpected Success Message : '+json.validDataForEditProfile.expectedSuccessMsg, 'INFO');
-					test.assertEquals(successMessage.trim(),json.validDataForEditProfile.expectedSuccessMsg);
-					this.echo('Success message is verified when user try to edit profile with valid data', 'INFO');
+					if((successMessage == expectedSuccessMsg) || (successMessage.indexOf(expectedSuccessMsg) > -1)) {
+						casper.echo('Success message is verified when user try to edit with valid data', 'INFO');
+					} else {
+						casper.echo("Success Message Is Not Correct", 'ERROR');
+					}
 				}, function fail() {
 					casper.echo('ERROR OCCURRED', 'ERROR');
 				});
@@ -260,6 +274,16 @@ editProfile.customFieldsTest = function(casper, test) {
 		test.assertEquals(message, expectedErrorMsg);
 		this.echo('Alert message is verified', 'INFO');
 	});
+	
+	//Method For Verifying JavaScript Errors
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		editProfile.errors.push(msg);
+	});
+	
 	casper.start();
 
 	//Open Front_end URL and Get Title
@@ -635,6 +659,16 @@ editProfile.fullNameFieldsTest = function(casper, test) {
 		test.assertEquals(message, expectedErrorMsg);
 		this.echo('Alert message is verified', 'INFO');
 	});
+	
+	//Method For Verifying JavaScript Errors
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		editProfile.errors.push(msg);
+	});
+	
 	casper.start();
 	//Set Different Value For 'Full Name' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
 	casper.then(function() {
@@ -776,6 +810,16 @@ editProfile.instantMsgFieldsTest = function(casper, test) {
 		test.assertEquals(message, expectedErrorMsg);
 		this.echo('Alert message is verified', 'INFO');
 	});
+	
+	//Method For Verifying JavaScript Errors
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		editProfile.errors.push(msg);
+	});
+	
 	casper.start();
 	//Set Different Value For 'Instant Messaging' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
 	casper.then(function() {
@@ -925,6 +969,16 @@ editProfile.birthdayFieldsTest = function(casper, test) {
 		test.assertEquals(message, expectedErrorMsg);
 		this.echo('Alert message is verified', 'INFO');
 	});
+	
+	//Method For Verifying JavaScript Errors
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		editProfile.errors.push(msg);
+	});
+	
 	casper.start();
 	//Set Different Value For 'Birthday' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
 	casper.then(function() {
@@ -1071,6 +1125,16 @@ editProfile.signatureFieldsTest = function(casper, test) {
 		test.assertEquals(message, expectedErrorMsg);
 		this.echo('Alert message is verified', 'INFO');
 	});
+	
+	//Method For Verifying JavaScript Errors
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		editProfile.errors.push(msg);
+	});
+	
 	casper.start();
 	//Set Different Value For 'Signature' Field On 'Default Registration Options' Page And Get Result On Forum Front End And Then Fill Data On Edit Profile
 	casper.then(function() {
@@ -1527,6 +1591,9 @@ var disableInvisibleModeForRegisteredUser = function(driver, test, callback) {
 						}
 					}
 				});
+				var id = grpName.split('=');
+				var id = id[2];
+				this.click('a[data-tooltip-elm="ugManage'+id+'"]');
 				this.click('a[href="'+grpName+'"]');
 				driver.waitForSelector('#allow_invisible', function success() {
 					try {
@@ -1588,6 +1655,9 @@ var disableEditOwnProfileForRegisteredUser = function(driver, test, callback) {
 						}
 					}
 				});
+				var id = grpName.split('=');
+				var id = id[2];
+				this.click('a[data-tooltip-elm="ugManage'+id+'"]');
 				this.click('a[href="'+grpName+'"]');
 				driver.waitForSelector('#edit_profile', function success() {
 					try {
@@ -1648,6 +1718,9 @@ var disableCustomUserTitleForRegisteredUser = function(driver, test, callback) {
 						}
 					}
 				});
+				var id = grpName.split('=');
+				var id = id[2];
+				this.click('a[data-tooltip-elm="ugManage'+id+'"]');
 				this.click('a[href="'+grpName+'"]');
 				driver.waitForSelector('#allow_customtitle', function success() {
 					try {
