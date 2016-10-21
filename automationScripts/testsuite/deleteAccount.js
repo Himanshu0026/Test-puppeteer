@@ -6,8 +6,9 @@ var utils = require('./utils.js');
 var editProfile = require('./editprofile.js');
 var json = require('../testdata/editData.json');
 var config = require('../../config/config.json');
-
+//var errors = [];
 var deleteAccount = module.exports = {};
+deleteAccount.errors = [];
 var screenShotsDir = config.screenShotsLocation + 'deleteAccount/';
 
 deleteAccount.featureTest = function(casper, test, x) {
@@ -15,50 +16,36 @@ deleteAccount.featureTest = function(casper, test, x) {
 	//Methos For Verifying Alert Message
 	casper.on('remote.alert', function(message) {
 		this.echo('alert message: ' + message, 'INFO');
-		//var expectedErrorMsg = 'Delete the selected user?';
-		//test.assertEquals(message, expectedErrorMsg);
 		this.echo('Alert message is verified when user try to delete an account', 'INFO');
+	});
+	
+	//Method For Verifying JavaScript Errors
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		deleteAccount.errors.push(msg);
 	});
 
 	casper.start();
-//*******************************************1st Test Case Verification**************************************************
-
-	//Open Front End URL And Registering a user And Verifying Do Not Delete Account
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		forumRegister.redirectToLogout(casper, test, function(err) {
-			if(!err) {
-				casper.waitForSelector('a[href^="/register/register"]', function success() {
-					this.click('a[href^="/register/register"]');
-					casper.waitForSelector('form[action="/register/create_account"]', function success() {
-						this.echo('registration from opened successfully', 'INFO');
-						forumRegister.registerToApp(json.deleteAccount, casper, function(err) {
-							if(!err) {
-								casper.echo('user registered successfully', 'INFO');
-								casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
-									forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function(err) {
-										if(!err) {
-											casper.waitForSelector('a.default-user', function success() {
-												this.echo('User Logged-in Successfully', 'INFO');
-												this.click('a.default-user');
-												test.assertExists('a[href^="/register/register?edit="]');
-												this.click('a[href^="/register/register?edit="]');
-												test.assertExists('a[href^="/register?action=preferences&userid="]');
-												this.click('a[href^="/register?action=preferences&userid="]');
-												casper.waitForSelector('a#deleteAccountDialog', function success() {
-													doNotDeleteAccount(casper, function(err) {});
-												}, function fail() {
-													casper.echo('ERROR OCCURRED', 'ERROR');
-												});
-											}, function fail() {
-												casper.echo('ERROR OCCURRED', 'ERROR');
-											});
-										}else {
-											casper.echo('Error : '+err, 'INFO');
-										}
-									});
-								}, function fail() {
-									casper.waitForSelector('div.alert.alert-danger.text-center', function success() {
+	casper.then(function() {
+		casper.echo('                                      CASE 1', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Open Front End URL And Registering a user And Verifying Do Not Delete Account', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.thenOpen(config.url, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+			forumRegister.redirectToLogout(casper, test, function(err) {
+				if(!err) {
+					casper.waitForSelector('a[href^="/register/register"]', function success() {
+						this.click('a[href^="/register/register"]');
+						casper.waitForSelector('form[action="/register/create_account"]', function success() {
+							this.echo('registration from opened successfully', 'INFO');
+							forumRegister.registerToApp(json.deleteAccount, casper, function(err) {
+								if(!err) {
+									casper.echo('user registered successfully', 'INFO');
+									casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
 										forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function(err) {
 											if(!err) {
 												casper.waitForSelector('a.default-user', function success() {
@@ -81,71 +68,102 @@ deleteAccount.featureTest = function(casper, test, x) {
 											}
 										});
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.waitForSelector('div.alert.alert-danger.text-center', function success() {
+											forumLogin.loginToApp(json.deleteAccount.uname, json.deleteAccount.upass, casper, function(err) {
+												if(!err) {
+													casper.waitForSelector('a.default-user', function success() {
+														this.echo('User Logged-in Successfully', 'INFO');
+														this.click('a.default-user');
+														test.assertExists('a[href^="/register/register?edit="]');
+														this.click('a[href^="/register/register?edit="]');
+														test.assertExists('a[href^="/register?action=preferences&userid="]');
+														this.click('a[href^="/register?action=preferences&userid="]');
+														casper.waitForSelector('a#deleteAccountDialog', function success() {
+															doNotDeleteAccount(casper, function(err) {});
+														}, function fail() {
+															casper.echo('ERROR OCCURRED', 'ERROR');
+														});
+													}, function fail() {
+														casper.echo('ERROR OCCURRED', 'ERROR');
+													});
+												}else {
+													casper.echo('Error : '+err, 'INFO');
+												}
+											});
+										}, function fail() {
+											casper.echo('ERROR OCCURRED', 'ERROR');
+										});
 									});
-								});
-							}else {
-								casper.echo('Error : '+err, 'INFO');
-							}
-						});		
+								}else {
+									casper.echo('Error : '+err, 'INFO');
+								}
+							});		
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});
 					}, function fail() {
 						casper.echo('ERROR OCCURRED', 'ERROR');
 					});
-				}, function fail() {
-					casper.echo('ERROR OCCURRED', 'ERROR');
-				});
-			}else {
-				casper.echo('Error : '+err, 'INFO');
-			}
+				}else {
+					casper.echo('Error : '+err, 'INFO');
+				}
+			});
 		});
 	});
 
-//*******************************************2nd Test Case Verification********************************************
-
-	//Open Front End URL And Registering a user And Verifying Delete Account
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		forumRegister.redirectToLogout(casper, test, function(err) {
-			if(!err) {
-				casper.waitForSelector('a#td_tab_login', function success() {
-					forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
-						if(!err) {
-							casper.waitForSelector('a.default-user', function success() {
-								this.echo('User logged-in successfully', 'INFO');
-								this.click('a.default-user');
-								test.assertExists('a[href^="/register/register?edit="]');
-								this.click('a[href^="/register/register?edit="]');
-								test.assertExists('a[href^="/register?action=preferences&userid="]');
-								this.click('a[href^="/register?action=preferences&userid="]');
-								casper.waitForSelector('a#deleteAccountDialog', function success() {
-									deleteAccount(casper, function(err) {
-										if(!err) {
-											casper.echo('Delete Account Task Completed On Account Setting Page', 'INFO');
-										}else {
-											casper.echo('Error : '+err, 'INFO');
-										}
+	casper.then(function() {
+		casper.echo('                                      CASE 2', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Open Front End URL And Registering a user And Verifying Delete Account', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.thenOpen(config.url, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+			forumRegister.redirectToLogout(casper, test, function(err) {
+				if(!err) {
+					casper.waitForSelector('a#td_tab_login', function success() {
+						forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
+							if(!err) {
+								casper.waitForSelector('a.default-user', function success() {
+									this.echo('User logged-in successfully', 'INFO');
+									this.click('a.default-user');
+									test.assertExists('a[href^="/register/register?edit="]');
+									this.click('a[href^="/register/register?edit="]');
+									test.assertExists('a[href^="/register?action=preferences&userid="]');
+									this.click('a[href^="/register?action=preferences&userid="]');
+									casper.waitForSelector('a#deleteAccountDialog', function success() {
+										deleteAccount(casper, function(err) {
+											if(!err) {
+												casper.echo('Delete Account Task Completed On Account Setting Page', 'INFO');
+											}else {
+												casper.echo('Error : '+err, 'INFO');
+											}
+										});
+									}, function fail() {
+										casper.echo('ERROR OCCURRED', 'ERROR');
 									});
 								}, function fail() {
 									casper.echo('ERROR OCCURRED', 'ERROR');
 								});
-							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
-							});
-						}else {
-							casper.echo('Error : '+err, 'INFO');
-						}
+							}else {
+								casper.echo('Error : '+err, 'INFO');
+							}
+						});
+					}, function fail() {
+						casper.echo('ERROR OCCURRED', 'ERROR');
 					});
-				}, function fail() {
-					casper.echo('ERROR OCCURRED', 'ERROR');
-				});
-			}else {
-				casper.echo('Error : '+err, 'INFO');
-			}
+				}else {
+					casper.echo('Error : '+err, 'INFO');
+				}
+			});
 		});
 	});
 
-//*************************************3rd Test Case Verification***************************************************8
-
+	casper.then(function() {
+		casper.echo('                                      CASE 3', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Login To App And An Admin Deletes An Account From Members Page', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Reopen Front-End URL  And Register A User
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -258,9 +276,12 @@ deleteAccount.featureTest = function(casper, test, x) {
 		});
 	});
 
-//******************************************4th Test Case Verification********************************************
-
-
+	casper.then(function() {
+		casper.echo('                                      CASE 4', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Login To App And An Admin Deletes An Account From Members Page', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Reopen Front-End URL And Delete An Account From Members Page
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -301,8 +322,12 @@ deleteAccount.featureTest = function(casper, test, x) {
 		});
 	});
 
-//**************************************5th Test Case Verification****************************************
-
+	casper.then(function() {
+		casper.echo('                                      CASE 5', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Login To App And An Admin Deletes An Account From Members List Using Search-Box', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Reopen Front-End URL And Register A User
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -382,6 +407,12 @@ deleteAccount.featureTest = function(casper, test, x) {
 
 //*********************************6th Test Case Verification************************************************
 
+	casper.then(function() {
+		casper.echo('                                      CASE 6', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Open Front-End URL And An Admin Deletes Other Users Account From Members Page', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Front-End URL And Register A User
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -508,6 +539,12 @@ deleteAccount.featureTest = function(casper, test, x) {
 	
 //*******************************7th Test Case Verification**********************************************
 
+	casper.then(function() {
+		casper.echo('                                      CASE 7', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Login To App And User Deletes Own Account From Topic List', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Reopen Front-End URL And Register A User
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -670,6 +707,12 @@ deleteAccount.featureTest = function(casper, test, x) {
 
 //***********************************8th Test Case Verification*****************************************
 
+	casper.then(function() {
+		casper.echo('                                      CASE 8', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Login To App And User Deletes Own Account From Topic List', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Reopen Front-End URL And Register A User
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -829,6 +872,8 @@ deleteAccount.featureTest = function(casper, test, x) {
 	});
 };
 
+//******************************************************************************************************************************
+
 deleteAccount.backEndTest = function(casper, test, x) {
 	
 	casper.start();
@@ -847,10 +892,23 @@ deleteAccount.backEndTest = function(casper, test, x) {
 			//stream.removeListener('end', cleanup)
 		  }
 	});
+	
+	//Method For Verifying JavaScript Errors
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		deleteAccount.errors.push(msg);
+	});
 
 
-//***********************************9th Test Case Verification********************************************
-
+	casper.then(function() {
+		casper.echo('                                      CASE 9', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('An Admin Delete An Account From Profile Page', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Reopen Front-End URL And Register A User
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -985,8 +1043,12 @@ deleteAccount.backEndTest = function(casper, test, x) {
 		});
 	});
 	
-//*********************************10th Test Case Verification***************************************	
-
+	casper.then(function() {
+		casper.echo('                                      CASE 10', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Register A User And Do Not Delete An Account From profilePage', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Reopen Front-End URL And Register A User
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -1052,8 +1114,12 @@ deleteAccount.backEndTest = function(casper, test, x) {
 		});
 	});
 
-//********************************11th Test Case verification**************************************
-
+	casper.then(function() {
+		casper.echo('                                      CASE 11', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Register A User And Delete An Account From profile Page', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Reopen Front-End URL And Register A User
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -1119,8 +1185,12 @@ deleteAccount.backEndTest = function(casper, test, x) {
 		});
 	});
 
-//*******************************************12th test Case Verification*************************************
-
+	casper.then(function() {
+		casper.echo('                                      CASE 12', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Login To Forum Back-end And Delete An Account', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Reopen Front-End URL And Register A User
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -1207,8 +1277,12 @@ deleteAccount.backEndTest = function(casper, test, x) {
 		});
 	});
 
-//******************************************13th Test Case Verification********************************************
-
+	casper.then(function() {
+		casper.echo('                                      CASE 13', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Login To Forum Back-end And Delete An Account Of A Registered User', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -1242,6 +1316,9 @@ deleteAccount.backEndTest = function(casper, test, x) {
 								}
 							}
 						});
+						var id = grpName.split('=');
+						var id = id[2];
+						this.click('a[data-tooltip-elm="ugManage'+id+'"]');
 						this.click('a[href="'+grpName+'"]');
 						casper.waitForSelector('#groupUsersList input[name="user_id"][type="checkbox"]', function success() {
 							this.click('#groupUsersList input[name="user_id"][type="checkbox"]');
@@ -1273,8 +1350,12 @@ deleteAccount.backEndTest = function(casper, test, x) {
 		});
 	});
 
-//*********************************************14th Test Case Verification*******************************************
-	
+	casper.then(function() {
+		casper.echo('                                      CASE 14', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Login To Forum Back-end And Delete An Account Of A Pending Email Verification User', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -1308,6 +1389,9 @@ deleteAccount.backEndTest = function(casper, test, x) {
 								}
 							}
 						});
+						var id = grpName.split('=');
+						var id = id[2];
+						this.click('a[data-tooltip-elm="ugManage'+id+'"]');
 						this.click('a[href="'+grpName+'"]');
 						casper.waitForSelector('#groupUsersList input[name="user_id"][type="checkbox"]', function success() {
 							this.click('#groupUsersList input[name="user_id"][type="checkbox"]');
@@ -1339,8 +1423,12 @@ deleteAccount.backEndTest = function(casper, test, x) {
 		});
 	});
 
-//*************************************15th Test Case Verification************************************************
-
+	casper.then(function() {
+		casper.echo('                                      CASE 15', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Login To Forum Back-end And Delete An Account Of An Admin User', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -1374,6 +1462,9 @@ deleteAccount.backEndTest = function(casper, test, x) {
 								}
 							}
 						});
+						var id = grpName.split('=');
+						var id = id[2];
+						this.click('a[data-tooltip-elm="ugManage'+id+'"]');
 						this.click('a[href="'+grpName+'"]');
 						casper.waitForSelector('#groupUsersList input[name="user_id"][type="checkbox"]', function success() {
 							this.click('#groupUsersList input[name="user_id"][type="checkbox"]');
@@ -1412,8 +1503,21 @@ deleteAccount.customFieldsTest = function(casper, test) {
 
 	casper.start();
 
-	//********************************1st Test Case Verification*******************************************
-
+	//Method For Verifying JavaScript Errors
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		deleteAccount.errors.push(msg);
+	});
+	
+	casper.then(function() {
+		casper.echo('                                      CASE 16', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Open Back-End URL And Change "Delete Own Profile" Permission For Pending Email Verification User Group', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -1423,6 +1527,8 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
 		}
 	});
+	
+	
 
 	//Open Back-End URL And Change 'Delete Own Profile' Permission For Pending Email Verification User Group
 	casper.then(function() {
@@ -1474,8 +1580,12 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	//*****************************************2nd Test Case Verification****************************************************
-	
+	casper.then(function() {
+		casper.echo('                                      CASE 17', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Open Front End URL And Registering a user And Verifying Delete Account From Account Setting page', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Front-End URL And Register A User
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -1583,8 +1693,12 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	//****************************************3rd Test Case Verification*****************************************************
-
+	casper.then(function() {
+		casper.echo('                                      CASE 18', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Delete An Account From Profile Page By Changing Permissions For Pending User', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Back-End URL And Get Title
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -1680,8 +1794,12 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	//**********************************************4th Test Case Verification***********************************************
-
+	casper.then(function() {
+		casper.echo('                                      CASE 19', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Delete An Account From Profile Page By Changing Permissions For Registered User', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Forum Backend URL And Get Title 
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -1751,8 +1869,12 @@ deleteAccount.customFieldsTest = function(casper, test) {
 		});
 	});
 
-	//***********************5th Test Case Verification With Back-End Settings*********************
-	
+	casper.then(function() {
+		casper.echo('                                      CASE 20', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Delete An Account From Account Setting Page By Changing Permissions For Pending User', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Forum Backend URL  
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -1849,8 +1971,12 @@ deleteAccount.customFieldsTest = function(casper, test) {
 	});
 
 
-	//********************************6th Test Case Verification With Back-End Settings**********************************	
-
+	casper.then(function() {
+		casper.echo('                                      CASE 21', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Delete An Account From Account Setting Page By Changing Permissions For Pending User', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Forum Backend URL  
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -1945,15 +2071,29 @@ deleteAccount.customFieldsTest = function(casper, test) {
 			}
 		});
 	});
-
 };
+
+//*************************************************************************************************************************************
 
 deleteAccount.customFieldsTest2 = function(casper, test) {
 
 	casper.start();
+	
+	//Method For Verifying JavaScript Errors
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		deleteAccount.errors.push(msg);
+	});
 
-	//******************7th Test Case Verification With Back-End Settings**************	
-
+	casper.then(function() {
+		casper.echo('                                      CASE 22', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Delete An Account From Account Setting Page By Changing Permissions For Pending User', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Forum Backend URL  
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -2049,8 +2189,12 @@ deleteAccount.customFieldsTest2 = function(casper, test) {
 		});
 	});
 
-	//******************8th Test Case Verification With Back-End Settings**************
-
+	casper.then(function() {
+		casper.echo('                                      CASE 23', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Delete An Account From Account Setting Page By Changing Permissions For Registered User', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -2157,8 +2301,12 @@ deleteAccount.customFieldsTest2 = function(casper, test) {
 		});
 	});
 
-	//******************9th Test Case Verification With Back-End Settings**************
-
+	casper.then(function() {
+		casper.echo('                                      CASE 24', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Delete An Account From Account Setting Page By Changing Permissions For Registered User', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -2265,8 +2413,12 @@ deleteAccount.customFieldsTest2 = function(casper, test) {
 		});
 	});
 
-	//******************10th Test Case Verification With Back-End Settings**************
-
+	casper.then(function() {
+		casper.echo('                                      CASE 25', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Delete An Account From Account Setting Page By Changing Permissions For Registered User', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Front-End URL
 	casper.thenOpen(config.url, function() {
 		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
@@ -2373,8 +2525,12 @@ deleteAccount.customFieldsTest2 = function(casper, test) {
 		});
 	});
 
-	//******************11th Test Case Verification With Back-End Settings**************
-	
+	casper.then(function() {
+		casper.echo('                                      CASE 26', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Delete An Account From Account Setting Page By Changing Permissions For Pending User', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+	});
 	//Open Forum Backend URL  
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -2470,113 +2626,111 @@ deleteAccount.customFieldsTest2 = function(casper, test) {
 		});
 	});
 
-	//******************12th Test Case Verification With Back-End Settings**************
-
-	//Open Front-End URL
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		forumRegister.redirectToLogout(casper, test, function(err) {
-			if(!err) {
-				casper.waitForSelector('a[href^="/register/register"]', function success() {
-					this.click('a[href^="/register/register"]');
-					casper.waitForSelector('form[action="/register/create_account"]', function success() {
-						this.echo('registration from opened successfully', 'INFO');
-						forumRegister.registerToApp(json.deleteAccount, casper, function(err) {
-							if(!err) {
-								casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
-									casper.echo('user registered successfully', 'INFO');
-								}, function fail() {
-									casper.waitForSelector('div.alert.alert-danger.text-center', function success() {
+	casper.then(function() {
+		casper.echo('                                      CASE 27', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.echo('Delete An Account From Profile Page By Changing Permissions For Registered User', 'INFO');
+		casper.echo('************************************************************************************', 'INFO');
+		casper.thenOpen(config.url, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+			forumRegister.redirectToLogout(casper, test, function(err) {
+				if(!err) {
+					casper.waitForSelector('a[href^="/register/register"]', function success() {
+						this.click('a[href^="/register/register"]');
+						casper.waitForSelector('form[action="/register/create_account"]', function success() {
+							this.echo('registration from opened successfully', 'INFO');
+							forumRegister.registerToApp(json.deleteAccount, casper, function(err) {
+								if(!err) {
+									casper.waitForSelector('div.text-center.bmessage.alert-info.text-danger', function success() {
 										casper.echo('user registered successfully', 'INFO');
 									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
+										casper.waitForSelector('div.alert.alert-danger.text-center', function success() {
+											casper.echo('user registered successfully', 'INFO');
+										}, function fail() {
+											casper.echo('ERROR OCCURRED', 'ERROR');
+										});
 									});
+								}else {
+									casper.echo('Error : '+err, 'INFO');
+								}
+							});		
+						}, function fail() {
+							casper.echo('ERROR OCCURRED', 'ERROR');
+						});
+					}, function fail() {
+						casper.echo('ERROR OCCURRED', 'ERROR');
+					});
+				}else {
+					casper.echo('Error : '+err, 'INFO');
+				}
+			});
+		});
+		casper.thenOpen(config.backEndUrl, function() {
+			this.echo('Title of the page :' +this.getTitle(), 'INFO');
+			try {
+				this.click('a[href="/tool/members/login?action=logout"]');
+			}catch(e) {
+				test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+			}
+		});
+		casper.then(function() {
+			forumRegister.loginToForumBackEnd(casper, test, function(err) {
+				if(!err) {
+					casper.echo('Logged-in successfully from back-end', 'INFO');
+					casper.waitForSelector('div#my_account_forum_menu', function success() {
+						enableDeleteOwnProfileForRegisteredUser(casper, casper.test, function(err) {
+							if(!err) {
+								casper.echo('permission changed for registered user', 'INFO');
+							}else {
+								casper.echo('Error : '+err, 'INFO');
+							}
+						});
+					}, function fail() {
+						casper.echo('ERROR OCCURRED', 'ERROR');
+					});
+				}else {
+					casper.echo('Error : '+err, 'INFO');
+				}
+			});
+		});
+
+		casper.thenOpen(config.url, function() {
+			this.echo('Title of the page : ' +this.getTitle(), 'INFO');
+			forumRegister.redirectToLogout(casper, test, function(err) {
+				if(!err) {
+					casper.waitForSelector('a#td_tab_login', function success() {
+						forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
+							if(!err) {
+								casper.waitForSelector('a.default-user', function success() {
+									casper.echo('User logged-in successfully', 'INFO');
+									this.click('a.default-user');
+									try {
+										test.assertExists('a[href^="/profile"]');	
+										this.click('a[href^="/profile/"]');	
+										casper.waitForSelector('a#deleteAccountDialog', function success() {
+											deleteAccount(casper, function(err) {});					
+										}, function fail() {
+											casper.echo('ERROR OCCURRED', 'ERROR');
+										});
+									}catch(e) {
+										test.assertDoesntExist('a[href^="/register?action=preferences"]', 'account setting tab not found');	
+									}
+								}, function fail() {
+									casper.echo('ERROR OCCURRED', 'ERROR');
 								});
 							}else {
 								casper.echo('Error : '+err, 'INFO');
 							}
-						});		
+						});
 					}, function fail() {
 						casper.echo('ERROR OCCURRED', 'ERROR');
 					});
-				}, function fail() {
-					casper.echo('ERROR OCCURRED', 'ERROR');
-				});
-			}else {
-				casper.echo('Error : '+err, 'INFO');
-			}
+				}else {
+					casper.echo('Error : '+err, 'INFO');
+				}
+			});
 		});
 	});
-
-	//Open Forum Backend URL  
-	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		try {
-			this.click('a[href="/tool/members/login?action=logout"]');
-		}catch(e) {
-			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}
-	});
-
-	//Change Permissions From Back End
-	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function(err) {
-			if(!err) {
-				casper.echo('Logged-in successfully from back-end', 'INFO');
-				casper.waitForSelector('div#my_account_forum_menu', function success() {
-					enableDeleteOwnProfileForRegisteredUser(casper, casper.test, function(err) {
-						if(!err) {
-							casper.echo('permission changed for registered user', 'INFO');
-						}else {
-							casper.echo('Error : '+err, 'INFO');
-						}
-					});
-				}, function fail() {
-					casper.echo('ERROR OCCURRED', 'ERROR');
-				});
-			}else {
-				casper.echo('Error : '+err, 'INFO');
-			}
-		});
-	});
-
-	//Reopen Front-End URL Delete An Account From User's Profile Page
-	casper.thenOpen(config.url, function() {
-		this.echo('Title of the page : ' +this.getTitle(), 'INFO');
-		forumRegister.redirectToLogout(casper, test, function(err) {
-			if(!err) {
-				casper.waitForSelector('a#td_tab_login', function success() {
-					forumLogin.loginToApp(json['deleteAccount'].uname, json['deleteAccount'].upass, casper, function(err) {
-						if(!err) {
-							casper.waitForSelector('a.default-user', function success() {
-								casper.echo('User logged-in successfully', 'INFO');
-								this.click('a.default-user');
-								try {
-									test.assertExists('a[href^="/profile"]');	
-									this.click('a[href^="/profile/"]');	
-									casper.waitForSelector('a#deleteAccountDialog', function success() {
-										deleteAccount(casper, function(err) {});					
-									}, function fail() {
-										casper.echo('ERROR OCCURRED', 'ERROR');
-									});
-								}catch(e) {
-									test.assertDoesntExist('a[href^="/register?action=preferences"]', 'account setting tab not found');	
-								}
-							}, function fail() {
-								casper.echo('ERROR OCCURRED', 'ERROR');
-							});
-						}else {
-							casper.echo('Error : '+err, 'INFO');
-						}
-					});
-				}, function fail() {
-					casper.echo('ERROR OCCURRED', 'ERROR');
-				});
-			}else {
-				casper.echo('Error : '+err, 'INFO');
-			}
-		});
-	});	
 };
 
 //************************************PRIVATE METHODS***********************************
@@ -2707,6 +2861,9 @@ var enableDeleteOwnProfileForRegisteredUser = function(driver, test, callback) {
 						}
 					}
 				});
+				var id = grpName.split('=');
+				var id = id[2];
+				this.click('a[data-tooltip-elm="ugManage'+id+'"]');
 				this.click('a[href="'+grpName+'"]');
 				driver.waitForSelector('#delete_profile', function success() {
 					utils.enableorDisableCheckbox('delete_profile', true, driver, function() {
@@ -2764,6 +2921,9 @@ var enableDeleteOwnProfileForPendingUser = function(driver, test, callback) {
 						}
 					}
 				});
+				var id = grpName.split('=');
+				var id = id[2];
+				this.click('a[data-tooltip-elm="ugManage'+id+'"]');
 				this.click('a[href="'+grpName+'"]');
 				driver.waitForSelector('#delete_profile', function success() {
 					utils.enableorDisableCheckbox('delete_profile', true, driver, function() {
@@ -2818,6 +2978,9 @@ var disableDeleteOwnProfileForRegisteredUser = function(driver, test, callback) 
 						}
 					}
 				});
+				var id = grpName.split('=');
+				var id = id[2];
+				this.click('a[data-tooltip-elm="ugManage'+id+'"]');
 				this.click('a[href="'+grpName+'"]');
 				driver.waitForSelector('#delete_profile', function success() {
 					utils.enableorDisableCheckbox('delete_profile', false, driver, function() {
@@ -2875,6 +3038,9 @@ var disableDeleteOwnProfileForPendingUser = function(driver, test, callback) {
 						}
 					}
 				});
+				var id = grpName.split('=');
+				var id = id[2];
+				this.click('a[data-tooltip-elm="ugManage'+id+'"]');
 				this.click('a[href="'+grpName+'"]');
 				driver.waitForSelector('#delete_profile', function success() {
 					utils.enableorDisableCheckbox('delete_profile', false, driver, function() {
