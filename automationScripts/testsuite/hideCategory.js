@@ -14,31 +14,25 @@ hideCategory.hideCategoryFeature = function(casper, test, x) {
 	//start from forum url
 	casper.start(config.url, function() {
 		casper.echo('Title of the page :' +this.getTitle(), 'INFO');
-	});
-
-	//Login To App
-	casper.then(function() {
-		forumLogin.loginToApp(json['newTopic'].adminUname, json['newTopic'].adminPass, casper, function() {
-			casper.echo('Admin has been successfuly login to application', 'INFO');
+		//Login To App
+		casper.then(function() {
+			forumLogin.loginToApp(json['newTopic'].adminUname, json['newTopic'].adminPass, casper, function(err) {
+				if(!err) {
+					casper.echo('Admin has been successfuly login to application', 'INFO');
+				}
+			});
 		});
 	});
 
-	//Getting Screenshot After Clicking On 'Log In' Link 
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'login.png');
-	});
-	casper.then(function() {
+	casper.thenOpen(config.url, function() {
 		test.assertExists('a[href="/categories"]');
 		this.click('a[href="/categories"]');
-		this.wait(7000, function() {
-			this.capture(screenShotsDir+ 'category.png');
-		});
-		if(this.exists(x('//a/span[text()="'+selectCategory+'"]/parent::a')))
-		{
-			/*****Hide category and verify hidden category in Modify filter*****/
-			casper.then(function() {
-				casper.echo('Hide category and verify hidden category in Modify filter', 'INFO');
-				this.then(function() {
+		this.waitForSelector('.tab-content', function success() {
+			if(this.exists(x('//a/span[text()="'+selectCategory+'"]/parent::a')))
+			{
+				/*****Hide category and verify hidden category in Modify filter*****/
+				casper.then(function() {
+					casper.echo('Hide category and verify hidden category in Modify filter', 'INFO');
 					var classVal = x('//a/span[text()="'+selectCategory+'"]/parent::a');
 					var href = this.getElementAttribute(classVal, "href");
 					if(!href){
@@ -57,124 +51,123 @@ hideCategory.hideCategoryFeature = function(casper, test, x) {
 					casper.echo('hideButtonId : ' +hideButtonId[1]);
 					test.assertExists('a[data-forumid="'+hideButtonId[1]+'"]');
 					this.click('a[data-forumid="'+hideButtonId[1]+'"]');
-					this.wait(7000, function() {
-						this.capture(screenShotsDir+ 'hideCategory.png');
-						this.reload();
+					this.wait(2000, function() {
+						this.reload(function() {
+							//verify after hiding category
+							this.wait(2000, function(){
+								test.assertDoesntExist(x('//a/span[text()="'+selectCategory+'"]'));
+								casper.echo('successfully verified category is hide', 'INFO');
+							});
+						});
 					});
-		
-					//verify after hiding category
-					this.wait(2000, function(){
-						test.assertDoesntExist(x('//a/span[text()="'+selectCategory+'"]'));
-						casper.echo('successfully verified category is hide', 'INFO');
-					});
-			
 				});
 
-			});
-
-			/*****Deselect particular category from Filter Category and check that category is showing in the list*****/
-			casper.then(function() {
-				casper.echo('Deselect particular category from Filter Category and check that category is showing in the list', 'INFO');
-				test.assertExists('a[href="#filter-modal"]');
-				this.click('a[href="#filter-modal"]');
-				this.wait(7000, function() {
-					this.capture(screenShotsDir+ 'filterModel.png');
-				});
-				this.then(function() {
-					test.assertExists('form[action="/forums"] div#alertMsg');
-					var info = this.fetchText('form[action="/forums"] div#alertMsg');
-					casper.echo('dialog info : ' +info);
-					test.assertEquals(info.trim(),json.hideUnHideCategory.infoMessage, 'info message is verified');
-			
-				});
-				this.then(function() {
-					test.assertExists('li.list-group-item');
-					this.click('li.list-group-item');
-				});
-				this.then(function() {
-					test.assertExists('#apply_forum_filter');
-					this.click('#apply_forum_filter');
-				});
-
-				//verify un-hide category
-				this.then(function() {
-					//var selectCategory = json.hideUnHideCategory.categoryName;
-					test.assertExists(x('//a/span[text()="'+selectCategory+'"]'));
-					casper.echo('successfully verified category is un-hide', 'INFO');
-					this.capture(screenShotsDir+ 'verifyOnCategoryPage.png');
-				});
-		
-			});
-	
-			/*****Check Clear Filter functionality to stop hiding hidded category*****/
-			casper.then(function() {
-				//var selectCategory = json.hideUnHideCategory.categoryName;
-				var classVal = x('//a/span[text()="'+selectCategory+'"]/parent::a');
-				var href = this.getElementAttribute(classVal, "href");
-				test.assertExists('a[href="'+href+'"]');
-				var hideButtonId = href.split('=');
-				casper.echo('hideButtonId : ' +hideButtonId[1]);
-				test.assertExists('a[data-forumid="'+hideButtonId[1]+'"]');
-				this.click('a[data-forumid="'+hideButtonId[1]+'"]');
-				this.wait(7000, function() {
-					this.capture(screenShotsDir+ 'hideCategory.png');
-					this.reload();
-				});
-
-				//verify after hiding category
-				this.wait(2000, function(){
-					test.assertDoesntExist(x('//a/span[text()="'+selectCategory+'"]'));
-					casper.echo('successfully verified category is hide', 'INFO');
-				});
-
-				this.then(function() {
+				/*****Deselect particular category from Filter Category and check that category is showing in the list*****/
+				casper.then(function() {
+					casper.echo('Deselect particular category from Filter Category and check that category is showing in the list', 'INFO');
 					test.assertExists('a[href="#filter-modal"]');
 					this.click('a[href="#filter-modal"]');
-					this.wait(7000, function() {
-						this.capture(screenShotsDir+ 'filterModel.png');
-					});
-					this.then(function() {
+					this.waitForSelector('form[action="/forums"] div#alertMsg', function success() {
 						test.assertExists('form[action="/forums"] div#alertMsg');
 						var info = this.fetchText('form[action="/forums"] div#alertMsg');
 						casper.echo('dialog info : ' +info);
 						test.assertEquals(info.trim(),json.hideUnHideCategory.infoMessage, 'info message is verified');
 			
+					}, function fail(err) {
+						casper.echo(err);
 					});
-					this.then(function() {
-						test.assertExists('#clear_forum_filter');
-						this.click('#clear_forum_filter');
-					});
-					this.then(function() {
-						test.assertExists('#apply_forum_filter');
-						this.click('#apply_forum_filter');
+
+					this.waitForSelector('li.list-group-item', function success() {
+						test.assertExists('li.list-group-item');
+						this.click('li.list-group-item');
+						this.waitForSelector('#apply_forum_filter', function success() {
+							test.assertExists('#apply_forum_filter');
+							this.click('#apply_forum_filter');
+						}, function fail(err) {
+							casper.echo(err);
+						});
+					}, function fail(err) {
+						casper.echo(err);
 					});
 
 					//verify un-hide category
-					this.then(function() {
-						//var selectCategory = json.hideUnHideCategory.categoryName;
+					this.waitForSelector('.table-responsive', function success() {
 						test.assertExists(x('//a/span[text()="'+selectCategory+'"]'));
 						casper.echo('successfully verified category is un-hide', 'INFO');
-						this.capture(screenShotsDir+ 'verifyOnCategoryPage.png');
+					}, function fail(err) {
+						casper.echo(err);
+					});
+		
+				});
+	
+				/*****Check Clear Filter functionality to stop hiding hidded category*****/
+				casper.then(function() {
+					var classVal = x('//a/span[text()="'+selectCategory+'"]/parent::a');
+					var href = this.getElementAttribute(classVal, "href");
+					test.assertExists('a[href="'+href+'"]');
+					var hideButtonId = href.split('=');
+					casper.echo('hideButtonId : ' +hideButtonId[1]);
+					test.assertExists('a[data-forumid="'+hideButtonId[1]+'"]');
+					this.click('a[data-forumid="'+hideButtonId[1]+'"]');
+					this.wait(2000, function() {
+						this.reload(function() {
+							//verify after hiding category
+							this.wait(2000, function(){
+								test.assertDoesntExist(x('//a/span[text()="'+selectCategory+'"]'));
+								casper.echo('successfully verified category is hide', 'INFO');
+							});
+						});
+					});
+
+					this.waitForSelector('a[href="#filter-modal"]', function success() {
+						test.assertExists('a[href="#filter-modal"]');
+						this.click('a[href="#filter-modal"]');
+						this.wait(2000);
+						this.waitForSelector('form[action="/forums"] div#alertMsg', function success() {
+							test.assertExists('form[action="/forums"] div#alertMsg');
+							var info = this.fetchText('form[action="/forums"] div#alertMsg');
+							casper.echo('dialog info : ' +info);
+							test.assertEquals(info.trim(),json.hideUnHideCategory.infoMessage, 'info message is verified');
+						}, function fail(err) {
+							casper.echo(err);
+						});
+
+						this.waitForSelector('#clear_forum_filter', function success() {
+							test.assertExists('#clear_forum_filter');
+							this.click('#clear_forum_filter');
+							test.assertExists('#apply_forum_filter');
+							this.click('#apply_forum_filter');
+						}, function fail(err) {
+							casper.echo(err);
+						});
+
+						//verify un-hide category
+						this.waitForSelector('.table-responsive', function success() {
+							test.assertExists(x('//a/span[text()="'+selectCategory+'"]'));
+							casper.echo('successfully verified category is un-hide', 'INFO');
+						}, function fail(err) {
+							casper.echo(err);
+						});
+					}, function fail(err) {
+						casper.echo(err);
 					});
 				});
-			});
-		} else {
-			casper.echo('Error occurred i.e. category does Not Exists', 'INFO');
-			this.capture(screenShotsDir+ 'categoryPage.png');
-		}
+			} else {
+				casper.echo('Error occurred i.e. category does Not Exists', 'INFO');
+			}
+		}, function fail(err) {
+			casper.echo(err);
+		});
 	});
 			
 	
 	//Log Out From App
 	casper.then(function() {
-		forumLogin.logoutFromApp(casper, function() {
-			casper.echo('Successfully logout from application', 'INFO');
+		forumLogin.logoutFromApp(casper, function(err) {
+			if(!err) {
+				casper.echo('Successfully logout from application', 'INFO');
+			}
 		});
-	});
-
-	//Getting Screenshot After Clicking On 'Logout' Link
-	casper.wait(7000, function() {
-		this.capture(screenShotsDir+ 'logout.png');
 	});
 };
 

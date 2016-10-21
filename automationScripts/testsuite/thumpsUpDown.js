@@ -3,14 +3,24 @@ var utils = require('./utils.js');
 var forumRegister = require('./register.js');
 var generalPermission = require('./generalPermission.js');
 var forumLogin = require('./forum_login.js');
-var config = require('../../config/config.json');
-var json = require('../testdata/editData.json');
+var config = require('../config/config.json');
+var json = require('../../testdata/editData.json');
 
 var thumpsUpDown = module.exports = {};
+thumpsUpDown.errors = [];
 var screenShotsDir = config.screenShotsLocation + 'thumpsUpDown/';
 
 thumpsUpDown.featureTest = function(casper, test, x) {
 
+	//Method For Verifying JavaScript Errors
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		thumpsUpDown.errors.push(msg);
+	});
+	
 	//Open Forum Front End URL And Get Title 
 	casper.start(config.url, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -27,7 +37,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		});
 	});
 	
-	casper.then(function() {
+	/*casper.then(function() {
 		this.echo('                                      CASE 1', 'INFO');
 		this.echo('************************************************************************************', 'INFO');
 		this.echo('LIKE POST FROM TOPIC PAGE', 'INFO');
@@ -127,7 +137,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 				casper.echo('ERROR OCCURRED', 'ERROR');
 			});
 		});
-	});
+	});*/
 	
 	casper.then(function() {
 		casper.echo('                                      CASE 4', 'INFO');
@@ -140,6 +150,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
+			test.assertExists('a[href="/tool/members/login?action=logout"]');
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -256,6 +267,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
+			test.assertExists('a[href="/tool/members/login?action=logout"]');
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -308,7 +320,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 		});
 	});
 	
-	casper.then(function() {
+	/*casper.then(function() {
 		casper.echo('                                      CASE 5', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('TO VERIFY WITH CLICK ON LIKERS/DISLIKERS USERNAME IN CASE OF REGISTERED USER', 'INFO');
@@ -394,6 +406,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
+			test.assertExists('a[href="/tool/members/login?action=logout"]');
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -502,6 +515,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
+			test.assertExists('a[href="/tool/members/login?action=logout"]');
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -753,6 +767,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
+			test.assertExists('a[href="/tool/members/login?action=logout"]');
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -844,6 +859,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
+			test.assertExists('a[href="/tool/members/login?action=logout"]');
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1163,6 +1179,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
+			test.assertExists('a[href="/tool/members/login?action=logout"]');
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1233,6 +1250,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
+			test.assertExists('a[href="/tool/members/login?action=logout"]');
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1554,6 +1572,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
+			test.assertExists('a[href="/tool/members/login?action=logout"]');
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1647,6 +1666,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 	casper.thenOpen(config.backEndUrl, function() {
 		this.echo('Title of the page :' +this.getTitle(), 'INFO');
 		try {
+			test.assertExists('a[href="/tool/members/login?action=logout"]');
 			this.click('a[href="/tool/members/login?action=logout"]');
 		}catch(e) {
 			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
@@ -1730,7 +1750,7 @@ thumpsUpDown.featureTest = function(casper, test, x) {
 				casper.echo('Error : '+err, 'INFO');
 			}
 		});
-	});
+	});*/
 };
 
 //*************************************************PRIVATE METHODS***********************************************

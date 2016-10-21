@@ -153,6 +153,30 @@ switch (feature) {
 		});
 	break;
 	
+	case "forumListingPage":
+		casper.test.begin("Start 'Forum Listing Page' functionality from home page & verify content with all scenarios", function(test) {
+			var forumListingPage = require("./testsuite/forumListingPage.js");
+			forumListingPage.featureTest(casper, casper.test);
+			casper.run(function(){
+				test.done();
+				test.assert(true);
+			});
+		});        
+	break;
+	
+	case "forumListingPageForSubCategory":
+	casper.test.begin("Start 'Forum Listing Page For Sub Category' functionality from home page & verify content with all scenarios", function(test) {
+
+		var forumListingPage = require("./testsuite/forumListingPage.js");
+		var x = require('casper').selectXPath;
+		forumListingPage.customFieldsTest(casper, casper.test, x);
+		casper.run(function(){
+			test.done();
+			test.assert(true);
+		});
+	});
+	break;
+	
 	case "thumpsUpDown" :
 		 casper.test.begin('Verify thumps up/down functionlity ', function(test) {
 		 var thumpsUpDown = require("./testsuite/thumpsUpDown.js");
@@ -234,7 +258,7 @@ switch (feature) {
 		});
 		break;
 
-	case "topic":
+	case "generalTopic":
 		casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 			var newTopic = require("./testsuite/newTopic.js");
 			var x = require('casper').selectXPath;
@@ -245,6 +269,17 @@ switch (feature) {
 		});
 		break;
 
+	case "movetopic" :
+		casper.test.begin('Verify move topic functionlity ', function(test) {
+			var moveTopic = require("./testsuite/moveTopic.js");
+			var x = require('casper').selectXPath;
+			moveTopic.moveTopicFeature(casper, casper.test, x);
+			casper.run(function(){
+				test.done();
+			});
+		});
+		break;
+        
 	case "calendar" :
 		 casper.test.begin('Verify calendar functionlity ', function(test) {
 			 var x = require('casper').selectXPath;
