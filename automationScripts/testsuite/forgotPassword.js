@@ -198,7 +198,17 @@ forgotpwd.featureTest = function(casper, test) {
 								test.assert(ActualMessage.indexOf(responseData.ExpectedMessage) > -1);
 								casper.waitForSelector('small a[href="/categories"]', function() {
 									this.click('small a[href="/categories"]');
-									casper.waitForSelector('#startTopic', function() {
+									casper.waitForSelector('#startTopic', function success() {
+										casper.capture(screenShotsDir+"a.png");
+										forgotpwd.gotoForgotPasswordpage(casper, function(err){
+											if (err) {
+												casper.echo("Error Occurred In Callback", "ERROR");
+											} else {
+												casper.echo("Forgot password page navigated");
+											}
+										});
+									}, function fail() {
+										this.echo('Start New Topic Not Found', 'ERROR');
 										forgotpwd.gotoForgotPasswordpage(casper, function(err){
 											if (err) {
 												casper.echo("Error Occurred In Callback", "ERROR");
@@ -227,12 +237,22 @@ forgotpwd.featureTest = function(casper, test) {
 								casper.waitForSelector('small a[href="/categories"]', function() {
 									this.click('small a[href="/categories"]');
 								});
-								casper.waitForSelector('#startTopic', function() {
+								casper.waitForSelector('#startTopic', function success() {
+									casper.capture(screenShotsDir+"a.png");
 									forgotpwd.gotoForgotPasswordpage(casper, function(err){
 										if (err) {
 											casper.echo("Error Occurred In Callback", "ERROR");
 										} else {
-											casper.echo("Forgot password page is navigated");	
+											casper.echo("Forgot password page navigated");
+										}
+									});
+								}, function fail() {
+									this.echo('Start New Topic Not Found', 'ERROR');
+									forgotpwd.gotoForgotPasswordpage(casper, function(err){
+										if (err) {
+											casper.echo("Error Occurred In Callback", "ERROR");
+										} else {
+											casper.echo("Forgot password page navigated");
 										}
 									});
 								});
@@ -255,7 +275,17 @@ forgotpwd.featureTest = function(casper, test) {
 								casper.waitForSelector('small a[href="/categories"]', function() {
 									this.click('small a[href="/categories"]');
 								});
-								casper.waitForSelector('#startTopic', function() {
+								casper.waitForSelector('#startTopic', function success() {
+									casper.capture(screenShotsDir+"a.png");
+									forgotpwd.gotoForgotPasswordpage(casper, function(err){
+										if (err) {
+											casper.echo("Error Occurred In Callback", "ERROR");
+										} else {
+											casper.echo("Forgot password page navigated");
+										}
+									});
+								}, function fail() {
+									this.echo('Start New Topic Not Found', 'ERROR');
 									forgotpwd.gotoForgotPasswordpage(casper, function(err){
 										if (err) {
 											casper.echo("Error Occurred In Callback", "ERROR");
@@ -283,7 +313,17 @@ forgotpwd.featureTest = function(casper, test) {
 								casper.waitForSelector('small a[href="/categories"]', function() {
 									this.click('small a[href="/categories"]');
 								});
-								casper.waitForSelector('#startTopic', function() {
+								casper.waitForSelector('#startTopic', function success() {
+									casper.capture(screenShotsDir+"a.png");
+									forgotpwd.gotoForgotPasswordpage(casper, function(err){
+										if (err) {
+											casper.echo("Error Occurred In Callback", "ERROR");
+										} else {
+											casper.echo("Forgot password page navigated");
+										}
+									});
+								}, function fail() {
+									this.echo('Start New Topic Not Found', 'ERROR');
 									forgotpwd.gotoForgotPasswordpage(casper, function(err){
 										if (err) {
 											casper.echo("Error Occurred In Callback", "ERROR");

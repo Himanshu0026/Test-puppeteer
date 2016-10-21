@@ -127,7 +127,7 @@ poll.pollFeature = function(casper, test, x, callback) {
 			gotoNewTopic(json['newTopic'].ValidCredential, casper, function(err) {
 				if(!err) {
 					casper.echo('START NEW TOPIC with valid credential', 'INFO');
-					casper.wait(7000, function() {
+					casper.wait(4000, function() {
 						//go to new poll
 						gotoNewPollpage(casper, function(err) {
 							if(!err) {
