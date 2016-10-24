@@ -37,7 +37,14 @@
 	"username": "sangita",
 	"password": "",
 	"ExpectedErrorMessage" : "You must enter your password."
-	}
+	},
+	
+	"AdminLogin" : {
+	 "username": "hani",
+	 "password": "hani",
+	 "ExpectedErrorMessage" : "Admin Login successfully." 
+	
+	}  
 
 	
 
