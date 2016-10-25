@@ -373,6 +373,24 @@ case "deletetopic":
 		});
 	});
         break;
+        case "fbLogin" :
+        	casper.test.begin('Verify Fblogin functionlity', function(test){
+        		var fbLogin=require("./testsuite/fbLogin.js");
+        		fbLogin.fbLoginfeatureTest(casper, casper.test);
+        		var errors = [];
+        		casper.run(function() {
+        			if (errors.length > 0) {
+        				this.echo(errors.length + ' Javascript errors found', "WARNING");
+        				
+        			}else{
+        				this.echo(errors.length + ' Javascript errors found', "INFO");
+        			}
+        			casper.exit();
+        			test.done();
+        		});
+        	
+        	});
+        	break;
 	
     default:
 	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
