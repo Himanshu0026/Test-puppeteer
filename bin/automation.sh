@@ -51,9 +51,9 @@ sleep 1
 #printf "\nTests executing for Verify move topic functionlity : \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature=movetopic >> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1
-#printf "\nTests executing for Forum Listing Page: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-#casperjs test ./automationScripts/automation.js --feature=forumListingPage >> "$AUTOMATION_HOME"/log/automation.txt
-#sleep 1
+printf "\nTests executing for Forum Listing Page: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./automationScripts/automation.js --feature=forumListingPage >> "$AUTOMATION_HOME"/log/automation.txt
+sleep 1
 #printf "\nTests executing for Forum Listing Page For Sub Category: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature=forumListingPageForSubCategory >> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1
