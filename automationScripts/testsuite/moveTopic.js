@@ -9,10 +9,18 @@ var forumLogin = require('./forum_login.js');
 var config = require('../../config/config.json');
 
 var moveTopic = module.exports = {};
+moveTopic.errors = [];
 var screenShotsDir = config.screenShotsLocation + 'moveTopic/';
 
 moveTopic.moveTopicFeature = function(casper, test, x) {
 	var hrefVal = "";
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		moveTopic.errors.push(msg);
+	});
 	//start from forum url
 	casper.start(config.url, function() {
 		casper.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -881,36 +889,44 @@ moveTopic.moveTopicFeature = function(casper, test, x) {
 					var moveToCategory = json.moveTopic.moveToCategory2;
 					var classVal = x("//a[text()='"+topicTitle+"']");
 					var href = casper.getElementAttribute(classVal, "href");
-					href = href.split('-');
-					var id = href[1].split('?');
-					casper.mouse.move('#complete_post_' +id[0]);
-					test.assertExists('div.post-body.pull-left .panel-dropdown div.dropdown');
-					this.click('div.post-body.pull-left .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
-					this.click('#move');
-					this.waitForSelector('#move_threads_dropdown', function success() {
-						test.assertExists('#move_threads_dropdown');
-						this.click('#move_threads_dropdown');
-						this.fill('form[name="admindd"]',{
-							'moveto' : moveToCategory
-						},false);
-						test.assertExists('button[name="submit"]');
-						this.click('button[name="submit"]');
-						//verify moved topic
-						this.waitForSelector('a[href="/categories"]', function success() {
-							test.assertExists('a[href="/categories"]');
-							this.click('a[href="/categories"]');
-							casper.waitForSelector('.table-responsive ul li', function success() {
-								var moveToCategory = json.moveTopic.moveToCategory1;
-								var classVal = x("//a/span[text()='"+moveToCategory+"']/parent::a");
-								var href = this.getElementAttribute(classVal, "href");
+					if(href) {
+						href = href.split('-');
+						var id = href[1].split('?');
+						casper.mouse.move('#complete_post_' +id[0]);
+						test.assertExists('div.post-body.pull-left .panel-dropdown div.dropdown');
+						this.click('div.post-body.pull-left .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
+						this.click('#move');
+						this.waitForSelector('#move_threads_dropdown', function success() {
+							test.assertExists('#move_threads_dropdown');
+							this.click('#move_threads_dropdown');
+							this.fill('form[name="admindd"]',{
+								'moveto' : moveToCategory
+							},false);
+							test.assertExists('button[name="submit"]');
+							this.click('button[name="submit"]');
+							//verify moved topic
+							this.waitForSelector('a[href="/categories"]', function success() {
+								test.assertExists('a[href="/categories"]');
+								this.click('a[href="/categories"]');
+								casper.waitForSelector('.table-responsive ul li', function success() {
+									var moveToCategory = json.moveTopic.moveToCategory1;
+									var classVal = x("//a/span[text()='"+moveToCategory+"']/parent::a");
+									var href = this.getElementAttribute(classVal, "href");
 
-								test.assertExists('a[href="'+href+'"]');
-								this.click('a[href="'+href+'"]');
-								casper.waitForSelector('a[href^="/post/"]', function success() {
-									casper.capture('pp.png');
-									var topicTitle = json.moveTopic.topicName;
-									test.assertDoesntExist(x("//a/span[text()='"+topicTitle+"']"));
-									casper.echo('move topic is verified', 'INFO');
+									test.assertExists('a[href="'+href+'"]');
+									this.click('a[href="'+href+'"]');
+									casper.waitForSelector('a[href^="/post/"]', function success() {
+										casper.capture('category2.png');
+										var topicTitle = json.moveTopic.topicName;
+										try {
+											test.assertDoesntExist(x("//a/span[text()='"+topicTitle+"']"));
+										} catch(e) {
+
+										}
+										casper.echo('move topic is verified', 'INFO');
+									}, function fail(err) {
+										casper.echo(err);
+									});
 								}, function fail(err) {
 									casper.echo(err);
 								});
@@ -920,9 +936,9 @@ moveTopic.moveTopicFeature = function(casper, test, x) {
 						}, function fail(err) {
 							casper.echo(err);
 						});
-					}, function fail(err) {
-						casper.echo(err);
-					});
+					} else {
+						casper.echo('topic '+topicTitle+' does not exists','INFO');
+					}
 				}, function fail(err) {
 					casper.echo(err);
 				});

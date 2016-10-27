@@ -152,7 +152,7 @@ poll.pollFeature = function(casper, test, x, callback) {
 											});
 										}
 									});	
-								}, function fail() {
+								}, function fail(err) {
 									casper.echo(err);				
 								});
 							}

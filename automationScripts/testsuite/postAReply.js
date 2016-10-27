@@ -166,7 +166,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 	casper.thenOpen(config.url, function() {
 		casper.echo('test case for post reply on others topic with valid and invalid contents', 'INFO');
 		this.waitForSelector('a[href="/latest"]', function success() {
-			postReply(casper, function(err) {
+			postReply(x, casper, function(err) {
 				casper.echo('replyed on other topic', 'INFO');
 			});		
 		}, function fail(err) {
@@ -192,7 +192,7 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 				casper.echo('User has been successfuly login to application with register user', 'INFO');
 				casper.echo('post reply on own topic with valid and invalid contents', 'INFO');
 				casper.waitForSelector('a[href="/latest"]', function success() {
-					postReply(casper, function(err) {
+					postReply(x, casper, function(err) {
 						casper.echo('replyed on own topic', 'INFO');
 					});
 				}, function fail(err) {
@@ -235,7 +235,9 @@ postAReply.postAReplyFeature = function(casper, test, x, callback) {
 								casper.echo('sharing on facebook', 'INFO');
 							}		
 						});
-					}, function fail(err) {});
+					}, function fail(err) {
+						casper.echo(err);
+					});
 				}
 			});
 	});
@@ -634,12 +636,12 @@ var verifyPermissionSettingMsg = function(driver, callback) {
 }; 
 
 // method for reply post on any topic
-var replyTopic = function(content, driver, callback) { 
-	
-	
+var replyTopic = function(x, content, driver, callback) { 
 	driver.waitForSelector('form[name="posts"]', function success() {
+		var classVal = x("//a/span[text()='HolyDay']/parent::a");
+		var href = casper.getElementAttribute(classVal, "href");
 		try {
-			driver.click('form[name="posts"] h4 a');
+			driver.click('a[href="'+href+'"]');
 		} catch(e) {
 
 		}
@@ -648,7 +650,11 @@ var replyTopic = function(content, driver, callback) {
 	});
 
 	driver.waitForSelector('#message', function success() {
-		this.sendKeys('#message', content);
+		try {
+			this.sendKeys('#message', content);
+		} catch(err) {
+			
+		}
 	}, function fail(err) {
 		casper.echo(err);
 	});
@@ -680,20 +686,20 @@ function testAlert1(message) {
 };
 
 // post reply with valid and invalid scenario
-var postReply = function(driver, callback){
+var postReply = function(x, driver, callback){
 	// Verify error message when user try to post blank content
 	casper.on('remote.alert',testAlert1);
 
 	casper.then(function() {
 		//Reply topic with blank content
 		casper.echo('Reply topic with blank content', 'INFO');
-		replyTopic(json.replyTopic.blankContent.content, casper, function(err) {
+		replyTopic(x, json.replyTopic.blankContent.content, casper, function(err) {
 			if(!err) {
 				casper.echo('post a reply by leaving blank content and verify error message', 'INFO');
 				//Reply topic with valid credential
 				driver.waitForSelector('.post-body', function success() {
 					casper.echo('Reply topic with valid credential', 'INFO');
-					replyTopic(json.replyTopic.ValidCredential.content, casper, function(err) {
+					replyTopic(x, json.replyTopic.ValidCredential.content, casper, function(err) {
 						if(!err) {
 							casper.waitForSelector('span[id^="post_message_"]', function success() {
 								verifyPostReply(casper, function(err) {

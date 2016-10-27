@@ -476,50 +476,55 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		this.click('li i.icon-right-dir');
 		this.click('li a[href^="/?forum="]');
 		this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
-			this.click('h3 a[href^="/?forum="]');
-			this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
-				if(this.exists('span.alert-info')){
-					var info = this.fetchText('span.alert-info');
-					test.assertEquals(info.trim(), "This category doesn't have any topics yet.  Create a topic  to get this discussion started!", info.trim()+' info message is verified');
-				} else {
-					this.waitForSelector('a span', function success() {
-						var postTitle = json['pin/unPin'].topicTitle;
-						casper.echo('pin topic title : ' +postTitle, 'INFO');
-						var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-						var href = this.getElementAttribute(classVal, "href");
-						this.click('a[href="'+href+'"]');
-						this.waitForSelector('a.dropdown-toggle i.icon-shield', function success() {
-							test.assertExists('a.dropdown-toggle i.icon-shield');
-							this.click('a.dropdown-toggle i.icon-shield');
-							this.waitForSelector('a[href^="/mbactions/pin?"]', function success() {
-								this.click('a[href^="/mbactions/pin?"]');
-								casper.waitForSelector('span[id^="post_message_"]', function success() {
-									this.thenOpen(config.url, function() {
-										casper.echo('go to topic listing page : ');
-									});
-									//verify pin topic
-									this.waitForSelector('a[href^="/post/"]', function success() {
-										var postTitle = json['pin/unPin'].topicTitle;
-										var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-										var href = this.getElementAttribute(classVal, "href");
-										test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
-										casper.echo('pin topic is verified', 'INFO');
-										casper.echo('---------------------------------------------------------------------------');
-									}, function fail(err) {
-										casper.echo(err);			
-									});
-								}, function fail(err) {});
+			if(this.exists('h3 a[href^="/?forum="]')) {
+				this.click('h3 a[href^="/?forum="]');
+				this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
+					if(this.exists('span.alert-info')){
+						var info = this.fetchText('span.alert-info');
+						test.assertEquals(info.trim(), "This category doesn't have any topics yet.  Create a topic  to get this discussion started!", info.trim()+' info message is verified');
+					} else {
+						this.waitForSelector('a span', function success() {
+							var postTitle = json['pin/unPin'].topicTitle;
+							casper.echo('pin topic title : ' +postTitle, 'INFO');
+							var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+							var href = this.getElementAttribute(classVal, "href");
+							this.click('a[href="'+href+'"]');
+							this.waitForSelector('a.dropdown-toggle i.icon-shield', function success() {
+								test.assertExists('a.dropdown-toggle i.icon-shield');
+								this.click('a.dropdown-toggle i.icon-shield');
+								this.waitForSelector('a[href^="/mbactions/pin?"]', function success() {
+									this.click('a[href^="/mbactions/pin?"]');
+									casper.waitForSelector('span[id^="post_message_"]', function success() {
+										this.thenOpen(config.url, function() {
+											casper.echo('go to topic listing page : ');
+										});
+										//verify pin topic
+										this.waitForSelector('a[href^="/post/"]', function success() {
+											var postTitle = json['pin/unPin'].topicTitle;
+											var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+											var href = this.getElementAttribute(classVal, "href");
+											test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
+											casper.echo('pin topic is verified', 'INFO');
+											casper.echo('---------------------------------------------------------------------------');
+										}, function fail(err) {
+											casper.echo(err);			
+										});
+									}, function fail(err) {});
+								}, function fail(err) {
+									casper.echo(err);
+								});
 							}, function fail(err) {
 								casper.echo(err);
 							});
 						}, function fail(err) {
 							casper.echo(err);
 						});
-					}, function fail(err) {
-						casper.echo(err);
-					});
-				}
-			}, function fail(err) {});
+					}
+				}, function fail(err) {});
+			} else {
+				test.assertDoesntExist('h3 a[href^="/?forum="]');
+				casper.echo('Sub Category Does not Exists', 'INFO');
+			}
 		}, function fail(err) {
 			casper.echo(err);
 		});
@@ -532,35 +537,39 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 		this.click('li i.icon-right-dir');
 		this.click('li a[href^="/?forum="]');
 		this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
-			this.click('h3 a[href^="/?forum="]');
-			this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
-				if(this.exists('span.alert-info')){
-					var info = this.fetchText('span.alert-info');
-					test.assertEquals(info.trim(), "This category doesn't have any topics yet.  Create a topic  to get this discussion started!", info.trim()+' info message is verified');
-				} else { 
-					this.waitForSelector('a span', function success() {
-						var postTitle = json['pin/unPin'].topicTitle;
-						casper.echo('unpin topic title : ' +postTitle, 'INFO');
-						var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-						var href = this.getElementAttribute(classVal, "href");
-						this.click('a[href="'+href+'"]');
-						this.waitForSelector('a.dropdown-toggle i.icon-shield', function success() {
-							test.assertExists('a.dropdown-toggle i.icon-shield');
-							this.click('a.dropdown-toggle i.icon-shield');
-							this.waitForSelector('a[href^="/mbactions/unpin?"]', function success() {
-								this.click('a[href^="/mbactions/unpin?"]');
-								casper.waitForSelector('span[id^="post_message_"]', function success() {
-									this.thenOpen(config.url, function() {
-										casper.echo('go to topic listing page : ');
-									});
-									//verify unPin topic
-									this.waitForSelector('a[href^="/post/"]', function success() {
-										var postTitle = json['pin/unPin'].topicTitle;
-										var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-										var href = this.getElementAttribute(classVal, "href");
-										test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
-										casper.echo('unPin topic is verified', 'INFO');
-										casper.echo('---------------------------------------------------------------------------');
+			if(this.exists('h3 a[href^="/?forum="]')) {
+				this.click('h3 a[href^="/?forum="]');
+				this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
+					if(this.exists('span.alert-info')){
+						var info = this.fetchText('span.alert-info');
+						test.assertEquals(info.trim(), "This category doesn't have any topics yet.  Create a topic  to get this discussion started!", info.trim()+' info message is verified');
+					} else { 
+						this.waitForSelector('a span', function success() {
+							var postTitle = json['pin/unPin'].topicTitle;
+							casper.echo('unpin topic title : ' +postTitle, 'INFO');
+							var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+							var href = this.getElementAttribute(classVal, "href");
+							this.click('a[href="'+href+'"]');
+							this.waitForSelector('a.dropdown-toggle i.icon-shield', function success() {
+								test.assertExists('a.dropdown-toggle i.icon-shield');
+								this.click('a.dropdown-toggle i.icon-shield');
+								this.waitForSelector('a[href^="/mbactions/unpin?"]', function success() {
+									this.click('a[href^="/mbactions/unpin?"]');
+									casper.waitForSelector('span[id^="post_message_"]', function success() {
+										this.thenOpen(config.url, function() {
+											casper.echo('go to topic listing page : ');
+										});
+										//verify unPin topic
+										this.waitForSelector('a[href^="/post/"]', function success() {
+											var postTitle = json['pin/unPin'].topicTitle;
+											var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+											var href = this.getElementAttribute(classVal, "href");
+											test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
+											casper.echo('unPin topic is verified', 'INFO');
+											casper.echo('---------------------------------------------------------------------------');
+										}, function fail(err) {
+											casper.echo(err);
+										});
 									}, function fail(err) {
 										casper.echo(err);
 									});
@@ -568,16 +577,17 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 									casper.echo(err);
 								});
 							}, function fail(err) {
-								casper.echo(err);
+								casper.echo(err);	
 							});
-						}, function fail(err) {
-							casper.echo(err);	
+						}, function fail() {
+							casper.echo(err);
 						});
-					}, function fail() {
-						casper.echo(err);
-					});
-				}
-			}, function fail(err) {});
+					}
+				}, function fail(err) {});
+			} else {
+				test.assertDoesntExist('h3 a[href^="/?forum="]');
+				casper.echo('Sub Category Does not Exists');
+			}
 		}, function fail(err) {
 			casper.echo(err);
 		});
@@ -606,26 +616,30 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 						casper.echo('pin topic title : ' +postTitle, 'INFO');
 						var classVal = x("//a[text()='"+postTitle+"']"); 
 						var href = casper.getElementAttribute(classVal, "href");
-						href = href.split('-');
-						var id = href[1].split('?');
-						casper.mouse.move('#complete_post_' +id[0]);
-						test.assertExists('div.post-body .panel-dropdown div.dropdown');
-						this.click('div.post-body .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
-						this.test.assertExists('a[data-original-title="Pin/Un-Pin"]');
-						casper.echo('---------------------------------------------------------------------------');
-						this.click('a[data-original-title="Pin/Un-Pin"]');
-						this.click('#pin');
-						//verify pin topic
-						casper.waitForSelector('span i.glyphicon-pushpin', function success() {
-							var postTitle = json['pin/unPin'].topicTitle;
-							casper.echo('pin topic title : ' +postTitle, 'INFO');
-							test.assertExists(x("//a[text()='"+postTitle+"']/following::span/i")); 
+						if(href) {
+							href = href.split('-');
+							var id = href[1].split('?');
+							casper.mouse.move('#complete_post_' +id[0]);
+							test.assertExists('div.post-body .panel-dropdown div.dropdown');
+							this.click('div.post-body .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
+							this.test.assertExists('a[data-original-title="Pin/Un-Pin"]');
 							casper.echo('---------------------------------------------------------------------------');
-							casper.echo('pin topic is verified', 'INFO');
-							casper.echo('---------------------------------------------------------------------------');
-						}, function fail(err) {
-							casper.echo(err);
-						});		
+							this.click('a[data-original-title="Pin/Un-Pin"]');
+							this.click('#pin');
+							//verify pin topic
+							casper.waitForSelector('span i.glyphicon-pushpin', function success() {
+								var postTitle = json['pin/unPin'].topicTitle;
+								casper.echo('pin topic title : ' +postTitle, 'INFO');
+								test.assertExists(x("//a[text()='"+postTitle+"']/following::span/i")); 
+								casper.echo('---------------------------------------------------------------------------');
+								casper.echo('pin topic is verified', 'INFO');
+								casper.echo('---------------------------------------------------------------------------');
+							}, function fail(err) {
+								casper.echo(err);
+							});		
+						} else {
+							casper.echo('topic '+postTitle+' does not exists ', 'INFO');
+						}
 					}, function fail(err) {
 						casper.echo(err);
 					});
@@ -651,25 +665,29 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 				casper.echo('un-pin topic title : ' +postTitle, 'INFO');
 				var classVal = x("//a[text()='"+postTitle+"']"); 
 				var href = casper.getElementAttribute(classVal, "href");
-				href = href.split('-');
-				var id = href[1].split('?');
-				casper.mouse.move('#complete_post_' +id[0]);
-				test.assertExists('div.post-body .panel-dropdown div.dropdown');
-				this.click('div.post-body .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
-				this.test.assertExists('a[data-original-title="Pin/Un-Pin"]');
-				casper.echo('---------------------------------------------------------------------------');
-				this.click('a[data-original-title="Pin/Un-Pin"]');
-				this.click('#unpin');
-				//verify un-pin topic
-				casper.waitForSelector('a[href^="/post/"]', function success() {
-					var postTitle = json['pin/unPin'].topicTitle;
-					casper.echo('un-pin topic title : ' +postTitle, 'INFO');
-					test.assertDoesntExist(x("//a[text()='"+postTitle+"']/following::span/i[@class='glyphicon-pushpin']")); 
-					casper.echo('un-pin topic is verified', 'INFO');
+				if(href) {
+					href = href.split('-');
+					var id = href[1].split('?');
+					casper.mouse.move('#complete_post_' +id[0]);
+					test.assertExists('div.post-body .panel-dropdown div.dropdown');
+					this.click('div.post-body .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
+					this.test.assertExists('a[data-original-title="Pin/Un-Pin"]');
 					casper.echo('---------------------------------------------------------------------------');
-				}, function fail(err) {
-					casper.echo(err);
-				});	
+					this.click('a[data-original-title="Pin/Un-Pin"]');
+					this.click('#unpin');
+					//verify un-pin topic
+					casper.waitForSelector('a[href^="/post/"]', function success() {
+						var postTitle = json['pin/unPin'].topicTitle;
+						casper.echo('un-pin topic title : ' +postTitle, 'INFO');
+						test.assertDoesntExist(x("//a[text()='"+postTitle+"']/following::span/i[@class='glyphicon-pushpin']")); 
+						casper.echo('un-pin topic is verified', 'INFO');
+						casper.echo('---------------------------------------------------------------------------');
+					}, function fail(err) {
+						casper.echo(err);
+					});	
+				} else {
+					casper.echo('topic '+postTitle+' does not exists', 'INFO');
+				}
 			}, function fail(err) {
 				casper.echo(err);
 			});
@@ -894,48 +912,53 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			this.click('li i.icon-right-dir');
 			this.click('li a[href^="/?forum="]');
 			this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
-				this.click('h3 a[href^="/?forum="]');
-				this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
-					gotoNewTopic(json['newTopic'].ValidCredential, casper, function(err) {
-						if(!err) {
-							casper.echo('go to new topic', 'INFO');
-							casper.waitForSelector('#Pin', function success() {
-								this.click('#Pin');
-								this.click('#post_submit');
-								casper.waitForSelector('span[id^="post_message_"]', function success() {
-									var url = this.getCurrentUrl();
-									casper.echo('url : ' +url);
-									url = url.split('#');
-									href = url[0].split('.com');
-									casper.echo('href : ' +href[1]);
-									casper.thenOpen(config.url, function() {
-										//verify pin icon from topic listion page
-										casper.echo('go to topic listing page to verify pin icon ', 'INFO');
-										casper.waitForSelector('form[name="posts"]', function success() {
-											test.assertExists(x('//a[@href="'+href[1]+'"]/following::span/i'));
-											casper.echo('pin topic is verified', 'INFO');
-											casper.echo('---------------------------------------------------------------------------');
-											//delete newely created topic
-											deleteNewlyCreatedTopic(href[1], 'delete', casper, function(err) {
-												if(!err) {
-													casper.echo('newely created topic is deleted ', 'INFO');
-												}		
+				if(this.exists('h3 a[href^="/?forum="]')) {
+					this.click('h3 a[href^="/?forum="]');
+					this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
+						gotoNewTopic(json['newTopic'].ValidCredential, casper, function(err) {
+							if(!err) {
+								casper.echo('go to new topic', 'INFO');
+								casper.waitForSelector('#Pin', function success() {
+									this.click('#Pin');
+									this.click('#post_submit');
+									casper.waitForSelector('span[id^="post_message_"]', function success() {
+										var url = this.getCurrentUrl();
+										casper.echo('url : ' +url);
+										url = url.split('#');
+										href = url[0].split('.com');
+										casper.echo('href : ' +href[1]);
+										casper.thenOpen(config.url, function() {
+											//verify pin icon from topic listion page
+											casper.echo('go to topic listing page to verify pin icon ', 'INFO');
+											casper.waitForSelector('form[name="posts"]', function success() {
+												test.assertExists(x('//a[@href="'+href[1]+'"]/following::span/i'));
+												casper.echo('pin topic is verified', 'INFO');
+												casper.echo('---------------------------------------------------------------------------');
+												//delete newely created topic
+												deleteNewlyCreatedTopic(href[1], 'delete', casper, function(err) {
+													if(!err) {
+														casper.echo('newely created topic is deleted ', 'INFO');
+													}		
+												});
+											}, function fail(err) {
+												casper.echo(err);
 											});
-										}, function fail(err) {
-											casper.echo(err);
 										});
+									}, function fail(err) {
+										casper.echo(err);
 									});
 								}, function fail(err) {
 									casper.echo(err);
 								});
-							}, function fail(err) {
-								casper.echo(err);
-							});
-						}
+							}
+						});
+					}, function fail(err) {
+						casper.echo(err);
 					});
-				}, function fail(err) {
-					casper.echo(err);
-				});
+				} else {
+					test.assertDoesntExist('h3 a[href^="/?forum="]');
+					casper.echo('Sub Category does not exist', 'INFO');
+				}
 			}, function fail(err) {
 				casper.echo(err);
 			});
@@ -953,46 +976,51 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			this.click('li i.icon-right-dir');
 			this.click('li a[href^="/?forum="]');
 			this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
-				this.click('h3 a[href^="/?forum="]');
-				this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
-					gotoNewTopic(json['newTopic'].ValidCredential, casper, function(err) {
-						if(!err) {
-							casper.echo('start new topic', 'INFO');
-							casper.waitForSelector('#post_submit', function success() {
-								this.click('#post_submit');
-								casper.waitForSelector('span[id^="post_message_"]', function success() {
-									var url = this.getCurrentUrl();
-									casper.echo('url : ' +url);
-									url = url.split('#');
-									href = url[0].split('.com');
-									casper.echo('href : ' +href[1]);
-									casper.thenOpen(config.url, function() {
-										//verify pin icon is not showing on topic listion page
-										casper.echo('go to topic listing page to verify pin icon ', 'INFO');
-										casper.waitForSelector('form[name="posts"]', function success() {
-											test.assertDoesntExist(x('//a[@href="'+href[1]+'"]/following::span/i[@class="glyphicon-pushpin"]'));
-											casper.echo('unPin topic is verified', 'INFO');
-											casper.echo('---------------------------------------------------------------------------');
-											//delete newely created topic
-											deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
-												casper.echo('newely created topic is deleted ', 'INFO');		
+				if(this.exists('h3 a[href^="/?forum="]')) {
+					this.click('h3 a[href^="/?forum="]');
+					this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
+						gotoNewTopic(json['newTopic'].ValidCredential, casper, function(err) {
+							if(!err) {
+								casper.echo('start new topic', 'INFO');
+								casper.waitForSelector('#post_submit', function success() {
+									this.click('#post_submit');
+									casper.waitForSelector('span[id^="post_message_"]', function success() {
+										var url = this.getCurrentUrl();
+										casper.echo('url : ' +url);
+										url = url.split('#');
+										href = url[0].split('.com');
+										casper.echo('href : ' +href[1]);
+										casper.thenOpen(config.url, function() {
+											//verify pin icon is not showing on topic listion page
+											casper.echo('go to topic listing page to verify pin icon ', 'INFO');
+											casper.waitForSelector('form[name="posts"]', function success() {
+												test.assertDoesntExist(x('//a[@href="'+href[1]+'"]/following::span/i[@class="glyphicon-pushpin"]'));
+												casper.echo('unPin topic is verified', 'INFO');
+												casper.echo('---------------------------------------------------------------------------');
+												//delete newely created topic
+												deleteNewlyCreatedTopic(href[1], 'delete', casper, function() {
+													casper.echo('newely created topic is deleted ', 'INFO');		
+												});
+											}, function fail(err) {
+												casper.echo(err);
 											});
-										}, function fail(err) {
-											casper.echo(err);
-										});
 									
+										});
+									}, function fail(err) {
+										casper.echo(err);
 									});
 								}, function fail(err) {
 									casper.echo(err);
 								});
-							}, function fail(err) {
-								casper.echo(err);
-							});
-						}
+							}
+						});
+					}, function fail(err) {
+						casper.echo(err);		
 					});
-				}, function fail(err) {
-					casper.echo(err);		
-				});
+				} else {
+					test.assertDoesntExist('h3 a[href^="/?forum="]');
+					casper.echo('Sub Category does not exist', 'INFO');
+				}
 			}, function fail(err) {
 				casper.echo(err);
 			});
@@ -1009,36 +1037,41 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			this.click('li i.icon-right-dir');
 			this.click('li a[href^="/?forum="]');
 			this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
-				this.click('h3 a[href^="/?forum="]');
-				this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
-					if(this.exists('span.alert-info')){
-						var info = this.fetchText('span.alert-info');
-						var ExpInfo = "This category doesn't have any topics yet.  Create a topic  to get this discussion started!";
-						test.assertEquals(info.trim(), ExpInfo.trim(), info.trim()+' info message is verified');
-					} else { 
+				if(this.exists('h3 a[href^="/?forum="]')) {
+					this.click('h3 a[href^="/?forum="]');
+					this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
+						if(this.exists('span.alert-info')){
+							var info = this.fetchText('span.alert-info');
+							var ExpInfo = "This category doesn't have any topics yet.  Create a topic  to get this discussion started!";
+							test.assertEquals(info.trim(), ExpInfo.trim(), info.trim()+' info message is verified');
+						} else { 
 					
-						var postTitle = json['pin/unPin'].topicTitle;
-						casper.echo('pin topic title : ' +postTitle, 'INFO');
-						var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-						selectTopic(classVal, 'pin', 'Pin/Un-pin', casper, function(err) {
-							if(!err) {
-								casper.waitForSelector('a[href^="/post/"]', function success() {
-									//verify pin topic
-									var postTitle = json['pin/unPin'].topicTitle;
-									var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-									var href = this.getElementAttribute(classVal, "href");
-									test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
-									casper.echo('pin topic is verified', 'INFO');
-									casper.echo('---------------------------------------------------------------------------');
-								}, function fail(err) {
-									casper.echo(err);
-								});
-							}
-						});
-					}
-				}, function fail(err) {
-					casper.echo(err);
-				});
+							var postTitle = json['pin/unPin'].topicTitle;
+							casper.echo('pin topic title : ' +postTitle, 'INFO');
+							var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+							selectTopic(classVal, 'pin', 'Pin/Un-pin', casper, function(err) {
+								if(!err) {
+									casper.waitForSelector('a[href^="/post/"]', function success() {
+										//verify pin topic
+										var postTitle = json['pin/unPin'].topicTitle;
+										var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+										var href = this.getElementAttribute(classVal, "href");
+										test.assertExists(x('//a[@href="'+href+'"]/following::span/i'));
+										casper.echo('pin topic is verified', 'INFO');
+										casper.echo('---------------------------------------------------------------------------');
+									}, function fail(err) {
+										casper.echo(err);
+									});
+								}
+							});
+						}
+					}, function fail(err) {
+						casper.echo(err);
+					});
+				} else {
+					test.assertDoesntExist('h3 a[href^="/?forum="]');
+					casper.echo('Sub Category does not exist', 'INFO');
+				}
 			}, function fail(err) {
 				casper.echo(err);		
 			});
@@ -1057,35 +1090,40 @@ pinTopic.pinUnPinFeature = function(casper, test, x, callback) {
 			this.click('li i.icon-right-dir');
 			this.click('li a[href^="/?forum="]');
 			this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
-				this.click('h3 a[href^="/?forum="]');
-				this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
-					if(this.exists('span.alert-info')){
-						var info = this.fetchText('span.alert-info');
-						var ExpInfo = "This category doesn't have any topics yet.  Create a topic  to get this discussion started!";
-						test.assertEquals(info.trim(), ExpInfo.trim(), info.trim()+' info message is verified');
-					} else {
-						var postTitle = json['pin/unPin'].topicTitle;
-						casper.echo('unpin topic title : ' +postTitle, 'INFO');
-						var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-						selectTopic(classVal, 'unpin', 'Pin/Un-pin', casper, function(err) {
-							if(!err) {
-								casper.waitForSelector('a[href^="/post/"]', function success() {
-									//verify unPin topic
-									var postTitle = json['pin/unPin'].topicTitle;
-									var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
-									var href = this.getElementAttribute(classVal, "href");
-									test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
-									casper.echo('unPin topic is verified', 'INFO');
-									casper.echo('---------------------------------------------------------------------------');
-								}, function fail(err) {
-									casper.echo(err);
-								});
-							}
-						});
-					}
-				}, function fail(err) {
-					casper.echo(err);
-				});
+				if(this.exists('h3 a[href^="/?forum="]')) {
+					this.click('h3 a[href^="/?forum="]');
+					this.waitForSelector('a[href^="/post/printadd?forum="]', function success() {
+						if(this.exists('span.alert-info')){
+							var info = this.fetchText('span.alert-info');
+							var ExpInfo = "This category doesn't have any topics yet.  Create a topic  to get this discussion started!";
+							test.assertEquals(info.trim(), ExpInfo.trim(), info.trim()+' info message is verified');
+						} else {
+							var postTitle = json['pin/unPin'].topicTitle;
+							casper.echo('unpin topic title : ' +postTitle, 'INFO');
+							var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+							selectTopic(classVal, 'unpin', 'Pin/Un-pin', casper, function(err) {
+								if(!err) {
+									casper.waitForSelector('a[href^="/post/"]', function success() {
+										//verify unPin topic
+										var postTitle = json['pin/unPin'].topicTitle;
+										var classVal = x("//a/span[text()='"+postTitle+"']/parent::a"); 
+										var href = this.getElementAttribute(classVal, "href");
+										test.assertDoesntExist(x('//a[@href="'+href+'"]/following::span/i[class="glyphicon-pushpin"]'));
+										casper.echo('unPin topic is verified', 'INFO');
+										casper.echo('---------------------------------------------------------------------------');
+									}, function fail(err) {
+										casper.echo(err);
+									});
+								}
+							});
+						}
+					}, function fail(err) {
+						casper.echo(err);
+					});
+				} else {
+					test.assertDoesntExist('h3 a[href^="/?forum="]');
+					casper.echo('Sub Category does not exist', 'INFO');
+				}
 			}, function fail(err) {
 				casper.echo(err);		
 			});

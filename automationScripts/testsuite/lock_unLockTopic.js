@@ -165,28 +165,31 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 						var postTitle = json['lock/unLock'].topicTitle;
 						casper.echo('lock topic title : ' +postTitle, 'INFO');
 						var classVal = x("//a[text()='"+postTitle+"']"); 
-						var classVal = x("//a[text()='"+postTitle+"']"); 
 						var href = casper.getElementAttribute(classVal, "href");
-						href = href.split('-');
-						var id = href[1].split('?');
-						casper.mouse.move('#complete_post_' +id[0]);
-						test.assertExists('div.post-body .panel-dropdown div.dropdown');
-						this.click('div.post-body .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
-						this.test.assertExists('a[data-original-title="Lock/Un-lock"]');
-						casper.echo('---------------------------------------------------------------------------');
-						this.click('a[data-original-title="Lock/Un-lock"]');
-						this.click('#lock');
-						//verify lock topic
-						casper.waitForSelector('span i.glyphicon-pushpin', function success() {
-							var postTitle = json['lock/unLock'].topicTitle;
-							casper.echo('lock topic title : ' +postTitle, 'INFO');
-							test.assertExists(x("//a[text()='"+postTitle+"']/following::span/i")); 
+						if(href) {
+							href = href.split('-');
+							var id = href[1].split('?');
+							casper.mouse.move('#complete_post_' +id[0]);
+							test.assertExists('div.post-body .panel-dropdown div.dropdown');
+							this.click('div.post-body .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
+							this.test.assertExists('a[data-original-title="Lock/Un-lock"]');
 							casper.echo('---------------------------------------------------------------------------');
-							casper.echo('lock topic is verified', 'INFO');
-							casper.echo('---------------------------------------------------------------------------');
-						}, function fail(err) {
-							casper.echo(err);
-						})
+							this.click('a[data-original-title="Lock/Un-lock"]');
+							this.click('#lock');
+							//verify lock topic
+							casper.waitForSelector('span i.glyphicon-pushpin', function success() {
+								var postTitle = json['lock/unLock'].topicTitle;
+								casper.echo('lock topic title : ' +postTitle, 'INFO');
+								test.assertExists(x("//a[text()='"+postTitle+"']/following::span/i")); 
+								casper.echo('---------------------------------------------------------------------------');
+								casper.echo('lock topic is verified', 'INFO');
+								casper.echo('---------------------------------------------------------------------------');
+							}, function fail(err) {
+								casper.echo(err);
+							})
+						} else {
+							casper.echo('topic '+postTitle+' does not exists', 'INFO');
+						}
 					}, function fail(err) {
 						casper.echo(err);
 					});
@@ -216,16 +219,21 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 						casper.log('register user has successfully login to application with valid username and password', 'INFO');
 						casper.waitForSelector('a[href^="/post/"]', function success() {
 							var postTitle = json['lock/unLock'].topicTitle;
-							this.click(x("//a[text()='"+postTitle+"']"));
-							this.waitForSelector('.alert-warning', function success() {
-								test.assertExists('.alert-warning');
-								casper.echo('---------------------------------------------------------------------------');
-								var warningMsg = this.fetchText('.alert-warning');
-								test.assertEquals(warningMsg.trim(), json['lock/unLock'].ExpectedWarningMessage.trim(), warningMsg.trim()+' and message verified');
-								casper.echo('---------------------------------------------------------------------------');
-							}, function fail(err) {
-								casper.echo(err)
-							});
+							if(this.exists(x("//a[text()='"+postTitle+"']"))) {
+								test.assertExists(x("//a[text()='"+postTitle+"']"));
+								this.click(x("//a[text()='"+postTitle+"']"));
+								this.waitForSelector('.alert-warning', function success() {
+									test.assertExists('.alert-warning');
+									casper.echo('---------------------------------------------------------------------------');
+									var warningMsg = this.fetchText('.alert-warning');
+									test.assertEquals(warningMsg.trim(), json['lock/unLock'].ExpectedWarningMessage.trim(), warningMsg.trim()+' and message verified');
+									casper.echo('---------------------------------------------------------------------------');
+								}, function fail(err) {
+									casper.echo(err)
+								});
+							} else {
+								casper.echo('topic '+postTitle+' does not exists', 'INFO');
+							}
 						}, function fail(err) {
 							casper.echo(err);
 						});
@@ -283,26 +291,29 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 							casper.echo('un-lock topic title : ' +postTitle, 'INFO');
 							var classVal = x("//a[text()='"+postTitle+"']");
 							var href = casper.getElementAttribute(classVal, "href");
-							href = href.split('-');
-							var id = href[1].split('?');
-							casper.mouse.move('#complete_post_' +id[0]);
-							test.assertExists('div.post-body .panel-dropdown div.dropdown');
-							this.click('div.post-body .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
-							this.test.assertExists('a[data-original-title="Lock/Un-lock"]');
-							casper.echo('---------------------------------------------------------------------------');
-							this.click('a[data-original-title="Lock/Un-lock"]');
-							this.click('#unlock'); 
-							//verify un-lock topic
-							casper.waitForSelector('a[href^="/post/"]', function success() {
-								var postTitle = json['lock/unLock'].topicTitle;
-								casper.echo('un-lock topic title : ' +postTitle, 'INFO');
-								test.assertDoesntExist(x("//a[text()='"+postTitle+"']/following::span/i[@class='glyphicon-lock']")); 
-								casper.echo('un-lock topic is verified', 'INFO');
+							if(href) {
+								href = href.split('-');
+								var id = href[1].split('?');
+								casper.mouse.move('#complete_post_' +id[0]);
+								test.assertExists('div.post-body .panel-dropdown div.dropdown');
+								this.click('div.post-body .panel-dropdown div.dropdown input[value="'+id[0]+'"]');
+								this.test.assertExists('a[data-original-title="Lock/Un-lock"]');
 								casper.echo('---------------------------------------------------------------------------');
-							}, function fail(err) {
-								casper.echo(err);
-							});
-								
+								this.click('a[data-original-title="Lock/Un-lock"]');
+								this.click('#unlock'); 
+								//verify un-lock topic
+								casper.waitForSelector('a[href^="/post/"]', function success() {
+									var postTitle = json['lock/unLock'].topicTitle;
+									casper.echo('un-lock topic title : ' +postTitle, 'INFO');
+									test.assertDoesntExist(x("//a[text()='"+postTitle+"']/following::span/i[@class='glyphicon-lock']")); 
+									casper.echo('un-lock topic is verified', 'INFO');
+									casper.echo('---------------------------------------------------------------------------');
+								}, function fail(err) {
+									casper.echo(err);
+								});
+							} else {
+								casper.echo('topic '+postTitle+' does not exists', 'INFO');
+							}		
 						}, function fail(err) {
 							casper.echo(err);
 						});
@@ -321,16 +332,18 @@ lock_unLockTopic.lockUnLockFeature = function(casper, test, x, callback) {
 	casper.then(function() {
 		casper.echo('UnLock any locked  topic from post page and verify that the locked message should be disappeared ', 'INFO');
 		var postTitle = json['lock/unLock'].topicTitle;		
-		test.assertExists(x("//a[text()='"+postTitle+"']"));
-		casper.echo('---------------------------------------------------------------------------');
-		this.click(x("//a[text()='"+postTitle+"']"));
-		this.waitForSelector('.alert-warning', function success() {	
-			test.assertDoesntExist('.alert-warning');
-			casper.echo('---------------------------------------------------------------------------');
-		}, function fail(err) {
-			casper.echo(err);
-		});
-
+		if(this.exists(x("//a[text()='"+postTitle+"']"))) {
+			test.assertExists(x("//a[text()='"+postTitle+"']"));
+			this.click(x("//a[text()='"+postTitle+"']"));
+			this.waitForSelector('.alert-warning', function success() {	
+				test.assertDoesntExist('.alert-warning');
+				casper.echo('---------------------------------------------------------------------------');
+			}, function fail(err) {
+				casper.echo(err);
+			});
+		} else {
+			casper.echo('topic '+postTitle+' does not exists', 'INFO');
+		}
 	});
 
 	/*****Add New topic by enable lock check box and verify lock topic  on forum listing page*****/
