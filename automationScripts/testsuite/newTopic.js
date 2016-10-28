@@ -13,13 +13,21 @@ var deleteTopic = require('./deleteTopic.js');
 var poll = require('./poll.js');
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
-var config = require('../../config/config.json');
+var config = require('../config/config.json');
 
 var newTopic = module.exports = {};
+newTopic.errors = [];
 var screenShotsDir = config.screenShotsLocation + 'newTopic/';
 
 newTopic.featureTest = function(casper, test, x) {
 		
+		casper.on("page.error", function(msg, trace) {
+			this.echo("Error:    " + msg, "ERROR");
+			this.echo("file:     " + trace[0].file, "WARNING");
+			this.echo("line:     " + trace[0].line, "WARNING");
+			this.echo("function: " + trace[0]["function"], "WARNING");
+			newTopic.errors.push(msg);
+		});
 		//Login To Backend URL and disable start topic checkbox
 		casper.start(config.backEndUrl,function() {
 			casper.echo('Login To Backend URL and disable start topic checkbox', 'INFO');
@@ -586,9 +594,7 @@ newTopic.featureTest = function(casper, test, x) {
 		});
 };
 
-
 //private methods
-
 
 /************************************PRIVATE METHODS***********************************/
 
@@ -671,7 +677,7 @@ var verifyUnFollowContent = function(driver, callback) {
 	url= url[0].split(".com");
 	driver.click('li.user-panel .dropdown-toggle');
 	driver.click('span.user-nav-panel li a[href^="/search"]');
-	driver.then(function() {
+	driver.waitForSelector('a[href^="/post/"]', function() {
 		this.test.assertDoesntExist('span.topic-content h4 a[href="'+url[1]+'"]');
 		casper.echo('---------------------------------------------------------------------------');
 	});

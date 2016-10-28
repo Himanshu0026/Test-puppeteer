@@ -4,13 +4,21 @@
 
 var json = require('../testdata/topic.json');
 var forumLogin = require('./forum_login.js');
-var config = require('../../config/config.json');
+var config = require('../config/config.json');
 
 var hideCategory = module.exports = {};
+hideCategory.errors = [];
 var screenShotsDir = config.screenShotsLocation + 'hideUnHide/';
 
 hideCategory.hideCategoryFeature = function(casper, test, x) {
 	var selectCategory = json.hideUnHideCategory.categoryName;
+	casper.on("page.error", function(msg, trace) {
+		this.echo("Error:    " + msg, "ERROR");
+		this.echo("file:     " + trace[0].file, "WARNING");
+		this.echo("line:     " + trace[0].line, "WARNING");
+		this.echo("function: " + trace[0]["function"], "WARNING");
+		hideCategory.errors.push(msg);
+	});
 	//start from forum url
 	casper.start(config.url, function() {
 		casper.echo('Title of the page :' +this.getTitle(), 'INFO');
