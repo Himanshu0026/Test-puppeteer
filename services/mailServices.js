@@ -19,7 +19,7 @@ mailServices.sendMail = function(emailDetails, callback){
 	// setup e-mail data with unicode symbols 
 	var mailOptions = {
 		"from": 'noresponse@websitetoolbox.com', // sender address 
-		"to": emailDetails.committerEmail, // list of receivers 
+		"to": 'shipra@websitetoolbox.com',//emailDetails.committerEmail, // list of receivers 
 		"subject": "Forum test result: "+emailDetails.branchName, // Subject line 
 		"text": 'Hello ' + emailDetails.committerName+",\n\n Following is the automation test result: \n"+emailDetails.testResult+"\nPlease find details of the automation test result attached herewith. \n" , // plaintext body 
 		"attachments": emailDetails.attachments //attachments
