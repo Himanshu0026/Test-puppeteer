@@ -31,43 +31,9 @@ editProfile.featureTest = function(casper, test) {
 		editProfile.errors.push(msg);
 	});
 	
-	//Open Back-End URL And Get Title
-	casper.thenOpen(config.backEndUrl, function() {
-		this.echo('Title of the page :' +this.getTitle(), 'INFO');
-		try {
-			test.assertExists('a[href="/tool/members/login?action=logout"]');
-			this.click('a[href="/tool/members/login?action=logout"]');
-		}catch(e) {
-			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
-		}
-	});
-
 	//Login To Forum BackEnd
 	casper.then(function() {
-		forumRegister.loginToForumBackEnd(casper, test, function(err) {
-			casper.echo('Logged-in successfully from back-end', 'INFO');
-			casper.waitForSelector('div#my_account_forum_menu', function success() {
-				test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-				this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-				test.assertExists('div#ddUsers a[href="/tool/members/mb/fields"]');
-				this.click('div#ddUsers a[href="/tool/members/mb/fields"]');
-				casper.waitForSelector('form[name="posts"]', function success() {
-					this.click('form#custom_fields_table input');
-					this.click('form#custom_fields_table button');
-					casper.waitForSelector('p:nth-child(4)', function success() {
-						this.capture('demo.png');
-						var msg = this.fetchText('p:nth-child(4)');
-						this.echo('Success Message: '+msg, 'INFO');
-						this.echo('all custom profile fields have been deleted', 'INFO');
-					}, function fail() {
-					
-					});
-				}, function fail() {
-				
-				});
-			}, function fail() {
-				casper.echo('ERROR OCCURRED', 'ERROR');
-			});
+		editProfile.removeShortAnswerFields(casper, casper.test, function(err) {
 		});
 		
 	});
@@ -1762,4 +1728,53 @@ var disableCustomUserTitleForRegisteredUser = function(driver, test, callback) {
 	}catch(e) {
 		test.assertDoesntExist('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	}
+};
+
+//Method To Remove Short Answer Field
+editProfile.removeShortAnswerFields = function(driver, test, callback) {
+	//Open Back-End URL And Get Title
+	driver.thenOpen(config.backEndUrl, function() {
+		this.echo('Title of the page :' +this.getTitle(), 'INFO');
+		try {
+			test.assertExists('a[href="/tool/members/login?action=logout"]');
+			this.click('a[href="/tool/members/login?action=logout"]');
+		}catch(e) {
+			test.assertDoesntExist('a[href="/tool/members/login?action=logout"]');
+		}
+	});
+
+	//Login To Forum BackEnd
+	driver.then(function() {
+		forumRegister.loginToForumBackEnd(casper, test, function(err) {
+			if(!err) {
+				driver.echo('Logged-in successfully from back-end', 'INFO');
+				driver.waitForSelector('div#my_account_forum_menu', function success() {
+					test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+					this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+					test.assertExists('div#ddUsers a[href="/tool/members/mb/fields"]');
+					this.click('div#ddUsers a[href="/tool/members/mb/fields"]');
+					driver.waitForSelector('form[name="posts"]', function success() {
+						this.click('form#custom_fields_table input');
+						this.click('form#custom_fields_table button');
+						driver.waitForSelector('p:nth-child(4)', function success() {
+							this.capture('demo.png');
+							var msg = this.fetchText('p:nth-child(4)');
+							this.echo('Success Message: '+msg, 'INFO');
+							this.echo('all custom profile fields have been deleted', 'INFO');
+						}, function fail() {
+					
+						});
+					}, function fail() {
+				
+					});
+				}, function fail() {
+					driver.echo('ERROR OCCURRED', 'ERROR');
+				});
+			}else {
+				driver.echo('Error : '+err, 'ERROR');
+			}
+		});
+		
+	});
+	return callback(null);
 };
