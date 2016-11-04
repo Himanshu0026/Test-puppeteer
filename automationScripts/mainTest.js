@@ -1,9 +1,9 @@
 var config = require("../config/config.json");
 
 casper.options.viewportSize = config.app.viewportSize;
-casper.options.verbose = config.app.verbose;
-casper.options.logLevel = config.app.logLevel;
-//casper.options.waitTimeout = config.app.waitTimeout;
+//casper.options.verbose = config.app.verbose;
+//casper.options.logLevel = config.app.logLevel;
+casper.options.waitTimeout = config.app.waitTimeout;
 
 var feature = casper.cli.get('feature');
 if(feature){
@@ -362,6 +362,24 @@ case "deletetopic":
 		});
 	});
         break;
+	case "customProfileField" :
+		 casper.test.begin('Verify custom Profile Fields topic functionlity ', function(test) {
+		 var field_permission = require("./testsuite/customProfileField.js");
+		 var x = require('casper').selectXPath;
+		 field_permission.field_permissionfeatureTest(casper, casper.test, x);
+		 var errors = [];
+		 casper.run(function(){
+		if (errors.length > 0) {
+        				this.echo(errors.length + ' Javascript errors found', "WARNING");
+        			}else{
+        				this.echo(errors.length + ' Javascript errors found', "INFO");
+        			}
+        			casper.exit();
+        			test.done();
+			
+		});
+	});
+        break;
 	case "movetopic" :
 		 casper.test.begin('Verify move topic functionlity ', function(test) {
 		 var moveTopic = require("./testsuite/moveTopic.js");
@@ -373,6 +391,7 @@ case "deletetopic":
 	});
         break;
 	
+		
     default:
 	casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
         casper.echo("Options:");
