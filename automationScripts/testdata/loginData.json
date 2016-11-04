@@ -7,7 +7,12 @@
 	"username": "sangita",
 	"password": "sangita"
 	},
-
+    
+		"ValidUser" : {
+	"username": "rajan41",
+	"password": "rajan41"
+	},
+	
      "ValidEmail" : {
 	"username": "sangita@websitetoolbox.com",
 	"password": "sangita"
