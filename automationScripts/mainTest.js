@@ -375,7 +375,6 @@ case "deletetopic":
         			}else{
         				this.echo(errors.length + ' Javascript errors found', "INFO");
         			}
-        			casper.exit();
         			test.done();
 			
 		});

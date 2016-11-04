@@ -258,6 +258,24 @@ switch (feature) {
 		});
 		break;
 
+	case "customProfileField" :
+		 casper.test.begin('Verify custom Profile Fields topic functionlity ', function(test) {
+		 var field_permission = require("./testsuite/customProfileField.js");
+		 var x = require('casper').selectXPath;
+		 field_permission.field_permissionfeatureTest(casper, casper.test, x);
+		 var errors = [];
+		 casper.run(function(){
+		if (errors.length > 0) {
+        				this.echo(errors.length + ' Javascript errors found', "WARNING");
+        			}else{
+        				this.echo(errors.length + ' Javascript errors found', "INFO");
+        			}
+        			test.done();
+			
+		});
+	});
+        break;
+        
 	case "generalTopic":
 		casper.test.begin("Start New Topic functionality from home page & verify content with all valid and invalid scenarios", function(test) {
 			var newTopic = require("./testsuite/newTopic.js");
