@@ -148,6 +148,15 @@
         "namePrivate" : true,
         "expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
     },
+	"validregister" : {
+        "uname" : "rajan41",
+        "uemail" : "frajan4178dsd@gmail.com",
+        "upass" : "rajan41",
+        "usignature" : "This is my signature blank uname",
+		 "newmodule" : "This is my signature blank uname",
+        "namePrivate" : true,
+        "expectedErrorMsg" : "not register." 
+    },
     
     "setValueOnRegister" : [{
     	"required" : "1",
