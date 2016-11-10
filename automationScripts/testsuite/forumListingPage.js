@@ -209,6 +209,8 @@ forumListingPage.featureTest = function(casper, test, x) {
 									}, function fail() {
 										casper.echo('category edit form not opened', 'INFO');
 									});
+								}, function fail() {
+									casper.echo('error message not found', 'ERROR');
 								});
 							});
 						}, function fail() {
@@ -1706,7 +1708,9 @@ forumListingPage.featureTest = function(casper, test, x) {
 
 forumListingPage.customFieldsTest = function(casper, test, x) {
 
-	casper.start();
+	/*casper.start();
+	var categoryId;
+	var subCategoryId;
 	
 	//Method For Verifying JavaScript Errors
 	casper.on("page.error", function(msg, trace) {
@@ -1717,6 +1721,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 		forumListingPage.errors.push(msg);
 	});
 	
+	//Adding Category And Sub Category From The Backend
 	casper.then(function() {
 		casper.thenOpen(config.backEndUrl, function() {
 			this.echo('Title of the page :' +this.getTitle(), 'INFO');
@@ -1737,36 +1742,63 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 						this.click('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
 						test.assertExists('div.tooltipMenu.text a[href="/tool/members/mb/forums"]');
 						this.click('div.tooltipMenu.text a[href="/tool/members/mb/forums"]');
-						casper.waitForSelector('a.forumName.atree', function success() {
-							var element = casper.evaluate(function() {
-								var liElement = document.querySelectorAll('div#sortable ul.ui-sortable li');
-								//var text = liElement[liElement.length-2].innerText;
-								//var target = $("li:contains("+text+")").attr('id');
-								return liElement.length-2;
-							});
-							while(element>3) {
-								this.echo('length of list : '+element, 'INFO');
-								casper.mouse.move('div#sortable ul.ui-sortable li:nth-child('+element+') div.select');
-								this.capture('demo.png');
-								casper.click('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.manageAction');
-								if(element==4) {
-									try {
-										casper.click('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.delete_category_btn');
-									}catch(e) {
-										casper.click('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.deleteEmptyForum');
-									}
-								}else {
-									try {
-										casper.click('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.deleteEmptyForum');
-									}catch(e) {
-										casper.click('div#sortable ul.ui-sortable li:nth-child('+element+') div.select a.delete_category_btn');
-									}
-								}
-								casper.then(function() {
-									
+						casper.waitForSelector('a[href^="/tool/members/mb/forums?action=edit_forum"]', function success() {
+							this.click('a[href^="/tool/members/mb/forums?action=edit_forum"]');
+							casper.waitForSelector('form[name="frmOptions"]', function success() {
+								this.sendKeys('input#forum_name', 'New Title', {reset : true});
+								//this.sendKeys('#forum_description', 'This is description for new title7', {reset : true});
+								this.click('form[action="/tool/members/mb/forums"] button');
+								casper.wait(5000, function() {
+									var successMsg = this.fetchText('div.heading.error_message');
+									this.echo('Success Message : '+successMsg, 'INFO');
+									this.echo('Success message is verified', 'INFO');
+									var catId = casper.evaluate(function() {
+										var element = document.querySelectorAll('div#sortable ul.ui-sortable li');
+										var id = element[element.length-1].id;
+										return id;	
+
+									});
+									categoryId = catId;
+									this.echo('Category ID : '+categoryId, 'INFO');
+									//casper.waitForSelector('a[href^="/tool/members/mb/forums?action=edit_forum"]', function success() {
+										this.click('a[href^="/tool/members/mb/forums?action=edit_forum"]');
+										casper.waitForSelector('form[name="frmOptions"]', function success() {
+											this.sendKeys('input#forum_name', 'new title', {reset : true});
+											//this.sendKeys('#forum_description', 'This is description for new title7', {reset : true});
+											this.click('#isSubcategory')
+											this.fillSelectors('form[name="frmOptions"]', {
+												'select[name="parentid"]' :  categoryId
+											}, true);
+											this.click('form[action="/tool/members/mb/forums"] button');
+											//casper.waitForSelector('div.heading.error_message', function success() {
+												//var successMsg = this.fetchText('div.heading.error_message');
+												//this.echo('Success Message : '+successMsg, 'INFO');
+												//this.echo('Success message is verified', 'INFO');
+												casper.wait(5000, function() {
+													this.capture('111.png');
+													var subCatId = casper.evaluate(function() {
+														var element = document.querySelectorAll('div#sortable ul.ui-sortable li ul li');
+														var id = element[element.length].id;
+														return id;	
+													});
+													subCategoryId = subCatId;
+													this.echo('Sub Category ID : '+subCategoryId, 'INFO');
+												});
+											//}, function fail() {
+												//casper.echo('success message not found', 'ERROR');
+											//});
+										}, function fail() {
+							
+										});
+									//}, function fail() {
+						
+									//});
+								//}, function fail() {
+									//casper.echo('success message not found', 'ERROR');
 								});
-								element--;
-							}
+							}, function fail() {
+							
+							});
 						}, function fail() {
 						
 						});
@@ -1779,9 +1811,9 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 			});
 		});
 	});
-
+	
 	//*****************************VERIFY THE PARENT CATEGORY AS LOCKED**********************************
-	/*casper.then(function() {
+	casper.then(function() {
 		casper.echo('                                      CASE 20', 'INFO');
 		casper.echo('************************************************************************************', 'INFO');
 		casper.echo('VERIFY THE PARENT CATEGORY AS LOCKED', 'INFO');
@@ -2231,7 +2263,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 				}
 			});
 		});
-	});*/
+	});
 	
 	//*****************************VERIFY A CATEGORY AS WELL AS SUB CATEGORY AS INVISIBLE**********************************
 	casper.then(function() {
@@ -2707,7 +2739,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 					casper.waitForSelector('a[href^="/categories"]', function success() {
 						this.click('a[href^="/categories"]');
 						casper.waitForSelector('span.forum-title', function success() {
-							/*try {
+							try {
 								var category = x("//a/span[starts-with(.,'General')]");
 								test.assertExists(category);	
 								this.click(category);
@@ -2724,7 +2756,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 								}, function fail() {
 								
 								});
-							}catch(e) {*/
+							}catch(e) {
 								test.assertExists('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title');
 								this.echo('Category : '+this.fetchText('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title'), 'INFO');
 								this.click('div.panel.panel-default ul:first-child li:first-child a:first-child span.forum-title');
@@ -4229,7 +4261,7 @@ forumListingPage.customFieldsTest = function(casper, test, x) {
 				}
 			});
 		});
-	});
+	});*/
 };
 
 //*************************************************PRIVATE METHODS***********************************************
@@ -4310,7 +4342,7 @@ var deleteCategory = function(driver, test, categoryId, callback) {
 							driver.waitUntilVisible('li[id="'+categoryId+'"] div.select a.manageAction', function success() {
 									driver.click('li[id="'+categoryId+'"] div.select a.manageAction');
 									driver.click('li[id="'+categoryId+'"] div.select a.deleteEmptyForum');
-									driver.then(function() {
+									driver.wait(5000, function() {
 								
 									});
 							}, function fail() {
