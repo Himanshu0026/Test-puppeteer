@@ -3,6 +3,7 @@
 require('shelljs/global');
 var fs = require('fs');
 var mailServices = require('./mailServices.js');
+var createStatus = require('./createStatus.js');
 var executorServices = module.exports = {};
 
 //It executes job. Take job details as argument, executed the job and initiates mail sending.
@@ -37,6 +38,9 @@ executorServices.executeJob = function(commitDetails, callback){
 						var fileSize = fileStat.size;
 						console.log("fail.txt size: "+fileSize);
 						if(fileSize != 0){
+							createStatus.failure(commitDetails, function(status) {
+								console.log('state of failure : '+status);
+							});
 							//Adding test result with commit details
 							commitDetails['testResult'] = testResult;
 							//Addling log files as attachments
@@ -61,6 +65,10 @@ executorServices.executeJob = function(commitDetails, callback){
 								return callback();
 							});
 						}else{
+							console.log('hello hotam:::::');
+							createStatus.success(commitDetails, function(status) {
+								console.log('state of success : '+status);
+							});
 							//Deleting commit specific log files
 							fs.unlinkSync(automationLogFile);
 							fs.unlinkSync(failLogFile);
