@@ -38,6 +38,7 @@ executorServices.executeJob = function(commitDetails, callback){
 						var fileSize = fileStat.size;
 						console.log("fail.txt size: "+fileSize);
 						if(fileSize != 0){
+							console.log('hello singh:::::');
 							createStatus.failure(commitDetails, function(status) {
 								console.log('state of failure : '+status);
 							});
