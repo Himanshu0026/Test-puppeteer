@@ -1,7 +1,7 @@
 "use strict";
 
 var Client = require("./../lib/index");
-createStatus = module.exports = {};
+var createStatus = module.exports = {};
 
 createStatus.success = function(commitDetails, callback) {
 	console.log('hello hshhshshsh');

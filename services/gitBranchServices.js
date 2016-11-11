@@ -11,6 +11,7 @@ gitBranchServices.deleteMatureCommitBranch = function(){
 			pendingCommits.forEach(function ( pc, index){
 				redisClient.hgetall(pc, function(err, commit){
 					console.log("Now checking for pending commit for branch: " + commit.branch);
+					console.log("commit details : " + JSON.stringify(commit));
 					var currentTime = new Date();
 					var timeDiff = currentTime - new Date(commit.entryTime);
 					console.log(timeDiff + " ms ago commit had been made.");

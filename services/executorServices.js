@@ -54,7 +54,7 @@ executorServices.executeJob = function(commitDetails, callback){
 								}
 							];
 							//initiating mail sending to committer
-							mailServices.sendMail(commitDetails, function(err){
+							mailServices.sendMail(commitDetails, function(err){git add
 								if(err)
 									console.error("error occurred while sending email: "+err);
 								else
