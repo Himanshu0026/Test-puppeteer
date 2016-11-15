@@ -9,25 +9,25 @@ createStatus.success = function(commitDetails, callback) {
     		debug: true
 	});
 
-	/*github.authenticate({
+	github.authenticate({
 	    type: "oauth",
 	   token: commitDetails.commitId
-	});*/
+	});
 	
-	github.authenticate({
+	/*github.authenticate({
 	    type: "basic",
 	   username: "hotam-singh",
 	   password: "hotam@123"
-	});
+	});*/
 
 	github.repos.createStatus({
 	    owner: commitDetails.committerName,
-	    repo: "webtoolbox/QA-automation",
+	    repo: commitDetails.repositoryName,
 	    sha: commitDetails.commitId,
 	    state: "success",
 	}, function(err, res) {
-	   // console.log(err, res);
-	    return callback(res);
+	   	console.log(err, res);
+	    return callback(state);
 	});
 };
 
@@ -36,25 +36,25 @@ createStatus.failure = function(commitDetails, callback) {
     		debug: true
 	});
 
-	/*github.authenticate({
+	github.authenticate({
 	    type: "oauth",
 	   token: commitDetails.commitId
-	});*/
+	});
 
-	github.authenticate({
+	/*github.authenticate({
 	    type: "basic",
 	   username: "hotam-singh",
 	   password: "hotam@123"
-	});
+	});*/
 	
 	github.repos.createStatus({
 	    owner: commitDetails.committerName,
-	    repo: "webtoolbox/QA-automation",
+	    repo: commitDetails.repositoryName,
 	    sha: commitDetails.commitId,
 	    state: "failure",
 	}, function(err, res) {
-	    //console.log(err, res);
-	    return callback(res);
+	    console.log(err, res);
+	    return callback(state);
 	});
 };
 
