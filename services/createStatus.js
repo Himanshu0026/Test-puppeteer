@@ -1,6 +1,7 @@
 "use strict";
 
 var Client = require("./../lib/index");
+var testAuth = require("../lib/userData.json");
 var createStatus = module.exports = {};
 
 createStatus.success = function(commitDetails, callback) {
@@ -10,7 +11,7 @@ createStatus.success = function(commitDetails, callback) {
 
 	github.authenticate({
 		type: "oauth",
-		token: "b2e8c840886cae303ed3d1cfe0c3cdbf2143608b" 
+		token: testAuth.userToken.token 
 	});
 
 	github.repos.createStatus({
@@ -31,7 +32,7 @@ createStatus.failure = function(commitDetails, callback) {
 
 	github.authenticate({
 		type: "oauth",
-		token: "b2e8c840886cae303ed3d1cfe0c3cdbf2143608b" 
+		token: testAuth.userToken.token 
 	});
 
 	github.repos.createStatus({
