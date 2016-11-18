@@ -4,30 +4,23 @@ var Client = require("./../lib/index");
 var createStatus = module.exports = {};
 
 createStatus.success = function(commitDetails, callback) {
-	console.log('hello hshhshshsh');
 	var github = new Client({
     		debug: true
 	});
 
 	github.authenticate({
-	    type: "oauth",
-	   token: commitDetails.commitId
+		type: "oauth",
+		token: "b2e8c840886cae303ed3d1cfe0c3cdbf2143608b" 
 	});
-	
-	/*github.authenticate({
-	    type: "basic",
-	   username: "hotam-singh",
-	   password: "hotam@123"
-	});*/
 
 	github.repos.createStatus({
-	    owner: commitDetails.committerName,
-	    repo: commitDetails.repositoryName,
-	    sha: commitDetails.commitId,
-	    state: "success",
+		owner: commitDetails.ownerName,
+		repo: commitDetails.repositoryName,
+		sha: commitDetails.commitId,
+		state: "success",
 	}, function(err, res) {
 	   	console.log(err, res);
-	    return callback(state);
+	    	return callback(res.state);
 	});
 };
 
@@ -37,24 +30,18 @@ createStatus.failure = function(commitDetails, callback) {
 	});
 
 	github.authenticate({
-	    type: "oauth",
-	   token: commitDetails.commitId
+		type: "oauth",
+		token: "b2e8c840886cae303ed3d1cfe0c3cdbf2143608b" 
 	});
 
-	/*github.authenticate({
-	    type: "basic",
-	   username: "hotam-singh",
-	   password: "hotam@123"
-	});*/
-	
 	github.repos.createStatus({
-	    owner: commitDetails.committerName,
-	    repo: commitDetails.repositoryName,
-	    sha: commitDetails.commitId,
-	    state: "failure",
+		owner: commitDetails.ownerName,
+		repo: commitDetails.repositoryName,
+		sha: commitDetails.commitId,
+		state: "failure",
 	}, function(err, res) {
-	    console.log(err, res);
-	    return callback(state);
+		console.log(err, res);
+		return callback(res.state);
 	});
 };
 

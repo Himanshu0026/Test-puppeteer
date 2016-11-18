@@ -34,15 +34,13 @@ handler.on('push', function (event) {
 	console.log('Received a push event for %s to %s',
     	event.payload.repository.name,
     	event.payload.ref);
-    	console.log("Event : %s", JSON.stringify(event));
-    	console.log("Event payload : %s", JSON.stringify(event.payload));
-    	console.log("Event repository : %s", JSON.stringify(event.payload.repository));
 	var commitPayload = event.payload.head_commit;
 	if(commitPayload){
 		//Preapring commit details from event's payload for further processing
 		var commitDetails = {};
 		commitDetails["commitId"] = commitPayload.id;
 		commitDetails["repositoryName"] = event.payload.repository.name;
+		commitDetails["ownerName"] = event.payload.repository.owner.name;
 		commitDetails["commitMessage"] = commitPayload.message;
 		commitDetails["commitUrl"] = commitPayload.url;
 		commitDetails["committerName"] = commitPayload.committer.name;
