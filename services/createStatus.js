@@ -9,9 +9,15 @@ createStatus.success = function(commitDetails, callback) {
     		debug: true
 	});
 
-	github.authenticate({
+	/*github.authenticate({
 		type: "oauth",
 		token: testAuth.userToken.token 
+	});*/
+	
+	github.authenticate({
+		type: "basic",
+		username: "hotam-singh",
+		password:"hotam@123"    
 	});
 
 	github.repos.createStatus({
@@ -30,9 +36,15 @@ createStatus.failure = function(commitDetails, callback) {
     		debug: true
 	});
 
-	github.authenticate({
+	/*github.authenticate({
 		type: "oauth",
 		token: testAuth.userToken.token 
+	});*/
+	
+	github.authenticate({
+		type: "basic",
+		username: "hotam-singh",
+		password:"hotam@123"    
 	});
 
 	github.repos.createStatus({
