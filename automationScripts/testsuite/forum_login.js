@@ -15,7 +15,7 @@ forumLogin.featureTest = function(casper, test) {
 		casper.echo("Title of the page :"+this.getTitle(), 'INFO');
 
 		//test case for login to application with invalid password and verify error message
-		forumLogin.loginToApp(json['InvalidPwd'].username, json['InvalidPassowrd'].password, casper, function(err){
+		forumLogin.loginToApp(json['InvalidPassowrd'].username, json['InvalidPassowrd'].password, casper, function(err){
 			if(!err){
 				casper.echo('login with valid username and invalid password and verify error message', 'INFO');
 				casper.waitForSelector('form[name="frmLogin"] [role="alert"]', function() {
