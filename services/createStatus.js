@@ -9,16 +9,16 @@ createStatus.success = function(commitDetails, callback) {
     		debug: true
 	});
 
-	/*github.authenticate({
-		type: "oauth",
-		token: testAuth.userToken.token 
-	});*/
-	
 	github.authenticate({
+	    type: "token",
+	    token: "3a07de9885c788c8ac0b639fafbe3c166018a19c",
+	});
+	
+	/*github.authenticate({
 		type: "basic",
 		username: "hotam-singh",
 		password:"hotam@123"    
-	});
+	});*/
 
 	github.repos.createStatus({
 		owner: commitDetails.ownerName,
@@ -36,16 +36,16 @@ createStatus.failure = function(commitDetails, callback) {
     		debug: true
 	});
 
-	/*github.authenticate({
-		type: "oauth",
-		token: testAuth.userToken.token 
-	});*/
-	
 	github.authenticate({
+	    type: "token",
+	    token: "3a07de9885c788c8ac0b639fafbe3c166018a19c",
+	});
+	
+	/*github.authenticate({
 		type: "basic",
 		username: "hotam-singh",
 		password:"hotam@123"    
-	});
+	});*/
 
 	github.repos.createStatus({
 		owner: commitDetails.ownerName,
