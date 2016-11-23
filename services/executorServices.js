@@ -25,14 +25,28 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Exit code:', code);
 			console.log('Program output:', stdout);
 			console.log('Program stderr:', stderr);
-			var testResult = stdout;
+			/*var testResult = stdout;
 			var descriptionRes = 0;
 			var description = stdout.split(' ');
 			for(var i=0; i<description.length;i++) {
 				if(description[i+1]=='tests') {
 					descriptionRes = parseInt(descriptionRes)+parseInt(description[i]);
 				}
+			}*/
+			var stderr1 = 'Tests executing for LOGIN:PASS 21 tests executed in 12.122s, 21 passed, 0 failed, 0 dubious, 0 skipped.Tests executing for IN-CONTEXT LOGIN:PASS 20 tests executed in 12.239s, 20 passed, 0 failed, 0 dubious, 0 skipped.';
+			stderr1 = stderr1.toString();
+			var descriptionRes = 0;
+			var failTestResult = stderr1.split(' ');
+			for(var i=0;i<failTestResult.length;i++) {
+				if(failTestResult[i+1]=='tests') {
+					//var description = description[i].split(' ');
+					console.log("\ni :::::::::::" +i+ "......." +failTestResult[i]);
+					descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
+					console.log("$$$$$$$$$$ : " +descriptionRes);
+				}
 			}
+			var result = descriptionRes;
+			console.log("######### : " +result);
 			
 			var automationLogFile = '/etc/automation/log/automation.txt';
 			var failLogFile = '/etc/automation/log/fail.txt';
@@ -76,8 +90,9 @@ executorServices.executeJob = function(commitDetails, callback){
 								console.log("Commit specific log files deleted.");
 								return callback();
 							});
-						}else{
-							createStatus.success(commitDetails, descriptionRes, function(status) {
+						}else{	
+							console.log("Result In Else::::::::: " +result);
+							createStatus.success(commitDetails, result, function(status) {
 								console.log('state of success : '+status);
 							});
 							//Deleting commit specific log files
