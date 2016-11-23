@@ -4,7 +4,7 @@ var Client = require("./../lib/index");
 var testAuth = require("../lib/userData.json");
 var createStatus = module.exports = {};
 
-createStatus.success = function(commitDetails, callback) {
+createStatus.success = function(commitDetails, description, callback) {
 	var github = new Client({
     		debug: true
 	});
@@ -25,13 +25,14 @@ createStatus.success = function(commitDetails, callback) {
 		repo: commitDetails.repositoryName,
 		sha: commitDetails.commitId,
 		state: "success",
+		description: description
 	}, function(err, res) {
 	   	console.log(err, res);
 	    	return callback(res.state);
 	});
 };
 
-createStatus.failure = function(commitDetails, callback) {
+createStatus.failure = function(commitDetails, description, callback) {
 	var github = new Client({
     		debug: true
 	});
@@ -52,6 +53,7 @@ createStatus.failure = function(commitDetails, callback) {
 		repo: commitDetails.repositoryName,
 		sha: commitDetails.commitId,
 		state: "failure",
+		description: description
 	}, function(err, res) {
 		console.log(err, res);
 		return callback(res.state);
