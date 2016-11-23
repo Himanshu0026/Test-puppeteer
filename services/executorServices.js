@@ -25,29 +25,16 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Exit code:', code);
 			console.log('Program output:', stdout);
 			console.log('Program stderr:', stderr);
-			/*var testResult = stdout;
+			var testResult = stdout;
 			var descriptionRes = 0;
-			var description = stdout.split(' ');
-			for(var i=0; i<description.length;i++) {
-				if(description[i+1]=='tests') {
-					descriptionRes = parseInt(descriptionRes)+parseInt(description[i]);
-				}
-			}*/
-			console.log("type of stdout : " +typeof(stdout));
-			var stderr1 = stdout; //'Tests executing for LOGIN:PASS 21 tests executed in 12.122s, 21 passed, 0 failed, 0 dubious, 0 skipped.Tests executing for IN-CONTEXT LOGIN:PASS 20 tests executed in 12.239s, 20 passed, 0 failed, 0 dubious, 0 skipped.';
-			//stderr1 = stderr1.toString();
-			var descriptionRes = 0;
-			var failTestResult = stderr1.split(' ');
-			for(var i=0;i<failTestResult.length;i++) {
+			var failTestResult = testResult.split(' ');
+			for(var i=0; i<failTestResult.length;i++) {
 				if(failTestResult[i+1]=='tests') {
-					//var description = description[i].split(' ');
-					console.log("\ni :::::::::::" +i+ "......." +failTestResult[i]);
 					descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
-					console.log("$$$$$$$$$$ : " +descriptionRes);
 				}
 			}
 			var result = descriptionRes;
-			console.log("######### : " +result);
+			console.log("Result ######### : " +result);
 			
 			var automationLogFile = '/etc/automation/log/automation.txt';
 			var failLogFile = '/etc/automation/log/fail.txt';
