@@ -27,11 +27,10 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Program stderr:', stderr);
 			var testResult = stdout;
 			var descriptionRes = 0;
-			var description = stdout.split(':');
+			var description = stdout.split(' ');
 			for(var i=0; i<description.length;i++) {
-				if(i%2!=0) {
-					var description = description[i].split(' ');
-					var descriptionRes = parseInt(descriptionRes)+parseInt(description[2]);
+				if(description[i+1]=='tests') {
+					descriptionRes = parseInt(descriptionRes)+parseInt(description[i]);
 				}
 			}
 			
