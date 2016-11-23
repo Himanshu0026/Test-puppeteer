@@ -12,18 +12,36 @@ var backEndForumRegister= module.exports = {};
 
 backEndForumRegister.featureTest = function(casper, test) {
 	
-	casper.start(config.backEndUrl, function() {
-		
-		casper.echo("Title of the page :"+this.getTitle(), 'INFO');
+	//Test Case for Login To Application And Verify Error Messages While User Registering With Blank User Name.
+	casper.echo('*****************************Case1**********************************','INFO');
+	casper.echo('Verifying Error Messages While User Registering With Blank User Name','INFO');
+	backEndForumRegisterTests.VerifyingErrorMessagesWithBlankUserName();
 
-		//test case for login to application with invalid password and verify error message
-		casper.echo('Test cases for Verifying Error Messages While User Registering With Invalid Info ','INFO');
-		backEndForumRegisterTests.VerifyingErrorMessagesWithInValidInfo();
-
-		//test case for Register User With Valid Info.
-		casper.then(function(){
-			casper.echo('Test case for Register User With Valid Info','INFO');
-			backEndForumRegisterTests.registerToBackEndWithValidInfo();
-		});
+	//Test Case for Verify Error Messages While User Registering With Blank EmailId.
+	casper.then(function(){
+		casper.echo('*****************************Case2********************************','INFO');
+		casper.echo('Verifying Error Messages While User Registering With Blank EmailId','INFO');
+		backEndForumRegisterTests.VerifyingErrorMessagesWithBlankUserEmail();
 	});
+	
+	//Test Case for Verify Error Messages While User Registering With Existing UserName.
+	casper.then(function(){
+		casper.echo('*****************************Case3************************************','INFO');
+		casper.echo('Verifying Error Messages While User Registering With Existing UserName','INFO');
+		backEndForumRegisterTests.VerifyingErrorMessagesWithExistingUserName();
+	});
+
+	//Test Case for Verify Error Messages While User Registering With Invalid Email Id.
+	casper.then(function(){
+		casper.echo('*****************************Case4***********************************','INFO');
+		casper.echo('Verifying Error Messages While User Registering With Invalid Email Id','INFO');
+		backEndForumRegisterTests.VerifyingErrorMessagesWithInvalidEmailId();
+	});
+	//Test case for Register User With Valid Information.
+	casper.then(function(){
+		casper.echo('*****************************Case5**********************************','INFO');
+		casper.echo('Register User With Valid Information','INFO');
+		backEndForumRegisterTests.registerToBackEndWithValidInfo();
+	});
+	
 };

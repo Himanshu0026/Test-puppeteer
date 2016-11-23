@@ -14,7 +14,7 @@ if(feature){
 
 switch (feature) {
     		
-	case "backEndRegister":
+	case "backEndRegistration":
 		casper.test.begin('BACK END REGISTRATION TEST', function(test) {
 			var backEndRegister = require("./testsuite/main/backEndRegistration.js");
 			backEndRegister.featureTest(casper, casper.test);

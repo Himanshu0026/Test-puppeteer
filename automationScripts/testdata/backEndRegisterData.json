@@ -1,5 +1,5 @@
 {
-    "invalidInfo" : [{
+    "blankUserName" : {
         "uname" : "",
         "upass" : "1234",
         "uemail" : "blank_uname@wt.com",
@@ -7,7 +7,7 @@
         "expectedErrorMsg" : "Please enter a username." 
     },
     
-    {
+    "blankUserEmail" : {
         "uname" : "blank_email",
         "upass" : "1234",
         "uemail" : "",
@@ -15,7 +15,7 @@
         "expectedErrorMsg" : "Please enter an email address." 
     },
     
-    {
+    "existingUserName" : {
     	"uname" : "shipra",
         "uemail" : "35asasa@wt.com",
         "upass" : "1234",
@@ -24,17 +24,17 @@
         "expectedErrorMsg" : "There is already a user registered with the username "
     },
     
-    {
+    "invalidEmailId" : {
         "uname" : "invalid_email",
         "uemail" : "aaaaa",
         "upass" : "1234",
         "pNote" : "This is my personal note with invalid email",
         "errorType" : "invalidEmail",
         "expectedErrorMsg" : "You entered an invalid email address." 
-    }],
-    
+    },
+  
     "validInfo" : {
-    	"uname" : "213",
+    	"uname" : "138935",
         "uemail" : "213@wt.com",
         "upass" : "1234",
         "pNote" : "This is my personal note with valid info.."

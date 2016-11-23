@@ -35,7 +35,7 @@ backEndForumRegisterMethod.redirectToBackEndLogout = function(driver, test, call
 	return callback(null);
 };
 
-//Method For Verifying Error Message On Registration Form After Submitting Form
+//Method For Verifying Error Message On Registration Form After Submitting Form.
 
 backEndForumRegisterMethod.verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver,callback) {
 	driver.echo('errorMessage : ' +errorMessage, 'INFO');
@@ -48,4 +48,46 @@ backEndForumRegisterMethod.verifyErrorMsg = function(errorMessage, expectedError
 		driver.test.assertDoesntExist('div.ui-dialog');
 	}
 	return callback(null);
+};
+
+//Common Method For Verifying Error Message While User Registering with Any Invalid Information.
+
+backEndForumRegisterMethod.verifyErrorMsgWithInvalidInfo = function(data, driver, callback) {
+	backEndForumRegisterMethod.registerToBackEnd(data, driver, function(err) {
+		if (!err) {
+			var errorMessage;
+			var msgTitle;
+			var expectedErrorMsg;
+			if (data.expectedErrorMsg)
+				expectedErrorMsg = data.expectedErrorMsg;
+			if (data.uname == '') {
+				errorMessage = driver.fetchText('.tooltip p');
+				msgTitle = 'BlankUsername';
+			} else if (data.uemail == '') {
+				driver.wait(1000, function() {
+					errorMessage = driver.fetchText('.tooltip p');
+					msgTitle = 'BlankEmail';
+				});
+			} else if (data.errorType == 'existWithName') {
+				driver.wait(1000, function() {
+					errorMessage = driver.fetchText('div[role="dialog"] div[id^="ui-id-"]');
+					expectedErrorMsg = data.expectedErrorMsg+ '"' +data.uname+ '".';
+					msgTitle = 'ExistUsername';
+				});
+			} else if (data.errorType == 'invalidEmail') {
+				errorMessage = driver.fetchText('.tooltip p');
+				msgTitle = 'InvalidEmail';
+			}
+			//Call Method For Verifying Error Messages
+			driver.then(function() {
+				 if(errorMessage && errorMessage != "") {
+					backEndForumRegisterMethod.verifyErrorMsg(errorMessage, expectedErrorMsg, msgTitle, driver,function(err){
+						if(!err){
+							return callback(null);
+						}
+					});
+				}
+			});
+		} 
+	});
 };
