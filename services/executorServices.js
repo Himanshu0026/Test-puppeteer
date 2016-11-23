@@ -25,10 +25,10 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Program output:', stdout);
 			console.log('Program stderr:', stderr);
 			var testResult = stdout;
-			var successTestResult = stdout.split(' e');
-			var successResult = successTestResult[0];
-			var failTestResult = stderr.split(' e');
-			var failResult = failTestResult[0];
+			var successTestResult = stdout.split(' ');
+			var successResult = successTestResult[0]+" "+successTestResult[1]+" "+successTestResult[2];
+			//var failTestResult = stderr.split(' e');
+			//var failResult = failTestResult[0];
 			var automationLogFile = '/etc/automation/log/automation.txt';
 			var failLogFile = '/etc/automation/log/fail.txt';
 			fs.stat(failLogFile, function(err, fileStat) {
