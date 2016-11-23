@@ -3,7 +3,7 @@
 'use strict';
 var forgotPasswordMethod = module.exports = {};
 
-//method to send forgot password request after filling username/email
+//method to send forgot password request after filling username/email form
 forgotPasswordMethod.forgotPassword = function(username, email, driver, callback) {
 	driver.fill('form[name="lost_pw_form"]', {
 		'member' : username,
@@ -30,11 +30,3 @@ forgotPasswordMethod.gotoForgotPasswordpage = function(driver, callback) {
 	return callback(null);
 };
 
-//method to wait for a element
-forgotPasswordMethod.waitForElement = function(element, driver, callback) {
-	driver.waitForSelector(element, function success() {
-		return callback(null, true);
-	}, function fail() {
-		return callback(null, false);
-	})
-};
