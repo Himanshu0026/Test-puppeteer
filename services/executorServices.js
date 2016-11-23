@@ -35,7 +35,7 @@ executorServices.executeJob = function(commitDetails, callback){
 			}*/
 			console.log("type of stdout : " +typeof(stdout));
 			var stderr1 = stdout; //'Tests executing for LOGIN:PASS 21 tests executed in 12.122s, 21 passed, 0 failed, 0 dubious, 0 skipped.Tests executing for IN-CONTEXT LOGIN:PASS 20 tests executed in 12.239s, 20 passed, 0 failed, 0 dubious, 0 skipped.';
-			stderr1 = stderr1.toString();
+			//stderr1 = stderr1.toString();
 			var descriptionRes = 0;
 			var failTestResult = stderr1.split(' ');
 			for(var i=0;i<failTestResult.length;i++) {
