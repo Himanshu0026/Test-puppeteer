@@ -382,9 +382,12 @@ forumRegister.loginToForumBackEnd = function(driver, test, callback) {
 	
 	driver.wait(5000,function(){
 		this.capture(screenShotsDir + 'login_submit.png');
+		driver.then(function(){
+			return callback(null);
+		});
 	});
 	}
-	return callback(null);
+	
 };
 
 
