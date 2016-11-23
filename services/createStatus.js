@@ -5,7 +5,7 @@ var testAuth = require("../lib/userData.json");
 var createStatus = module.exports = {};
 
 //Method For Creating Status If All Automation Test Cases Are Passed.
-createStatus.success = function(commitDetails, callback) {
+createStatus.success = function(commitDetails, num, callback) {
 	var github = new Client({
     		debug: true
 	});
@@ -20,7 +20,7 @@ createStatus.success = function(commitDetails, callback) {
 		repo: commitDetails.repositoryName,
 		sha: commitDetails.commitId,
 		state: "success",
-		description: "Passed automation testing."
+		description: "success "+num+" automation test cases"
 	}, function(err, res) {
 	   	console.log(err, res);
 	    	return callback(res.state);

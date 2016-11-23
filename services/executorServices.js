@@ -26,6 +26,15 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Program output:', stdout);
 			console.log('Program stderr:', stderr);
 			var testResult = stdout;
+			var descriptionRes = 0;
+			var description = stderr.split(':');
+			for(var i=0; i<description.length;i++) {
+				if(i%2!=0) {
+					var description = description[i].split(' ');
+					var descriptionRes += description[2];
+				}
+			}
+			
 			var automationLogFile = '/etc/automation/log/automation.txt';
 			var failLogFile = '/etc/automation/log/fail.txt';
 			fs.stat(failLogFile, function(err, fileStat) {
@@ -69,7 +78,7 @@ executorServices.executeJob = function(commitDetails, callback){
 								return callback();
 							});
 						}else{
-							createStatus.success(commitDetails, function(status) {
+							createStatus.success(commitDetails, descriptionRes, function(status) {
 								console.log('state of success : '+status);
 							});
 							//Deleting commit specific log files
