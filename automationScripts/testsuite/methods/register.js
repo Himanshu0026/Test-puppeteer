@@ -1,5 +1,5 @@
 'use strict';
-
+var forumLogin = require('../forum_login.js');
 var registerMethod=module.exports = {};
 var json = require('../../testdata/registerData.json');
 var screenShotsDir = config.screenShotsLocation + 'register/';
