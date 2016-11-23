@@ -31,7 +31,7 @@ executorServices.executeJob = function(commitDetails, callback){
 			for(var i=0; i<description.length;i++) {
 				if(i%2!=0) {
 					var description = description[i].split(' ');
-					var descriptionRes += description[2];
+					var descriptionRes = parseInt(descriptionRes)+parseInt(description[2]);
 				}
 			}
 			
