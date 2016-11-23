@@ -1,6 +1,7 @@
 //This script is responsible for executing any external script/process. 
 'use strict';
 require('shelljs/global');
+
 var fs = require('fs');
 var mailServices = require('./mailServices.js');
 var createStatus = require('./createStatus.js');
@@ -25,8 +26,10 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Program output:', stdout);
 			console.log('Program stderr:', stderr);
 			var testResult = stdout;
-			var successTestResult = stdout.split(' ');
-			var successResult = successTestResult[0]+" "+successTestResult[1]+" "+successTestResult[2];
+			var description = stdout.split(':');
+			var description = description[1].split(' ');
+			var descriptionRes = description[1];
+			//var successResult = successTestResult[0]+" "+successTestResult[1]+" "+successTestResult[2];
 			//var failTestResult = stderr.split(' e');
 			//var failResult = failTestResult[0];
 			var automationLogFile = '/etc/automation/log/automation.txt';
@@ -69,7 +72,7 @@ executorServices.executeJob = function(commitDetails, callback){
 								return callback();
 							});
 						}else{
-							createStatus.success(commitDetails, successResult, function(status) {
+							createStatus.success(commitDetails, descriptionRes, function(status) {
 								console.log('state of success : '+status);
 							});
 							//Deleting commit specific log files
