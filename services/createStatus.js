@@ -5,7 +5,7 @@ var testAuth = require("../lib/userData.json");
 var createStatus = module.exports = {};
 
 //Method For Creating Status If All Automation Test Cases Are Passed.
-createStatus.success = function(commitDetails, num, callback) {
+createStatus.success = function(commitDetails, callback) {
 	var github = new Client({
     		debug: true
 	});
@@ -20,7 +20,7 @@ createStatus.success = function(commitDetails, num, callback) {
 		repo: commitDetails.repositoryName,
 		sha: commitDetails.commitId,
 		state: "success",
-		description: "Success "+num+" automation test cases"
+		description: "Passed automation testing."
 	}, function(err, res) {
 	   	console.log(err, res);
 	    	return callback(res.state);
@@ -28,7 +28,7 @@ createStatus.success = function(commitDetails, num, callback) {
 };
 
 //Method For Creating Status If Any Automation Test Case Is Failed.
-createStatus.failure = function(commitDetails, description, callback) {
+createStatus.failure = function(commitDetails, num, callback) {
 	var github = new Client({
     		debug: true
 	});
@@ -43,7 +43,7 @@ createStatus.failure = function(commitDetails, description, callback) {
 		repo: commitDetails.repositoryName,
 		sha: commitDetails.commitId,
 		state: "failure",
-		description: description
+		description: "Fail "+num+" automation test cases"
 	}, function(err, res) {
 		console.log(err, res);
 		return callback(res.state);
