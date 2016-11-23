@@ -4,8 +4,6 @@ var registerMethod=module.exports = {};
 var json = require('../../testdata/registerData.json');
 var screenShotsDir = config.screenShotsLocation + 'register/';
 
-
-
 /************************************PRIVATE METHODS***********************************/
 
 //Login To Forum Back End

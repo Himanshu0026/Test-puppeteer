@@ -1,7 +1,7 @@
 {
 	"screenShotsLocation": "../Screenshots/",
-	"url": "http://automation.websitetoolbox.com/",
-	"backEndUrl": "https://www.websitetoolbox.com/tool/members/login",
+	"url": "http://beta12.websitetoolbox.com/",
+	"backEndUrl": "https://beta12.websitetoolbox.com/tool/members/login",
 	"app": {	
 		"verbose" : true,
 	 	"logLevel" : "debug",
@@ -13,7 +13,7 @@
 	},
 
 	"backendCred" : {
-		"uname" : "automation",
+		"uname" : "beta12",
     		"upass" : "test",
     		"apiKey" : "4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q"
 	},

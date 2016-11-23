@@ -12,43 +12,41 @@ var forumRegister = module.exports = {};
 forumRegister.featureTest = function(casper, test) {
   
    
-        //1.Getting 'User Accounts' Field Valu If, Enabled, Then Filling Data For Testing
+        //Getting 'User Accounts' Field Valu If, Enabled, Then Filling Data For Testing
          registerTests.userAccountsEnable();
 		 
-	        //2.test case for register to application by leaving blank username and verify error message
-	          registerTests.blankUsername();
-		
-			//3.test case for register to application by leaving blank email and verify error message
-			  registerTests.blankEmail();
-			
-			//4.test case for register to application by leaving blank password and verify error message
-			 registerTests.blankPassword();
-			
-			//8.test case for register to application by existing username and verify error message
-			 registerTests.existUsername();
-			 
-			 
-			//5.test case for register to application by leaving blank im-id and verify error message
-			 registerTests.blankImId();
-			
-			//6.test case for register to application by leaving blank birthday and verify error message
-			 registerTests.blankBirthday();
-			
-			//7.test case for register to application by leaving blank signature and verify error message
-			 registerTests.blankSignature();
-			
-			
-			//9.test case for register to application by existing email and verify error message
-			 registerTests.existEmail();
-			
-			//10.test case for register to application by existing username and email and verify error message
-			 registerTests.existUsernameEmail();
-			
-			//11.test case for register to application by invalid email and verify error message
-			 registerTests.invalidEmail();
-			
-			//12.test case for register to application by valid data and verify error message
-			  registerTests.validInfo();
+	//test case for register to application by leaving blank username and verify error message
+	  registerTests.blankUsername();
+
+	//test case for register to application by leaving blank email and verify error message
+	 registerTests.blankEmail();
+	
+	//test case for register to application by leaving blank password and verify error message
+	 registerTests.blankPassword();
+	 
+	//test case for register to application by leaving blank im-id and verify error message
+	 registerTests.blankImId();
+	
+	//test case for register to application by leaving blank birthday and verify error message
+	  registerTests.blankBirthday();
+	
+	//test case for register to application by leaving blank signature and verify error message
+	 registerTests.blankSignature();
+	
+	//test case for register to application by existing username and verify error message
+	 registerTests.existUsername();
+	 
+	//test case for register to application by existing email and verify error message
+	 registerTests.existEmail();
+	
+	//test case for register to application by existing username and email and verify error message
+	 registerTests.existUsernameEmail();
+	
+	//test case for register to application by invalid email and verify error message
+	 registerTests.invalidEmail();
+	
+	//test case for register to application by valid data and verify error message
+	  registerTests.validInfo();
 
 };
 

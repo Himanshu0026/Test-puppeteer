@@ -46,12 +46,12 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 											}	
 										});	
 									} else {
-										casper.echo('User Accounts Checkbox Not Found', ERROR);
+										casper.echo('User Accounts Checkbox Not Found', 'ERROR');
 									}	
 								}
 							});
 						} else {
-							casper.echo('Setting Link Not Found', ERROR);
+							casper.echo('Setting Link Not Found', 'ERROR');
 						}
 					}
 				});
@@ -66,7 +66,7 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 							casper.click('.pull-right a[href="/register/register"]');
 							casper.echo('Successfully open register form.....', 'INFO');
 						} else {
-							casper.echo('User didn\'t not found any register link', ERROR);
+							casper.echo('User didn\'t not found any register link', 'ERROR');
 						}
 					}
 				});
@@ -93,7 +93,7 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 								if(errorMessage && errorMessage!= '')
 									registerMethod.verifyErrorMsg(errorMessage, 'Please enter a username.', 'blankUsername', casper, function() {});
 							} else {
-								casper.echo('postTopic form  Not Found', ERROR);
+								casper.echo('postTopic form  Not Found', 'ERROR');
 							}
 						}
 					});
@@ -121,7 +121,7 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 								if(errorMessage && errorMessage!= '')
 									registerMethod.verifyErrorMsg(errorMessage, 'Please enter your email address.', 'blankEmail', casper, function() {});	
 							} else {
-									casper.echo('postTopic form  Not Found', ERROR);
+									casper.echo('postTopic form  Not Found', 'ERROR');
 						   }
 						}
 					});
@@ -149,7 +149,7 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 								if(errorMessage && errorMessage!= '')
 									registerMethod.verifyErrorMsg(errorMessage, 'Please enter a password.', 'blankPassword', casper, function() {});
 							} else {
-								casper.echo('postTopic form  Not Found', ERROR);
+								casper.echo('postTopic form  Not Found', 'ERROR');
 							}
 						}
 					});
@@ -191,7 +191,7 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 												casper.click('.pull-right a[href="/register/register"]');
 												casper.echo('Successfully open register form.....', 'INFO');
 											} else {
-												casper.echo('User didn\'t not found any register link', ERROR);
+												casper.echo('User didn\'t not found any register link', 'ERROR');
 											}
 										}
 									});
@@ -237,7 +237,7 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 												casper.click('.pull-right a[href="/register/register"]');
 												casper.echo('Successfully open register form.....', 'INFO');
 											} else {
-												casper.echo('User didn\'t not found any register link', ERROR);
+												casper.echo('User didn\'t not found any register link', 'ERROR');
 											}
 										}
 									});
@@ -298,7 +298,7 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 												casper.click('.pull-right a[href="/register/register"]');
 												casper.echo('Successfully open register form.....', 'INFO');
 											} else {
-												casper.echo('User didn\'t not found any register link', ERROR);
+												casper.echo('User didn\'t not found any register link', 'ERROR');
 											}
 										}
 									});
@@ -343,7 +343,7 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 												casper.click('.pull-right a[href="/register/register"]');
 												casper.echo('Successfully open register form.....', 'INFO');
 											} else {
-												casper.echo('User didn\'t not found any register link', ERROR);
+												casper.echo('User didn\'t not found any register link', 'ERROR');
 											}
 										}
 									});
@@ -388,7 +388,7 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 												casper.click('.pull-right a[href="/register/register"]');
 												casper.echo('Successfully open register form.....', 'INFO');
 											} else {
-												casper.echo('User didn\'t not found any register link', ERROR);
+												casper.echo('User didn\'t not found any register link', 'ERROR');
 											}
 										}
 									});
@@ -433,7 +433,7 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 												casper.click('.pull-right a[href="/register/register"]');
 												casper.echo('Successfully open register form.....', 'INFO');
 											} else {
-												casper.echo('User didn\'t not found any register link', ERROR);
+												casper.echo('User didn\'t not found any register link', 'ERROR');
 											}
 										}
 									});
