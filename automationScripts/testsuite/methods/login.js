@@ -2,15 +2,6 @@
 'use strict';
 var forumLoginMethod = module.exports = {};
 var errorMessage = "";
-//var loginWait = module.exports = {};
-
-
-forumLoginMethod.login = function( driver, callback) {
-	driver.echo("password");
-	 
-	
-	return callback(null);
-};
 
 // method for login to application by passing username and password
 forumLoginMethod.loginToApp = function(username, password, driver, callback) {
@@ -39,20 +30,59 @@ forumLoginMethod.loginToApp = function(username, password, driver, callback) {
 };
 
 //method for logout from application
-forumLoginMethod.logoutFromApp = function(driver, callback) {
-	try {
-		driver.test.assertExists('ul.nav.pull-right span.caret');
-		driver.click('ul.nav.pull-right span.caret');
-		try {
-			driver.test.assertExists('#logout');
-			driver.click('#logout');
-		}catch(e) {
-			driver.test.assertDoesntExist('#logout');
-		}
-	}catch(e) {
-		driver.test.assertDoesntExist('ul.nav.pull-right span.caret');
-	}
-	return callback(null);
+forumLoginMethod.logoutFromApp = function(casper,callback) {
+	
+		//try {
+			casper.test.assertExists('ul.nav.pull-right span.caret');
+			casper.click('ul.nav.pull-right span.caret');
+			casper.waitForSelector('ul.nav.pull-right span.caret',function success(){
+				casper.capture('toggle1.png');
+				casper.test.assertExists('#logout');
+				var user= casper.evaluate(function() {
+					var id = document.querySelector('a.fb_logout').getAttribute('href');
+					return id;
+				});
+				casper.echo('********'+user);
+				casper.click('a[href="'+user+'"]');
+				casper.waitForSelector('a#td_tab_login', function() {
+					casper.capture('logout1.png');
+					casper.test.assertExists('a#td_tab_login');
+					
+				return callback(null);					
+				},function fail(){
+					casper.echo('Login link not found','INFO')
+				});
+							
+				
+			},function fail(){
+				casper.echo('Selector NOt Found','ERROR');
+			});
+			//try {
+				/*casper.waitUntilVisible('#logout',function success(){
+					casper.capture('toggle.png');
+					casper.test.assertExists('#logout');
+				 
+                                		var user= casper.evaluate(function() {
+							var id = document.querySelector('a.fb_logout').getAttribute('href');
+						return id;
+						});
+					casper.echo('********'+user);
+					casper.click('a[href="'+user+'"]');
+
+					return callback(null);
+				},function fail(){
+					casper.echo('selector not found','ERROR');
+					return callback(null);
+				});*/
+                                //driver.click('a#'+element+'');
+			/*}catch(e) {
+				driver.test.assertDoesntExist('#logout');
+			}*/
+		/*}catch(e) {
+			driver.test.assertDoesntExist('ul.nav.pull-right span.caret');
+		}*/
+	
+	
 };
 
 //Method For Verifying Error Message On Edit Profile/Account Setting Page After Submitting Form
@@ -67,15 +97,6 @@ forumLoginMethod.verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTi
 	return callback(null);
 };
 
-loginWait.waitElement = function(elementid,driver, callback){
-	driver.waitForSelector(elementid, function success() {
-		return callback(null,true);
-	}, function fail() {
-		//this.echo(errormessage, 'ERROR');
-		return(null,false);
-	});
-
-};
 
 
 
