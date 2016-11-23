@@ -26,9 +26,6 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Program output:', stdout);
 			console.log('Program stderr:', stderr);
 			var testResult = stdout;
-			var description = stderr.split(':');
-			var description = description[1].split(' ');
-			var descriptionRes = description[2];
 			var automationLogFile = '/etc/automation/log/automation.txt';
 			var failLogFile = '/etc/automation/log/fail.txt';
 			fs.stat(failLogFile, function(err, fileStat) {
@@ -42,6 +39,9 @@ executorServices.executeJob = function(commitDetails, callback){
 						var fileSize = fileStat.size;
 						console.log("fail.txt size: "+fileSize);
 						if(fileSize != 0){
+							var description = stderr.split(':');
+							var description = description[1].split(' ');
+							var descriptionRes = description[2];
 							createStatus.failure(commitDetails, descriptionRes, function(status) {
 								console.log('state of failure : '+status);
 							});
