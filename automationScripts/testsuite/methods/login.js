@@ -18,7 +18,7 @@ forumLoginMethod.loginToApp = function(username, password, driver, callback) {
 		try {
 			driver.test.assertExists('form[name="frmLogin"] input[type="submit"]');
 			driver.click('form[name="frmLogin"] input[type="submit"]');
-		}catch(e) {
+		} catch(e) {
 			driver.test.assertExists('form[name="frmLogin"] button[type="submit"]');
 			driver.click('form[name="frmLogin"] button[type="submit"]');
 		}
@@ -37,19 +37,13 @@ forumLoginMethod.logoutFromApp = function(casper,callback) {
 			casper.click('ul.nav.pull-right span.caret');
 			casper.waitForSelector('ul.nav.pull-right span.caret',function success(){
 				casper.capture('toggle1.png');
-				casper.test.assertExists('a[href="/register/logout?userid=24488764"]');
-				/*var user= casper.evaluate(function() {
-					var id = document.querySelector('a.fb_logout').getAttribute('href');
-					return id;
+				casper.test.assertExists('a[href^="/register/logout"]');
+				this.evaluate(function() {
+					document.querySelector('a#logout').click();
 				});
-				casper.echo('********'+user);
-				casper.click('a[href="'+user+'"]');*/
-				casper.click('a#logout');
 				casper.waitForSelector('a#td_tab_login', function() {
 						casper.capture('success.png');
-	
 						return callback(null);	
-
 				},function fail(){
 					casper.capture('fail.png');
 					casper.echo('Login link not found','ERROR');
