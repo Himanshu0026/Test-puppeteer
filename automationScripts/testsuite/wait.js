@@ -1,10 +1,13 @@
-// This file include wait for selector method
+// This file includes all methids of wait family
 var wait = module.exports = {};
+
 wait.waitForElement = function(element, driver, callback){
 	driver.waitForSelector(element, function success() {
+		casper.echo('Form Selector ' +element+ ' Found', 'INFO');
 		return callback(null, true);
 	}, function fail() {
-		return callback(null, false);
+		casper.echo('Form Selector ' +element+ ' Not Found', 'ERROR');
+		return(null, false);
 	});
 };
 
