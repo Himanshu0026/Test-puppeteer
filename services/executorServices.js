@@ -26,16 +26,7 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Program output:', stdout);
 			console.log('Program stderr:', stderr);
 			var testResult = stdout;
-			var descriptionRes = 0;
-			var failTestResult = testResult.split(' ');
-			for(var i=0; i<failTestResult.length;i++) {
-				if(failTestResult[i+1]=='tests') {
-					descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
-				}
-			}
-			var result = descriptionRes;
-			console.log("Result ######### : " +result);
-			
+			var failTestResult = stderr;
 			var automationLogFile = '/etc/automation/log/automation.txt';
 			var failLogFile = '/etc/automation/log/fail.txt';
 			fs.stat(failLogFile, function(err, fileStat) {
@@ -49,10 +40,15 @@ executorServices.executeJob = function(commitDetails, callback){
 						var fileSize = fileStat.size;
 						console.log("fail.txt size: "+fileSize);
 						if(fileSize != 0){
-							var description = stderr.split(':');
-							var description = description[1].split(' ');
-							var descriptionRes = description[2];
-							createStatus.failure(commitDetails, descriptionRes, function(status) {
+							var descriptionRes = 0;
+							var failTestResult = failTestResult.split(' ');
+							for(var i=0; i<failTestResult.length;i++) {
+								if(failTestResult[i+1]=='tests') {
+									descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
+								}
+							}
+							var result = descriptionRes;
+							createStatus.failure(commitDetails, result, function(status) {
 								console.log('state of failure : '+status);
 							});
 							//Adding test result with commit details
@@ -79,8 +75,7 @@ executorServices.executeJob = function(commitDetails, callback){
 								return callback();
 							});
 						}else{	
-							console.log("Result In Else::::::::: " +result);
-							createStatus.success(commitDetails, result, function(status) {
+							createStatus.success(commitDetails, function(status) {
 								console.log('state of success : '+status);
 							});
 							//Deleting commit specific log files
