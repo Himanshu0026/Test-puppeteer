@@ -1,3 +1,4 @@
+// This file includes all methids of wait family
 
 var wait = module.exports = {};
 
@@ -11,3 +12,6 @@ wait.waitForElement = function(element, driver, callback){
 	});
 };
 
+
+
+			

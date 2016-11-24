@@ -16,9 +16,9 @@ sleep 1
 #printf "\nTests executing for BACKEND REGISTRATION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature=backEndRegistration >> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1
-#printf "\nTests executing for FORGOT PASSWORD: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-#casperjs test ./automationScripts/automation.js --feature=forgotpassword >> "$AUTOMATION_HOME"/log/automation.txt
-#sleep 1
+printf "\nTests executing for FORGOT PASSWORD: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./automationScripts/automation.js --feature=forgotPassword >> "$AUTOMATION_HOME"/log/automation.txt
+sleep 1
 #printf "\nTests executing for HIDE CATEGORY: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature=hidecategory >> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1
