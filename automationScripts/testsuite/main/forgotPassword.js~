@@ -12,21 +12,21 @@ forgotPassword.featureTest = function(casper, test) {
 	casper.start(config.url, function() {
 		this.echo("Title of the page :"+this.getTitle());
 		
-		forgotPasswordTestcases.resetPasswordUsingValidUsername(); // call method to Reset password with valid user name
+		forgotPasswordTestcases.validUsername(); // call method to Reset password with valid user name
 	
-		forgotPasswordTestcases.resetPasswordUsingValidEmailid(); // call method to Reset password with valid email id
+		forgotPasswordTestcases.validEmailid(); // call method to Reset password with valid email id
 		
-		forgotPasswordTestcases.resetPasswordUsingInvalidUsername(); // call method to Reset password with Invalid user name
+		forgotPasswordTestcases.invalidUsername(); // call method to Reset password with Invalid user name
 		
-		forgotPasswordTestcases.resetPasswordUsingInvalidEmailid(); // call method to Reset password with Invalid email id
+		forgotPasswordTestcases.invalidEmailid(); // call method to Reset password with Invalid email id
 		
-		forgotPasswordTestcases.resetPasswordUsingBlankUsernameandEmail(); // call method to Reset password by leaving blank Username and Email textfield both //
+		forgotPasswordTestcases.blankUsernameandEmail(); // call method to Reset password by leaving blank Username and Email textfield both //
 		
-		forgotPasswordTestcases.resetPasswordUsingValidUsernameandEmailid(); // call method to Reset Password with valid username and valid Email id with mismatched condition //
+		forgotPasswordTestcases.validUsernameandEmailid(); // call method to Reset Password with valid username and valid Email id with mismatched condition //
 		
-		forgotPasswordTestcases.resetPasswordUsingInvalidUsernameandValidEmailid(); // call method to Reset Password with Invalid username and valid Email id //
+		forgotPasswordTestcases.invalidUsernameandValidEmailid(); // call method to Reset Password with Invalid username and valid Email id //
 		
-		forgotPasswordTestcases.resetPasswordUsingValidUsernameandInvalidEmailid(); // call method to Reset Password with Valid username and Invalid Email id //
+		forgotPasswordTestcases.validUsernameandInvalidEmailid(); // call method to Reset Password with Valid username and Invalid Email id //
 		
 	});
 };

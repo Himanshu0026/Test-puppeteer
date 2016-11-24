@@ -1,6 +1,7 @@
 /***These are the function which has been called in forgotPassword.js and also will be used in other js file as per requirement**********/
 
 'use strict';
+var forumLoginMethod = require('./login.js');
 var forgotPasswordMethod = module.exports = {};
 
 //method to send forgot password request after filling username/email form
@@ -19,9 +20,9 @@ forgotPasswordMethod.gotoForgotPasswordpage = function(driver, callback) {
 		driver.test.assertExists('#td_tab_login');
 		driver.click('#td_tab_login');
 		driver.click('#anchor_tab_forget_password');
-	} catch(e){
+	} catch(e) {
 		driver.test.assertDoesntExist('#td_tab_login');
-		forumLogin.logoutFromApp(driver, function(){
+		forumLoginMethod.logoutFromApp(driver, function() {
 			driver.assertExists('#td_tab_login');
 			driver.click('#td_tab_login');
 			driver.click('#anchor_tab_forget_password');

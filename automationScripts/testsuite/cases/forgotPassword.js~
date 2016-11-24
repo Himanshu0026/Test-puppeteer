@@ -6,13 +6,13 @@ var config = require('../../../config/config.json');
 var  forgotPasswordMethod = require('../methods/forgotPassword.js');
 var wait = require('../wait.js');
 var forgotPasswordTestcases = module.exports = {};
-
+var screenShotsDir = config.screenShotsLocation + "forgotPassword/";
+var ActualMessage="";
 //method to test the Reset password with valid username functionality --Test case 1
-forgotPasswordTestcases.resetPasswordUsingValidUsername = function() {
-	var screenShotsDir = config.screenShotsLocation + "forgotPassword/";
-	var ActualMessage="";
+forgotPasswordTestcases.validUsername = function() {
+	
 	// this code is to launch application to perform related actions
-	casper.then(function() {
+	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (err) {
 				casper.echo("Error Occurred In Callback", "ERROR");
@@ -33,9 +33,8 @@ forgotPasswordTestcases.resetPasswordUsingValidUsername = function() {
 									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
 										if(isExist) {
 											casper.click('small a[href="/categories"]');
-											return null;
 										} else {
-											casper.echo('Categories not found','INFO')
+											casper.echo('Categories not found','INFO');
 										}
 									});
 								} else {
@@ -53,11 +52,9 @@ forgotPasswordTestcases.resetPasswordUsingValidUsername = function() {
 
 
 //method to test the Reset Password using Valid Email id functionality --Test case 2
-forgotPasswordTestcases.resetPasswordUsingValidEmailid = function() {
-	var screenShotsDir = config.screenShotsLocation + "forgotPassword/";
-	var ActualMessage="";
+forgotPasswordTestcases.validEmailid = function() {
 	// this code is to launch application to perform related actions
-	casper.then(function() {
+	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (err) {
 				casper.echo("Error Occurred In Callback", "ERROR");
@@ -78,9 +75,8 @@ forgotPasswordTestcases.resetPasswordUsingValidEmailid = function() {
 									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
 										if(isExist) {
 											casper.click('small a[href="/categories"]');
-											return null;
 										} else {
-											casper.echo('Categories not found','INFO')
+											casper.echo('Categories not found','INFO');
 										}
 									});
 								} else {
@@ -98,11 +94,9 @@ forgotPasswordTestcases.resetPasswordUsingValidEmailid = function() {
 
 //method to test the Reset Password using InValid Username functionality --Test case 3
 
-forgotPasswordTestcases.resetPasswordUsingInvalidUsername = function() {
-	var screenShotsDir = config.screenShotsLocation + "forgotPassword/";
-	var ActualMessage="";
+forgotPasswordTestcases.invalidUsername = function() {
 	// this code is to launch application to perform related actions
-	casper.then(function() {
+	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (err) {
 				casper.echo("Error Occurred In Callback", "ERROR");
@@ -119,7 +113,7 @@ forgotPasswordTestcases.resetPasswordUsingInvalidUsername = function() {
 									casper.capture(screenShotsDir+"invalidUsername.png");			
 									casper.test.assert(ActualMessage.indexOf(json['InvalidUsername'].ExpectedMessage) > -1,'Same as expected message');	
 									casper.echo("Error message in case of invalid username has been verified",'INFO');
-									return null;
+									casper.click('input#cancelPassword');
 								} else {
 									casper.echo("Error Occurred", "ERROR");
 									casper.capture(screenShotsDir+"Error_invalidUsername.png");
@@ -134,11 +128,9 @@ forgotPasswordTestcases.resetPasswordUsingInvalidUsername = function() {
 };
 
 //method to test the Reset Password using InValid Email id functionality --Test case 4
-forgotPasswordTestcases.resetPasswordUsingInvalidEmailid = function() {
-	var screenShotsDir = config.screenShotsLocation + "forgotPassword/";
-	var ActualMessage="";
+forgotPasswordTestcases.invalidEmailid = function() {
 	// this code is to launch application to perform related actions
-	casper.then(function() {
+	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (err) {
 				casper.echo("Error Occurred In Callback", "ERROR");
@@ -155,7 +147,6 @@ forgotPasswordTestcases.resetPasswordUsingInvalidEmailid = function() {
 									casper.capture(screenShotsDir+"invalidEmail.png");			
 									casper.test.assert(ActualMessage.indexOf(json['InvalidEmailid'].ExpectedMessage) > -1,'Same as expected message');	
 									casper.echo("Error message in case of invalid username has been verified",'INFO');
-									return null;
 								} else {
 									casper.echo("Error Occurred", "ERROR");
 									casper.capture(screenShotsDir+"Error_invalidEmailid.png");
@@ -170,11 +161,9 @@ forgotPasswordTestcases.resetPasswordUsingInvalidEmailid = function() {
 };
 
 //method to test the Reset Password by leaving blank Username and Email textfield both functionality --Test case 5
-forgotPasswordTestcases.resetPasswordUsingBlankUsernameandEmail = function() {
-	var screenShotsDir = config.screenShotsLocation + "forgotPassword/";
-	var ActualMessage="";
+forgotPasswordTestcases.blankUsernameandEmail = function() {
 	// this code is to launch application to perform related actions
-	casper.then(function() {
+	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (err) {
 				casper.echo("Error Occurred In Callback", "ERROR");
@@ -191,7 +180,6 @@ forgotPasswordTestcases.resetPasswordUsingBlankUsernameandEmail = function() {
 									//casper.capture(screenShotsDir+"BlankData.png");			
 									casper.test.assert(ActualMessage.indexOf(json['BlankUsernameAndEmail'].ExpectedMessage) > -1,'Same as expected message');
 									casper.echo("Error message is verified while submit request with blank username and email",'INFO');
-									return null;
 								} else {
 									casper.echo("Error Occurred", "ERROR");
 									casper.capture(screenShotsDir+"Error_BlankData.png");
@@ -207,11 +195,9 @@ forgotPasswordTestcases.resetPasswordUsingBlankUsernameandEmail = function() {
 };
 
 //method to test the Reset Password with valid username and valid Email id with mismatched condition functionality --Test case 6
-forgotPasswordTestcases.resetPasswordUsingValidUsernameandEmailid = function() {
-	var screenShotsDir = config.screenShotsLocation + "forgotPassword/";
-	var ActualMessage="";
+forgotPasswordTestcases.validUsernameandEmailid = function() {
 	// this code is to launch application to perform related actions
-	casper.then(function() {
+	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (err) {
 				casper.echo("Error Occurred In Callback", "ERROR");
@@ -232,9 +218,8 @@ forgotPasswordTestcases.resetPasswordUsingValidUsernameandEmailid = function() {
 									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
 										if(isExist) {
 											casper.click('small a[href="/categories"]');
-											return null;
 										} else {
-											casper.echo('Categories not found','INFO')
+											casper.echo('Categories not found','INFO');
 										}
 									});
 								} else {
@@ -251,11 +236,9 @@ forgotPasswordTestcases.resetPasswordUsingValidUsernameandEmailid = function() {
 };
 
 //method to test the Reset Password with Invalid username and valid Email id functionality--Test case 7
-forgotPasswordTestcases.resetPasswordUsingInvalidUsernameandValidEmailid = function() {
-	var screenShotsDir = config.screenShotsLocation + "forgotPassword/";
-	var ActualMessage="";
+forgotPasswordTestcases.invalidUsernameandValidEmailid = function() {
 	// this code is to launch application to perform related actions
-	casper.then(function() {
+	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (err) {
 				casper.echo("Error Occurred In Callback", "ERROR");
@@ -276,9 +259,8 @@ forgotPasswordTestcases.resetPasswordUsingInvalidUsernameandValidEmailid = funct
 									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
 										if(isExist) {
 											casper.click('small a[href="/categories"]');
-											return null;
 										} else {
-											casper.echo('Categories not found','INFO')
+											casper.echo('Categories not found','INFO');
 										}
 									});
 								} else {
@@ -295,11 +277,9 @@ forgotPasswordTestcases.resetPasswordUsingInvalidUsernameandValidEmailid = funct
 };
 
 //method to test the Reset Password with valid username and Invalid Email id functionality --Test case 8
-forgotPasswordTestcases.resetPasswordUsingValidUsernameandInvalidEmailid = function() {
-	var screenShotsDir = config.screenShotsLocation + "forgotPassword/";
-	var ActualMessage="";
+forgotPasswordTestcases.validUsernameandInvalidEmailid = function() {
 	// this code is to launch application to perform related actions
-	casper.then(function() {
+	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (err) {
 				casper.echo("Error Occurred In Callback", "ERROR");
@@ -320,9 +300,8 @@ forgotPasswordTestcases.resetPasswordUsingValidUsernameandInvalidEmailid = funct
 									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
 										if(isExist) {
 											casper.click('small a[href="/categories"]');
-											return null;
 										} else {
-											casper.echo('Categories not found','INFO')
+											casper.echo('Categories not found','INFO');
 										}
 									});
 								} else {
