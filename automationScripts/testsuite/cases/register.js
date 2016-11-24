@@ -17,7 +17,6 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 
 	//Getting 'User Accounts' Field Valu If, Enabled, Then Filling Data For Testing
     registerTests.userAccountsEnable  = function() {
-
 		casper.start(config.backEndUrl, function() {
 			casper.echo('******************** case-1 ************************');
 			casper.echo('Getting User Accounts Field Valu If, Enabled, Then Filling Data For Testing');

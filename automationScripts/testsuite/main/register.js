@@ -6,15 +6,14 @@ var registerTests = require('../cases/register.js');
 var registerMethod = require('../methods/register.js');
 var forumRegister = module.exports = {};
 
-
 /**************************All Fields Required Validation****************************/
 
 forumRegister.featureTest = function(casper, test) {
   
    
-        //Getting 'User Accounts' Field Valu If, Enabled, Then Filling Data For Testing
-         registerTests.userAccountsEnable();
-		 
+	//Getting 'User Accounts' Field Valu If, Enabled, Then Filling Data For Testing
+	 registerTests.userAccountsEnable();
+	 
 	//test case for register to application by leaving blank username and verify error message
 	  registerTests.blankUsername();
 
