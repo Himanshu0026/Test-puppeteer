@@ -12,41 +12,37 @@ var ActualMessage="";
 forgotPasswordTestcases.validUsername = function() {
 	
 	// this code is to launch application to perform related actions
-	casper.thenOpen(config.url, function() {
-		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
-			if (err) {
-				casper.echo("Error Occurred In Callback", "ERROR");
-			} else { 
-				casper.echo("Forgot password page is navigated",'INFO');
-				casper.then(function() {
-					forgotPasswordMethod.forgotPassword(json['validUserName'].username, json['validUserName'].email, casper, function(err) {
-						if (!err) {
-							//This is to verify success message after submitting request for reset password with valid username
-							wait.waitForElement("div.text-center.bmessage", casper, function(err, isExist) {
-								if(isExist) {
-									ActualMessage = casper.fetchText('div.text-center.bmessage');
-									var ActualMessage1 = casper.fetchText('div.text-center small');
-									ActualMessage = ActualMessage.replace(ActualMessage1, "");
-									casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
-									casper.capture(screenShotsDir+"validusername.png");
-									casper.test.assert(ActualMessage.indexOf(json['validUserName'].ExpectedMessage) > -1,'Same as expected message');
-									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
-										if(isExist) {
-											casper.click('small a[href="/categories"]');
-										} else {
-											casper.echo('Categories not found','INFO');
-										}
-									});
-								} else {
-									casper.test.assert(ActualMessage.indexOf(json['validUserName'].ExpectedMessage) > -1);
-									casper.capture(screenShotsDir+"Error_validusername.png");
-								}
-							});
-						}
-					});
+	forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
+		if (!err) { 
+			casper.echo("Forgot password page is navigated",'INFO');
+			wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
+				forgotPasswordMethod.forgotPassword(json['validUserName'].username, json['validUserName'].email, casper, function(err) {
+					if (!err) {
+						//This is to verify success message after submitting request for reset password with valid username
+						wait.waitForElement("div.text-center.bmessage", casper, function(err, isExist) {
+							if(isExist) {
+								ActualMessage = casper.fetchText('div.text-center.bmessage');
+								var ActualMessage1 = casper.fetchText('div.text-center small');
+								ActualMessage = ActualMessage.replace(ActualMessage1, "");
+								casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
+								casper.capture(screenShotsDir+"validusername.png");
+								casper.test.assert(ActualMessage.indexOf(json['validUserName'].ExpectedMessage) > -1,'Same as expected message');
+								wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
+									if(isExist) {
+										casper.click('small a[href="/categories"]');
+									} else {
+										casper.echo('Categories not found','INFO');
+									}
+								});
+							} else {
+								casper.test.assert(ActualMessage.indexOf(json['validUserName'].ExpectedMessage) > -1);
+								casper.capture(screenShotsDir+"Error_validusername.png");
+							}
+						});
+					}
 				});
-			}
-		});
+			});
+		}
 	});
 };
 
@@ -56,11 +52,9 @@ forgotPasswordTestcases.validEmailid = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
-			if (err) {
-				casper.echo("Error Occurred In Callback", "ERROR");
-			} else { 
+			if (!err) {
 				casper.echo("Forgot password page is navigated",'INFO');
-				casper.then(function() {
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
 					forgotPasswordMethod.forgotPassword(json['validEmailid'].username, json['validEmailid'].email, casper, function(err) {
 						if (!err) {
 							//This is to verify success message after submitting request for reset password with valid Email id
@@ -98,11 +92,9 @@ forgotPasswordTestcases.invalidUsername = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
-			if (err) {
-				casper.echo("Error Occurred In Callback", "ERROR");
-			} else { 
+			if (!err) { 
 				casper.echo("Forgot password page is navigated",'INFO');
-				casper.then(function() {
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
 					forgotPasswordMethod.forgotPassword(json['InvalidUsername'].username, json['InvalidUsername'].email, casper, function(err) {
 						if (!err) {
 							//This is to verify success message after submitting request for reset password with invalid username
@@ -132,11 +124,9 @@ forgotPasswordTestcases.invalidEmailid = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
-			if (err) {
-				casper.echo("Error Occurred In Callback", "ERROR");
-			} else { 
+			if (!err) {
 				casper.echo("Forgot password page is navigated",'INFO');
-				casper.then(function() {
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
 					forgotPasswordMethod.forgotPassword(json['InvalidEmailid'].username, json['InvalidEmailid'].email, casper, function(err) {
 						if (!err) {
 							//This is to verify success message after submitting request for reset password with invalid Email
@@ -165,11 +155,9 @@ forgotPasswordTestcases.blankUsernameandEmail = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
-			if (err) {
-				casper.echo("Error Occurred In Callback", "ERROR");
-			} else { 
+			if (!err) {
 				casper.echo("Forgot password page is navigated",'INFO');
-				casper.then(function() {
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
 					forgotPasswordMethod.forgotPassword(json['BlankUsernameAndEmail'].username, json['BlankUsernameAndEmail'].email, casper, function(err) {
 						if (!err) {
 							//This is to verify success message after submitting request for reset password by leaving blank Username and Email textfield both
@@ -199,11 +187,9 @@ forgotPasswordTestcases.validUsernameandEmailid = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
-			if (err) {
-				casper.echo("Error Occurred In Callback", "ERROR");
-			} else { 
+			if (!err) { 
 				casper.echo("Forgot password page is navigated",'INFO');
-				casper.then(function() {
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
 					forgotPasswordMethod.forgotPassword(json['ValidUsernameAndEmail'].username, json['ValidUsernameAndEmail'].email, casper, function(err) {
 						if (!err) {
 							//This is to verify success message after submitting request for reset password with valid Username and Email id
@@ -240,11 +226,9 @@ forgotPasswordTestcases.invalidUsernameandValidEmailid = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
-			if (err) {
-				casper.echo("Error Occurred In Callback", "ERROR");
-			} else { 
+			if (!err) {
 				casper.echo("Forgot password page is navigated",'INFO');
-				casper.then(function() {
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
 					forgotPasswordMethod.forgotPassword(json['invalidUsernameAndValidEmail'].username, json['invalidUsernameAndValidEmail'].email, casper, function(err) {
 						if (!err) {
 							//This is to verify success message after submitting request for reset password with invalid Username and valid Email id
@@ -281,11 +265,9 @@ forgotPasswordTestcases.validUsernameandInvalidEmailid = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
-			if (err) {
-				casper.echo("Error Occurred In Callback", "ERROR");
-			} else { 
+			if (!err) {
 				casper.echo("Forgot password page is navigated",'INFO');
-				casper.then(function() {
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
 					forgotPasswordMethod.forgotPassword(json['validUsernameAndInvalidEmail'].username, json['validUsernameAndInvalidEmail'].email, casper, function(err) {
 						if (!err) {
 							//This is to verify success message after submitting request for reset password with valid Username and invalid Email id

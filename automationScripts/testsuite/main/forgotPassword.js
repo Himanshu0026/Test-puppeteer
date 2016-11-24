@@ -2,9 +2,7 @@
 //----- This js file covers all the valid and invalid Test scenarios for forgot Password functionality from login window comes from home page---------//
 
 'use strict';
-var json = require('../../testdata/forgotpasswordData.json');
 var config = require('../../../config/config.json');
-var forgotPasswordMethod = require('../methods/forgotPassword.js');
 var forgotPasswordTestcases = require('../cases/forgotPassword.js');
 var forgotPassword = module.exports = {};
 
