@@ -9,7 +9,7 @@ forumLoginMethod.loginToApp = function(username, password, driver, callback) {
 	try {
 		driver.test.assertExists('#td_tab_login');
 		driver.click('#td_tab_login');
-		driver.then(function() {});
+		//driver.then(function() {});
 		driver.fill('form[name="frmLogin"]', {
 			'member': username,
 			'pw' : password
