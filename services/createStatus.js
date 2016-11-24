@@ -20,7 +20,7 @@ createStatus.success = function(commitDetails, callback) {
 		repo: commitDetails.repositoryName,
 		sha: commitDetails.commitId,
 		state: "success",
-		description: "Passed automation testing"
+		description: "Passed automation testing."
 	}, function(err, res) {
 	   	console.log(err, res);
 	    	return callback(res.state);
@@ -43,7 +43,7 @@ createStatus.failure = function(commitDetails, num, callback) {
 		repo: commitDetails.repositoryName,
 		sha: commitDetails.commitId,
 		state: "failure",
-		description: "Fail "+num+" automation test cases"
+		description: "Failed "+num+" automation test cases."
 	}, function(err, res) {
 		console.log(err, res);
 		return callback(res.state);
