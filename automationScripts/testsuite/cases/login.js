@@ -16,14 +16,13 @@ forumLoginTests.validCredential=function(){
 				if(isExists) {
 					casper.test.assertDoesntExist('#td_tab_login');
 					casper.echo('User has been successfuly login to application', 'INFO');
-					
 					forumLoginMethod.logoutFromApp(casper, function(err){
 						if (!err)
 							casper.echo('Successfully logout from application', 'INFO');
 					});
 				}
 			});
-		};
+		}
 	});
 };
 
@@ -39,12 +38,11 @@ forumLoginTests.invalidUsername= function(){
 						errorMessage = casper.fetchText('form[name="frmLogin"] [role="alert"]');
 						errorMessage = errorMessage.trim();
 						if(errorMessage && errorMessage!= '')
-						forumLoginMethod.verifyErrorMsg(errorMessage, 'There is no account with the username you specified.', 'invalidUsername', casper, function() {});
+						forumLoginMethod.verifyErrorMsg(errorMessage, 'There is no account with the username you specified.', 'invalidUsername', casper, function(err) {});
 					}
 				});
 			}
 		});
-
 	});
 };
 
@@ -60,9 +58,8 @@ forumLoginTests.invalidPassword = function() {
 						var errorMessage = casper.fetchText('form[name="frmLogin"] [role="alert"]');
 						errorMessage = errorMessage.trim();
 						if(errorMessage && errorMessage!= '')
-							forumLoginMethod.verifyErrorMsg(errorMessage, 'The password you entered is incorrect.', 'invalidPassword', casper, function() {});
+							forumLoginMethod.verifyErrorMsg(errorMessage, 'The password you entered is incorrect.', 'invalidPassword', casper, function(err) {});
 					}
-				
 				});
 			}
 		});
@@ -76,15 +73,15 @@ forumLoginTests.blankUsernamePassword=function(){
 		forumLoginMethod.loginToApp(json['BlankField'].username, json['BlankField'].password, casper, function(err){
 			if(!err) {
 				casper.echo('login by leaving blank username and password and verify error message', 'INFO');
-				wait.waitForElement('form[name="frmLogin"] [role="alert"]', casper, function(err,isExists) {
+				wait.waitForElement('form[name="frmLogin"] [role="alert"]', casper, function(err, isExists) {
 					if(isExists) {
 						errorMessage = casper.fetchText('form[name="frmLogin"] [role="alert"]');
 						errorMessage = errorMessage.trim();
 						if(errorMessage && errorMessage!= '')
-							forumLoginMethod.verifyErrorMsg(errorMessage, 'You must enter your username or email address.', 'blankEmailPassword', casper, function() {});
+							forumLoginMethod.verifyErrorMsg(errorMessage, 'You must enter your username or email address.', 'blankEmailPassword', casper, function(err) {});
 					}
 				});
-			};
+			}
 		});
 	});
 };
@@ -96,15 +93,15 @@ forumLoginTests.blankPassword=function(){
 		forumLoginMethod.loginToApp(json['BlankPassword'].username, json['BlankPassword'].password, casper, function(err){
 			if(!err) {
 				casper.echo('login by leaving blank username and password and verify error message', 'INFO');
-				wait.waitForElement('form[name="frmLogin"] [role="alert"]', casper, function(err,isExists) {
+				wait.waitForElement('form[name="frmLogin"] [role="alert"]', casper, function(err, isExists) {
 					if(isExists) {
 						errorMessage = casper.fetchText('form[name="frmLogin"] [role="alert"]');
 						errorMessage = errorMessage.trim();
 						if(errorMessage && errorMessage!= '')
-							forumLoginMethod.verifyErrorMsg(errorMessage, 'You must enter your password.', 'blankEmailPassword', casper, function() {});
+							forumLoginMethod.verifyErrorMsg(errorMessage, 'You must enter your password.', 'blankEmailPassword', casper, function(err) {});
 					}
 				});
-			};
+			}
 		});
 	});
 };
@@ -116,18 +113,17 @@ forumLoginTests.validEmail=function(){
 		forumLoginMethod.loginToApp(json['ValidEmail'].username, json['ValidEmail'].password, casper, function(err){
 			if(!err) {
 				casper.echo('login by validEmail and password and verify error message', 'INFO');
-				wait.waitForElement('a.default-user', casper , function(err,isExists) {
+				wait.waitForElement('a.default-user', casper , function(err, isExists) {
 					if(isExists) {
 						casper.test.assertDoesntExist('#td_tab_login');
 						casper.echo('User has been successfuly login to application', 'INFO');
-	
 						forumLoginMethod.logoutFromApp(casper, function(err){
 							if(!err)
 								casper.echo('Successfully logout from application', 'INFO');
 						});
 					 }
 				});
-			};
+			}
 		});
 	});
 };
