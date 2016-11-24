@@ -7,6 +7,8 @@ var  forgotPasswordMethod = require('../methods/forgotPassword.js');
 var wait = require('../wait.js');
 var forgotPasswordTestcases = module.exports = {};
 var ActualMessage="";
+
+
 //method to test the Reset password with valid username functionality --Test case 1
 forgotPasswordTestcases.validUsername = function() {
 	
@@ -45,6 +47,7 @@ forgotPasswordTestcases.validUsername = function() {
 		}
 	});
 };
+
 
 //method to test the Reset Password using Valid Email id functionality --Test case 2
 forgotPasswordTestcases.validEmail = function() {
@@ -85,8 +88,8 @@ forgotPasswordTestcases.validEmail = function() {
 	});
 };
 
-//method to test the Reset Password using InValid Username functionality --Test case 3
 
+//method to test the Reset Password using InValid Username functionality --Test case 3
 forgotPasswordTestcases.invalidUsername = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
@@ -119,6 +122,7 @@ forgotPasswordTestcases.invalidUsername = function() {
 		});
 	});
 };
+
 
 //method to test the Reset Password using InValid Email id functionality --Test case 4
 forgotPasswordTestcases.invalidEmail = function() {
@@ -153,6 +157,7 @@ forgotPasswordTestcases.invalidEmail = function() {
 	});
 };
 
+
 //method to test the Reset Password by leaving blank Username and Email textfield both functionality --Test case 5
 forgotPasswordTestcases.blankUsernameAndEmail = function() {
 	// this code is to launch application to perform related actions
@@ -185,6 +190,7 @@ forgotPasswordTestcases.blankUsernameAndEmail = function() {
 		});
 	});
 };
+
 
 //method to test the Reset Password with valid username and valid Email id with mismatched condition functionality --Test case 6
 forgotPasswordTestcases.validUsernameAndEmail = function() {
@@ -225,6 +231,7 @@ forgotPasswordTestcases.validUsernameAndEmail = function() {
 	});
 };
 
+
 //method to test the Reset Password with Invalid username and valid Email id functionality--Test case 7
 forgotPasswordTestcases.invalidUsernameAndValidEmail = function() {
 	// this code is to launch application to perform related actions
@@ -263,6 +270,7 @@ forgotPasswordTestcases.invalidUsernameAndValidEmail = function() {
 		});
 	});
 };
+
 
 //method to test the Reset Password with valid username and Invalid Email id functionality --Test case 8
 forgotPasswordTestcases.validUsernameAndInvalidEmail = function() {

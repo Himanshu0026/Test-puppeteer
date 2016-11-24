@@ -4,6 +4,7 @@
 var forumLoginMethod = require('./login.js');
 var forgotPasswordMethod = module.exports = {};
 
+
 //method to send forgot password request after filling username/email form
 forgotPasswordMethod.forgotPassword = function(username, email, driver, callback) {
 	driver.fill('form[name="lost_pw_form"]', {
@@ -13,6 +14,7 @@ forgotPasswordMethod.forgotPassword = function(username, email, driver, callback
 	driver.click('input[name="Submit"]');
 	return callback(null);
 };
+
 
 //method to verify forgot password link from home page
 forgotPasswordMethod.gotoForgotPasswordpage = function(driver, callback) {
