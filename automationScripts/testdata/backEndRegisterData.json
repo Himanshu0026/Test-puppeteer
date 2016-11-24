@@ -1,4 +1,12 @@
 {
+ 
+    "validInfo" : {
+    	"uname" : "138935",
+        "uemail" : "213@wt.com",
+        "upass" : "1234",
+        "pNote" : "This is my personal note with valid info.."
+    },
+
     "blankUserName" : {
         "uname" : "",
         "upass" : "1234",
@@ -23,6 +31,13 @@
         "errorType" : "existWithName",
         "expectedErrorMsg" : "There is already a user registered with the username "
     },
+
+    "existingEmailId" : {
+    	"uname" : "existing_emailid",
+        "uemail" : "213@wt.com",
+        "upass" : "1234",
+        "pNote" : "This is my personal note with existing email id "
+    },
     
     "invalidEmailId" : {
         "uname" : "invalid_email",
@@ -31,12 +46,5 @@
         "pNote" : "This is my personal note with invalid email",
         "errorType" : "invalidEmail",
         "expectedErrorMsg" : "You entered an invalid email address." 
-    },
-  
-    "validInfo" : {
-    	"uname" : "138935",
-        "uemail" : "213@wt.com",
-        "upass" : "1234",
-        "pNote" : "This is my personal note with valid info.."
     }
 }

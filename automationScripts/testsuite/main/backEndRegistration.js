@@ -11,27 +11,38 @@ var backEndForumRegister= module.exports = {};
 
 
 backEndForumRegister.featureTest = function(casper, test) {
-	
-	//Test Case for Login To Application And Verify Error Messages While User Registering With Blank User Name.
-	
-	backEndForumRegisterTests.VerifyingErrorMessagesWithBlankUserName();
 
-	//Test Case for Verify Error Messages While User Registering With Blank EmailId.
-	
-	backEndForumRegisterTests.VerifyingErrorMessagesWithBlankUserEmail();
-	
-	
-	//Test Case for Verify Error Messages While User Registering With Existing UserName.
-	
-	backEndForumRegisterTests.VerifyingErrorMessagesWithExistingUserName();
-	
+	casper.on('remote.alert', function(message) {
+		this.echo('alert message: ' + message, 'INFO');
+	});
 
-	//Test Case for Verify Error Messages While User Registering With Invalid Email Id.
+	casper.start(config.backEndUrl, function() {
+		
+		this.echo("Title of the page :"+this.getTitle(), 'INFO');
 	
-	backEndForumRegisterTests.VerifyingErrorMessagesWithInvalidEmailId();
+		//Register User With Valid Information.
+
+		backEndForumRegisterTests.validInfo();
+
+		//Verify Error Messages While User Registering With Blank User Name.
 	
-	//Test case for Register User With Valid Information.
+		backEndForumRegisterTests.blankUserName();
+
+		//Verify Error Messages While User Registering With Blank EmailId.
 	
-	backEndForumRegisterTests.registerToBackEndWithValidInfo();
+		backEndForumRegisterTests.blankEmailId();
 	
+		//Verify Error Messages While User Registering With Existing UserName.
+	
+		backEndForumRegisterTests.existingUserName();
+
+		//Register User With Existing EmailId.
+
+		backEndForumRegisterTests.existingEmailId();
+	
+		//Verify Error Messages While User Registering With Invalid Email Id.
+	
+		backEndForumRegisterTests.invalidEmailId();
+
+	});
 };
