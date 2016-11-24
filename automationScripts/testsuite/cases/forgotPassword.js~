@@ -6,7 +6,6 @@ var config = require('../../../config/config.json');
 var  forgotPasswordMethod = require('../methods/forgotPassword.js');
 var wait = require('../wait.js');
 var forgotPasswordTestcases = module.exports = {};
-var screenShotsDir = config.screenShotsLocation + "forgotPassword/";
 var ActualMessage="";
 //method to test the Reset password with valid username functionality --Test case 1
 forgotPasswordTestcases.validUsername = function() {
@@ -25,7 +24,6 @@ forgotPasswordTestcases.validUsername = function() {
 								var ActualMessage1 = casper.fetchText('div.text-center small');
 								ActualMessage = ActualMessage.replace(ActualMessage1, "");
 								casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
-								casper.capture(screenShotsDir+"validusername.png");
 								casper.test.assert(ActualMessage.indexOf(json['validUserName'].ExpectedMessage) > -1,'Same as expected message');
 								wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
 									if(isExist) {
@@ -36,7 +34,6 @@ forgotPasswordTestcases.validUsername = function() {
 								});
 							} else {
 								casper.test.assert(ActualMessage.indexOf(json['validUserName'].ExpectedMessage) > -1);
-								casper.capture(screenShotsDir+"Error_validusername.png");
 							}
 						});
 					}
@@ -46,9 +43,8 @@ forgotPasswordTestcases.validUsername = function() {
 	});
 };
 
-
 //method to test the Reset Password using Valid Email id functionality --Test case 2
-forgotPasswordTestcases.validEmailid = function() {
+forgotPasswordTestcases.validEmail = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
@@ -64,7 +60,6 @@ forgotPasswordTestcases.validEmailid = function() {
 									var ActualMessage1 = casper.fetchText('div.text-center small');
 									ActualMessage = ActualMessage.replace(ActualMessage1, "");
 									casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
-									casper.capture(screenShotsDir+"validEmail.png");
 									casper.test.assert(ActualMessage.indexOf(json['validEmailid'].ExpectedMessage) > -1,'Same as expected message');
 									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
 										if(isExist) {
@@ -75,7 +70,6 @@ forgotPasswordTestcases.validEmailid = function() {
 									});
 								} else {
 									casper.test.assert(ActualMessage.indexOf(json['validEmailid'].ExpectedMessage) > -1);
-									casper.capture(screenShotsDir+"Error_validEmailid.png");
 								}
 							});
 						}
@@ -102,13 +96,11 @@ forgotPasswordTestcases.invalidUsername = function() {
 								if(isExist) { 
 									ActualMessage = casper.fetchText('div.alert.alert-danger');
 									casper.echo("Actual error message is --> "+ActualMessage.trim(), 'INFO');
-									casper.capture(screenShotsDir+"invalidUsername.png");			
 									casper.test.assert(ActualMessage.indexOf(json['InvalidUsername'].ExpectedMessage) > -1,'Same as expected message');	
 									casper.echo("Error message in case of invalid username has been verified",'INFO');
 									casper.click('input#cancelPassword');
 								} else {
 									casper.echo("Error Occurred", "ERROR");
-									casper.capture(screenShotsDir+"Error_invalidUsername.png");
 								}
 							});
 						}
@@ -120,7 +112,7 @@ forgotPasswordTestcases.invalidUsername = function() {
 };
 
 //method to test the Reset Password using InValid Email id functionality --Test case 4
-forgotPasswordTestcases.invalidEmailid = function() {
+forgotPasswordTestcases.invalidEmail = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
@@ -134,12 +126,10 @@ forgotPasswordTestcases.invalidEmailid = function() {
 								if(isExist) { 
 									ActualMessage = casper.fetchText('div.alert.alert-danger');
 									casper.echo("Actual error message is --> "+ActualMessage.trim(), 'INFO');
-									casper.capture(screenShotsDir+"invalidEmail.png");			
 									casper.test.assert(ActualMessage.indexOf(json['InvalidEmailid'].ExpectedMessage) > -1,'Same as expected message');	
 									casper.echo("Error message in case of invalid username has been verified",'INFO');
 								} else {
 									casper.echo("Error Occurred", "ERROR");
-									casper.capture(screenShotsDir+"Error_invalidEmailid.png");
 								}
 							});
 						}
@@ -151,7 +141,7 @@ forgotPasswordTestcases.invalidEmailid = function() {
 };
 
 //method to test the Reset Password by leaving blank Username and Email textfield both functionality --Test case 5
-forgotPasswordTestcases.blankUsernameandEmail = function() {
+forgotPasswordTestcases.blankUsernameAndEmail = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
@@ -165,15 +155,12 @@ forgotPasswordTestcases.blankUsernameandEmail = function() {
 								if(isExist) { 
 									ActualMessage = casper.getElementAttribute('form[name="lost_pw_form"] input[name="member"]', 'data-original-title');	
 									casper.echo("Actual error in tooltip --> "+ActualMessage.trim(),'INFO');
-									//casper.capture(screenShotsDir+"BlankData.png");			
 									casper.test.assert(ActualMessage.indexOf(json['BlankUsernameAndEmail'].ExpectedMessage) > -1,'Same as expected message');
 									casper.echo("Error message is verified while submit request with blank username and email",'INFO');
 								} else {
 									casper.echo("Error Occurred", "ERROR");
-									casper.capture(screenShotsDir+"Error_BlankData.png");
 								}
 							});
-							casper.capture(screenShotsDir+"BlankData.png");
 						}
 					});
 				});
@@ -183,7 +170,7 @@ forgotPasswordTestcases.blankUsernameandEmail = function() {
 };
 
 //method to test the Reset Password with valid username and valid Email id with mismatched condition functionality --Test case 6
-forgotPasswordTestcases.validUsernameandEmailid = function() {
+forgotPasswordTestcases.validUsernameAndEmail = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
@@ -199,7 +186,6 @@ forgotPasswordTestcases.validUsernameandEmailid = function() {
 									var ActualMessage1 = casper.fetchText('div.text-center small');
 									ActualMessage = ActualMessage.replace(ActualMessage1, "");
 									casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
-									casper.capture(screenShotsDir+"validUsernameandEmail.png");
 									casper.test.assert(ActualMessage.indexOf(json['ValidUsernameAndEmail'].ExpectedMessage) > -1,'Same as expected message');
 									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
 										if(isExist) {
@@ -210,7 +196,6 @@ forgotPasswordTestcases.validUsernameandEmailid = function() {
 									});
 								} else {
 									casper.test.assert(ActualMessage.indexOf(json['ValidUsernameAndEmail'].ExpectedMessage) > -1);
-									casper.capture(screenShotsDir+"Error_validUsernameandEmailid.png");
 								}
 							});
 						}
@@ -222,7 +207,7 @@ forgotPasswordTestcases.validUsernameandEmailid = function() {
 };
 
 //method to test the Reset Password with Invalid username and valid Email id functionality--Test case 7
-forgotPasswordTestcases.invalidUsernameandValidEmailid = function() {
+forgotPasswordTestcases.invalidUsernameAndValidEmail = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
@@ -238,7 +223,6 @@ forgotPasswordTestcases.invalidUsernameandValidEmailid = function() {
 									var ActualMessage1 = casper.fetchText('div.text-center small');
 									ActualMessage = ActualMessage.replace(ActualMessage1, "");
 									casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
-									casper.capture(screenShotsDir+"invalidUsernameAndValidEmail.png");
 									casper.test.assert(ActualMessage.indexOf(json['invalidUsernameAndValidEmail'].ExpectedMessage) > -1,'Same as expected message');
 									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
 										if(isExist) {
@@ -249,7 +233,6 @@ forgotPasswordTestcases.invalidUsernameandValidEmailid = function() {
 									});
 								} else {
 									casper.test.assert(ActualMessage.indexOf(json['invalidUsernameAndValidEmail'].ExpectedMessage) > -1);
-									casper.capture(screenShotsDir+"Error_invalidUsernameAndValidEmail.png");
 								}
 							});
 						}
@@ -261,7 +244,7 @@ forgotPasswordTestcases.invalidUsernameandValidEmailid = function() {
 };
 
 //method to test the Reset Password with valid username and Invalid Email id functionality --Test case 8
-forgotPasswordTestcases.validUsernameandInvalidEmailid = function() {
+forgotPasswordTestcases.validUsernameAndInvalidEmail = function() {
 	// this code is to launch application to perform related actions
 	casper.thenOpen(config.url, function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
@@ -277,7 +260,6 @@ forgotPasswordTestcases.validUsernameandInvalidEmailid = function() {
 									var ActualMessage1 = casper.fetchText('div.text-center small');
 									ActualMessage = ActualMessage.replace(ActualMessage1, "");
 									casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
-									casper.capture(screenShotsDir+"validUsernameAndInvalidEmail.png");
 									casper.test.assert(ActualMessage.indexOf(json['validUsernameAndInvalidEmail'].ExpectedMessage) > -1,'Same as expected message');
 									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
 										if(isExist) {
@@ -288,7 +270,6 @@ forgotPasswordTestcases.validUsernameandInvalidEmailid = function() {
 									});
 								} else {
 									casper.test.assert(ActualMessage.indexOf(json['validUsernameAndInvalidEmail'].ExpectedMessage) > -1);
-									casper.capture(screenShotsDir+"Error_validUsernameAndInvalidEmail.png");
 								}
 							});
 						}
