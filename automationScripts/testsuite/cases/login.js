@@ -20,6 +20,8 @@ forumLoginTests.validCredential=function(){
 						if (!err)
 							casper.echo('Successfully logout from application', 'INFO');
 					});
+				}else{
+					casper.echo('User not logged-in element a.default-user not found','ERROR');
 				}
 			});
 		}
@@ -42,6 +44,8 @@ forumLoginTests.invalidUsername= function(){
 							if(!err)
 								casper.echo('Error message is verified with expected message', 'INFO');
 						});
+					}else{
+						casper.echo('Alert not found on login form element form[name="frmLogin"] [role="alert"]','ERROR');	
 					}
 				});
 			}
@@ -65,6 +69,8 @@ forumLoginTests.invalidPassword = function() {
 							if(!err)
 								casper.echo('Error message is verified with expected message', 'INFO');
 						});
+					}else{
+						casper.echo('Alert  not found  on login form element form[name="frmLogin"] [role="alert"]','ERROR');	
 					}
 				});
 			}
@@ -88,6 +94,8 @@ forumLoginTests.blankUsernamePassword=function(){
 								if(!err)
 									casper.echo('Error message is verified with expected message', 'INFO');
 							});
+					}else{
+						casper.echo('Alert  not found  on login form element form[name="frmLogin"] [role="alert"]','ERROR');	
 					}
 				});
 			}
@@ -110,7 +118,9 @@ forumLoginTests.blankPassword=function(){
 							forumLoginMethod.verifyErrorMsg(errorMessage, 'You must enter your password.', 'blankEmailPassword', casper, function(err) {
 						if(!err)
 							casper.echo('Error message is verified with expected message', 'INFO');
-					  });
+					    });
+					}else{
+						casper.echo('Alert  not found  on login form element form[name="frmLogin"] [role="alert"]','ERROR');	
 					}
 				});
 			}
@@ -133,6 +143,8 @@ forumLoginTests.validEmail=function(){
 							if(!err)
 								casper.echo('Successfully logout from application', 'INFO');
 						});
+					 }else{
+						casper.echo('User not logged-in element a.default-user not found','ERROR');
 					 }
 				});
 			}
