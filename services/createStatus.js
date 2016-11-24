@@ -20,7 +20,7 @@ createStatus.success = function(commitDetails, callback) {
 		repo: commitDetails.repositoryName,
 		sha: commitDetails.commitId,
 		state: "success",
-		description: "success "+num+" automation test cases"
+		description: "Passed automation testing"
 	}, function(err, res) {
 	   	console.log(err, res);
 	    	return callback(res.state);
