@@ -1,7 +1,6 @@
 //----- This js file covers all the valid and invalid scenarios for login functionlaity from home page---------//
 
 'use strict';
-var json = require('../../testdata/loginData.json');
 var config = require('../../../config/config.json');
 var forumLoginTests = require('../cases/login.js');
 var forumLogin = module.exports = {};

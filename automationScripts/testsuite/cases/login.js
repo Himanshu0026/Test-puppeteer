@@ -123,13 +123,12 @@ forumLoginTests.validEmail=function(){
 						casper.test.assertDoesntExist('#td_tab_login');
 						casper.echo('User has been successfuly login to application', 'INFO');
 						
-						forumLoginMethod.logoutFromApp(casper, function(){
+						forumLoginMethod.logoutFromApp(casper, function(err){
+							if(!err)
 							
 								casper.echo('Successfully logout from application', 'INFO');
-							
 						});
-					    
-					}
+					    }
 				});
 			};
 		});
