@@ -1,5 +1,5 @@
 'use strict';
-var forumLogin = require('../forum_login.js');
+var forumLoginMethod  = require('./login.js');
 var registerMethod=module.exports = {};
 var screenShotsDir = config.screenShotsLocation + 'register/';
 var errorMessage = "";
@@ -164,7 +164,7 @@ registerMethod.redirectToLogout = function(driver, test, callback) {
 		//Click On Logout Link
 
 		driver.then(function() {
-			forumLogin.logoutFromApp(driver, function(){
+			forumLoginMethod .logoutFromApp(driver, function(){
 			driver.echo('Successfully logout from application', 'INFO');
 		});
 
@@ -186,7 +186,7 @@ registerMethod.redirectToLogout = function(driver, test, callback) {
 			driver.echo('Successfully done registration on forum.....', 'INFO');
 			//Click On Logout Link
 			driver.then(function() {
-				forumLogin.logoutFromApp(driver, function(){
+				forumLoginMethod .logoutFromApp(driver, function(){
 				      driver.echo('Successfully logout from application', 'INFO');
 				});
 				//Getting Screenshot After Clicking On 'Logout' Link  
