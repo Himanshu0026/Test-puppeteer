@@ -14,30 +14,33 @@ forgotPasswordTestcases.validUsername = function() {
 	forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 		if (!err) { 
 			casper.echo("Forgot password page is navigated",'INFO');
-			wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
-				forgotPasswordMethod.forgotPassword(json['validUserName'].username, json['validUserName'].email, casper, function(err) {
-					if (!err) {
-						//This is to verify success message after submitting request for reset password with valid username
-						wait.waitForElement("div.text-center.bmessage", casper, function(err, isExist) {
-							if(isExist) {
-								ActualMessage = casper.fetchText('div.text-center.bmessage');
-								var ActualMessage1 = casper.fetchText('div.text-center small');
-								ActualMessage = ActualMessage.replace(ActualMessage1, "");
-								casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
-								casper.test.assert(ActualMessage.indexOf(json['validUserName'].ExpectedMessage) > -1,'Same as expected message');
-								wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
-									if(isExist) {
-										casper.click('small a[href="/categories"]');
-									} else {
-										casper.echo('Categories not found','INFO');
-									}
-								});
-							} else {
-								casper.test.assert(ActualMessage.indexOf(json['validUserName'].ExpectedMessage) > -1);
-							}
-						});
-					}
-				});
+			wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExists) {
+				if(isExists) {
+					forgotPasswordMethod.forgotPassword(json['validUserName'].username, json['validUserName'].email, casper, function(err) {
+						if (!err) {
+							//This is to verify success message after submitting request for reset password with valid username
+							wait.waitForElement("div.text-center.bmessage", casper, function(err, isExists) {
+								if(isExists) {
+									ActualMessage = casper.fetchText('div.text-center.bmessage');
+									casper.echo("Actual success message is --> "+ActualMessage,'INFO');
+									casper.test.assert(ActualMessage.indexOf(json['validUserName'].ExpectedMessage) > -1,'Same as expected message');
+									
+									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExists) {
+										if(isExists) {
+											casper.click('small a[href="/categories"]');
+										} else {
+											casper.echo('Categories not found','INFO');
+										}
+									});
+								} else {
+									casper.test.assert(ActualMessage.indexOf(json['validUserName'].ExpectedMessage) > -1);
+								}
+							});
+						}
+					});
+				} else {
+					casper.echo('lost_pw_form form not found','INFO');
+				}
 			});
 		}
 	});
@@ -50,30 +53,32 @@ forgotPasswordTestcases.validEmail = function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (!err) {
 				casper.echo("Forgot password page is navigated",'INFO');
-				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
-					forgotPasswordMethod.forgotPassword(json['validEmailid'].username, json['validEmailid'].email, casper, function(err) {
-						if (!err) {
-							//This is to verify success message after submitting request for reset password with valid Email id
-							wait.waitForElement("div.text-center.bmessage", casper, function(err, isExist) {
-								if(isExist) {
-									ActualMessage = casper.fetchText('div.text-center.bmessage');
-									var ActualMessage1 = casper.fetchText('div.text-center small');
-									ActualMessage = ActualMessage.replace(ActualMessage1, "");
-									casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
-									casper.test.assert(ActualMessage.indexOf(json['validEmailid'].ExpectedMessage) > -1,'Same as expected message');
-									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
-										if(isExist) {
-											casper.click('small a[href="/categories"]');
-										} else {
-											casper.echo('Categories not found','INFO');
-										}
-									});
-								} else {
-									casper.test.assert(ActualMessage.indexOf(json['validEmailid'].ExpectedMessage) > -1);
-								}
-							});
-						}
-					});
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExists) {
+					if(isExists) {
+						forgotPasswordMethod.forgotPassword(json['validEmailid'].username, json['validEmailid'].email, casper, function(err) {
+							if (!err) {
+								//This is to verify success message after submitting request for reset password with valid Email id
+								wait.waitForElement("div.text-center.bmessage", casper, function(err, isExists) {
+									if(isExists) {
+										ActualMessage = casper.fetchText('div.text-center.bmessage');
+										casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
+										casper.test.assert(ActualMessage.indexOf(json['validEmailid'].ExpectedMessage) > -1,'Same as expected message');
+										wait.waitForElement('small a[href="/categories"]', casper, function(err, isExists) {
+											if(isExists) {
+												casper.click('small a[href="/categories"]');
+											} else {
+												casper.echo('Categories not found','INFO');
+											}
+										});
+									} else {
+										casper.test.assert(ActualMessage.indexOf(json['validEmailid'].ExpectedMessage) > -1);
+									}
+								});
+							}
+						});
+					} else {
+						casper.echo('lost_pw_form form not found','INFO');
+					}
 				});
 			}
 		});
@@ -88,23 +93,27 @@ forgotPasswordTestcases.invalidUsername = function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (!err) { 
 				casper.echo("Forgot password page is navigated",'INFO');
-				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
-					forgotPasswordMethod.forgotPassword(json['InvalidUsername'].username, json['InvalidUsername'].email, casper, function(err) {
-						if (!err) {
-							//This is to verify success message after submitting request for reset password with invalid username
-							wait.waitForElement("div.alert.alert-danger", casper, function(err, isExist) {
-								if(isExist) { 
-									ActualMessage = casper.fetchText('div.alert.alert-danger');
-									casper.echo("Actual error message is --> "+ActualMessage.trim(), 'INFO');
-									casper.test.assert(ActualMessage.indexOf(json['InvalidUsername'].ExpectedMessage) > -1,'Same as expected message');	
-									casper.echo("Error message in case of invalid username has been verified",'INFO');
-									casper.click('input#cancelPassword');
-								} else {
-									casper.echo("Error Occurred", "ERROR");
-								}
-							});
-						}
-					});
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExists) {
+					if(isExists) {
+						forgotPasswordMethod.forgotPassword(json['InvalidUsername'].username, json['InvalidUsername'].email, casper, function(err) {
+							if (!err) {
+								//This is to verify success message after submitting request for reset password with invalid username
+								wait.waitForElement("div.alert.alert-danger", casper, function(err, isExists) {
+									if(isExists) { 
+										ActualMessage = casper.fetchText('div.alert.alert-danger');
+										casper.echo("Actual error message is --> "+ActualMessage.trim(), 'INFO');
+										casper.test.assert(ActualMessage.indexOf(json['InvalidUsername'].ExpectedMessage) > -1,'Same as expected message');	
+										casper.echo("Error message in case of invalid username has been verified",'INFO');
+										casper.click('input#cancelPassword');
+									} else {
+										casper.echo("Error Occurred", "ERROR");
+									}
+								});
+							}
+						});
+					} else {
+						casper.echo('lost_pw_form form not found','INFO');
+					}
 				});
 			}
 		});
@@ -118,22 +127,26 @@ forgotPasswordTestcases.invalidEmail = function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (!err) {
 				casper.echo("Forgot password page is navigated",'INFO');
-				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
-					forgotPasswordMethod.forgotPassword(json['InvalidEmailid'].username, json['InvalidEmailid'].email, casper, function(err) {
-						if (!err) {
-							//This is to verify success message after submitting request for reset password with invalid Email
-							wait.waitForElement("div.alert.alert-danger", casper, function(err, isExist) {
-								if(isExist) { 
-									ActualMessage = casper.fetchText('div.alert.alert-danger');
-									casper.echo("Actual error message is --> "+ActualMessage.trim(), 'INFO');
-									casper.test.assert(ActualMessage.indexOf(json['InvalidEmailid'].ExpectedMessage) > -1,'Same as expected message');	
-									casper.echo("Error message in case of invalid username has been verified",'INFO');
-								} else {
-									casper.echo("Error Occurred", "ERROR");
-								}
-							});
-						}
-					});
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExists) {
+					if(isExists) {
+						forgotPasswordMethod.forgotPassword(json['InvalidEmailid'].username, json['InvalidEmailid'].email, casper, function(err) {
+							if (!err) {
+								//This is to verify success message after submitting request for reset password with invalid Email
+								wait.waitForElement("div.alert.alert-danger", casper, function(err, isExists) {
+									if(isExists) { 
+										ActualMessage = casper.fetchText('div.alert.alert-danger');
+										casper.echo("Actual error message is --> "+ActualMessage.trim(), 'INFO');
+										casper.test.assert(ActualMessage.indexOf(json['InvalidEmailid'].ExpectedMessage) > -1,'Same as expected message');	
+										casper.echo("Error message in case of invalid username has been verified",'INFO');
+									} else {
+										casper.echo("Error Occurred", "ERROR");
+									}
+								});
+							}
+						});
+					} else {
+						casper.echo('lost_pw_form form not found','INFO');
+					}
 				});
 			}
 		});
@@ -147,22 +160,26 @@ forgotPasswordTestcases.blankUsernameAndEmail = function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (!err) {
 				casper.echo("Forgot password page is navigated",'INFO');
-				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
-					forgotPasswordMethod.forgotPassword(json['BlankUsernameAndEmail'].username, json['BlankUsernameAndEmail'].email, casper, function(err) {
-						if (!err) {
-							//This is to verify success message after submitting request for reset password by leaving blank Username and Email textfield both
-							wait.waitForElement('form[name="lost_pw_form"] input[name="member"]', casper, function(err, isExist) {
-								if(isExist) { 
-									ActualMessage = casper.getElementAttribute('form[name="lost_pw_form"] input[name="member"]', 'data-original-title');	
-									casper.echo("Actual error in tooltip --> "+ActualMessage.trim(),'INFO');
-									casper.test.assert(ActualMessage.indexOf(json['BlankUsernameAndEmail'].ExpectedMessage) > -1,'Same as expected message');
-									casper.echo("Error message is verified while submit request with blank username and email",'INFO');
-								} else {
-									casper.echo("Error Occurred", "ERROR");
-								}
-							});
-						}
-					});
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExists) {
+					if(isExists) {
+						forgotPasswordMethod.forgotPassword(json['BlankUsernameAndEmail'].username, json['BlankUsernameAndEmail'].email, casper, function(err) {
+							if (!err) {
+								//This is to verify success message after submitting request for reset password by leaving blank Username and Email textfield both
+								wait.waitForElement('form[name="lost_pw_form"] input[name="member"]', casper, function(err, isExists) {
+									if(isExists) { 
+										ActualMessage = casper.getElementAttribute('form[name="lost_pw_form"] input[name="member"]', 'data-original-title');	
+										casper.echo("Actual error in tooltip --> "+ActualMessage.trim(),'INFO');
+										casper.test.assert(ActualMessage.indexOf(json['BlankUsernameAndEmail'].ExpectedMessage) > -1,'Same as expected message');
+										casper.echo("Error message is verified while submit request with blank username and email",'INFO');
+									} else {
+										casper.echo("Error Occurred", "ERROR");
+									}
+								});
+							}
+						});
+					} else {
+						casper.echo('lost_pw_form form not found','INFO');
+					}
 				});
 			}
 		});
@@ -176,30 +193,32 @@ forgotPasswordTestcases.validUsernameAndEmail = function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (!err) { 
 				casper.echo("Forgot password page is navigated",'INFO');
-				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
-					forgotPasswordMethod.forgotPassword(json['ValidUsernameAndEmail'].username, json['ValidUsernameAndEmail'].email, casper, function(err) {
-						if (!err) {
-							//This is to verify success message after submitting request for reset password with valid Username and Email id
-							wait.waitForElement("div.text-center.bmessage", casper, function(err, isExist) {
-								if(isExist) {
-									ActualMessage = casper.fetchText('div.text-center.bmessage');
-									var ActualMessage1 = casper.fetchText('div.text-center small');
-									ActualMessage = ActualMessage.replace(ActualMessage1, "");
-									casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
-									casper.test.assert(ActualMessage.indexOf(json['ValidUsernameAndEmail'].ExpectedMessage) > -1,'Same as expected message');
-									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
-										if(isExist) {
-											casper.click('small a[href="/categories"]');
-										} else {
-											casper.echo('Categories not found','INFO');
-										}
-									});
-								} else {
-									casper.test.assert(ActualMessage.indexOf(json['ValidUsernameAndEmail'].ExpectedMessage) > -1);
-								}
-							});
-						}
-					});
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExists) {
+					if(isExists) {
+						forgotPasswordMethod.forgotPassword(json['ValidUsernameAndEmail'].username, json['ValidUsernameAndEmail'].email, casper, function(err) {
+							if (!err) {
+								//This is to verify success message after submitting request for reset password with valid Username and Email id
+								wait.waitForElement("div.text-center.bmessage", casper, function(err, isExists) {
+									if(isExists) {
+										ActualMessage = casper.fetchText('div.text-center.bmessage');
+										casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
+										casper.test.assert(ActualMessage.indexOf(json['ValidUsernameAndEmail'].ExpectedMessage) > -1,'Same as expected message');
+										wait.waitForElement('small a[href="/categories"]', casper, function(err, isExists) {
+											if(isExists) {
+												casper.click('small a[href="/categories"]');
+											} else {
+												casper.echo('Categories not found','INFO');
+											}
+										});
+									} else {
+										casper.test.assert(ActualMessage.indexOf(json['ValidUsernameAndEmail'].ExpectedMessage) > -1);
+									}
+								});
+							}
+						});
+					} else {
+						casper.echo('lost_pw_form form not found','INFO');
+					}
 				});
 			}
 		});
@@ -213,30 +232,32 @@ forgotPasswordTestcases.invalidUsernameAndValidEmail = function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (!err) {
 				casper.echo("Forgot password page is navigated",'INFO');
-				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
-					forgotPasswordMethod.forgotPassword(json['invalidUsernameAndValidEmail'].username, json['invalidUsernameAndValidEmail'].email, casper, function(err) {
-						if (!err) {
-							//This is to verify success message after submitting request for reset password with invalid Username and valid Email id
-							wait.waitForElement("div.text-center.bmessage", casper, function(err, isExist) {
-								if(isExist) {
-									ActualMessage = casper.fetchText('div.text-center.bmessage');
-									var ActualMessage1 = casper.fetchText('div.text-center small');
-									ActualMessage = ActualMessage.replace(ActualMessage1, "");
-									casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
-									casper.test.assert(ActualMessage.indexOf(json['invalidUsernameAndValidEmail'].ExpectedMessage) > -1,'Same as expected message');
-									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
-										if(isExist) {
-											casper.click('small a[href="/categories"]');
-										} else {
-											casper.echo('Categories not found','INFO');
-										}
-									});
-								} else {
-									casper.test.assert(ActualMessage.indexOf(json['invalidUsernameAndValidEmail'].ExpectedMessage) > -1);
-								}
-							});
-						}
-					});
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExists) {
+					if(isExists) {
+						forgotPasswordMethod.forgotPassword(json['invalidUsernameAndValidEmail'].username, json['invalidUsernameAndValidEmail'].email, casper, function(err) {
+							if (!err) {
+								//This is to verify success message after submitting request for reset password with invalid Username and valid Email id
+								wait.waitForElement("div.text-center.bmessage", casper, function(err, isExists) {
+									if(isExists) {
+										ActualMessage = casper.fetchText('div.text-center.bmessage');
+										casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
+										casper.test.assert(ActualMessage.indexOf(json['invalidUsernameAndValidEmail'].ExpectedMessage) > -1,'Same as expected message');
+										wait.waitForElement('small a[href="/categories"]', casper, function(err, isExists) {
+											if(isExists) {
+												casper.click('small a[href="/categories"]');
+											} else {
+												casper.echo('Categories not found','INFO');
+											}
+										});
+									} else {
+										casper.test.assert(ActualMessage.indexOf(json['invalidUsernameAndValidEmail'].ExpectedMessage) > -1);
+									}
+								});
+							}
+						});
+					} else {
+						casper.echo('lost_pw_form form not found','INFO');
+					}
 				});
 			}
 		});
@@ -250,30 +271,32 @@ forgotPasswordTestcases.validUsernameAndInvalidEmail = function() {
 		forgotPasswordMethod.gotoForgotPasswordpage(casper, function(err) {
 			if (!err) {
 				casper.echo("Forgot password page is navigated",'INFO');
-				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExist) {
-					forgotPasswordMethod.forgotPassword(json['validUsernameAndInvalidEmail'].username, json['validUsernameAndInvalidEmail'].email, casper, function(err) {
-						if (!err) {
-							//This is to verify success message after submitting request for reset password with valid Username and invalid Email id
-							wait.waitForElement("div.text-center.bmessage", casper, function(err, isExist) {
-								if(isExist) {
-									ActualMessage = casper.fetchText('div.text-center.bmessage');
-									var ActualMessage1 = casper.fetchText('div.text-center small');
-									ActualMessage = ActualMessage.replace(ActualMessage1, "");
-									casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
-									casper.test.assert(ActualMessage.indexOf(json['validUsernameAndInvalidEmail'].ExpectedMessage) > -1,'Same as expected message');
-									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExist) {
-										if(isExist) {
-											casper.click('small a[href="/categories"]');
-										} else {
-											casper.echo('Categories not found','INFO');
-										}
-									});
-								} else {
-									casper.test.assert(ActualMessage.indexOf(json['validUsernameAndInvalidEmail'].ExpectedMessage) > -1);
-								}
-							});
-						}
-					});
+				wait.waitForElement('form[name="lost_pw_form"]', casper, function(err, isExists) {
+					if(isExists) {
+						forgotPasswordMethod.forgotPassword(json['validUsernameAndInvalidEmail'].username, json['validUsernameAndInvalidEmail'].email, casper, function(err) {
+							if (!err) {
+								//This is to verify success message after submitting request for reset password with valid Username and invalid Email id
+								wait.waitForElement("div.text-center.bmessage", casper, function(err, isExists) {
+									if(isExists) {
+										ActualMessage = casper.fetchText('div.text-center.bmessage');
+										casper.echo("Actual success message is --> "+ActualMessage.trim(),'INFO');
+										casper.test.assert(ActualMessage.indexOf(json['validUsernameAndInvalidEmail'].ExpectedMessage) > -1,'Same as expected message');
+										wait.waitForElement('small a[href="/categories"]', casper, function(err, isExists) {
+											if(isExists) {
+												casper.click('small a[href="/categories"]');
+											} else {
+												casper.echo('Categories not found','INFO');
+											}
+										});
+									} else {
+										casper.test.assert(ActualMessage.indexOf(json['validUsernameAndInvalidEmail'].ExpectedMessage) > -1);
+									}
+								});
+							}
+						});
+					} else {
+						casper.echo('lost_pw_form form not found','INFO');
+					}
 				});
 			}
 		});
