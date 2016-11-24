@@ -37,21 +37,24 @@ forumLoginMethod.logoutFromApp = function(casper,callback) {
 			casper.click('ul.nav.pull-right span.caret');
 			casper.waitForSelector('ul.nav.pull-right span.caret',function success(){
 				casper.capture('toggle1.png');
-				casper.test.assertExists('#logout');
-				var user= casper.evaluate(function() {
+				casper.test.assertExists('a[href="/register/logout?userid=24488764"]');
+				/*var user= casper.evaluate(function() {
 					var id = document.querySelector('a.fb_logout').getAttribute('href');
 					return id;
 				});
 				casper.echo('********'+user);
-				casper.click('a[href="'+user+'"]');
+				casper.click('a[href="'+user+'"]');*/
+				casper.click('a#logout');
 				casper.waitForSelector('a#td_tab_login', function() {
-					casper.capture('logout1.png');
-					casper.test.assertExists('a#td_tab_login');
-					
-				return callback(null);					
+						casper.capture('success.png');
+	
+						return callback(null);	
+
 				},function fail(){
-					casper.echo('Login link not found','INFO')
+					casper.capture('fail.png');
+					casper.echo('Login link not found','ERROR');
 				});
+			
 							
 				
 			},function fail(){

@@ -3,8 +3,34 @@ var json = require('../../testdata/loginData.json');
 var config = require('../../../config/config.json');
 var forumLoginMethod = require('../methods/login.js');
 var forumLoginTests = module.exports = {};
-var loginWait=require('../methods/wait.js');
+var loginWait=require('../wait.js');
 var errorMessage = "";
+
+
+//Test case for login to application with valid valid username and password then logout from application
+
+forumLoginTests.validCredential=function(){
+	casper.thenOpen(config.url, function() {
+		forumLoginMethod.loginToApp(json['ValidCredential'].username, json['ValidCredential'].password, casper, function(err){
+			if(!err) {
+				casper.echo('login by valid username and password and verify error message', 'INFO');
+				loginWait.waitElement('a.default-user', casper , function(err,isExists) {
+					if(isExists) {
+						casper.test.assertDoesntExist('#td_tab_login');
+						casper.echo('User has been successfuly login to application', 'INFO');
+						
+						forumLoginMethod.logoutFromApp(casper, function(err){
+							if (!err)
+								casper.echo('Successfully logout from application', 'INFO');
+							
+						});
+					    
+					}
+				});
+			};
+		});
+	});
+};
 
 //Test case for login to application with invalid password and verify error message
 
@@ -88,30 +114,6 @@ forumLoginTests.blankPassword=function(){
 	});
 };
 
-//Test case for login to application with valid valid username and password then logout from application
-
-forumLoginTests.validCredential=function(){
-	casper.thenOpen(config.url, function() {
-		forumLoginMethod.loginToApp(json['ValidCredential'].username, json['ValidCredential'].password, casper, function(err){
-			if(!err) {
-				casper.echo('login by valid username and password and verify error message', 'INFO');
-				loginWait.waitElement('a.default-user', casper , function(err,isExists) {
-					if(isExists) {
-						casper.test.assertDoesntExist('#td_tab_login');
-						casper.echo('User has been successfuly login to application', 'INFO');
-						
-						forumLoginMethod.logoutFromApp(casper, function(){
-							
-								casper.echo('Successfully logout from application', 'INFO');
-							
-						});
-					    
-					}
-				});
-			};
-		});
-	});
-};
 
 //Test case for login to application with valid valid email and password then logout from application
 
