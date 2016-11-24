@@ -29,6 +29,5 @@ forumLogin.featureTest = function(casper, test) {
 		//Valid email and password then logout from application
 		forumLoginTests.validEmail();
 		
-		
 	});
 };

@@ -25,22 +25,21 @@ forumLoginMethod.loginToApp = function(username, password, driver, callback) {
 	} catch(e) {
 		driver.echo("The user is already logged-in.", 'INFO');
 	}	 
-	
 	return callback(null);
 };
 
+
 //method for logout from application
 forumLoginMethod.logoutFromApp = function(driver,callback) {
-	
-		driver.test.assertExists('ul.nav.pull-right span.caret');
-		driver.click('ul.nav.pull-right span.caret');
-		wait.waitForElement('ul.nav.pull-right span.caret', casper, function(err, isExists){
+	driver.test.assertExists('ul.nav.pull-right span.caret');
+	driver.click('ul.nav.pull-right span.caret');
+	wait.waitForElement('ul.nav.pull-right span.caret', casper, function(err, isExists) {
 		if(isExists) {		
 			driver.test.assertExists('a[href^="/register/logout"]');
 			driver.evaluate(function() {
 				document.querySelector('a#logout').click();
 			});
-			wait.waitForElement('a#td_tab_login', casper, function(err, isExists){
+			wait.waitForElement('a#td_tab_login', casper, function(err, isExists) {
 				if(isExists) {
 					return callback(null);
 				}	
@@ -48,6 +47,7 @@ forumLoginMethod.logoutFromApp = function(driver,callback) {
 		}
 	});
 };
+
 
 //Method For Verifying Error Message On Edit Profile/Account Setting Page After Submitting Form
 forumLoginMethod.verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver, callback) {
