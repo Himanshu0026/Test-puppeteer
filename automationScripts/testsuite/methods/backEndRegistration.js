@@ -64,15 +64,19 @@ backEndForumRegisterMethod.verifyErrorMsgWithInvalidInfo = function(data, driver
 				errorMessage = driver.fetchText('.tooltip p');
 				msgTitle = 'BlankUsername';
 			} else if (data.uemail == '') {
-				driver.wait(1000, function() {
-					errorMessage = driver.fetchText('.tooltip p');
-					msgTitle = 'BlankEmail';
+				wait.waitForTime(1000, driver, function(err){
+					if(!err){
+						errorMessage = driver.fetchText('.tooltip p');
+						msgTitle = 'BlankEmail';
+					}
 				});
 			} else if (data.errorType == 'existWithName') {
-				driver.wait(1000, function() {
-					errorMessage = driver.fetchText('div[role="dialog"] div[id^="ui-id-"]');
-					expectedErrorMsg = data.expectedErrorMsg+ '"' +data.uname+ '".';
-					msgTitle = 'ExistUsername';
+				wait.waitForTime(1000, driver, function(err){
+					if(!err){
+						errorMessage = driver.fetchText('div[role="dialog"] div[id^="ui-id-"]');
+						expectedErrorMsg = data.expectedErrorMsg+ '"' +data.uname+ '".';
+						msgTitle = 'ExistUsername';
+					}
 				});
 			} else if (data.errorType == 'invalidEmail') {
 				errorMessage = driver.fetchText('.tooltip p');

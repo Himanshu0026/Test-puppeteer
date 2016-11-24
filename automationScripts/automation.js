@@ -26,7 +26,7 @@ switch (feature) {
 	break;
 	
 	default:
-		casper.echo("Please select any feature from options given below. For ex: casperjs main.js <option>.\n"); 
+		casper.echo("Please select any feature from options given below. For ex: casperjs automation.js <option>.\n"); 
         	casper.echo("Options:");
 		casper.echo("	backEndRegistration");
 		casper.exit();

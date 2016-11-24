@@ -1,37 +1,41 @@
 'use strict';
 var backEndRegisterJSON = require('../../testdata/backEndRegisterData.json');
-var forumRegister = require('../register.js');
-var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
-var backEndForumRegisterTests = module.exports = {};
+var registerMethod = require('../methods/register.js');
+var backEndregisterMethodMethod = require('../methods/backEndRegistration.js');
+var backEndregisterMethodTests = module.exports = {};
 var wait = require('../wait.js');
 
 //Test Case for Register With Valid Information.
 
-backEndForumRegisterTests.validInfo = function() {
+backEndregisterMethodTests.validInfo = function() {
 
 	//Login To Forum BackEnd 
 	casper.echo('*****************************Case1**********************************','INFO');
 	casper.echo('Register User With Valid Information','INFO');
-	forumRegister.loginToForumBackEnd(casper, casper.test, function(err) {
+	registerMethod.loginToForumBackEnd(casper, casper.test, function(err) {
 		if(!err){
 			casper.echo('Successfully Login To Forum Back End...........', 'INFO');
 			//Clicking On 'New User' Tab Under Users 
-			wait.waitForElement('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', casper, function(err, isExist) {	
+			wait.waitForElement('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', casper, function(err, isExists) {	
 				if(!err){
-					if(isExist) {
+					if(isExists) {
 						casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 						casper.test.assertExists('div#ddUsers a[href="/tool/members/mb/addusers"]');
 						casper.click('div#ddUsers a[href="/tool/members/mb/addusers"]');
-						wait.waitForElement('form[name="frmAddUser"]', casper, function(err, isExist) {	
+						wait.waitForElement('form[name="frmAddUser"]', casper, function(err, isExists) {	
 							if(!err){
-								if(isExist) {
+								if(isExists) {
 									//Registering New User
-									backEndForumRegisterMethod.registerToBackEnd(backEndRegisterJSON['validInfo'], casper, function(err) {
+									backEndregisterMethodMethod.registerToBackEnd(backEndRegisterJSON['validInfo'], casper, function(err) {
 										if (!err) {
-											casper.waitUntilVisible('div#ajax-msg-top', function success() {
-												casper.echo('Thank you for registering....','INFO');
-												},function fail(){
-													casper.echo('User Does Not Registered Successfully','ERROR');
+											wait.waitForVisible('div#ajax-msg-top', casper, function(err, isVisible){
+												if(!err){
+													if(isVisible){
+														casper.echo('Thank you for registering....','INFO');
+													}else{
+														casper.echo('User Does Not Registered Successfully','ERROR');
+													}
+												}
 											});
 										} 
 									});
@@ -51,11 +55,11 @@ backEndForumRegisterTests.validInfo = function() {
 
 //Test Case for Verifying Error Messages While User Registering With Blank User Name.
 
-backEndForumRegisterTests.blankUserName = function() {
+backEndregisterMethodTests.blankUserName = function() {
 	casper.then(function(){
 		casper.echo('*****************************Case2********************************','INFO');
 		casper.echo('Verifying Error Messages While User Registering With Blank User Name','INFO');
-		backEndForumRegisterMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.blankUserName, casper, function(err) {
+		backEndregisterMethodMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.blankUserName, casper, function(err) {
 			if(!err){
 				casper.echo('Message Verified Successfully','INFO');
 			}
@@ -65,11 +69,11 @@ backEndForumRegisterTests.blankUserName = function() {
 
 //Test Case for Verifying Error Messages While User Registering With With Blank Email Id.
 
-backEndForumRegisterTests.blankEmailId = function() {
+backEndregisterMethodTests.blankEmailId = function() {
 	casper.then(function(){
 		casper.echo('*****************************Case3********************************','INFO');
 		casper.echo('Verifying Error Messages While User Registering With Blank Email Id','INFO');
-		backEndForumRegisterMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.blankUserEmail, casper, function(err) {
+		backEndregisterMethodMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.blankUserEmail, casper, function(err) {
 			if(!err){
 				casper.echo('Message Verified Successfully','INFO');
 			}
@@ -81,11 +85,11 @@ backEndForumRegisterTests.blankEmailId = function() {
 
 //Test Case for Verifying Error Messages While User Registering With Existing User Name.
 
-backEndForumRegisterTests.existingUserName = function() {
+backEndregisterMethodTests.existingUserName = function() {
 	casper.then(function(){
 		casper.echo('*****************************Case4************************************','INFO');
 		casper.echo('Verifying Error Messages While User Registering With Existing UserName','INFO');
-		backEndForumRegisterMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.existingUserName, casper, function(err) {
+		backEndregisterMethodMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.existingUserName, casper, function(err) {
 			if(!err){
 				casper.echo('Message Verified Successfully','INFO');
 			}
@@ -94,16 +98,20 @@ backEndForumRegisterTests.existingUserName = function() {
 };
 
 //Test Case for Registering User with Existing EmailId.
-backEndForumRegisterTests.existingEmailId = function() {
+backEndregisterMethodTests.existingEmailId = function() {
 	casper.then(function(){
 		casper.echo('*****************************Case5************************************','INFO');
 		casper.echo('User Registered With Existing EmailId','INFO');
-		backEndForumRegisterMethod.registerToBackEnd(backEndRegisterJSON['existingEmailId'], casper, function(err) {
+		backEndregisterMethodMethod.registerToBackEnd(backEndRegisterJSON['existingEmailId'], casper, function(err) {
 			if (!err) {
-				casper.waitUntilVisible('div#ajax-msg-top', function success() {
-					casper.echo('Thank you for registering....','INFO');
-					},function fail(){
-						casper.echo('User Does Not Registered Successfully','ERROR');
+				wait.waitForVisible('div#ajax-msg-top', casper, function(err, isVisible){
+					if(!err){
+						if(isVisible){
+							casper.echo('Thank you for registering....','INFO');
+						}else{
+							casper.echo('User Does Not Registered Successfully','ERROR');
+						}
+					}
 				});
 			} 
 		});
@@ -112,11 +120,11 @@ backEndForumRegisterTests.existingEmailId = function() {
 
 //Test Case for Verifying Error Messages While User Registering With Invalid Email Id.
 
-backEndForumRegisterTests.invalidEmailId= function() {
+backEndregisterMethodTests.invalidEmailId= function() {
 	casper.then(function(){
 		casper.echo('*****************************Case6***********************************','INFO');
 		casper.echo('Verifying Error Messages While User Registering With Invalid Email Id','INFO');
-		backEndForumRegisterMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.invalidEmailId, casper, function(err) {
+		backEndregisterMethodMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.invalidEmailId, casper, function(err) {
 			if(!err){
 				casper.echo('Message Verified Successfully','INFO');
 				casper.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]'); 
@@ -124,23 +132,23 @@ backEndForumRegisterTests.invalidEmailId= function() {
 				casper.test.assertExists('a[href^="/tool/members/mb/usergroup"]');
 				casper.click('a[href^="/tool/members/mb/usergroup"]');
 				//Deleting User and Logout from Backend
-				wait.waitForElement('form#frmChangeUsersGroup', casper, function(err, isExist) {	
+				wait.waitForElement('form#frmChangeUsersGroup', casper, function(err, isExists) {	
 					if(!err){
-						if(isExist) {
+						if(isExists) {
 							casper.fill('form#frmChangeUsersGroup', {
 								'member' : backEndRegisterJSON['validInfo'].uname
 							}, true);
-							wait.waitForElement('a#delete_user', casper, function(err, isExist) {	
+							wait.waitForElement('a#delete_user', casper, function(err, isExists) {	
 								if(!err){
-									if(isExist) {
+									if(isExists) {
 										casper.click('a#delete_user');
 										casper.test.assertExists('a[data-tooltip-elm="ddAccount"]');
 										casper.click('a[data-tooltip-elm="ddAccount"]');
 										casper.test.assertExists('a[href="/tool/members/login?action=logout"]');
 										casper.click('a[href="/tool/members/login?action=logout"]');
-										wait.waitForElement('form[name="frmLogin"]', casper, function(err, isExist) {	
+										wait.waitForElement('form[name="frmLogin"]', casper, function(err, isExists) {	
 											if(!err){
-												if(isExist) {
+												if(isExists) {
 													casper.echo('Logout Succesfully......','INFO')
 												} else {
 													casper.echo('Unable to logout successfully', 'ERROR');
