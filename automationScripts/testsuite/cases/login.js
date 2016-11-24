@@ -38,7 +38,10 @@ forumLoginTests.invalidUsername= function(){
 						errorMessage = casper.fetchText('form[name="frmLogin"] [role="alert"]');
 						errorMessage = errorMessage.trim();
 						if(errorMessage && errorMessage!= '')
-						forumLoginMethod.verifyErrorMsg(errorMessage, 'There is no account with the username you specified.', 'invalidUsername', casper, function(err) {});
+						forumLoginMethod.verifyErrorMsg(errorMessage, 'There is no account with the username you specified.', 'invalidUsername', casper, function(err) {
+							if(!err)
+								casper.echo('Error message is verified with expected message', 'INFO');
+						});
 					}
 				});
 			}
@@ -58,7 +61,10 @@ forumLoginTests.invalidPassword = function() {
 						var errorMessage = casper.fetchText('form[name="frmLogin"] [role="alert"]');
 						errorMessage = errorMessage.trim();
 						if(errorMessage && errorMessage!= '')
-							forumLoginMethod.verifyErrorMsg(errorMessage, 'The password you entered is incorrect.', 'invalidPassword', casper, function(err) {});
+							forumLoginMethod.verifyErrorMsg(errorMessage, 'The password you entered is incorrect.', 'invalidPassword', casper, function(err) {
+							if(!err)
+								casper.echo('Error message is verified with expected message', 'INFO');
+						});
 					}
 				});
 			}
@@ -78,7 +84,10 @@ forumLoginTests.blankUsernamePassword=function(){
 						errorMessage = casper.fetchText('form[name="frmLogin"] [role="alert"]');
 						errorMessage = errorMessage.trim();
 						if(errorMessage && errorMessage!= '')
-							forumLoginMethod.verifyErrorMsg(errorMessage, 'You must enter your username or email address.', 'blankEmailPassword', casper, function(err) {});
+							forumLoginMethod.verifyErrorMsg(errorMessage, 'You must enter your username or email address.', 'blankEmailPassword', casper, function(err) {
+								if(!err)
+									casper.echo('Error message is verified with expected message', 'INFO');
+							});
 					}
 				});
 			}
@@ -98,7 +107,10 @@ forumLoginTests.blankPassword=function(){
 						errorMessage = casper.fetchText('form[name="frmLogin"] [role="alert"]');
 						errorMessage = errorMessage.trim();
 						if(errorMessage && errorMessage!= '')
-							forumLoginMethod.verifyErrorMsg(errorMessage, 'You must enter your password.', 'blankEmailPassword', casper, function(err) {});
+							forumLoginMethod.verifyErrorMsg(errorMessage, 'You must enter your password.', 'blankEmailPassword', casper, function(err) {
+						if(!err)
+							casper.echo('Error message is verified with expected message', 'INFO');
+					  });
 					}
 				});
 			}
