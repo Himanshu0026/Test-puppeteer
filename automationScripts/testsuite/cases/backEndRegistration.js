@@ -169,19 +169,6 @@ backEndregisterTests.invalidEmailId= function() {
 													backEndregisterMethod.deleteUser(backEndRegisterJSON['existingEmailId'],casper,function(err){
 														if(!err){
 															casper.echo('User Register With Existing Email Id Deleted Successfully','INFO');	
-															casper.test.assertExists('a[data-tooltip-elm="ddAccount"]');
-															casper.click('a[data-tooltip-elm="ddAccount"]');
-															casper.test.assertExists('a[href="/tool/members/login?action=logout"]');
-															casper.click('a[href="/tool/members/login?action=logout"]');
-															wait.waitForElement('form[name="frmLogin"]', casper, function(err, isExists) {	
-																if(!err){
-																	if(isExists) {
-																		casper.echo('Logout Succesfully......','INFO')
-																	} else {
-																		casper.echo('Unable to logout successfully', 'ERROR');
-																	}	
-																}
-															});
 														}
 													});
 												});	
@@ -195,6 +182,82 @@ backEndregisterTests.invalidEmailId= function() {
 						}	
 					}
 				});
+			}
+		});
+	});
+};
+
+//Test Case for Inviting User By a Valid Email.
+backEndregisterTests.validInvitation = function() {
+	casper.then(function(){
+		casper.echo('*****************************Case8************************************','INFO');
+		casper.echo('Inviting User By a Email','INFO');
+		casper.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]'); 
+		casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		casper.test.assertExists('a[href^="/tool/members/mb/addusers?action=invite"]');
+		casper.click('a[href^="/tool/members/mb/addusers?action=invite"]');
+		wait.waitForElement('form#frmInviteUser', casper, function(err, isExists) {	
+			if(!err){
+				if(isExists) {
+					//filling form with valid emailid
+					casper.fill('form#frmInviteUser', {
+						'emails' : backEndRegisterJSON['validInvite'].uemail,
+						'note' : backEndRegisterJSON['validInvite'].pNote
+					}, false);
+					casper.test.assertExists('form#frmInviteUser button');
+					casper.click('form#frmInviteUser button');	
+					wait.waitForVisible('div#ajax-msg-top', casper, function(err, isVisible){
+						if(!err){
+							if(isVisible){
+								casper.echo('User Invited Successfully....','INFO');
+							}else{
+								casper.echo('User is not invited Successfully','ERROR');
+							}
+						}
+					});
+				} else {
+					casper.echo('Invitation form not found', 'ERROR');
+				}	
+			}
+		});
+	});
+};
+
+//Test Case for Invite User By Enter Invalid Address.
+backEndregisterTests.invalidInvitation = function() {
+	casper.then(function(){
+		casper.echo('*****************************Case9************************************','INFO');
+		casper.echo('Invite User By Enter Invalid Address.','INFO');
+		//filling form with invalid emailid
+		casper.fill('form#frmInviteUser', {
+			'emails' : backEndRegisterJSON['invalidInvite'].uemail,
+			'note' : backEndRegisterJSON['invalidInvite'].pNote
+		}, false);
+		casper.test.assertExists('form#frmInviteUser button');
+		casper.click('form#frmInviteUser button');	
+		//waiting for alert
+		wait.waitForElement('div.jQAlertDlg.ui-dialog-content.ui-widget-content', casper, function(err, isExists) {	
+			if(!err){
+				if(isExists) {
+					var errormsg = casper.fetchText('div.jQAlertDlg.ui-dialog-content.ui-widget-content');
+					casper.echo('Error Message=' + errormsg,'INFO');
+					//logout from backend
+					casper.test.assertExists('a[data-tooltip-elm="ddAccount"]');
+					casper.click('a[data-tooltip-elm="ddAccount"]');
+					casper.test.assertExists('a[href="/tool/members/login?action=logout"]');
+					casper.click('a[href="/tool/members/login?action=logout"]');
+					wait.waitForElement('form[name="frmLogin"]', casper, function(err, isExists) {	
+						if(!err){
+							if(isExists) {
+								casper.echo('Logout Succesfully......','INFO');
+							} else {
+								casper.echo('Unable to logout successfully', 'ERROR');
+							}	
+						}
+					});
+				} else {
+					casper.echo('Error message popup is not appears in 5 seconds','ERROR');
+				}	
 			}
 		});
 	});

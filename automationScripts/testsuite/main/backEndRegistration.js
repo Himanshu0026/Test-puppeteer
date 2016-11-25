@@ -36,7 +36,13 @@ backEndForumRegister.featureTest = function(casper, test) {
 		backEndForumRegisterTests.existingEmailId();
 	
 		//Verify Error Messages While User Registering With Invalid Email Id.
-		backEndForumRegisterTests.invalidEmailId();
+		backEndForumRegisterTests.invalidEmailId(); 
+
+		//Inviting User By Valid Email Address.
+		backEndForumRegisterTests.validInvitation();
+
+		//Inviting User By Entering Invalid Address.
+		backEndForumRegisterTests.invalidInvitation();
 
 	});
 };
