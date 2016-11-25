@@ -48,7 +48,7 @@ forumRegister.featureTest = function(casper, test) {
 		registerTests.invalidEmail();
 
 		//Verify register to application by leaving blank signature and verify error message
-		registerTests.blankSignature();
+		//registerTests.blankSignature();
 
 		//Verify register to application by existing username and email and verify error message
 		registerTests.existUsernameEmail();

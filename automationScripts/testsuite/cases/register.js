@@ -1,6 +1,4 @@
 'use strict';
-var utils = require('../utils.js');
-var forumLogin = require('../forum_login.js');
 var json = require('../../testdata/registerData.json');
 var config = require('../../../config/config.json');
 var registerMethod = require('../methods/register.js');
@@ -19,36 +17,38 @@ registerTests.userAccountsEnable  = function() {
 	//Login To Forum BackEnd 
 	registerMethod.loginToForumBackEnd(casper, casper.test, function() {
 		casper.echo('Successfully Login To Forum Back End...........', 'INFO');
-		//Clicking On "General" Tab Under Settings 
-		wait.waitForElement('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', casper, function(err, isExist) {
-			if(!err){
-				if(isExist) {
-					casper.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-					casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-					casper.test.assertExists('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
-					casper.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
-					casper.echo('Successfully open forum settings form.....', 'INFO');
-					//Getting 'User Accounts' Field Value, If, Enabled, Then Filling Data For Testing
-					wait.waitForElement('#REQreg', casper, function(err, isExist) {
-						if(!err){
-							if(isExist) {
-								utils.enableorDisableCheckbox('REQreg', true, casper, function(err) {
-									if (!err){
-										casper.echo("User Accounts Checkbox Has Been Enabled For Registered User", 'INFO');
-										casper.test.assertExists('.button.btn-m.btn-blue');
-										casper.click('.button.btn-m.btn-blue');
-									}	
-								});	
-							} else {
-								casper.echo('User Accounts Checkbox Not Found', 'ERROR');
-							}	
-						}
-					});
-				} else {
-					casper.echo('Setting Link Not Found', 'ERROR');
+                //casper.thenOpen(config.backendCred, function() {
+			//Clicking On "General" Tab Under Settings 
+			wait.waitForElement('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', casper, function(err, isExist) {
+				if(!err){
+					if(isExist) {
+						casper.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+						casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+						casper.test.assertExists('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
+						casper.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
+						casper.echo('Successfully open forum settings form.....', 'INFO');
+						//Getting 'User Accounts' Field Value, If, Enabled, Then Filling Data For Testing
+						wait.waitForElement('#REQreg', casper, function(err, isExist) {
+							if(!err){
+								if(isExist) {
+									utils.enableorDisableCheckbox('REQreg', true, casper, function(err) {
+										if (!err){
+											casper.echo("User Accounts Checkbox Has Been Enabled For Registered User", 'INFO');
+											casper.test.assertExists('.button.btn-m.btn-blue');
+											casper.click('.button.btn-m.btn-blue');
+										}	
+									});	
+								} else {
+									casper.echo('User Accounts Checkbox Not Found', 'ERROR');
+								}	
+							}
+						});
+					} else {
+						casper.echo('Setting Link Not Found', 'ERROR');
+					}
 				}
-			}
-		});
+			});
+                //});
 	});
 	
 	casper.thenOpen(config.url, function() {
@@ -390,7 +390,7 @@ registerTests.blankSignature = function() {
 		registerMethod.registerToApp(json['blankSignature'], casper, function(err){
 			if(!err) {
 				casper.echo('register by leaving blank signature and verify error message', 'INFO');
-				casper.capture(screenShotsDir+ '6.png');
+				//casper.capture(screenShotsDir+ '6.png');
 			}
 		});
 	});	
