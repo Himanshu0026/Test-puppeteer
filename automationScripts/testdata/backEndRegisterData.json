@@ -27,7 +27,7 @@
         "uname" : "blank_pwd",
         "upass" : "1234",
         "uemail" : "blank_pwd@wt.com",
-        "pNote" : "This is my personal note blank email"
+        "pNote" : "This is my personal note blank password"
     },
     
     "existingUserName" : {
@@ -53,5 +53,16 @@
         "pNote" : "This is my personal note with invalid email",
         "errorType" : "invalidEmail",
         "expectedErrorMsg" : "You entered an invalid email address." 
+    },
+
+    "validInvite" : {
+        "uemail" : "vishalskb@gmail.com",
+        "pNote" : "This is my personal note with valid inviation.."
+    },
+
+    "invalidInvite" : {
+        "uemail" : "217367",
+        "pNote" : "This is my personal note with invalid invitaion.."
     }
+
 }
