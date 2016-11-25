@@ -12,38 +12,37 @@ registerMethod.loginToForumBackEnd = function(driver, test, callback) {
 		
 	//Click On Login Link 
 	try{
-		test.assertDoesntExist('a#navLogin');
+	        test.assertDoesntExist('a#navLogin');
 	}catch(e){
-	driver.then(function() {
-		driver.wait(7000, function(){
-			test.assertExists('a#navLogin');
-			this.click('a#navLogin');
-			this.echo('Successfully open login form.....', 'INFO');
+		driver.then(function() {
+			driver.wait(7000, function(){
+				test.assertExists('a#navLogin');
+				this.click('a#navLogin');
+				this.echo('Successfully open login form.....', 'INFO');
+			});
 		});
-	});
-	
-	//Getting Screenshot After Clicking On 'Login' Link  
-	
-	driver.wait(7000, function() {
-		this.capture(screenShotsDir + 'login_form.png');
-	});
-	
-	//Filling Username/Password On Login Form
-	
-	driver.then(function() {
-		fillDataToLogin(config.backendCred, driver, function() {
-			driver.echo('Proccessing to login on forum back end....', 'INFO');
-			
-		});
-	});
 
-	//Getting Screenshot After Submitting 'Login' Form From Backend
-	
-	driver.wait(5000,function(){
-		this.capture(screenShotsDir + 'login_submit.png');
-	});
+		//Getting Screenshot After Clicking On 'Login' Link  
+		driver.wait(7000, function() {
+		        this.capture(screenShotsDir + 'login_form.png');
+		});
+
+		//Filling Username/Password On Login Form
+		driver.then(function() {
+			fillDataToLogin(config.backendCred, driver, function() {
+			        driver.echo('Proccessing to login on forum back end....', 'INFO');
+			});
+		});
+
+		//Getting Screenshot After Submitting 'Login' Form From Backend
+		driver.wait(5000,function(){
+		        this.capture(screenShotsDir + 'login_submit.png');
+		});
 	}
+
 	return callback(null);
+	
+	
 };
 
 
@@ -194,7 +193,6 @@ registerMethod.redirectToLogout = function(driver, test, callback) {
 				});
 
 				//Getting Screenshot After Clicking On 'Logout' Link  
-
 				this.wait(5000, function() {
 					this.capture(screenShotsDir + 'logout.png');
 				});
