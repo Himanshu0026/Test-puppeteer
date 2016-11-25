@@ -22,6 +22,13 @@
         "pNote" : "This is my personal note blank email",
         "expectedErrorMsg" : "Please enter an email address." 
     },
+
+     "blankUserPassword" : {
+        "uname" : "blank_pwd",
+        "upass" : "1234",
+        "uemail" : "blank_pwd@wt.com",
+        "pNote" : "This is my personal note blank email"
+    },
     
     "existingUserName" : {
     	"uname" : "shipra",

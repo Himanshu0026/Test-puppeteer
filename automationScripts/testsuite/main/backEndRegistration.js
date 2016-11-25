@@ -25,6 +25,9 @@ backEndForumRegister.featureTest = function(casper, test) {
 
 		//Verify Error Messages While User Registering With Blank EmailId.
 		backEndForumRegisterTests.blankEmailId();
+		
+		//Register User With Blank Password So That Later User Choose There Own Password.
+		backEndForumRegisterTests.blankPassword();
 	
 		//Verify Error Messages While User Registering With Existing UserName.
 		backEndForumRegisterTests.existingUserName();

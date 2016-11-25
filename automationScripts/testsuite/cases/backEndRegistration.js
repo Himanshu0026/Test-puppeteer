@@ -1,13 +1,13 @@
 'use strict';
 var backEndRegisterJSON = require('../../testdata/backEndRegisterData.json');
 var registerMethod = require('../methods/register.js');
-var backEndregisterMethodMethod = require('../methods/backEndRegistration.js');
-var backEndregisterMethodTests = module.exports = {};
+var backEndregisterMethod = require('../methods/backEndRegistration.js');
+var backEndregisterTests = module.exports = {};
 var wait = require('../wait.js');
 
 //Test Case for Register With Valid Information.
 
-backEndregisterMethodTests.validInfo = function() {
+backEndregisterTests.validInfo = function() {
 
 	//Login To Forum BackEnd 
 	casper.echo('*****************************Case1**********************************','INFO');
@@ -26,7 +26,7 @@ backEndregisterMethodTests.validInfo = function() {
 							if(!err){
 								if(isExists) {
 									//Registering New User
-									backEndregisterMethodMethod.registerToBackEnd(backEndRegisterJSON['validInfo'], casper, function(err) {
+									backEndregisterMethod.registerToBackEnd(backEndRegisterJSON['validInfo'], casper, function(err) {
 										if (!err) {
 											wait.waitForVisible('div#ajax-msg-top', casper, function(err, isVisible){
 												if(!err){
@@ -55,11 +55,11 @@ backEndregisterMethodTests.validInfo = function() {
 
 //Test Case for Verifying Error Messages While User Registering With Blank User Name.
 
-backEndregisterMethodTests.blankUserName = function() {
+backEndregisterTests.blankUserName = function() {
 	casper.then(function(){
 		casper.echo('*****************************Case2********************************','INFO');
 		casper.echo('Verifying Error Messages While User Registering With Blank User Name','INFO');
-		backEndregisterMethodMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.blankUserName, casper, function(err) {
+		backEndregisterMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.blankUserName, casper, function(err) {
 			if(!err){
 				casper.echo('Message Verified Successfully','INFO');
 			}
@@ -69,11 +69,11 @@ backEndregisterMethodTests.blankUserName = function() {
 
 //Test Case for Verifying Error Messages While User Registering With With Blank Email Id.
 
-backEndregisterMethodTests.blankEmailId = function() {
+backEndregisterTests.blankEmailId = function() {
 	casper.then(function(){
 		casper.echo('*****************************Case3********************************','INFO');
 		casper.echo('Verifying Error Messages While User Registering With Blank Email Id','INFO');
-		backEndregisterMethodMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.blankUserEmail, casper, function(err) {
+		backEndregisterMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.blankUserEmail, casper, function(err) {
 			if(!err){
 				casper.echo('Message Verified Successfully','INFO');
 			}
@@ -81,15 +81,35 @@ backEndregisterMethodTests.blankEmailId = function() {
 	});
 };
 
+//Test Case for Registering User With Blank Password.
 
+backEndregisterTests.blankPassword = function() {
+	casper.then(function(){
+		casper.echo('*****************************Case4************************************','INFO');
+		casper.echo('User Registered With Blank Password ','INFO');
+		backEndregisterMethod.registerToBackEnd(backEndRegisterJSON['blankUserPassword'], casper, function(err) {
+			if (!err) {
+				wait.waitForVisible('div#ajax-msg-top', casper, function(err, isVisible){
+					if(!err){
+						if(isVisible){
+							casper.echo('Thank you for registering....','INFO');
+						}else{
+							casper.echo('User Does Not Registered Successfully','ERROR');
+						}
+					}
+				});
+			} 
+		});
+	});
+};
 
 //Test Case for Verifying Error Messages While User Registering With Existing User Name.
 
-backEndregisterMethodTests.existingUserName = function() {
+backEndregisterTests.existingUserName = function() {
 	casper.then(function(){
-		casper.echo('*****************************Case4************************************','INFO');
+		casper.echo('*****************************Case5************************************','INFO');
 		casper.echo('Verifying Error Messages While User Registering With Existing UserName','INFO');
-		backEndregisterMethodMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.existingUserName, casper, function(err) {
+		backEndregisterMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.existingUserName, casper, function(err) {
 			if(!err){
 				casper.echo('Message Verified Successfully','INFO');
 			}
@@ -98,11 +118,11 @@ backEndregisterMethodTests.existingUserName = function() {
 };
 
 //Test Case for Registering User with Existing EmailId.
-backEndregisterMethodTests.existingEmailId = function() {
+backEndregisterTests.existingEmailId = function() {
 	casper.then(function(){
-		casper.echo('*****************************Case5************************************','INFO');
+		casper.echo('*****************************Case6************************************','INFO');
 		casper.echo('User Registered With Existing EmailId','INFO');
-		backEndregisterMethodMethod.registerToBackEnd(backEndRegisterJSON['existingEmailId'], casper, function(err) {
+		backEndregisterMethod.registerToBackEnd(backEndRegisterJSON['existingEmailId'], casper, function(err) {
 			if (!err) {
 				wait.waitForVisible('div#ajax-msg-top', casper, function(err, isVisible){
 					if(!err){
@@ -120,11 +140,11 @@ backEndregisterMethodTests.existingEmailId = function() {
 
 //Test Case for Verifying Error Messages While User Registering With Invalid Email Id.
 
-backEndregisterMethodTests.invalidEmailId= function() {
+backEndregisterTests.invalidEmailId= function() {
 	casper.then(function(){
-		casper.echo('*****************************Case6***********************************','INFO');
+		casper.echo('*****************************Case7***********************************','INFO');
 		casper.echo('Verifying Error Messages While User Registering With Invalid Email Id','INFO');
-		backEndregisterMethodMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.invalidEmailId, casper, function(err) {
+		backEndregisterMethod.verifyErrorMsgWithInvalidInfo(backEndRegisterJSON.invalidEmailId, casper, function(err) {
 			if(!err){
 				casper.echo('Message Verified Successfully','INFO');
 				casper.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]'); 

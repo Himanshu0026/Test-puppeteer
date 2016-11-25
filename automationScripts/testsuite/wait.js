@@ -11,7 +11,6 @@ wait.waitForElement = function(element, driver, callback){
 	});
 };
 
-
 wait.waitForTime = function(time , driver, callback){
 	driver.wait(time,function(){
 		driver.echo('Finished wait for '+ time +' ms','INFO');
