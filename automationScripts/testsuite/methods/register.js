@@ -1,8 +1,8 @@
 'use strict';
-var forumLogin = require('../forum_login.js');
-var registerMethod=module.exports = {};
+var forumLoginMethod = require('../methods/login.js');
 var json = require('../../testdata/registerData.json');
-var screenShotsDir = config.screenShotsLocation + 'register/';
+var wait = require('../wait.js');
+var registerMethod=module.exports = {};
 
 /************************************PRIVATE METHODS***********************************/
 
@@ -11,45 +11,23 @@ var screenShotsDir = config.screenShotsLocation + 'register/';
 registerMethod.loginToForumBackEnd = function(driver, test, callback) {
 		
 	//Click On Login Link 
-	try{
-		test.assertDoesntExist('a#navLogin');
-	}catch(e){
-		driver.then(function() {
-			driver.wait(7000, function(){
-				test.assertExists('a#navLogin');
-				this.click('a#navLogin');
-				this.echo('Successfully open login form.....', 'INFO');
+	wait.waitForElement('a#navLogin', casper, function(err, isExist) {
+		if(isExist) {
+			driver.click('a#navLogin');
+			driver.echo('Successfully open login form.....', 'INFO');
+			fillDataToLogin(config.backendCred, driver, function(err) {
+				if (!err)
+					driver.echo('Proccessing to login on forum back end....', 'INFO');
 			});
-		});
-		
-		//Getting Screenshot After Clicking On 'Login' Link  
-		
-		driver.wait(7000, function() {
-			this.capture(screenShotsDir + 'login_form.png');
-		});
-		
-		//Filling Username/Password On Login Form
-		driver.then(function() {
-			fillDataToLogin(config.backendCred, driver, function() {
-				driver.echo('Proccessing to login on forum back end....', 'INFO');
-				
-			});
-		});
-
-		//Getting Screenshot After Submitting 'Login' Form From Backend
-		
-		driver.wait(5000,function(){
-			this.capture(screenShotsDir + 'login_submit.png');
-		});
-	}
-	driver.then(function(){
-		return callback(null);
+		} else {
+			driver.echo('Login Link Not Found', 'ERROR');
+		}
+		return callback(null)
 	});
 };
 
 
 //Method For Filling Data In Login Form(Back end)
-
 var fillDataToLogin = function(data, driver, callback) {
 	driver.fill('form[name="frmLogin"]', {
 		'username' : data.uname,
@@ -57,7 +35,7 @@ var fillDataToLogin = function(data, driver, callback) {
 	}, false);
 	driver.test.assertExists('form[name="frmLogin"] button');
 	driver.click('form[name="frmLogin"] button');
-	return callback();
+	return callback(null);
 };
 
 
@@ -148,33 +126,18 @@ registerMethod.redirectToLogout = function(driver, test, callback) {
 		var expectedSuccessMsg = json['validInfo'].expectedSuccessMsg;
 		test.assertEquals(successMsg.trim(), expectedSuccessMsg.trim());
 		driver.echo('Successfully done registration on forum.....', 'INFO');
+
 		
 		//Clicking On 'Back To Category' Link 
-
-		driver.then(function() {
-			test.assertExists('a[href="/categories"]');
-			this.click('a[href="/categories"]');
-			this.echo('Successfully back to category', 'INFO');
-		});
-
-		//Getting Screenshot After Clicking On 'Back To Category' Link  
-
-		driver.wait(5000, function() {
-			this.capture(screenShotsDir + 'backToCategory.png');
-		});
-		
-		//Click On Logout Link
-
-		driver.then(function() {
-			forumLogin.logoutFromApp(driver, function(){
-				driver.echo('Successfully logout from application', 'INFO');
-			});
-
-			//Getting Screenshot After Clicking On 'Logout' Link  
-
-			this.wait(5000, function() {
-				this.capture(screenShotsDir + 'logout.png');
-			});
+		wait.waitForElement('a[href="/categories"]', casper, function(err, isExist) {
+			if(isExist) {
+				driver.click('a[href="/categories"]');
+				driver.echo('Successfully back to category', 'INFO');
+				forumLoginMethod.logoutFromApp(driver, function(err) {
+				if (!err)
+					driver.echo('Successfully logout from application', 'INFO');
+				});
+			}
 		});
 	} catch(e) {
 		try {
@@ -188,15 +151,10 @@ registerMethod.redirectToLogout = function(driver, test, callback) {
 			driver.echo('Successfully done registration on forum.....', 'INFO');
 			
 			//Click On Logout Link
-
 			driver.then(function() {
-				forumLogin.logoutFromApp(driver, function(){
-					driver.echo('Successfully logout from application', 'INFO');
-				});
-
-				//Getting Screenshot After Clicking On 'Logout' Link  
-				this.wait(5000, function() {
-					this.capture(screenShotsDir + 'logout.png');
+				forumLoginMethod.logoutFromApp(driver, function(err) {
+					if (!err)
+						driver.echo('Successfully logout from application', 'INFO');
 				});
 			});
 		}

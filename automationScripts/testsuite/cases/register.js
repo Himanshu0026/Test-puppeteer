@@ -4,7 +4,7 @@ var config = require('../../../config/config.json');
 var utils = require('../utils.js');
 var registerMethod = require('../methods/register.js');
 var wait = require('../wait.js');
-var registerTests=module.exports = {};
+var registerTests = module.exports = {};
 
 //Getting 'User Accounts' Field Value If, Enabled, Then Filling Data For Testing
 registerTests.userAccountsEnable  = function() {
@@ -557,13 +557,15 @@ registerTests.validInfo= function() {
 		casper.echo('******************** case-12 ************************', 'INFO');
 		casper.echo('test case for register to application by valid data and verify error message', 'INFO');
 		casper.echo('********************************************', 'INFO');
-		registerMethod.registerToApp(json['validInfo'], casper, function() {
-			casper.echo('Processing to registration on forum.....', 'INFO');
-			registerMethod.redirectToLogout(casper, casper.test, function(err) {
-				if(!err) {
-					casper.echo('User logout successfully', 'INFO');
-				}
-			});
+		registerMethod.registerToApp(json['validInfo'], casper, function(err) {
+			if(!err) {
+				casper.echo('Processing to registration on forum.....', 'INFO');
+				registerMethod.redirectToLogout(casper, casper.test, function(err) {
+					if(!err) {
+						casper.echo('User logout successfully', 'INFO');
+					}
+				});
+			}
 		});
 	});
 }
