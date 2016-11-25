@@ -7,7 +7,7 @@ casper.options.waitTimeout = config.app.waitTimeout;
 
 var feature = casper.cli.get('feature');
 if(feature){
-	casper.echo("Started testing for the feature: " + feature +"\n");
+	casper.echo("Started testing for the feature: " + feature +"\n",'INFO');
 }else{
 	casper.echo("It seems, you have not given any option.");
 }
@@ -33,12 +33,24 @@ switch (feature) {
 			});
 		});
 	break;
+    		
+	case "backEndRegistration":
+		casper.test.begin('BACK END REGISTRATION TEST', function(test) {
+			var backEndRegister = require("./testsuite/main/backEndRegistration.js");
+			backEndRegister.featureTest(casper, casper.test);
+			casper.run(function(){
+				test.done();
+				test.assert(true);
+			});
+		});
+	break;
 	
 	default:
 		casper.echo("Please select any feature from options given below. For ex: casperjs automation.js <option>.\n"); 
         	casper.echo("Options:");
-		casper.echo("	login");
-        	casper.echo(" forgotPassword");
+		casper.echo("login");
+        	casper.echo("forgotPassword");
+		casper.echo("backEndRegistration");
 		casper.exit();
 };
 

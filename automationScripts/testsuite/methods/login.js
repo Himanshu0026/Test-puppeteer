@@ -28,26 +28,26 @@ forumLoginMethod.loginToApp = function(username, password, driver, callback) {
 	return callback(null);
 };
 
+
 //method for logout from application
 forumLoginMethod.logoutFromApp = function(driver,callback) {
 	driver.test.assertExists('ul.nav.pull-right span.caret');
 	driver.click('ul.nav.pull-right span.caret');
-	wait.waitForElement('ul.nav.pull-right span.caret', casper, function(err, isExists){
+	wait.waitForElement('ul.nav.pull-right span.caret', casper, function(err, isExists) {
 		if(isExists) {		
-			driver.capture('toggle1.png');
 			driver.test.assertExists('a[href^="/register/logout"]');
 			driver.evaluate(function() {
 				document.querySelector('a#logout').click();
 			});
-			wait.waitForElement('a#td_tab_login', casper, function(err, isExists){
+			wait.waitForElement('a#td_tab_login', casper, function(err, isExists) {
 				if(isExists) {
-					driver.capture('success.png');
 					return callback(null);
 				}	
 			});
 		}
 	});
 };
+
 
 //Method For Verifying Error Message On Edit Profile/Account Setting Page After Submitting Form
 forumLoginMethod.verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver, callback) {
@@ -60,15 +60,4 @@ forumLoginMethod.verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTi
 	}
 	return callback(null);
 };
-
-
-
-
-
-
-
-
-
-
-
 
