@@ -146,16 +146,21 @@ registerMethod.redirectToLogout = function(driver, test, callback) {
 			var expectedErrorMsg = "It looks like you already have a forum account!";
 			driver.test.assert(errorMessage.indexOf(expectedErrorMsg) > -1);
 			driver.echo('USER ALREADY REGISTERED ON FORUM.....', 'INFO');
+			
 			return callback(null);
 		} catch(e1) {
 			driver.echo('Successfully done registration on forum.....', 'INFO');
 			
 			//Click On Logout Link
-			driver.then(function() {
-				forumLoginMethod.logoutFromApp(driver, function(err) {
-					if (!err)
-						driver.echo('Successfully logout from application', 'INFO');
-				});
+			wait.waitForElement('ul.nav.pull-right span.caret', casper, function(err, isExist) {
+			    if(isExist) {
+					forumLoginMethod.logoutFromApp(driver, function(err) {
+						if (!err)
+							driver.echo('Successfully logout from application', 'INFO');
+					});
+				}else{
+				  casper.echo('logout link not found');
+				}
 			});
 		}
 	}

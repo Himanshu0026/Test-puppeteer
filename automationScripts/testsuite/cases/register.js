@@ -90,7 +90,7 @@ registerTests.userAccountsEnable  = function() {
 								});				
 							});		
 						} else {
-							casper.echo('Account_orum_Menu Not Found', 'ERROR');
+							casper.echo('Account Forum Menu Not Found', 'ERROR');
 						}
 					}
 			    });
@@ -99,6 +99,7 @@ registerTests.userAccountsEnable  = function() {
 	});
 	//Login To Forum BackEnd
 	casper.thenOpen(config.backEndUrl, function() {
+	    casper.echo('Title of the page :' +this.getTitle(), 'INFO');
 		registerMethod.loginToForumBackEnd(casper, casper.test, function(err) {
 			 if(!err){
 				casper.echo('Successfully Login To Forum Back End...........', 'INFO');
