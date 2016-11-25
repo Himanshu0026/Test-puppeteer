@@ -1,0 +1,57 @@
+{
+ 
+    "validInfo" : {
+    	"uname" : "138935",
+        "uemail" : "213@wt.com",
+        "upass" : "1234",
+        "pNote" : "This is my personal note with valid info.."
+    },
+
+    "blankUserName" : {
+        "uname" : "",
+        "upass" : "1234",
+        "uemail" : "blank_uname@wt.com",
+        "pNote" : "This is my personal note blank uname",
+        "expectedErrorMsg" : "Please enter a username." 
+    },
+    
+    "blankUserEmail" : {
+        "uname" : "blank_email",
+        "upass" : "1234",
+        "uemail" : "",
+        "pNote" : "This is my personal note blank email",
+        "expectedErrorMsg" : "Please enter an email address." 
+    },
+
+     "blankUserPassword" : {
+        "uname" : "blank_pwd",
+        "upass" : "1234",
+        "uemail" : "blank_pwd@wt.com",
+        "pNote" : "This is my personal note blank email"
+    },
+    
+    "existingUserName" : {
+    	"uname" : "shipra",
+        "uemail" : "35asasa@wt.com",
+        "upass" : "1234",
+        "pNote" : "This is my personal note with existing username",
+        "errorType" : "existWithName",
+        "expectedErrorMsg" : "There is already a user registered with the username "
+    },
+
+    "existingEmailId" : {
+    	"uname" : "existing_emailid",
+        "uemail" : "213@wt.com",
+        "upass" : "1234",
+        "pNote" : "This is my personal note with existing email id "
+    },
+    
+    "invalidEmailId" : {
+        "uname" : "invalid_email",
+        "uemail" : "aaaaa",
+        "upass" : "1234",
+        "pNote" : "This is my personal note with invalid email",
+        "errorType" : "invalidEmail",
+        "expectedErrorMsg" : "You entered an invalid email address." 
+    }
+}
