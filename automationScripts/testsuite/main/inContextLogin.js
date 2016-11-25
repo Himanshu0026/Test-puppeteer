@@ -12,20 +12,11 @@ inContextLogin.featureTest = function(casper, test) {
 		//Incontext login from start new topic button	
 		inContextLoginTests.inContextLoginfrmStartTopic();
 		//Incontext Login while Like this post from Topic page 
-		inContextLoginTests.inContextLoginLikePostTopicPage();	
-
-
-
-
-
-
-
-
-
-
-
-
-
+		inContextLoginTests.inContextLoginLikePostTopicPage();
+		//Incontext Login while Dislike this post from Topic page
+		inContextLoginTests.inContextLoginDisLikePostTopicPage();
+		//Incontext Login while Like this Topic from list of topics 
+		inContextLoginTests.inContextLoginLikeTopicHome();	
 	});
 
 

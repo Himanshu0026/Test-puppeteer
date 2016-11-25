@@ -40,7 +40,7 @@ inContextLoginTests.inContextLoginfrmStartTopic=function(){
 
 inContextLoginTests.inContextLoginLikePostTopicPage=function(){
 	casper.thenOpen(config.url, function() {
-		casper.echo('Incontext Login while Like this post from Topic page ','INFO');
+		casper.echo('***************************Incontext Login while Like this post from Topic page****************************','INFO');
 		wait.waitForElement('form[name="posts"] a.topic-title', casper , function(err, isExists) {
 			if(isExists) {
 				casper.test.assertExists('form[name="posts"] a.topic-title');
@@ -71,8 +71,80 @@ inContextLoginTests.inContextLoginLikePostTopicPage=function(){
 	});
 };
 
+//Incontext Login while Dislike this post from Topic page
 
+inContextLoginTests.inContextLoginDisLikePostTopicPage=function(){
+	casper.thenOpen(config.url, function() {
+		casper.echo('*******************Incontext Login while Dislike this post from Topic page************************','INFO');
+		wait.waitForElement('form[name="posts"] a.topic-title', casper , function(err, isExists) {
+			if(isExists) {
+				casper.test.assertExists('form[name="posts"] a.topic-title');
+				casper.click('form[name="posts"] a.topic-title');	
+				wait.waitForElement('a.dislike_post.text-muted', casper , function(err, isExists) {					
+					if(isExists) {	
+						casper.click('a.dislike_post.text-muted');
+						inContextLoginMethod.loginToApp(json['validInfo'].username, json['validInfo'].password, casper, function(err) {
+							if (err) {
+								casper.echo("Error occurred in callback user not logged-in", "ERROR");	
+							}else {
+								casper.echo('Processing to Login on forum.....', 'INFO');
+								wait.waitForElement('ul.nav.pull-right span.caret', casper , function(err, isExists){
+									if(isExists) {
+										inContextLoginMethod.logoutFromApp(casper, function(err){
+											if (!err)
+												casper.echo('Successfully logout from application', 'INFO');
+										});
+									}
+								});
+							}	
+						});
+					}else {
+						casper.echo('Dislike selector not found a.dislike_post.text-muted','ERROR');
+					}
+			
+				});
+			}else {
+				casper.echo('Topics not found on frontend element not found form[name="posts"] a.topic-title','ERROR');
+			}
 
+		});
+	});
+};
+
+//Incontext Login while Like this Topic from list of topics 
+
+inContextLoginTests.inContextLoginLikeTopicHome=function(){
+	casper.thenOpen(config.url, function() {	
+		casper.echo('*********************Incontext Login while Like this Topic from list of topics*****************','INFO');		
+		wait.waitForElement('i.glyphicon.glyphicon-like-alt', casper , function(err, isExists) {					
+			if(isExists) {
+				casper.test.assertExists('i.glyphicon.glyphicon-like-alt');
+				casper.click('i.glyphicon.glyphicon-like-alt');
+				inContextLoginMethod.loginToApp(json['validInfo'].username, json['validInfo'].password, casper, function(err) {
+					if (err) {
+						casper.echo("Error occurred in callback user not logged-in", "ERROR");	
+					}else {
+						casper.echo('Processing to Login on forum.....', 'INFO');
+						wait.waitForElement('ul.nav.pull-right span.caret', casper , function(err, isExists){
+							if(isExists) {
+								inContextLoginMethod.logoutFromApp(casper, function(err){
+									if (!err)
+										casper.echo('Successfully logout from application', 'INFO');
+								});
+							}else {
+								casper.echo('Logout toggle selector not found ul.nav.pull-right span.caret','ERROR');
+							}
+						});
+					}	
+				});
+			}else {
+				casper.echo('Like post selector not found i.glyphicon.glyphicon-like-alt','ERROR');
+			}
+		});
+	});
+};
+
+//Verify Forgot Password link on InContext Login popup
 
 
 
