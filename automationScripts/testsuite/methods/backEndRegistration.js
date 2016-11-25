@@ -95,3 +95,26 @@ backEndForumRegisterMethod.verifyErrorMsgWithInvalidInfo = function(data, driver
 		} 
 	});
 };
+
+//Method For Deleting User.
+
+backEndForumRegisterMethod.deleteUser = function(data, driver, callback) {
+	driver.fill('form#frmChangeUsersGroup', {
+		'member' : data.uname
+	}, true);
+	wait.waitForElement('a#delete_user', driver, function(err, isExists) {	
+		if(!err){
+			if(isExists) {
+				driver.click('a#delete_user');
+				wait.waitForTime(2000, driver, function(err){
+					if(!err){
+						return callback(null);
+					}
+				});
+			} else {
+				driver.echo('Delete User Button Not Visible in 5 seconds', 'ERROR');
+			}	
+		}
+	});
+};
+

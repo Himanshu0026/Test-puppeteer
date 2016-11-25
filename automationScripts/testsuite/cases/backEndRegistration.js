@@ -155,31 +155,41 @@ backEndregisterTests.invalidEmailId= function() {
 				wait.waitForElement('form#frmChangeUsersGroup', casper, function(err, isExists) {	
 					if(!err){
 						if(isExists) {
-							casper.fill('form#frmChangeUsersGroup', {
-								'member' : backEndRegisterJSON['validInfo'].uname
-							}, true);
-							wait.waitForElement('a#delete_user', casper, function(err, isExists) {	
+							//Deleting User i.e Register With Valid Information.
+							backEndregisterMethod.deleteUser(backEndRegisterJSON['validInfo'],casper,function(err){
 								if(!err){
-									if(isExists) {
-										casper.click('a#delete_user');
-										casper.test.assertExists('a[data-tooltip-elm="ddAccount"]');
-										casper.click('a[data-tooltip-elm="ddAccount"]');
-										casper.test.assertExists('a[href="/tool/members/login?action=logout"]');
-										casper.click('a[href="/tool/members/login?action=logout"]');
-										wait.waitForElement('form[name="frmLogin"]', casper, function(err, isExists) {	
+									casper.echo('User Register With Valid Information Deleted Successfully','INFO');			
+									casper.reload(function(){
+										//Deleting User i.e Register With Blank Password.
+										backEndregisterMethod.deleteUser(backEndRegisterJSON['blankUserPassword'],casper,function(err){
 											if(!err){
-												if(isExists) {
-													casper.echo('Logout Succesfully......','INFO')
-												} else {
-													casper.echo('Unable to logout successfully', 'ERROR');
-												}	
+												casper.echo('User Register With Blank User Password  Deleted Successfully','INFO');	
+												casper.reload(function(){
+													//Deleting User i.e Register With Existing Email Id And Logout from Backend.
+													backEndregisterMethod.deleteUser(backEndRegisterJSON['existingEmailId'],casper,function(err){
+														if(!err){
+															casper.echo('User Register With Existing Email Id Deleted Successfully','INFO');	
+															casper.test.assertExists('a[data-tooltip-elm="ddAccount"]');
+															casper.click('a[data-tooltip-elm="ddAccount"]');
+															casper.test.assertExists('a[href="/tool/members/login?action=logout"]');
+															casper.click('a[href="/tool/members/login?action=logout"]');
+															wait.waitForElement('form[name="frmLogin"]', casper, function(err, isExists) {	
+																if(!err){
+																	if(isExists) {
+																		casper.echo('Logout Succesfully......','INFO')
+																	} else {
+																		casper.echo('Unable to logout successfully', 'ERROR');
+																	}	
+																}
+															});
+														}
+													});
+												});	
 											}
 										});
-									} else {
-										casper.echo('Delete User Button Not Visible in 5 seconds', 'ERROR');
-									}	
+									});			
 								}
-							});
+							});	
 						} else {
 							casper.echo('Change User Group Permission Not Found', 'ERROR');
 						}	
