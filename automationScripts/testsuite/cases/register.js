@@ -5,15 +5,12 @@ var utils = require('../utils.js');
 var registerMethod = require('../methods/register.js');
 var wait = require('../wait.js');
 var registerTests=module.exports = {};
-var screenShotsDir = config.screenShotsLocation + 'register/';
 
-
-
-//Getting 'User Accounts' Field Valu If, Enabled, Then Filling Data For Testing
+//Getting 'User Accounts' Field Value If, Enabled, Then Filling Data For Testing
 registerTests.userAccountsEnable  = function() {
 
 	casper.echo('******************** case-1 ************************', 'INFO');
-	casper.echo('Getting User Accounts Field Valu If, Enabled, Then Filling Data For Testing', 'INFO');
+	casper.echo('Getting User Accounts Field Value If, Enabled, Then Filling Data For Testing', 'INFO');
 	casper.echo('********************************************', 'INFO');
 	 
 	 //Open Back-End URL And Get Title
@@ -166,14 +163,17 @@ registerTests.blankUsername = function() {
 		registerMethod.registerToApp(json['blankUsername'], casper, function(err){
 			if(!err) {
 				casper.echo('register by leaving blank username and verify error message', 'INFO');
-				casper.capture(screenShotsDir+ '1.png');
 				wait.waitForElement('form[name="PostTopic"] input[name="member"]', casper, function(err, isExist){ 
 					 if(!err){
 						 if(isExist) {
 							var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="member"]', 'data-original-title');
 							errorMessage = errorMessage.trim();
 							if(errorMessage && errorMessage!= '')
-								registerMethod.verifyErrorMsg(errorMessage, 'Please enter a username.', 'blankUsername', casper, function() {});
+								registerMethod.verifyErrorMsg(errorMessage, 'Please enter a username.', 'blankUsername', casper, function(err) {
+									if(!err) {
+										casper.echo('Verified error message successfully', 'INFO');
+									}
+								});
 						} else {
 							casper.echo('postTopic form  Not Found', 'ERROR');
 						}
@@ -194,14 +194,17 @@ registerTests.blankEmail = function() {
 		registerMethod.registerToApp(json['blankEmail'], casper, function(err){
 			if(!err) {
 				casper.echo('register by leaving blank email and verify error message', 'INFO');
-				casper.capture(screenShotsDir+ '2.png');
 				wait.waitForElement('form[name="PostTopic"] input[name="email"]', casper, function(err, isExist){ 
 				 if(!err){
 						 if(isExist) {
 							var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="email"]', 'data-original-title');
 							errorMessage = errorMessage.trim();
 							if(errorMessage && errorMessage!= '')
-								registerMethod.verifyErrorMsg(errorMessage, 'Please enter your email address.', 'blankEmail', casper, function() {});	
+								registerMethod.verifyErrorMsg(errorMessage, 'Please enter your email address.', 'blankEmail', casper, function(err) {
+									if(!err) {
+										casper.echo('Verified error message successfully', 'INFO');
+									}
+								});	
 						} else {
 								casper.echo('postTopic form  Not Found', 'ERROR');
 					   }
@@ -222,14 +225,17 @@ registerTests.blankPassword = function() {
 		registerMethod.registerToApp(json['blankPassword'], casper, function(err){
 			if(!err) {
 				casper.echo('register by leaving blank password and verify error message', 'INFO');
-				casper.capture(screenShotsDir+ '3.png');
 				wait.waitForElement('form[name="PostTopic"] input[name="pw"]', casper, function(err, isExist){ 
 					 if(!err){
 						 if(isExist) {
 							var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="pw"]', 'data-original-title');
 							errorMessage = errorMessage.trim();
 							if(errorMessage && errorMessage!= '')
-								registerMethod.verifyErrorMsg(errorMessage, 'Please enter a password.', 'blankPassword', casper, function() {});
+								registerMethod.verifyErrorMsg(errorMessage, 'Please enter a password.', 'blankPassword', casper, function(err) {
+									if(!err) {
+										casper.echo('Verified error message successfully', 'INFO');
+									}
+								});
 						} else {
 							casper.echo('postTopic form  Not Found', 'ERROR');
 						}
@@ -250,16 +256,19 @@ registerTests.existUsername = function() {
 		registerMethod.registerToApp(json['existUsername'], casper, function(err){
 			if(!err) {
 				casper.echo('register by existing username and verify error message', 'INFO');
-				casper.capture(screenShotsDir+ '7.png');
 				wait.waitForElement('#registerEditProfile div[role="alert"]', casper, function(err, isExist){ 
 					if(!err){
 						if(isExist) {
 							var errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
 							errorMessage = errorMessage.trim();
 							if(errorMessage && errorMessage!= '')
-								registerMethod.verifyErrorMsg(errorMessage, 'The username "35" has already been taken.', 'existWithName', casper, function() {});
+								registerMethod.verifyErrorMsg(errorMessage, 'The username "35" has already been taken.', 'existWithName', casper, function(err) {
+									if(!err) {
+										casper.echo('Verified error message successfully', 'INFO');
+									}
+								});
 						} else {
-							casper.capture(screenShotsDir+ '77.png');
+							
 							var pageJson = JSON.parse(casper.getPageContent());
 							var message = pageJson.message;
 							casper.echo(message, 'INFO');
@@ -295,16 +304,19 @@ registerTests.existEmail = function() {
 		 registerMethod.registerToApp(json['existEmail'], casper, function(err){
 			if(!err) {
 				casper.echo('register by existing email and verify error message', 'INFO');
-				casper.capture(screenShotsDir+ '8.png');
 				wait.waitForElement('#registerEditProfile div[role="alert"]', casper, function(err, isExist){ 
 					if(!err){
 						if(isExist) {
 							var errorMessage = casper.fetchText('#registerEditProfile div[role="alert"]');
 							errorMessage = errorMessage.trim();
 							if(errorMessage && errorMessage!= '')
-								registerMethod.verifyErrorMsg(errorMessage, 'It looks like you are already registered', 'existEmail', casper, function() {});
+								registerMethod.verifyErrorMsg(errorMessage, 'It looks like you are already registered', 'existEmail', casper, function(err) {
+									if(!err) {
+										casper.echo('Verified error message successfully', 'INFO');
+									}
+								});
 						} else {
-							casper.capture(screenShotsDir+ '88.png');
+						
 							var pageJson = JSON.parse(casper.getPageContent());
 							var message = pageJson.message;
 							casper.echo(message, 'INFO');
@@ -341,17 +353,20 @@ registerTests.blankImId = function() {
 		registerMethod.registerToApp(json['blankImId'], casper, function(err){
 			if(!err) {
 				casper.echo('register by leaving blank im-id and verify error message', 'INFO');
-				casper.capture(screenShotsDir+ '4.png');
 				wait.waitForElement('form[name="PostTopic"] input[name="imID"]', casper, function(err, isExist){ 
 					if(!err){
 						if(isExist) {
 							var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="imID"]', 'data-original-title');
 							errorMessage = errorMessage.trim();
 							if(errorMessage && errorMessage!= '')
-								registerMethod.verifyErrorMsg(errorMessage, 'Please enter your screen name.', 'blankImId', casper, function() {});
+								registerMethod.verifyErrorMsg(errorMessage, 'Please enter your screen name.', 'blankImId', casper, function(err) {
+									if(!err) {
+										casper.echo('Verified error message successfully', 'INFO');
+									}
+								});
 						} else {
 							casper.echo('IM-ID field doesn\'t exists..', 'ERROR');
-							casper.capture(screenShotsDir+ '44.png');
+							
 							var pageJson = JSON.parse(casper.getPageContent());
 							var message = pageJson.message;
 							casper.echo(message, 'INFO');
@@ -387,17 +402,19 @@ registerTests.blankBirthday = function() {
 		registerMethod.registerToApp(json['blankBirthday'], casper, function(err){
 			if(!err) {
 				casper.echo('register by leaving blank birthday and verify error message', 'INFO');
-				casper.capture(screenShotsDir+ '5.png');
 				wait.waitForElement('form[name="PostTopic"] input[name="birthDatepicker"]', casper, function(err, isExist){ 
 					if(!err){
 						if(isExist) {
 							var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="birthDatepicker"]', 'data-original-title');
 								errorMessage = errorMessage.trim();
 							if(errorMessage && errorMessage!= '')
-								registerMethod.verifyErrorMsg(errorMessage, 'Please enter birthday.', 'blankBirthday', casper, function() {});
+								registerMethod.verifyErrorMsg(errorMessage, 'Please enter birthday.', 'blankBirthday', casper, function(err) {
+									if(!err) {
+										casper.echo('Verified error message successfully', 'INFO');
+									}
+								});
 						} else {
 							casper.echo('Birthday field doesn\'t exists..', 'ERROR');
-							casper.capture(screenShotsDir+ '55.png');
 							var pageJson = JSON.parse(casper.getPageContent());
 							var message = pageJson.message;
 							casper.echo(message, 'INFO');
@@ -433,16 +450,18 @@ registerTests.invalidEmail = function() {
 		registerMethod.registerToApp(json['invalidEmail'], casper, function(err){
 			if(!err) {
 				casper.echo('register by invalid email and verify error message', 'INFO');
-				casper.capture(screenShotsDir+ '10.png');
 				wait.waitForElement('form[name="PostTopic"] input[name="email"]', casper, function(err, isExist){ 
 					if(!err){
 						if(isExist) {
 							var errorMessage = casper.getElementAttribute('form[name="PostTopic"] input[name="email"]', 'data-original-title');
 							errorMessage = errorMessage.trim();
 							if(errorMessage && errorMessage!= '')
-								registerMethod.verifyErrorMsg(errorMessage, 'You entered an invalid email address.', 'invalidEmail', casper, function() {});
+								registerMethod.verifyErrorMsg(errorMessage, 'You entered an invalid email address.', 'invalidEmail', casper, function(err) {
+									if(!err) {
+										casper.echo('Verified error message successfully', 'INFO');
+									}
+								});
 						} else {
-							casper.capture(screenShotsDir+ '1010.png');
 							var pageJson = JSON.parse(casper.getPageContent());
 							var message = pageJson.message;
 							casper.echo(message, 'INFO');
@@ -478,7 +497,6 @@ registerTests.blankSignature = function() {
 		registerMethod.registerToApp(json['blankSignature'], casper, function(err){
 			if(!err) {
 				casper.echo('register by leaving blank signature and verify error message', 'INFO');
-				//casper.capture(screenShotsDir+ '6.png');
 			}
 		});
 	});	
@@ -496,7 +514,6 @@ registerTests.existUsernameEmail= function() {
 		registerMethod.registerToApp(json['existUsernameEmail'], casper, function(err){
 			if(!err) {
 				casper.echo('register by existing username and email and verify error message', 'INFO');
-				casper.capture(screenShotsDir+ '9.png');
 				wait.waitForElement('#registerEditProfile div[role="alert"]', casper, function(err, isExist){ 
 					if(!err){
 						if(isExist) {
@@ -505,7 +522,6 @@ registerTests.existUsernameEmail= function() {
 							if(errorMessage && errorMessage!= '')
 								registerMethod.verifyErrorMsg(errorMessage, 'It looks like you already have a forum account! A forum account for that username and email address combination already exists!', 'existUsernameEmail', casper, function() {});
 						} else {
-							casper.capture(screenShotsDir+ '99.png');
 							var pageJson = JSON.parse(casper.getPageContent());
 							var message = pageJson.message;
 							casper.echo(message, 'INFO');
@@ -543,7 +559,11 @@ registerTests.validInfo= function() {
 		casper.echo('********************************************', 'INFO');
 		registerMethod.registerToApp(json['validInfo'], casper, function() {
 			casper.echo('Processing to registration on forum.....', 'INFO');
-			registerMethod.redirectToLogout(casper, casper.test, function() {});
+			registerMethod.redirectToLogout(casper, casper.test, function(err) {
+				if(!err) {
+					casper.echo('User logout successfully', 'INFO');
+				}
+			});
 		});
 	});
 }
