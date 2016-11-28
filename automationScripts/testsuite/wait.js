@@ -8,7 +8,7 @@ wait.waitForElement = function(element, driver, callback){
 		return callback(null, true);
 		}, function fail() {
 			driver.echo('Selector ' +element+ ' Not Found', 'ERROR');
-			return(null, false);
+			return callback(null, false);
 	});
 };
 

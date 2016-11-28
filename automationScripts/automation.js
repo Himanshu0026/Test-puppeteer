@@ -44,13 +44,25 @@ switch (feature) {
 			});
 		});
 	break;
-	
+    		
+	case "register":
+		casper.test.begin('REGISTRATION TEST', function(test) {
+			var forumRegister = require("./testsuite/main/register.js");
+			forumRegister.featureTest(casper, casper.test);
+			casper.run(function(){
+				test.done();
+				test.assert(true);
+			});
+		});
+	break;
+     
 	default:
 		casper.echo("Please select any feature from options given below. For ex: casperjs automation.js <option>.\n"); 
         	casper.echo("Options:");
 		casper.echo("login");
         	casper.echo("forgotPassword");
 		casper.echo("backEndRegistration");
+		casper.echo("register");
 		casper.exit();
 };
 

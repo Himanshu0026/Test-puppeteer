@@ -60,4 +60,3 @@ forumLoginMethod.verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTi
 	}
 	return callback(null);
 };
-
