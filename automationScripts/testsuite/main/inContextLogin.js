@@ -16,7 +16,12 @@ inContextLogin.featureTest = function(casper, test) {
 		//Incontext Login while Dislike this post from Topic page
 		inContextLoginTests.inContextLoginDisLikePostTopicPage();
 		//Incontext Login while Like this Topic from list of topics 
-		inContextLoginTests.inContextLoginLikeTopicHome();	
+		inContextLoginTests.inContextLoginLikeTopicHome();
+		//Verify Forgot Password link on InContext Login popup
+		inContextLoginTests.inContextLoginForgotpassword();
+		//inContext Login from vote on post from post list 
+		inContextLoginTests.inContextLoginVoteOnpost();	
+		inContextLoginTests.inContextLoginQuote();
 	});
 
 
