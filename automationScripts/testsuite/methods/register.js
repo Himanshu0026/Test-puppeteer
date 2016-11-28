@@ -1,49 +1,29 @@
 'use strict';
-var forumLoginMethod  = require('./login.js');
+var forumLoginMethod = require('../methods/login.js');
+var json = require('../../testdata/registerData.json');
+var wait = require('../wait.js');
+var utils = require('../utils.js');
 var registerMethod=module.exports = {};
-var screenShotsDir = config.screenShotsLocation + 'register/';
-var errorMessage = "";
 
 /************************************PRIVATE METHODS***********************************/
 
-// method for Login To Forum Back End
+//Login To Forum Back End
+
 registerMethod.loginToForumBackEnd = function(driver, test, callback) {
 		
 	//Click On Login Link 
-	try{
-		test.assertDoesntExist('a#navLogin');
-	}catch(e){
-	driver.then(function() {
-		driver.wait(7000, function(){
-			test.assertExists('a#navLogin');
-			this.click('a#navLogin');
-			this.echo('Successfully open login form.....', 'INFO');
-		});
-	});
-	
-	//Getting Screenshot After Clicking On 'Login' Link  
-	
-	driver.wait(7000, function() {
-		this.capture(screenShotsDir + 'login_form.png');
-	});
-	
-	//Filling Username/Password On Login Form
-	
-	driver.then(function() {
-		fillDataToLogin(config.backendCred, driver, function() {
-			driver.echo('Proccessing to login on forum back end....', 'INFO');
-			
-		});
-	});
-
-	//Getting Screenshot After Submitting 'Login' Form From Backend
-	
-	driver.wait(5000,function(){
-		this.capture(screenShotsDir + 'login_submit.png');
-	});
-	}
-	driver.then(function(){
-		return callback(null);
+	wait.waitForElement('a#navLogin', casper, function(err, isExist) {
+		if(isExist) {
+			driver.click('a#navLogin');
+			driver.echo('Successfully open login form.....', 'INFO');
+			fillDataToLogin(config.backendCred, driver, function(err) {
+				if (!err)
+					driver.echo('Proccessing to login on forum back end....', 'INFO');
+			});
+		} else {
+			driver.echo('Login Link Not Found', 'ERROR');
+		}
+		return callback(null)
 	});
 };
 
@@ -56,7 +36,7 @@ var fillDataToLogin = function(data, driver, callback) {
 	}, false);
 	driver.test.assertExists('form[name="frmLogin"] button');
 	driver.click('form[name="frmLogin"] button');
-	return callback();
+	return callback(null);
 };
 
 
@@ -123,8 +103,8 @@ registerMethod.registerToApp = function(data, driver, callback) {
 	return callback(null);		
 };
 
-
 //Method For Verifying Error Message On Registration Form After Submitting Form
+
 registerMethod.verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitle, driver, callback) {
 	driver.echo('Actual Error message : '+errorMessage, 'INFO');
 	driver.echo('Expected Error message : '+expectedErrorMsg, 'INFO');
@@ -136,8 +116,8 @@ registerMethod.verifyErrorMsg = function(errorMessage, expectedErrorMsg, msgTitl
 	return callback(null);
 };
 
+//Logout To Forum Front End
 
-//Method for Logout To Forum Front End
 registerMethod.redirectToLogout = function(driver, test, callback) {
 	try {
 		test.assertExists('div.bmessage');
@@ -148,31 +128,15 @@ registerMethod.redirectToLogout = function(driver, test, callback) {
 		driver.echo('Successfully done registration on forum.....', 'INFO');
 
 		//Clicking On 'Back To Category' Link 
-
-		driver.then(function() {
-			test.assertExists('a[href="/categories"]');
-			this.click('a[href="/categories"]');
-			this.echo('Successfully back to category', 'INFO');
-		});
-
-		//Getting Screenshot After Clicking On 'Back To Category' Link  
-
-		driver.wait(5000, function() {
-		        this.capture(screenShotsDir + 'backToCategory.png');
-		});
-
-		//Click On Logout Link
-
-		driver.then(function() {
-			forumLoginMethod .logoutFromApp(driver, function(){
-			driver.echo('Successfully logout from application', 'INFO');
-		});
-
-		//Getting Screenshot After Clicking On 'Logout' Link  
-
-		this.wait(5000, function() {
-		this.capture(screenShotsDir + 'logout.png');
-		});
+		wait.waitForElement('a[href="/categories"]', casper, function(err, isExist) {
+			if(isExist) {
+				driver.click('a[href="/categories"]');
+				driver.echo('Successfully back to category', 'INFO');
+				forumLoginMethod.logoutFromApp(driver, function(err) {
+				if (!err)
+					driver.echo('Successfully logout from application', 'INFO');
+				});
+			}
 		});
 	} catch(e) {
 		try {
@@ -184,15 +148,17 @@ registerMethod.redirectToLogout = function(driver, test, callback) {
 			return callback(null);
 		} catch(e1) {
 			driver.echo('Successfully done registration on forum.....', 'INFO');
+			
 			//Click On Logout Link
-			driver.then(function() {
-				forumLoginMethod .logoutFromApp(driver, function(){
-				      driver.echo('Successfully logout from application', 'INFO');
-				});
-				//Getting Screenshot After Clicking On 'Logout' Link  
-				this.wait(5000, function() {
-				      this.capture(screenShotsDir + 'logout.png');
-				});
+			wait.waitForElement('ul.nav.pull-right span.caret', casper, function(err, isExist) {
+			    if(isExist) {
+					forumLoginMethod.logoutFromApp(driver, function(err) {
+						if (!err)
+							driver.echo('Successfully logout from application', 'INFO');
+					});
+				}else{
+				  casper.echo('logout link not found');
+				}
 			});
 		}
 	}
