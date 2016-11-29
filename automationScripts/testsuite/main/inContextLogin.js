@@ -21,7 +21,10 @@ inContextLogin.featureTest = function(casper, test) {
 		inContextLoginTests.inContextLoginForgotpassword();
 		//inContext Login from vote on post from post list 
 		inContextLoginTests.inContextLoginVoteOnpost();	
+		//inContext Login from Quote on post from post list 
 		inContextLoginTests.inContextLoginQuote();
+		//inContext Login from Email button on Profile view screen of any user
+		inContextLoginTests.inContextLoginEmailButton();
 	});
 
 
