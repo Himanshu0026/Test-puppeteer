@@ -41,6 +41,7 @@ handler.on('push', function (event) {
 		commitDetails["commitId"] = commitPayload.id;
 		commitDetails["repositoryName"] = event.payload.repository.name;
 		commitDetails["ownerName"] = event.payload.repository.owner.name;
+		commitDetails["beta"] = config.beta;
 		commitDetails["commitMessage"] = commitPayload.message;
 		commitDetails["commitUrl"] = commitPayload.url;
 		commitDetails["committerName"] = commitPayload.committer.name;
