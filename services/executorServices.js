@@ -3,6 +3,7 @@
 require('shelljs/global');
 
 var fs = require('fs');
+var result;
 var mailServices = require('./mailServices.js');
 var createStatus = require('./createStatus.js');
 var executorServices = module.exports = {};
@@ -27,19 +28,18 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Program stderr:', stderr);
 			var testResult = stdout;
 			//var failTestResult = stderr;
-			if(stderr) {
+			if(stdout) {
 				var descriptionRes = 0;
-				console.log('stderr : '+stderr);
-				var failTestResult = stderr.split(' ');
+				var failTestResult = stdout.split(' ');
 				console.log('in is condition');
 				for(var i=0; i<failTestResult.length;i++) {
 					console.log('in for loop');
-					if(failTestResult[i+1]=='tests') {
-						console.log('no of failed test case : '+failTestResult[i]);
+					if(failTestResult[i+1]=='tests' && failTestResult[i-1] == 'FAIL') {
+						console.log('no of failed test case : '+failTestResult[i-1]);
 						descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
 					}
 				}
-				var result = descriptionRes;
+				result = descriptionRes;
 			}
 			var automationLogFile = '/etc/automation/log/automation.txt';
 			var failLogFile = '/etc/automation/log/fail.txt';
