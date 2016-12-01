@@ -43,7 +43,7 @@ executorServices.executeJob = function(commitDetails, callback){
 						if(commitDetails.beta == 0) {
 							if(fileSize != 0) {
 								var descriptionRes = 0;
-								var failTestResult = failTestResult.split(' ');
+								failTestResult = stderr.split(' ');
 								for(var i = 0; i < failTestResult.length; i++) {
 									if(failTestResult[i+1]=='tests') {
 										descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
