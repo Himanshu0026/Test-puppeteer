@@ -40,7 +40,7 @@ executorServices.executeJob = function(commitDetails, callback){
 						var fileSize = fileStat.size;
 						console.log("fail.txt size: "+fileSize);
 						console.log("beta value : "+commitDetails.beta);
-						if(commitDetails.beta == 0) {
+						if(commitDetails.beta == 0 && commitDetails.branchName == 'automation') {
 							if(fileSize != 0) {
 								var descriptionRes = 0;
 								failTestResult = stderr.split(' ');
