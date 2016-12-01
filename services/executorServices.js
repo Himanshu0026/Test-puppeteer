@@ -44,8 +44,9 @@ executorServices.executeJob = function(commitDetails, callback){
 							if(fileSize != 0) {
 								var descriptionRes = 0;
 								failTestResult = stderr.split(' ');
-								for(var i = 0; i < failTestResult.length; i++) {
+								for(var i=0; i<failTestResult.length;i++) {
 									if(failTestResult[i+1]=='tests') {
+										console.log('no of failed test case : '+failTestResult[i]);
 										descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
 									}
 								}
