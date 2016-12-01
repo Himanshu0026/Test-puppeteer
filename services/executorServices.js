@@ -44,7 +44,7 @@ executorServices.executeJob = function(commitDetails, callback){
 							if(fileSize != 0) {
 								var descriptionRes = 0;
 								var failTestResult = failTestResult.split(' ');
-								for(var i=0; i<failTestResult.length;i++) {
+								for(var i = 0; i < failTestResult.length; i++) {
 									if(failTestResult[i+1]=='tests') {
 										descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
 									}
@@ -86,7 +86,7 @@ executorServices.executeJob = function(commitDetails, callback){
 								return callback();
 							}
 						} else {
-							console.log('you are not allowed to set status of the branch.');
+							console.log('you are not allowed to set the status of the branch.');
 						}
 					}else{
 						return callback();
