@@ -45,7 +45,9 @@ executorServices.executeJob = function(commitDetails, callback){
 								var descriptionRes = 0;
 								console.log('stderr : '+stderr);
 								failTestResult = stderr.split(' ');
+								console.log('in is condition');
 								for(var i=0; i<failTestResult.length;i++) {
+									console.log('in for loop');
 									if(failTestResult[i+1]=='tests') {
 										console.log('no of failed test case : '+failTestResult[i]);
 										descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
@@ -53,6 +55,7 @@ executorServices.executeJob = function(commitDetails, callback){
 									var result = descriptionRes;
 								}
 								createStatus.failure(commitDetails, result, function(status) {
+									console.log('in createStatus');
 									console.log('state of failure : '+status);
 								});
 								//Adding test result with commit details
