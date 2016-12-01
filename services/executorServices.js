@@ -26,7 +26,21 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Program output:', stdout);
 			console.log('Program stderr:', stderr);
 			var testResult = stdout;
-			var failTestResult = stderr;
+			//var failTestResult = stderr;
+			if(stderr) {
+				var descriptionRes = 0;
+				console.log('stderr : '+stderr);
+				var failTestResult = stderr.split(' ');
+				console.log('in is condition');
+				for(var i=0; i<failTestResult.length;i++) {
+					console.log('in for loop');
+					if(failTestResult[i+1]=='tests') {
+						console.log('no of failed test case : '+failTestResult[i]);
+						descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
+					}
+				}
+				var result = descriptionRes;
+			}
 			var automationLogFile = '/etc/automation/log/automation.txt';
 			var failLogFile = '/etc/automation/log/fail.txt';
 			fs.stat(failLogFile, function(err, fileStat) {
@@ -42,18 +56,7 @@ executorServices.executeJob = function(commitDetails, callback){
 						console.log("beta value : "+commitDetails.beta);
 						if(commitDetails.beta == 0 && commitDetails.branchName == 'automation') {
 							if(fileSize != 0) {
-								var descriptionRes = 0;
-								console.log('stderr : '+stderr);
-								failTestResult = stderr.split(' ');
-								console.log('in is condition');
-								for(var i=0; i<failTestResult.length;i++) {
-									console.log('in for loop');
-									if(failTestResult[i+1]=='tests') {
-										console.log('no of failed test case : '+failTestResult[i]);
-										descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
-									}
-									var result = descriptionRes;
-								}
+								console.log('result : '+result);
 								createStatus.failure(commitDetails, result, function(status) {
 									console.log('in createStatus');
 									console.log('state of failure : '+status);
