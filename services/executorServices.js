@@ -33,6 +33,7 @@ executorServices.executeJob = function(commitDetails, callback){
 				var failTestResult = stdout.split(' ');
 				console.log('in is condition');
 				for(var i=0; i<failTestResult.length;i++) {
+					failTestResult[i-1] = failTestResult[i-1].replace(/\s/g, "");
 					console.log('no of failed test case : '+failTestResult[i-1]);
 					if(failTestResult[i+1]=='tests' && failTestResult[i-1] == 'FAIL') {
 						//console.log('no of failed test case : '+failTestResult[i-1]);
