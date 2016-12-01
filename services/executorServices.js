@@ -43,14 +43,15 @@ executorServices.executeJob = function(commitDetails, callback){
 						if(commitDetails.beta == 0 && commitDetails.branchName == 'automation') {
 							if(fileSize != 0) {
 								var descriptionRes = 0;
+								console.log('stderr : '+stderr);
 								failTestResult = stderr.split(' ');
 								for(var i=0; i<failTestResult.length;i++) {
 									if(failTestResult[i+1]=='tests') {
 										console.log('no of failed test case : '+failTestResult[i]);
 										descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
 									}
+									var result = descriptionRes;
 								}
-								var result = descriptionRes;
 								createStatus.failure(commitDetails, result, function(status) {
 									console.log('state of failure : '+status);
 								});
