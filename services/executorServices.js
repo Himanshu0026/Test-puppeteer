@@ -52,7 +52,7 @@ executorServices.executeJob = function(commitDetails, callback){
 						console.log("beta value : "+commitDetails.beta);
 						console.log("branch : "+commitDetails.branchName);
 							if(fileSize != 0) {
-								if(commitDetails.beta == 0 && commitDetails.branchName == 'automation') {
+								if(commitDetails.beta == 0) {
 									createStatus.failure(commitDetails, result, function(status) {
 										console.log('state of failure : '+status);
 									});
