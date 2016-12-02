@@ -32,7 +32,7 @@ executorServices.executeJob = function(commitDetails, callback){
 				var failTestResult = stdout.split(' ');
 				for(var i=0; i<failTestResult.length;i++) {
 					if(failTestResult[i+1]=='tests'  && failTestResult[i+7]!=0) {
-						descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
+						descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i+7]);
 					}
 				}
 				result = descriptionRes;
