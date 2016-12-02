@@ -61,9 +61,6 @@ sleep 1
 #casperjs test ./automationScripts/automation.js --feature=forumListingPageForSubCategory >> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1
 cat "$AUTOMATION_HOME"/log/automation.txt | grep FAIL > "$AUTOMATION_HOME"/log/fail.txt 
-echo "Enter a file name"
-read filename
-import -window root $HOME/Desktop/$filename.png
 cat "$AUTOMATION_HOME"/log/automation.txt | grep -i "tests execut" > "$AUTOMATION_HOME"/log/result.txt
 cat "$AUTOMATION_HOME"/log/result.txt
 rm "$AUTOMATION_HOME"/log/result.txt
