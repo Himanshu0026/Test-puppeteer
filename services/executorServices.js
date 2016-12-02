@@ -51,36 +51,37 @@ executorServices.executeJob = function(commitDetails, callback){
 						console.log("fail.txt size: "+fileSize);
 						console.log("beta value : "+commitDetails.beta);
 						console.log("branch : "+commitDetails.branchName);
-						if(commitDetails.beta == 0 && commitDetails.branchName == 'automation') {
 							if(fileSize != 0) {
-								console.log('result : '+result);
-								createStatus.failure(commitDetails, result, function(status) {
-									console.log('in createStatus');
-									console.log('state of failure : '+status);
-								});
-								//Adding test result with commit details
-								commitDetails['testResult'] = testResult;
-								//Addling log files as attachments
-								commitDetails['attachments'] = [
-									{   
-								    		path: automationLogFile
-									},
-									{   
-								    		path: failLogFile
-									}
-								];
-								//initiating mail sending to committer
-								mailServices.sendMail(commitDetails, function(err){
-									if(err)
-										console.error("error occurred while sending email: "+err);
-									else
-										console.log("Mail sent successfully.");
-									//Deleting commit specific log files
-									fs.unlinkSync(automationLogFile);
-									fs.unlinkSync(failLogFile);
-									console.log("Commit specific log files deleted.");
-									return callback();
-								});
+								if(commitDetails.beta == 0 && commitDetails.branchName == 'automation') {
+									createStatus.failure(commitDetails, result, function(status) {
+										console.log('state of failure : '+status);
+									});
+									//Adding test result with commit details
+									commitDetails['testResult'] = testResult;
+									//Addling log files as attachments
+									commitDetails['attachments'] = [
+										{   
+									    		path: automationLogFile
+										},
+										{   
+									    		path: failLogFile
+										}
+									];
+									//initiating mail sending to committer
+									mailServices.sendMail(commitDetails, function(err){
+										if(err)
+											console.error("error occurred while sending email: "+err);
+										else
+											console.log("Mail sent successfully.");
+										//Deleting commit specific log files
+										fs.unlinkSync(automationLogFile);
+										fs.unlinkSync(failLogFile);
+										console.log("Commit specific log files deleted.");
+										return callback();
+									});
+								} else {
+									console.log('you are not allowed to set the status of the branch.');
+								}
 							}else{	
 								createStatus.success(commitDetails, function(status) {
 									console.log('state of success : '+status);
@@ -90,9 +91,6 @@ executorServices.executeJob = function(commitDetails, callback){
 								fs.unlinkSync(failLogFile);
 								return callback();
 							}
-						} else {
-							console.log('you are not allowed to set the status of the branch.');
-						}
 					}else{
 						return callback();
 					}
