@@ -27,19 +27,11 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Program output:', stdout);
 			console.log('Program stderr:', stderr);
 			var testResult = stdout;
-			//var failTestResult = stderr;
 			if(stdout) {
 				var descriptionRes = 0;
 				var failTestResult = stdout.split(' ');
 				for(var i=0; i<failTestResult.length;i++) {
-					//failTestResult[i-1] = String(failTestResult[i-1]);
-					var fail = failTestResult[i-1];
-					fail = fail.toString();
-					fail = fail.trim();
-					if(failTestResult[i+1]=='tests') {
-						//var fail = failTestResult[i-1];
-						console.log('value ::::::::::: '+fail);
-						console.log('no of failed test case : '+failTestResult[i-1]);
+					if(failTestResult[i+1]=='tests'  && failTestResult[i+7]!=0) {
 						descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
 					}
 				}
