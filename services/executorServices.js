@@ -31,12 +31,12 @@ executorServices.executeJob = function(commitDetails, callback){
 			if(stdout) {
 				var descriptionRes = 0;
 				var failTestResult = stdout.split(' ');
-				console.log('in is condition');
 				for(var i=0; i<failTestResult.length;i++) {
-					failTestResult[i-1] = String(failTestResult[i-1]);
-					var fail = failTestResult[i-1].trim();
-					if(failTestResult[i+1]=='tests' && fail == 'FAIL') {
-						//console.log('no of failed test case : '+failTestResult[i-1]);
+					//failTestResult[i-1] = String(failTestResult[i-1]);
+					var fail = (failTestResult[i-1]).substring(20, 4);
+					if(failTestResult[i+1]=='tests') {
+						console.log('value ::::::::::: '+fail);
+						console.log('no of failed test case : '+failTestResult[i-1]);
 						descriptionRes = parseInt(descriptionRes)+parseInt(failTestResult[i]);
 					}
 				}
