@@ -99,7 +99,7 @@ executorServices.executeJob = function(commitDetails, callback){
 												return callback();
 											});
 										//}								
-									});
+									//});
 								} else {
 									console.log('you are not allowed to set the status of the branch.');
 								}
