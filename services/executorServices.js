@@ -6,6 +6,7 @@ var fs = require('fs');
 var result;
 var mailServices = require('./mailServices.js');
 var createStatus = require('./createStatus.js');
+var removeDir = require('./removeDir.js');
 var executorServices = module.exports = {};
 
 //It executes job. Take job details as argument, executed the job and initiates mail sending.
@@ -19,6 +20,9 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Error: gitdeploy.sh failed');
 			return callback();
 		}
+		
+		//Removing Old ScreenShots
+		removeDir.deleteFolderRecursive('../automationScripts/failedScreenshots');
 		
 		//Executing automation test script
 		console.log("Executing Automation script");

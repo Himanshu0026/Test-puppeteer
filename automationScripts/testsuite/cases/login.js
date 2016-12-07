@@ -5,7 +5,20 @@ var forumLoginMethod = require('../methods/login.js');
 var forumLoginTests = module.exports = {};
 var wait=require('../wait.js');
 var errorMessage = "";
+forumLoginMethod.failedErrors = [];
+var count = 1;
 
+var failedScreenShotsLocation = config.failedScreenShotsLocation+'forumLogin/'
+
+//Method to Capture Screenshot And Store The URL Of Failed test Case
+casper.test.on('fail', function(failure) {
+	forumLoginMethod.failedErrors.push(failure);
+	casper.echo('Errors : '+JSON.stringify(failure), 'INFO');
+	forumLoginMethod.failedErrors.push(casper.getCurrentUrl());
+	casper.echo('current url : '+casper.getCurrentUrl(), 'INFO');
+	casper.capture(failedScreenShotsLocation+'forumLoginCasesError'+count+'.png');
+	count++;
+});
 
 //Test case for login to application with valid valid username and password then logout from application
 forumLoginTests.validCredential=function(){
