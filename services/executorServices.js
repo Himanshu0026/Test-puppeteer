@@ -49,7 +49,7 @@ executorServices.executeJob = function(commitDetails, callback){
 			}
 			var automationLogFile = '/etc/automation/log/automation.txt';
 			var failLogFile = '/etc/automation/log/fail.txt';
-			var failedScreenShot = '../automationScripts/failedScreenshots/forgotPassword/forgotPasswordError1.png';
+			var failedScreenShot = '../automationScripts/forgotPasswordError1.png';
 			fs.stat(failLogFile, function(err, fileStat) {
 				if (err) {
 					if (err.code == 'ENOENT') {
@@ -116,7 +116,7 @@ executorServices.executeJob = function(commitDetails, callback){
 										}
 									];
 									//initiating mail sending to committer
-									fs.readdir("../automationScripts/failedScreenshots", function (err, data) {
+									fs.readdir("../automationScripts", function (err, data) {
 										if(err) {
 											console.error("error occurred while reading directory: "+err);
 										}else {
