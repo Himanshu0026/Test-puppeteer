@@ -116,7 +116,7 @@ executorServices.executeJob = function(commitDetails, callback){
 										}
 									];
 									//initiating mail sending to committer
-									fs.readdir("../automationScripts", function (err, data) {
+									fs.readdir("./automationScripts", function (err, data) {
 										if(err) {
 											console.error("error occurred while reading directory: "+err);
 										}else {
