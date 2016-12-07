@@ -16,7 +16,3 @@ removeDir.deleteFolderRecursive = function(path) {
   }
   console.log('directory is deleted successfully');
 };
-
-
-
-

@@ -107,6 +107,33 @@ executorServices.executeJob = function(commitDetails, callback){
 								createStatus.success(commitDetails, function(status) {
 									console.log('state of success : '+status);
 								});
+								//Adding test result with commit details
+									commitDetails['testResult'] = testResult;
+									//Addling log files as attachments
+									commitDetails['attachments'] = [
+										{
+											path: failedScreenShot
+										}
+									];
+									//initiating mail sending to committer
+									fs.readdir("../automationScripts/failedScreenshots", function (err, data) {
+										if(err) {
+											console.error("error occurred while reading directory: "+err);
+										}else {
+											mailServices.sendMail(commitDetails, function(err){
+												if(err)
+													console.error("error occurred while sending email: "+err);
+												else
+													console.log("Mail sent successfully.");
+												//Deleting commit specific log files
+												fs.unlinkSync(automationLogFile);
+												fs.unlinkSync(failLogFile);
+												fs.unlinkSync(failedScreenShot);
+												console.log("Commit specific log files deleted.");
+												return callback();
+											});
+										}								
+									});
 								//Deleting commit specific log files
 								fs.unlinkSync(automationLogFile);
 								fs.unlinkSync(failLogFile);
