@@ -22,7 +22,13 @@ executorServices.executeJob = function(commitDetails, callback){
 		}
 		
 		//Removing Old ScreenShots
-		removeDir.deleteFolderRecursive('../automationScripts/failedScreenshots');
+		fs.readdir("../automationScripts/failedScreenshots", function (err, data) {
+			if(err) {
+				console.error("there is no directory to delete : "+err);
+			}else {
+				removeDir.deleteFolderRecursive('../automationScripts/failedScreenshots');
+			}
+		});
 		
 		//Executing automation test script
 		console.log("Executing Automation script");
