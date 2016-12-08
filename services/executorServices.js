@@ -21,15 +21,6 @@ executorServices.executeJob = function(commitDetails, callback){
 			return callback();
 		}
 		
-		//Removing Old ScreenShots
-		fs.readdir("../automationScripts/failedScreenshots", function (err, data) {
-			if(err) {
-				console.error("there is no directory to delete : "+err);
-			}else {
-				removeDir.deleteFolderRecursive('../automationScripts/failedScreenshots');
-			}
-		});
-		
 		//Executing automation test script
 		console.log("Executing Automation script");
 		exec("/etc/automation/bin/automation.sh", function(code, stdout, stderr) {
@@ -49,7 +40,6 @@ executorServices.executeJob = function(commitDetails, callback){
 			}
 			var automationLogFile = '/etc/automation/log/automation.txt';
 			var failLogFile = '/etc/automation/log/fail.txt';
-			var failedScreenShot = '../automationScripts/forgotPasswordError1.png';
 			fs.stat(failLogFile, function(err, fileStat) {
 				if (err) {
 					if (err.code == 'ENOENT') {
@@ -76,9 +66,6 @@ executorServices.executeJob = function(commitDetails, callback){
 										},
 										{   
 									    		path: failLogFile
-										},
-										{
-											path: failedScreenShot
 										}
 									];
 									//initiating mail sending to committer
