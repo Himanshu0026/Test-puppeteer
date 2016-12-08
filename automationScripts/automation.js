@@ -55,6 +55,16 @@ switch (feature) {
 			});
 		});
 	break;
+	
+	case "inContextLogin":
+		casper.test.begin('Verify inContext Login functionlity',function(test){
+			var inContextLogin=require("./testsuite/main/inContextLogin.js");
+			inContextLogin.featureTest(casper,casper.test);
+			casper.run(function(){
+				test.done();
+			});
+		});
+	break;
      
 	default:
 		casper.echo("Please select any feature from options given below. For ex: casperjs automation.js <option>.\n"); 
@@ -63,6 +73,7 @@ switch (feature) {
         	casper.echo("forgotPassword");
 		casper.echo("backEndRegistration");
 		casper.echo("register");
+		casper.echo("inContextLogin");
 		casper.exit();
 };
 
