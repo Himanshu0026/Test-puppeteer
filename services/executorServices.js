@@ -108,7 +108,6 @@ executorServices.executeJob = function(commitDetails, callback){
 											//Deleting commit specific log files
 											fs.unlinkSync(automationLogFile);
 											fs.unlinkSync(failLogFile);
-											fs.unlinkSync(failedScreenShot);
 											console.log("Commit specific log files deleted.");
 											return callback();
 										});	
