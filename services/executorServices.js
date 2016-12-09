@@ -88,10 +88,37 @@ executorServices.executeJob = function(commitDetails, callback){
 								createStatus.success(commitDetails, function(status) {
 									console.log('state of success : '+status);
 								});
+								var path = '../automationScripts/failedScreenshots';
+								fs.readdir(path, function (err, data) {
+									if(err) {
+										console.error("Error : "+err);
+									}else {
+										var imagePath = '../automationScripts/failedScreenshots/error1.png';
+										commitDetails['attachments'] = [
+											{   
+										    		path: imagePath
+											}
+										];
+										mailServices.sendMail(commitDetails, function(err){
+											if(err)
+												console.error("error occurred while sending email: "+err);
+											else
+												console.log("Mail sent successfully.");
+											//Deleting commit specific log files
+											fs.unlinkSync(automationLogFile);
+											fs.unlinkSync(failLogFile);
+											fs.unlinkSync(failedScreenShot);
+											console.log("Commit specific log files deleted.");
+											return callback();
+										});	
+									}
+								});
+								//initiating mail sending to committer
+								
 								//Deleting commit specific log files
-								fs.unlinkSync(automationLogFile);
-								fs.unlinkSync(failLogFile);
-								return callback();
+								//fs.unlinkSync(automationLogFile);
+								//fs.unlinkSync(failLogFile);
+								//return callback();
 							}
 					}else{
 						return callback();
