@@ -6,7 +6,6 @@ var fs = require('fs');
 var result;
 var mailServices = require('./mailServices.js');
 var createStatus = require('./createStatus.js');
-var attachmentServices = require('./attachmentServices.js');
 var executorServices = module.exports = {};
 
 //It executes job. Take job details as argument, executed the job and initiates mail sending.
@@ -20,13 +19,6 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Error: gitdeploy.sh failed');
 			return callback();
 		}
-		/*fs.readdir('/etc/automation/automationScripts/failedScreenshots', function (err, data) {
-			if(err) {
-				console.error("Error : "+err);
-			}else {
-				attachmentServices.deleteFolderRecursive('/etc/automation/automationScripts/failedScreenshots');
-			}
-		});*/
 		//Executing automation test script
 		console.log("Executing Automation script");
 		exec("/etc/automation/bin/automation.sh", function(code, stdout, stderr) {
@@ -74,27 +66,18 @@ executorServices.executeJob = function(commitDetails, callback){
 									    		path: failLogFile
 										}
 									];
-									var path = '/etc/automation/automationScripts/failedScreenshots';
-									fs.readdir(path, function (err, data) {
-										if(err) {
-											console.error(err);
-										}else {
-											attachmentServices.addAttachments(path, commitDetails, function(commitDetails) {
-												console.log('attachments added successfully');
-												//initiating mail sending to committer
-												mailServices.sendMail(commitDetails, function(err){
-													if(err)
-														console.error("error occurred while sending email: "+err);
-													else
-														console.log("Mail sent successfully.");
-													//Deleting commit specific log files
-													fs.unlinkSync(automationLogFile);
-													fs.unlinkSync(failLogFile);
-													console.log("Commit specific log files deleted.");
-													return callback();
-												});
-											});
-										}
+									//initiating mail sending to committer
+									mailServices.sendMail(commitDetails, function(err){
+										if(err)
+											console.error("error occurred while sending email: "+err);
+										else
+											console.log("Mail sent successfully.");
+											
+											//Deleting commit specific log files
+											fs.unlinkSync(automationLogFile);
+											fs.unlinkSync(failLogFile);
+											console.log("Commit specific log files deleted.");
+											return callback();
 									});
 								} else {
 									console.log('you are not allowed to set the status of the branch.');
@@ -103,43 +86,11 @@ executorServices.executeJob = function(commitDetails, callback){
 								createStatus.success(commitDetails, function(status) {
 									console.log('state of success : '+status);
 								});
-								//Adding test result with commit details
-								commitDetails['testResult'] = testResult;
-								//Addling log files as attachments
-								commitDetails['attachments'] = [
-									{   
-								    		path: automationLogFile
-									},
-									{   
-								    		path: failLogFile
-									}
-								];
-								var path = '/etc/automation/automationScripts/failedScreenshots';
-								fs.readdir(path, function (err, data) {
-									if(err) {
-										console.error(err);
-									}else {
-										attachmentServices.addAttachments(path, commitDetails, function(commitDetails) {
-											console.log('attachments added successfully');
-											//initiating mail sending to committer
-											mailServices.sendMail(commitDetails, function(err){
-												if(err)
-													console.error("error occurred while sending email: "+err);
-												else
-													console.log("Mail sent successfully.");
-												//Deleting commit specific log files
-												fs.unlinkSync(automationLogFile);
-												fs.unlinkSync(failLogFile);
-												console.log("Commit specific log files deleted.");
-												return callback();
-											});
-										});
-									}
-								});
+								
 								//Deleting commit specific log files
-								//fs.unlinkSync(automationLogFile);
-								//fs.unlinkSync(failLogFile);
-								//return callback();
+								fs.unlinkSync(automationLogFile);
+								fs.unlinkSync(failLogFile);
+								return callback();
 							}
 					}else{
 						return callback();
