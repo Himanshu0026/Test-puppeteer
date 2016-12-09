@@ -1,6 +1,6 @@
 'use strict';
 var fs = require('fs');
-var removeDir = module.exports = {};
+var attachmentServices = module.exports = {};
 var commitDetails = {};
 //Method to Delete Old Directory
 attachmentServices.deleteFolderRecursive = function(path) {
@@ -11,7 +11,7 @@ attachmentServices.deleteFolderRecursive = function(path) {
 				// recurse
 				attachmentServices.deleteFolderRecursive(curPath);
 			} else { 
-				// delete file
+				// Delete File
 				console.log('deleting file : '+curPath);
 				fs.unlinkSync(curPath);
 			}
@@ -25,8 +25,8 @@ attachmentServices.deleteFolderRecursive = function(path) {
 attachmentServices.addAttachments = function(dirPath, commitDetails, callback) {
 	console.log('directory path : '+dirPath);
 	if( fs.existsSync(dirPath) ) {
-		fs.readdirSync(path).forEach(function(file,index){
-			var curPath = path + "/" + file;
+		fs.readdirSync(dirPath).forEach(function(file,index){
+			var curPath = dirPath + "/" + file;
 			if(fs.lstatSync(curPath).isDirectory()) { 
 				// recurse
 				attachmentServices.addAttachments(curPath);
