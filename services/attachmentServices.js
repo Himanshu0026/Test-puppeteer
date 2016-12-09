@@ -2,9 +2,8 @@
 var fs = require('fs');
 var attachmentServices = module.exports = {};
 var commitDetails = {};
-var path = '../automationScripts/failedScreenshots';
 //Method to Delete Old Directory
-attachmentServices.deleteFolderRecursive = function() {
+attachmentServices.deleteFolderRecursive = function(path) {
 	if( fs.existsSync(path) ) {
 		fs.readdirSync(path).forEach(function(file,index){
 			var curPath = path + "/" + file;

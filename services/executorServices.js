@@ -20,13 +20,13 @@ executorServices.executeJob = function(commitDetails, callback){
 			console.log('Error: gitdeploy.sh failed');
 			return callback();
 		}
-		/*fs.readdir('/etc/automation/automationScripts/failedScreenshots', function (err, data) {
+		fs.readdir('/etc/automation/automationScripts/failedScreenshots', function (err, data) {
 			if(err) {
 				console.error("Error : "+err);
 			}else {
-				attachmentServices.deleteFolderRecursive();
+				attachmentServices.deleteFolderRecursive('../automationScripts/failedScreenshots/forgotPassword');
 			}
-		});*/
+		});
 		//Executing automation test script
 		console.log("Executing Automation script");
 		exec("/etc/automation/bin/automation.sh", function(code, stdout, stderr) {
