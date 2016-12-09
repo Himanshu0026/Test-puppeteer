@@ -21,15 +21,6 @@ executorServices.executeJob = function(commitDetails, callback){
 			return callback();
 		}
 		
-		//Removing Old ScreenShots
-		fs.readdir("../automationScripts/failedScreenshots", function (err, data) {
-			if(err) {
-				console.error("there is no directory to delete : "+err);
-			}else {
-				removeDir.deleteFolderRecursive('../automationScripts/failedScreenshots');
-			}
-		});
-		
 		//Executing automation test script
 		console.log("Executing Automation script");
 		exec("/etc/automation/bin/automation.sh", function(code, stdout, stderr) {
@@ -49,7 +40,6 @@ executorServices.executeJob = function(commitDetails, callback){
 			}
 			var automationLogFile = '/etc/automation/log/automation.txt';
 			var failLogFile = '/etc/automation/log/fail.txt';
-			var failedScreenShot = '../automationScripts/forgotPasswordError1.png';
 			fs.stat(failLogFile, function(err, fileStat) {
 				if (err) {
 					if (err.code == 'ENOENT') {
@@ -76,30 +66,21 @@ executorServices.executeJob = function(commitDetails, callback){
 										},
 										{   
 									    		path: failLogFile
-										},
-										{
-											path: failedScreenShot
 										}
 									];
 									//initiating mail sending to committer
-									//fs.readdir("../automationScripts/failedScreenshots", function (err, data) {
-										//if(err) {
-											//console.error("error occurred while reading directory: "+err);
-										//}else {
-											mailServices.sendMail(commitDetails, function(err){
-												if(err)
-													console.error("error occurred while sending email: "+err);
-												else
-													console.log("Mail sent successfully.");
-												//Deleting commit specific log files
-												fs.unlinkSync(automationLogFile);
-												fs.unlinkSync(failLogFile);
-												fs.unlinkSync(failedScreenShot);
-												console.log("Commit specific log files deleted.");
-												return callback();
-											});
-										//}								
-									//});
+									mailServices.sendMail(commitDetails, function(err){
+										if(err)
+											console.error("error occurred while sending email: "+err);
+										else
+											console.log("Mail sent successfully.");
+										//Deleting commit specific log files
+										fs.unlinkSync(automationLogFile);
+										fs.unlinkSync(failLogFile);
+										fs.unlinkSync(failedScreenShot);
+										console.log("Commit specific log files deleted.");
+										return callback();
+									});
 								} else {
 									console.log('you are not allowed to set the status of the branch.');
 								}
@@ -107,10 +88,37 @@ executorServices.executeJob = function(commitDetails, callback){
 								createStatus.success(commitDetails, function(status) {
 									console.log('state of success : '+status);
 								});
+								var path = '../automationScripts/failedScreenshots';
+								fs.readdir(path, function (err, data) {
+									if(err) {
+										console.error("Error : "+err);
+									}else {
+										var imagePath = '../automationScripts/failedScreenshots/error1.png';
+										commitDetails['attachments'] = [
+											{   
+										    		path: imagePath
+											}
+										];
+										mailServices.sendMail(commitDetails, function(err){
+											if(err)
+												console.error("error occurred while sending email: "+err);
+											else
+												console.log("Mail sent successfully.");
+											//Deleting commit specific log files
+											fs.unlinkSync(automationLogFile);
+											fs.unlinkSync(failLogFile);
+											fs.unlinkSync(failedScreenShot);
+											console.log("Commit specific log files deleted.");
+											return callback();
+										});	
+									}
+								});
+								//initiating mail sending to committer
+								
 								//Deleting commit specific log files
-								fs.unlinkSync(automationLogFile);
-								fs.unlinkSync(failLogFile);
-								return callback();
+								//fs.unlinkSync(automationLogFile);
+								//fs.unlinkSync(failLogFile);
+								//return callback();
 							}
 					}else{
 						return callback();

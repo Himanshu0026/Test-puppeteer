@@ -4,20 +4,6 @@
 var forumLoginMethod = require('./login.js');
 var forgotPasswordMethod = module.exports = {};
 forgotPasswordMethod.failedErrors = [];
-var count = 1;
-
-var failedScreenShotsLocation = config.failedScreenShotsLocation+'forgotPassword/'
-
-//Method to Capture Screenshot And Store The URL Of Failed test Case
-casper.test.on('fail', function(failure) {
-	forgotPasswordMethod.failedErrors.push(failure);
-	casper.echo('Errors : '+JSON.stringify(failure), 'INFO');
-	forgotPasswordMethod.failedErrors.push(casper.getCurrentUrl());
-	casper.echo('current url : '+casper.getCurrentUrl(), 'INFO');
-	casper.capture(failedScreenShotsLocation+'forgotPasswordError'+count+'.png');
-	count++;
-});
-
 
 //method to send forgot password request after filling username/email form
 forgotPasswordMethod.forgotPassword = function(username, email, driver, callback) {
