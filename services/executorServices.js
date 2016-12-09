@@ -40,6 +40,7 @@ executorServices.executeJob = function(commitDetails, callback){
 			}
 			var automationLogFile = '/etc/automation/log/automation.txt';
 			var failLogFile = '/etc/automation/log/fail.txt';
+			var imagePath = '/etc/automation/automationScripts/failedScreenshots/error1.png';
 			fs.stat(failLogFile, function(err, fileStat) {
 				if (err) {
 					if (err.code == 'ENOENT') {
@@ -88,12 +89,12 @@ executorServices.executeJob = function(commitDetails, callback){
 								createStatus.success(commitDetails, function(status) {
 									console.log('state of success : '+status);
 								});
-								var path = '../automationScripts/failedScreenshots';
+								var path = '/etc/automation/automationScripts/failedScreenshots';
 								fs.readdir(path, function (err, data) {
 									if(err) {
-										console.error("Error : "+err);
+										console.error(err);
 									}else {
-										var imagePath = '../automationScripts/failedScreenshots/error1.png';
+										//var imagePath = '../automationScripts/failedScreenshots/error1.png';
 										commitDetails['attachments'] = [
 											{   
 										    		path: imagePath
