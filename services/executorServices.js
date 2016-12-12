@@ -25,7 +25,7 @@ executorServices.executeJob = function(commitDetails, callback){
 			if(err) {
 				console.error("Error : "+err);
 			}else {
-				attachmentServices.deleteFolderRecursive('../automationScripts/failedScreenshots');
+				attachmentServices.deleteFolderRecursive('project/QA-automation/automationScripts/failedScreenshots');
 			}
 		});
 		//Executing automation test script

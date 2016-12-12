@@ -4,7 +4,9 @@ var attachmentServices = module.exports = {};
 var commitDetails = {};
 //Method to Delete Old Directory
 attachmentServices.deleteFolderRecursive = function(path) {
+	console.log('directory path : '+path);
 	if( fs.existsSync(path) ) {
+		console.log('path exists : '+path);
 		fs.readdirSync(path).forEach(function(file,index){
 			var curPath = path + "/" + file;
 			if(fs.lstatSync(curPath).isDirectory()) { 
