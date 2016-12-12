@@ -13,7 +13,6 @@ attachmentServices.deleteFolderRecursive = function(path) {
 			} else { 
 				// Delete File
 				console.log('deleting file : '+curPath);
-				fs.chmodSync(curPath, '0777');
 				fs.unlinkSync(curPath);
 			}
 		});
