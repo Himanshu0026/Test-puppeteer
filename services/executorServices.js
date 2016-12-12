@@ -25,7 +25,7 @@ executorServices.executeJob = function(commitDetails, callback){
 			if(err) {
 				console.error("Error : "+err);
 			}else {
-				attachmentServices.deleteFolderRecursive('project/QA-automation/automationScripts/failedScreenshots');
+				attachmentServices.deleteFolderRecursive('/home/hotam/project/QA-automation/automationScripts/failedScreenshots');
 			}
 		});
 		//Executing automation test script
