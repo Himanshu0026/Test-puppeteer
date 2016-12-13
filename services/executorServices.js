@@ -22,11 +22,11 @@ executorServices.executeJob = function(commitDetails, callback){
 		}
 		
 		//Deleting Old Directory That Contains Screenshots
-		fs.readdir('/var/tmp/failedScreenshots', function (err, data) {
+		fs.readdir('/var/tmp/failedScreenshots/', function (err, data) {
 			if(err) {
 				console.error("Error : "+err);
 			}else {
-				attachmentServices.deleteFolderRecursive('/var/tmp/failedScreenshots');
+				attachmentServices.deleteFolderRecursive('/var/tmp/failedScreenshots/');
 			}
 		});
 		

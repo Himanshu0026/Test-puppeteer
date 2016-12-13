@@ -36,7 +36,7 @@ forgotPasswordTestcases.validUsername = function() {
 									
 									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExists) {
 										if(isExists) {
-											casper.click('small a[href="/categories."]');
+											casper.click('small a[href="/categories"]');
 										} else {
 											casper.echo('Categories not found','INFO');
 										}
@@ -75,7 +75,7 @@ forgotPasswordTestcases.validEmail = function() {
 										casper.test.assert(ActualMessage.indexOf(json['validEmailid'].ExpectedMessage) > -1,'Same as expected message');
 										wait.waitForElement('small a[href="/categories"]', casper, function(err, isExists) {
 											if(isExists) {
-												casper.click('small a[href="/categories."]');
+												casper.click('small a[href="/categories"]');
 											} else {
 												casper.echo('Categories not found','INFO');
 											}
