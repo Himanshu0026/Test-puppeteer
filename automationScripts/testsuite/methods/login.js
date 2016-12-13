@@ -2,8 +2,16 @@
 'use strict';
 var forumLoginMethod = module.exports = {};
 var wait=require('../wait.js');
+var config = require('../../../config/config.json');
 var errorMessage = "";
-forumLoginMethod.failedErrors = [];
+var count = 1;
+var failedScreenshotsLocation = config.failedScreenShotsLocation+'login/';
+
+//Method To capture Screenshots If Any Test Case Failed
+casper.test.on('fail', function(failure) {
+	casper.capture(failedScreenshotsLocation+'loginMethodError'+count+'.png');
+	count++;
+});
 
 // method for login to application by passing username and password
 forumLoginMethod.loginToApp = function(username, password, driver, callback) {

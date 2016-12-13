@@ -7,7 +7,14 @@ var  forgotPasswordMethod = require('../methods/forgotPassword.js');
 var wait = require('../wait.js');
 var forgotPasswordTestcases = module.exports = {};
 var ActualMessage="";
-forgotPasswordMethod.failedErrors = [];
+var count = 1;
+var failedScreenshotsLocation = config.failedScreenShotsLocation+'forgotPassword/';
+ 
+//Method To capture Screenshots If Any Test Case Failed
+casper.test.on('fail', function(failure) {
+	casper.capture(failedScreenshotsLocation+'forgotPasswordCasesError'+count+'.png');
+	count++;
+});
 
 //method to test the Reset password with valid username functionality --Test case 1
 forgotPasswordTestcases.validUsername = function() {
