@@ -7,7 +7,14 @@ var  forgotPasswordMethod = require('../methods/forgotPassword.js');
 var wait = require('../wait.js');
 var forgotPasswordTestcases = module.exports = {};
 var ActualMessage="";
-forgotPasswordMethod.failedErrors = [];
+var count = 1;
+var failedScreenshotsLocation = config.failedScreenShotsLocation+'forgotPassword/';
+ 
+//Method To capture Screenshots If Any Test Case Failed
+casper.test.on('fail', function(failure) {
+	casper.capture(failedScreenshotsLocation+'forgotPasswordCasesError'+count+'.png');
+	count++;
+});
 
 //method to test the Reset password with valid username functionality --Test case 1
 forgotPasswordTestcases.validUsername = function() {
@@ -29,7 +36,7 @@ forgotPasswordTestcases.validUsername = function() {
 									
 									wait.waitForElement('small a[href="/categories"]', casper, function(err, isExists) {
 										if(isExists) {
-											casper.click('small a[href="/categories"]');
+											casper.click('small a[href="/categories."]');
 										} else {
 											casper.echo('Categories not found','INFO');
 										}
@@ -68,7 +75,7 @@ forgotPasswordTestcases.validEmail = function() {
 										casper.test.assert(ActualMessage.indexOf(json['validEmailid'].ExpectedMessage) > -1,'Same as expected message');
 										wait.waitForElement('small a[href="/categories"]', casper, function(err, isExists) {
 											if(isExists) {
-												casper.click('small a[href="/categories"]');
+												casper.click('small a[href="/categories."]');
 											} else {
 												casper.echo('Categories not found','INFO');
 											}
