@@ -7,6 +7,7 @@ var result;
 var mailServices = require('./mailServices.js');
 var createStatus = require('./createStatus.js');
 var attachmentServices = require('./attachmentServices.js');
+var path = '/var/tmp/failedScreenshots/';
 var executorServices = module.exports = {};
 
 //It executes job. Take job details as argument, executed the job and initiates mail sending.
@@ -22,11 +23,11 @@ executorServices.executeJob = function(commitDetails, callback){
 		}
 		
 		//Deleting Old Directory That Contains Screenshots
-		fs.readdir('/var/tmp/failedScreenshots/', function (err, data) {
+		fs.readdir(path, function (err, data) {
 			if(err) {
 				console.error("Error : "+err);
 			}else {
-				attachmentServices.deleteFolderRecursive('/var/tmp/failedScreenshots/');
+				attachmentServices.deleteFolderRecursive(path);
 			}
 		});
 		
@@ -77,18 +78,28 @@ executorServices.executeJob = function(commitDetails, callback){
 									    		path: failLogFile
 										}
 									];
-									//initiating mail sending to committer
-									mailServices.sendMail(commitDetails, function(err){
-										if(err)
-											console.error("error occurred while sending email: "+err);
-										else
-											console.log("Mail sent successfully.");
-											
-											//Deleting commit specific log files
-											fs.unlinkSync(automationLogFile);
-											fs.unlinkSync(failLogFile);
-											console.log("Commit specific log files deleted.");
-											return callback();
+									
+									//Sending Mail To The Committer After Adding Attachments
+									fs.readdir(path, function (err, data) {
+										if(err) {
+											console.error(err);
+										}else {
+											attachmentServices.addAttachments(path, commitDetails, function(commitDetails) {
+												console.log('attachments added successfully');
+												//initiating mail sending to committer
+												mailServices.sendMail(commitDetails, function(err){
+													if(err)
+														console.error("error occurred while sending email: "+err);
+													else
+														console.log("Mail sent successfully.");
+													//Deleting commit specific log files
+													fs.unlinkSync(automationLogFile);
+													fs.unlinkSync(failLogFile);
+													console.log("Commit specific log files deleted.");
+													return callback();
+												});
+											});
+										}
 									});
 								} else {
 									console.log('you are not allowed to set the status of the branch.');
