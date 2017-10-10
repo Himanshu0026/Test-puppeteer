@@ -1,0 +1,111 @@
+{
+	"registeredUserLogin" : {
+		"username": "neha",
+		"password": "123"
+	},
+
+	"userLogin" : {
+		"username": "isneha12",
+		"password": "isneha12"
+	},
+
+	"customUserLogin" : {
+		"username": "customUser",
+		"password": "customUser"
+	},
+
+	"pendingUserLogin" : {
+		"username": "pendingUser",
+		"password": "pendingUser"
+	},
+
+	"newTopic" : {
+		"title" : "New Topic",
+		"content" : "hellloooooo!!!!!!!!!",
+		"category" : "General"
+	},
+
+	"adminUserLogin" : {
+		"username": "isneha",
+		"password": "1234"
+	},
+
+	"infoToRegisterUser" : [{
+		"uname" : "neha",
+		"upass" : "123",
+		"uemail" : "neha@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	},
+
+	{
+		"uname" : "isneha12",
+		"upass" : "isneha12",
+		"uemail" : "isneha12@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	},
+
+	{
+		"uname" : "customUser",
+		"upass" : "customUser",
+		"uemail" : "customUser@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	},
+
+	{
+		"uname": "pendingUser",
+		"upass": "pendingUser",
+		"uemail" : "pendingUser@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	},
+
+	{
+		"uname" : "isneha",
+		"upass" : "1234",
+		"uemail" : "isneha@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	}],
+
+	"category" : {
+		"title" : "cat1",
+		"description" : "To test parent category"
+	},
+
+	"subCategory" : {
+		"title" : "cat1a",
+		"description" : "To test child category"
+	},
+
+	"otherSubCategory" : {
+		"title" : "cat1b",
+		"description" : "To test other child category"
+	},
+
+	"startTopic" : {
+		"title" : "New Topic",
+		"content" : "hellloooooo!!!!!!!!!",
+		"category" : "General"
+	},
+
+	"groupName" : "New Custom Group"
+
+}

@@ -1,269 +1,409 @@
 {
-    "blankUsername" : {
-        "uname" : "",
-        "uemail" : "blank_uname@wt.com",
-        "upass" : "1234",
-        "fullName" : "Blank Username",
-        "imID" : "Hello",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature blank uname",
-        "namePrivate" : true,
-        "expectedErrorMsg" : "Please enter a username." 
-    },
-    
-    "blankEmail" : {
-        "uname" : "blank_email",
-        "uemail" : "",
-        "upass" : "1234",
-        "fullName" : "Blank Email",
-        "imID" : "Hello",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature blank email",
-        "namePrivate" : true,
-        "expectedErrorMsg" : "Please enter your email address." 
-    },
+	"blankUsername" : {
+		"uname" : "",
+		"uemail" : "blank_uname@wt.com",
+		"upass" : "1234",
+		"fullName" : "Blank uname",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank uname",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter a username."
+	},
 
-    "blankPassword" : {
-        "uname" : "blank_password",
-        "uemail" : "blank_password@wt.com",
-        "upass" : "",
-        "fullName" : "Blank Password",
-        "imID" : "Hello",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature blank_password",
-        "namePrivate" : true,
-        "expectedErrorMsg" : "Please enter a password." 
-    },
-    
-    "blankImId" : {
-        "uname" : "blank_imID",
-        "uemail" : "blank_imID@wt.com",
-        "upass" : "1234",
-        "fullName" : "Blank IM ID",
-        "imID" : "",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature blank im-id",
-        "namePrivate" : true,
-        "expectedErrorMsg" : "Please enter your screen name." 
-    },
-    
-    "blankBirthday" : {
-        "uname" : "blank1_birthday",
-        "uemail" : "blank_birthday@wt.com",
-        "upass" : "1234",
-        "fullName" : "Blank Birthday",
-        "imID" : "Hello",
-        "birthday" : "",
-        "usignature" : "This is my signature blank birthday",
-        "namePrivate" : true,
-        "expectedErrorMsg" : "Please enter birthday." 
-    },
-    
-    "blankSignature" : {
-        "uname" : "blank_signature",
-        "uemail" : "blank_signature@wt.com",
-        "upass" : "1234",
-        "fullName" : "Blank Signature",
-        "imID" : "Hello",
-        "birthday" : "04/12/1991",
-        "usignature" : "",
-        "namePrivate" : true,
-        "expectedErrorMsg" : "Please provide a signature." 
-    },
-    
-    "existUsername" :{
-    	"uname" : "35",
-        "uemail" : "dfsf@wt.com",
-        "upass" : "1234",
-        "fullName" : "18",
-        "imID" : "18",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature 18",
-        "namePrivate" : true,
-        "errorType" : "existWithName",
-        "errorMsg1" : "The username ",
-        "errorMsg2" : " has already been taken."
-    },
-    
-    "existEmail" : {
-    	"uname" : "3rtertr",
-        "uemail" : "35@wt.com",
-        "upass" : "1234",
-        "fullName" : "18",
-        "imID" : "18",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature 18",
-        "namePrivate" : true,
-        "errorType" : "existWithEmail",
-        "expectedErrorMsg" : "It looks like you are already registered"
-    },
-    
-    "existUsernameEmail" : {
-    	"uname" : "100",
-        "uemail" : "100@wt.com",
-        "upass" : "1234",
-        "fullName" : "18",
-        "imID" : "18",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature 18",
-        "namePrivate" : true,
-        "errorType" : "existWithUsernameAndEmail",
-        "expectedErrorMsg" : "It looks like you already have a forum account! A forum account for that username and email address combination already exists!"
-    },
-    
-    "invalidBirthday" : {
-    	"uname" : "35ddf",
-        "uemail" : "35wew@wt.com",
-        "upass" : "1234",
-        "fullName" : "18",
-        "imID" : "18",
-        "birthday" : "06/29/2018",
-        "usignature" : "This is my signature 18",
-        "namePrivate" : true,
-        "errorType" : "invalidBirthday",
-        "expectedErrorMsg" : "Valid years for your Birthday are from 1900 to 2016."
-    },
-    
-    "invalidEmail" : {
-        "uname" : "invalid_emailk",
-        "uemail" : "aaaaa",
-        "upass" : "1234",
-        "fullName" : "Invalid Email",
-        "imID" : "Hello",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature invalid email",
-        "namePrivate" : true,
-        "errorType" : "invalidEmail",
-        "expectedErrorMsg" : "You entered an invalid email address." 
-    },
-    
-    "validInfo" : {
-    	"uname" : "801",
-        "uemail" : "801@wt.com",
-        "upass" : "1234",
-        "fullName" : "18",
-        "imID" : "18",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature 18",
-        "namePrivate" : true,
-        "expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
-    },
-	"validregister" : {
-        "uname" : "rajan41",
-        "uemail" : "frajan4178dsd@gmail.com",
-        "upass" : "rajan41",
-        "usignature" : "This is my signature blank uname",
-		 "newmodule" : "This is my signature blank uname",
-        "namePrivate" : true,
-        "expectedErrorMsg" : "not register." 
-    },
-    
-    "setValueOnRegister" : [{
-    	"required" : "1",
-    	"visibility" : "1"
-    }, 
-    
-    {
-    	"required" : "1",
-    	"visibility" : "2"
-    },
-    
-    {
-    	"required" : "1",
-    	"visibility" : "4"
-    },
-    
-    {
-    	"required" : "0",
-    	"visibility" : "1"
-    },
-    
-    {
-    	"required" : "0",
-    	"visibility" : "2"
-    },
-    
-    {
-    	"required" : "0",
-    	"visibility" : "4"
-    }],
-    
-    "fullnameData" : {
-    	"uname" : "blank_fullname",
-        "uemail" : "blank_fullname@wt.com",
-        "upass" : "1234",
-        "fullName" : "",
-        "imID" : "Hello",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature blank fullname",
-        "namePrivate" : true,
-        "expectedErrorMsg" : "Please enter user full name." 
-    },
-    
-    "imIdBlankData" : {
-        "uname" : "blank_imID1",
-        "uemail" : "blank_imID1@wt.com",
-        "upass" : "1234",
-        "fullName" : "Blank IM ID",
-        "imID" : "",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature blank im-id",
-        "namePrivate" : true
-    },
-    
-    "imIdData" : {
-        "uname" : "blank_imID2",
-        "uemail" : "blank_imID2@wt.com",
-        "upass" : "1234",
-        "fullName" : "Blank IM ID",
-        "imID" : "hello",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature blank im-id",
-        "namePrivate" : true
-    },
-    
-    "dobBlankData" : {
-        "uname" : "blank_dob",
-        "uemail" : "blank_dob@wt.com",
-        "upass" : "1234",
-        "fullName" : "Blank dob",
-        "imID" : "hello",
-        "birthday" : "",
-        "usignature" : "This is my signature blank dob",
-        "namePrivate" : true
-    },
-    
-    "dobData" : {
-        "uname" : "blank_dob1",
-        "uemail" : "blank_dob1@wt.com",
-        "upass" : "1234",
-        "fullName" : "Blank dob",
-        "imID" : "hello",
-        "birthday" : "04/12/1991",
-        "usignature" : "This is my signature blank dob",
-        "namePrivate" : true
-    },
-    
-    "signatureBlankData" : {
-        "uname" : "blank_signature",
-        "uemail" : "blank_signature@wt.com",
-        "upass" : "1234",
-        "fullName" : "Blank Signature",
-        "imID" : "Hello",
-        "birthday" : "04/12/1991",
-        "usignature" : "",
-        "namePrivate" : true
-    },
-    
-    "signatureData" : {
-        "uname" : "blank_signature1",
-        "uemail" : "blank_signature1@wt.com",
-        "upass" : "1234",
-        "fullName" : "Blank Signature",
-        "imID" : "Hello",
-        "birthday" : "04/12/1991",
-        "usignature" : "hii...how r u?",
-        "namePrivate" : true
-    }
-    
+	"blankEmail" : {
+		"uname" : "blank_uemail",
+		"uemail" : "",
+		"upass" : "1234",
+		"fullName" : "Blank uemail",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank uemail",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+	"blankPassword" : {
+		"uname" : "blank_upass",
+		"uemail" : "blank_upass@wt.com",
+		"upass" : "",
+		"fullName" : "Blank upass",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank_upass",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter a password."
+	},
+
+	"existingUsername" :{
+		"uname" : "neha",
+		"uemail" : "sssa@wt.com",
+		"upass" : "sangita",
+		"fullName" : "sangita",
+		"imID" : "18",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature 18",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "'neha' is already taken."
+	},
+
+	"existingEmail" : {
+		"uname" : "3rtertr",
+		"uemail" : "neha@gmail.com",
+		"upass" : "1234",
+		"fullName" : "18",
+		"imID" : "18",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature 18",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "It looks like you are already registered as"
+	},
+
+	"blankScreen" : {
+		"uname" : "sangita",
+		"uemail" : "sangita@websitetoolbox.com",
+		"upass" : "sangita",
+		"fullName" : "Blank IM ID",
+		"imID" : "",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your screen name."
+	},
+
+	"invalidBirthday" : {
+		"uname" : "sangita",
+		"uemail" : "sangita@websitetoolbox.com",
+		"upass" : "sangita",
+		"fullName" : "18",
+		"imID" : "Hello",
+		"usignature" : "This is my signature 18",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please provide a valid Birthday."
+	},
+
+	"invalidEmail" : {
+		"uname" : "invalid_uemailk",
+		"uemail" : "aaaaa",
+		"upass" : "1234",
+		"fullName" : "Invalid uemail",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature invalid email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "You entered an invalid email address."
+	},
+
+	"upperCaseLettersOnly" : {
+		"testcase" : "Upper Case Letters Only",
+		"invalidInput" : {
+			"uname" : "dthgdjhh",
+			"uemail" : "aaaaa@gmail.com",
+			"upass" : "1234",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Your username must contain uppercase letters from A-Z"
+		},
+		"validInput" : {
+			"uname" : "KULWINDER",
+			"uemail" : "KULWINDER@gamil.com",
+			"upass" : "KULWINDER",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+		}
+	},
+
+	"upperCaseLettersIncludingSpace" : {
+		"testcase" : "Upper Case Letters Including Space",
+		"invalidInput" : {
+			"uname" : "sdfglfhkfl",
+			"uemail" : "aaaaa",
+			"upass" : "1234",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Your username must contain uppercase letters from A-Z including spaces"
+		},
+		"validInput" : {
+			"uname" : "POONAM KAPOOR",
+			"uemail" : "KAPOOR@gamil.com",
+			"upass" : "KAPOOR",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+		}
+	},
+
+	"lowerCaseLettersIncludingSpace" : {
+		"testcase" : "Lower Case Letters Including Space",
+		"invalidInput" : {
+			"uname" : "POONAMKAPOOR",
+			"uemail" : "aaaaa",
+			"upass" : "1234",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Your username must contain lowercase letters from a-z including spaces"
+		},
+		"validInput" : {
+			"uname" : "poonam goel",
+			"uemail" : "goel@gamil.com",
+			"upass" : "goel",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+		}
+	},
+
+	"lowerCaseLettersOnly" : {
+		"testcase" : "Lower Case Letters Only",
+		"invalidInput" : {
+			"uname" : "POONAMKAPOOR",
+			"uemail" : "aaaaa",
+			"upass" : "1234",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Your username must contain lowercase letters from a-z"
+		},
+		"validInput" : {
+			"uname" : "dfgdfgdfg",
+			"uemail" : "hkl@gamil.com",
+			"upass" : "hkl",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+		}
+	},
+
+	"lowerAndUpperCaseLetters" : {
+		"testcase" : "Lower And Upper Case Letters Only",
+		"invalidInput" : {
+			"uname" : "fhhfjh123",
+			"uemail" : "aaaaa",
+			"upass" : "1234",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Your username must contain lower and upper case letters"
+		},
+		"validInput" : {
+			"uname" : "dgWHSD",
+			"uemail" : "gkl@gamil.com",
+			"upass" : "gkl",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+		}
+	},
+
+	"alphaNumericCharactersOnly" : {
+		"testcase" : "AlphaNumeric Characters Only",
+		"invalidInput" : {
+			"uname" : "POONAM@KAPOOR",
+			"uemail" : "aaaaa",
+			"upass" : "1234",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Your username must contain alphanumeric characters"
+		},
+		"validInput" : {
+			"uname" : "abc1Sjkj",
+			"uemail" : "gh@gamil.com",
+			"upass" : "gh",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+		}
+	},
+
+	"lowerAndUpperCaseLettersIncludingSpace" : {
+		"testcase" : "Lower And Upper Case Letters Including Space",
+		"invalidInput" : {
+			"uname" : "POONAM@KAPOOR",
+			"uemail" : "aaaaa",
+			"upass" : "1234",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Your username must contain lower and upper case letters including spaces"
+		},
+		"validInput" : {
+			"uname" : "dh DH",
+			"uemail" : "dh@gamil.com",
+			"upass" : "dh",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+		}
+	},
+
+	"lowerAndUpperCaseLettersIncludingUnderscore" : {
+		"testcase" : "Lower And Upper Case Letters Including UnderScore",
+		"invalidInput" : {
+			"uname" : "POONAM KAPOOR",
+			"uemail" : "aaaaa",
+			"upass" : "1234",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Your username must contain lower and upper case letters including underscores"
+		},
+		"validInput" : {
+			"uname" : "abc_ABC",
+			"uemail" : "abc_ABC@gamil.com",
+			"upass" : "abc_ABC",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+		}
+	},
+
+	"alphaNumericCharacterIncludingSpace" : {
+		"testcase" : "AlphaNumeric Character Including Space",
+		"invalidInput" : {
+			"uname" : "dh45arna2@#$%",
+			"uemail" : "aaaaa",
+			"upass" : "1234",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Your username must contain Alphanumeric characters including spaces"
+		},
+		"validInput" : {
+			"uname" : "hani132 sharma",
+			"uemail" : "hani132@gamil.com",
+			"upass" : "hani132",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+		}
+	},
+
+	"alphaNumericCharacterIncludingSpaceAndUnderscore" : {
+		"testcase" : "AlphaNumeric Character Including Space And Underscore",
+		"invalidInput" : {
+			"uname" : "adb _@#$",
+			"uemail" : "aaaaa",
+			"upass" : "1234",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Your username must contain alphanumeric characters including underscores and spaces"
+		},
+		"validInput" : {
+			"uname" : "abc1_dc yd",
+			"uemail" : "abc2@gamil.com",
+			"upass" : "abc2",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+		}
+	},
+
+	"customRegularExpression" : {
+		"testcase" : "Custom Regular Expression",
+		"invalidInput" : {
+			"uname" : "xgfdg",
+			"uemail" : "aaaaa",
+			"upass" : "1234",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Your username does not meet the administrator's standards."
+		},
+		"validInput" : {
+			"uname" : "123Abx",
+			"uemail" : "123A@gamil.com",
+			"upass" : "123A",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+		}
+	},
+
+	"allCharacterAndAnyFormat" : {
+		"testcase" : "All Character And Any Format",
+		"invalidInput" : {
+			"uname" : "df576@3 df",
+			"uemail" : "fgfd@gmail.com",
+			"upass" : "fggf",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+		},
+		"validInput" : {
+			"uname" : "gdt #$5 % ",
+			"uemail" : "hjhgm@gamil.com",
+			"upass" : "gjkm",
+			"fullName" : "Invalid uemail",
+			"imID" : "Hello",
+			"birthday" : "04/12/1991",
+			"usignature" : "This is my signature invalid email",
+			"namePrivate" : true,
+			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+		}
+	}
+
 }

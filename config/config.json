@@ -1,22 +1,66 @@
 {
 	"screenShotsLocation": "../Screenshots/",
-	"failedScreenShotsLocation": "/var/tmp/failedScreenshots/",
-	"url": "http://beta12.websitetoolbox.com/",
-	"backEndUrl": "https://beta12.websitetoolbox.com/tool/members/login",
-	"app": {	
+	"failedScreenShotsLocation": "/var/tmp/",
+	"url": "https://beta12.websitetoolbox.com/",
+	"backEndUrl": "http://beta12.websitetoolbox.com/tool/members/login",
+
+	"app": {
 		"verbose" : true,
 	 	"logLevel" : "debug",
-		"waitTimeout" : "10000",
-		"viewportSize": { 
-			"width": 1024, 
-			"height": 768 
+		"waitTimeout" : "40000",
+		"viewportSize": {
+			"width": 1024,
+			"height": 768
 		}
 	},
 
 	"backendCred" : {
 		"uname" : "beta12",
-    		"upass" : "test",
-    		"apiKey" : "4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q"
+    "upass" : "test",
+    "apiKey" : "4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q"
+	},
+
+	"fbInfo" : {
+		"beta12" : {
+			"email": "8826329279",
+			"pass": "wt@isneha",
+			"appId": "1895734670711529"
+		},
+		"beta21" : {
+			"email": "8826329279",
+			"pass": "wt@isneha",
+			"appId": "104454613464449"
+		},
+		"beta22" : {
+			"email": "8826329279",
+			"pass": "wt@isneha",
+			"appId": "389904494707432"
+		},
+		"beta23" : {
+			"email": "8826329279",
+			"pass": "wt@isneha",
+			"appId": "379524372432870"
+		},
+		"beta24" : {
+			"email": "8826329279",
+			"pass": "wt@isneha",
+			"appId": "497627667292661"
+		},
+		"beta27" : {
+			"email": "8826329279",
+			"pass": "wt@isneha",
+			"appId": "1085407134899026"
+		},
+		"beta28" : {
+			"email": "8826329279",
+			"pass": "wt@isneha",
+			"appId": "1645844195430322"
+		},
+		"beta21" : {
+			"email": "8826329279",
+			"pass": "wt@isneha",
+			"appId": "104454613464449"
+		}
 	},
 
 	"webhook" : {
@@ -28,7 +72,7 @@
 		"host" : "127.0.0.1",
 		"port" : 6379
 	},
-	
+
 	"permissionSettingMsg" : "Your user group settings have been updated.",
 	"beta" : 0
 }

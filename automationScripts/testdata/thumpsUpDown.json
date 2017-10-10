@@ -1,0 +1,105 @@
+{
+  "registeredUserLogin" : {
+    "username": "neha",
+    "password": "neha"
+  },
+
+  "adminUserLogin" : {
+    "username": "isneha",
+    "password": "isneha"
+  },
+
+  "emailUser" : {
+    "username": "emailUser",
+    "password": "emailUser"
+  },
+
+  "otherUser" : {
+    "username": "abc",
+    "password": "abc"
+  },
+
+  "usersLogin" : [{
+    "username": "isneha",
+    "password": "isneha"
+  },
+  {
+    "username": "abc",
+    "password": "abc"
+  },
+  {
+    "username": "hsk",
+    "password": "hsk"
+  }],
+
+  "newTopic" : {
+    "title" : "New Topic",
+    "content" : "hellloooooo!!!!!!!!!",
+    "category" : "General"
+  },
+
+  "category" : {
+		"title" : "General",
+		"description" : "To test other category"
+	},
+
+  "infoToRegisterUser" : [{
+		"uname" : "neha",
+		"upass" : "neha",
+		"uemail" : "neha@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+	{
+		"uname" : "emailUser",
+		"upass" : "emailUser",
+		"uemail" : "emailUser@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+    "uname" : "hsk",
+    "upass" : "hsk",
+    "uemail" : "hsk@gmail.com",
+    "fullName" : "Blank Email",
+    "imID" : "Hello",
+    "birthday" : "04/12/1991",
+    "usignature" : "This is my signature blank email",
+    "namePrivate" : true,
+    "expectedErrorMsg" : "Please enter your email address."
+  },
+
+  {
+		"uname" : "isneha",
+		"upass" : "isneha",
+		"uemail" : "isneha@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc",
+		"upass" : "abc",
+		"uemail" : "abc@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	}]
+}

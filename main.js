@@ -1,6 +1,6 @@
 //This is the main script file responsible for starting the automation server. The request from webhook will be served here only by webhook handler.
- 
-'use strict';
+
+'use strict.';
 var http = require('http');
 var config = require('./config/config.json');
 var queueServices = require('./services/queueServices.js');
@@ -38,17 +38,17 @@ handler.on('push', function (event) {
 	if(commitPayload){
 		//Preapring commit details from event's payload for further processing
 		var commitDetails = {};
-		commitDetails["commitId"] = commitPayload.id;
-		commitDetails["repositoryName"] = event.payload.repository.name;
-		commitDetails["ownerName"] = event.payload.repository.owner.name;
-		commitDetails["beta"] = config.beta;
-		commitDetails["commitMessage"] = commitPayload.message;
-		commitDetails["commitUrl"] = commitPayload.url;
-		commitDetails["committerName"] = commitPayload.committer.name;
-		commitDetails["committerEmail"] = commitPayload.committer.email;
+		commitDetails.commitId = commitPayload.id;
+		commitDetails.repositoryName = event.payload.repository.name;
+		commitDetails.ownerName = event.payload.repository.owner.name;
+		commitDetails.beta = config.beta;
+		commitDetails.commitMessage = commitPayload.message;
+		commitDetails.commitUrl = commitPayload.url;
+		commitDetails.committerName = commitPayload.committer.name;
+		commitDetails.committerEmail = commitPayload.committer.email;
 		var tempArr = event.payload.ref.split("/");
 		var branchName = tempArr[tempArr.length-1];
-		commitDetails["branchName"] = branchName;
+		commitDetails.branchName = branchName;
 		//Adding a new job in queue with commit details
 		//queueServices.addNewJob(commitDetails);
 		utils.isValidJobToAdd(branchName, commitDetails, function(valid){

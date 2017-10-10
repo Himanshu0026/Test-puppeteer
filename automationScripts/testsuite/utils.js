@@ -1,52 +1,112 @@
 var utils = module.exports = {};
-
-// method for click on user's edit profile
-utils.clickOnElement = function(driver, element, callback) {
-	driver.click(element);
-	return callback(null);
-};
-
+var count = 1;
+utils.jsErrorsCount = 1;
+utils.jsErrors = [];
+utils.resourceErrorsCount = 1;
+utils.resourceErrors = [];
 
 //pass the id of the element in element parameter and for status true or false
-utils.enableorDisableCheckbox = function(element, status, driver, callback){
-
-	var checkbox_value = driver.evaluate(function (element) {
+utils.enableorDisableCheckbox = function(element, status) {
+	var checkbox_value = casper.evaluate(function (element) {
 	      return document.getElementById(element).checked;
 	}, element);
-		if (checkbox_value) {
-			if (checkbox_value != status) {
-				driver.click('#'+element);
-			}
-		} else {
-			if (status) {
-				driver.click('#'+element);
-			}
+	if (checkbox_value) {
+		if (checkbox_value != status) {
+			casper.click('#'+element);
 		}
-
-	return callback(null);
-
+	} else {
+		if (status) {
+			casper.click('#'+element);
+		}
+	}
 };
 
-/*function to go to user group permission for any user type in backend by sending parameter for xpath as x and user type as "Registered Users" and also need to initialize for xpath in mainTest.js file inside the particular feature*/
-utils.gotoEditUserGroupPermissionpage = function(x,userType, driver, callback) {
-	driver.waitForSelector('a[data-tooltip-elm="ddUsers"]', function(){
-		this.click('a[data-tooltip-elm="ddUsers"]');
-			
-	});
-	driver.waitForSelector('a[href="/tool/members/mb/usergroup"]', function(){
-		this.click('a[href="/tool/members/mb/usergroup"]');
-			
-	});
-
-	driver.waitForSelector(x('//td[text()="'+userType+'"]/following::td[2]/a'), function(){
-		this.click(x('//td[text()="'+userType+'"]/following::td[2]/a'));
-		casper.echo("***inner text*** : "+this.fetchText(x('//td[text()="'+userType+'"]/following::td[2]/a')));
-		this.wait(3000, function(){
-			this.click(x('//td[text()="'+userType+'"]/parent::tr/td[3]/div/a[1]'));
-			casper.echo("** Sublinks ** : "+this.fetchText(x('//td[text()="'+userType+'"]/parent::tr/td[3]/div/a[1]')));	
-		});
-	});
-	return callback(null);
+utils.randomString = function() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    for( var i=0; i < 10; i++ )
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
 };
 
+utils.info = function(msg) {
+	casper.echo(commitId + msg, 'INFO');
+};
 
+utils.debug = function(msg) {
+	casper.echo(commitId + msg, 'DEBUG');
+};
+
+utils.error = function(msg) {
+	casper.echo(commitId + msg, 'ERROR');
+};
+
+//Logging Message On The Console
+casper.on('log', function(data) {
+	utils.debug(' ['+data.level+'] [phantomjs] '+data.message);
+});
+
+//Method To Abort unnecessary Requests
+casper.on('resource.requested', function(requestData, networkRequest) {
+	var str = requestData.url;
+	var res = str.match('https://static.olark.com');
+	if(res) {
+		utils.info(' aborting url : ' + requestData.url);
+		networkRequest.abort();
+	}
+});
+
+casper.on("resource.error", function(resourceError) {
+	var resourceScreenshotsPath = config.failedScreenShotsLocation+branchName+'/' +commitId+ '/' +feature+ '/' + 'resourceErrors/resourceError' +utils.resourceErrorsCount;
+	var msg = '';
+	if(resourceError.status == 404) {
+		msg = 'ResourceError: ' + resourceError.url + ' failed to load (' + resourceError.status + ')';
+		utils.resourceErrorsCount++;
+		utils.error(' Error : ' + msg);
+		casper.capture(resourceScreenshotsPath + '.png');
+		utils.resourceErrors.push(msg);
+	} else if(resourceError.errorCode == 203) {
+		msg = 'ResourceError: ' + resourceError.url + ' failed to load (' + resourceError.errorCode + ')';
+		utils.resourceErrorsCount++;
+		utils.error(' Error : ' + msg);
+		casper.capture(resourceScreenshotsPath + '.png');
+		utils.resourceErrors.push(msg);
+	}
+});
+
+//Method To capture Screenshots If Any Test Case Failed
+casper.test.on('fail', function(failure) {
+	var failedScreenshotsPath = config.failedScreenShotsLocation+branchName+'/' +commitId+ '/' +feature+ '/' + feature + 'Error' +count;
+	casper.capture(failedScreenshotsPath + '.png');
+	count++;
+});
+
+//Method To Catch JS Errors
+casper.on("page.error", function(msg, trace) {
+	var str = msg;
+	str = str.match('TypeError:');
+	if(str) {
+		msg = msg + ' at line ' + trace[0].line + ' in ' + trace[0].function + ' function occurred in ' + trace[0].file + ' file';
+		var jsScreenshotsPath = config.failedScreenShotsLocation+branchName+'/' +commitId+ '/' +feature+ '/' + 'jsErrors/jsError' +utils.jsErrorsCount;
+		casper.capture(jsScreenshotsPath+'.png');
+		utils.jsErrorsCount++;
+		utils.error(' Error : ' + msg);
+		utils.jsErrors.push(msg);
+	}
+});
+
+//Method To Display JS Errors
+utils.displayError = function() {
+	if(utils.jsErrors.length) {
+		utils.error(' ' +utils.jsErrors.length+' javaScript errors found');
+		//jsErrorCount = jsErrorCount + utils.jsErrors.length;
+	} else {
+		utils.info(' ' +utils.jsErrors.length+' javascript errors found');
+	}
+
+	if(utils.resourceErrors.length) {
+		utils.error(' ' +utils.resourceErrors.length+' resources errors found');
+	} else {
+		utils.error(' ' +utils.resourceErrors.length+' resources errors found');
+	}
+};

@@ -1,5 +1,5 @@
 //This script is responsible for creating job queue and serves each job one by one.
-'use strict';
+'use strict.';
 var executorServices = require('./executorServices.js');
 var kue = require('kue');   
 

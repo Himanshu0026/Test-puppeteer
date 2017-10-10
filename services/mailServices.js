@@ -1,5 +1,5 @@
 //This script is responsible for sending mails.
-'use strict';
+'use strict.';
 var nodemailer = require('nodemailer');
 var fs = require('fs');
 var mailServices = module.exports = {};
@@ -8,20 +8,27 @@ var mailServices = module.exports = {};
 var smtpConfig = {
     host: 'mail.websitetoolbox.com',
     port: 587,
-    secure: false // use SSL 
+    secure: false // use SSL
 };
- 
+
 // create reusable transporter object using the SMTP configuration
 var transporter = nodemailer.createTransport(smtpConfig);
- 
-// send mail with defined transport object 
+
+// send mail with defined transport object
 mailServices.sendMail = function(emailDetails, callback){
-	// setup e-mail data with unicode symbols 
+  var txt = '';
+  if (emailDetails.attachments === '') {
+    txt = 'Hello ' + emailDetails.committerName+",\n\n Following is the automation test result: \n"+emailDetails.testResult;
+  } else {
+    txt = 'Hello ' + emailDetails.committerName+",\n\n Following is the automation test result: \n"+emailDetails.testResult+"\nPlease find details of the automation test result attached herewith. \n";
+  }
+
+	// setup e-mail data with unicode symbols
 	var mailOptions = {
-		"from": 'noresponse@websitetoolbox.com', // sender address 
-		"to": emailDetails.committerEmail, //'shipra@websitetoolbox.com', list of receivers 
-		"subject": "Forum test result: "+emailDetails.branchName, // Subject line 
-		"text": 'Hello ' + emailDetails.committerName+",\n\n Following is the automation test result: \n"+emailDetails.testResult+"\nPlease find details of the automation test result attached herewith. \n" , // plaintext body 
+		"from": 'noresponse@websitetoolbox.com', // sender address
+		"to": emailDetails.committerEmail+ ', shipra@websitetoolbox.com', //'shipra@websitetoolbox.com', list of receivers
+		"subject": "Forum test result: "+emailDetails.branchName, // Subject line
+		"text": '' +txt+ '' , // plaintext body
 		"attachments": emailDetails.attachments //attachments
 	};
 	console.log("mailOptions : "+JSON.stringify(mailOptions));

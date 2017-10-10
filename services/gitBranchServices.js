@@ -1,4 +1,4 @@
-'use strict';
+'use strict.';
 var queueServices = require('./queueServices.js');
 var redisClient;
 var gitBranchServices = module.exports = {};

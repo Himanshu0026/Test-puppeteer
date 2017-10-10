@@ -2,55 +2,55 @@
 
 	"username": "sangita",
 	"password": "sangita",
-	
-    "ValidCredential" : {
-	"username": "sangita",
-	"password": "sangita"
-	},
-    
-		"ValidUser" : {
-	"username": "rajan41",
-	"password": "rajan41"
-	},
-	
-     "ValidEmail" : {
-	"username": "sangita@websitetoolbox.com",
-	"password": "sangita"
+
+	"ValidCredential" : {
+		"username": "sangita",
+		"password": "sangita"
 	},
 
-
-     "InvalidPassowrd" : {
-	"username": "sangita",
-	"password": "sangita123",
-	"ExpectedErrorMessage" : "The password you entered is incorrect."
+	"ValidEmail" : {
+		"username": "sangita@websitetoolbox.com",
+		"password": "sangita"
 	},
 
-    "InvalidUsername" : {
-	"username": "sangitajrt",
-	"password": "sangita",
-	"ExpectedErrorMessage" : "There is no account with the username you specified."
-	
+	"InvalidPassowrd" : {
+		"username": "sangita",
+		"password": "sangita123",
+		"ExpectedErrorMessage" : "The password you entered is incorrect."
 	},
 
-    "BlankField" : {
-	"username": "",
-	"password": "",
-	"ExpectedErrorMessage" : "You must enter your username or email address."
+	"InvalidUsername" : {
+		"username": "sangitajrt",
+		"password": "sangita",
+		"ExpectedErrorMessage" : "There is no account with the username you specified."
 	},
 
-    "BlankPassword" : {
-	"username": "sangita",
-	"password": "",
-	"ExpectedErrorMessage" : "You must enter your password."
+	"BlankField" : {
+		"username": "",
+		"password": "",
+		"ExpectedErrorMessage" : "You must enter your username or email address."
 	},
-	
-	"AdminLogin" : {
-	 "username": "hani",
-	 "password": "hani",
-	 "ExpectedErrorMessage" : "Admin Login successfully." 
-	
-	}  
 
-	
+	"BlankPassword" : {
+		"username": "sangita",
+		"password": "",
+		"ExpectedErrorMessage" : "You must enter your password."
+	},
+
+	"validInfo" : {
+		"username" : "hani",
+    		"password" : "hani",
+    		"expectedSuccessMsg" : ""
+  	},
+	"adminUser":{
+		"username" : "hani12",
+    		"password" : "hani12"
+	},
+
+	"pmMsgUser" : {
+		"username" : "shipra",
+    		"password" : "shipra",
+    		"expectedSuccessMsg" : ""
+  	}
 
 }

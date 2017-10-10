@@ -1,0 +1,43 @@
+{
+	"newMsgInfo" : {
+		"to" : ["sangita"],
+		"subject" : "New message",
+		"pmessage" : "Hiiiiiiiiiiii"
+	},
+
+	"invalidRecipient" : {
+		"to" : ["gfgh"],
+		"subject" : "Invalid reciepient",
+		"pmessage" : "Invalid data.....!!!"
+	},
+
+	"blankRecipient" : {
+		"to" : [""],
+		"subject" : "Blank reciepient",
+		"pmessage" : "Blank data......!!!"
+	},
+
+	"blankSubject" : {
+		"to" : ["sangita"],
+		"subject" : "Blank subject",
+		"pmessage" : "Blank subject data......!!!"
+	},
+
+	"blankMessage" : {
+		"to" : ["sangita"],
+		"subject" : "Black message",
+		"pmessage" : ""
+	},
+
+	"ignoredUser" : {
+		"to" : ["shipra"],
+		"subject" : "Ignored User",
+		"pmessage" : "Ignored user message....!!!"
+	},
+
+	"ignoredByUser" : {
+		"to" : ["hani"],
+		"subject" : "Ignored By Hani",
+		"pmessage" : "Ignored By Hani message....!!!"
+	}
+}

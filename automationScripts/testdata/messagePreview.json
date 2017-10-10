@@ -1,0 +1,15 @@
+{
+
+	"privateMessage" : {
+		"subject" :"test message",
+		"pmessage":"Hiiiiiiiiiiii",
+		"expectedPmessage":"Your inbox is empty.",
+		"expectedPmessages":"1"
+
+	},
+	"frame" :{
+		"value" :"dragme",
+		"data":"hello"
+
+	}
+}

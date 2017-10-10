@@ -1,5 +1,16 @@
 {
 	"newTopic" : {
+		"title" : "NewTopic",
+		"content" : "hellloooooo!!!",
+		"category" : "General"
+	},
+	"ValidCredential" :{
+		"title" : "ONEpluse",
+		"content" : "my old topic",
+		"category" : "General"
+	},
+
+	"newTopic1" : {
 
 			"username" : "rajatk2",
 			"password" : "rk@123",
@@ -7,15 +18,15 @@
 			"password1" : "rk@123",
 			"adminUname" : "rajatk",
 			"adminPass" : "rk@123",
-			
+
 			"startTopicPermissionWarning" : "Sorry! You don't have permission to perform this action.",
 
 			"ValidCredential" : {
 				"title" : "ONEpluse",
 				"content" : "hey there..!!",
 				"category" : "General"
-			},    
-			
+			},
+
 			"blankTitle" : {
 				"title" : "",
 				"content" : "hey there..!!",
@@ -36,7 +47,7 @@
 				"ExpectedErrorMessage" : "You must select a category for your message.",
 				"category" : ""
 			},
-	
+
 			"blankField" : {
 				"title" : "",
 				"content" : "",
@@ -44,7 +55,7 @@
 				"category" : ""
 			}
 	},
-	
+
 	"poll" : {
 		"blankPollQues" : {
 			"pollQues" : "",
@@ -91,16 +102,16 @@
 		"ValidCredential" : {
 			"content" : "hello"
 		},
-		
+
 		"blankContent" : {
 			"content" : "",
 			"ExpectedErrorMessage" : "You must enter a message to post."
 		}
-		
+
 	},
 
 	"editTopic" : {
-		
+
 		"validTitle" : {
 			"title" : "HolyDay"
 		},
@@ -118,9 +129,9 @@
 			"content" : "",
 			"ExpectedErrorMessage" : "You must enter a message to post."
 		}
-		
+
 	},
-	
+
 	"followTopic" : {
 		"ExpectedWarningMessage" : "You haven't followed any topics yet."
 	},
@@ -128,12 +139,12 @@
 	"followCategory" : {
 		"ExpectedWarningMessage" : "You haven't followed any categories yet."
 	},
-	
+
 	"deleteTopic" : {
 		"topicName" : "ONEpluse"
 	},
 
-	
+
 	"sharePost" : {
 		"socialUrl" : "",
 		"email" : "sangita.digi@gmail.com",
@@ -161,7 +172,7 @@
 		"topicTitle" : "ONEpluse",
 		"warningMessage" : "rajatk hasn't started any topics yet."
 	},
-	
+
 	"lock/unLock" : {
 		"topicTitle" : "ONEpluse",
 		"ExpectedWarningMessage" : "Note: This topic is locked. No new replies will be accepted.",
@@ -173,7 +184,7 @@
 		"newPostTitle" : "newPost",
 		"moveToCategory1" : "",
 		"moveToCategory2" : "",
-		
+
 		"ValidCredential" : {
 				"title" : "newPost",
 				"content" : "hey there..!!",
@@ -186,8 +197,3 @@
 		"infoMessage" : "Deselect the categories you would like to stop hiding."
 	}
 }
-
-
-
-
-

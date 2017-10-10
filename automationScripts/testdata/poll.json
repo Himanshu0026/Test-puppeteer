@@ -1,0 +1,9 @@
+{
+  "pollData" : {
+		"pollQuestion" :"PM of india",
+		"votecheckbox" : true,
+		"option1" : "Modi",
+		"option2" : "Rahul",
+		"multiplechoicebox" : true
+	}
+}
