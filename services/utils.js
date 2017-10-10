@@ -42,18 +42,56 @@ utils.isValidJobToAdd = function(commitBranch, commitDetails, callback){
 				console.log("commitDetails: "+JSON.stringify(commitDetails));
 				redisClient.exists("pendingCommit_"+commitBranch, function(err, isExist){
 					if(!isExist)
-						redisClient.hmset("pendingCommit_"+commitBranch, {"branch": commitBranch, "commitDetails": JSON.stringify(commitDetails), "entryTime": timeString});	
+						redisClient.hmset("pendingCommit_"+commitBranch, {"branch": commitBranch, "commitDetails": JSON.stringify(commitDetails), "entryTime": timeString});
 					else
 						redisClient.hset("pendingCommit_"+commitBranch, "commitDetails", JSON.stringify(commitDetails));
 				});
 				return callback(false);
 			}
 		}else{
-			console.log("First time automation execution request received for the branch "+commitBranch); 
+			console.log("First time automation execution request received for the branch "+commitBranch);
 			redisClient.set(commitBranch, timeString);
 			return callback(true);
-		}		
+		}
 	});
 };
 
-
+utils.isValidBranch = function(branchName, callback) {
+	console.log("Executing isValidBranch for "+branchName);
+	var currentTime = new Date();
+	var timeString = currentTime.toString();
+	var len = 1;
+	redisClient.exists('backstopBranches', function(err, isExist) {
+		if(isExist) {
+			redisClient.smembers('backstopBranches', function (err, branchList) {
+				if(branchList) {
+					branchList.forEach(function(branch) {
+						if(branch.branchName == branchName) {
+							return callback(false);
+						}else {
+							if(len >= branchList.length) {
+								var value = false;
+								addNewBranch(value);
+								len++;
+							}
+						}
+					});
+					function addNewBranch(value) {
+						console.log('value in redis get : ' + value);
+						if(!value) {
+							console.log("First time backstop execution request received for the branch "+branchName);
+							redisClient.sadd('backstopBranches', branchName);
+							return callback(true);
+						}else {
+							return callback('false');
+						}
+					}
+				}
+			});
+		}else {
+			console.log("First time storing backstop branch details on the redis server for branch "+branchName);
+			redisClient.sadd('backstopBranches', branchName);
+			return callback(true);
+		}
+	});
+};

@@ -74,5 +74,16 @@
 	},
 
 	"permissionSettingMsg" : "Your user group settings have been updated.",
-	"beta" : 0
+
+	"beta" : 0,
+
+	"refHost": "https://www.websitetoolbox.com",
+
+	"testHost": "http://beta12.websitetoolbox.com",
+
+	"reportFile": "/etc/automation/backstopjs/backstop_data/html_report/index.html",
+
+	"token": "f17853d3424f65fe281c892b5c9656df61c0649c",
+
+	"apiURL": "https://api.github.com/repos/webtoolbox/Website-Toolbox/"
 }

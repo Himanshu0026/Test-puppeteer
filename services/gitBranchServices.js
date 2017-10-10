@@ -6,8 +6,8 @@ var gitBranchServices = module.exports = {};
 gitBranchServices.deleteMatureCommitBranch = function(){
 	console.log("Running deleteMatureCommitBranch");
 	redisClient.keys('pendingCommit*', function(err, pendingCommits){
-		console.log("Found pending commits");
 		if(pendingCommits && pendingCommits.length>0){
+			console.log("Found pending commits");
 			pendingCommits.forEach(function ( pc, index){
 				redisClient.hgetall(pc, function(err, commit){
 					console.log("Now checking for pending commit for branch: " + commit.branch);
@@ -20,11 +20,11 @@ gitBranchServices.deleteMatureCommitBranch = function(){
 						console.log("Last commit details: " + commit.commitDetails);
 						var commitInfoJSON = JSON.parse(commit.commitDetails);
 						console.log("commitDetails: "+commitInfoJSON.branchName);
-						queueServices.addNewJob(commitInfoJSON);
+						queueServices.addNewJob(commitInfoJSON, 'automation');
 						redisClient.del(pc);
 					}
 				});
-			});		
+			});
 		}else{
 			console.log("No pending commits");
 		}
@@ -36,4 +36,3 @@ gitBranchServices.managePendingCommits = function(redisStorageClient){
 	console.log("The service gitBranchServices.deleteMatureCommitBranch has been started.");
 	setInterval(gitBranchServices.deleteMatureCommitBranch, 300000);
 };
-

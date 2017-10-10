@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>QA Github Interface</title>
+		<% include ./partials/head.ejs %>
+		<script src="/js/head.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h3>Pull Requests</h3>
+					<a href="/pulls" id="pulls">View all pull requests</a><br><be>
+					<h3>Branches</h3>
+					<a href="/branches" id="branches">View all branches</a><br>
+					<form id="branchStats" action="">
+						<h3>Branch Details</h3>
+						<input type="text" id="branch" placeholder="Branch Name" autofous="true"><br>
+					</form>
+					<form id="backstopStats" target="_blank" action="" method="post">
+						<h3>Run Backstop</h3>
+						<input type="text" id="backstop" placeholder="Branch Name" autofous="true"><br>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+	</body>
+</html>

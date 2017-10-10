@@ -1,15 +1,15 @@
 //This script is responsible for creating job queue and serves each job one by one.
 'use strict.';
 var executorServices = require('./executorServices.js');
-var kue = require('kue');   
+var kue = require('kue');
 
 var queueServices = module.exports = {};
-                                                 
+
 //Creating job queue
-var jobQueue = kue.createQueue(); 
+var jobQueue = kue.createQueue();
 
 //Handling job enqueue event
-jobQueue.on('job enqueue', 
+jobQueue.on('job enqueue',
 	function(id, type){
 		console.log( 'Job %s got queued of type %s', id, type );
 
@@ -33,16 +33,28 @@ jobQueue.process('pushRequest', function(job, done){
 	executorServices.executeJob(job.data, done);
 });
 
+//Initiating backstop job processing
+jobQueue.process('backstop', function(job, done){
+	console.log("started job "+ job.id );
+	console.log("started job with data  "+ job.data );
+	executorServices.executeBackstop(job.data, done);
+});
+
 //Adding new job in queue of "pushRequest" type
-queueServices.addNewJob = function(jobArg){
-	var job = jobQueue.create('pushRequest', jobArg).save( function(err){
-		if( !err ) 
-			console.log( job.id );
-		else
-			console.log("Getting error while adding job in queue: "+err);			
-	});
+queueServices.addNewJob = function(jobArg, type){
+	if(type == 'automation') {
+		var job = jobQueue.create('pushRequest', jobArg).save( function(err){
+			if( !err )
+				console.log( job.id );
+			else
+				console.log("Getting error while adding job in queue: "+err);
+		});
+	}else {
+		var job = jobQueue.create('backstop', jobArg).save( function(err){
+			if( !err )
+				console.log( job.id );
+			else
+				console.log("Getting error while adding job in queue: "+err);
+		});
+	}
 };
-
-
-
-

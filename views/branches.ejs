@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Branches</title>
+		<% include ./partials/head.ejs %>
+		<script src="/js/head.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+			    		<%if (branches.length > 0) { %>
+			    			<h2>Branches</h2>
+			    			<a href="" style="float: right; margin-top: -41px;" onclick="goBack()"><button type="button" class="btn btn-sky">Back</button></a>
+			    			<div class="table-responsive">
+				      			<table id="branches" class="table table-bordred table-striped">
+								<thead>
+									<th>Branch Name</th>
+									<th>Run Backstop</th>
+									<th>Automation Status</th>
+									<th>Automation Status Description</th>
+									<th>Merging Status</th>
+								</thead>
+			    					<tbody>
+			    						<% branches.forEach(function(branch){ %>
+										<tr>
+											<td><a href="branches/<%= branch.name %>" ><%= branch.name %></a></td>
+											<td><form class="backstop_form_button" target="_blank" action="" method="post"><a class="run_backstop" id="<%= branch.name %>"><button type="submit" class="btn btn-primary">Run</button></a></form></td>
+											<td><%= branch.automationStatus %></td>
+											<td><%= branch.description %></td>
+											<% if(branch.automationStatus == 'success') { %>
+												<td>Automatically Mergable</td>
+											<% } else {%>
+												<td>Not Automatically Mergable</td>
+											<% } %>
+										</tr>
+									<%  }); %>
+								</tbody>
+
+							</table>
+				    		</div>
+			    		<% } %>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

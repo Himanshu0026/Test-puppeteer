@@ -1,0 +1,67 @@
+[![Build Status](https://github.com/webtoolbox/QA-automation/tree/node-backstop/backstopjs)
+
+Project's Home Directory : /etc/automation
+
+# BackstopJS
+
+# Install BackstopJS
+Run this in your terminal from anywhere...
+$ npm install -g backstopjs
+
+# Install minimist(Get command line arguments) module
+$ npm install minimist
+
+# Generating configuration file
+
+The following command will create a config template file which you can modify in your root directory.
+From your projects's directory ...
+$ backstop genConfig
+
+# Set up reference host(A url for capturing screenshots for backstop reference command)
+We can set up refhost url using two of the following way.
+A) We can pass refhost url from the command line as "backstop reference --configPath=backstop-settings.js --refhost=url_for_reference_host"
+B) We can change refHost property in "https://github.com/webtoolbox/QA-automation/blob/node-backstop/config/config.json" file.
+
+
+# Set up test host(A url for capturing screenshots for backstop test command)
+We can set up testhost url using two of the following way.
+A) We can pass testhost url from the command line as "backstop test --configPath=backstop-settings.js --testhost=url_for_test_host"
+B) We can change testHost property in "https://github.com/webtoolbox/QA-automation/blob/node-backstop/config/config.json" file.
+
+
+# Set up viewports configuration
+Currently We are using viewports configuration for phone/tablet_h/tablet_v. If want to change viewports configuration, change viewports array inside "https://github.com/webtoolbox/QA-automation/blob/node-backstop/backstopjs/backstop-settings.js".
+
+
+# Set up scenarios
+Currently we are running backstop for 29 pages. If want to add pages or remove pages, change pathConfig(an array containing all pages to be tested) inside "https://github.com/webtoolbox/QA-automation/blob/node-backstop/backstopjs/paths.js"
+
+
+# Run backstop manually inside project directory
+run commands in the same order one after the other
+A) backstop reference --configPath=backstop-settings.js
+B) backstop test --configPath=backstop-settings.js
+
+
+# Running backstop on live server
+
+Application startup :
+
+Move to the application directory : cd /etc/automation
+Run the command “sudo ./bin/startup.sh”
+(Logs are being written under the directory "/var/log/scripts/".)
+
+Application Stop :
+
+Move to the application directory : cd /etc/automation
+Run the command "sudo ./bin/stop.sh"
+
+Application deployment on live server :
+
+sudo su - automation
+cd /etc/automation
+git pull origin node-backstop
+sudo ./bin/stop.sh //Stop backstopJS application
+sudo ./bin/startup.sh //Start backstopJS application
+
+Once we are done with the above commands, we can simply go through the "https://beta12.websitetoolbox.com:8081/qa" url and run backstop from the QA GitHub Interface page.
