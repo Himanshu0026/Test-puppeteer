@@ -3,15 +3,18 @@
 'use strict.';
 var config = require('../../../config/config.json');
 var forumLoginTests = require('../cases/login.js');
+var forumLoginMethod = require('../methods/login.js');
 var utils = require('../utils.js');
 var forumLogin = module.exports = {};
 
 forumLogin.featureTest = function() {
-
-	casper.start(config.url, function() {
-
+	
+	casper.start(config.backEndUrl, function() {
+		forumLoginMethod.loginToForumBackEnd();
+	}).then(function() {
+		utils.setNewTheme();
+	}).thenOpen(config.url, function() {
 		utils.info(" Title of the page :" +this.getTitle());
-
 		//Valid username and password then logout from application
 		forumLoginTests.validCredential();
 
@@ -29,6 +32,5 @@ forumLogin.featureTest = function() {
 
 		//Valid email and password then logout from application
 		forumLoginTests.validEmail();
-
 	});
 };

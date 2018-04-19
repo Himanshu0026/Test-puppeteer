@@ -26,23 +26,23 @@ registerMethod.registerToApp = function(data) {
 
 //2.Logout after registration
 registerMethod.redirectToLogout = function() {
-	var emailSuccessStartMsg = "Thank you for registering! We sent a verification email to";
-	var emailSuccessEndMsg = "Please follow the instructions in the email to verify your account. If it doesn't arrive, please check your spam folder, or";
+	var emailSuccessStartMsg = "Thank you for registering! Please check your email for instructions on how to begin using your account.";
+	//var emailSuccessEndMsg = "Please follow the instructions in the email to verify your account. If it doesn't arrive, please check your spam folder, or";
 	var ExistingUserMsg = "It looks like you already have a forum account! A forum account for that username and email address combination already exists";
 	var approvalSuccessMsg = "Thank you for registering! Your account will need to be approved before you have full access to the forums. You will be notified via email once your account has been reviewed.";
 	casper.waitForText(emailSuccessStartMsg, function() {
-		this.waitForText(emailSuccessEndMsg, function() {
-			this.test.assertSelectorHasText('small a[href="/categories"]', 'Back to Categories');
-			this.click('small a[href="/categories"]');
+		//this.waitForText(emailSuccessEndMsg, function() {
+			this.test.assertExists('div.back-message a:nth-child(1)');
+			this.click('div.back-message a:nth-child(1)');
 			utils.info('User successfully registered and added in the email verification group');
 			this.waitForSelector('ul.nav.pull-right span.caret', function() {
 				forumLoginMethod.logoutFromApp();
 			});
-		});
+		//});
 	}, function() {
 		casper.waitForText(approvalSuccessMsg, function() {
-			this.test.assertSelectorHasText('small a[href="/categories"]', 'Back to Categories');
-			this.click('small a[href="/categories"]');
+			this.test.assertExists('div.back-message a:nth-child(1)');
+			this.click('div.back-message a:nth-child(1)');
 			utils.info('User successfully registered and added in the pending approval group');
 			this.waitForSelector('ul.nav.pull-right span.caret', function() {
 				forumLoginMethod.logoutFromApp();
@@ -84,8 +84,8 @@ registerMethod.registerMultipleUsers = function(usersCount, callback) {
 			utils.enableorDisableCheckbox('rules_checkbox', true);
 			this.test.assertExists('form[name="PostTopic"] button');
 			this.click('form[name="PostTopic"] button');
-		}).waitForSelector('a.default-user', function() {
-			if(this.exists('a.default-user')) {
+		}).waitForSelector('button span.image-wrapper', function() {
+			if(this.exists('button span.image-wrapper')) {
 				forumLoginMethod.logoutFromApp();
 			}
 		});

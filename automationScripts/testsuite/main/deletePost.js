@@ -11,6 +11,8 @@ deletePost.featureTest = function(){
 		utils.info(" Title of the page :"+this.getTitle());
 		forumLoginMethod.loginToForumBackEnd();
 	}).then(function(){
+	//create category--
+	deletePostTests.deletePostCreateCategory();
 	//Verify by delete one topic -selecting by check box
 	deletePostTests.deleteTopicByCheckboxAdmin();
 	//Verify by delete multiple topic-selecting by check box

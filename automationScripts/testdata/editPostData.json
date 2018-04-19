@@ -7,10 +7,18 @@
 		"data":"edit",
 		"searchPageData":"neweditpost reply",
 		"expectedPost":"editpost reply",
-		"expectedPostProfilePage":"newPosthello",
+		"expectedPostProfilePage":"newPostmyPost",
 		"expectedTopicRegisterUser":"newTopicmy old topic",
-		"expectedPostRegisterUser":"=neweditpost reply",
-		"expectedPostprofileRegister":"..=neweditpost reply",
-		"expectedsearchDataRegister":"....=neweditpost reply"
+		"expectedPostRegisterUser":"=newpost replyHello",
+		"expectedPostprofileRegister":"hellnewpost replyHello",
+		"expectedsearchDataRegister":"posthellnewpost replyHello"
+	},
+	"SearchPage" :{
+		"expectedPost":"newpost replyHello"
+	},
+
+	"editedPost":{
+		"newPost":"myPost"
 	}
+
 }

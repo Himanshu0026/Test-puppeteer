@@ -3,413 +3,413 @@
 'use strict.';
 var config = require('../../../config/config.json');
 var utils = require('../utils.js');
+var forumLoginMethod = require('../methods/login.js');
+var postTopicUserPermissionJSON = require('../../testdata/postTopicUserPermissionData.json');
 var postTopicUserPermissionTestcases = require('../cases/postTopicUserPermission.js');
-var postTopicUserPermissionMethod = require('../methods/postTopicUserPermission.js');
 var combinationOfSubCategoryAndGroupPermissionsTestcases = require('../cases/combinationOfSubCategoryAndGroupPermissions.js');
 var postTopicUserPermission = module.exports = {};
 
 
 postTopicUserPermission.registeredUserTest = function() {
 
-	casper.start(config.url, function() {
+	casper.start(config.backEndUrl, function() {
 
 		utils.info(" Title of the page :"+this.getTitle());
+		forumLoginMethod.loginToForumBackEnd();
 
-		// method to enable view forum for unregistered User
-		combinationOfSubCategoryAndGroupPermissionsTestcases.enableViewForumForUnregisterdUser();
+	}).then(function() {
 
-		// method to register users
-		postTopicUserPermissionTestcases.registerUserTOLogin();
-
-		// method to create a category cat1
-		postTopicUserPermissionTestcases.createCategory();
+		// method to create a category and its sub category and get their id
+		combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory();
 
 		// method to verify permission message after clicking on any topic
-		postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable();
+		postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable('Registered Users');
 
 		// method to Verify permission message after creating new topic
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicDisable();
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicDisable('Registered Users');
 
 		// method to Verify permission message after clicking on this newly created topic from the category listing page
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageDisable();
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageDisable('Registered Users');
 
 		// method to verify content of  a topic
-		postTopicUserPermissionTestcases.verifyClickOnAnyTopicEnable();
+		postTopicUserPermissionTestcases.verifyClickOnAnyTopicEnable('Registered Users');
 
 		// method to verify compose message functionality from the category listing page
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageEnable();
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageEnable('Registered Users');
 
 		// method to Verify compose message functionality from the Topic listing page
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicEnable();
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicEnable('Registered Users');
 
 		// method to Disable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserDisable();
+		postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserDisable('Unregistered / Not Logged In');
 
 		// method to Enable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserEnable();
+		postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserEnable('Unregistered / Not Logged In');
 
 		// method to Disable "View Others' Topic" for Registered user from group Permission
-		postTopicUserPermissionTestcases.disableViewOthersTopicsForRegisteredUser();
+		postTopicUserPermissionTestcases.disableViewOthersTopicsForRegisteredUser('Registered Users');
 
 		// method to Verify View Others's Topic on frontend from category
-		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategory();
+		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategory('Registered Users');
 
 		// method to Verify View Others's Topic on frontend from category when there are own topic
-		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForOwnTopic();
+		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForOwnTopic('Registered Users');
 
 		// method to Verify View Others's Topic in topic list inside category
-		postTopicUserPermissionTestcases.verifyViewOthersTopicBySearchingTopic();
+		postTopicUserPermissionTestcases.verifyViewOthersTopicBySearchingTopic('Registered Users');
 
 		// method to Enable "View Other Topic" for Registered user from group Permission and verify permission on frontend
-		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryEnable();
+		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryEnable('Registered Users');
 
 		// method to Disable "View Others' Topic" for un-registered user from group Permission
-		postTopicUserPermissionTestcases.verifyViewOthersTopicForUnregisteredUserWhenNoTopicCreatedDisable();
+		postTopicUserPermissionTestcases.verifyViewOthersTopicForUnregisteredUserWhenNoTopicCreatedDisable('Unregistered / Not Logged In');
 
 		// method to Disable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyReplyOwnTopicForRegisterUserDisable();
+		postTopicUserPermissionTestcases.verifyReplyOwnTopicForRegisterUserDisable('Registered Users');
 
 		// method to Enable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyReplyOwnTopicForRegisterUserEnable();
+		postTopicUserPermissionTestcases.verifyReplyOwnTopicForRegisterUserEnable('Registered Users');
 
 		// method to Disable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyReplyOwnTopicForAdminUser();
+		postTopicUserPermissionTestcases.verifyReplyOwnTopicForAdminUser('Registered Users');
 
 		// method to Disable "Edit Own Post" for Registered user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyEditOwnPostForRegisteredUserDisable();
+		postTopicUserPermissionTestcases.verifyEditOwnPostForRegisteredUserDisable('Registered Users');
 
 		// method to Enable "Edit Own Post" for Registered user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyEditOwnPostForRegisteredUserEnable();
+		postTopicUserPermissionTestcases.verifyEditOwnPostForRegisteredUserEnable('Registered Users');
 
 		// method to Disable "Delete Own Post" for Registered user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostForRegisteredUserDisable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostForRegisteredUserDisable('Registered Users');
 
 		// method to Enable "Delete Own Post" for Registered user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostForRegisteredUserEnable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostForRegisteredUserEnable('Registered Users');
 
 		// method to Disable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserDisable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserDisable('Registered Users');
 
 		// method to Enable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserEnable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserEnable('Registered Users');
 
 		// method to Disable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic on the post screen
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTopicDisable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTopicDisable('Registered Users');
 
 		// method to Enable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic on the post screen
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTopicEnable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTopicEnable('Registered Users');
 
 		// method to Disable "Delete Own Topic" for Registered user from group Permission and Verify delete option on drop down on the post listing page
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredFromDropDownOnPostListingPageDisable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredFromDropDownOnPostListingPageDisable('Registered Users');
 
 		// method to Enable "Delete Own Topic" for Registered user from group Permission and Verify delete option on drop down on the post listing page
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredFromDropDownOnPostListingPageEnable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredFromDropDownOnPostListingPageEnable('Registered Users');
 
 		// method to verify when delete own post is disable and delete own topic enable
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostDisableAndTopicEnableForRegisteredUser();
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostDisableAndTopicEnableForRegisteredUser('Registered Users');
 
 		// method to verify when delete own post is disable and delete own topic disable
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostAndTopicDisableForRegisteredUser();
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostAndTopicDisableForRegisteredUser('Registered Users');
 
 		// method to Disable "Move Own Post" for Registered user from group Permission and Verify Move option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicDisable();
-
-		// method to Enable "Move Own Post" for Registered user from group Permission and Verify Move option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicEnable();
-
-		// method to verify Move Own Topic shown on User's Profile page
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageEnable();
+		postTopicUserPermissionTestcases.verifyMoveOwnTopicDisable('Registered Users');
 
 		// method to Move Own Topic shown on User's Profile page For disable setting
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageDisable();
+		postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageDisable('Registered Users');
 	});
 };
 
 postTopicUserPermission.pendingUserTest = function() {
 
-	casper.start(config.url, function() {
+	casper.start(config.backEndUrl, function() {
 
-		utils.info("Title of the page :"+this.getTitle());
+		utils.info(" Title of the page :"+this.getTitle());
+		forumLoginMethod.loginToForumBackEnd();
 
-		// method to verify permission message after clicking on any topic for pending user
-		postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisableForPendingUser();
+	}).then(function() {
 
-		// method to Verify permission message after creating new topic for pending user
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicForPendingUserDisable();
+		// method to enable pending user group and assign the user
+		//combinationOfSubCategoryAndGroupPermissionsTestcases.enablePendingApprovalAndAssignUser();
 
-		// method to Verify permission message after clicking on this newly created topic from the category listing page for pending user
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageForPendingUserDisable();
+		// method to verify permission message after clicking on any topic
+		postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable('Pending Approval');
 
-		// method to verify content of  a topic for pending user
-		postTopicUserPermissionTestcases.verifyClickOnAnyTopicForPendingUserEnable();
+		// method to Verify permission message after creating new topic
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicDisable('Pending Approval');
 
-		// method to verify compose message functionality from the category listing page for pending user
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageForPendingUserEnable();
+		// method to Verify permission message after clicking on this newly created topic from the category listing page
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageDisable('Pending Approval');
 
-		// method to Verify compose message functionality from the Topic listing page" for pending user
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicEnableForPendingUser();
+		// method to verify content of  a topic
+		postTopicUserPermissionTestcases.verifyClickOnAnyTopicEnable('Pending Approval');
 
-		// method to Disable "View Others' Topic" for Pending user from group Permission
-		postTopicUserPermissionTestcases.disableViewOthersTopicsForPendingUser();
+		// method to verify compose message functionality from the category listing page
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageEnable('Pending Approval');
 
-		// method to Verify View Others's Topic on frontend from category when there is no own topic ForP ending User
-		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForPendingUser();
+		// method to Verify compose message functionality from the Topic listing page
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicEnable('Pending Approval');
 
-		// method to Verify View Others's Topic on frontend from category when there are own topic For Pending User
-		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForOwnTopicForPendingUser();
+		// method to Disable "View Others' Topic" for Registered user from group Permission
+		postTopicUserPermissionTestcases.disableViewOthersTopicsForRegisteredUser('Pending Approval');
 
-		// method to Verify View Others's Topic in topic list inside category For Pending User
-		postTopicUserPermissionTestcases.verifyViewOthersTopicBySearchingTopicForPendingUser();
+		// method to Verify View Others's Topic on frontend from category
+		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategory('Pending Approval');
 
-		// method to Enable "View Other Topic" for Registered user from group Permission and verify permission on frontend For Pending User
-		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForPendingUserEnable();
+		// method to Verify View Others's Topic on frontend from category when there are own topic
+		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForOwnTopic('Pending Approval');
 
-		// method to Disable "Reply Own Topic" for Pending user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyReplyOwnTopicForPendingUserDisable();
+		// method to Verify View Others's Topic in topic list inside category
+		postTopicUserPermissionTestcases.verifyViewOthersTopicBySearchingTopic('Pending Approval');
 
-		// method to Enable "Reply Own Topic" for Pending user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyReplyOwnTopicForPendingUserEnable();
+		// method to Enable "View Other Topic" for Registered user from group Permission and verify permission on frontend
+		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryEnable('Pending Approval');
 
-		// method to Disable "Reply Own Topic" for Pending user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyReplyOwnTopicForPendingUser();
+		// method to Disable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyReplyOwnTopicForRegisterUserDisable('Pending Approval');
 
-		// method to Disable "Edit Own Post" for Pending user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyEditOwnPostForPendingUserDisable();
+		// method to Enable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyReplyOwnTopicForRegisterUserEnable('Pending Approval');
 
-		// method to Enable "Edit Own Post" for Pending user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyEditOwnPostForPendingUserEnable();
+		// method to Disable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyReplyOwnTopicForAdminUser('Pending Approval');
 
-		// method to Disable "Delete Own Post" for Pending user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostForPendingUserDisable();
+		// method to Disable "Edit Own Post" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyEditOwnPostForRegisteredUserDisable('Pending Approval');
 
-		// method to Enable "Delete Own Post" for Pending user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostForPendingUserEnable();
+		// method to Enable "Edit Own Post" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyEditOwnPostForRegisteredUserEnable('Pending Approval');
 
-		// method to Disable "Delete Own Topic" for Pending user from group Permission and Verify delete option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForPendingUserDisable();
+		// method to Disable "Delete Own Post" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostForRegisteredUserDisable('Pending Approval');
 
-		// method to Enable "Delete Own Topic" for Pending user from group Permission and Verify delete option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForPendingUserEnable();
+		// method to Enable "Delete Own Post" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostForRegisteredUserEnable('Pending Approval');
 
-		// method to Disable "Delete Own Topic" for Pending user from group Permission and Verify delete option against topic on the post screen
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForPendingUserAgainstTopicDisable();
+		// method to Disable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic in the topic list
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserDisable('Pending Approval');
 
-		// method to Enable "Delete Own Topic" for Pending user from group Permission and Verify delete option against topic on the post screen
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForPendingUserAgainstTopicEnable();
+		// method to Enable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic in the topic list
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserEnable('Pending Approval');
 
-		// method to Disable "Delete Own Topic" for Pending user from group Permission and Verify delete option on drop down on the post listing page
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForPendingUserFromDropDownOnPostListingPageDisable();
+		// method to Disable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic on the post screen
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTopicDisable('Pending Approval');
 
-		// method to Enable "Delete Own Topic" for Pending user from group Permission and Verify delete option on drop down on the post listing page
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForPendingUserFromDropDownOnPostListingPageEnable();
+		// method to Enable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic on the post screen
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTopicEnable('Pending Approval');
 
-		// method to Disable "Move Own Post" for Pending user from group Permission and Verify Move option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicForPendingUserDisable();
+		// method to Disable "Delete Own Topic" for Registered user from group Permission and Verify delete option on drop down on the post listing page
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredFromDropDownOnPostListingPageDisable('Pending Approval');
 
-		// method to Enable "Move Own Post" for Pending user from group Permission and Verify Move option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicForPendingUserEnable();
+		// method to Enable "Delete Own Topic" for Registered user from group Permission and Verify delete option on drop down on the post listing page
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredFromDropDownOnPostListingPageEnable('Pending Approval');
 
-		// method to verify Move Own Topic shown on User's Profile page for Pending User
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageForPendingUserEnable();
+		// method to verify when delete own post is disable and delete own topic enable
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostDisableAndTopicEnableForRegisteredUser('Pending Approval');
 
-		// method to Move Own Topic shown on User's Profile page For disable setting for Pending User
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageForPendingUserDisable();
+		// method to verify when delete own post is disable and delete own topic disable
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostAndTopicDisableForRegisteredUser('Pending Approval');
+
+		// method to Disable "Move Own Post" for Registered user from group Permission and Verify Move option against topic in the topic list
+		postTopicUserPermissionTestcases.verifyMoveOwnTopicDisable('Pending Approval');
+
+		// method to Move Own Topic shown on User's Profile page For disable setting
+		postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageDisable('Pending Approval');
 	});
 };
 
 postTopicUserPermission.emailVerificationUserTest = function() {
 
-	casper.start(config.url, function() {
+	casper.start(config.backEndUrl, function() {
 
-		utils.info("Title of the page :"+this.getTitle());
+		utils.info(" Title of the page :"+this.getTitle());
+		forumLoginMethod.loginToForumBackEnd();
 
-		// method to verify permission message after clicking on any topic for email verification user
-		postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisableForEmailVerificationUser();
+	}).then(function() {
 
-		// method to Verify permission message after creating new topic for email verification user
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicForEmailVerificationUserDisable();
+		// method to enable email verification user group and assign the user
+		//combinationOfSubCategoryAndGroupPermissionsTestcases.enableEmailVerificationAndAssignUser();
 
-		// method to Verify permission message after clicking on this newly created topic from the category listing page for email verification user
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageForEmailVerificationUserDisable();
+		// method to verify permission message after clicking on any topic
+		postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable('Pending Email Verification');
 
-		// method to verify content of  a topic for email verification user
-		postTopicUserPermissionTestcases.verifyClickOnAnyTopicForEmailVerificationUserEnable();
+		// method to Verify permission message after creating new topic
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicDisable('Pending Email Verification');
 
-		// method to verify compose message functionality from the category listing page for email verification user
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageForEmailVerificationUserEnable();
+		// method to Verify permission message after clicking on this newly created topic from the category listing page
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageDisable('Pending Email Verification');
 
-		// method to Verify compose message functionality from the Topic listing page" for email verification user
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicEnableForEmailVerificationUser();
+		// method to verify content of  a topic
+		postTopicUserPermissionTestcases.verifyClickOnAnyTopicEnable('Pending Email Verification');
 
-		// method to Disable "View Others' Topic" for Pending Email Verification user from group Permission
-		postTopicUserPermissionTestcases.disableViewOthersTopicsForEmailVerificationUser();
+		// method to verify compose message functionality from the category listing page
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageEnable('Pending Email Verification');
 
-		// method to Verify View Others's Topic on frontend from category when there is no own topic For Email Verification User
-		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForEmailVerificationUser();
+		// method to Verify compose message functionality from the Topic listing page
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicEnable('Pending Email Verification');
 
-		// method to Verify View Others's Topic on frontend from category when there are own topic For Email Verification User
-		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForOwnTopicForEmailVerificationUser();
+		// method to Disable "View Others' Topic" for Registered user from group Permission
+		postTopicUserPermissionTestcases.disableViewOthersTopicsForRegisteredUser('Pending Email Verification');
 
-		// method to Verify View Others's Topic in topic list inside category For Email Verification User
-		postTopicUserPermissionTestcases.verifyViewOthersTopicBySearchingTopicForEmailVerificationUser();
+		// method to Verify View Others's Topic on frontend from category
+		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategory('Pending Email Verification');
 
-		// method to Enable "View Other Topic" for Email Verification user from group Permission and verify permission on frontend For Pending User
-		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForEmailVerificationUserEnable();
+		// method to Verify View Others's Topic on frontend from category when there are own topic
+		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForOwnTopic('Pending Email Verification');
 
-		// method to Disable "Reply Own Topic" for Pending Email Verification user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyReplyOwnTopicForEmailVerificationUserDisable();
+		// method to Verify View Others's Topic in topic list inside category
+		postTopicUserPermissionTestcases.verifyViewOthersTopicBySearchingTopic('Pending Email Verification');
 
-		// method to Enable "Reply Own Topic" for Pending Email Verification user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyReplyOwnTopicForEmailVerificationUserEnable();
+		// method to Enable "View Other Topic" for Registered user from group Permission and verify permission on frontend
+		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryEnable('Pending Email Verification');
 
-		// method to Disable "Reply Own Topic" for Pending Email Verification user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyReplyOwnTopicForEmailVerificationUser();
+		// method to Disable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyReplyOwnTopicForRegisterUserDisable('Pending Email Verification');
 
-		// method to Disable "Edit Own Post" for Pending Email Verification user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyEditOwnPostForEmailVerificationUserDisable();
+		// method to Enable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyReplyOwnTopicForRegisterUserEnable('Pending Email Verification');
 
-		// method to Enable "Edit Own Post" for Pending Email Verification user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyEditOwnPostForEmailVerificationUserEnable();
+		// method to Disable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyReplyOwnTopicForAdminUser('Pending Email Verification');
 
-		// method to Disable "Delete Own Post" for Pending Email Verification user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostForEmailVerificationUserDisable();
+		// method to Disable "Edit Own Post" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyEditOwnPostForRegisteredUserDisable('Pending Email Verification');
 
-		// method to Enable "Delete Own Post" for Pending Email Verification user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostForEmailVerificationUserEnable();
+		// method to Enable "Edit Own Post" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyEditOwnPostForRegisteredUserEnable('Pending Email Verification');
 
-		// method to Disable "Delete Own Topic" for Pending Email Verification user from group Permission and Verify delete option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForEmailVerificationUserDisable();
+		// method to Disable "Delete Own Post" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostForRegisteredUserDisable('Pending Email Verification');
 
-		// method to Enable "Delete Own Topic" for Pending Email Verification user from group Permission and Verify delete option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForEmailVerificationUserEnable();
+		// method to Enable "Delete Own Post" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostForRegisteredUserEnable('Pending Email Verification');
 
-		// method to Disable "Delete Own Topic" for Email Verification User from group Permission and Verify delete option against topic on the post screen
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForEmailVerificationUserAgainstTopicDisable();
+		// method to Disable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic in the topic list
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserDisable('Pending Email Verification');
 
-		// method to Enable "Delete Own Topic" for Email Verification user from group Permission and Verify delete option against topic on the post screen
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForEmailVerificationUserAgainstTopicEnable();
+		// method to Enable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic in the topic list
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserEnable('Pending Email Verification');
 
-		// method to Disable "Move Own Post" for Email Verification user from group Permission and Verify Move option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicForEmailVerificationUserDisable();
+		// method to Disable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic on the post screen
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTopicDisable('Pending Email Verification');
 
-		// method to Enable "Move Own Post" for Email Verification user from group Permission and Verify Move option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicForEmailVerificationUserEnable();
+		// method to Enable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic on the post screen
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTopicEnable('Pending Email Verification');
 
-		// method to verify Move Own Topic shown on User's Profile page for Email Verification User
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageForEmailVerificationUserEnable();
+		// method to Disable "Delete Own Topic" for Registered user from group Permission and Verify delete option on drop down on the post listing page
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredFromDropDownOnPostListingPageDisable('Pending Email Verification');
 
-		// method to Move Own Topic shown on User's Profile page For disable setting for Email Verification User
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageForEmailVerificationUserDisable();
+		// method to Enable "Delete Own Topic" for Registered user from group Permission and Verify delete option on drop down on the post listing page
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredFromDropDownOnPostListingPageEnable('Pending Email Verification');
 
-		// method to verify when delete own post is disable and delete own topic enable for Email Verification user
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostDisableAndTopicEnableForEmailVerificationUser();
+		// method to verify when delete own post is disable and delete own topic enable
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostDisableAndTopicEnableForRegisteredUser('Pending Email Verification');
 
-		// method to verify when delete own post is disable and delete own topic disable for Email Verification user
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostAndTopicDisableForEmailVerificationUser();
+		// method to verify when delete own post is disable and delete own topic disable
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostAndTopicDisableForRegisteredUser('Pending Email Verification');
 
-		// method to Disable "Delete Own Topic" for Email Verification user from group Permission and Verify delete option on drop down on the post listing page
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForEmailVerificationUserFromDropDownOnPostListingPageDisable();
+		// method to Disable "Move Own Post" for Registered user from group Permission and Verify Move option against topic in the topic list
+		postTopicUserPermissionTestcases.verifyMoveOwnTopicDisable('Pending Email Verification');
 
-		// method to Enable "Delete Own Topic" for Email Verification user from group Permission and Verify delete option on drop down on the post listing page
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForEmailVerificationUserFromDropDownOnPostListingPageEnable();
+		// method to Move Own Topic shown on User's Profile page For disable setting
+		postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageDisable('Pending Email Verification');
 	});
 };
 
 postTopicUserPermission.customUserTest = function() {
 
-	casper.start(config.url, function() {
+	casper.start(config.backEndUrl, function() {
 
-		utils.info("Title of the page :"+this.getTitle());
+		utils.info(" Title of the page :"+this.getTitle());
+		forumLoginMethod.loginToForumBackEnd();
+
+	}).then(function() {
+
+		var customUserGroup = postTopicUserPermissionJSON.groupName;
+
+		// method to create a custom group and assign a user
+		//combinationOfSubCategoryAndGroupPermissionsTestcases.createCustomGroupAndAssignUser(customUserGroup);
 
 		// method to verify permission message after clicking on any topic for Custom user
-		postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisableForCustomUser();
+		postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisableForCustomUser(customUserGroup);
 
-		// method to Verify permission message after creating new topic for Custom user
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicForCustomUserDisable();
+		// method to Verify permission message after creating new topic
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicDisable(customUserGroup);
 
-		// method to Verify permission message after clicking on this newly created topic from the category listing page for Custom user
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageForCustomUserDisable();
+		// method to Verify permission message after clicking on this newly created topic from the category listing page
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageDisable(customUserGroup);
 
 		// method to verify content of  a topic for pending user
-		postTopicUserPermissionTestcases.verifyClickOnAnyTopicForCustomUserEnable();
+		postTopicUserPermissionTestcases.verifyClickOnAnyTopicForCustomUserEnable(customUserGroup);
 
-		// method to verify compose message functionality from the category listing page for Custom user
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageForCustomUserEnable();
+		// method to verify compose message functionality from the category listing page
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageEnable(customUserGroup);
 
-		// method to Verify compose message functionality from the Topic listing page" for Custom user
-		postTopicUserPermissionTestcases.verifyClickOnNewTopicEnableForCustomUser();
+		// method to Verify compose message functionality from the Topic listing page
+		postTopicUserPermissionTestcases.verifyClickOnNewTopicEnable(customUserGroup);
 
 		// method to Disable "View Others' Topic" for Custom user from group Permission
-		postTopicUserPermissionTestcases.disableViewOthersTopicsForCustomUser();
+		postTopicUserPermissionTestcases.disableViewOthersTopicsForCustomUser(customUserGroup);
 
 		// method to Verify View Others's Topic on frontend from category when there is no own topic For Custom User
-		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForCustomUser();
+		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForCustomUser(customUserGroup);
 
-		// method to Verify View Others's Topic on frontend from category when there are own topic For Custom User
-		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForOwnTopicForCustomUser();
+		// method to Verify View Others's Topic on frontend from category when there are own topic
+		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForOwnTopic(customUserGroup);
 
-		// method to Verify View Others's Topic in topic list inside category For Custom User
-		postTopicUserPermissionTestcases.verifyViewOthersTopicBySearchingTopicForCustomUser();
+		// method to Verify View Others's Topic in topic list inside category
+		postTopicUserPermissionTestcases.verifyViewOthersTopicBySearchingTopic(customUserGroup);
 
 		// method to Enable "View Other Topic" for Custom user from group Permission and verify permission on frontend For Pending User
-		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForCustomUserEnable();
+		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryForCustomUserEnable(customUserGroup);
 
 		// method to Disable "Reply Own Topic" for Custom user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyReplyOwnTopicForCustomUserDisable();
+		postTopicUserPermissionTestcases.verifyReplyOwnTopicForCustomUserDisable(customUserGroup);
 
 		// method to Enable "Reply Own Topic" for Custom user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyReplyOwnTopicForCustomUserEnable();
+		postTopicUserPermissionTestcases.verifyReplyOwnTopicForCustomUserEnable(customUserGroup);
 
-		// method to Disable "Reply Own Topic" for Custom user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyReplyOwnTopicForCustomUser();
+		// method to Disable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyReplyOwnTopicForAdminUser(customUserGroup);
 
 		// method to Disable "Edit Own Post" for Custom user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyEditOwnPostForCustomUserDisable();
+		postTopicUserPermissionTestcases.verifyEditOwnPostForCustomUserDisable(customUserGroup);
 
 		// method to Enable "Edit Own Post" for Custom user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyEditOwnPostForCustomUserEnable();
+		postTopicUserPermissionTestcases.verifyEditOwnPostForCustomUserEnable(customUserGroup);
 
 		// method to Disable "Delete Own Post" for Custom user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostForCustomUserDisable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostForCustomUserDisable(customUserGroup);
 
 		// method to Enable "Delete Own Post" for Custom user from group Permission and Verify permission on Frontend
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostForCustomUserEnable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostForCustomUserEnable(customUserGroup);
 
 		// method to Disable "Delete Own Topic" for Custom user from group Permission and Verify delete option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForCustomUserDisable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForCustomUserDisable(customUserGroup);
 
 		// method to Enable "Delete Own Topic" for Custom user from group Permission and Verify delete option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForCustomUserEnable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForCustomUserEnable(customUserGroup);
 
 		// method to Disable "Delete Own Topic" for Custom user from group Permission and Verify delete option against topic on the post screen
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForCustomUserAgainstTopicDisable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForCustomUserAgainstTopicDisable(customUserGroup);
 
 		// method to Enable "Delete Own Topic" for Custom user from group Permission and Verify delete option against topic on the post screen
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForCustomUserAgainstTopicEnable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForCustomUserAgainstTopicEnable(customUserGroup);
 
 		// method to Disable "Delete Own Topic" for Custom user from group Permission and Verify delete option on drop down on the post listing page
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForCustomFromDropDownOnPostListingPageDisable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForCustomFromDropDownOnPostListingPageDisable(customUserGroup);
 
 		// method to Enable "Delete Own Topic" for Custom user from group Permission and Verify delete option on drop down on the post listing page
-		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForCustomFromDropDownOnPostListingPageEnable();
+		postTopicUserPermissionTestcases.verifyDeleteOwnTopicForCustomFromDropDownOnPostListingPageEnable(customUserGroup);
 
 		// method to verify when delete own post is disable and delete own topic enable for Custom user
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostDisableAndTopicEnableForCustomUser();
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostDisableAndTopicEnableForCustomUser(customUserGroup);
 
 		// method to verify when delete own post is disable and delete own topic disable for Custom user
-		postTopicUserPermissionTestcases.verifyDeleteOwnPostAndTopicDisableForCustomUser();
+		postTopicUserPermissionTestcases.verifyDeleteOwnPostAndTopicDisableForCustomUser(customUserGroup);
 
 		// method to Disable "Move Own Post" for Custom user from group Permission and Verify Move option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicForCustomUserDisable();
-
-		// method to Enable "Move Own Post" for Custom user from group Permission and Verify Move option against topic in the topic list
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicForCustomUserEnable();
-
-		// method to verify Move Own Topic shown on User's Profile page for Custom User
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageForCustomUserEnable();
+		postTopicUserPermissionTestcases.verifyMoveOwnTopicForCustomUserDisable(customUserGroup);
 
 		// method to Move Own Topic shown on User's Profile page For disable setting for Custom User
-		postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageForCustomUserDisable();
+		postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageForCustomUserDisable(customUserGroup);
 
 	});
 };

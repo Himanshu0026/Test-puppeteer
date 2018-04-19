@@ -44,7 +44,7 @@
 		"birthday" : "04/12/1991",
 		"usignature" : "This is my signature 18",
 		"namePrivate" : true,
-		"expectedErrorMsg" : "'neha' is already taken."
+		"expectedErrorMsg" : " has already been taken."
 	},
 
 	"existingEmail" : {
@@ -116,7 +116,7 @@
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature invalid email",
 			"namePrivate" : true,
-			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+			"expectedMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 		}
 	},
 
@@ -142,7 +142,7 @@
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature invalid email",
 			"namePrivate" : true,
-			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+			"expectedMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 		}
 	},
 
@@ -168,7 +168,7 @@
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature invalid email",
 			"namePrivate" : true,
-			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+			"expectedMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 		}
 	},
 
@@ -194,7 +194,7 @@
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature invalid email",
 			"namePrivate" : true,
-			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+			"expectedMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 		}
 	},
 
@@ -220,7 +220,7 @@
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature invalid email",
 			"namePrivate" : true,
-			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+			"expectedMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 		}
 	},
 
@@ -246,7 +246,7 @@
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature invalid email",
 			"namePrivate" : true,
-			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+			"expectedMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 		}
 	},
 
@@ -272,7 +272,7 @@
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature invalid email",
 			"namePrivate" : true,
-			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+			"expectedMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 		}
 	},
 
@@ -298,7 +298,7 @@
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature invalid email",
 			"namePrivate" : true,
-			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+			"expectedMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 		}
 	},
 
@@ -324,7 +324,7 @@
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature invalid email",
 			"namePrivate" : true,
-			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+			"expectedMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 		}
 	},
 
@@ -350,7 +350,7 @@
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature invalid email",
 			"namePrivate" : true,
-			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+			"expectedMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 		}
 	},
 
@@ -376,7 +376,7 @@
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature invalid email",
 			"namePrivate" : true,
-			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+			"expectedMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 		}
 	},
 
@@ -391,7 +391,7 @@
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature invalid email",
 			"namePrivate" : true,
-			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+			"expectedMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 		},
 		"validInput" : {
 			"uname" : "gdt #$5 % ",
@@ -402,7 +402,7 @@
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature invalid email",
 			"namePrivate" : true,
-			"expectedMsg" : "Thank you for registering! We sent a verification email to"
+			"expectedMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
 		}
 	}
 

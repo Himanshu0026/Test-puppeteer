@@ -25,7 +25,9 @@ incontextRegistrationTests.doRegistrationByStartTopicEnable = function() {
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('a[href="/post/printadd"]', function() {
 			this.test.assertSelectorHasText('div#topics', 'Start New Topic');
-			this.click('a[href="/post/printadd"]');
+			this.evaluate(function() {
+				document.querySelector('a[href="/post/printadd"]').click();
+			});
 		}).waitForText('Create an account or log in', function() {
 			this.test.assertSelectorHasText('a#guest_user_create_account', 'Create an account or log in');
 			this.click('a#guest_user_create_account');
@@ -49,7 +51,9 @@ incontextRegistrationTests.doRegistrationByStartTopicDisable = function() {
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('a[href="/post/printadd"]', function() {
 			this.test.assertSelectorHasText('div#topics', 'Start New Topic');
-			this.click('a[href="/post/printadd"]');
+			this.evaluate(function() {
+				document.querySelector('a[href="/post/printadd"]').click();
+			});
 			registerTests.registrationWithValidInfo();
     });
 	});
@@ -85,8 +89,10 @@ incontextRegistrationTests.doRegistrationByQuoteOnPost = function() {
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).waitForSelector('a[href="/post/printadd"]', function() {
 	  this.test.assertSelectorHasText('div#topics', 'Start New Topic');
-	  this.click('a[href="/post/printadd"]');
-		topicMethod.createTopic(topicJSON.newTopic);
+	  this.evaluate(function() {
+		document.querySelector('a[href="/post/printadd"]').click();
+	  });
+	  topicMethod.createTopic(topicJSON.newTopic);
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
 	}).waitForSelector('i.icon.icon-menu', function() {
@@ -159,10 +165,12 @@ incontextRegistrationTests.doRegistrationByViewProfileDisable = function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
 			var userHref = casper.evaluate(function() {
-				var userId = document.querySelectorAll('div.panel-body.table-responsive ul li:nth-child(1) span.col-md-9 a.default-user.username');
+				var userId = document.querySelectorAll('div.panel-body.table-responsive ul li:nth-child(1) span.col-md-9 a.username');
 				return userId[0].getAttribute('href');
 			});
-			this.click('a[href="'+userHref+'"]');
+			casper.evaluate(function(userHref) {
+				document.querySelector('a[href="'+userHref+'"]').click();
+			},userHref);
       registerTests.registrationWithValidInfo();
     });
 	});
@@ -299,10 +307,12 @@ incontextRegistrationTests.doRegistrationByEmailButton = function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
 			var userHref = casper.evaluate(function() {
-				var userId = document.querySelectorAll('div.panel-body.table-responsive ul li:nth-child(1) span.col-md-9 a.default-user.username');
+				var userId = document.querySelectorAll('div.panel-body.table-responsive ul li span.col-md-9 a.username');
 				return userId[0].getAttribute('href');
 			});
-			this.click('a[href="'+userHref+'"]');
+			casper.evaluate(function(userHref) {
+				document.querySelector('a[href="'+userHref+'"]').click();
+			},userHref);
 			this.waitForSelector('a#send_email', function() {
 				this.test.assertSelectorHasText('a#send_email', 'Email');
 				this.click('a#send_email');
@@ -402,9 +412,11 @@ incontextRegistrationTests.doRegistrationFromReplyPostWithCreateAccount = functi
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
-			this.click('form[name="posts"] a.topic-title');
+		this.click('form[name="posts"] a.topic-title');
     }).waitForSelector('#posts-list', function() {
-      this.click('#sub_post_reply');
+     this.evaluate(function() {
+			 document.querySelector('#sub_post_reply').click();
+     });
     }).waitUntilVisible('#guest_user', function() {
       this.click('#guest_user');
     }).waitForSelector('form[name="PostTopic"]', function() {
@@ -432,7 +444,7 @@ incontextRegistrationTests.doRegistrationWhenUserAccountOff = function() {
   }).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]', function() {
     this.test.assertSelectorHasText('#ddSettings', 'General');
     this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
-    backEndregisterMethod.enableDisableUserAccounts(true);
+	backEndregisterMethod.enableDisableUserAccounts(true);
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
 		casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
@@ -441,5 +453,11 @@ incontextRegistrationTests.doRegistrationWhenUserAccountOff = function() {
 		backEndregisterMethod.viewUsers('Pending Email Verification');
 	}).then(function() {
 		backEndregisterMethod.editUserActions('Pending Email Verification', 'Delete', 'all');
-  });
+	}).then(function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+		this.test.assertSelectorHasText('#ddSettings', 'Security');
+		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+		backEndregisterMethod.enableDisableEmailAddressVerification(false);
+	});
 };

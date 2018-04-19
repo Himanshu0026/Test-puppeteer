@@ -17,11 +17,14 @@ thumpsUpDown.featureTest = function() {
 
 	}).then(function() {
 
+		// Test case to set up all the backend setting for registration task
+		//thumpsUpDownTestcases.registrationBackendSetting();
+
 		// method to register two user neha and isneha
-		thumpsUpDownTestcases.registerUserTOLogin();
+		//thumpsUpDownTestcases.registerUserTOLogin();
 
 		// method to create a category General
-		thumpsUpDownTestcases.createCategoryTestCase();
+		//thumpsUpDownTestcases.createCategoryTestCase();
 
 		// method to verify the thumbs up and down for guest user(unregister user)
 		thumpsUpDownTestcases.unregisterUserOnPostListingPageLikeDislike();

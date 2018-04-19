@@ -28,7 +28,7 @@ editPostTests.editTopicAdmin=function(){
 	}).waitForSelector('span#editable_subjuct', function(){
 		this.test.assertExists('i.glyphicon.glyphicon-chevron-down');
 		this.click('i.glyphicon.glyphicon-chevron-down');
-		casper.click('div[id^="post_list_"]:nth-child(1) div:nth-child(1) div ul li:nth-child(2) a');
+		casper.click('a[id^="edit_post_request"]');
 	}).waitForSelector('i.mce-ico.mce-i-image', function(){
 		casper.withFrame('message1_ifr', function(){
 			casper.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
@@ -53,21 +53,32 @@ editPostTests.editPostAdmin=function(){
 			this.test.assertExists('form[name="posts"] a.topic-title', 'topic is present');
 			this.click('form[name="posts"] a.topic-title');
 		}).waitForSelector('span#editable_subjuct', function(){
-			casper.click('span#first_coloumn_2 div div div:nth-child(1) div a i');
+			this.evaluate(function() {
+				document.querySelector('span#first_coloumn_2 div div div:nth-child(1) div a i').click();
+			});
 			var index=1;
 			editPostMethod.editPostGetHref('a#edit_post_request', index);
-		}).waitForSelector('i.mce-ico.mce-i-image', function(){
-			casper.withFrame('message1_ifr', function(){
-				casper.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
-				casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
-				casper.sendKeys('#tinymce', editPostJSON.editPost.data);
+		}).waitForSelector('#message1_ifr',function() {
+			var earlierText = casper.fetchText('span[id^="post_message_"]');
+			var successMsg = earlierText.substring(0, earlierText.indexOf('v'));
+			var trimmedMsg = successMsg.trim();
+			utils.info('The text before editing ='+trimmedMsg);
+			this.test.assertExists('#message1_ifr', 'message1-ifr found So the post is editable');
+			this.withFrame('message1_ifr', function() {
+	 			this.sendKeys('body#tinymce', "Hello");
 			});
-		}).wait(5000, function(){
-			this.click('input[type="button"]');
-		}).waitForText('editpost reply', function(){
-			var post=this.getHTML('span#first_coloumn_2  div:nth-child(4) span');
-			var actualPost=post.trim();
-			this.test.assertEquals(actualPost, editPostJSON.editPost.expectedPost,'post edited successfully');
+			this.then(function() {
+				this.click('div.form-group.cleared input[name="save"]');
+				this.wait('5000',function () {
+					var laterText = this.fetchText('span[id^="post_message_"]');
+					utils.info('The text before editing ='+laterText);
+					if(trimmedMsg != laterText){
+						utils.info('post edited');
+					} else {
+						utils.error('post not edited');
+					}
+				});
+			});
 		});
 	});
 };
@@ -83,19 +94,22 @@ editPostTests.editPostProfilePageAdmin=function(){
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
 		this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Post a reply');
-		this.click('a.pull-right.btn.btn-uppercase.btn-primary');
+		this.evaluate(function() {
+			document.querySelector('a#sub_post_reply').click();
+		});
 		this.waitForSelector('i.mce-ico.mce-i-image', function(){
 			casper.withFrame('message_ifr', function(){
 				casper.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
 				casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
-				casper.sendKeys('#tinymce', 'hello');
+				casper.sendKeys('#tinymce', 'myPost');
 			});
 		}).wait(5000, function(){
 			this.test.assertExists('input[name="submitbutton"]');
 			this.click('input[name="submitbutton"]');
-		}).waitForText('hello', function(){
+		}).waitForText(editPostJSON.editedPost.newPost, function(){
 			this.test.assertExists('ul.nav.pull-right span.caret');
 			this.click('ul.nav.pull-right span.caret');
+		}).then(function(){
 			this.click('a#user-nav-panel-profile');
 		}).waitForSelector('a#PostsOFUser', function(){
 			this.test.assertExists('i.glyphicon.glyphicon-chevron-down');
@@ -110,8 +124,8 @@ editPostTests.editPostProfilePageAdmin=function(){
 			});
 		}).wait(5000, function(){
 			this.click('input[type="button"]');
-		}).waitForText('newPosthello', function(){
-			var post=this.getHTML('div[id^="post_message_"]');
+		}).waitForText(editPostJSON.editPost.expectedPostProfilePage, function(){
+			var post=this.fetchText('div[id^="post_message_"]');
 			var actualPost=post.trim();
 			this.test.assertEquals(actualPost, editPostJSON.editPost.expectedPostProfilePage,'post edited on profilepage successfully');
 		}).then(function(){
@@ -145,10 +159,12 @@ editPostTests.editPostPeoplePosted=function(){
 		});
 	}).wait(5000, function(){
 		this.click('input[type="button"]');
-	}).waitForText('neweditpost reply', function(){
-		var post=this.getHTML('div[id^="post_message_"]');
+	}).waitForText(editPostJSON.SearchPage.expectedPost, function(){
+		var post=this.fetchText('div[id^="post_message_"] span');
 		var actualPost=post.trim();
-		this.test.assertEquals(actualPost, editPostJSON.editPost.searchPageData,'post edited on searchpage successfully');
+		var newPost=actualPost.split('T');
+		var firstPost=newPost[0];
+		this.test.assertEquals(firstPost, editPostJSON.SearchPage.expectedPost,'post edited on searchpage successfully');
 	}).then(function(){
 		forumLoginMethod.logoutFromApp();
 	});
@@ -173,7 +189,7 @@ editPostTests.editTopicregister=function(){
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('span#editable_subjuct', function(){
 		this.click('i.glyphicon.glyphicon-chevron-down');
-		this.click('div[id^="post_list_"]:nth-child(1) div:nth-child(1) div ul li:nth-child(3) a');
+		this.click('a[id^="edit_post_request"]');
 	}).waitForSelector('i.mce-ico.mce-i-image', function(){
 		casper.withFrame('message1_ifr', function(){
 			casper.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
@@ -183,9 +199,12 @@ editPostTests.editTopicregister=function(){
 	}).wait(5000, function(){
 		this.click('input[type="button"]');
 	}).waitForText(editPostJSON.editPost.expectedTopicRegisterUser, function(){
-		var Topic=this.getHTML('span[id^="post_message_"]');
+		var Topic=this.fetchText('span[id^="post_message_"]');
 		var actualTopic=Topic.trim();
-		this.test.assertEquals(actualTopic, editPostJSON.editPost.expectedTopicRegisterUser,'topic edited successfully');
+		var newPost=actualTopic.split('newpost');
+		var firstPost=newPost[0];
+		var post=firstPost.trim();
+		this.test.assertEquals(post, editPostJSON.editPost.expectedTopicRegisterUser,'topic edited successfully');
 	});
 };
 
@@ -201,18 +220,27 @@ editPostTests.editPostregister=function(){
 			casper.click('span#first_coloumn_2 div div div:nth-child(1) div a i');
 			var index=1;
 			editPostMethod.editPostGetHref('a#edit_post_request', index);
-		}).waitForSelector('i.mce-ico.mce-i-image', function(){
-			casper.withFrame('message1_ifr', function(){
-				casper.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
-				casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
-				casper.sendKeys('#tinymce', '=');
+			}).waitForSelector('#message1_ifr',function() {
+			var earlierText = casper.fetchText('span[id^="post_message_"]');
+			var successMsg = earlierText.substring(0, earlierText.indexOf('v'));
+			var trimmedMsg = successMsg.trim();
+			utils.info('The text before editing ='+trimmedMsg);
+			this.test.assertExists('#message1_ifr', 'message1-ifr found So the post is editable');
+			this.withFrame('message1_ifr', function() {
+	 			this.sendKeys('body#tinymce', ".");
 			});
-		}).wait(5000, function(){
-			this.click('input[type="button"]');
-		}).waitForText('=neweditpost reply', function(){
-			var post=this.getHTML('span#first_coloumn_2  div:nth-child(4) span');
-			var actualPost=post.trim();
-			this.test.assertEquals(actualPost, editPostJSON.editPost.expectedPostRegisterUser,'post edited successfully');
+			this.then(function() {
+				this.click('div.form-group.cleared input[name="save"]');
+				this.wait('5000',function () {
+					var laterText = this.fetchText('span[id^="post_message_"]');
+					utils.info('The text before editing ='+laterText);
+					if(trimmedMsg != laterText){
+						utils.info('post edited');
+					} else {
+						utils.error('post not edited');
+					}
+				});
+			});
 		});
 	});
 };
@@ -234,14 +262,17 @@ editPostTests.editPostProfilePageRegister=function(){
 		casper.withFrame('message1_ifr', function(){
 			casper.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
 			casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
-			casper.sendKeys('#tinymce', '..');
+			casper.sendKeys('#tinymce', 'hell');
 		});
 	}).wait(5000, function(){
 		this.click('input[type="button"]');
-	}).waitForText('..=neweditpost reply', function(){
-		var post=this.getHTML('div[id^="post_message_"]');
+	}).waitForText(editPostJSON.editPost.expectedPostprofileRegister, function(){
+		var post=this.fetchText('div[id^="post_message_"]');
 		var actualPost=post.trim();
-		this.test.assertEquals(actualPost, editPostJSON.editPost.expectedPostprofileRegister,'post edited successfully');
+		var newPost=actualPost.split('.');
+		var firstPost=newPost[0];
+		var posts=firstPost.trim();
+		this.test.assertEquals(posts, editPostJSON.editPost.expectedPostprofileRegister,'post edited successfully');
 	});
 };
 
@@ -262,14 +293,17 @@ editPostTests.editSearchPeoplePostedRegister=function(){
 		casper.withFrame('message1_ifr', function(){
 			casper.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
 			casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
-			casper.sendKeys('#tinymce', '..');
+			casper.sendKeys('#tinymce', 'post');
 		});
 	}).wait(5000, function(){
 		this.click('input[type="button"]');
-	}).waitForText('....=neweditpost reply', function(){
-		var post=this.getHTML('div[id^="post_message_"]');
+	}).waitForText(editPostJSON.editPost.expectedsearchDataRegister, function(){
+		var post=this.fetchText('div[id^="post_message_"]');
 		var actualPost=post.trim();
-		this.test.assertEquals(actualPost, editPostJSON.editPost.expectedsearchDataRegister,'post edited on searchpage successfully');
+		var newPost=actualPost.split('.');
+		var firstPost=newPost[0];
+		var posts=firstPost.trim();
+		this.test.assertEquals(posts, editPostJSON.editPost.expectedsearchDataRegister,'post edited on searchpage successfully');
 	});
 };
 

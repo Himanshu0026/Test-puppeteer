@@ -9,7 +9,10 @@ forgotPasswordMethod.gotoForgotPasswordPage = function(username, email) {
 	if (casper.visible('#td_tab_login')) {
     utils.info('Login button visible!');
 		casper.click('#td_tab_login');
-		casper.click('#anchor_tab_forget_password');
+		casper.evaluate(function() {
+			document.querySelector('#anchor_tab_forget_password').click();
+		});
+		//casper.click('#anchor_tab_forget_password');
   } else {
     utils.info('Login button is not visible!');
 		forumLoginMethod.logoutFromApp();

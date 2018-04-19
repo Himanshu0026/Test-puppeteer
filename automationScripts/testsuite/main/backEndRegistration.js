@@ -16,6 +16,8 @@ backEndForumRegister.featureTest = function() {
 		forumLoginMethod.loginToForumBackEnd();
 
   }).then(function() {
+	  utils.setNewTheme();
+  }).then(function() {
 
 		//Verify Error Messages While User Registering With Blank User Name.
 		//Verify Error Messages While User Registering With Blank EmailId.

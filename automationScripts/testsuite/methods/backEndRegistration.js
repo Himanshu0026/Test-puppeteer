@@ -20,8 +20,8 @@ backEndForumRegisterMethod.addUser = function(userInfo) {
 backEndForumRegisterMethod.inviteUser = function(userInfo) {
 	casper.waitForSelector('form[name="frmInviteUser"]',function() {
 		this.fill('form#frmInviteUser', {
-			'emails' : userInfo.uemail,
-			'note' : userInfo.pNote
+			'emails' : userInfo,
+			'note' : 'This is my personal note with valid inviation..'
 		}, false);
 		this.click('form[name="frmInviteUser"] button');
 	});
@@ -374,6 +374,7 @@ backEndForumRegisterMethod.editUserActions = function(userGroup, action, usersCo
 		this.fillSelectors('form[name="dbfrm"]', {
 			'select[name="action"]': action
 		}, true);
+		this.wait(2000, function(){});
 	});
 };
 
@@ -404,7 +405,9 @@ backEndForumRegisterMethod.goToCategoryPage = function() {
 	casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
 	casper.waitForSelector('div#ddContent a[href="/tool/members/mb/forums"]', function() {
 		this.test.assertSelectorHasText('#ddContent', 'Categories');
-		this.click('div#ddContent a[href="/tool/members/mb/forums"]');
+		this.evaluate(function() {
+		  document.querySelector('div#ddContent a[href="/tool/members/mb/forums"]').click();
+		});
 	});
 };
 
@@ -416,13 +419,34 @@ backEndForumRegisterMethod.createCategory = function(data) {
 		this.sendKeys('input[name="forum_name"]', data.title, {reset:true});
 		this.sendKeys('textarea[name="forum_description"]', data.description, {reset:true});
 		this.test.assertExists('button.button.btn-m.btn-blue', 'Save button found');
-		this.click('button.button.btn-m.btn-blue');
+		//this.click('button.button.btn-m.btn-blue');
+		this.evaluate(function() {
+		  document.querySelector('button.button.btn-m.btn-blue').click();
+		});
 	}).waitUntilVisible('div#loading_msg', function success() {
 		utils.info(casper.fetchText('div#loading_msg'));
-		utils.info('Category created','INFO');
+		utils.info('Category created');
 	}, function fail() {
-		utils.error('Category not created');
-		utils.error('Loading... not found');
+		var title = data.title;
+		try{
+			casper.test.assertExists('div#sortable ul li', 'Category list present');
+			var isCatExists = casper.evaluate(function(title) {
+				var totalCategories = document.querySelectorAll('div#sortable ul li');
+			   	for(var i=1; i<=(totalCategories.length); i++) {
+					var category = document.querySelector('div#sortable ul li:nth-child('+i+') div:nth-child(1) a');
+					if (category.innerText == title) {
+						return true;
+					}
+				}
+			},title);
+			if(isCatExists === true) {
+				utils.info('Category created');
+			} else {
+				utils.error('Category not created');
+			}
+		} catch (e) {
+			utils.error('Category not created');
+		}
 	});
 };
 
@@ -430,7 +454,7 @@ backEndForumRegisterMethod.createCategory = function(data) {
 backEndForumRegisterMethod.isCategoryExists = function(data, callback) {
 	var title = data.title;
 	try{
-		casper.test.assertExists('div#sortable ul li', 'Category present');
+		casper.test.assertExists('div#sortable ul li', 'Category list present');
 		var isCatExists = casper.evaluate(function(title) {
 			var totalCategories = document.querySelectorAll('div#sortable ul li');
 		   	for(var i=1; i<=(totalCategories.length); i++) {
@@ -453,6 +477,7 @@ backEndForumRegisterMethod.isCategoryExists = function(data, callback) {
 //*************************Method to get the id of Category and sub category from backend ************************
 backEndForumRegisterMethod.getIdOfCategory = function(data, callback) {
 	var title = data.title;
+	utils.info('value of title is'+title);
 	casper.waitForSelector('a#addForumButton', function() {
 		categoryId = this.evaluate(function(title) {
 			var totalCat = document.querySelectorAll('div#wrapper li a.forumName.atree');
@@ -464,7 +489,7 @@ backEndForumRegisterMethod.getIdOfCategory = function(data, callback) {
 				}
 			}
 		},title);
-		this.echo('the id of the category ='+categoryId,'INFO');
+		utils.info('the id of the category ='+categoryId);
 		return callback(null, categoryId);
 	});
 };
@@ -472,9 +497,11 @@ backEndForumRegisterMethod.getIdOfCategory = function(data, callback) {
 //Method to Add new moderarator
 backEndForumRegisterMethod.addNewModerator = function(data, category) {
 	casper.waitForSelector('a[href^="/tool/members/mb/moderators?action=new"]', function() {
-		this.click('a[href^="/tool/members/mb/moderators?action=new"]');
-	}).waitForSelector('form#add_mod_form',function() {
-		backEndForumRegisterMethod.getIdOfCategory(category, function(err,category_id){
+		this.evaluate(function() {
+		  document.querySelector('a[href^="/tool/members/mb/moderators?action=new"]').click();
+		});
+	}).waitUntilVisible('form#add_mod_form',function() {
+		backEndForumRegisterMethod.getIdOfCategory(category, function(err, category_id){
 			if(!err) {
 				casper.sendKeys('input[name="user"]', data, {reset:true});
 				casper.fillSelectors('form[name="posts"]', {
@@ -513,4 +540,135 @@ backEndForumRegisterMethod.removeModerator=function() {
 		}
 	}).wait('2000', function(err) {
 	});
+};
+
+//compose topic methods.
+backEndForumRegisterMethod.setTopicsPerPage=function(value){
+
+	casper.waitForSelector('form[name="posts"]',function() {
+		this.test.assertExists('select#privacy');
+		this.fillSelectors('form[name="posts"]', {
+			'select[name="perpage"]' : value
+		});
+		casper.click('button.button.btn-m.btn-blue');
+	}).waitUntilVisible('div#ajax-msg-top', function() {
+		if (this.visible('div#ajax-msg-top')) {
+      			utils.info(' Saved....');
+    		}else{
+			utils.info(' Saved is not displayed.');
+		}
+	});
+};
+
+
+backEndForumRegisterMethod.followUnfollow=function(value){
+
+	casper.waitForSelector('input[name="subject"]',function() {
+		utils.enableorDisableCheckbox('follow_thread', value);
+	});
+};
+
+
+backEndForumRegisterMethod.pinUnpin=function(value){
+
+	casper.waitForSelector('input[name="subject"]',function() {
+		utils.enableorDisableCheckbox('Pin', value);
+	});
+};
+
+
+backEndForumRegisterMethod.lockUnlock=function(value){
+
+	casper.waitForSelector('input[name="subject"]',function() {
+		utils.enableorDisableCheckbox('LCK', value);
+	});
+};
+
+//method to goto display page from backend
+backEndForumRegisterMethod.goToDisplayPage=function(){
+  casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function(){
+	  this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+	  this.click('a[href="/tool/members/mb/settings?tab=Display"]');
+  }).waitForText('Moderators');
+};
+
+//*************************Method to enable and disable Private Categories from Setting -> General backend ************************
+backEndForumRegisterMethod.enableDisablePrivateCategories = function(value) {
+	casper.waitForSelector('#show_private_forums', function() {
+		utils.enableorDisableCheckbox('show_private_forums', value);
+		casper.test.assertExists('button.button.btn-m.btn-blue', 'Save button found');
+		casper.click('button.button.btn-m.btn-blue');
+	}).waitUntilVisible('div#ajax-msg-top', function success() {
+		utils.info(casper.fetchText('div#ajax-msg-top'));
+	}, function fail() {
+		utils.error('Saved not found');
+	},30000);
+};
+
+//*************************Method to goto the permission of Category from backend ************************
+backEndForumRegisterMethod.goToCategoryPermission = function(id) {
+	casper.mouse.move('li[id="'+id+'"] div.select');
+	casper.click('li[id="'+id+'"] a.manageAction span');
+	casper.wait('2000',function() {
+	}).then(function() {
+		this.click('div[id="forumAction'+id+'"] a.change_perm');
+	}).waitForSelector('span#inheritance', function() {
+		utils.info("Change Permission Page opened");
+	});
+};
+
+//*************************Method to change the permission of Category of View Category from backend ************************
+backEndForumRegisterMethod.enableDisableCategoryPermissions = function(id, value) {
+	utils.enableorDisableCheckbox(id, value);
+	casper.waitUntilVisible('div#loading_msg', function success() {
+		utils.info("Permission changed");
+	}, function fail() {
+		utils.info("Permission not changed");
+	});
+};
+
+
+//Method for filling data in a category create form
+backEndForumRegisterMethod.createCategorySubcategory= function(title, data){
+	casper.then(function(){
+		this.waitForText(title, function(){
+			utils.info('category is found on category page');
+		}, function(){
+			utils.error('category cannot be found on forum need to create category');
+			this.waitForSelector('form[name=frmOptions]', function(){
+				this.fill('form[name=frmOptions]',{
+					'forum_name': data.title,
+					'forum_description': data.description,
+					'isSubcategory': data.isSubcategorycheckbox,
+					'parentid': data.isSubcategoryvalue,
+					'forum_pw_cb': data.passwordprotectcheckbox,
+			        	'forum_pw': data.passwordprotectvalue,
+					'locked': data.lock,
+					'invisible': data.invisible,
+					'forum_link_cb': data.linked
+				},false);
+
+				try {
+					this.test.assertExists('form#edit_forum_form input[name="forum_link"]');
+					this.fill('form[name="frmOptions"]',{
+						'forum_link' : data.linkedtext
+					}, false);
+						this.test.assertExists('form[name="frmOptions"] button', 'button found on create category page');
+				}catch(e){
+					utils.info('users error message cannot be found on category create form page');
+				}
+				try{
+					this.test.assertExists('form#edit_forum_form select[name="parentid"]');
+					this.click('select#parentid');
+					this.fill('form[name="frmOptions"]',{
+						'parentid' : data.isSubcategoryvalue
+					}, false);
+				}catch(e){
+					utils.info('subcategory value cannot be found on forum');
+				}
+				this.click('form[name="frmOptions"] button');
+				}).wait('5000', function(err){
+				});
+			});
+		});
 };

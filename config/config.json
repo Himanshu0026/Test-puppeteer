@@ -2,12 +2,12 @@
 	"screenShotsLocation": "../Screenshots/",
 	"failedScreenShotsLocation": "/var/tmp/",
 	"url": "https://beta12.websitetoolbox.com/",
-	"backEndUrl": "http://beta12.websitetoolbox.com/tool/members/login",
+	"backEndUrl": "https://beta12.websitetoolbox.com/tool/members/login",
 
 	"app": {
 		"verbose" : true,
 	 	"logLevel" : "debug",
-		"waitTimeout" : "40000",
+		"waitTimeout" : "20000",
 		"viewportSize": {
 			"width": 1024,
 			"height": 768
@@ -16,8 +16,8 @@
 
 	"backendCred" : {
 		"uname" : "beta12",
-    "upass" : "test",
-    "apiKey" : "4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q"
+  		"upass" : "test",
+    		"apiKey" : "4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q"
 	},
 
 	"fbInfo" : {
@@ -77,9 +77,9 @@
 
 	"beta" : 0,
 
-	"refHost": "https://www.websitetoolbox.com",
+	"refHost": "https://beta12.websitetoolbox.com",
 
-	"testHost": "http://beta12.websitetoolbox.com",
+	"testHost": "https://beta12.websitetoolbox.com",
 
 	"reportFile": "/etc/automation/backstopjs/backstop_data/html_report/index.html",
 

@@ -1,14 +1,13 @@
 'use strict.';
-var forumLoginMethod = require('../methods/login.js');
 var loginJSON = require('../../testdata/loginData.json');
 var topicMethod = require('../methods/topic.js');
 var topicJSON = require('../../testdata/topic.json');
+var composeTopicJSON=require('../../testdata/composeTopic.json');
 var profilePageJSON=require('../../testdata/profilePageData.json');
+var forumLoginMethod = require('../methods/login.js');
 var registerMethod=require('../methods/register.js');
 var profilePageMethod = module.exports = {};
 profilePageMethod.newUserData="";
-
-
 
 //----------------------------------get post href------------------------------------------------------------------------------
 profilePageMethod.getPostHref= function(data, index){
@@ -53,32 +52,32 @@ profilePageMethod.addTopicPost= function(){
 	//for another post 10 seconds wait
 	var newUser ="";
 	casper.thenOpen(config.url, function(){
-		registerMethod.registerMultipleUsers(1, function(users){
-			newUser = users;
-			profilePageMethod.newUserData=newUser;
+		forumLoginMethod.loginToApp(loginJSON.pmMsgUser.username, loginJSON.pmMsgUser.password);
+	}).waitForSelector('a[href="/post/printadd"]', function(){
+		this.evaluate(function() {
+			document.querySelector('a[href="/post/printadd"]').click();
 		});
 	}).then(function(){
-		forumLoginMethod.loginToApp(newUser, newUser);
-	}).waitForSelector('a[href="/post/printadd"]', function(){
-		this.click('a[href="/post/printadd"]');
-		topicMethod.createTopic(topicJSON.ValidCredential);
-	}).waitForText(topicJSON.ValidCredential.content, function(){
+		topicMethod.createTopic(composeTopicJSON.ValidCredential);
+	}).then(function(){
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function(){
-		forumLoginMethod.loginToApp(newUser, newUser);
+		forumLoginMethod.loginToApp(loginJSON.pmMsgUser.username, loginJSON.pmMsgUser.password);
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
 		this.test.assertExists('form[name="posts"] a.topic-title');
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
 		this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Post a reply');
-		this.click('a.pull-right.btn.btn-uppercase.btn-primary');
+		this.evaluate(function() {
+				document.querySelector('a#sub_post_reply').click();
+			});
 		this.waitForSelector('i.mce-ico.mce-i-image', function(){
 			casper.withFrame('message_ifr', function(){
 				casper.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
 				casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
 				casper.sendKeys('#tinymce', profilePageJSON.addPost.Post );
 			});
-		}).wait(10000, function(){
+		}).then(function(){
 			this.test.assertExists('input[name="submitbutton"]');
 			this.click('input[name="submitbutton"]');
 		}).then(function(){
@@ -93,17 +92,54 @@ profilePageMethod.addTopicPost= function(){
 	});
 };
 
-//delete topic/ post from register user.
-//--------------------------------------------------DeleteTopic from frontEnd-------------------------------------
-profilePageMethod.deleteTopic = function(){
+
+//add topic post ----------------------------
+profilePageMethod.newaddTopicPost= function(){
+	var newUser ="";
 	casper.thenOpen(config.url, function(){
-		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).waitForSelector('div.panel-heading span input', function(){
-		this.test.assertExists('div.panel-heading span input');
-		this.click('div.panel-heading span input');
-		this.test.assertExists('a#delete');
-		this.click('a#delete');
+		registerMethod.registerMultipleUsers(1, function(users){
+			newUser = users;
+			profilePageMethod.newUserData=newUser;
+		});
+	}).then(function(){
+		forumLoginMethod.loginToApp(newUser, newUser);
+	}).waitForSelector('a[href="/post/printadd"]', function(){
+		this.evaluate(function() {
+			document.querySelector('a[href="/post/printadd"]').click();
+		});
+	}).then(function(){
+		topicMethod.createTopic(composeTopicJSON.ValidCredential);
 	}).then(function(){
 		forumLoginMethod.logoutFromApp();
+	}).thenOpen(config.url, function(){
+		forumLoginMethod.loginToApp(newUser, newUser);
+	}).waitForSelector('form[name="posts"] a.topic-title', function(){
+		this.test.assertExists('form[name="posts"] a.topic-title');
+		this.click('form[name="posts"] a.topic-title');
+	}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
+		this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Post a reply');
+		this.evaluate(function() {
+				document.querySelector('a#sub_post_reply').click();
+			});
+		this.waitForSelector('i.mce-ico.mce-i-image', function(){
+			casper.withFrame('message_ifr', function(){
+				casper.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
+				casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
+				casper.sendKeys('#tinymce', profilePageJSON.addPost.Post );
+			});
+		}).then(function(){
+			this.test.assertExists('input[name="submitbutton"]');
+			this.click('input[name="submitbutton"]');
+		}).then(function(){
+			this.waitForText('post reply', function(){
+				this.test.assertExists('ul.nav.pull-right span.caret');
+				this.click('ul.nav.pull-right span.caret');
+				this.click('a#user-nav-panel-profile');
+			}).waitForSelector('a#PostsOFUser', function(){
+				this.click('a#PostsOFUser');
+			}).waitForText('post reply');
+		});
 	});
 };
+
+

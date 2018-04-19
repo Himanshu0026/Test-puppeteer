@@ -9,7 +9,6 @@ var registerMethod = require('../methods/register.js');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var topicMethod = require('../methods/topic.js');
 var forumLoginMethod = require('../methods/login.js');
-var wait = require('../wait.js');
 var thumpsUpDownTestcases = module.exports = {};
 
 function deleteCategoriesHandler(i) {
@@ -18,6 +17,55 @@ function deleteCategoriesHandler(i) {
 		backEndForumRegisterMethod.deleteAllCategories();
 	};
 }
+
+thumpsUpDownTestcases.registrationBackendSetting = function() {
+	casper.thenOpen(config.backEndUrl , function() {
+		utils.info('Test case to set up all the backend setting for registration task');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_messageboard', true);
+		});
+	}).then(function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/fields"]', function() {
+	 this.test.assertSelectorHasText('#ddUsers', 'Profile Fields');
+	 this.click('div#ddUsers a[href="/tool/members/mb/fields"]');
+ 	}).waitForText('Default Profile Fields',function() {
+		var setOptions = {"fullName" : "", "instantMessaging" : "", "birthday" : "", "signature" : "", "avatar" : "",
+		 "visiblity_name_registration" : "Yes",
+		 "visiblity_imType_registration" : "Yes", "visiblity_dob_registration" : "Yes",
+		 "visiblity_signature_registration" : "Yes", "visiblity_avatar_registration" : "Yes"};
+		 backEndForumRegisterMethod.changeDefaultRegistrationOptions(setOptions);
+	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+		this.test.assertSelectorHasText('#ddSettings', 'Security');
+		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+		backEndForumRegisterMethod.enableDisableEmailAddressVerification(false);
+	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+		this.test.assertSelectorHasText('#ddSettings', 'Security');
+		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+		backEndForumRegisterMethod.enableDisableApproveNewRegistrations(false);
+	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+		this.test.assertSelectorHasText('#ddSettings', 'Security');
+		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+		backEndForumRegisterMethod.enableDisableHumanVerification(false);
+	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+		this.test.assertSelectorHasText('#ddSettings', 'Security');
+		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+		backEndForumRegisterMethod.enableDisableNewRegistrations(true);
+	});
+};
 
 // method to register two user neha and isneha
 thumpsUpDownTestcases.registerUserTOLogin = function() {
@@ -93,9 +141,9 @@ thumpsUpDownTestcases.unregisterUserOnPostListingPageLikeDislike = function() {
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.adminUserLogin.username, thumpsUpDownJSON.adminUserLogin.password);
-	}).waitForSelector('a[href="/post/printadd"]', function() {
+	}).waitForSelector('div#topics a[href="/post/printadd"]', function() {
 	  this.test.assertSelectorHasText('div#topics', 'Start New Topic');
-	  this.click('a[href="/post/printadd"]');
+	  this.click('div#topics a[href="/post/printadd"]');
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
@@ -137,7 +185,7 @@ thumpsUpDownTestcases.likeDislikePostOfUnregisteredUserByRegisterUser = function
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 	  this.test.assertSelectorHasText('div#topics', 'Start New Topic');
-	  this.click('a[href="/post/printadd"]');
+	  this.click('div#topics a[href="/post/printadd"]');
 	}).then(function() {
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
 		this.waitForText('hellloooooo!!!!!!!!!');
@@ -386,13 +434,15 @@ thumpsUpDownTestcases.verifyIncreasedCount = function() {
 	}).waitForSelector('#posts-list', function() {
 		if(this.exists('a.voted-yes')) {
 			this.click('i.glyphicon.glyphicon-like-alt');
-			this.waitUntilVisible('div#loading_msg', function() {
+			this.waitUntilVisible('div#loading_msg', function success() {
 				if (this.visible('div#loading_msg')) {
 		      utils.info(' Loading....');
 					this.waitWhileVisible('div#loading_msg', function() {});
 		    } else {
 					utils.info(' Loading is not displayed.');
 				}
+			}, function fail() {
+				utils.info(' Loading is not displayed.');
 			});
 		}
 	}).then(function() {
@@ -428,13 +478,15 @@ thumpsUpDownTestcases.verifyDecreasedCount = function() {
 	}).waitForSelector('#posts-list', function() {
 		if(this.exists('a.voted-no')) {
 			this.click('i.glyphicon.glyphicon-dislike-alt');
-			this.waitUntilVisible('div#loading_msg', function() {
+			this.waitUntilVisible('div#loading_msg', function success() {
 				if (this.visible('div#loading_msg')) {
 		      utils.info(' Loading....');
 					this.waitWhileVisible('div#loading_msg', function() {});
 		    } else {
 					utils.info(' Loading is not displayed.');
 				}
+			}, function fail() {
+				utils.info(' Loading is not displayed.');
 			});
 		}
 	}).then(function() {
@@ -470,13 +522,15 @@ thumpsUpDownTestcases.verifyTwoTimesClickOnLike = function() {
 	}).waitForSelector('#posts-list', function() {
 		if(this.exists('a.voted-no')) {
 			this.click('i.glyphicon.glyphicon-dislike-alt');
-			this.waitUntilVisible('div#loading_msg', function() {
+			this.waitUntilVisible('div#loading_msg', function success() {
 				if (this.visible('div#loading_msg')) {
 		      utils.info(' Loading....');
 					this.waitWhileVisible('div#loading_msg', function() {});
 		    } else {
 					utils.info(' Loading is not displayed.');
 				}
+			}, function fail() {
+				utils.info(' Loading is not displayed.');
 			});
 		}
 	}).then(function() {
@@ -502,7 +556,7 @@ thumpsUpDownTestcases.verifyTwoTimesClickOnLike = function() {
 		utils.info(' the earlier number = '+earlierNumber);
 		var laterCount;
 		this.click('i.glyphicon.glyphicon-dislike-alt');
-		this.waitUntilVisible('div#loading_msg', function() {
+		this.waitUntilVisible('div#loading_msg', function success() {
 			if (this.visible('div#loading_msg')) {
 				utils.info(' Loading....');
 				this.waitWhileVisible('div#loading_msg', function() {
@@ -519,6 +573,8 @@ thumpsUpDownTestcases.verifyTwoTimesClickOnLike = function() {
 			} else {
 				utils.info(' Loading is not displayed.');
 			}
+		}, function fail() {
+			utils.info(' Loading is not displayed.');
 		});
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
@@ -606,9 +662,9 @@ thumpsUpDownTestcases.verifyReputation = function() {
 		utils.info('CASE 18 [To verify user reputation]');
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
-	}).waitForSelector('a[href="/post/printadd"]', function() {
+	}).waitForSelector('div#topics a[href="/post/printadd"]', function() {
 	  this.test.assertSelectorHasText('div#topics', 'Start New Topic');
-	  this.click('a[href="/post/printadd"]');
+	  this.click('div#topics a[href="/post/printadd"]');
 	}).then(function() {
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
 	}).waitForSelector('div#posts-list', function() {
@@ -674,7 +730,7 @@ thumpsUpDownTestcases.verifyLikeIconForGuestUser = function() {
 		this.test.assertExists('span#user-login-modal-heading', utils.info('Login pop up window found hence verified'));
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
 	}).then(function() {
-		this.test.assertExists('button.dropdown-toggle a.default-user', 'User logged in successfully');
+		this.test.assertExists('button.dropdown-toggle a', 'User logged in successfully');
 		forumLoginMethod.logoutFromApp();
 	});
 };
@@ -738,7 +794,7 @@ thumpsUpDownTestcases.reputationCountFbUser = function() {
 		forumLoginMethod.loginByFacebookUser();
 	}).then(function() {
 		this.test.assertSelectorHasText('div#topics', 'Start New Topic');
-	  this.click('a[href="/post/printadd"]');
+	  this.click('div#topics a[href="/post/printadd"]');
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
 	}).waitForSelector('div#posts-list', function() {
 		this.click('ul.nav.pull-right span.caret');
@@ -799,9 +855,9 @@ thumpsUpDownTestcases.verifyCombineAllForum = function() {
 	casper.thenOpen(config.url, function() {
 		utils.info('CASE 30 [To verify combine all forum]');
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.otherUser.username, thumpsUpDownJSON.otherUser.password);
-	}).waitForSelector('a[href="/post/printadd"]', function() {
+	}).waitForSelector('div#topics a[href="/post/printadd"]', function() {
 		this.test.assertSelectorHasText('div#topics', 'Start New Topic');
-		this.click('a[href="/post/printadd"]');
+		this.click('div#topics a[href="/post/printadd"]');
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();

@@ -20,7 +20,7 @@ gitBranchServices.deleteMatureCommitBranch = function(){
 						console.log("Last commit details: " + commit.commitDetails);
 						var commitInfoJSON = JSON.parse(commit.commitDetails);
 						console.log("commitDetails: "+commitInfoJSON.branchName);
-						queueServices.addNewJob(commitInfoJSON, 'automation');
+						queueServices.addNewJob(commitInfoJSON, 'automation', '0');
 						redisClient.del(pc);
 					}
 				});

@@ -15,6 +15,8 @@ privateMessage.featureTest = function() {
 		forumLoginMethod.loginToForumBackEnd();
 
 	}).then(function() {
+		utils.setNewTheme();
+	}).then(function() {
 
 		privateMessageTestcases.disablePM();
 		privateMessageTestcases.enablePM();
@@ -80,7 +82,7 @@ privateMessage.featureTest = function() {
 		privateMessageTestcases.sendMessageWhoIgnoredYou();
 
 		// method to verify count of message icon -> send 3 messages from  s1 >log in with r1 and verify the message icon count.
-		privateMessageTestcases.verifyMessageIconCountCaseOne();
+		//privateMessageTestcases.verifyMessageIconCountCaseOne();
 
 		// method to verify count of message icon->verify when 4 user send 1 message to r1>log in with r1 and verify the message icon count.
 		privateMessageTestcases.verifyMessageIconCountCaseTwo();
@@ -98,7 +100,7 @@ privateMessage.featureTest = function() {
 		// method Delete coversation from conversation page
 		// method To verify delete all Conversation
 		// method To verify "Go to inbox" link when there are no conversation.
-		//privateMessageTestcases.deleteConversation();
+		privateMessageTestcases.deleteConversation();
 
 	});
 };

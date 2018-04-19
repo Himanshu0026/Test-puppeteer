@@ -3,7 +3,6 @@
 'use strict.';
 var registerMethod = require('./register.js');
 var utils = require('../utils.js');
-var wait = require('../wait.js');
 var forumLoginMethod = require('./login.js');
 var thumpsUpDownMethod = module.exports = {};
 
@@ -42,7 +41,34 @@ thumpsUpDownMethod.changeUserGroup = function(user, userGroup) {
 				}, true);
 			}
 		}
-		casper.waitUntilVisible('#loading_msg', function() {
+		casper.waitUntilVisible('#loading_msg', function success() {
+			if(userGroup == 'Administrators') {
+				casper.fillLabels('form#frmChangeUsersGroupFinal', {
+					'Administrators' : 'checked',
+					'Registered Users' : ''
+				}, true);
+			}else if (userGroup == 'Moderators') {
+				casper.fillLabels('form#frmChangeUsersGroupFinal', {
+					'Moderators' : 'checked',
+					'Registered Users' : ''
+				}, true);
+			}else if (userGroup == 'Registered Users') {
+				casper.fillLabels('form#frmChangeUsersGroupFinal', {
+					'Registered Users' : 'checked',
+					'Administrators' : ''
+				}, true);
+			}else if (userGroup == 'Pending Email Verification') {
+				casper.fillLabels('form#frmChangeUsersGroupFinal', {
+					'Pending Email Verification' : 'checked',
+					'Registered Users' : ''
+				}, true);
+			}else if (userGroup == 'Pending Approval') {
+				casper.fillLabels('form#frmChangeUsersGroupFinal', {
+					'Pending Approval' : 'checked',
+					'Registered Users' : ''
+				}, true);
+			}
+		}, function fail() {
 			if(userGroup == 'Administrators') {
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
 					'Administrators' : 'checked',
@@ -70,12 +96,14 @@ thumpsUpDownMethod.changeUserGroup = function(user, userGroup) {
 				}, true);
 			}
 		}).then(function() {
-			this.waitUntilVisible('#loading_msg', function() {
+			casper.waitUntilVisible('#loading_msg', function success(){
 				if (this.visible('#loading_msg')) {
 			    utils.info(' Loading....');
 			  } else {
 					utils.info(' Loading is not displayed.');
 				}
+			}, function fail(){
+				utils.info(' Loading is not displayed within 40 sec');
 			});
 		});
 	});

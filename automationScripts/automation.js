@@ -80,6 +80,17 @@ switch (feature[0]) {
 		});
 	break;
 
+	case "moveTopicAndPost":
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify Move Topic And Post functionlity',function(test){
+			var moveTopicAndPost=require("./testsuite/main/moveTopicAndPost.js");
+			moveTopicAndPost.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
 	case "loginByPrivacyOption":
 		casper.test.begin(branchName+ ' : ' + commitId + ' Verify LoginByPrivacyOption functionality', function(test) {
 			var loginByPrivacyOption = require("./testsuite/main/loginByPrivacyOption.js");
@@ -90,6 +101,58 @@ switch (feature[0]) {
 			});
 		});
 
+	break;
+
+	case "postTopicUserPermission":
+		var subFeature = feature[1];
+		switch(subFeature) {
+			case "registeredUserTest" :
+				casper.test.begin(branchName+ ' : ' + commitId + ' Verify post, Topic User Permission functionality from home page with all valid and invalid scenarios', function(test) {
+					var postTopicUserPermission = require("./testsuite/main/postTopicUserPermission.js");
+					postTopicUserPermission.registeredUserTest();
+					casper.run(function(){
+						utils.displayError();
+						test.done();
+					});
+				});
+			break;
+			case "pendingUserTest" :
+				casper.test.begin(branchName+ ' : ' + commitId + 'Verify post, Topic User Permission functionality from home page with all valid and invalid scenarios', function(test) {
+					var postTopicUserPermission = require("./testsuite/main/postTopicUserPermission.js");
+					postTopicUserPermission.pendingUserTest();
+					casper.run(function(){
+						utils.displayError();
+						test.done();
+					});
+				});
+			break;
+			case "emailVerificationUserTest" :
+				casper.test.begin(branchName+ ' : ' + commitId + 'Verify post, Topic User Permission functionality from home page with all valid and invalid scenarios', function(test) {
+					var postTopicUserPermission = require("./testsuite/main/postTopicUserPermission.js");
+					postTopicUserPermission.emailVerificationUserTest();
+					casper.run(function(){
+						utils.displayError();
+						test.done();
+					});
+				});
+			break;
+			case "customUserTest" :
+				casper.test.begin(branchName+ ' : ' + commitId + 'Verify post, Topic User Permission functionality from home page with all valid and invalid scenarios', function(test) {
+					var postTopicUserPermission = require("./testsuite/main/postTopicUserPermission.js");
+					postTopicUserPermission.customUserTest();
+					casper.run(function(){
+						utils.displayError();
+						test.done();
+					});
+				});
+			break;
+			default:
+			 	casper.echo("Please select any sub feature from options given below. For ex: casperjs test automation.js --feature = '<option> <option>'.\n");
+				casper.echo('registeredUserTest');
+				casper.echo('pendingUserTest');
+				casper.echo('emailVerificationUserTest');
+				casper.echo('customUserTest');
+		}
 	break;
 
 case "messagePreview" :
@@ -108,6 +171,17 @@ case "messagePreview" :
 		casper.test.begin(branchName+ ' : ' + commitId + ' Verify registration functionality from home page with all valid and invalid scenarios', function(test) {
 			var register = require("./testsuite/main/register.js");
 			register.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
+	case "moderatorPermissions":
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify moderator permissions functionality from home page with all valid and invalid scenarios', function(test) {
+			var moderatorPermissions = require("./testsuite/main/moderatorPermissions.js");
+			moderatorPermissions.featureTest();
 			casper.run(function(){
 				utils.displayError();
 				test.done();
@@ -179,16 +253,6 @@ case "messagePreview" :
 		});
 	break;
 
-	case "combinationOfCategoryAndGroupPermissions":
-		casper.test.begin('Verify Combination of Category and Group Permission functionality from home page with all valid and invalid scenarios ', function(test) {
-			var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
-			combinationOfCategoryAndGroupPermissions.pendingUserTest(casper, casper.test);
-			casper.run(function(){
-				test.done();
-			});
-		});
-	break;
-
 	case "privateMessage":
 		casper.test.begin(branchName+ ' : ' + commitId + ' Verify privateMessage functionality from home page with all valid and invalid scenarios ', function(test) {
 			var privateMessage = require("./testsuite/main/privateMessage.js");
@@ -197,7 +261,6 @@ case "messagePreview" :
 				utils.displayError();
 				test.done();
 			});
-
 		});
 	break;
 
@@ -245,7 +308,18 @@ case "messagePreview" :
 			});
 		});
 	break;
-
+	
+	case "followPinLock" :
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify followPinLock functionality for start new topic from home page with all valid and invalid scenarios ', function(test) {
+			var followpinlock = require("./testsuite/main/followpinlock.js");
+			followpinlock.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+	
 	case "insertEmoticans" :
 		casper.test.begin('Verify insertEmoticans functionality', function(test) {
 			var insertEmoticans = require("./testsuite/main/insertEmoticans.js");
@@ -255,6 +329,17 @@ case "messagePreview" :
 			});
 		});
 
+	break;
+
+	case "composeTopic" :
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify composeTopic functionality for start new topic from home page with all valid and invalid scenarios ', function(test) {
+			var composeTopic = require("./testsuite/main/composeTopic.js");
+			composeTopic.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
 	break;
 
 	case "defaultOption":
@@ -344,6 +429,121 @@ case "messagePreview" :
 		});
 	break;
 
+	case "combinationOfSubCategoryAndGroupPermissions":
+		var subFeature = feature[1];
+
+		switch(subFeature) {
+			case "registerUserTest":
+				casper.test.begin(branchName+ ' : ' + commitId + 'Verify combination of sub category and group permission functionality from home page with all valid and invalid scenarios ', function(test) {
+					var combinationOfSubCategoryAndGroupPermissions = require("./testsuite/main/combinationOfSubCategoryAndGroupPermissions.js");
+					combinationOfSubCategoryAndGroupPermissions.registerUserTest();
+					casper.run(function(){
+						utils.displayError();
+						test.done();
+					});
+				});
+			break;
+			case "unregisterUserTest":
+				casper.test.begin(branchName+ ' : ' + commitId + 'Verify combination of sub category and group permission functionality from home page with all valid and invalid scenarios ', function(test) {
+					var combinationOfSubCategoryAndGroupPermissions = require("./testsuite/main/combinationOfSubCategoryAndGroupPermissions.js");
+					combinationOfSubCategoryAndGroupPermissions.unregisterUserTest();
+					casper.run(function(){
+						utils.displayError();
+						test.done();
+					});
+				});
+			break;
+			case "customUserTest":
+				casper.test.begin(branchName+ ' : ' + commitId + 'Verify combination of sub category and group permission functionality from home page with all valid and invalid scenarios ', function(test) {
+					var combinationOfSubCategoryAndGroupPermissions = require("./testsuite/main/combinationOfSubCategoryAndGroupPermissions.js");
+					combinationOfSubCategoryAndGroupPermissions.customUserTest();
+					casper.run(function(){
+						utils.displayError();
+						test.done();
+					});
+				});
+			break;
+			case "pendingUserTest":
+				casper.test.begin(branchName+ ' : ' + commitId + 'Verify combination of sub category and group permission functionality from home page with all valid and invalid scenarios ', function(test) {
+					var combinationOfSubCategoryAndGroupPermissions = require("./testsuite/main/combinationOfSubCategoryAndGroupPermissions.js");
+					combinationOfSubCategoryAndGroupPermissions.pendingUserTest();
+					casper.run(function(){
+						utils.displayError();
+						test.done();
+					});
+				});
+			break;
+				default:
+				 	utils.info("Please select any sub feature from options given below. For ex: casperjs test automation.js --feature = '<option> <option>'.\n");
+					utils.info('registerUserTest');
+					utils.info('unregisterUserTest');
+					utils.info('customUserTest');
+					utils.info('pendingUserTest');
+					casper.exit();
+		}
+	break;
+
+	case "combinationOfCategoryAndGroupPermissions":
+		var subFeature = feature[1];
+
+		switch(subFeature) {
+			case "registerUserTest":
+			casper.test.begin(branchName+ ' : ' + commitId + 'Verify Combination of Category and Group Permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
+				combinationOfCategoryAndGroupPermissions.registerUserTest();
+				casper.run(function(){
+					test.done();
+				});
+			});
+			break;
+			case "pendingUserTest":
+			casper.test.begin(branchName+ ' : ' + commitId + 'Verify Combination of Category and Group Permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
+				combinationOfCategoryAndGroupPermissions.pendingUserTest(casper, casper.test);
+				casper.run(function(){
+					test.done();
+				});
+			});
+			break;
+			case "moderatorsUserTest":
+			casper.test.begin(branchName+ ' : ' + commitId + 'Verify Combination of Category and Group Permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
+				combinationOfCategoryAndGroupPermissions.moderatorsUserTest(casper, casper.test);
+				casper.run(function(){
+					test.done();
+				});
+			});
+			break;
+			case "emailVerificationUserTest":
+			casper.test.begin(branchName+ ' : ' + commitId + 'Verify Combination of Category and Group Permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
+				combinationOfCategoryAndGroupPermissions.emailVerificationUserTest(casper, casper.test);
+				casper.run(function(){
+					test.done();
+				});
+			});
+			break;
+			case "unregisteredUserTest":
+			casper.test.begin(branchName+ ' : ' + commitId + 'Verify Combination of Category and Group Permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
+				combinationOfCategoryAndGroupPermissions.unregisteredUserTest();
+				casper.run(function(){
+					test.done();
+				});
+			});
+			break;
+			case "customUserTest":
+			casper.test.begin(branchName+ ' : ' + commitId + 'Verify Combination of Category and Group Permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
+				combinationOfCategoryAndGroupPermissions.customUserTest();
+				casper.run(function(){
+					test.done();
+				});
+			});
+			break;
+		}
+	break;
+
 	default:
 		casper.echo("Please select any feature from options given below. For ex: casperjs test automation.js --feature = <option>.\n");
         	casper.echo("Options:");
@@ -355,15 +555,17 @@ case "messagePreview" :
 					casper.echo("forgotPassword");
 					casper.echo("inContextLogin");
 					casper.echo("profilePage");
-        	casper.echo("login");
+					casper.echo("editProfilePage");
+					casper.echo("composeTopic");
+        			casper.echo("login");
 					casper.echo("incontextRegistration");
-      		casper.echo("loginByPrivacyOption");
+      				casper.echo("loginByPrivacyOption");
 					casper.echo("thumpsUpDown featureTest");
 					casper.echo("thumpsUpDown featureTest2");
 					casper.echo("thumpsUpDown featureTest3");
 					casper.echo("register");
-        	casper.echo("privateMessage");
-        	casper.echo("postEventMemberApproval");
+        			casper.echo("privateMessage");
+        			casper.echo("postEventMemberApproval");
 					casper.echo("oldThemeJsErrors");
 					casper.exit();
 }

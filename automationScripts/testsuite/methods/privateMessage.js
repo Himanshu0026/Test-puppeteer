@@ -38,7 +38,7 @@ privateMessageMethod.deleteAllPrivateMessage = function() {
 			this.test.assertExists('#messages-menu');
 			this.test.assertExists('a#delete_conversation i');
 			this.click('a#delete_conversation i');
-		}).waitForText('Your inbox is empty.', function success() {
+		}).waitForText('Your inbox is empty', function success() {
 			utils.info('All messages has been deleted');
 		}, function fail() {
 			privateMessageMethod.deleteAllPrivateMessage();

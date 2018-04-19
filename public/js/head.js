@@ -22,7 +22,31 @@ $('document').ready(function() {
 		var branchName = $(this).attr('id');
 		if(branchName) {
 			$('form.backstop_form_button').attr('action', 'backstop/'+branchName);
-			$('form.backstop_form_button').submit();
+			//$('form.backstop_form_button').submit();
+		}
+	});
+	$('a.run_automation').click(function() {
+		var branchName = $(this).attr('id');
+		if(branchName) {
+			//$('form.automation_form_button').attr('action', 'automate/'+branchName);
+			//$('form.backstop_form_button').submit();
+		}
+	});
+	$('a.prioritze_job').click(function() {
+		var branchName = $(this).attr('id');
+		//$('button[type=submit]').not('#'+branchName).prop('disabled',true);
+		$("#executeAutomation").show();
+		if(branchName) {
+			$('form.priortize_form_button').attr('action', 'pendingBranches/'+branchName);
+		}
+	});
+	$('input#automate_Branch').keydown(function (e) {
+		if (e.which == 13 || e.keyCode == 13) {
+			var automateBranch = $('#automate_Branch').val();
+			if(automateBranch) {
+				$('form#automate_branch_form').attr('action', 'automate/'+automateBranch);
+				$('form#automate_branch_form').submit();
+			}
 		}
 	});
 });

@@ -4,13 +4,13 @@ var extfs = require('extfs');
 var attachmentServices = module.exports = {};
 
 //Method to Delete Old Directory
-attachmentServices.removeDirs = function(path, callback) {
+attachmentServices.deleteFolderRecursive = function(path, callback) {
 	if( fs.existsSync(path) ) {
 		fs.readdirSync(path).forEach(function(file,index){
 			var curPath = path + "/" + file;
 			if(fs.lstatSync(curPath).isDirectory()) {
 				// recurse
-				attachmentServices.removeDirs(curPath, function() {
+				attachmentServices.deleteFolderRecursive(curPath, function() {
 					return;
 				});
 			} else {
@@ -46,6 +46,28 @@ attachmentServices.addAttachments = function(dirPath, commitDetails, callback) {
 		});
 	}
 	return callback(commitDetails);
+};
+
+//Method to Delete Old Directory
+attachmentServices.removeDirs = function(path, callback) {
+	if( fs.existsSync(path) ) {
+		fs.readdirSync(path).forEach(function(file,index){
+			var curPath = path + "/" + file;
+			if(fs.lstatSync(curPath).isDirectory()) {
+				// recurse
+				attachmentServices.removeDirs(curPath, function() {
+					return;
+				});
+			} else {
+				// Delete File
+				console.log('deleting file : '+curPath);
+				fs.unlinkSync(curPath);
+			}
+		});
+		console.log('deleting directory : '+path);
+		fs.rmdirSync(path);
+	}
+	return callback();
 };
 
 //Method to Delete Backstop Old Data

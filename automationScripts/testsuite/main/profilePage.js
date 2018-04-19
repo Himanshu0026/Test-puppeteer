@@ -2,6 +2,7 @@
 'use strict.';
 var config = require('../../../config/config.json');
 var profilePageTests = require('../cases/profilePage.js');
+var profilePageMethod= require('../methods/profilePage.js');
 var forumLoginMethod = require('../methods/login.js');
 var profilePage = module.exports = {};
 
@@ -16,12 +17,14 @@ profilePage.featureTest = function(){
 		profilePageTests.profilePageMessageButton();
 		//Verify with sending message by message button is disable.
 		profilePageTests.profilePageMessageButtonDisable();
+		//delete all topics
+		profilePageTests.deleteTopics();
 		//All Post tab for own profile page.
 		profilePageTests.profilePageAllPostTab();
 		//Verify with All post tab after start a topic/post
 		profilePageTests.profilePageAfterStartTopic();
   		//Verify with All post tab after edit a topic/post on topic listing page
-		profilePageTests.profilePageEditTopic();
+		//profilePageTests.profilePageEditTopic();
 		//Verify with All post tab after delete a topic/post
 		profilePageTests.profilePageDeletePost();
 //---------------------------------Topic started tab--------------------------------------------------
@@ -32,7 +35,7 @@ profilePage.featureTest = function(){
 		//verify with edit topic title
 		profilePageTests.profilePageTopicEditTopicTitle();
 		//verify with delete the topic which have edited .
-		profilePageTests.profilePageDeleteTopic();
+		profilePageTests.deleteTopic();
 //-------------------------------Likes tab-------------------------------------------------------------
 		//Verify with like the post.
 		profilePageTests.profilePageLikesTab();
@@ -58,6 +61,6 @@ profilePage.featureTest = function(){
 		profilePageTests.profilePageReputationCount();
 		//verify after like the post(one user like your multiple post one post)
 		profilePageTests.profilePageReputationCountMultiplePostLike();
-
+		
 	});
 };
