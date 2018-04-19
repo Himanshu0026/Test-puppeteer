@@ -1,0 +1,35 @@
+
+{
+	"topicCount" : {
+		"count":"1"
+	},
+
+	"ValidTopic" :{
+		"title" : "ONEpluse",
+		"content" : "my old topic"
+	},
+
+	"expectedtooltip" :{
+		"expectedMessage":"You don't have permission to start a new topic."
+	},
+
+	"expectedMessage":{
+		"Message":" You must select a category for your message."
+	},
+	
+	"category" : {
+		"title" : "ComposeCategory",
+		"description" : "To test other category"
+	},
+	
+	"expectedCount":{
+		"expectedPostCount":"1"
+	},
+	
+	"ValidCredential" :{
+		"title" : "ONEpluse",
+		"content" : "my old topic",
+		"category" : "ComposeCategory"
+	}
+
+}
