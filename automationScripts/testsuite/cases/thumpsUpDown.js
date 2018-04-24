@@ -372,7 +372,7 @@ thumpsUpDownTestcases.clickReputationTab = function() {
 		var reputationCount2;
 		try {
 			this.click('i.glyphicon.glyphicon-like-alt');
-			this.wait('2000', function() {
+			this.wait('1000', function() {
 				this.reload(function() {
 					reputationCount2 = casper.fetchText('li.reputation span.profile-count a');
 					if(reputationCount > reputationCount2) {
@@ -698,13 +698,13 @@ thumpsUpDownTestcases.verifyReputation = function() {
 	}).then(function() {
 		this.test.assertExists('#PostsOFUser', 'All posts');
 		this.click('#PostsOFUser');
-	}).wait('3000', function() {
+	}).wait('1000', function() {
 		this.test.assertExists('i.glyphicon.glyphicon-chevron-down', 'drop down to delete post');
 		this.click('i.glyphicon.glyphicon-chevron-down');
 	}).waitUntilVisible('#search_delete_post', function() {
 		this.test.assertExists('i.glyphicon.glyphicon-trash.text-muted.pull-right', 'Delete Button');
 		this.click('i.glyphicon.glyphicon-trash.text-muted.pull-right');
-	}).wait('2000', function() {
+	}).wait('1000', function() {
 		var deletedRepCount = casper.fetchText('li.reputation span.profile-count a');
 		var deletedRepNum = parseInt(deletedRepCount);
 		this.test.assertEquals(laterRepNum, deletedRepNum);
