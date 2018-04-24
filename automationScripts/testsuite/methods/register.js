@@ -18,7 +18,7 @@ registerMethod.registerToApp = function(data) {
 	}, false);
 	casper.test.assertExists('form[name="PostTopic"] input[name="rules_checkbox"]', ' Rules checkbox exists');
 	utils.enableorDisableCheckbox('rules_checkbox', true);
-	casper.wait(2000,function() {
+	casper.wait(1000,function() {
 		casper.test.assertExists('form[name="PostTopic"] button', ' form[name="PostTopic"] button selector exists');
 		casper.click('form[name="PostTopic"] button');
 	});
@@ -30,7 +30,23 @@ registerMethod.redirectToLogout = function() {
 	//var emailSuccessEndMsg = "Please follow the instructions in the email to verify your account. If it doesn't arrive, please check your spam folder, or";
 	var ExistingUserMsg = "It looks like you already have a forum account! A forum account for that username and email address combination already exists";
 	var approvalSuccessMsg = "Thank you for registering! Your account will need to be approved before you have full access to the forums. You will be notified via email once your account has been reviewed.";
-	casper.waitForText(emailSuccessStartMsg, function() {
+	casper.waitForSelector('span.registration_msg', function() {
+		this.test.assertExists('div.back-message a:nth-child(1)');
+		this.click('div.back-message a:nth-child(1)');
+		utils.info('User successfully registered and added in the email verification group');
+		this.waitForSelector('ul.nav.pull-right span.caret', function() {
+			forumLoginMethod.logoutFromApp();
+		});
+	}, function() {
+			if(this.exists('#errorMsgForSameEmailOrName')){
+				utils.info('User already exists on the forum');
+			}else {
+				this.test.assertExists('ul.nav.pull-right span.caret');
+				utils.info('User successfully registered and added registered group');
+				forumLoginMethod.logoutFromApp();
+			}
+	});
+	/*casper.waitForText(emailSuccessStartMsg, function() {
 		//this.waitForText(emailSuccessEndMsg, function() {
 			this.test.assertExists('div.back-message a:nth-child(1)');
 			this.click('div.back-message a:nth-child(1)');
@@ -57,7 +73,7 @@ registerMethod.redirectToLogout = function() {
 				});
 			});
 		});
-	});
+	});*/
 };
 
 //3.Method For Multiple Users Registration

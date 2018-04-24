@@ -19,9 +19,9 @@ sleep 1
 printf "Executing Automation Script For $1 commitID\nTests executing for OLD THEME JSERRORS: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./automationScripts/automation.js --feature=oldThemeJsErrors --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
-#printf "Executing Automation Script For $1 commitID\nTests executing for REGISTRATION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-#casperjs test ./automationScripts/automation.js --feature=register --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-#sleep 1
+printf "Executing Automation Script For $1 commitID\nTests executing for REGISTRATION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./automationScripts/automation.js --feature=register --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+sleep 1
 printf "Executing Automation Script For $1 commitID\nTests executing for INCONTEXT REGISTRATION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./automationScripts/automation.js --feature=incontextRegistration --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
@@ -37,9 +37,9 @@ sleep 1
 printf "Executing Automation Script For $1 commitID\nTests executing for COMPOSE TOPIC: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./automationScripts/automation.js --feature=composeTopic --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
-#printf "Executing Automation Script For $1 commitID\nTests executing for PROFILE PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-#casperjs test ./automationScripts/automation.js --feature=profilePage --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-#sleep 1
+printf "Executing Automation Script For $1 commitID\nTests executing for PROFILE PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./automationScripts/automation.js --feature=profilePage --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+sleep 1
 #printf "Executing Automation Script For $1 commitID\nTests executing for THUMPS UP AND DOWN - featureTest: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature="thumpsUpDown featureTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1

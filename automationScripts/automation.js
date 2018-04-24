@@ -308,7 +308,7 @@ case "messagePreview" :
 			});
 		});
 	break;
-	
+
 	case "followPinLock" :
 		casper.test.begin(branchName+ ' : ' + commitId + ' Verify followPinLock functionality for start new topic from home page with all valid and invalid scenarios ', function(test) {
 			var followpinlock = require("./testsuite/main/followpinlock.js");
@@ -319,7 +319,7 @@ case "messagePreview" :
 			});
 		});
 	break;
-	
+
 	case "insertEmoticans" :
 		casper.test.begin('Verify insertEmoticans functionality', function(test) {
 			var insertEmoticans = require("./testsuite/main/insertEmoticans.js");
@@ -547,25 +547,21 @@ case "messagePreview" :
 	default:
 		casper.echo("Please select any feature from options given below. For ex: casperjs test automation.js --feature = <option>.\n");
         	casper.echo("Options:");
+					casper.echo("login");
 					casper.echo("backEndRegistration");
-					casper.echo("defaultOption blankData");
-					casper.echo("defaultOption enableDisableEditPage");
-					casper.echo("defaultOption blankDataRegistration");
-					casper.echo("defaultOption enableDisableRegistration");
 					casper.echo("forgotPassword");
+					casper.echo("loginByPrivacyOption");
 					casper.echo("inContextLogin");
-					casper.echo("profilePage");
+					casper.echo("oldThemeJsErrors");
+					casper.echo("register");
+					casper.echo("incontextRegistration");
+					casper.echo("privateMessage");
 					casper.echo("editProfilePage");
 					casper.echo("composeTopic");
-        			casper.echo("login");
-					casper.echo("incontextRegistration");
-      				casper.echo("loginByPrivacyOption");
+					casper.echo("profilePage");
 					casper.echo("thumpsUpDown featureTest");
 					casper.echo("thumpsUpDown featureTest2");
 					casper.echo("thumpsUpDown featureTest3");
-					casper.echo("register");
-        			casper.echo("privateMessage");
         			casper.echo("postEventMemberApproval");
-					casper.echo("oldThemeJsErrors");
 					casper.exit();
 }
