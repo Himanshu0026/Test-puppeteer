@@ -87,6 +87,15 @@ thumpsUpDown.featureTest = function() {
 		// Method To verify reputaion count of fb user
 		//thumpsUpDownTestcases.reputationCountFbUser();
 
+		// method to delete all the categories from backend
+		thumpsUpDownTestcases.deleteAllCategoriesTestCase();
+
+		// 30 verify combine all forum.
+		thumpsUpDownTestcases.verifyCombineAllForum();
+
+		// method to create a category General
+		thumpsUpDownTestcases.createCategoryTestCase();
+
 	});
 };
 

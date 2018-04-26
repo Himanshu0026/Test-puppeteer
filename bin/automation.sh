@@ -43,12 +43,12 @@ sleep 1
 printf "Executing Automation Script For $1 commitID\nTests executing for THUMPS UP AND DOWN - featureTest: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./automationScripts/automation.js --feature="thumpsUpDown featureTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
-printf "Executing Automation Script For $1 commitID\nTests executing for THUMPS UP AND DOWN - featureTest2: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./automationScripts/automation.js --feature="thumpsUpDown featureTest2" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-sleep 1
-printf "Executing Automation Script For $1 commitID\nTests executing for THUMPS UP AND DOWN- featureTest3: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./automationScripts/automation.js --feature="thumpsUpDown featureTest3" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-sleep 1
+#printf "Executing Automation Script For $1 commitID\nTests executing for THUMPS UP AND DOWN - featureTest2: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./automationScripts/automation.js --feature="thumpsUpDown featureTest2" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
+#printf "Executing Automation Script For $1 commitID\nTests executing for THUMPS UP AND DOWN- featureTest3: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./automationScripts/automation.js --feature="thumpsUpDown featureTest3" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
 #printf "Executing Automation Script For $1 commitID\nTests executing for DELETE POST: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature=deletePost --proxy-type=none --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1
