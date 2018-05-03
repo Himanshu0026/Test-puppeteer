@@ -34,9 +34,9 @@ sleep 1
 printf "Executing Automation Script For $1 commitID\nTests executing for EDIT PROFILE PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./automationScripts/automation.js --feature=editProfilePage --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
-#printf "Executing Automation Script For $1 commitID\nTests executing for COMPOSE TOPIC: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-#casperjs test ./automationScripts/automation.js --feature=composeTopic --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-#sleep 1
+printf "Executing Automation Script For $1 commitID\nTests executing for COMPOSE TOPIC: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./automationScripts/automation.js --feature=composeTopic --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+sleep 1
 #printf "Executing Automation Script For $1 commitID\nTests executing for PROFILE PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature=profilePage --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1
