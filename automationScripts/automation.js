@@ -562,6 +562,6 @@ case "messagePreview" :
 					casper.echo("thumpsUpDown featureTest");
 					casper.echo("thumpsUpDown featureTest2");
 					casper.echo("thumpsUpDown featureTest3");
-        			casper.echo("postEventMemberApproval");
+					casper.echo("postEventMemberApproval");
 					casper.exit();
 }

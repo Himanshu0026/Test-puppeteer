@@ -40,9 +40,9 @@ sleep 1
 printf "Executing Automation Script For $1 commitID\nTests executing for PROFILE PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./automationScripts/automation.js --feature=profilePage --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
-printf "Executing Automation Script For $1 commitID\nTests executing for THUMPS UP AND DOWN - featureTest: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./automationScripts/automation.js --feature="thumpsUpDown featureTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-sleep 1
+#printf "Executing Automation Script For $1 commitID\nTests executing for THUMPS UP AND DOWN - featureTest: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./automationScripts/automation.js --feature="thumpsUpDown featureTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#sleep 1
 #printf "Executing Automation Script For $1 commitID\nTests executing for THUMPS UP AND DOWN - featureTest2: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature="thumpsUpDown featureTest2" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1
