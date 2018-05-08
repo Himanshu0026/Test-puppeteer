@@ -322,7 +322,7 @@ backEndForumRegisterMethod.editGroupPermissions = function(userGroup, permission
 
 // method to change username format
 backEndForumRegisterMethod.changeUserNameFormat = function(format) {
-	casper.waitForSelector('form[name="posts"]',function() {
+	/*casper.waitForSelector('form[name="posts"]',function() {
 		this.test.assertExists('select#username_regexp');
 		this.fillSelectors('form[name="posts"]', {
 			'select[name="username_regexp"]' : format
@@ -339,7 +339,7 @@ backEndForumRegisterMethod.changeUserNameFormat = function(format) {
 		});
 	}, function fail() {
 		utils.info('Loading... not found');
-	},10000);
+	},10000);*/
 };
 
 backEndForumRegisterMethod.viewUsers = function(userGroup) {
