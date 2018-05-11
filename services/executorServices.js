@@ -161,7 +161,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 											];
 
 											createStatus.failure(commitDetails, description, function(status) {
-												//console.log('state of failure : '+status);
+												console.log('state of failure : '+status);
 												//Sending Mail To The Committer After Adding Attachments
 												fs.exists(path, function(exists) {
 													if(exists) {
