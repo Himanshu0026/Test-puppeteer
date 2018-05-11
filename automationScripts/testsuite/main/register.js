@@ -9,7 +9,7 @@ var forumLoginMethod = require('../methods/login.js');
 var register = module.exports = {};
 
 register.featureTest = function() {
-
+	
 		casper.start(config.backEndUrl, function() {
 
 			utils.info(" Title of the page :"+this.getTitle());

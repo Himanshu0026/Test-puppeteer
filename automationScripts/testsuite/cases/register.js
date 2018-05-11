@@ -97,19 +97,10 @@ registerTests.invalidBirthdayDate = function(data) {
 		casper.test.assertExists('#forum_header_fixed a[href="/register/register"]');
 		casper.click('#forum_header_fixed a[href="/register/register"]');
 	}).waitForSelector('form[name="PostTopic"]', function() {
-		/*var date = casper.evaluate(function() {
-			var currentDate = new Date();
-			var day = currentDate.getDate();
-			var month = currentDate.getMonth() + 1;
-			var year = currentDate.getFullYear();
-			var bdaydate = month + "/" + day + "/" + year;
-			return bdaydate;
-		});*/
 		var date = casper.evaluate(function() {
 			var today = new Date();
 	    var tomorrow = new Date(today);
 	    tomorrow.setDate(today.getDate()+4);
-	    //tomorrow.setMonth(today.getMonth()+1);
 	    if(today.getDate() > 28) {
 	         tomorrow.setMonth(today.getMonth()+1);
 	    }

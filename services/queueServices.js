@@ -76,7 +76,6 @@ jobQueue.process('backstop', function(job, done){
 //Adding new job in queue of "pushRequest" type
 queueServices.addNewJob = function(jobArg, type, priorityNo){
 	if(type == 'automation') {
-
 		var job = jobQueue.create('pushRequest', jobArg).priority(priorityNo).save( function(err){
 			if( !err ) {
 				console.log( job.id );

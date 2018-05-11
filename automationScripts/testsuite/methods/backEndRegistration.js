@@ -322,24 +322,7 @@ backEndForumRegisterMethod.editGroupPermissions = function(userGroup, permission
 
 // method to change username format
 backEndForumRegisterMethod.changeUserNameFormat = function(format) {
-	/*casper.waitForSelector('form[name="posts"]',function() {
-		this.test.assertExists('select#username_regexp');
-		this.fillSelectors('form[name="posts"]', {
-			'select[name="username_regexp"]' : format
-		});
-		if(format == "regexp") {
-			casper.sendKeys('input[name="custom_username_regexp"]', "123A", {reset:true});
-		}
-	}).then(function() {
-		this.click('button.button.btn-m.btn-blue');
-	}).waitUntilVisible('div#loading_msg', function success() {
-		utils.info(casper.fetchText('div#loading_msg'));
-		this.waitUntilVisible('div#ajax-msg-top', function success() {
-			utils.info(casper.fetchText('div#ajax-msg-top'));
-		});
-	}, function fail() {
-		utils.info('Loading... not found');
-	},10000);*/
+
 };
 
 backEndForumRegisterMethod.viewUsers = function(userGroup) {
@@ -419,7 +402,6 @@ backEndForumRegisterMethod.createCategory = function(data) {
 		this.sendKeys('input[name="forum_name"]', data.title, {reset:true});
 		this.sendKeys('textarea[name="forum_description"]', data.description, {reset:true});
 		this.test.assertExists('button.button.btn-m.btn-blue', 'Save button found');
-		//this.click('button.button.btn-m.btn-blue');
 		this.evaluate(function() {
 		  document.querySelector('button.button.btn-m.btn-blue').click();
 		});
@@ -509,7 +491,7 @@ backEndForumRegisterMethod.addNewModerator = function(data, category) {
 				}, false);
 				casper.test.assertExists('div.ui-dialog-buttonset button','Save button Found');
 				casper.click('div.ui-dialog-buttonset button');
-				casper.wait('2000', function(err) {
+				casper.wait('1000', function(err) {
 				});
 			}
 		});
@@ -538,13 +520,12 @@ backEndForumRegisterMethod.removeModerator=function() {
 		if(this.exists('a#remove_mod_all')){
 			this.click('a#remove_mod_all');
 		}
-	}).wait('2000', function(err) {
+	}).wait('1000', function(err) {
 	});
 };
 
 //compose topic methods.
 backEndForumRegisterMethod.setTopicsPerPage=function(value){
-
 	casper.waitForSelector('form[name="posts"]',function() {
 		this.test.assertExists('select#privacy');
 		this.fillSelectors('form[name="posts"]', {
@@ -557,30 +538,6 @@ backEndForumRegisterMethod.setTopicsPerPage=function(value){
     		}else{
 			utils.info(' Saved is not displayed.');
 		}
-	});
-};
-
-
-backEndForumRegisterMethod.followUnfollow=function(value){
-
-	casper.waitForSelector('input[name="subject"]',function() {
-		utils.enableorDisableCheckbox('follow_thread', value);
-	});
-};
-
-
-backEndForumRegisterMethod.pinUnpin=function(value){
-
-	casper.waitForSelector('input[name="subject"]',function() {
-		utils.enableorDisableCheckbox('Pin', value);
-	});
-};
-
-
-backEndForumRegisterMethod.lockUnlock=function(value){
-
-	casper.waitForSelector('input[name="subject"]',function() {
-		utils.enableorDisableCheckbox('LCK', value);
 	});
 };
 
@@ -625,50 +582,4 @@ backEndForumRegisterMethod.enableDisableCategoryPermissions = function(id, value
 	}, function fail() {
 		utils.info("Permission not changed");
 	});
-};
-
-
-//Method for filling data in a category create form
-backEndForumRegisterMethod.createCategorySubcategory= function(title, data){
-	casper.then(function(){
-		this.waitForText(title, function(){
-			utils.info('category is found on category page');
-		}, function(){
-			utils.error('category cannot be found on forum need to create category');
-			this.waitForSelector('form[name=frmOptions]', function(){
-				this.fill('form[name=frmOptions]',{
-					'forum_name': data.title,
-					'forum_description': data.description,
-					'isSubcategory': data.isSubcategorycheckbox,
-					'parentid': data.isSubcategoryvalue,
-					'forum_pw_cb': data.passwordprotectcheckbox,
-			        	'forum_pw': data.passwordprotectvalue,
-					'locked': data.lock,
-					'invisible': data.invisible,
-					'forum_link_cb': data.linked
-				},false);
-
-				try {
-					this.test.assertExists('form#edit_forum_form input[name="forum_link"]');
-					this.fill('form[name="frmOptions"]',{
-						'forum_link' : data.linkedtext
-					}, false);
-						this.test.assertExists('form[name="frmOptions"] button', 'button found on create category page');
-				}catch(e){
-					utils.info('users error message cannot be found on category create form page');
-				}
-				try{
-					this.test.assertExists('form#edit_forum_form select[name="parentid"]');
-					this.click('select#parentid');
-					this.fill('form[name="frmOptions"]',{
-						'parentid' : data.isSubcategoryvalue
-					}, false);
-				}catch(e){
-					utils.info('subcategory value cannot be found on forum');
-				}
-				this.click('form[name="frmOptions"] button');
-				}).wait('5000', function(err){
-				});
-			});
-		});
 };

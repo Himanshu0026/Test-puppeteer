@@ -9,7 +9,6 @@ var forumLoginMethod = require('../methods/login.js');
 var incontextRegistration = module.exports = {};
 
 incontextRegistration.featureTest = function() {
-
 	casper.start(config.backEndUrl, function() {
 
 		utils.info(" Title of the page :"+this.getTitle());

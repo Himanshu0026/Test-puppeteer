@@ -9,12 +9,12 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
-			    		<%if (branches.length > 0) { %>
-			    			<h2>Branches</h2>
-			    			<!--a style="float: right; margin-top: -41px;" onclick="goBack()"><button type="button" class="btn btn-sky">Back</button></a-->
-			    			<a id="back" class="btn btn-sky" onclick="window.history.back();" style="float: right; margin-top: -41px;">&larr;&nbsp; Back</a>
-			    			<div class="table-responsive">
-				      			<table id="branches" class="table table-bordred table-striped">
+			    <%if (branches.length > 0) { %>
+	    			<h2>Branches</h2>
+	    			<!--a style="float: right; margin-top: -41px;" onclick="goBack()"><button type="button" class="btn btn-sky">Back</button></a-->
+	    			<a id="back" class="btn btn-sky" onclick="window.history.back();" style="float: right; margin-top: -41px;">&larr;&nbsp; Back</a>
+	    			<div class="table-responsive">
+		      		<table id="branches" class="table table-bordred table-striped">
 								<thead>
 									<th>Branch Name</th>
 									<th>User Name</th>
@@ -44,10 +44,9 @@
 										</tr>
 									<%  }); %>
 								</tbody>
-
 							</table>
-				    		</div>
-			    		<% } %>
+		    		</div>
+	    		<% } %>
 				</div>
 			</div>
 		</div>

@@ -3,7 +3,6 @@ var forumLoginMethod = require('../methods/login.js');
 var pollMethod = require('../methods/poll.js');
 var topicMethod = require('../methods/topic.js');
 var backEndregisterMethod = require('../methods/backEndRegistration.js');
-var wait=require('../wait.js');
 var utils = require('../utils.js');
 var loginJSON = require('../../testdata/loginData.json');
 var topicJSON = require('../../testdata/topic.json');

@@ -2,7 +2,6 @@
 var config = require('../../../config/config.json');
 var loginJSON = require('../../testdata/loginData.json');
 var profilePageJSON=require('../../testdata/profilePageData.json');
-var thumpsUpDownJSON = require('../../testdata/thumpsUpDown.json');
 var topicJSON = require('../../testdata/topic.json');
 var composeTopicJSON=require('../../testdata/composeTopic.json');
 var topicMethod = require('../methods/topic.js');
@@ -18,7 +17,6 @@ var registerUser='';
 
 //add delete method
 profilePageTests.deleteTopics=function() {
-
 	casper.thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
 	}).waitForSelector('div.panel-heading span input', function(){
@@ -42,7 +40,6 @@ profilePageTests.deleteTopics=function() {
 
 //Verify with sending message by message button.
 profilePageTests.profilePageMessageButton=function(){
-	
 	var pmessage = "";
 	casper.then(function(){
 		utils.info('Case 1 [Verify with sending message by message button.]');
@@ -80,7 +77,6 @@ profilePageTests.profilePageMessageButton=function(){
 //Verify with sending message by message button when message permission is disable from back end
 
 profilePageTests.profilePageMessageButtonDisable=function(){
-
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('Case 2[Verify with sending message by message button when message permission is disable from back end]');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function(){
@@ -104,7 +100,6 @@ profilePageTests.profilePageMessageButtonDisable=function(){
 
 //Verify all post tab before start a topic/or post.
 profilePageTests.profilePageAllPostTab=function(){
-
 	casper.thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.pmMsgUser.username, loginJSON.pmMsgUser.password);
 	}).waitForSelector('ul.nav.pull-right span.caret', function(){
@@ -121,7 +116,6 @@ profilePageTests.profilePageAllPostTab=function(){
 
 //Verify with All post tab after start a topic/post
 profilePageTests.profilePageAfterStartTopic=function(){
-
 	//for another post 10 seconds wait
 	casper.thenOpen(config.url, function(){
 		this.waitForSelector('a[href="/post/printadd"]', function(){
@@ -165,7 +159,6 @@ profilePageTests.profilePageAfterStartTopic=function(){
 
 //Verify with All post tab after delete a topic/post
 profilePageTests.profilePageDeletePost=function(){
-
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 5[Verify with All post tab after delete a topic/post]');
 	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
@@ -198,7 +191,6 @@ profilePageTests.profilePageDeletePost=function(){
 //Verify with Topic started tab
 //verify with before start a topic.
 profilePageTests.profilePageTopicTab=function() {
-
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 7[Verify with Topic started tab before start a topic..]');
 	}).then(function(){
@@ -217,7 +209,6 @@ profilePageTests.profilePageTopicTab=function() {
 
 //Verify with topic started tab after start a topic.
 profilePageTests.profilePageTopicTabCreateTopic=function() {
-
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 8[Verify with topic started tab after start a topic.]');
 		this.waitForSelector('a[href="/post/printadd"]', function(){
@@ -242,7 +233,6 @@ profilePageTests.profilePageTopicTabCreateTopic=function() {
 //verify with edit topic title
 //Verify with All post tab after delete a topic/post
 profilePageTests.profilePageTopicEditTopicTitle=function() {
-
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 9[verify with edit topic title]');
 		this.waitForSelector('form[name="posts"] a.topic-title', function(){
@@ -278,7 +268,6 @@ profilePageTests.profilePageTopicEditTopicTitle=function() {
 
 //delete topics
 profilePageTests.deleteTopic=function() {
-	
 	casper.thenOpen(config.url, function(){
 		utils.info('************************Delete Users Topics*********************');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
@@ -302,7 +291,6 @@ profilePageTests.deleteTopic=function() {
 //Likes tab
 //Verify with like the post.
 profilePageTests.profilePageLikesTab=function(){
-
 	casper.thenOpen(config.backEndUrl , function(){
 		utils.info('Case 11[Verify with like the post.]');
 		this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
@@ -417,7 +405,6 @@ profilePageTests.profilePageDeleteLikePost=function(){
 
 //Verify post count for newly register user
 profilePageTests.profilePagePostCount=function() {
-
 	var expectedPostCount="0";
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('Case 13[Verify post count for newly register user.]');
@@ -448,7 +435,6 @@ profilePageTests.profilePagePostCount=function() {
 
 //Verify with add topic/post
 profilePageTests.profilePagePostCountAddtopic=function() {
-
 	var expectedPostCount="2";
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 14[Verify post count with add topic/post]');
@@ -468,7 +454,6 @@ profilePageTests.profilePagePostCountAddtopic=function() {
 
 //Verify with delete the post
 profilePageTests.profilePagePostCountDeletePost=function(){
-
 	var expectedPostCount="0";
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 15[Verify post count with delete the post]');
@@ -503,7 +488,6 @@ profilePageTests.profilePagePostCountDeletePost=function(){
 
 //verify with reputation link after disable the permissions
 profilePageTests.profilePageReputationDisable=function(){
-
 	casper.thenOpen(config.backEndUrl , function() {
 		utils.info('Case 16[Verify with reputation link after disable the permissions]');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
@@ -530,7 +514,6 @@ profilePageTests.profilePageReputationDisable=function(){
 };
 
 profilePageTests.profilePageReputationEnable=function(){
-
 	casper.thenOpen(config.backEndUrl , function() {
 		utils.info('Case 17[Verify with reputation link after enable the permissions]');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
@@ -553,8 +536,6 @@ profilePageTests.profilePageReputationEnable=function(){
 
 //verify with edit user icon
 profilePageTests.profilePageEditUserIcon=function(){
-
-
 	var oldUserName="";
 	var newUsername="hell";
 	casper.thenOpen(config.backEndUrl, function(){
@@ -602,7 +583,6 @@ profilePageTests.profilePageEditUserIcon=function(){
 
 //Verify with delete icon delete register user
 profilePageTests.profilePageDeleteUser= function(){
-
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 19[Verify with delete icon delete register user]');
 		this.test.assertExists('ul.nav.pull-right span.caret');
@@ -615,7 +595,6 @@ profilePageTests.profilePageDeleteUser= function(){
 	}).waitForSelector('div#userAccountName', function(){
 		this.test.assertSelectorHasText('div#userAccountName h3', 'Are you sure you would like to permanently delete the account');
 		this.click('a#deleteAccount');
-		//this.wait(3000, function(){});
 	}).waitForSelector('a#td_tab_login', function(){
 		this.test.assertExists('a#td_tab_login', 'login button found');
 	});
@@ -623,7 +602,6 @@ profilePageTests.profilePageDeleteUser= function(){
 
 //Verify after like the post(one user like your only one post)for newly register user.
 profilePageTests.profilePageReputationCount=function(){
-
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 20[Verify with delete icon delete register user check reputation count]');
 		profilePageMethod.newaddTopicPost();
@@ -671,7 +649,6 @@ profilePageTests.profilePageReputationCount=function(){
 
 //Verify after like the post(one user like your multiple post one post)
 profilePageTests.profilePageReputationCountMultiplePostLike=function(){
-
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 21[Verify after like the post(one user like your multiple post one post)]');
 		profilePageMethod.newaddTopicPost();

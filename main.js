@@ -14,7 +14,6 @@ var gitBranchServices = require('./services/gitBranchServices');
 var executorServices = require('./services/executorServices');
 var utils = require('./services/utils.js');
 var bodyParser = require('body-parser');
-//var io = require('socket.io')(server);
 
 // Middlewares to handle Directory Structure
 app.use(express.static(__dirname + '/backstopjs/backstop_data/html_report/'));
@@ -23,7 +22,6 @@ app.use(express.static(__dirname + '/backstopjs/backstop_data'));
 //Initializing Redis client
 var redisClient = utils.initRedisClient();
 executorServices.redisClient = redisClient;
-//exports.redisClient = redisClient;
 
 //Creating github webhook handler
 var createHandler = require('github-webhook-handler');
@@ -151,81 +149,79 @@ app.get('/branches', function(req, res) {
 app.get('/pulls', function(req, res) {
 	console.log('Getting pull requests');
 	var pullRequests = [];
-        request({
-        	url: config.apiURL+'pulls?state=open&sort=updated&direction=desc&page=1&per_page=26&access_token='+config.token,
-            	headers: { 'user-agent' : 'git-technetium' },
-            	json: true
-       }, function(err, response, body) {
-        	if(err) {
-        		console.log('err : '+err);
-        		res.send(err);
-        	}
-        	if(response.statusCode == 200) {
-        		var inc = 1;
-        		body.forEach(function(pulls) {
-        			request({
-        				url: config.apiURL+'pulls/'+pulls.number+'?access_token='+config.token,
-				    	headers: { 'user-agent' : 'git-technetium' },
-				    	json: true
-        			}, function(err, response, body1) {
-        				if(err) {
-									console.log('err : '+err);
-									res.send(err);
+	request({
+	url: config.apiURL+'pulls?state=open&sort=updated&direction=desc&page=1&per_page=26&access_token='+config.token,
+	  	headers: { 'user-agent' : 'git-technetium' },
+	  	json: true
+	}, function(err, response, body) {
+		if(err) {
+			console.log('err : '+err);
+			res.send(err);
+		}
+		if(response.statusCode == 200) {
+			var inc = 1;
+			body.forEach(function(pulls) {
+				request({
+					url: config.apiURL+'pulls/'+pulls.number+'?access_token='+config.token,
+					headers: { 'user-agent' : 'git-technetium' },
+					json: true
+				}, function(err, response, body1) {
+					if(err) {
+						console.log('err : '+err);
+						res.send(err);
+					}
+					if(response.statusCode == 200) {
+						var date = body1.updated_at;
+						//var currentTime = moment();
+						date = moment(date);
+						var time = date.format('HH:mm:ss');
+						var updatedDate = date.format('DD/MM/YYYY');
+						request({
+							url: body1.statuses_url+'?access_token='+config.token,
+							headers: { 'user-agent' : 'git-technetium' },
+							json: true
+						}, function(err, response, body2) {
+							if(err) {
+								console.log('err : '+err);
+								res.send(err);
+							}
+							if(response.statusCode == 200) {
+								if(body2.length > 0) {
+									var pullRequest = {
+										//name: pulls.title,
+										name:body1.head.ref,
+										number: pulls.number,
+										username: pulls.user.login,
+										date:updatedDate + ' | ' + time,
+										state: pulls.state,
+										merged: body1.merged,
+										mergeable: body1.mergeable,
+										automationStatus: body2[0].state
+									};
+									pullRequests.push(pullRequest);
 								}
-        				if(response.statusCode == 200) {
-									var date = body1.updated_at;
-									//var currentTime = moment();
-									date = moment(date);
-									var time = date.format('HH:mm:ss');
-									var updatedDate = date.format('DD/MM/YYYY');
-        					request({
-        						url: body1.statuses_url+'?access_token='+config.token,
-						    	headers: { 'user-agent' : 'git-technetium' },
-						    	json: true
-        					}, function(err, response, body2) {
-        						if(err) {
-											console.log('err : '+err);
-											res.send(err);
-										}
-										if(response.statusCode == 200) {
-											if(body2.length > 0) {
-												var pullRequest = {
-													//name: pulls.title,
-													name:body1.head.ref,
-													number: pulls.number,
-													username: pulls.user.login,
-													date:updatedDate + ' | ' + time,
-													state: pulls.state,
-													merged: body1.merged,
-													mergeable: body1.mergeable,
-													automationStatus: body2[0].state
-												};
-												//console.log('gdhdhdfghdgfdhgd'+pullRequest.mergeable);
-												//console.log(typeof(pullRequest.mergeable));
-												pullRequests.push(pullRequest);
-											}
-										}
-										if(inc >= body.length) {
-											sendResponse();
-										}
-										inc++;
-        					});
-        				}
-        			});
-        		});
-						function sendResponse() {
-							console.log('sending response');
-        			res.render('pullRequests', {
-        				pullRequests: pullRequests
-        			});
-						}
-        	}
-      });
+							}
+							if(inc >= body.length) {
+								sendResponse();
+							}
+							inc++;
+						});
+					}
+				});
+			});
+			function sendResponse() {
+				console.log('sending response');
+				res.render('pullRequests', {
+					pullRequests: pullRequests
+				});
+			}
+		}
+  });
 });
 
 //Handling unused request
 app.get('/favicon.ico', function(req, res) {
-    res.sendStatus(204);
+  res.sendStatus(204);
 });
 
 app.get('/reviews/*', function(req, res) {
@@ -424,7 +420,6 @@ app.post('/backstop/*', function(req, res) {
 		if(response.statusCode == 200) {
 			executorServices.executeBackstop(branchName, function(err) {
 				if(err) {
-					//res.end(err);
 					console.log('Adding backstop job into queue for branch ' + branchName);
 					utils.isValidBranch(branchName, function(valid) {
 						if(valid) {
@@ -477,8 +472,6 @@ handler.on('push', function (event) {
 		var branchName = tempArr[tempArr.length-1];
 		commitDetails.branchName = branchName;
 		commitDetails.priorityNo = '0';
-		//Adding a new job in queue with commit details
-		//queueServices.addNewJob(commitDetails);
 		utils.isValidJobToAdd(branchName, commitDetails, function(valid){
 			if(valid)
 				queueServices.addNewJob(commitDetails, 'automation', '0');
@@ -526,14 +519,6 @@ app.post('/pendingBranches/*', function(req, res) {
 		console.log(commit);
 		var commitInfoJSON = JSON.parse(commit.commitDetails);
 		queueServices.addNewJob(commitInfoJSON, 'automation', '-10');
-		/*executorServices.executeJob(commitInfoJSON, function(err) {
-			if(err) {
-				console.log('Automation not executed for this branch');
-			}else {
-				res.render('pendingBranchStatus');
-				redisClient.del(branch);
-			}
-		});*/
 	});
 });
 
@@ -560,7 +545,6 @@ app.post('/automate/*', function(req, res) {
 		if(response.statusCode == 200) {
 			commitDetails.commitId = body.commit.sha;
 			commitDetails.repositoryName = "Website-Toolbox";
-			//commitDetails.ownerName = body.commit.committer.login;
 			commitDetails.ownerName = "webtoolbox";
 			commitDetails.beta = config.beta;
 			commitDetails.commitMessage = body.commit.commit.message;
@@ -569,23 +553,6 @@ app.post('/automate/*', function(req, res) {
 			commitDetails.committerEmail = body.commit.commit.committer.email;
 			commitDetails.priorityNo = '-10';
 			console.log('initiating automation for ' + commitDetails.branchName + ' branch');
-			/*executorServices.executeAutomation(branchName, function(err, msg) {
-				if(err) {
-					res.send(msg);
-				}else {
-					//console.log('sjdjdjahdkjhkad'+stdout);
-					res.send(msg);
-					res.send('Automation passed for this branch');
-				}
-			});*/
-			/*executorServices.executeJob(commitDetails, function(err) {
-				if(err) {
-					console.log('Automation not executed for this branch');
-				}else {
-					res.render('pendingBranchStatus');
-					//redisClient.del(branch);
-				}
-			});*/
 			queueServices.addNewJob(commitDetails, 'automation', '-10');
 			res.send('Branch added to the automation queue and will execute just after the completion of current process and you will get the mail in case of failure ');
 		}

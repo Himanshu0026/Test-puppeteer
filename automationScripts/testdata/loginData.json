@@ -1,5 +1,4 @@
 {
-
 	"username": "sangita",
 	"password": "sangita",
 
@@ -39,24 +38,24 @@
 
 	"validInfo" : {
 		"username" : "hani",
-    		"password" : "hani",
-    		"expectedSuccessMsg" : ""
-  	},
-	"adminUser":{
+		"password" : "hani",
+		"expectedSuccessMsg" : ""
+  },
+
+	"adminUser": {
 		"username" : "hani12",
-    		"password" : "hani12"
+    "password" : "hani12"
 	},
 
 	"pmMsgUser" : {
 		"username" : "shipra",
-    		"password" : "shipra",
-    		"expectedSuccessMsg" : ""
-  	},
-  	
-  	"deleteTopicUser":{
-  		"username" : "haniuser",
-    		"password" : "haniuser",
-    		"expectedSuccessMsg" : ""
-  	}
+		"password" : "shipra",
+		"expectedSuccessMsg" : ""
+  },
 
+	"deleteTopicUser": {
+		"username" : "haniuser",
+		"password" : "haniuser",
+		"expectedSuccessMsg" : ""
+	}
 }

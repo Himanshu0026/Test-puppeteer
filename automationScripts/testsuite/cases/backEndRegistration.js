@@ -7,7 +7,6 @@ var backEndregisterTests = module.exports = {};
 
 //Test Case for Verifying Error Messages While User Registering With Blank User Name.
 backEndregisterTests.doRegister = function() {
-
 	utils.info('Case1[Verifying Error Messages While User Registering With Blank User Name]');
 	casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
 		casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
