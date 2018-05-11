@@ -17,7 +17,7 @@
 						<h2>Pull Requests</h2>
 						<a id="back" class="btn btn-sky" onclick="window.history.back();" style="float: right; margin-top: -41px;">&larr;&nbsp; Back</a>
 						<div class="table-responsive">
-				      <table id="pullRequests" class="table table-bordred table-striped">
+				      			<table id="pullRequests" class="table table-bordred table-striped">
 								<thead>
 									<!--<th>Pull Request Name</th>-->
 									<th>Branch Name</th>
@@ -29,8 +29,8 @@
 									<th>Automation Status</th>
 									<th>Reviews</th>
 								</thead>
-			    			<tbody>
-			    				<% pullRequests.forEach(function(pullRequest){ %>
+			    					<tbody>
+			    						<% pullRequests.forEach(function(pullRequest){ %>
 										<tr>
 											<td width="350px;"><%= pullRequest.name %></td>
 											<td><%= pullRequest.username %></td>
@@ -56,8 +56,8 @@
 									<%  }); %>
 								</tbody>
 							</table>
-				    </div>
-			    <% } %>
+				    		</div>
+			   		 <% } %>
 				</div>
 			</div>
 		</div>

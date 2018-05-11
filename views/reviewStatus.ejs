@@ -17,41 +17,41 @@
 						<h4><%= error %></h4>
 						<a id="back" class="btn btn-sky" onclick="window.history.back();" style="float: right; margin-top: -41px;">&larr;&nbsp; Back</a>
 					<% } %>
-			    <% if (pullRequestReviews.length > 0) { %>
+			    		<% if (pullRequestReviews.length > 0) { %>
 						<h2>Review Status</h2>
 						<a id="back" class="btn btn-sky" onclick="window.history.back();" style="float: right; margin-top: -41px;">&larr;&nbsp; Back</a>
-			    		<div class="table-responsive">
-				      	<table id="branchStats" class="table table-bordred table-striped">
-									<thead>
-										<th>Name</th>
-										<th>Status</th>
-									</thead>
-			    				<tbody>
-		    						<% pullRequestReviews.forEach(function(reviewer) { %>
-		    							<tr>
-			    							<td><%= reviewer.name %></td>
-			    							<td><%= reviewer.state %></td>
-			    						</tr>
-		    						<% }) %>
-									</tbody>
-								</table>
-				    	</div>
-			    	<% } else { %>
-			    		<h2>Review Status</h2>
-			    		<a href="" style="float: right; margin-top: -18px;" onclick="goBack()"><button type="button" class="btn btn-sky">Back</button></a>
-			    		<div class="table-responsive">
-				      	<table id="branchStats" class="table table-bordred table-striped">
+					    	<div class="table-responsive">
+						      	<table id="branchStats" class="table table-bordred table-striped">
+								<thead>
+									<th>Name</th>
+									<th>Status</th>
+								</thead>
+				    				<tbody>
+			    						<% pullRequestReviews.forEach(function(reviewer) { %>
+			    							<tr>
+				    							<td><%= reviewer.name %></td>
+				    							<td><%= reviewer.state %></td>
+				    						</tr>
+			    						<% }) %>
+								</tbody>
+							</table>
+				    		</div>
+			    		<% } else { %>
+				    		<h2>Review Status</h2>
+				    		<a href="" style="float: right; margin-top: -18px;" onclick="goBack()"><button type="button" class="btn btn-sky">Back</button></a>
+				    		<div class="table-responsive">
+					      		<table id="branchStats" class="table table-bordred table-striped">
 								<thead>
 									<th>Status</th>
 								</thead>
-			    			<tbody>
-    							<tr>
-	    							<td>There is no reviewer for this pull request</td>
-	    						</tr>
+					    			<tbody>
+		    							<tr>
+			    							<td>There is no reviewer for this pull request</td>
+			    						</tr>
 								</tbody>
 							</table>
-				    </div>
-			    <% } %>
+				    		</div>
+			    		<% } %>
 				</div>
 			</div>
 		</div>

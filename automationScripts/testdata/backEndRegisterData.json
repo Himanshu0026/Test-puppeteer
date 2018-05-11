@@ -16,7 +16,7 @@
   },
 
   "existingUserName" : {
-  	"uname" : "sangita",
+    "uname" : "sangita",
     "uemail" : "sangita@websitetoolbox.com",
     "upass" : "1234",
     "pNote" : "This is my personal note with existing username",
@@ -24,7 +24,7 @@
   },
 
   "existingEmailId" : {
-  	"uname" : "1234",
+    "uname" : "1234",
     "uemail" : "sangita@websitetoolbox.com",
     "upass" : "1234",
     "pNote" : "This is my personal note with existing email id ",

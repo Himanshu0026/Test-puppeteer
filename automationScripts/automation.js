@@ -170,18 +170,18 @@ switch (feature[0]) {
 
 	default:
 		casper.echo("Please select any feature from options given below. For ex: casperjs test automation.js --feature = <option>.\n");
-    	casper.echo("Options:");
-			casper.echo("login");
-			casper.echo("backEndRegistration");
-			casper.echo("forgotPassword");
-			casper.echo("loginByPrivacyOption");
-			casper.echo("inContextLogin");
-			casper.echo("oldThemeJsErrors");
-			casper.echo("register");
-			casper.echo("incontextRegistration");
-			casper.echo("privateMessage");
-			casper.echo("editProfilePage");
-			casper.echo("composeTopic");
-			casper.echo("profilePage");
-			casper.exit();
+		casper.echo("Options:");
+		casper.echo("login");
+		casper.echo("backEndRegistration");
+		casper.echo("forgotPassword");
+		casper.echo("loginByPrivacyOption");
+		casper.echo("inContextLogin");
+		casper.echo("oldThemeJsErrors");
+		casper.echo("register");
+		casper.echo("incontextRegistration");
+		casper.echo("privateMessage");
+		casper.echo("editProfilePage");
+		casper.echo("composeTopic");
+		casper.echo("profilePage");
+		casper.exit();
 }

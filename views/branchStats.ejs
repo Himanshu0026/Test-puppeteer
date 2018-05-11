@@ -18,12 +18,12 @@
 						<!--a style="float: right; margin-top: -18px;" onclick="goBack()"><button type="button" class="btn btn-sky">Back</button></a-->
 						<a id="back" class="btn btn-sky" onclick="window.history.back();" style="float: right; margin-top: -41px;">&larr;&nbsp; Back</a>
 					<% } %>
-			    <% if (branchStats) { %>
+			    		<% if (branchStats) { %>
 						<h2>Branch Details</h2>
 						<!--<a href="" style="float: right; margin-top: -41px;" onclick="goBack()"><button type="button" class="btn btn-sky">Back</button></a>-->
 						<a id="back" class="btn btn-sky" onclick="window.history.back();" style="float: right; margin-top: -41px;">&larr;&nbsp; Back</a>
-			    		<div class="table-responsive">
-				      	<table id="branchStats" class="table table-bordred table-striped">
+				    		<div class="table-responsive">
+					      		<table id="branchStats" class="table table-bordred table-striped">
 								<thead>
 									<th>Branch Name</th>
 									<th>User Name</th>
@@ -33,7 +33,7 @@
 									<th>Date</th>
 									<th>Last Commit Updation</th>
 								</thead>
-			    			<tbody>
+			    					<tbody>
 									<tr>
 										<td><%= branchStats.name %></td>
 										<td><%= branchStats.userName %></td>
@@ -49,8 +49,8 @@
 									</tr>
 								</tbody>
 							</table>
-		    		</div>
-	    		<% } %>
+		    				</div>
+	    				<% } %>
 				</div>
 			</div>
 		</div>
