@@ -3,7 +3,7 @@
 'use strict.';
 var registerMethod = require('../methods/register.js');
 var utils = require('../utils.js');
-var thumpsUpDownJSON = require('../../testdata/thumpsUpDown.json');
+//var thumpsUpDownJSON = require('../../testdata/thumpsUpDown.json');
 var topicJSON = require('../../testdata/topic.json');
 var loginJSON = require('../../testdata/loginData.json');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
@@ -52,12 +52,12 @@ ooScriptTestcases.registrationBackendSetting = function() {
 
 // method to register two user neha and isneha
 ooScriptTestcases.registerUserTOLogin = function() {
-	casper.thenOpen(config.backEndUrl, function() {
+	/*casper.thenOpen(config.backEndUrl, function() {
     utils.info('Test case to register all the users');
 	}).eachThen(thumpsUpDownJSON.infoToRegisterUser, function(response) {
 		var responseData = response.data;
 		registerMethod.registerMember(responseData);
-	});
+	});*/
 };
 
 ooScriptTestcases.createNewTopic = function() {
