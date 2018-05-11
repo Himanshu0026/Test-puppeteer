@@ -1,10 +1,7 @@
 //This script is responsible for creating job queue and serves each job one by one.
 'use strict.';
 var executorServices = require('./executorServices.js');
-//var utils = require('./utils.js');
-//executorServices.redisClient = utils.redisClient;
-//var myModule = require('../main.js');
-var redisClient;// = myModule.redisClient;
+var redisClient;
 var kue = require('kue');
 
 var queueServices = module.exports = {};
