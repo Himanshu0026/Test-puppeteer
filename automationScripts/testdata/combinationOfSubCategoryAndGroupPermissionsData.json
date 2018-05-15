@@ -1,0 +1,132 @@
+{
+	"registeredUserLogin" : {
+		"username": "neha",
+		"password": "neha"
+	},
+
+	"customUserLogin" : {
+		"username": "customUser",
+		"password": "customUser"
+	},
+
+	"pendingUserLogin" : {
+		"username": "pendingUser",
+		"password": "pendingUser"
+	},
+
+	"adminUserLogin" : {
+		"username": "isneha",
+		"password": "isneha"
+	},
+
+	"moderatorsLogin" : {
+		"username": "moderatorsUser",
+		"password": "moderatorsUser"
+	},
+
+	"emailVerificationUserLogin" : {
+		"username": "emailUser",
+		"password": "emailUser"
+	},
+
+	"infoToRegisterUser" : [{
+		"uname" : "neha",
+		"upass" : "neha",
+		"uemail" : "neha@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	},
+
+	{
+		"uname" : "isneha12",
+		"upass" : "isneha12",
+		"uemail" : "isneha12@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	},
+	
+	{
+		"uname" : "customUser",
+		"upass" : "customUser",
+		"uemail" : "customUser@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	},
+
+	{
+		"uname": "pendingUser",
+		"upass": "pendingUser",
+		"uemail" : "pendingUser@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	},
+
+	{
+		"uname": "emailUser",
+		"upass": "emailUser",
+		"uemail" : "emailUser@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	},
+
+	{
+		"uname": "moderatorsUser",
+		"upass": "moderatorsUser",
+		"uemail" : "moderatorsUser@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	},
+
+	{
+		"uname" : "isneha",
+		"upass" : "isneha",
+		"uemail" : "isneha@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	}],
+
+	"category" : {
+		"title" : "cat1",
+		"description" : "To test parent category"
+	},
+
+	"subCategory" : {
+		"title" : "cat1a",
+		"description" : "To test child category"
+	},
+
+	"otherSubCategory" : {
+		"title" : "cat1b",
+		"description" : "To test other child category"
+	},
+
+	"startTopic" : {
+		"title" : "New Topic",
+		"content" : "hellloooooo!!!!!!!!!",
+		"category" : "General"
+	},
+
+	"groupName" : "New Custom Group"
+
+}

@@ -1,0 +1,66 @@
+{
+
+	"setHiddenValueOn" : {
+		"required" : "1",
+		"visiblity" : "1"
+	},
+	
+	"setVisibleValueOn" : {
+		"required" : "1",
+		"visiblity" : "2"
+	},
+	
+	"setRegistrationValueOn" : {
+		"required" : "1",
+		"visiblity" : "4"
+	},
+	
+	"setHiddenValueOff" : {
+		"required" : "0",
+		"visiblity" : "1"
+	},
+	
+	"setVisibleValueOff" : {
+		"required" : "0",
+		"visiblity" : "2"
+	},
+	
+	"setRegistrationValueOff" : {
+		"required" :"0",
+		"visiblity" :"4"
+	},
+	
+	"setSettingsOn" : {
+		"required" : "1",
+		"visiblity" : "8"
+	},
+	
+	"setSettingsOff" : {
+		"required" : "0",
+		"visiblity" : "8"
+	},
+
+	"adminLogin" : {
+		 "username": "sangita",
+		 "password": "sangita",
+		 "ExpectedErrorMessage" : "Admin Login successfully."
+
+	},
+	
+	"validInfo" : {
+		"uname" : "sangita",
+		"uemail" : "sangita@websitetool.com",
+		"upass" : "sangita",
+		"fullName" : "sangita",
+		"imID" : "sangita",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature sangita",
+		"namePrivate" : true,
+		"expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
+	},
+
+	"editProfile" : {
+		"value" : "",
+		"checkbox" : true
+	}
+}

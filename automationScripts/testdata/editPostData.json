@@ -1,0 +1,24 @@
+{
+	"editTopic" : {
+		"data":"Topic",
+		"expectedTopic":"Topicmy old topic"
+	},
+	"editPost" :{
+		"data":"edit",
+		"searchPageData":"neweditpost reply",
+		"expectedPost":"editpost reply",
+		"expectedPostProfilePage":"newPostmyPost",
+		"expectedTopicRegisterUser":"newTopicmy old topic",
+		"expectedPostRegisterUser":"=newpost replyHello",
+		"expectedPostprofileRegister":"hellnewpost replyHello",
+		"expectedsearchDataRegister":"posthellnewpost replyHello"
+	},
+	"SearchPage" :{
+		"expectedPost":"newpost replyHello"
+	},
+
+	"editedPost":{
+		"newPost":"myPost"
+	}
+
+}
