@@ -135,6 +135,17 @@ switch (feature[0]) {
 		});
 	break;
 
+	case "messagePreview" :
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify messagePreview functionality', function(test) {
+			var messagePreview = require("./testsuite/main/messagePreview.js");
+			messagePreview.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
 	case "editProfilePage":
 		casper.test.begin(branchName+ ' : ' + commitId + ' Verify EditProfilePage functionality', function(test){
 			var editProfilePage = require("./testsuite/main/editProfilePage.js");
