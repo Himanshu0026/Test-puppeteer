@@ -406,6 +406,7 @@ profilePageTests.profilePageDeleteLikePost=function(){
 //Verify post count for newly register user
 profilePageTests.profilePagePostCount=function() {
 	var expectedPostCount="0";
+	var actualcount;
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('Case 13[Verify post count for newly register user.]');
 		this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
@@ -424,7 +425,8 @@ profilePageTests.profilePagePostCount=function() {
 				});
 			}).waitForSelector('a#PostsOFUser', function(){
 				var actualPostCount=casper.fetchText('li:nth-child(1) span.profile-count');
-				var actualcount=actualPostCount.trim();
+				actualcount=actualPostCount.trim();
+			}).then(function(){
 				this.test.assertEquals(actualcount, expectedPostCount, 'both the outputs are equals');
 			}).then(function(){
 				forumLoginMethod.logoutFromApp();
@@ -436,6 +438,7 @@ profilePageTests.profilePagePostCount=function() {
 //Verify with add topic/post
 profilePageTests.profilePagePostCountAddtopic=function() {
 	var expectedPostCount="2";
+	var actualcount="0";
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 14[Verify post count with add topic/post]');
 		profilePageMethod.addTopicPost();
@@ -447,7 +450,8 @@ profilePageTests.profilePagePostCountAddtopic=function() {
 		});
 	}).waitForSelector('a#PostsOFUser', function(){
 		var actualPostCount=casper.fetchText('li:nth-child(1) span.profile-count');
-		var actualcount=actualPostCount.trim();
+		actualcount=actualPostCount.trim();
+	}).then(function(){
 		this.test.assertEquals(actualcount, expectedPostCount, 'both the outputs are equals');
 	});
 };
