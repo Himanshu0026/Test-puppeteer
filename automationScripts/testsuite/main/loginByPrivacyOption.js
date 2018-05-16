@@ -15,6 +15,8 @@ loginByPrivacyOption.featureTest = function() {
 		forumLoginMethod.loginToForumBackEnd();
 
 	}).then(function() {
+  	  utils.setNewTheme();
+    }).then(function() {
 
 		//Login page on Forum by enabling Privacy Private option from backend
 		loginByPrivacyOptionTests.enablePrivacyOption();

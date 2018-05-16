@@ -4,12 +4,17 @@
 'use strict.';
 var config = require('../../../config/config.json');
 var forgotPasswordTestcases = require('../cases/forgotPassword.js');
+var forumLoginMethod = require('../methods/login.js');
 var utils = require('../utils.js');
 var forgotPassword = module.exports = {};
 
 forgotPassword.featureTest = function() {
 
-	casper.start(config.url, function() {
+	casper.start(config.backEndUrl, function() {
+		forumLoginMethod.loginToForumBackEnd();
+	}).then(function() {
+		utils.setNewTheme();
+	}).thenOpen(config.url, function() {
 		utils.info(" Title of the page :"+this.getTitle());
 
 		// call method to Reset password with valid user name

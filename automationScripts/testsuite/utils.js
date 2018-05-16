@@ -4,6 +4,7 @@ utils.jsErrorsCount = 1;
 utils.jsErrors = [];
 utils.resourceErrorsCount = 1;
 utils.resourceErrors = [];
+utils.newTheme = 0;
 
 //pass the id of the element in element parameter and for status true or false
 utils.enableorDisableCheckbox = function(element, status) {
@@ -12,11 +13,15 @@ utils.enableorDisableCheckbox = function(element, status) {
 	}, element);
 	if (checkbox_value) {
 		if (checkbox_value != status) {
-			casper.click('#'+element);
+			casper.evaluate(function(element) {
+				document.querySelector('#'+element).click();
+			},element);
 		}
 	} else {
 		if (status) {
-			casper.click('#'+element);
+			casper.evaluate(function(element) {
+				document.querySelector('#'+element).click();
+			},element);
 		}
 	}
 };
@@ -108,5 +113,27 @@ utils.displayError = function() {
 		utils.error(' ' +utils.resourceErrors.length+' resources errors found');
 	} else {
 		utils.error(' ' +utils.resourceErrors.length+' resources errors found');
+	}
+};
+
+utils.activateNewTheme = function() {
+	utils.newTheme = 1;
+};
+
+utils.deActivateNewTheme = function() {
+	utils.newTheme = 0;
+};
+
+utils.isNewThemeActivated = function() {
+	return utils.newTheme;
+};
+
+utils.setNewTheme = function() {
+	if(!utils.isNewThemeActivated()) {
+		casper.thenOpen(config.url+'tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=51&search_skin=Angela&sorted=', function() {
+		}).waitForText("The Angela theme has been activated.", function() {
+			utils.activateNewTheme();
+			utils.info("New Theme Activated :" +utils.isNewThemeActivated());
+		});
 	}
 };

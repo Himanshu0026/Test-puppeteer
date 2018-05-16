@@ -55,6 +55,78 @@
 		"expectedErrorMsg" : "Please enter your email address."
 	},
 
+  {
+		"uname" : "hani",
+		"upass" : "hani",
+		"uemail" : "hani@wt.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "hani12",
+		"upass" : "hani12",
+		"uemail" : "hani12@wt.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "haniuser",
+		"upass" : "haniuser",
+		"uemail" : "haniuser@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "shipra",
+		"upass" : "shipra",
+		"uemail" : "shipra@websitetoolbox.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "sangita",
+		"upass" : "sangita",
+		"uemail" : "sangita@websitetoolbox.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "sangita.digi",
+		"upass" : "sangita.digi",
+		"uemail" : "sangita.digi@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
 	{
 		"uname" : "emailUser",
 		"upass" : "emailUser",
@@ -92,9 +164,213 @@
 	},
 
   {
+		"uname" : "isneha12",
+		"upass" : "isneha12",
+		"uemail" : "isneha12@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
 		"uname" : "abc",
 		"upass" : "abc",
 		"uemail" : "abc@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc1",
+		"upass" : "abc1",
+		"uemail" : "abc1@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc2",
+		"upass" : "abc2",
+		"uemail" : "abc2@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc3",
+		"upass" : "abc3",
+		"uemail" : "abc3@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc4",
+		"upass" : "abc4",
+		"uemail" : "abc4@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc5",
+		"upass" : "abc5",
+		"uemail" : "abc5@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc6",
+		"upass" : "abc6",
+		"uemail" : "abc6@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc7",
+		"upass" : "abc7",
+		"uemail" : "abc7@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc8",
+		"upass" : "abc8",
+		"uemail" : "abc8@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc9",
+		"upass" : "abc9",
+		"uemail" : "abc9@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc10",
+		"upass" : "abc10",
+		"uemail" : "abc10@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc11",
+		"upass" : "abc11",
+		"uemail" : "abc11@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc12",
+		"upass" : "abc12",
+		"uemail" : "abc12@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc13",
+		"upass" : "abc13",
+		"uemail" : "abc13@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc14",
+		"upass" : "abc14",
+		"uemail" : "abc14@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc15",
+		"upass" : "abc15",
+		"uemail" : "abc15@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true,
+		"expectedErrorMsg" : "Please enter your email address."
+	},
+
+  {
+		"uname" : "abc16",
+		"upass" : "abc16",
+		"uemail" : "abc16@gmail.com",
 		"fullName" : "Blank Email",
 		"imID" : "Hello",
 		"birthday" : "04/12/1991",

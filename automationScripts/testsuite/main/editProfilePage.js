@@ -23,8 +23,12 @@ editProfilePage.featureTest = function(){
 	editProfilePageTests.deleteSignature();
 	//Disable CustomTitle  for Registered user from group Permission
 	editProfilePageTests.disableCustomTitle();
-	//Enable CustomTitile for Registered user from group Permission
+	//Verify by add a custom user title.
 	editProfilePageTests.enableCustomTitle();
+	//Verify with edit custom member title.
+	editProfilePageTests.editCustomTitle();
+	//Verify with delete custom user title
+	editProfilePageTests.deleteCustomTitle();
 	//Verify the shield icon for registered user  on edit profile page
 	editProfilePageTests.shieldIcon();
 	//Verify the tool tip on the shield icon
@@ -32,9 +36,9 @@ editProfilePage.featureTest = function(){
 	//Verify the shield icon for registered user  on edit profile page by the admin
 	editProfilePageTests.shieldIconRegisteruser();
 	//Verify with invalid birthday(future year)
-	editProfilePageTests.invalidBirthday();
+	//editProfilePageTests.invalidBirthday();
 	//verify with invalid birthday(future month)
-	editProfilePageTests.invalidFutureMonth();
+	//editProfilePageTests.invalidFutureMonth();
 	//verify with enter full name greater then maximum limits(30)
 	editProfilePageTests.verifyFullName();
 

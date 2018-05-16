@@ -2,6 +2,7 @@ var config = require('../../../config/config.json');
 var deletePostTests = require('../cases/deletePost.js');
 var thumpsUpDownTestcases = require('../cases/thumpsUpDown.js');
 var forumLoginMethod = require('../methods/login.js');
+var profilePageTests = require('../cases/profilePage.js');
 var profilePageMethod= require('../methods/profilePage.js');
 var deletePost = module.exports = {};
 
@@ -11,6 +12,8 @@ deletePost.featureTest = function(){
 		utils.info(" Title of the page :"+this.getTitle());
 		forumLoginMethod.loginToForumBackEnd();
 	}).then(function(){
+	//create category--
+	deletePostTests.deletePostCreateCategory();
 	//Verify by delete one topic -selecting by check box
 	deletePostTests.deleteTopicByCheckboxAdmin();
 	//Verify by delete multiple topic-selecting by check box
@@ -77,6 +80,14 @@ deletePost.featureTest = function(){
 	deletePostTests.deletePostDropdownTopicdisablePostdisable();
 	//Verify with delete  own post from own profile page
 	deletePostTests.deleteOwnProfilePageTopicDisablePostDisable();
+	//delete topics
+	//profilePageTests.deleteTopics();
+	//delete topics from new and top option from topic listingpage
+	//deletePostTests.deleteTopicNewTop('div.panel-heading ul li:nth-child(2) a');
+	//Verify with the postcount on topiclistingPage
+	//deletePostTests.checkTopicCount();
+	//verify with delete topic  for deleted user check counts.
+	//deletePostTests.checkTopicCountDeletedUser();
 
 //------------search topic testcases------------------------------------------
 	/*}).thenOpen(config.searchUrl, function(){

@@ -15,39 +15,42 @@
 				<div class="col-md-12">
 					<% if(error) { %>
 						<div class="alert alert-danger"><h4><%= error %></h4></div>
-						<a href="" style="float: right; margin-top: -18px;" onclick="goBack()"><button type="button" class="btn btn-sky">Back</button></a>
+						<!--a style="float: right; margin-top: -18px;" onclick="goBack()"><button type="button" class="btn btn-sky">Back</button></a-->
+						<a id="back" class="btn btn-sky" onclick="window.history.back();" style="float: right; margin-top: -41px;">&larr;&nbsp; Back</a>
 					<% } %>
 			    		<% if (branchStats) { %>
 						<h2>Branch Details</h2>
-						<a href="" style="float: right; margin-top: -41px;" onclick="goBack()"><button type="button" class="btn btn-sky">Back</button></a>
-			    			<div class="table-responsive">
-				      			<table id="branchStats" class="table table-bordred table-striped">
+						<!--<a href="" style="float: right; margin-top: -41px;" onclick="goBack()"><button type="button" class="btn btn-sky">Back</button></a>-->
+						<a id="back" class="btn btn-sky" onclick="window.history.back();" style="float: right; margin-top: -41px;">&larr;&nbsp; Back</a>
+				    		<div class="table-responsive">
+					      		<table id="branchStats" class="table table-bordred table-striped">
 								<thead>
-									<th>Branche Name</th>
+									<th>Branch Name</th>
+									<th>User Name</th>
 									<th>Automation Status</th>
 									<th>Automation Status Description</th>
-									<th>Merging Status</th>
+									<!--<th>Merging Status</th>-->
 									<th>Date</th>
 									<th>Last Commit Updation</th>
 								</thead>
 			    					<tbody>
 									<tr>
 										<td><%= branchStats.name %></td>
+										<td><%= branchStats.userName %></td>
 										<td><%= branchStats.automationStatus %></td>
 										<td><%= branchStats.description %></td>
-										<% if(branchStats.automationStatus == 'success') { %>
+										<!--<% if(branchStats.automationStatus == 'success') { %>
 											<td>Automatically Mergable</td>
 										<% } else {%>
 											<td>Not Automatically Mergable</td>
-										<% } %>
+										<% } %>-->
 										<td><%= branchStats.date %></td>
 										<td><%= branchStats.commitUpdate %></td>
 									</tr>
 								</tbody>
-
 							</table>
-				    		</div>
-			    		<% } %>
+		    				</div>
+	    				<% } %>
 				</div>
 			</div>
 		</div>

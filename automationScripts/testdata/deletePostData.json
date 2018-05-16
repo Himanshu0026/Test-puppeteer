@@ -1,5 +1,32 @@
 {
 	"postData" : {
 		"data":"dragme"
+	},
+
+	"category" : {
+      		"title" : "CheckPostCountCategory",
+      		"description" : "To test other category"
+      	},
+
+	"newTopic" : {
+		"title" : "NewTopic",
+		"content" : "hellloooooo!!!",
+		"category" : "CheckPostCountCategory"
+	},
+
+	"expectedTopicCount" :{
+		"topicCount" :"1 to 10 of 111 to 10 of 11",
+		"topicCounts": "1 to 10 of 121 to 10 of 12"
+	},
+
+	"expectedCategoryCount" :{
+		"categoryCount":"11",
+		"categoryCounts" :"12"
+	},
+
+	"ValidCredential" :{
+		"title" : "ONEpluse",
+		"content" : "my old topic",
+		"category" : "CheckPostCountCategory"
 	}
 }

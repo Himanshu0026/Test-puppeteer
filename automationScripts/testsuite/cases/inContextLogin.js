@@ -3,7 +3,6 @@ var forumLoginMethod = require('../methods/login.js');
 var pollMethod = require('../methods/poll.js');
 var topicMethod = require('../methods/topic.js');
 var backEndregisterMethod = require('../methods/backEndRegistration.js');
-var wait=require('../wait.js');
 var utils = require('../utils.js');
 var loginJSON = require('../../testdata/loginData.json');
 var topicJSON = require('../../testdata/topic.json');
@@ -169,7 +168,7 @@ inContextLoginTests.doLoginByViewProfileDisable = function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
 			var userHref = casper.evaluate(function() {
-				var userId = document.querySelectorAll('div.panel-body.table-responsive ul li:nth-child(1) span.col-md-9 a.default-user.username');
+				var userId = document.querySelectorAll('div.panel-body.table-responsive ul li:nth-child(1) span.col-md-9 span.image-wrapper a');
 				return userId[0].getAttribute('href');
 			});
 			this.click('a[href="'+userHref+'"]');
@@ -319,10 +318,12 @@ inContextLoginTests.doLoginByEmailButton = function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
 			var userHref = casper.evaluate(function() {
-				var userId = document.querySelectorAll('div.panel-body.table-responsive ul li:nth-child(1) span.col-md-9 a.default-user.username');
+				var userId = document.querySelectorAll('div.panel-body.table-responsive ul li:nth-child(1) span.col-md-9 span.image-wrapper a');
 				return userId[0].getAttribute('href');
 			});
-			this.click('a[href="'+userHref+'"]');
+			casper.evaluate(function(userHref) {
+				document.querySelector('a[href="'+userHref+'"]').click();
+			}, userHref);
 			this.waitForSelector('a#send_email', function() {
 				this.test.assertSelectorHasText('a#send_email', 'Email');
 				this.click('a#send_email');

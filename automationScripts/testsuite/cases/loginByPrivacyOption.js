@@ -37,7 +37,9 @@ loginByPrivacyOptionTests.doLoginByTopic = function() {
 			this.click('i.icon.icon-menu');
 			this.test.assertSelectorHasText('li#latest_topics_show', 'Topics');
 			this.click('li#latest_topics_show a');
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+			this.then(function(){
+				forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+			});
 		});
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
@@ -52,7 +54,9 @@ loginByPrivacyOptionTests.doLoginByMember = function() {
 			this.click('i.icon.icon-menu');
 			this.test.assertSelectorHasText('li#members_list_show', 'Members');
 			this.click('li#members_list_show a');
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+			this.then(function(){
+				forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+			});
 		});
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();

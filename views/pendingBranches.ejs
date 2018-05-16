@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Pending Branch Details</title>
+		<% include ./partials/head.ejs %>
+		<style>
+			#executeAutomation {
+				display: none;
+			}
+		</style>
+		<script>
+			function goBackPage() {
+				window.location("http://beta12.websitetoolbox.com:8081/qa");
+			}
+		</script>
+		<script src="/js/head.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<%if (pendingBranches.length > 0) { %>
+						<h2>Pending Branches</h2>
+						<a href="http://beta21.websitetoolbox.com:8081/qa" style="float: right; margin-top: -41px;" onclick="goBackPage()"><button type="button" class="btn btn-sky">Back</button></a>
+						<div class="table-responsive">
+							<table id="pendingbranch" class="table table-bordred table-striped">
+								<thead>
+									<th>Branch Name</th>
+									<th style="text-align: right;">Change Branch Priority</th>
+								</thead>
+								<tbody>
+									<% pendingBranches.forEach(function(pendingBranches){ %>
+									<% var brancheName = pendingBranches.substring(pendingBranches.indexOf("_") + 1);%>
+									<tr>
+										<td width="650px;"><%= brancheName %></td>
+										<td width="650px;" style="text-align: right;">
+										<form class="priortize_form_button" action="" method="post">
+										<input type="hidden" name="pendingBranchName" value="<%= pendingBranches %>">
+										<a class="prioritze_job" id="<%= brancheName %>"><button type="submit" class="btn btn-primary">Prioritize</button></a>
+										<div id="executeAutomation"><div class="progress-label">Automation is executing.Please wait...</div></div>
+										</form></td>
+									</tr>
+									<%  }); %>
+								</tbody>
+							</table>
+						</div>
+					<% } else {%>
+						<div><a href="http://beta21.websitetoolbox.com:8081/qa" style="float: right;padding: 20px;" onclick="goBackPage()"><button type="button" class="btn btn-sky">Back</button></a></div>
+						<div style="text-align: center; padding-top: 92px;" class="pending_Automation_Status">No Pending Branch is available</div>
+					<% } %>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

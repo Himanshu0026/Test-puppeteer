@@ -1,12 +1,7 @@
 {
 	"registeredUserLogin" : {
 		"username": "neha",
-		"password": "123"
-	},
-
-	"userLogin" : {
-		"username": "isneha12",
-		"password": "isneha12"
+		"password": "neha"
 	},
 
 	"customUserLogin" : {
@@ -19,20 +14,24 @@
 		"password": "pendingUser"
 	},
 
-	"newTopic" : {
-		"title" : "New Topic",
-		"content" : "hellloooooo!!!!!!!!!",
-		"category" : "General"
-	},
-
 	"adminUserLogin" : {
 		"username": "isneha",
-		"password": "1234"
+		"password": "isneha"
+	},
+
+	"moderatorsLogin" : {
+		"username": "moderatorsUser",
+		"password": "moderatorsUser"
+	},
+
+	"emailVerificationUserLogin" : {
+		"username": "emailUser",
+		"password": "emailUser"
 	},
 
 	"infoToRegisterUser" : [{
 		"uname" : "neha",
-		"upass" : "123",
+		"upass" : "neha",
 		"uemail" : "neha@gmail.com",
 		"fullName" : "Blank Email",
 		"imID" : "Hello",
@@ -51,7 +50,7 @@
 		"usignature" : "This is my signature blank email",
 		"namePrivate" : true
 	},
-
+	
 	{
 		"uname" : "customUser",
 		"upass" : "customUser",
@@ -75,8 +74,30 @@
 	},
 
 	{
+		"uname": "emailUser",
+		"upass": "emailUser",
+		"uemail" : "emailUser@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	},
+
+	{
+		"uname": "moderatorsUser",
+		"upass": "moderatorsUser",
+		"uemail" : "moderatorsUser@gmail.com",
+		"fullName" : "Blank Email",
+		"imID" : "Hello",
+		"birthday" : "04/12/1991",
+		"usignature" : "This is my signature blank email",
+		"namePrivate" : true
+	},
+
+	{
 		"uname" : "isneha",
-		"upass" : "1234",
+		"upass" : "isneha",
 		"uemail" : "isneha@gmail.com",
 		"fullName" : "Blank Email",
 		"imID" : "Hello",

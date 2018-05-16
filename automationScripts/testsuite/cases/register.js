@@ -2,6 +2,7 @@
 var registerJSON = require('../../testdata/registerData.json');
 var config = require('../../../config/config.json');
 var registerMethod = require('../methods/register.js');
+var forumLoginMethod = require('../methods/login.js');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var utils = require('../utils.js');
 var registerTests = module.exports = {};
@@ -10,6 +11,13 @@ var registerTests = module.exports = {};
 registerTests.registrationBackendSetting = function() {
 	casper.thenOpen(config.backEndUrl , function() {
 		utils.info('Test case to set up all the backend setting for registration task');
+	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+		this.test.assertSelectorHasText('#ddSettings', 'Security');
+		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+		backEndForumRegisterMethod.changeUserNameFormat("");
+	}).then(function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
@@ -90,13 +98,19 @@ registerTests.invalidBirthdayDate = function(data) {
 		casper.click('#forum_header_fixed a[href="/register/register"]');
 	}).waitForSelector('form[name="PostTopic"]', function() {
 		var date = casper.evaluate(function() {
-			var currentDate = new Date();
-			var day = currentDate.getDate();
-			var month = currentDate.getMonth() + 1;
-			var year = currentDate.getFullYear();
+			var today = new Date();
+	    var tomorrow = new Date(today);
+	    tomorrow.setDate(today.getDate()+4);
+	    if(today.getDate() > 28) {
+	         tomorrow.setMonth(today.getMonth()+1);
+	    }
+			var day = tomorrow.getDate();
+			var month = tomorrow.getMonth()+1;
+			var year = tomorrow.getFullYear();
 			var bdaydate = month + "/" + day + "/" + year;
 			return bdaydate;
 		});
+		utils.info('date ='+date);
 		casper.test.assertExists('form[name="PostTopic"] input[name="birthDatepicker"]', ' Birth day picker exists');
 		casper.sendKeys('input[name="birthDatepicker"]', date, {reset : true});
 	}).then(function() {
@@ -177,6 +191,7 @@ registerTests.registrationForDifferentUserNameFormat = function(data, format) {
 		registerMethod.registerToApp(data.invalidInput);
 	}).waitForText(data.invalidInput.expectedMsg, function() {
 		this.reload(function() {
+		}).waitForSelector('form[name="PostTopic"]', function() {
 			registerMethod.registerToApp(data.validInput);
 		}).waitForText(data.validInput.expectedMsg, function() {
 			registerMethod.redirectToLogout();
@@ -234,6 +249,7 @@ registerTests.registrationForDisabledEmailAndDisabledApproveNewRegistration = fu
 		this.test.assertSelectorHasText('#ddSettings', 'Security');
 		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
 		backEndForumRegisterMethod.enableDisableEmailAddressVerification(false);
+	}).then(function() {
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {

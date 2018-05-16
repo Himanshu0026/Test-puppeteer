@@ -7,7 +7,6 @@ var backEndregisterTests = module.exports = {};
 
 //Test Case for Verifying Error Messages While User Registering With Blank User Name.
 backEndregisterTests.doRegister = function() {
-	
 	utils.info('Case1[Verifying Error Messages While User Registering With Blank User Name]');
 	casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
 		casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
@@ -76,7 +75,9 @@ backEndregisterTests.validInvitation = function() {
   }).waitForSelector('div#ddUsers a[href="/tool/members/mb/addusers?action=invite"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Invite');
 		this.click('div#ddUsers a[href="/tool/members/mb/addusers?action=invite"]');
-		backEndregisterMethod.inviteUser(backEndRegisterJSON.validInvite);
+		var uname = Math.random().toString(36).substring(7);
+		var email=uname+ '@gmail.com';
+		backEndregisterMethod.inviteUser(email);
 	}).waitUntilVisible('div#ajax-msg-top', function() {
 		if (this.visible('div#ajax-msg-top')) {
       utils.info(' User Invited Successfully....');

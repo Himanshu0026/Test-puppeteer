@@ -40,7 +40,7 @@ editPost.featureTest = function(){
 	//Verify with edit on search listing page by people who posted- edit own post disable
 	editPostTests.editSearchPeoplePostedEditPostDisable();
 	//Verify edit topic by searching topic using admin user-
-	//editPostTests.editTopicSearchAdmin();
+	//editPostTests.editTopicSearchAdmin();*/
 
 	});
 };

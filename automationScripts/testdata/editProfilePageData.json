@@ -11,8 +11,12 @@
 	},
 	"birthdayPicker" :{
 		"date" :"04/05/2018",
-		"month" :"11/16/2017",
+		"month" :"12/30/2017",
 		"fullName":"In case one approaches you to write for them a referenc"
+	},
+	"customTitle":{
+		"addTitle":"member",
+		"editTitle":"membernew"
 	}
 
  }

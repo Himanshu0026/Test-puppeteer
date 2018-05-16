@@ -6,7 +6,6 @@ var utils = require('../utils.js');
 var wait = require('../wait.js');
 var postEventMemberApprovalJSON = require('../../testdata/postEventMemberApproval.json');
 var forumLoginMethod = require('../methods/login.js');
-var backEndForumRegisterMethod = require('./backEndRegistration.js');
 var postEventMemberApprovalMethod = module.exports = {};
 var currentUrl;
 var topic;
@@ -17,7 +16,7 @@ var memberId;
 
 //method to set the user permission to Administration
 postEventMemberApprovalMethod.setAdmin = function(user) {
-	casper.test.assertExist('#autosuggest', utils.info('Found username autosuggest input field'));
+	casper.test.assertExist('#autosuggest', 'Found username autosuggest input field');
 	casper.fill('form#frmChangeUsersGroup', {
 		'member' : user
 	}, true);
@@ -36,256 +35,105 @@ postEventMemberApprovalMethod.setAdmin = function(user) {
 	});
 };
 
-//method to enable approve new post** All posts
-postEventMemberApprovalMethod.enableApproveNewPost = function(callback) {
-        forumLoginMethod.loginToForumBackEnd(function(err) {
-		if(!err) {
-			wait.waitForElement('div#my_account_forum_menu', function(err, isExists) {
-				if(isExists) {
-					casper.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-					casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-					wait.waitForElement('div#ddSettings', function(err, isExists) {
-						if(isExists) {
-							casper.click('div#ddSettings a:nth-child(3)');
-							wait.waitForElement('td#approval_drop_down', function(err, isExists) {
-								if(isExists) {
-									casper.fillSelectors('form[name="posts"]', {
-		    								'select[name="post_approval"]': '99'
-									}, true);
-									casper.test.assertExists('button.button.btn-m.btn-blue');
-									casper.click('button.button.btn-m.btn-blue');
-									casper.waitUntilVisible('div#loading_msg', function success() {
-										casper.echo(casper.fetchText('div#loading_msg'),'INFO');
-										casper.waitUntilVisible('div#ajax-msg-top', function success() {
-											casper.echo(casper.fetchText('div#ajax-msg-top'),'INFO');
-										}, function fail() {
-											casper.echo('Saved not found', 'ERROR');
-											/*casper.waitUntilVisible('div#ajax-msg-top', function success() {
-												casper.echo(casper.fetchText('div#ajax-msg-top'),'INFO');
-											});*/
-										},30000);
-									}, function fail() {
-										casper.echo('Loading... not found', 'INFO');
-									});
-								} else {
-									casper.echo('approve new post dropDown not found', 'ERROR');
-								}
-							});
-						} else {
-							casper.echo('Setting  tooltip menu not found', 'ERROR');
-						}
-					});
-				} else {
-					casper.echo('Backend Menu not found', 'ERROR');
-				}
-			});
-		}else {
-			casper.echo('Error : ', 'ERROR');
+//method to set the user permission to Administration
+postEventMemberApprovalMethod.setUserGroupToRegisteredUser = function(user) {
+	casper.test.assertExist('#autosuggest', 'Found username autosuggest input field');
+	casper.fill('form#frmChangeUsersGroup', {
+		'member' : user
+	}, true);
+	casper.waitForSelector('form[name="ugfrm"]',  function() {
+		this.test.assertSelectorHasText('.ui-dialog-title', 'Change User Group');
+		casper.fillLabels('form#frmChangeUsersGroupFinal', {
+			'Administrators' : '',
+			'Registered Users' : 'checked'
+		}, true);
+	}).waitUntilVisible('#loading_msg', function() {
+		if (this.visible('#loading_msg')) {
+      utils.info(' Loading....');
+    } else {
+			utils.info(' Loading is not displayed.');
 		}
-	});
-	casper.then(function() {
-		forumLoginMethod.backEndLogout(function() {
-		});
-		return callback(null);
 	});
 };
 
-//code to disable approve new post** All posts
-postEventMemberApprovalMethod.disableApproveNewPost = function(callback) {
-        forumLoginMethod.loginToForumBackEnd(function(err) {
-		if(!err) {
-			wait.waitForElement('div#my_account_forum_menu', function(err, isExists) {
-				if(isExists) {
-					casper.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-					casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-					wait.waitForElement('div#ddSettings', function(err, isExists) {
-						if(isExists) {
-							casper.click('div#ddSettings a:nth-child(3)');
-							wait.waitForElement('input#reqregapp', function(err, isExists) {
-								if(isExists) {
-									casper.fillSelectors('form[name="posts"]', {
-		    								'select[name="post_approval"]': '0'
-									}, true);
-									casper.test.assertExists('button.button.btn-m.btn-blue');
-									casper.click('button.button.btn-m.btn-blue');
-									casper.waitUntilVisible('div#ajax-msg-top', function success() {
-										casper.echo(casper.fetchText('div#ajax-msg-top'),'INFO');
-									}, function fail() {
-										casper.echo('Saved not found', 'ERROR');
-									},30000);
-								} else {
-									casper.echo('approve new post checkbox not found', 'ERROR');
-								}
-							});
-						} else {
-							casper.echo('Setting  tooltip menu not found', 'ERROR');
-						}
-					});
-				} else {
-					casper.echo('Backend Menu not found', 'ERROR');
-				}
-			});
-		}else {
-			casper.echo('Error : ', 'ERROR');
-		}
-	});
-	casper.then(function() {
-		forumLoginMethod.backEndLogout(function() {
-		});
-		return callback(null);
-	});
-};
-
-//method to create a new topic
-postEventMemberApprovalMethod.startTopic = function(data, callback) {
-	casper.click('a.pull-right.btn.btn-uppercase.btn-primary ');
-	wait.waitForElement('div.post-body.pull-left', function(err, isExists) {
-		if(isExists) {
-			casper.sendKeys('input[name="subject"]', data.title, {reset:true});
-			casper.withFrame('message_ifr', function() {
-				casper.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
-				casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
-				casper.sendKeys('#tinymce',data.content);
-			});
-			wait.waitForElement('#all_forums_dropdown', function(err, isExists) {
-				if(isExists) {
-					casper.click('#all_forums_dropdown');
-					casper.fill('form[name="PostTopic"]',{
-						'forum' : data.category
-					},false);
-					casper.then(function() {
-						casper.click('#post_submit');
-						wait.waitForElement('div#posts-list', function(err, isExists) {
-							if(isExists) {
-								utils.info('New topic Created');
-							}
-						});
-					});
-				} else {
-					wait.waitForElement('#post_submit', function(err, isExists) {
-						if(isExists) {
-							casper.test.assertExists('#post_submit');
-							casper.click('#post_submit');
-							wait.waitForElement('div#posts-list', function(err, isExists) {
-								if(isExists) {
-									utils.info('New topic Created');
-								}
-							});
-						}
-					});
-				}
-			});
-		}
-	});
-	casper.then(function() {
-		return callback(null);
-	});
-};
 //*************************method to compose a post by register user ************************************
-postEventMemberApprovalMethod.composePost = function(callback) {
-	casper.echo('Inside the composePost method','INFO');
-	casper.test.assertExists('a[id^="topic_"]', 'Composed topic is found');
-	topic = casper.evaluate(function() {
-		var name = document.querySelector('a[id^="topic_"] span');
-		return name.innerHTML;
-	});
-	casper.echo('*******************************************************','INFO');
-	casper.echo('*           The name of the topic is-'+topic+        '*','INFO');
-	casper.echo('*******************************************************','INFO');
+postEventMemberApprovalMethod.composePost = function() {
+	utils.info(' Inside the composePost method');
 	casper.click('a[id^="topic_"]');
-	wait.waitForElement('form[name="PostTopic"]', function(err, isExists) {
-		if(isExists) {
-			currentUrl = casper.getCurrentUrl();
-			casper.fill('form[name="PostTopic"]',{
-				'message': "Hello I am Register user"
-			},false);
-			wait.waitForElement('#reply_submit', function(err, isExists) {
-				if(isExists) {
-					casper.test.assertExists('#reply_submit');
-					casper.click('#reply_submit');
-					wait.waitForTime(6000, function(err) {
-						if(!err) {
-							return callback(null);
-						}
-					});
-				}else {
-					casper.echo('Reply Submit button not found', 'ERROR');
-				}
+	casper.waitForSelector('#posts-list', function() {
+		currentUrl = this.getCurrentUrl();
+		this.test.assertSelectorHasText('#sub_post_reply', 'Post a reply');
+		this.click('#sub_post_reply');
+		this.wait('5000', function() {
+			this.withFrame('message_ifr', function() {
+				this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
+				this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
+				this.sendKeys('#tinymce', 'Hello I am Register user');
 			});
-		}else {
-			casper.echo('Reply Post Compose form Doesnot visible', 'ERROR');
-		}
+		});
+	}).then(function() {
+		this.test.assertVisible('#reply_submit');
+		this.click('#reply_submit');
+		this.wait('6000', function() {
+		});
 	});
 };
 
 // method to get the id of the post
 postEventMemberApprovalMethod.getPostId = function(callback) {
 	casper.then(function() {
-		forumLoginMethod.logoutFromApp(function() { });
-	});
-	casper.thenOpen(config.url, function() {
-		//login with admin user to get the id of the post and to approve it
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(postEventMemberApprovalJSON["adminUserLogin"].username, postEventMemberApprovalJSON["adminUserLogin"].password, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#approvalQueue a','Approval Queue found');
-										casper.click('li#approvalQueue a');
-										wait.waitForElement('form#approveMembers', function(err, isExists) {
-												if(isExists) {
-												var post_id = casper.evaluate(function() {
-													var element=document.querySelectorAll("div[id^='post_message_']");
-													var id = element[element.length-1].id;
-													return id;
-													});
-												postId = post_id.split("_");
-												casper.echo('post id ; '+postId[2], 'INFO');
-												return callback(null, postId[2]);
-											}
-										});
-									}else {
-										casper.echo('Approval Queue not Found','INFO');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'INFO');
-			}
+		forumLoginMethod.logoutFromApp();
+	}).thenOpen(config.url, function() {
+		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.adminUserLogin.username, postEventMemberApprovalJSON.adminUserLogin.password);
+	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function() {
+		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'Category link found');
+		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertExists('li#approvalQueue a', 'Approval Queue found');
+		casper.click('li#approvalQueue a');
+	}).waitForSelector('form#approveMembers', function() {
+		var post_id = casper.evaluate(function() {
+			var element=document.querySelectorAll("div[id^='post_message_']");
+			var id = element[element.length-1].id;
+			return id;
 		});
+		postId = post_id.split("_");
+		utils.info('post id ; '+postId[2]);
+		return callback(null, postId[2]);
+	});
+};
+
+// method to get the id of the post
+postEventMemberApprovalMethod.getPostIdForCombineForum = function(callback) {
+	casper.then(function() {
+		forumLoginMethod.logoutFromApp();
+	}).thenOpen(config.url, function() {
+		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.adminUserLogin.username, postEventMemberApprovalJSON.adminUserLogin.password);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		utils.info('User has been successfuly login to application with admin user');
+		this.test.assertExists('li#approvalQueue a', 'Approval Queue found');
+		this.click('li#approvalQueue a');
+	}).waitForSelector('form#approveMembers', function() {
+		var post_id = this.evaluate(function() {
+			var element=document.querySelectorAll("div[id^='post_message_']");
+			var id = element[element.length-1].id;
+			return id;
+		});
+		postId = post_id.split("_");
+		utils.info('post id ; '+postId[2]);
+		return callback(null, postId[2]);
 	});
 };
 
 //****************** method to delete the approved post*************************
-postEventMemberApprovalMethod.deletePost = function(callback) {
+postEventMemberApprovalMethod.deletePost = function() {
 	casper.thenOpen(currentUrl, function() {
-		casper.echo('Inside the deletePost method','INFO');
-		casper.test.assertExists('form[name="posts"] div#post_list_'+postId[2] + ' input');
-		casper.click('form[name="posts"] div#post_list_'+postId[2] + ' input');
-		wait.waitForElement('input#deleteposts', function(err, isExists) {
-			if(isExists) {
-				casper.click('input#deleteposts');
-				wait.waitForTime(2000, function(err) {
-					if(!err) {
-						return callback(null);
-					}
-				});
-			}
-		});
+		utils.info('Inside the deletePost method');
+		this.test.assertExists('form[name="posts"] div#post_list_'+postId[2] + ' input', 'Post to be deleted found');
+		this.click('form[name="posts"] div#post_list_'+postId[2] + ' input');
+	}).waitForSelector('input#deleteposts', function() {
+		this.click('input#deleteposts');
+	}).wait(2000, function() {
 	});
 };
 
@@ -297,7 +145,7 @@ postEventMemberApprovalMethod.enableEventApproval = function(callback) {
 		if(!err) {
 			wait.waitForElement('div#my_account_forum_menu', function(err, isExists) {
 				if(isExists) {
-					casper.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
+					casper.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]', utils.log('Content tab found','INFO'));
 					casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
 					wait.waitForElement('div#ddContent', function(err, isExists) {
 						if(isExists) {

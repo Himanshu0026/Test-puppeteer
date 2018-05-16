@@ -15,14 +15,16 @@
 				<div class="col-md-12">
 					<%if (pullRequests.length > 0) { %>
 						<h2>Pull Requests</h2>
-						<a href="" style="float: right; margin-top: -41px;" onclick="goBack()"><button type="button" class="btn btn-sky">Back</button></a>
+						<a id="back" class="btn btn-sky" onclick="window.history.back();" style="float: right; margin-top: -41px;">&larr;&nbsp; Back</a>
 						<div class="table-responsive">
 				      			<table id="pullRequests" class="table table-bordred table-striped">
 								<thead>
-									<th>Pull Request Name</th>
+									<!--<th>Pull Request Name</th>-->
+									<th>Branch Name</th>
 									<th>Username</th>
+									<th>Date</th>
 									<th>Status</th>
-									<th>Merged</th>
+									<!--<th>Merged</th>-->
 									<th>Mergable</th>
 									<th>Automation Status</th>
 									<th>Reviews</th>
@@ -30,19 +32,20 @@
 			    					<tbody>
 			    						<% pullRequests.forEach(function(pullRequest){ %>
 										<tr>
-											<td width="650px;"><%= pullRequest.name %></td>
+											<td width="350px;"><%= pullRequest.name %></td>
 											<td><%= pullRequest.username %></td>
+											<td><%= pullRequest.date %></td>
 											<% if(pullRequest.state == 'open') { %>
 												<td class="text-success"><%= pullRequest.state %></td>
 											<% } else { %>
 												<td class="text-danger"><%= pullRequest.state %></td>
 											<% } %>
-											<% if(pullRequest.merged) { %>
+											<!--<% if(pullRequest.merged) { %>
 												<td>YES</td>
 											<% } else { %>
-												<td>NO</td>
+												<td>NO</td>-->
 											<% } %>
-											<% if(pullRequest.mergeable) { %>
+											<% if(pullRequest.mergeable === true) { %>
 												<td>YES</td>
 											<% } else { %>
 												<td>NO</td>
@@ -54,7 +57,7 @@
 								</tbody>
 							</table>
 				    		</div>
-			    		<% } %>
+			   		 <% } %>
 				</div>
 			</div>
 		</div>

@@ -11,5 +11,18 @@
 		"value" :"dragme",
 		"data":"hello"
 
+	},
+	
+	"msgPreview" : {
+		"to" : ["haniuser"],
+		"subject" : "New message",
+		"pmessage" : "Hiiiiiiiiiiii"
+	},
+	
+	"sentMsg":{
+		"to" : ["hani", "shipra", "hani12", "sangita"],
+		"subject" : "New message",
+		"pmessage" : "Hiiiiiiiiiiii"
+	
 	}
 }

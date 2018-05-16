@@ -5,9522 +5,2242 @@ var combinationOfSubCategoryAndGroupPermissionsJSON = require('../../testdata/co
 var config = require('../../../config/config.json');
 var combinationOfSubCategoryAndGroupPermissionsMethod = require('../methods/combinationOfSubCategoryAndGroupPermissions.js');
 var forumLoginMethod = require('../methods/login.js');
+var thumpsUpDownMethod = require('../methods/thumpsUpDown.js');
+var registerMethod = require('../methods/register.js');
+var topicMethod = require('../methods/topic.js');
+var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var postEventMemberApprovalMethod = require('../methods/postEventMemberApproval.js');
-var wait = require('../wait.js');
 var category_Id;
 var subCategory_Id;
 var combinationOfSubCategoryAndGroupPermissionsTestcases = module.exports = {};
 
-// method to enable view forum for unregistered User
-combinationOfSubCategoryAndGroupPermissionsTestcases.enableViewForumForUnregisterdUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		forumLoginMethod.loginToForumBackEnd(function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', function(err, isExists) {
-					if(isExists) {
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Unregistered / Not Logged In', function(err) {
-							if(!err) {
-								combinationOfSubCategoryAndGroupPermissionsMethod.enableViewforum(function(err) {
-									if(!err) {
-										utils.info('enableViewCategory method called ');
-									}
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(function(err) {
-								if(!err) {
-									utils.info('User successfully logged out from backend');
-								}
-							});
-						});
-					} else {
-						utils.error('Backend Menu not found');
-					}
-				});
-			}else {
-				utils.error('Error : ');
-			}
-		});
-	});
-};
-
-// method to register users neha, isneha, isneha12 and isneha13
+// method to register users neha, isneha etc
 combinationOfSubCategoryAndGroupPermissionsTestcases.registerUserTOLogin = function() {
-	//Open Back-End URL And Get Title and logout if logged in
 	casper.thenOpen(config.backEndUrl, function() {
-		//method to Disable -  Email verification and Disable -Approve New Registrations
-		postEventMemberApprovalMethod.disableApproveRegistrationsAndDisableEmail(casper, function(err) {
-			if(!err) {
-				casper.echo('Disable Approve New Event functionality method called ','INFO');
-			}
-		});
-	});
-	casper.eachThen(combinationOfSubCategoryAndGroupPermissionsJSON.infoToRegisterUser, function(response) {
-		casper.echo("the response data "+response.data,"INFO");
+	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+		this.test.assertSelectorHasText('#ddSettings', 'Security');
+		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+		backEndForumRegisterMethod.enableDisableEmailAddressVerification(false);
+	}).then(function() {
+		backEndForumRegisterMethod.enableDisableApproveNewRegistrations(false);
+	}).then(function() {
+		backEndForumRegisterMethod.enableDisableHumanVerification(false);
+	}).eachThen(combinationOfSubCategoryAndGroupPermissionsJSON.infoToRegisterUser, function(response) {
 		var responseData = response.data;
-		postEventMemberApprovalMethod.registerMember(responseData, casper, function(err) {
-			if(!err) {
-				casper.echo('Users registered method called successfully', 'INFO');
-			}else {
-				casper.echo('Users registered method not called successfully', 'ERROR');
-			}
-		});
+		registerMethod.registerMember(responseData);
 	});
 };
 
 // method to create a category cat1 and its sub categories cat1a and cat1b
 combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory = function() {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*                      Method to create category and sub category                  *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPage(casper, function(err) {
-							if(!err) {
-								combinationOfSubCategoryAndGroupPermissionsMethod.isCategoryExists(combinationOfSubCategoryAndGroupPermissionsJSON.category, casper, function(err, isExists) {
-									if(isExists) {
-										casper.echo('Category already existed', 'INFO');
-										combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory, casper, function(err) {
-											if(!err) {
-												casper.echo('Category and sub castegories created','INFO');
-											}
-										});
-									} else {
-										casper.echo('Category not exist', 'INFO');
-										combinationOfSubCategoryAndGroupPermissionsMethod.createCategory(combinationOfSubCategoryAndGroupPermissionsJSON.category, casper, function(err) {
-											if(!err) {
-												casper.then(function() {
-													casper.reload(function() {
-													combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.subCategory, casper, function(err) {
-														if(!err) {
-															casper.then(function() {
-																		combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory, casper, function(err) {
-																			if(!err) {
-																				casper.echo('Category and sub castegories created','INFO');
-																			}
-																		});
-																});
-															}
-														});
-													});
-												});
-											}
-										});
-									}
-								});
-							}
+		utils.info(' Method to create category and sub category ');
+		backEndForumRegisterMethod.goToCategoryPage();
+		casper.then(function() {
+			backEndForumRegisterMethod.isCategoryExists(combinationOfSubCategoryAndGroupPermissionsJSON.category, function(err, isExists) {
+				if(isExists) {
+					utils.info(' Category already existed');
+					combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory);
+				} else {
+					utils.info(' Category not exist');
+					backEndForumRegisterMethod.createCategory(combinationOfSubCategoryAndGroupPermissionsJSON.category);
+					casper.reload(function() {
+						this.waitForText(combinationOfSubCategoryAndGroupPermissionsJSON.category.title, function() {
+							combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.subCategory);
+						}).then(function() {
+							combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory);
 						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
+					});
+				}
+			});
 		});
 	});
 };
 
 // method to verify with category cat1
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 1                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*                      Method to verify with category cat1                      *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 1 [ Method to verify with category cat1 ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategoryForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewCategoryForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Registered Users',casper, function(err) {
-								if(!err) {
-									combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategory(casper, function(err) {
-										if(!err) {
-											casper.echo('enableViewCategory method called ','INFO');
-										}
-									});
-								}
-							});
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, true);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'view_forum', true);
+		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+  }).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with sub-category cat1a
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithSubCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithSubCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 2                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*                      Method verify with sub-category cat1a                       *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 2 [ Method verify with sub-category cat1a ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategoryForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewCategoryForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1a not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+  }).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		this.test.assertExists('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with the private sub-category cat1a
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPrivateSubCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPrivateSubCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 3                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*               Method to verify with the private sub-category cat1a               *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 3 [ Method to verify with the private sub-category cat1a ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableViewCategoryForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableViewCategoryForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-						casper.then(function() {
-							combinationOfSubCategoryAndGroupPermissionsMethod.enablePrivateCategories(casper, function(err) {
-								if(!err) {
-									casper.echo('enablePrivateCategories method called','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForElement('div.text-center.bmessage.alert-info.text-danger', casper,function(err, isExists) {
-													if(isExists) {
-														var actualText = casper.fetchText('div.text-center.bmessage.alert-info.text-danger');
-														var expectedText = "Sorry! You don't have permission to perform this action.";
-														var successMsg = actualText.substring(0, actualText.indexOf('<'));
-														casper.test.assert(successMsg.indexOf(expectedText) > -1);
-													}else{
-														casper.echo('not visible on category listing page','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, false);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+		}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+			this.test.assertSelectorHasText('#ddSettings', 'General');
+			this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
+			backEndForumRegisterMethod.enableDisablePrivateCategories(true);
+		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+  }).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		this.test.assertExists('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitForText("Sorry! You don't have permission to perform this action.");
+	casper.then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with the parent category cat1
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithParentCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithParentCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 4                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*                Method to verify with the parent category cat1                    *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 4 [ Method to verify with the parent category cat1 ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.backEndUrl, function() {
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategoryForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewCategoryForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		this.test.assertExists('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with other sub-categories
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithOtherSubCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithOtherSubCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 5                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*                   Method to verify with other sub-categories                     *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 5 [ Method to verify with other sub-categories ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+  }).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		this.test.assertExists('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1b visible');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify start new topic button with the sub-category cat1a
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonForSubCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonForSubCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 6                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*       Method to verify start new topic button with the sub-category cat1a        *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 6 [ Method to verify start new topic button with the sub-category cat1a ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableStartTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableStartTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Registered Users', casper, function(err) {
-								if(!err) {
-									combinationOfSubCategoryAndGroupPermissionsMethod.enableStartTopics(casper, function(err) {
-										if(!err) {
-											casper.echo('enableStartTopics method called ','INFO');
-										}
-									});
-								}
-							});
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(4000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, true);
+						}
+					});
+				}).then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('post_threads_'+groupId, true);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_threads', true);
+		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+  }).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
+		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify start new topic button with the sub-category cat1a(Disable)
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonForSubCategoryDisable = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonForSubCategoryDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 7                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*   Method to verify start new topic button with the sub-category cat1a(Disable)   *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 7 [ Method to verify start new topic button with the sub-category cat1a(Disable) ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableStartTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableStartTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														casper.mouse.move('a.pull-right.btn.btn-uppercase.btn-primary');
-														casper.click('a.pull-right.btn.btn-uppercase.btn-primary');
-														wait.waitForElement('div.tooltip.fade.bottom.in', casper,function(err, isExists) {
-															if(isExists) {
-																var text = casper.evaluate(function() {
-																	var toolText = document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').getAttribute('data-original-title');
-																	return toolText;
-																});
-																var expectedText = "You don't have permission to start a new topic.";
-																casper.test.assert(text.indexOf(expectedText) > -1);
-															}else{
-																casper.echo('not visible on category listing page','ERROR');
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('post_threads_'+groupId, false);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		var msg = this.getElementAttribute('#ajax_subscription_vars a:nth-child(1)', 'title');
+		utils.info(msg);
+		var expectedText = "You don't have permission to start a new topic.";
+		this.test.assert(msg.indexOf(expectedText) > -1);
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify start new topic button with the parent category cat1
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonForParentCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonForParentCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 8                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*        Method to verify start new topic button with the parent category cat1     *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 8 [ Method to verify start new topic button with the parent category cat1 ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-												postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-													if(!err) {
-														casper.echo("Topic created succcessfully","INFO");
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+  }).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with other sub-categories
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonForOtherSubCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonForOtherSubCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 9                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*                   Method to verify with other sub-categories                  *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 9 [ Method to verify with other sub-categories ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1b visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify Reply topic button with the sub-category cat1a
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForSubCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForSubCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 10                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*          Method to verify Reply topic button with the sub-category cat1a         *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 10 [ Method to verify Reply topic button with the sub-category cat1a ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableReplyTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableReplyTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableStartTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableStartTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Registered Users', casper, function(err) {
-								if(!err) {
-									combinationOfSubCategoryAndGroupPermissionsMethod.enableReplyTopics(casper, function(err) {
-										if(!err) {
-											casper.echo('enableReplyTopics method called ','INFO');
-										}
-									});
-								}
-							});
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.userLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.userLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-															postEventMemberApprovalMethod.composePost(casper, casper.test, function(err) {
-															if(!err) {
-																casper.echo("User replied succcessfully","INFO");
-															}
-														});
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('post_threads_'+groupId, true);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('other_post_replies_'+groupId, true);
+						}
+					});
+				});
 			}
 		});
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'other_post_replies', true);
+		}).then(function() {
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_replies', true);
+		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		postEventMemberApprovalMethod.composePost();
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify Reply topic button with the sub-category cat1a(Disable)
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForSubCategoryDisable = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForSubCategoryDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 11                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*     Method to verify Reply topic button with the sub-category cat1a(Disable)     *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 11 [ Method to verify Reply topic button with the sub-category cat1a(Disable) ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableReplyTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableReplyTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.userLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.userLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a[id^="topic_"]', 'Composed topic is found');
-														var topic = casper.evaluate(function() {
-															var name = document.querySelector('a[id^="topic_"] span');
-															return name.innerHTML;
-														});
-														casper.echo('*******************************************************','INFO');
-														casper.echo('*           The name of the topic is-'+topic+        '*','INFO');
-														casper.echo('*******************************************************','INFO');
-														casper.click('a[id^="topic_"]');
-														wait.waitForElement('div#posts-list', casper, function(err, isExists) {
-															if(isExists) {
-																casper.test.assertDoesntExist('a#sub_post_reply','Reply option not appear','INFO');
-															}else {
-																casper.echo('Reply option visible', 'ERROR');
-															}
-														});
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('other_post_replies_'+groupId, false);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_replies', false);
+		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a[id^="topic_"]', ' Composed topic is found');
+		this.click('a[id^="topic_"]');
+	}).waitForSelector('div#posts-list', function() {
+		this.test.assertNotVisible('#sub_post_reply', ' Reply option not visible');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify reply topic button with the parent category cat1
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithParentCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithParentCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 12                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*         Method to verify reply topic button with the parent category cat1        *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 12 [ Method to verify reply topic button with the parent category cat1 ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.userLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.userLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.click('a#topics_tab');
-												wait.waitForElement('div.topics-list', casper,function(err, isExists) {
-													if(isExists) {
-														postEventMemberApprovalMethod.composePost(casper, casper.test, function(err) {
-															if(!err) {
-																casper.echo("User replied succcessfully","INFO");
-															}
-														});
-													}else{
-														casper.echo('cat1a not visible','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_replies', true);
 		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('#topics_tab' , ' Topic tab visible');
+		this.click('#topics_tab');
+	}).waitUntilVisible('.topics-list', function() {
+		postEventMemberApprovalMethod.composePost();
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with other sub-categories
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForOtherSubCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForOtherSubCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 13                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*                   Method to verify with other sub-categories                     *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 13 [ Method to verify with other sub-categories ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-															postEventMemberApprovalMethod.composePost(casper, casper.test, function(err) {
-															if(!err) {
-																casper.echo("User replied succcessfully","INFO");
-															}
-														});
-													}
-												});
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify  upload attachments with the private sub-category cat1a
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithSubCategory = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 14                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*     Method to verify  upload attachments with the private sub-category cat1a     *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableUploadAttachmentsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableUploadAttachmentsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableReplyTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableStartTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Registered Users', casper, function(err) {
-								if(!err) {
-									combinationOfSubCategoryAndGroupPermissionsMethod.enableUploadAttachments(casper, function(err) {
-										if(!err) {
-											casper.echo('enableUploadAttachments method called ','INFO');
-										}
-									});
-								}
-							});
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-															combinationOfSubCategoryAndGroupPermissionsMethod.uploadAttachmentWithTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("User replied succcessfully","INFO");
-															}
-														});
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1b visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		postEventMemberApprovalMethod.composePost();
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify upload attachments button with the private sub-category cat1a(Disable)
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithSubCategoryDisable = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithSubCategoryDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 15                                      ', 'INFO');
-		casper.echo('*******************************************************************************************', 'INFO');
-		casper.echo('* Method to verify upload attachments button with the private sub-category cat1a(Disable) *', 'INFO');
-		casper.echo('*******************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 16 [ Method to verify upload attachments button with the private sub-category cat1a(Disable) ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableUploadAttachmentsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableUploadAttachmentsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableReplyTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableStartTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
+			if(!err) {
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('other_post_replies_'+groupId, true);
+						}
+					});
 				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('upload_attachments_'+groupId, true);
+						}
+					});
+				});
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertDoesntExist('a#fancy_attach_ i' ,'Attachment link not found','INFO');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify  upload attachments with the parent category cat1
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithParentCategory = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 16                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*        Method to verify  upload attachments with the parent category cat1        *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.uploadAttachmentWithTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-													if(!err) {
-														casper.echo("User replied succcessfully","INFO");
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify with other sub-categories
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithOtherSubCategory = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 17                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*                  Method to verify with other sub-categories                      *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic.username, combinationOfSubCategoryAndGroupPermissionsJSON.startTopic.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify view attachments with the private sub-category cat1a
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithViewAttachmentsWithSubCategory = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 18                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*       Method to verify view attachments with the private sub-category cat1a      *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewAttachmentsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewAttachmentsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Registered Users', casper, function(err) {
-								if(!err) {
-									combinationOfSubCategoryAndGroupPermissionsMethod.enableViewAttachments(casper, function(err) {
-										if(!err) {
-											casper.echo('enableViewAttachments method called ','INFO');
-										}
-									});
-								}
-							});
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify view attachments with the private sub-category cat1a(Disable)
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithViewAttachmentsWithSubCategoryDisable = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 19                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify view attachments with the private sub-category cat1a(Disable)  *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableViewAttachmentsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableViewAttachmentsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify view attachments with the parent category cat1
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithViewAttachmentsWithParentCategory = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 20                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*         Method to verify view attachments with the parent category cat1          *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify with other sub-categories
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithViewAttachmentsWithOtherSubCategory = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 21                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*                   Method to verify with other sub-categories                     *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertDoesntExist('a#fancy_attach_ i', ' Attachment link not found');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify Post approval with the private sub-category cat1a
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 22                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*        Method to verify Post approval with the private sub-category cat1a        *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		postEventMemberApprovalMethod.enableApproveNewPost(casper, casper.test,  function(err) {
-			if(!err) {
-				casper.echo('enablePostApproval method called ','INFO');
-			}
-		});
-		casper.then(function() {
-			forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-				if(!err) {
-					wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-						if(isExists) {
-							var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-							var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 23 [ Method to verify Post approval with the private sub-category cat1a ]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+    casper.waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+      this.test.assertSelectorHasText('#ddSettings', 'Security');
+      this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+      backEndForumRegisterMethod.setApproveNewPost('99');
+    }).then(function() {
+			var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+			var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-							combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-								category_Id = categoryId;
-								subCategory_Id = subCategoryId;
-								if(!err) {
-									casper.then(function() {
-										combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-											if(!err) {
-												combinationOfSubCategoryAndGroupPermissionsMethod.enablePostApprovalForSubCategory(groupId, casper, function(err) {
-													if(!err) {
-														casper.echo('enablePostApprovalForSubCategory method called ','INFO');
-													}
-												});
-											}
-										});
-									});
-								}
-							});
-							casper.then(function() {
-								combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Registered Users', casper, function(err) {
-									if(!err) {
-										combinationOfSubCategoryAndGroupPermissionsMethod.enableRequirePostApproval(casper, function(err) {
-											if(!err) {
-												casper.echo('enableRequirePostApproval method called ','INFO');
-											}
-										});
-									}
-								});
-							});
-							casper.then(function() {
-								casper.click('a[data-tooltip-elm="ddAccount"]');
-								forumLoginMethod.backEndLogout(casper, function(err) {
-									if(!err) {
-										casper.echo('User successfully logged out from backend','INFO');
-									}
-								});
-							});
-						} else {
-							casper.echo('Backend Menu not found', 'ERROR');
-						}
-					});
-				}else {
-					casper.echo('Error : ', 'ERROR');
-				}
-			});
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully and moved to approval queue","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
+			combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+				category_Id = categoryId;
+				subCategory_Id = subCategoryId;
+				if(!err) {
+					casper.then(function() {
+						combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+							if(!err) {
+								backEndForumRegisterMethod.enableDisableCategoryPermissions('post_approval_'+groupId, true);
 							}
 						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
+					});
+				}
+			});
+		}).then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_approval', true);
 		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
+		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).waitForText('Thank you for your post! Your post is currently being reviewed and will be displayed on the forum once it is approved.', function() {
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify Post approval with the private sub-category cat1a(Disable)
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategoryDisable = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategoryDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 23                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*    Method to verify Post approval with the private sub-category cat1a(Disable)   *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 24 [ Method to verify Post approval with the private sub-category cat1a(Disable)]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Registered Users', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disablePostApprovalForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disablePostApprovalForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('post_approval_'+groupId, false);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
+		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify Post approval with the parent category cat1
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithParentCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithParentCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 24                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*           Method to verify Post approval with the parent category cat1           *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 25 [ Method to verify Post approval with the parent category cat1 ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with other sub-categories
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithOtherSubCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithOtherSubCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 25                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*                    Method to verify with other sub-categories                    *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
+		utils.info('Test case 26 [ Method to verify with other sub-categories ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully and moved to approval queue","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.backEndUrl, function() {
-		postEventMemberApprovalMethod.disableApproveNewPost(casper, casper.test,  function(err) {
-			if(!err) {
-				casper.echo('enablePostApproval method called ','INFO');
-			}
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
-	});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).waitForText('Thank you for your post! Your post is currently being reviewed and will be displayed on the forum once it is approved.', function() {
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
+	}).thenOpen(config.backEndUrl, function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+  }).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+    this.test.assertSelectorHasText('#ddSettings', 'Security');
+    this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+    backEndForumRegisterMethod.setApproveNewPost('0');
+  });
 };
 
 // method to verify with category cat1 for unregistered user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategoryUnregisteredUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategoryUnregisteredUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 26                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*             Method to verify with category cat1 for unregistered user            *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 27 [ Method to verify with category cat1 for unregistered user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Unregistered / Not Logged In', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategoryForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewCategoryForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Unregistered / Not Logged In',casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategory(casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
+			if(!err) {
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, true);
+						}
+					});
 				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'view_forum', true);
 		});
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 	});
 };
 
 // method to verify with sub category cat1a for unregistered user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithSubCategoryUnregisteredUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithSubCategoryUnregisteredUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 27                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*         Method to verify with sub-category cat1a for unregistered user           *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 28 [ Method to verify with sub-category cat1a for unregistered user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-					}else{
-						casper.echo('cat1a not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1a not visible on category listing page','ERROR');
-			}
-		});
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		this.test.assertExists('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 	});
 };
 
 // method to verify with sub-category cat1a for unregistered user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithSubCategoryUnregisteredUserDisabled = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithSubCategoryUnregisteredUserDisabled = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 28                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*             Method to verify with category cat1 for unregistered user            *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 29 [ Method to verify with category cat1 for unregistered user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Unregistered / Not Logged In', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableViewCategoryForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableViewCategoryForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Unregistered / Not Logged In',casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategory(casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-						casper.then(function() {
-							combinationOfSubCategoryAndGroupPermissionsMethod.enablePrivateCategories(casper, function() {
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
+			if(!err) {
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, false);
+						}
+					});
 				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.click('li#forum_'+subCategory_Id+' a');
-						wait.waitForElement('div.alert.alert-info.text-center', casper,function(err, isExists) {
-							if(isExists) {
-								var actualText = casper.fetchText('div.alert.alert-info.text-center');
-								var expectedText = "Please login or register to continue.";
-								casper.test.assert(actualText.indexOf(expectedText) > -1);
-							}else{
-								casper.echo('not visible on category listing page','ERROR');
-							}
-						});
-					}else{
-						casper.echo('cat1a not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+		}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+			this.test.assertSelectorHasText('#ddSettings', 'General');
+			this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
+			backEndForumRegisterMethod.enableDisablePrivateCategories(true);
 		});
-	});
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		this.test.assertExists('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitForText("Please login or");
 };
 
 // method to verify with category cat1 for unregistered user Disable
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategoryUnregisteredUserDisabled = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategoryUnregisteredUserDisabled = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 29                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*             Method to verify with category cat1 for unregistered user            *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 30 [ Method to verify with category cat1 for unregistered user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
-		});
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		this.test.assertExists('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 	});
 };
 
 // method to verify with other sub-categories
 combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithOtherSubCategoryUnregisteredUser = function() {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 30                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*           Method to verify with other sub-categories Unregistered user           *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 31 [ Method to verify with other sub-categories Unregistered user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-					}else{
-						casper.echo('cat1b not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.backEndUrl, function() {
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Unregistered / Not Logged In', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategoryForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewCategoryForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Unregistered / Not Logged In',casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategory(casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		this.test.assertExists('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1b visible');
 	});
 };
 
 // method to verify start new topic button with the private sub-category cat1a
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicWithSubCategoryUnregisteredUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicWithSubCategoryUnregisteredUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 31                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*          Method to verify with new topic button for unregistered user            *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 32 [ Method to verify with new topic button for unregistered user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Unregistered / Not Logged In', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableStartTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableStartTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Unregistered / Not Logged In',casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableStartTopics(casper, function(err) {
-												if(!err) {
-													casper.echo('enableStartTopics method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
+			if(!err) {
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, true);
+						}
+					});
+				}).then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('post_threads_'+groupId, true);
+						}
+					});
 				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-						casper.click('li#forum_'+subCategory_Id+' a');
-						wait.waitForTime(2000, casper,function(err) {
-							if(!err) {
-								casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-								postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-									if(!err) {
-										casper.echo("Topic created succcessfully","INFO");
-									}
-								});
-							}else{
-								casper.echo('Start New topic on subcategory page not Found','ERROR');
-							}
-						});
-					}else{
-						casper.echo('cat1a not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_threads', true);
 		});
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
+		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
 	});
 };
 
 // method to verify start new topic button with the private sub-category cat1a for unregistered user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicWithSubCategoryUnregisteredUserDisabled = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicWithSubCategoryUnregisteredUserDisabled = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 32                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*      Method  to verify with new topic button for unregistered user Disable       *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 33 [ Method to verify with new topic button for unregistered user Disable ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Unregistered / Not Logged In', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableStartTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableStartTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
+			if(!err) {
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('post_threads_'+groupId, false);
+						}
+					});
 				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-						casper.click('li#forum_'+subCategory_Id+' a');
-						wait.waitForTime(2000, casper,function(err) {
-							if(!err) {
-								casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-								casper.mouse.move('a.pull-right.btn.btn-uppercase.btn-primary');
-								wait.waitForElement('div.tooltip.fade.bottom.in', casper,function(err, isExists) {
-									if(isExists) {
-										var text = casper.evaluate(function() {
-											var toolText = document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').getAttribute('data-original-title');
-											return toolText;
-										});
-										var expectedText = "You don't have permission to start a new topic.";
-										casper.test.assert(text.indexOf(expectedText) > -1);
-									}else{
-										casper.echo('not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Start New topic on subcategory page not Found','ERROR');
-							}
-						});
-					}else{
-						casper.echo('cat1a not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
-	});
+	}).waitForText("Create Account");
 };
 
 // method to verify start new topic button with the private category cat1 for unregistered user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicWithCategoryUnregisteredUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicWithCategoryUnregisteredUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 33                                      ', 'INFO');
-		casper.echo('****************************************************************************************', 'INFO');
-		casper.echo('*  verify start new topic button with the private category cat1 for unregistered user  *', 'INFO');
-		casper.echo('****************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 34 [ verify start new topic button with the private category cat1 for unregistered user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-						postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-							if(!err) {
-								casper.echo("Topic created succcessfully","INFO");
-							}
-						});
-					}else{
-						casper.echo('cat1a not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
 	});
 };
 
 // method to verify start new topic button with the other category cat1 for unregistered user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicWithOtherCategoryUnregisteredUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicWithOtherCategoryUnregisteredUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 34                                      ', 'INFO');
-		casper.echo('****************************************************************************************', 'INFO');
-		casper.echo('*  verify start new topic button with the other category cat1 for unregistered user    *', 'INFO');
-		casper.echo('****************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 35 [ verify start new topic button with the other category cat1 for unregistered user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-						casper.click('li#forum_'+subCategory_Id+' a');
-						wait.waitForTime(2000, casper,function(err) {
-							if(!err) {
-								casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-								postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-									if(!err) {
-										casper.echo("Topic created succcessfully","INFO");
-									}
-								});
-							}else{
-								casper.echo('Start New topic on subcategory page not Found','ERROR');
-							}
-						});
-					}else{
-						casper.echo('cat1b not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1b visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
 	});
 };
 
 // method to verify Reply topics  with the private sub-category cat1a for unregistered user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithSubCategoryUnregisteredUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithSubCategoryUnregisteredUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 35                                      ', 'INFO');
-		casper.echo('**********************************************************************************************', 'INFO');
-		casper.echo('*    Method to verify Reply topics  with the private sub-category cat1a Unregistered user    *', 'INFO');
-		casper.echo('**********************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 36 [ Method to verify Reply topics  with the private sub-category cat1a Unregistered user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Unregistered / Not Logged In', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableReplyTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableReplyTopicsForSubCategory method called ','INFO');
-												}
-											});
-											casper.then(function() {
-												combinationOfSubCategoryAndGroupPermissionsMethod.enableStartTopicsForSubCategory(groupId, casper, function(err) {
-													if(!err) {
-														casper.echo('enableStartTopicsForSubCategory method called ','INFO');
-													}
-												});
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Unregistered / Not Logged In',casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableReplyTopics(casper, function(err) {
-												if(!err) {
-													casper.echo('enableReplyTopics method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
+			if(!err) {
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('post_threads_'+groupId, true);
+						}
+					});
 				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('other_post_replies_'+groupId, true);
+						}
+					});
+				});
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-						casper.click('li#forum_'+subCategory_Id+' a');
-						wait.waitForTime(2000, casper,function(err) {
-							if(!err) {
-									postEventMemberApprovalMethod.composePost(casper, casper.test, function(err) {
-									if(!err) {
-										casper.echo("User replied succcessfully","INFO");
-									}
-								});
-							}
-						});
-					}else{
-						casper.echo('cat1a not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'other_post_replies', true);
+		}).then(function() {
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_replies', true);
 		});
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		postEventMemberApprovalMethod.composePost();
 	});
 };
 
 // method to verify Reply topics  with the private sub-category cat1a for unregistered user Disable
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithSubCategoryUnregisteredUserDisable = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithSubCategoryUnregisteredUserDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 36                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('* Method to verify Reply topics  with the private sub-category cat1a Unregistered user Disable      *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 37 [ Method to verify Reply topics  with the private sub-category cat1a Unregistered user Disable ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Unregistered / Not Logged In', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableReplyTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableReplyTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
+			if(!err) {
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('other_post_replies_'+groupId, false);
+						}
+					});
 				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-						casper.click('li#forum_'+subCategory_Id+' a');
-						wait.waitForTime(2000, casper,function(err) {
-							if(!err) {
-								casper.test.assertExists('a[id^="topic_"]', 'Composed topic is found');
-								var topic = casper.evaluate(function() {
-									var name = document.querySelector('a[id^="topic_"]');
-									return name.innerHTML;
-								});
-								casper.echo('*******************************************************','INFO');
-								casper.echo('*           The name of the topic is-'+topic+        '*','INFO');
-								casper.echo('*******************************************************','INFO');
-								casper.click('div.panel-body.table-responsive ul li span span:nth-child(2) a');
-								wait.waitForElement('form[name="posts"]', casper, function(err, isExists) {
-									if(isExists) {
-										casper.test.assertDoesntExist('a#sub_post_reply','Reply option not appear','INFO');
-									}else {
-										casper.echo('Reply option visible', 'ERROR');
-									}
-								});
-							}
-						});
-					}else{
-						casper.echo('cat1a not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_replies', false);
 		});
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a[id^="topic_"]', ' Composed topic is found');
+		this.click('a[id^="topic_"]');
+	}).waitForSelector('div#posts-list', function() {
+		this.test.assertNotVisible('#sub_post_reply', ' Reply option not visible');
 	});
 };
 
 // method to verify reply topic button with the parent category cat1 for unregistered user Disable
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithCategoryUnregisteredUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithCategoryUnregisteredUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 37                                      ', 'INFO');
-		casper.echo('****************************************************************************************************', 'INFO');
-		casper.echo('*    Method to verify reply topic button with the parent category cat1 Unregistered user Disable   *', 'INFO');
-		casper.echo('****************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 38 [ Method to verify reply topic button with the parent category cat1 Unregistered user Disable ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.click('a#topics_tab');
-						postEventMemberApprovalMethod.composePost(casper, casper.test, function(err) {
-							if(!err) {
-								casper.echo("User replied succcessfully","INFO");
-							}
-						});
-					}else{
-						casper.echo('cat1a not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_replies', true);
 		});
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('#topics_tab' , ' Topic tab visible');
+		this.click('#topics_tab');
+	}).waitUntilVisible('.topics-list', function() {
+		postEventMemberApprovalMethod.composePost();
 	});
 };
 
 // method to verify with other sub-categories cat1b for unregistered user Disable
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithOtherSubCategoryUnregisteredUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithOtherSubCategoryUnregisteredUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 38                                      ', 'INFO');
-		casper.echo('****************************************************************************************************', 'INFO');
-		casper.echo('*           Method to verify with other sub-categories cat1b Unregistered user Disable             *', 'INFO');
-		casper.echo('****************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 39 [ Method to verify with other sub-categories cat1b Unregistered user Disable ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-						casper.click('li#forum_'+subCategory_Id+' a');
-						wait.waitForTime(2000, casper,function(err) {
-							if(!err) {
-									postEventMemberApprovalMethod.composePost(casper, casper.test, function(err) {
-									if(!err) {
-										casper.echo("User replied succcessfully","INFO");
-									}
-								});
-							}
-						});
-					}else{
-						casper.echo('cat1b not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
-		});
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1b visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		postEventMemberApprovalMethod.composePost();
 	});
 };
 
 // method to verify Post approval with the private sub-category cat1a for unregistered user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategoryUnregisteredUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategoryUnregisteredUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 39                                      ', 'INFO');
-		casper.echo('*************************************************************************************************', 'INFO');
-		casper.echo('*    Method to verify Post approval with the private sub-category cat1a Unregistered user       *', 'INFO');
-		casper.echo('*************************************************************************************************', 'INFO');
-		postEventMemberApprovalMethod.enableApproveNewPost(casper, casper.test,  function(err) {
-			if(!err) {
-				casper.echo('enablePostApproval method called ','INFO');
-			}
-		});
-		casper.then(function() {
-			forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-				if(!err) {
-					wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-						if(isExists) {
-							var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-							var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 40 [ Method to verify Post approval with the private sub-category cat1a Unregistered user ]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+    casper.waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+      this.test.assertSelectorHasText('#ddSettings', 'Security');
+      this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+      backEndForumRegisterMethod.setApproveNewPost('99');
+    }).then(function() {
+			var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+			var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-							combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-								category_Id = categoryId;
-								subCategory_Id = subCategoryId;
-								if(!err) {
-									casper.then(function() {
-										combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Unregistered / Not Logged In', subCategoryId, casper, function(err, groupId) {
-											if(!err) {
-												combinationOfSubCategoryAndGroupPermissionsMethod.enablePostApprovalForSubCategory(groupId, casper, function(err) {
-													if(!err) {
-														casper.echo('enablePostApprovalForSubCategory method called ','INFO');
-													}
-												});
-											}
-										});
-									});
-									casper.then(function() {
-										combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Unregistered / Not Logged In',casper, function(err) {
-											if(!err) {
-												combinationOfSubCategoryAndGroupPermissionsMethod.enableRequirePostApproval(casper, function(err) {
-													if(!err) {
-														casper.echo('enableRequirePostApproval method called ','INFO');
-													}
-												});
-											}
-										});
-									});
-								}
-							});
-							casper.then(function() {
-								casper.click('a[data-tooltip-elm="ddAccount"]');
-								forumLoginMethod.backEndLogout(casper, function(err) {
-									if(!err) {
-										casper.echo('User successfully logged out from backend','INFO');
-									}
-								});
-							});
-						} else {
-							casper.echo('Backend Menu not found', 'ERROR');
-						}
-					});
-				}else {
-					casper.echo('Error : ', 'ERROR');
-				}
-			});
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-						casper.click('li#forum_'+subCategory_Id+' a');
-						wait.waitForTime(2000, casper,function(err) {
+			combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+				category_Id = categoryId;
+				subCategory_Id = subCategoryId;
+				if(!err) {
+					casper.then(function() {
+						combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
 							if(!err) {
-								casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-								postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-									if(!err) {
-										casper.echo("Topic created succcessfully and moved to approval queue","INFO");
-									}
-								});
-							}else{
-								casper.echo('Start New topic on subcategory page not Found','ERROR');
+								backEndForumRegisterMethod.enableDisableCategoryPermissions('post_approval_'+groupId, true);
 							}
 						});
-					}else{
-						casper.echo('cat1a not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
+					});
+				}
+			});
+		}).then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_approval', true);
 		});
-	});
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
+		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).waitForText('Thank you for your post! Your post is currently being reviewed and will be displayed on the forum once it is approved.');
 };
 
 // method to verify Post approval with the private sub-category cat1a for unregistered user Disable
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategoryUnregisteredUserDisable = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategoryUnregisteredUserDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 40                                      ', 'INFO');
-		casper.echo('*************************************************************************************************', 'INFO');
-		casper.echo('* Method to verify Post approval with the private sub-category cat1a Unregistered user Disable  *', 'INFO');
-		casper.echo('*************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 41 [ Method to verify Post approval with the private sub-category cat1a Unregistered user Disable ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Unregistered / Not Logged In', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disablePostApprovalForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disablePostApprovalForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
+			if(!err) {
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('post_approval_'+groupId, false);
+						}
+					});
 				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-						casper.click('li#forum_'+subCategory_Id+' a');
-						wait.waitForTime(2000, casper,function(err) {
-							if(!err) {
-								casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-								postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-									if(!err) {
-										casper.echo("Topic created succcessfully","INFO");
-									}
-								});
-							}else{
-								casper.echo('Start New topic on subcategory page not Found','ERROR');
-							}
-						});
-					}else{
-						casper.echo('cat1a not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
 	});
 };
 
 // method to verify  Post approval with the parent category cat1 for unregistered user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithCategoryUnregisteredUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithCategoryUnregisteredUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 41                                      ', 'INFO');
-		casper.echo('*************************************************************************************************', 'INFO');
-		casper.echo('*    Method to verify  Post approval with the parent category cat1 Unregistered user Disable    *', 'INFO');
-		casper.echo('*************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 42 [ Method to verify  Post approval with the parent category cat1 Unregistered user Disable ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-						casper.click('li#forum_'+subCategory_Id+' a');
-						wait.waitForTime(2000, casper,function(err) {
-							if(!err) {
-								casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-								postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-									if(!err) {
-										casper.echo("Topic created succcessfully","INFO");
-									}
-								});
-							}else{
-								casper.echo('Start New topic on subcategory page not Found','ERROR');
-							}
-						});
-					}else{
-						casper.echo('cat1a not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
 	});
 };
 
 // method to verify  Post approval with other sub-categories cat1b for unregistered user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithOtherSubCategoryUnregisteredUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithOtherSubCategoryUnregisteredUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 42                                      ', 'INFO');
-		casper.echo('*************************************************************************************************', 'INFO');
-		casper.echo('*    Method to verify Post approvalwith other sub-categories cat1b Unregistered user Disable    *', 'INFO');
-		casper.echo('*************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 43 [ Method to verify Post approval with other sub-categories cat1b Unregistered user Disable ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-		wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-			if(isExists) {
-				casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-				casper.click('li#forum_'+category_Id+' a');
-				wait.waitForElement('div#category_list', casper,function(err, isExists) {
-					if(isExists) {
-						casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-						casper.click('li#forum_'+subCategory_Id+' a');
-						wait.waitForTime(2000, casper,function(err) {
-							if(!err) {
-								casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-								postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-									if(!err) {
-										casper.echo("Topic created succcessfully and moved to approval queue","INFO");
-									}
-								});
-							}else{
-								casper.echo('Start New topic on subcategory page not Found','ERROR');
-							}
-						});
-					}else{
-						casper.echo('cat1b not visible','ERROR');
-					}
-				});
-			}else{
-				casper.echo('cat1 not visible on category listing page','ERROR');
-			}
+	}).thenOpen(config.url, function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
 	});
 	casper.thenOpen(config.backEndUrl, function() {
-		postEventMemberApprovalMethod.disableApproveNewPost(casper, casper.test,  function(err) {
-			if(!err) {
-				casper.echo('enablePostApproval method called ','INFO');
-			}
-		});
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+  }).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+    this.test.assertSelectorHasText('#ddSettings', 'Security');
+    this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+    backEndForumRegisterMethod.setApproveNewPost('0');
+  });
+};
+
+// method to create a custom group and assign a user
+combinationOfSubCategoryAndGroupPermissionsTestcases.createCustomGroupAndAssignUser = function(userGroup) {
+	casper.thenOpen(config.backEndUrl, function() {
+		utils.info('Method to create a custom user group and assign the user');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+	}).waitForSelector('a[href="/tool/members/mb/usergroup?action=edit"]', function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.createCustomGroup(userGroup);
+	}).then(function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+	}).waitForSelector('div#tab_wrapper',function() {
+		var user = combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username;
+		thumpsUpDownMethod.changeUserGroup(user, userGroup);
 	});
 };
 
 // method to verify with category cat1 for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 43                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*                Method to verify with category cat1 for custom user               *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 44 [ Method to verify with category cat1 for custom user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroup(casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.createCustomGroup(combinationOfSubCategoryAndGroupPermissionsJSON.groupName, casper, function(err) {
-												if(!err) {
-													casper.then(function() {
-														combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroup(casper, function(err) {
-															if(!err) {
-																combinationOfSubCategoryAndGroupPermissionsMethod.changeGroup(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin, casper, function(err) {
-																});
-															}
-														});
-													});
-												}
-											});
-											casper.then(function() {
-												combinationOfSubCategoryAndGroupPermissionsMethod.goToCustomUserPemission(casper, function(err) {
-													if(!err) {
-														combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategory(casper, function(err) {
-															if(!err) {
-																casper.echo('enableViewCategory method called ','INFO');
-															}
-														});
-													}
-												});
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPage(casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-												if(!err) {
-													combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategoryForSubCategory(groupId, casper, function(err) {
-														if(!err) {
-															casper.echo('enableViewCategoryForSubCategory method called ','INFO');
-														}
-													});
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with registerd user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, true);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			combinationOfSubCategoryAndGroupPermissionsMethod.viewCustomUserPemissions();
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'view_forum', true);
+		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+  }).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with sub-category cat1a for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithSubCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithSubCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 44                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*             Method verify with sub-category cat1a for custom user                *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 45 [ Method verify with sub-category cat1a for custom user ');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1a not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+  }).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		this.test.assertExists('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with the private sub-category cat1a for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPrivateSubCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPrivateSubCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 45                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*       Method to verify with the private sub-category cat1a  for custom user      *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 46 [ Method to verify with the private sub-category cat1a  for custom user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableViewCategoryForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableViewCategoryForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.enablePrivateCategories(casper, function() {
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForElement('div.text-center.bmessage.alert-info.text-danger', casper,function(err, isExists) {
-													if(isExists) {
-														var actualText = casper.fetchText('div.text-center.bmessage.alert-info.text-danger');
-														var expectedText = "Sorry! You don't have permission to perform this action.";
-														var successMsg = actualText.substring(0, actualText.indexOf('<'));
-														casper.test.assert(successMsg.indexOf(expectedText) > -1);
-													}else{
-														casper.echo('not visible on category listing page','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, false);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+		}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+			this.test.assertSelectorHasText('#ddSettings', 'General');
+			this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
+			backEndForumRegisterMethod.enableDisablePrivateCategories(true);
+		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+  }).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		this.test.assertExists('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitForText("Sorry! You don't have permission to perform this action.");
+	casper.then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with the parent category cat1 for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithParentCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithParentCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 46                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*          Method to verify with the parent category cat1 for custom user         *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 47 [ Method to verify with the parent category cat1 for custom user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.backEndUrl, function() {
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategoryForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewCategoryForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		this.test.assertExists('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with other sub-categories for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithOtherSubCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithOtherSubCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 47                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*            Method to verify with other sub-categories for custom user            *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
+		utils.info('Test case 48 [ Method to verify with other sub-categories for custom user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
+
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+  }).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		this.test.assertExists('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1b visible');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify start new topic button with the sub-category cat1a for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonWithSubCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonWithSubCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 48                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*Method to verify start new topic button with the sub-category cat1a for custom user*', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 49 [ Method to verify start new topic button with the sub-category cat1a for custom user');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableStartTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableStartTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroup(casper, function(err) {
-								if(!err) {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToCustomUserPemission(casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableStartTopics(casper, function(err) {
-												if(!err) {
-													casper.echo('enableStartTopics method called ','INFO');
-												}
-											});
-										}
-									});
-								}
-							});
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, true);
+						}
+					});
+				}).then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('post_threads_'+groupId, true);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			combinationOfSubCategoryAndGroupPermissionsMethod.viewCustomUserPemissions();
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_threads', true);
+		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+  }).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
+		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify start new topic button with the sub-category cat1a(Disable) for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonWithSubCategoryForCustomUserDisable = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonWithSubCategoryForCustomUserDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 49                                      ', 'INFO');
-		casper.echo('*************************************************************************************************', 'INFO');
-		casper.echo('* Method to verify start new topic button with the sub-category cat1a(Disable) for custom user  *', 'INFO');
-		casper.echo('*************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 50 [ Method to verify start new topic button with the sub-category cat1a(Disable) for custom user');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableStartTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableStartTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														casper.mouse.move('a.pull-right.btn.btn-uppercase.btn-primary');
-														wait.waitForElement('div.tooltip.fade.bottom.in', casper,function(err, isExists) {
-															if(isExists) {
-																var text = casper.evaluate(function() {
-																	var toolText = document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').getAttribute('data-original-title');
-																	return toolText;
-																});
-																var expectedText = "You don't have permission to start a new topic.";
-																casper.test.assert(text.indexOf(expectedText) > -1);
-															}else{
-																casper.echo('not visible on category listing page','ERROR');
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('post_threads_'+groupId, false);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		var msg = this.getElementAttribute('#ajax_subscription_vars a:nth-child(1)', 'title');
+		utils.info(msg);
+		var expectedText = "You don't have permission to start a new topic.";
+		this.test.assert(msg.indexOf(expectedText) > -1);
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify start new topic button with the parent category cat1 for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonWithParentCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonWithParentCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 50                                      ', 'INFO');
-		casper.echo('*****************************************************************************************', 'INFO');
-		casper.echo('* Method to verify start new topic button with the parent category cat1 for custom user *', 'INFO');
-		casper.echo('*****************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 51 [ Method to verify start new topic button with the parent category cat1 for custom user');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-												postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-													if(!err) {
-														casper.echo("Topic created succcessfully","INFO");
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+  }).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
+		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with other sub-categories for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonWithOtherSubCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonWithOtherSubCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 51                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*           Method to verify with other sub-categories for custom user             *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
+		utils.info('Test case 52 [ Method to verify with other sub-categories for custom user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.backEndUrl, function() {
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableStartTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableStartTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1b visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify Reply topic button with the sub-category cat1a for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithSubCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithSubCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 52                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('* Method to verify Reply topic button with the sub-category cat1a for custom user  *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 53 [ Method to verify Reply topic button with the sub-category cat1a for custom user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableReplyTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableReplyTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroup(casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.goToCustomUserPemission(casper, function(err) {
-												if(!err) {
-													combinationOfSubCategoryAndGroupPermissionsMethod.enableReplyTopics(casper, function(err) {
-														if(!err) {
-															casper.echo('enableReplyTopics method called ','INFO');
-														}
-													});
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-															postEventMemberApprovalMethod.composePost(casper, casper.test, function(err) {
-															if(!err) {
-																casper.echo("User replied succcessfully","INFO");
-															}
-														});
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('post_threads_'+groupId, true);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('other_post_replies_'+groupId, true);
+						}
+					});
+				});
 			}
 		});
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			combinationOfSubCategoryAndGroupPermissionsMethod.viewCustomUserPemissions();
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'other_post_replies', true);
+		}).then(function() {
+			combinationOfSubCategoryAndGroupPermissionsMethod.viewCustomUserPemissions();
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_replies', true);
+		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		postEventMemberApprovalMethod.composePost();
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify Reply topic button with the sub-category cat1a(Disable) for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithSubCategoryForCustomUserDisable = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithSubCategoryForCustomUserDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 53                                      ', 'INFO');
-		casper.echo('**********************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify Reply topic button with the sub-category cat1a(Disable) for custom user  *', 'INFO');
-		casper.echo('**********************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 54 [ Method to verify Reply topic button with the sub-category cat1a(Disable) for custom user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableReplyTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableReplyTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.topic-title', 'Composed topic is found');
-														var topic = casper.evaluate(function() {
-															var name = document.querySelector('a.topic-title span');
-															return name.innerHTML;
-														});
-														casper.echo('*******************************************************','INFO');
-														casper.echo('*           The name of the topic is-'+topic+        '*','INFO');
-														casper.echo('*******************************************************','INFO');
-														casper.click('div.panel-body.table-responsive ul li span span:nth-child(2) a');
-														wait.waitForElement('form[name="posts"]', casper, function(err, isExists) {
-															if(isExists) {
-																casper.test.assertDoesntExist('a#sub_post_reply','Reply option not appear','INFO');
-															}else {
-																casper.echo('Reply option visible', 'ERROR');
-															}
-														});
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('other_post_replies_'+groupId, false);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			combinationOfSubCategoryAndGroupPermissionsMethod.viewCustomUserPemissions();
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_replies', false);
+		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a[id^="topic_"]', ' Composed topic is found');
+		this.click('a[id^="topic_"]');
+	}).waitForSelector('div#posts-list', function() {
+		this.test.assertNotVisible('#sub_post_reply', ' Reply option not visible');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify reply topic button with the parent category cat1 for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithParentCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithParentCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 54                                      ', 'INFO');
-		casper.echo('***************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify reply topic button with the parent category cat1 for custom user  *', 'INFO');
-		casper.echo('***************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 55 [ Method to verify reply topic button with the parent category cat1 for custom user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.click('a#topics_tab');
-												postEventMemberApprovalMethod.composePost(casper, casper.test, function(err) {
-													if(!err) {
-														casper.echo("User replied succcessfully","INFO");
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+		casper.then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			combinationOfSubCategoryAndGroupPermissionsMethod.viewCustomUserPemissions();
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_replies', true);
+		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('#topics_tab' , ' Topic tab visible');
+		this.click('#topics_tab');
+	}).waitUntilVisible('.topics-list', function() {
+		postEventMemberApprovalMethod.composePost();
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with other sub-categories for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithOtherSubCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithOtherSubCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 55                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*           Method to verify with other sub-categories for custom user             *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
+		utils.info('Test case 56 [ Method to verify with other sub-categories for custom user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
+			if(!err) {
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-															postEventMemberApprovalMethod.composePost(casper, casper.test, function(err) {
-															if(!err) {
-																casper.echo("User replied succcessfully","INFO");
-															}
-														});
-													}
-												});
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify  upload attachments with the private sub-category cat1a for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithSubCategoryForCustomUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 56                                      ', 'INFO');
-		casper.echo('***********************************************************************************************', 'INFO');
-		casper.echo('*   Method to verify  upload attachments with the private sub-category cat1a for custom user  *', 'INFO');
-		casper.echo('***********************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableUploadAttachmentsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableUploadAttachmentsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroup(casper, function(err) {
-								if(!err) {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToCustomUserPemission(casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableUploadAttachments(casper, function(err) {
-												if(!err) {
-
-												}
-											});
-										}
-									});
-								}
-							});
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-															combinationOfSubCategoryAndGroupPermissionsMethod.uploadAttachmentWithTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("User replied succcessfully","INFO");
-															}
-														});
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertVisible('li#forum_'+subCategory_Id+' a' , ' cat1b visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		postEventMemberApprovalMethod.composePost();
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify upload attachments button with the private sub-category cat1a(Disable) for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithSubCategoryForCustomUserDisable = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithSubCategoryForCustomUserDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 57                                      ', 'INFO');
-		casper.echo('**********************************************************************************************************', 'INFO');
-		casper.echo('* Method to verify upload attachments button with the private sub-category cat1a(Disable)for custom user *', 'INFO');
-		casper.echo('**********************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 57 [ Method to verify upload attachments button with the private sub-category cat1a(Disable)for custom user ');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableUploadAttachmentsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableUploadAttachmentsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
+			if(!err) {
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('other_post_replies_'+groupId, true);
+						}
+					});
 				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('upload_attachments_'+groupId, true);
+						}
+					});
+				});
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertDoesntExist('a#fancy_attach_ i' ,'Attachment link not found','INFO');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify  upload attachments with the parent category cat1 for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithParentCategoryForCustomUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 58                                      ', 'INFO');
-		casper.echo('****************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify  upload attachments with the parent category cat1 for custom user  *', 'INFO');
-		casper.echo('****************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.uploadAttachmentWithTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-													if(!err) {
-														casper.echo("User replied succcessfully","INFO");
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify with other sub-categories for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithOtherSubCategoryForCustomUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 59                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*           Method to verify with other sub-categories for custom user             *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify view attachments with the private sub-category cat1a for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithViewAttachmentsWithSubCategoryForCustomUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 60                                      ', 'INFO');
-		casper.echo('********************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify view attachments with the private sub-category cat1a for custom user   *', 'INFO');
-		casper.echo('********************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewAttachmentsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewAttachmentsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroup(casper, function(err) {
-								if(!err) {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToCustomUserPemission(casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewAttachments(casper, function(err) {
-												if(!err) {
-
-												}
-											});
-										}
-									});
-								}
-							});
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertDoesntExist('a#fancy_attach_ i', ' Attachment link not found');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify view attachments with the private sub-category cat1a(Disable) for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithViewAttachmentsWithSubCategoryForCustomUserDisable = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithViewAttachmentsWithSubCategoryForCustomUserDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                               Test case 61                                     ', 'INFO');
-		casper.echo('***************************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify view attachments with the private sub-category cat1a(Disable) for custom user *', 'INFO');
-		casper.echo('***************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 58 [ Method to verify view attachments with the private sub-category cat1a(Disable) for custom user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableViewAttachmentsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableViewAttachmentsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
+			if(!err) {
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('view_attachments_'+groupId, true);
+						}
+					});
 				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
 			}
 		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify view attachments with the parent category cat1 for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithViewAttachmentsWithParentCategoryForCustomUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 62                                      ', 'INFO');
-		casper.echo('**************************************************************************************', 'INFO');
-		casper.echo('*   Method to verify view attachments with the parent category cat1 for custom user  *', 'INFO');
-		casper.echo('**************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify with other sub-categories for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithViewAttachmentsWithOtherSubCategoryForCustomUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 63                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*            Method to verify with other sub-categories for custom user            *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
+	}).thenOpen(config.url, function() {
 	});
 };
 
 // method to verify Post approval with the private sub-category cat1a for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                      Test case 64                                     ', 'INFO');
-		casper.echo('******************************************************************************************', 'INFO');
-		casper.echo('*   Method to verify Post approval with the private sub-category cat1a for custom user   *', 'INFO');
-		casper.echo('******************************************************************************************', 'INFO');
-		postEventMemberApprovalMethod.enableApproveNewPost(casper, casper.test,  function(err) {
-			if(!err) {
-				casper.echo('enablePostApproval method called ','INFO');
-			}
-		});
-		casper.then(function() {
-			forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-				if(!err) {
-					wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-						if(isExists) {
-							var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-							var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 59 [ Method to verify Post approval with the private sub-category cat1a for custom user ]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+    casper.waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+      this.test.assertSelectorHasText('#ddSettings', 'Security');
+      this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+      backEndForumRegisterMethod.setApproveNewPost('99');
+    }).then(function() {
+			var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+			var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-							combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-								category_Id = categoryId;
-								subCategory_Id = subCategoryId;
-								if(!err) {
-									casper.then(function() {
-										combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-											if(!err) {
-												combinationOfSubCategoryAndGroupPermissionsMethod.enablePostApprovalForSubCategory(groupId, casper, function(err) {
-													if(!err) {
-														casper.echo('enablePostApprovalForSubCategory method called ','INFO');
-													}
-												});
-											}
-										});
-									});
-								}
-							});
-							casper.then(function() {
-								combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroup(casper, function(err) {
-									if(!err) {
-										combinationOfSubCategoryAndGroupPermissionsMethod.goToCustomUserPemission(casper, function(err) {
-											if(!err) {
-												combinationOfSubCategoryAndGroupPermissionsMethod.enableRequirePostApproval(casper, function(err) {
-													if(!err) {
-														casper.echo('enableRequirePostApproval method called ','INFO');
-													}
-												});
-											}
-										});
-									}
-								});
-							});
-							casper.then(function() {
-								casper.click('a[data-tooltip-elm="ddAccount"]');
-								forumLoginMethod.backEndLogout(casper, function(err) {
-									if(!err) {
-										casper.echo('User successfully logged out from backend','INFO');
-									}
-								});
-							});
-						} else {
-							casper.echo('Backend Menu not found', 'ERROR');
-						}
-					});
-				}else {
-					casper.echo('Error : ', 'ERROR');
-				}
-			});
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully and moved to approval queue","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
+			combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+				category_Id = categoryId;
+				subCategory_Id = subCategoryId;
+				if(!err) {
+					casper.then(function() {
+						combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+							if(!err) {
+								backEndForumRegisterMethod.enableDisableCategoryPermissions('post_approval_'+groupId, true);
 							}
 						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
+					});
+				}
+			});
+		}).then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			combinationOfSubCategoryAndGroupPermissionsMethod.viewCustomUserPemissions();
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_approval', true);
 		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
+		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).waitForText('Thank you for your post! Your post is currently being reviewed and will be displayed on the forum once it is approved.', function() {
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify Post approval with the private sub-category cat1a(Disable) for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategoryForCustomUserDisable = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategoryForCustomUserDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                       Test case 65                                      ', 'INFO');
-		casper.echo('***************************************************************************************************', 'INFO');
-		casper.echo('*    Method to verify Post approval with the private sub-category cat1a(Disable) for custom user  *', 'INFO');
-		casper.echo('***************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 60 [ Method to verify Post approval with the private sub-category cat1a(Disable) for custom user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('New Custom Group', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disablePostApprovalForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disablePostApprovalForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategoryId, function(err, groupId) {
+						if(!err) {
+							backEndForumRegisterMethod.enableDisableCategoryPermissions('post_approval_'+groupId, false);
+						}
+					});
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
+		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify Post approval with the parent category cat1 for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithParentCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithParentCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                       Test case 66                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*   Method to verify Post approval with the parent category cat1 for custom user   *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
+		utils.info('Test case 61 [ Method to verify Post approval with the parent category cat1 for custom user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
-		casper.then(function() {
-			forumLoginMethod.logoutFromApp(casper, function() { });
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).waitForText('Thank you for your post! Your post is currently being reviewed and will be displayed on the forum once it is approved.', function() {
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify with other sub-categories for custom user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithOtherSubCategoryForCustomUser = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithOtherSubCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                        Test case 67                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*            Method to verify with other sub-categories for custom user            *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
+		utils.info('Test case 62 [ Method to verify with other sub-categories for custom user ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with custom user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.customUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully and moved to approval queue","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
-	});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+		this.click('li#forum_'+category_Id+' a');
+	}).waitForSelector('div#category_list', function() {
+		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
+		this.click('li#forum_'+subCategory_Id+' a');
+	}).waitUntilVisible('#topics', function() {
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.evaluate(function() {
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
+		});
+		topicMethod.createTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic);
+	}).waitForText('Thank you for your post! Your post is currently being reviewed and will be displayed on the forum once it is approved.', function() {
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
+	}).thenOpen(config.backEndUrl, function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+  }).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+    this.test.assertSelectorHasText('#ddSettings', 'Security');
+    this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+    backEndForumRegisterMethod.setApproveNewPost('0');
+  });
+};
+
+// method to enable pending user group and assign the user
+combinationOfSubCategoryAndGroupPermissionsTestcases.enablePendingApprovalAndAssignUser = function() {
 	casper.thenOpen(config.backEndUrl, function() {
-		postEventMemberApprovalMethod.disableApproveNewPost(casper, casper.test,  function(err) {
-			if(!err) {
-				casper.echo('enablePostApproval method called ','INFO');
-			}
-		});
+	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+		this.test.assertSelectorHasText('#ddSettings', 'Security');
+		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+		backEndForumRegisterMethod.enableDisableApproveNewRegistrations(true);
+	}).then(function() {
+	this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+	}).waitForSelector('div#tab_wrapper',function() {
+		var user = combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username;
+		thumpsUpDownMethod.changeUserGroup(user, 'Pending Approval');
 	});
 };
 
-// method to verify with category cat1 for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategoryForPendingUser = function() {
+// method to enable email verification user group and assign the user
+combinationOfSubCategoryAndGroupPermissionsTestcases.enableEmailVerificationAndAssignUser = function() {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 68                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*           Method to verify with category cat1 for pending approval user          *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		postEventMemberApprovalMethod.enableApproveRegistrationsAndDisableEmail(casper, function(err) {
-			if(!err) {
-				casper.echo('Enable Approve Registrations And Disable Email functionality method called ','INFO');
-			}
-		});
-		casper.then(function() {
-			forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-				if(!err) {
-					wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-						if(isExists) {
-							var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-							var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-							combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-								category_Id = categoryId;
-								subCategory_Id = subCategoryId;
-								if(!err) {
-									casper.then(function() {
-										combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-											if(!err) {
-												combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategoryForSubCategory(groupId, casper, function(err) {
-													if(!err) {
-														casper.echo('enableViewCategoryForSubCategory method called ','INFO');
-													}
-												});
-											}
-										});
-									});
-									casper.then(function() {
-										combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Pending Approval',casper, function(err) {
-											if(!err) {
-												combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategory(casper, function(err) {
-													if(!err) {
-														casper.echo('enableViewCategory method called ','INFO');
-													}
-												});
-											}
-										});
-									});
-								}
-							});
-							casper.then(function() {
-								combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroup(casper, function(err) {
-									if(!err) {
-										combinationOfSubCategoryAndGroupPermissionsMethod.changeGroupToPendingApproval(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin, casper, function(err) {
-										});
-									}
-								});
-							});
-							casper.then(function() {
-								casper.click('a[data-tooltip-elm="ddAccount"]');
-								forumLoginMethod.backEndLogout(casper, function(err) {
-									if(!err) {
-										casper.echo('User successfully logged out from backend','INFO');
-									}
-								});
-							});
-						} else {
-							casper.echo('Backend Menu not found', 'ERROR');
-						}
-					});
-				}else {
-					casper.echo('Error : ', 'ERROR');
-				}
-			});
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify with sub-category cat1a for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithSubCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 69                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*          Method verify with sub-category cat1a for pending approval user         *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1a not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-
-};
-
-// method to verify with the private sub-category cat1a for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPrivateSubCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 70                                   ', 'INFO');
-		casper.echo('*************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify with the private sub-category cat1a for pending approval user   *', 'INFO');
-		casper.echo('*************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableViewCategoryForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableViewCategoryForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.enablePrivateCategories(casper, function() {
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForElement('div.text-center.bmessage.alert-info.text-danger', casper,function(err, isExists) {
-													if(isExists) {
-														var actualText = casper.fetchText('div.text-center.bmessage.alert-info.text-danger');
-														var expectedText = "Sorry! You don't have permission to perform this action.";
-														var successMsg = actualText.substring(0, actualText.indexOf('<'));
-														casper.test.assert(successMsg.indexOf(expectedText) > -1);
-													}else{
-														casper.echo('not visible on category listing page','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify with the parent category cat1 for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithParentCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 71                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*   Method to verify with the parent category cat1 for pending approval user       *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.backEndUrl, function() {
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewCategoryForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewCategoryForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify with other sub-categories for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithOtherSubCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 72                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*        Method to verify with other sub-categories for pending approval user      *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify start new topic button with the sub-category cat1a for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonForSubCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 73                                     ', 'INFO');
-		casper.echo('****************************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify start new topic button with the sub-category cat1a for pending approval user   *', 'INFO');
-		casper.echo('****************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableStartTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableStartTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Pending Approval',casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableStartTopics(casper, function(err) {
-												if(!err) {
-													casper.echo('enableStartTopics method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify start new topic button with the sub-category cat1a(Disable) for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonForSubCategoryForPendingUserDisable = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 74                                      ', 'INFO');
-		casper.echo('***********************************************************************************************************', 'INFO');
-		casper.echo('* Method to verify start new topic button with the sub-category cat1a(Disable) for pending approval user  *', 'INFO');
-		casper.echo('***********************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableStartTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableStartTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														casper.mouse.move('a.pull-right.btn.btn-uppercase.btn-primary');
-														wait.waitForElement('div.tooltip.fade.bottom.in', casper,function(err, isExists) {
-															if(isExists) {
-																var text = casper.evaluate(function() {
-																	var toolText = document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').getAttribute('data-original-title');
-																	return toolText;
-																});
-																var expectedText = "You don't have permission to start a new topic.";
-																casper.test.assert(text.indexOf(expectedText) > -1);
-															}else{
-																casper.echo('not visible on category listing page','ERROR');
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify start new topic button with the parent category cat1 for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonForParentCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 75                                      ', 'INFO');
-		casper.echo('*****************************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify start new topic button with the parent category cat1 for pending approval user  *', 'INFO');
-		casper.echo('*****************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-												postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-													if(!err) {
-														casper.echo("Topic created succcessfully","INFO");
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify with other sub-categories for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithNewTopicButtonForOtherSubCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 76                                      ', 'INFO');
-		casper.echo('*****************************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify with other sub-categories for pending approval user for pending approval user   *', 'INFO');
-		casper.echo('*****************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.backEndUrl, function() {
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableStartTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewCategoryForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify Reply topic button with the sub-category cat1a for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForSubCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 77                                      ', 'INFO');
-		casper.echo('************************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify Reply topic button with the sub-category cat1a for pending approval user   *', 'INFO');
-		casper.echo('************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableReplyTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableReplyTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Pending Approval',casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableReplyTopics(casper, function(err) {
-												if(!err) {
-													casper.echo('enableReplyTopics method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-															postEventMemberApprovalMethod.composePost(casper, casper.test, function(err) {
-															if(!err) {
-																casper.echo("User replied succcessfully","INFO");
-															}
-														});
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify Reply topic button with the sub-category cat1a(Disable) for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForSubCategoryForPendingUserDisable = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 78                                      ', 'INFO');
-		casper.echo('********************************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify Reply topic button with the sub-category cat1a(Disable) for pending approval user  *', 'INFO');
-		casper.echo('********************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableReplyTopicsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableReplyTopicsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.topic-title', 'Composed topic is found');
-														var topic = casper.evaluate(function() {
-															var name = document.querySelector('a.topic-title span');
-															return name.innerHTML;
-														});
-														casper.echo('*******************************************************','INFO');
-														casper.echo('*           The name of the topic is-'+topic+        '*','INFO');
-														casper.echo('*******************************************************','INFO');
-														casper.click('div.panel-body.table-responsive ul li span span:nth-child(2) a');
-														wait.waitForElement('form[name="posts"]', casper, function(err, isExists) {
-															if(isExists) {
-																casper.test.assertDoesntExist('a#sub_post_reply','Reply option not appear','INFO');
-															}else {
-																casper.echo('Reply option visible', 'ERROR');
-															}
-														});
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify reply topic button with the parent category cat1 for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicWithParentCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 79                                      ', 'INFO');
-		casper.echo('**************************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify reply topic button with the parent category cat1 for pending approval user   *', 'INFO');
-		casper.echo('**************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.click('a#topics_tab');
-												postEventMemberApprovalMethod.composePost(casper, casper.test, function(err) {
-													if(!err) {
-														casper.echo("User replied succcessfully","INFO");
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify with other sub-categories for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForOtherSubCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 80                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*       Method to verify with other sub-categories for pending approval user       *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-															postEventMemberApprovalMethod.composePost(casper, casper.test, function(err) {
-															if(!err) {
-																casper.echo("User replied succcessfully","INFO");
-															}
-														});
-													}
-												});
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify  upload attachments with the private sub-category cat1a for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithSubCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 81                                      ', 'INFO');
-		casper.echo('********************************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify  upload attachments with the private sub-category cat1a for pending approval user  *', 'INFO');
-		casper.echo('********************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableUploadAttachmentsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableUploadAttachmentsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Pending Approval',casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableUploadAttachments(casper, function(err) {
-												if(!err) {
-													casper.echo('enableUploadAttachments method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-															combinationOfSubCategoryAndGroupPermissionsMethod.uploadAttachmentWithTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("User replied succcessfully","INFO");
-															}
-														});
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify upload attachments button with the private sub-category cat1a(Disable) for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithSubCategoryForPendingUserDisable = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 82                                      ', 'INFO');
-		casper.echo('***********************************************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify upload attachments button with the private sub-category cat1a(Disable) for pending approval user  *', 'INFO');
-		casper.echo('***********************************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableUploadAttachmentsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableUploadAttachmentsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertDoesntExist('a#fancy_attach_ i' ,'Attachment link not found','INFO');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify  upload attachments with the parent category cat1 for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithParentCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 83                                      ', 'INFO');
-		casper.echo('*****************************************************************************************************', 'INFO');
-		casper.echo('*   Method to verify  upload attachments with the parent category cat1 for pending approval user    *', 'INFO');
-		casper.echo('*****************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.uploadAttachmentWithTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-													if(!err) {
-														casper.echo("User replied succcessfully","INFO");
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify with other sub-categories for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithUploadAttachmentsWithOtherSubCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 84                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*       Method to verify with other sub-categories for pending approval user       *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify view attachments with the private sub-category cat1a for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithViewAttachmentsWithSubCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 85                                      ', 'INFO');
-		casper.echo('*********************************************************************************************************', 'INFO');
-		casper.echo('*    Method to verify view attachments with the private sub-category cat1a for pending approval user    *', 'INFO');
-		casper.echo('*********************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewAttachmentsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewAttachmentsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Pending Approval',casper, function(err) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.enableViewAttachments(casper, function(err) {
-												if(!err) {
-													casper.echo('enableViewAttachments method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify view attachments with the private sub-category cat1a(Disable) for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithViewAttachmentsWithSubCategoryForPendingUserDisable = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 86                                      ', 'INFO');
-		casper.echo('**************************************************************************************************************', 'INFO');
-		casper.echo('*  Method to verify view attachments with the private sub-category cat1a(Disable) for pending approval user  *', 'INFO');
-		casper.echo('**************************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disableViewAttachmentsForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disableViewAttachmentsForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify view attachments with the parent category cat1 for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithViewAttachmentsWithParentCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 87                                      ', 'INFO');
-		casper.echo('**************************************************************************************************', 'INFO');
-		casper.echo('*   Method to verify view attachments with the parent category cat1 for pending approval user    *', 'INFO');
-		casper.echo('**************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify with other sub-categories for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithViewAttachmentsWithOtherSubCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 88                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*       Method to verify with other sub-categories for pending approval user       *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify Post approval with the private sub-category cat1a for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 89                                      ', 'INFO');
-		casper.echo('****************************************************************************************************', 'INFO');
-		casper.echo('*   Method to verify Post approval with the private sub-category cat1a for pending approval user   *', 'INFO');
-		casper.echo('****************************************************************************************************', 'INFO');
-		postEventMemberApprovalMethod.enableApproveNewPost(casper, casper.test,  function(err) {
-			if(!err) {
-				casper.echo('enablePostApproval method called ','INFO');
-			}
-		});
-		casper.then(function() {
-			forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-				if(!err) {
-					wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-						if(isExists) {
-							var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-							var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-							combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-								category_Id = categoryId;
-								subCategory_Id = subCategoryId;
-								if(!err) {
-									casper.then(function() {
-										combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-											if(!err) {
-												combinationOfSubCategoryAndGroupPermissionsMethod.enablePostApprovalForSubCategory(groupId, casper, function(err) {
-													if(!err) {
-														casper.echo('enablePostApprovalForSubCategory method called ','INFO');
-													}
-												});
-											}
-										});
-									});
-									casper.then(function() {
-										combinationOfSubCategoryAndGroupPermissionsMethod.goToUserGroupAndUserPemission('Pending Approval',casper, function(err) {
-											if(!err) {
-												combinationOfSubCategoryAndGroupPermissionsMethod.enableRequirePostApproval(casper, function(err) {
-													if(!err) {
-														casper.echo('enableRequirePostApproval method called ','INFO');
-													}
-												});
-											}
-										});
-									});
-								}
-							});
-							casper.then(function() {
-								casper.click('a[data-tooltip-elm="ddAccount"]');
-								forumLoginMethod.backEndLogout(casper, function(err) {
-									if(!err) {
-										casper.echo('User successfully logged out from backend','INFO');
-									}
-								});
-							});
-						} else {
-							casper.echo('Backend Menu not found', 'ERROR');
-						}
-					});
-				}else {
-					casper.echo('Error : ', 'ERROR');
-				}
-			});
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully and moved to approval queue","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify Post approval with the private sub-category cat1a(Disable) for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithSubCategoryForPendingUserDisable = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 90                                      ', 'INFO');
-		casper.echo('*************************************************************************************************************', 'INFO');
-		casper.echo('*    Method to verify Post approval with the private sub-category cat1a(Disable) for pending approval user  *', 'INFO');
-		casper.echo('*************************************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disablePostApprovalForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disablePostApprovalForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify Post approval with the parent category cat1 for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithParentCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 91                                      ', 'INFO');
-		casper.echo('**********************************************************************************************', 'INFO');
-		casper.echo('*   Method to verify Post approval with the parent category cat1 for pending approval user   *', 'INFO');
-		casper.echo('**********************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-							}
-						});
-						casper.then(function() {
-							casper.click('a[data-tooltip-elm="ddAccount"]');
-							forumLoginMethod.backEndLogout(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from backend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1a visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1a not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-};
-
-// method to verify with other sub-categories for pending approval user
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalWithOtherSubCategoryForPendingUser = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 92                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*        Method to verify with other sub-categories for pending approval user      *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
-
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
-			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-										casper.click('li#forum_'+category_Id+' a');
-										wait.waitForElement('div#category_list', casper,function(err, isExists) {
-											if(isExists) {
-												casper.test.assertExists('li#forum_'+subCategory_Id+' a' ,'cat1b visible','INFO');
-												casper.click('li#forum_'+subCategory_Id+' a');
-												wait.waitForTime(2000, casper,function(err) {
-													if(!err) {
-														casper.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', 'Start New topic on subcategory page Found','INFO');
-														postEventMemberApprovalMethod.startTopic(combinationOfSubCategoryAndGroupPermissionsJSON.startTopic, casper, function(err) {
-															if(!err) {
-																casper.echo("Topic created succcessfully and moved to approval queue","INFO");
-															}
-														});
-													}else{
-														casper.echo('Start New topic on subcategory page not Found','ERROR');
-													}
-												});
-											}else{
-												casper.echo('cat1b not visible','ERROR');
-											}
-										});
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
-				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.backEndUrl, function() {
-		postEventMemberApprovalMethod.disableApproveNewPost(casper, casper.test,  function(err) {
-			if(!err) {
-				casper.echo('enablePostApproval method called ','INFO');
-			}
-		});
+	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+		this.test.assertSelectorHasText('#ddSettings', 'Security');
+		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+		backEndForumRegisterMethod.enableDisableEmailAddressVerification(true);
+	}).then(function() {
+	this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+	}).waitForSelector('div#tab_wrapper',function() {
+		var user = combinationOfSubCategoryAndGroupPermissionsJSON.emailVerificationUserLogin.username;
+		thumpsUpDownMethod.changeUserGroup(user, 'Pending Email Verification');
 	});
 };
 
 // method to delete the subcategory
-combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithDeleteSubCategory = function() {
+combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithDeleteSubCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		casper.echo('                                   Test case 93                                      ', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		casper.echo('*                  Method to verify with delete the sub catgory                    *', 'INFO');
-		casper.echo('************************************************************************************', 'INFO');
-		forumLoginMethod.loginToForumBackEnd(casper, function(err) {
-			if(!err) {
-				wait.waitForElement('div#my_account_forum_menu', casper, function(err, isExists) {
-					if(isExists) {
-						var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
-						var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
+		utils.info('Test case 63 [Method to verify with delete the sub catgory ]');
+		var category = combinationOfSubCategoryAndGroupPermissionsJSON.category;
+		var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory;
 
-						combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, casper, function(err, categoryId, subCategoryId) {
-							category_Id = categoryId;
-							subCategory_Id = subCategoryId;
-							if(!err) {
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup('Pending Approval', subCategoryId, casper, function(err, groupId) {
-										if(!err) {
-											combinationOfSubCategoryAndGroupPermissionsMethod.disablePostApprovalForSubCategory(groupId, casper, function(err) {
-												if(!err) {
-													casper.echo('disablePostApprovalForSubCategory method called ','INFO');
-												}
-											});
-										}
-									});
-								});
-								casper.then(function() {
-									combinationOfSubCategoryAndGroupPermissionsMethod.deleteSubCategory(subCategory_Id, casper, function(err,subCategoryId) {
-									});
-								});
-								casper.then(function() {
-									casper.click('a[data-tooltip-elm="ddAccount"]');
-									forumLoginMethod.backEndLogout(casper, function(err) {
-										if(!err) {
-											casper.echo('User successfully logged out from backend','INFO');
-										}
-									});
-								});
-							}
-						});
-					} else {
-						casper.echo('Backend Menu not found', 'ERROR');
-					}
-				});
-			}else {
-				casper.echo('Error : ', 'ERROR');
-			}
-		});
-	});
-	casper.thenOpen(config.url, function() {
-		//login with pending user
-		casper.echo('Title of the page :' +casper.getTitle(), 'INFO');
-		forumLoginMethod.loginToApp(combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.username, combinationOfSubCategoryAndGroupPermissionsJSON.pendingUserLogin.password, casper, function(err) {
+		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+			category_Id = categoryId;
+			subCategory_Id = subCategoryId;
 			if(!err) {
-				wait.waitForElement('li.pull-right.user-panel', casper,function(err, isExists) {
-					if(isExists) {
-						casper.echo('User has been successfuly login to application with admin user', 'INFO');
-						wait.waitForElement('ul.nav.nav-tabs li:nth-child(2) a', casper,function(err, isExists) {
-							if(isExists) {
-								casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a','Category link found');
-								casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-								wait.waitForElement('li[id^="forum_"]', casper,function(err, isExists) {
-									if(isExists) {
-										casper.test.assertExists('li#forum_'+category_Id+' a' ,'cat1 visible on category listing page','INFO');
-									}else{
-										casper.echo('cat1 not visible on category listing page','ERROR');
-									}
-								});
-							}else{
-								casper.echo('Categories not Found','ERROR');
-							}
-						});
-						casper.then(function() {
-							forumLoginMethod.logoutFromApp(casper, function(err) {
-								if(!err) {
-									casper.echo('User successfully logged out from frontend','INFO');
-								}
-							});
-						});
-					} else {
-						casper.echo('User not logged in','ERROR');
-					}
+				casper.then(function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.deleteSubCategory(subCategory_Id);
 				});
-			}else {
-				casper.echo('Admin user not logged in', 'ERROR');
 			}
 		});
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+  }).waitForSelector('li.pull-right.user-panel', function() {
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	});
 };
