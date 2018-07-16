@@ -20,7 +20,14 @@ composeTopicTests.createCategoryTestCase = function() {
 		utils.info(' * Method to create category and sub category *');
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
-		backEndForumRegisterMethod.isCategoryExists(composeTopicJSON.category, function(err, isExists) {
+		try{
+			this.test.assertTextExist(composeTopicJSON.category.title, 'category found on category page');
+        }catch(e){
+        	backEndForumRegisterMethod.createCategory(composeTopicJSON.category);
+        }
+		
+		/*backEndForumRegisterMethod.isCategoryExists(composeTopicJSON.category, function(err, isExists) {
+			utils.info('value of isExists'+isExists);
 			if(isExists) {
 				utils.info(' Category already existed');
 			} else {
@@ -29,7 +36,7 @@ composeTopicTests.createCategoryTestCase = function() {
 					backEndForumRegisterMethod.createCategory(composeTopicJSON.category);
 				});
 			}
-		});
+		});*/
 	});
 };
 
@@ -217,6 +224,34 @@ composeTopicTests.composeTopicGueststartTopicEnable=function(){
                		}).then(function(){
                			this.test.assertExists('a#guest_user_create_account', 'create an account found');
                		});
+		});
+	});
+};
+//new case issue in the case.
+//Verify Compose Topic on topic listing page(if start new topic permission is disabled of one cateogry) (For Register User)
+composeTopicTests.composeTopicRegisterstartTopicdisablecategory=function(){
+	casper.thenOpen(config.backEndUrl, function(){
+		utils.info('******************************ComposeTopic********************************************');
+		utils.info('Case 7[Verify Preview Post of Compose Topic on postlisting page for register user]');
+		composeTopicMethod.startTopicPermissionForCategory(false);
+	}).then(function(){
+		casper.thenOpen(config.url, function(){
+			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+			this.evaluate(function(){
+				document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
+			});
+		}).waitForSelector('form#inlineSearchForm', function(){
+			deletePostMethod.getCategoryHrefFrontend('General');
+		}).waitForSelector('div#ajax_subscription_vars a', function(){
+			this.evaluate(function(){
+				document.querySelector('div#ajax_subscription_vars a').click();
+			});
+		}).then(function(){
+			var message=this.getElementAttribute('div#ajax_subscription_vars a', 'title');
+			this.test.assertEquals(message, composeTopicJSON.expectedtooltip.expectedMessage, 'both the text are equal');
+		}).then(function(){
+			forumLoginMethod.logoutFromApp();
 		});
 	});
 };

@@ -15,6 +15,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 	//Executing gitdeploy.sh to update Forum's code for given branch name
 	//if(commitDetails.branchName == "automation"){
 	console.log("Starting execution for commitDetails : "+commitDetails);
+	console.time('Automation execution time');
 	if(commitDetails.branchName) {
 		exec("/home/automation/gitdeploy.sh -p ssh " +commitDetails.branchName, function(code, stdout, stderr) {
 			if (code !== 0) {
@@ -22,15 +23,16 @@ executorServices.executeJob = function(commitDetails, callback) {
 				var testResult = stderr;
 				commitDetails.testResult = testResult;
 				commitDetails.attachments = '';
-				createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
+				//createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
 					mailServices.sendMail(commitDetails, function(err) {
 						if(err)
 							console.error("error occurred while sending email: "+err);
 						else
 							console.log("Mail sent successfully.");
+							console.timeEnd('Automation execution time');
 						return callback();
 					});
-				});
+				//});
 			} else {
 				exec("/etc/automation/bin/oo_automation.sh " +commitDetails.branchName+ ' ' +commitDetails.commitId, function(code, stdout, stderr) {
 					console.log('Exit code : oo_automation : ', code);
@@ -43,7 +45,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 							console.log("fail.txt size: "+fileSize);
 							if(fileSize !== 0) {
 								commitDetails.attachments = [];
-								createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
+								//createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
 
 									//Sending Mail To The Committer After Adding Attachments
 									fs.exists(path, function(exists) {
@@ -64,6 +66,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 															//Deleting Old Directory That Contains Screenshots
 															attachmentServices.deleteFolderRecursive(path, function() {
 																//Deleting commit specific log files
+																console.timeEnd('Automation execution time');
 																console.log("Commit specific log files deleted.");
 																return callback();
 															});
@@ -81,12 +84,13 @@ executorServices.executeJob = function(commitDetails, callback) {
 												//Deleting commit specific log files
 												//fs.unlinkSync(automationLogFile);
 												fs.unlinkSync(failLogFile);
+												console.timeEnd('Automation execution time');
 												console.log("Commit specific log files deleted.");
 												return callback();
 											});
 										}
 									});
-								});
+								//});
 							} else {
 							//Executing automation test script
 							console.log("Executing Automation Script For " + commitDetails.commitId + " CommitID");
@@ -126,6 +130,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 								if (err.code == 'ENOENT') {
 									console.log('fail.log does not exist.');
 								}
+								console.timeEnd('Automation execution time');
 								return callback();
 							} else {
 								if (fileStat) {
@@ -160,8 +165,8 @@ executorServices.executeJob = function(commitDetails, callback) {
 												}
 											];
 
-											createStatus.failure(commitDetails, description, function(status) {
-												console.log('state of failure : '+status);
+											//createStatus.failure(commitDetails, description, function(status) {
+												//console.log('state of failure : '+status);
 												//Sending Mail To The Committer After Adding Attachments
 												fs.exists(path, function(exists) {
 													if(exists) {
@@ -183,6 +188,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 																			//Deleting commit specific log files
 																			//fs.unlinkSync(automationLogFile);
 																			fs.unlinkSync(failLogFile);
+																			console.timeEnd('Automation execution time');
 																			console.log("Commit specific log files deleted.");
 																			return callback();
 																		});
@@ -200,25 +206,28 @@ executorServices.executeJob = function(commitDetails, callback) {
 															//Deleting commit specific log files
 															//fs.unlinkSync(automationLogFile);
 															fs.unlinkSync(failLogFile);
+															console.timeEnd('Automation execution time');
 															console.log("Commit specific log files deleted.");
 															return callback();
 														});
 													}
 												});
-											});
+											//});
 										} else {
 											console.log('you are not allowed to set the status of the branch.');
 										}
 									} else {
-										createStatus.success(commitDetails, function(status) {
-											console.log('state of success : '+status);
-										});
+										//createStatus.success(commitDetails, function(status) {
+											//console.log('state of success : '+status);
+										//});
 										//Deleting commit specific log files
 										//fs.unlinkSync(automationLogFile);
 										fs.unlinkSync(failLogFile);
+										console.timeEnd('Automation execution time');
 										return callback();
 									}
 								} else {
+									console.timeEnd('Automation execution time');
 									return callback();
 								}
 							}
@@ -231,6 +240,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 			}
 		});
 	} else {
+		console.timeEnd('Automation execution time');
 		return callback();
 	}
 };

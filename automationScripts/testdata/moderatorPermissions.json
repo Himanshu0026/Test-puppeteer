@@ -1,0 +1,35 @@
+{
+	"registeredUserLogin" : {
+		"username": "neha",
+		"password": "neha"
+	},
+
+	"newTopic" : {
+		"title" : "New Topic",
+		"content" : "hellloooooo!!!!!!!!!",
+		"category" : "General"
+	},
+
+	"adminUserLogin" : {
+		"username": "isneha12",
+		"password": "isneha12"
+	},
+
+	"category" : {
+		"title" : "General",
+		"description" : "To test General category"
+	},
+
+	"otherCategory" : {
+		"title" : "cat1",
+		"description" : "To test cat1 category"
+	},
+
+	"pollData" : {
+		"pollQuestion" :"PM of india",
+		"votecheckbox" : true,
+		"option1" : "Modi",
+		"option2" : "Rahul",
+		"multiplechoicebox" : true
+	}
+}

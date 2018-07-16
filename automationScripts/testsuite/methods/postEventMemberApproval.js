@@ -3,7 +3,6 @@
 'use strict.';
 var registerMethod = require('./register.js');
 var utils = require('../utils.js');
-var wait = require('../wait.js');
 var postEventMemberApprovalJSON = require('../../testdata/postEventMemberApproval.json');
 var forumLoginMethod = require('../methods/login.js');
 var postEventMemberApprovalMethod = module.exports = {};
@@ -26,12 +25,15 @@ postEventMemberApprovalMethod.setAdmin = function(user) {
 			'Administrators' : 'checked',
 			'Registered Users' : ''
 		}, true);
-	}).waitUntilVisible('#loading_msg', function() {
+	/*}).waitUntilVisible('#loading_msg', function() {
 		if (this.visible('#loading_msg')) {
       utils.info(' Loading....');
     } else {
 			utils.info(' Loading is not displayed.');
 		}
+	});*/
+	}).wait('2000', function() {
+
 	});
 };
 
@@ -47,18 +49,21 @@ postEventMemberApprovalMethod.setUserGroupToRegisteredUser = function(user) {
 			'Administrators' : '',
 			'Registered Users' : 'checked'
 		}, true);
-	}).waitUntilVisible('#loading_msg', function() {
+	/*}).waitUntilVisible('#loading_msg', function() {
 		if (this.visible('#loading_msg')) {
       utils.info(' Loading....');
     } else {
 			utils.info(' Loading is not displayed.');
 		}
+	});*/
+	}).wait('2000', function() {
+
 	});
 };
 
 //*************************method to compose a post by register user ************************************
 postEventMemberApprovalMethod.composePost = function() {
-	utils.info(' Inside the composePost method');
+	utils.info('Inside the composePost method');
 	casper.click('a[id^="topic_"]');
 	casper.waitForSelector('#posts-list', function() {
 		currentUrl = this.getCurrentUrl();
@@ -159,14 +164,14 @@ postEventMemberApprovalMethod.enableEventApproval = function(callback) {
 											wait.waitForElement('input#f', function(err, isExists) {
 												if(isExists) {
 													utils.enableorDisableCheckbox('f', true, function() {
-														casper.echo('checkbox is checked', 'INFO');
+														utils.log('checkbox is checked', 'INFO');
 													});
 												}
-												casper.test.assertExists('button.button.btn-m.btn-blue');
+												casper.test.assertExists('button.button.btn-m.btn-blue', utils.log('Save button found','INFO'));
 												casper.click('button.button.btn-m.btn-blue');
 												wait.waitForElement('font[color="red"]', function(err, isExists) {
 													if(isExists) {
-														casper.echo("Permission changed",'INFO');
+														utils.log("Permission changed",'INFO');
 													}
 												});
 											});
@@ -176,60 +181,68 @@ postEventMemberApprovalMethod.enableEventApproval = function(callback) {
 										casper.click('li.inactive_tab a');
 										wait.waitForElement('td.userGroupActions', function(err, isExists) {
 											if(isExists) {
-												var grpName = casper.evaluate(function(){
-													for(var i=3; i<=7; i++) {
+												var tableLength = casper.evaluate(function() {
+													var len = document.querySelectorAll('table.text.fullborder tr');
+													return len.length;
+												});
+												var grpName = casper.evaluate(function(tableLength){
+													for(var i=3; i<=tableLength; i++) {
 														var group = document.querySelector('tr:nth-child('+i+') td:nth-child(1) li'); // change li
 														if (group.innerText == 'Registered Users') {
 															document.querySelector('tr:nth-child('+i+') td:nth-child(2) a').click();
 															return (group.innerText);
 														}
 													}
-												});
-												casper.echo('group ='+grpName,"INFO");
+												},tableLength);
+												utils.log('group ='+grpName,"INFO");
 												wait.waitForElement('input#t', function(err, isExists) {
 													if(isExists) {
 														utils.enableorDisableCheckbox('t', true, function() {
-															casper.echo('checkbox is checked', 'INFO');
+															utils.log('checkbox is checked', 'INFO');
 														});
 														utils.enableorDisableCheckbox('o', true, function() {
-															casper.echo('checkbox is checked', 'INFO');
+															utils.log('checkbox is checked', 'INFO');
 														});
-														casper.test.assertExists('button.button.btn-m.btn-blue');
+														casper.test.assertExists('button.button.btn-m.btn-blue', utils.log('Save button found','INFO'));
 														casper.click('button.button.btn-m.btn-blue');
 														wait.waitForElement('font[color="red"]', function(err, isExists) {
 															if(isExists) {
-																casper.echo("Permission changed",'INFO');
+																utils.log("Permission changed",'INFO');
 															}
 														});
 													} else {
-														casper.echo(' Require event approval checkbox not found', 'ERROR');
+														utils.log(' Require event approval checkbox not found', 'ERROR');
 													}
 												});
 											} else {
-												casper.echo('Table not found', 'ERROR');
+												utils.log('Table not found', 'ERROR');
 											}
 										});
 									});
 								} else {
-									casper.echo('Calendar Permissions tab not found', 'ERROR');
+									utils.log('Calendar Permissions tab not found', 'ERROR');
 								}
 							});
 						} else {
-							casper.echo('Content  tooltip menu not found', 'ERROR');
+							utils.log('Content  tooltip menu not found', 'ERROR');
 						}
 					});
+					casper.then(function() {
+						casper.click('a[data-tooltip-elm="ddAccount"]');
+						forumLoginMethod.backEndLogout(function(err) {
+							if(!err) {
+								utils.log(' User successfully logged out from backend','INFO');
+								return callback(null);
+							}
+						});
+					});
 				} else {
-					casper.echo('Backend Menu not found', 'ERROR');
+					utils.log('Backend Menu not found', 'ERROR');
 				}
 			});
 		}else {
-			casper.echo('Error : '+err, 'INFO');
+			utils.log('Error : '+err, 'INFO');
 		}
-	});
-	casper.then(function() {
-		forumLoginMethod.backEndLogout(function() {
-		});
-		return callback(null);
 	});
 };
 
@@ -239,7 +252,7 @@ postEventMemberApprovalMethod.disableEventApproval = function(callback) {
 		if(!err) {
 			wait.waitForElement('div#my_account_forum_menu', function(err, isExists) {
 				if(isExists) {
-					casper.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
+					casper.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]', utils.log('Content tab found','INFO'));
 					casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
 					wait.waitForElement('div#ddContent', function(err, isExists) {
 						if(isExists) {
@@ -249,29 +262,33 @@ postEventMemberApprovalMethod.disableEventApproval = function(callback) {
 									casper.click('li.inactive_tab a');
 									wait.waitForElement('table.text.fullborder', function(err, isExists) {
 										if(isExists) {
-											casper.evaluate(function(){
-												for(var i=1; i<=7; i++) {
+											var tableLength = casper.evaluate(function() {
+												var len = document.querySelectorAll('table.text.fullborder tr');
+												return len.length;
+											});
+											casper.evaluate(function(tableLength){
+												for(var i=1; i<=tableLength; i++) {
 													var group = document.querySelector('tr:nth-child('+i+') td:nth-child(1)');
 													if (group.innerText == 'Registered Users') {
 														document.querySelector('tr:nth-child('+i+') td:nth-child(2) a').click();
 													}
 												}
-											});
+											},tableLength);
 											wait.waitForElement('font[color="red"]', function(err, isExists) {
 												if(isExists) {
-													casper.echo("Permission unchanged",'INFO');
+													utils.log("Permission unchanged",'INFO');
 												}
 											});
 										} else {
-											casper.echo('Table not found', 'ERROR');
+											utils.log('Table not found', 'ERROR');
 										}
 									});
 								} else {
-									casper.echo('Calendar Permissions tab not found', 'ERROR');
+									utils.log('Calendar Permissions tab not found', 'ERROR');
 								}
 							});
 						} else {
-							casper.echo('Content  tooltip menu not found', 'ERROR');
+							utils.log('Content  tooltip menu not found', 'ERROR');
 						}
 					});
 				} else {

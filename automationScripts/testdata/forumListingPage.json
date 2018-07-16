@@ -1,0 +1,197 @@
+
+{
+
+"categoryHeading" :{
+        "data":"headingCategories",
+        "editedData":"headingCategoriesEdit"
+},
+"checkCategory" :{
+        "name":"validCategories",
+        "description" :"this is validCategories without title"
+},
+"alertMessage" :{
+        "message":" Please enter a name for this category."
+
+},
+"blankCategoryPassword" :{
+        "blankData":""
+},
+"linkedtext" :{
+        "data":"http://www.google.com"
+},
+"moderatorLogin" :{
+        "username":"hanimode",
+        "password":"hanimode"
+},
+"withDescription" : {
+    	"title" : "withDescription",
+        "description" : "this is withDescription Categories",
+        "isSubcategorycheckbox" : false,
+	"isSubcategoryvalue" : false,
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" : false,
+        "linked" : false
+},
+"subWithdescription" : {
+    	"title" : "subWithdescription",
+        "description" : "this is subvalidCategories Categories",
+        "isSubcategorycheckbox" : true,
+	"isSubcategoryvalue" : "withDescription",
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" : false,
+        "linked" : false
+},
+
+"parentCategory" : {
+    	"title" : "parentCategory",
+        "description" : "this is parentCategory",
+        "isSubcategorycheckbox" : false,
+	"isSubcategoryvalue" : false,
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" : false,
+        "linked" : false
+},
+
+"validCategories" : {
+    	"title" : "validCategories",
+        "description" : "this is validCategories Categories",
+        "isSubcategorycheckbox" : false,
+	"isSubcategoryvalue" : false,
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" : false,
+        "linked" : false
+},
+"withoutTitle" : {
+    	"title" : "",
+        "description" : "this is validCategories without title",
+        "isSubcategorycheckbox" : false,
+	"isSubcategoryvalue" : false,
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" : false,
+        "linked" : false
+},
+"withoutDescription" : {
+        "title" : "withoutDescription",
+        "description" : "",
+        "isSubcategory" : false,
+        "passwordprotect" :false,
+        "lock" : false,
+        "invisible" : false,
+        "linked" : false
+},
+"subCategory" : {
+    	"title" : "subvalidCategories",
+        "description" : "this is subvalidCategories Categories",
+        "isSubcategorycheckbox" : true,
+	"isSubcategoryvalue" : "validCategories",
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" : false,
+        "linked" : false
+},
+
+"enablePasswordProtected" : {
+    	"title" : "enablePassword",
+        "description" : "this is enablePassword Categories",
+        "isSubcategorycheckbox" : false,
+	"isSubcategoryvalue" : false,
+        "passwordprotectcheckbox" : true,
+        "passwordprotectvalue" : "hello",
+        "lock" : false,
+        "invisible" : false,
+        "linked" : false
+},
+"disablePasswordProtected" : {
+    	"title" : "disablePassword",
+        "description" : "this is disablePassword Categories",
+        "isSubcategorycheckbox" : false,
+	"isSubcategoryvalue" : false,
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" : false,
+        "linked" : false
+},
+"enableLocked" : {
+    	"title" : "enableLock",
+        "description" : "this is enableLocked Categories",
+        "isSubcategorycheckbox" : false,
+	"isSubcategoryvalue" : false,
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : true,
+        "invisible" : false,
+        "linked" : false
+},
+
+"disableLocked" : {
+    	"title" : "enableLock",
+        "description" : "this is enableLocked Categories",
+        "isSubcategorycheckbox" : false,
+	"isSubcategoryvalue" : false,
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" : false,
+        "linked" : false
+},
+"Invisible" : {
+        "title" : "Invisible",
+        "description" : "this is Invisible Categories",
+        "isSubcategorycheckbox" : false,
+        "isSubcategoryvalue" : false,
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" : true,
+        "linked" : false
+},
+"enableLinked" : {
+    	"title" : "enableLinked",
+        "description" : "this is enableLinked",
+         "isSubcategorycheckbox" : false,
+	"isSubcategoryvalue" : false,
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" : false,
+        "linked" : true,
+	"linkedtext":"http://www.google.com"
+},
+
+"invalidLinked" : {
+        "title" : "invalidLinked",
+        "description" : "this is invalidLinked",
+        "isSubcategorycheckbox" : false,
+        "isSubcategoryvalue" : false,
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" : false,
+        "linked" : true,
+        "linkedtext":"hellorajan....."
+},
+"subEnableLocked" : {
+    "title" : "subenableLocked",
+    "description" : "this is enableLocked Categories",
+    "isSubcategorycheckbox" : true,
+    "isSubcategoryvalue" : "validCategories",
+    "passwordprotectcheckbox" : false,
+    "passwordprotectvalue" : "",
+    "lock" : true,
+    "invisible" : false,
+    "linked" : false
+}
+
+}

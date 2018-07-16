@@ -15,7 +15,7 @@ composeTopic.featureTest = function(){
 		//delete topics
 		profilePageTests.deleteTopics();
 		//Verify Preview Post of Compose Topic (For Registered User/Admin)
-		//Verify Compost Topic on Category Listing Page (For Registered User/Admin)
+		//Verify Compose Topic on Category Listing Page (For Registered User/Admin)
 		//Verify by Add New Topic  by topic listing page under  category
 		composeTopicTests.addTopic(loginJSON.ValidCredential.username, loginJSON.ValidCredential.password);
 		composeTopicTests.addTopic(loginJSON.adminUser.username, loginJSON.adminUser.password);
@@ -28,6 +28,7 @@ composeTopic.featureTest = function(){
 		composeTopicTests.composeTopicWithoutCategory(loginJSON.adminUser.username, loginJSON.adminUser.password);
 		//Verify with the guest user without selecting any category.
 		composeTopicTests.composeTopicGuestWithoutCategory();
+		//composeTopicTests.composeTopicRegisterstartTopicdisablecategory();
 		//Verify Compose Topic on Category/topic Listing Page(if  start new topic permission is disabled) (For Guest User)
 		//composeTopicTests.composeTopicGueststartTopicEnable
 		//Verify Compose Topic on topic listing page(if start new topic permission is disabled of one cateogry) (For Guest User)

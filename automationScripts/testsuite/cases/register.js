@@ -151,12 +151,16 @@ registerTests.enabledNewRegistration = function() {
 //1.Test case to verify registration with valid data and verify message
 registerTests.registrationWithValidInfo = function() {
 	var randomUser="";
+	var uname="";
 	casper.thenOpen(config.url ,function() {
 		utils.info(' Test case 1.[To verify registration with valid data and verify message]');
 		casper.test.assertExists('#forum_header_fixed a[href="/register/register"]');
 		casper.click('#forum_header_fixed a[href="/register/register"]');
 	}).waitForSelector('form[name="PostTopic"]', function() {
-		var uname = Math.random().toString(36).substring(7);
+		registerMethod.getUname(function(username){
+			uname=username;
+		});
+	}).then(function(){
 		randomUser = {
 			"uname" : uname,
 			"uemail" : uname+ "@wt.com",
@@ -166,10 +170,11 @@ registerTests.registrationWithValidInfo = function() {
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature" + uname,
 			"namePrivate" : true,
-			"expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
+			"expectedSuccessMsg" : "Thank you for registering! We sent a verification email to"
 		};
+	}).then(function(){
 		registerMethod.registerToApp(randomUser);
-	}).waitForText(randomUser.expectedErrorMsg, function() {
+	}).waitForText(randomUser.expectedSuccessMsg, function() {
 		registerMethod.redirectToLogout();
 	});
 };
@@ -216,11 +221,24 @@ registerTests.registrationForDisabledEmailAndEnableApproveNewRegistration = func
 		this.test.assertSelectorHasText('#ddSettings', 'Security');
 		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
 		backEndForumRegisterMethod.enableDisableApproveNewRegistrations(true);
+	}).thenOpen(config.backEndUrl, function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		this.waitUntilVisible('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndForumRegisterMethod.viewGroupPermissions('Pending Approval');
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions('Pending Approval', 'view_messageboard', true);
+		});
 	}).thenOpen(config.url ,function() {
 		casper.test.assertExists('#forum_header_fixed a[href="/register/register"]');
 		casper.click('#forum_header_fixed a[href="/register/register"]');
 	}).waitForSelector('form[name="PostTopic"]', function() {
-		var uname = Math.random().toString(36).substring(7);
+		registerMethod.getUname(function(username){
+			uname=username;
+			utils.info('new username is'+uname);
+		});
+	}).then(function(){
 		randomUser = {
 			"uname" : uname,
 			"uemail" : uname+ "@wt.com",
@@ -232,8 +250,9 @@ registerTests.registrationForDisabledEmailAndEnableApproveNewRegistration = func
 			"namePrivate" : true,
 			"expectedSuccessMsg" : "Thank you for registering! Your account will need to be approved before you have full access to the forums. You will be notified via email once your account has been reviewed."
 		};
+	}).then(function(){
 		registerMethod.registerToApp(randomUser);
-	}).waitForText(randomUser.expectedErrorMsg, function() {
+	}).waitForText(randomUser.expectedSuccessMsg, function() {
 		registerMethod.redirectToLogout();
 	});
 };
@@ -260,7 +279,10 @@ registerTests.registrationForDisabledEmailAndDisabledApproveNewRegistration = fu
 		casper.test.assertExists('#forum_header_fixed a[href="/register/register"]');
 		casper.click('#forum_header_fixed a[href="/register/register"]');
 	}).waitForSelector('form[name="PostTopic"]', function() {
-		var uname = Math.random().toString(36).substring(7);
+		registerMethod.getUname(function(username){
+			uname=username;
+		});
+	}).then(function(){
 		randomUser = {
 			"uname" : uname,
 			"uemail" : uname+ "@wt.com",
@@ -272,6 +294,7 @@ registerTests.registrationForDisabledEmailAndDisabledApproveNewRegistration = fu
 			"namePrivate" : true,
 			"expectedSuccessMsg" : ""
 		};
+	}).then(function(){
 		registerMethod.registerToApp(randomUser);
 	}).waitForSelector('ul.nav.pull-right span.caret', function() {
 		registerMethod.redirectToLogout();
@@ -307,7 +330,10 @@ registerTests.registrationForEnabledEmailAndEnabledApproveNewRegistration = func
 		casper.test.assertExists('#forum_header_fixed a[href="/register/register"]');
 		casper.click('#forum_header_fixed a[href="/register/register"]');
 	}).waitForSelector('form[name="PostTopic"]', function() {
-		var uname = Math.random().toString(36).substring(7);
+		registerMethod.getUname(function(username){
+			uname=username;
+		});
+	}).then(function(){
 		randomUser = {
 			"uname" : uname,
 			"uemail" : uname+ "@wt.com",
@@ -317,8 +343,9 @@ registerTests.registrationForEnabledEmailAndEnabledApproveNewRegistration = func
 			"birthday" : "04/12/1991",
 			"usignature" : "This is my signature" + uname,
 			"namePrivate" : true,
-			"expectedSuccessMsg" : "Thank you for registering! Please check your email for instructions on how to begin using your account."
+			"expectedSuccessMsg" : "Thank you for registering! We sent a verification email to"
 		};
+	}).then(function(){
 		registerMethod.registerToApp(randomUser);
 	}).waitForText(randomUser.expectedErrorMsg, function() {
 		registerMethod.redirectToLogout();

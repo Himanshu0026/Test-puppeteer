@@ -1,0 +1,67 @@
+{
+
+	"Disablefollow" : {
+                "title" : "Disablefollow",
+                "content" : "unfollow topic",
+                "category" : "General",
+                "reply" : false,
+                "pin" : false,
+                "locked" : false,
+                "expectedMessage":"Follow topic",
+		"expectedAlert":"You haven't followed any topics yet."
+        },
+	"Enablefollow" : {
+		"title" : "ONEpluse",
+                "content" : "hey there..!!",
+                "category" : "General",
+                "reply" : true,
+                "pin" : false,
+                "locked" : false,
+                "expectedMessage":"Unfollow topic"
+	},
+	"newCategory" : {
+	    	"title" : "newCategory",
+	        "description" : "this is Category",
+	        "isSubcategorycheckbox" : false,
+		"isSubcategoryvalue" : false,
+	        "passwordprotectcheckbox" : false,
+	        "passwordprotectvalue" : "",
+	        "lock" : false,
+	        "invisible" : false,
+	        "linked" : false
+	},
+	"newsubCategory" : {
+	    	"title" : "newsubCategory",
+	        "description" : "this is Categories",
+	        "isSubcategorycheckbox" : true,
+		"isSubcategoryvalue" : "newCategory",
+	        "passwordprotectcheckbox" : false,
+	        "passwordprotectvalue" : "",
+	        "lock" : false,
+	        "invisible" : false,
+	        "linked" : false
+	},
+	"ValidCredential" : {
+		"title" : "ONEpluse",
+		"content" : "hey there..!!"
+	},
+	"followCategory":{
+		"expectedMsg":"Follow"
+	},
+	"unFollowCategory":{
+		"expectedMsg":"Unfollow"
+	},
+	"moderatorLogin" :{
+        	"username":"hanimode",
+        	"password":"hanimode"
+	},
+	"lockTopic":{
+		"expectedMsg":"This topic is locked"
+	},
+	"voteTooltip":{
+		"expectedMsg":"You cannot vote on a locked topic."
+	},
+	"pinMessage":{
+		"expectedMsg":"This topic is pinned. It will display at the top of its category."
+	}
+}

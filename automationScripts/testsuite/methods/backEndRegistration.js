@@ -365,7 +365,14 @@ backEndForumRegisterMethod.editUserActions = function(userGroup, action, usersCo
 backEndForumRegisterMethod.deleteAllCategories = function() {
 	casper.mouse.move('li div.select');
 	casper.click('li a.manageAction span');
+	var url = casper.evaluate(function() {
+		var href = document.querySelector('div.tooltipMenu.forumActionbutton a:nth-child(2)').getAttribute('href');
+		return href;
+	});
+	console.log('the href of delete tab'+url);
 	casper.click('div.tooltipMenu.forumActionbutton a:nth-child(2)'); // click on delete of manage tab
+	casper.waitWhileSelector(url, function success() {
+	});
 	casper.waitForSelector('input#remove_forum', function success() {
 		this.click('input#remove_forum');
 		this.waitForSelector('div.heading.error_message', function() {
@@ -432,6 +439,26 @@ backEndForumRegisterMethod.createCategory = function(data) {
 	});
 };
 
+
+backEndForumRegisterMethod.createCategoryForumListing = function(data) {
+
+	casper.test.assertExists('a#addForumButton', 'Add category tab found');
+	casper.click('a#addForumButton');
+	casper.waitForSelector('form#edit_forum_form', function() {
+		this.fillSelectors('form#edit_forum_form', {
+			'input[name="forum_name"]': data.title,
+			'textarea[name="forum_description"]': data.description
+		}).then(function() {
+			this.evaluate(function() {
+			  document.querySelector('button.button.btn-m.btn-blue').click();
+			});
+		});
+	}).then(function(){
+		utils.info('category created succesfully');
+	});
+};
+
+
 // method to check cat1 is already exists or not
 backEndForumRegisterMethod.isCategoryExists = function(data, callback) {
 	var title = data.title;
@@ -491,6 +518,8 @@ backEndForumRegisterMethod.addNewModerator = function(data, category) {
 				}, false);
 				casper.test.assertExists('div.ui-dialog-buttonset button','Save button Found');
 				casper.click('div.ui-dialog-buttonset button');
+				//casper.test.assertExists('button.button.btn-m.btn-blue.pull-right','Save button Found');
+				//casper.click('button.button.btn-m.btn-blue.pull-right');
 				casper.wait('1000', function(err) {
 				});
 			}
@@ -541,6 +570,30 @@ backEndForumRegisterMethod.setTopicsPerPage=function(value){
 	});
 };
 
+
+backEndForumRegisterMethod.followUnfollow=function(value){
+
+	casper.waitForSelector('input[name="subject"]',function() {
+		utils.enableorDisableCheckbox('follow_thread', value);
+	});
+};
+
+
+backEndForumRegisterMethod.pinUnpin=function(value){
+
+	casper.waitForSelector('input[name="subject"]',function() {
+		utils.enableorDisableCheckbox('Pin', value);
+	});
+};
+
+
+backEndForumRegisterMethod.lockUnlock=function(value){
+
+	casper.waitForSelector('input[name="subject"]',function() {
+		utils.enableorDisableCheckbox('LCK', value);
+	});
+};
+
 //method to goto display page from backend
 backEndForumRegisterMethod.goToDisplayPage=function(){
   casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function(){
@@ -581,5 +634,47 @@ backEndForumRegisterMethod.enableDisableCategoryPermissions = function(id, value
 		utils.info("Permission changed");
 	}, function fail() {
 		utils.info("Permission not changed");
+	});
+};
+
+
+//Method for filling data in a category create form
+backEndForumRegisterMethod.createCategorySubcategory= function(title, data){
+	casper.then(function(){
+		casper.test.assertExists('a#addForumButton', 'Add category tab found');
+		casper.click('a#addForumButton');
+		this.waitForSelector('form[name=frmOptions]', function(){
+			this.fill('form[name=frmOptions]',{
+				'forum_name': data.title,
+				'forum_description': data.description,
+				'isSubcategory': data.isSubcategorycheckbox,
+				'parentid': data.isSubcategoryvalue,
+				'forum_pw_cb': data.passwordprotectcheckbox,
+				'forum_pw': data.passwordprotectvalue,
+				'locked': data.lock,
+				'invisible': data.invisible,
+				'forum_link_cb': data.linked
+			},false);
+			try {
+				this.test.assertExists('form#edit_forum_form input[name="forum_link"]');
+				this.fill('form[name="frmOptions"]',{
+					'forum_link' : data.linkedtext
+				}, false);
+				this.test.assertExists('form[name="frmOptions"] button', 'button found on create category page');
+			}catch(e){
+				utils.info('users error message cannot be found on category create form page');
+			}
+			try{
+				this.test.assertExists('form#edit_forum_form select[name="parentid"]');
+				this.click('select#parentid');
+				this.fill('form[name="frmOptions"]',{
+					'parentid' : data.isSubcategoryvalue
+				}, false);
+			}catch(e){
+				utils.info('subcategory value cannot be found on forum');
+			}
+			this.click('form[name="frmOptions"] button');
+		}).wait('1000', function(err){
+		});
 	});
 };

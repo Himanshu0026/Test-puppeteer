@@ -53,7 +53,7 @@ app.get('/branches', function(req, res) {
 	console.log('getting all branches');
 	var branches = [];
 	request({
-		url: config.apiURL+'branches?page=1&per_page=100&access_token='+config.token,
+		url: config.apiURL+'branches?page=1&per_page=200&access_token='+config.token,
 	    	headers: { 'user-agent' : 'git-technetium' },
 	    	json: true
 	}, function(err, response, body) {
@@ -150,7 +150,7 @@ app.get('/pulls', function(req, res) {
 	console.log('Getting pull requests');
 	var pullRequests = [];
 	request({
-	url: config.apiURL+'pulls?state=open&sort=updated&direction=desc&page=1&per_page=26&access_token='+config.token,
+	url: config.apiURL+'pulls?state=open&sort=updated&direction=desc&page=1&per_page=50&access_token='+config.token,
 	  	headers: { 'user-agent' : 'git-technetium' },
 	  	json: true
 	}, function(err, response, body) {
@@ -239,15 +239,17 @@ app.get('/reviews/*', function(req, res) {
 			res.send(err);
 		}
 		if(response.statusCode == 200) {
-			body.forEach(function(reviewer) {
-				var requestedReviewer = reviewer.login;
+			console.log('the length of the body'+body.users);
+			console.log('the length of the user'+body.users.length);
+			body.users.forEach(function(users) {
+				var requestedReviewer = users.login;
 				var reviewer = {
 					name: requestedReviewer,
 					state: 'PENDING'
-				}
+				};
 				pullRequestReviews.push(reviewer);
 			});
-			if(inc >= body.length) {
+			if(inc >= body.users.length) {
 				request({
 					url: config.apiURL+'pulls/'+pullNumber+'/reviews?access_token='+config.token,
 				    	headers: { 'user-agent' : 'git-technetium' },
@@ -268,7 +270,7 @@ app.get('/reviews/*', function(req, res) {
 									var reviewer = {
 										name: body1[position1].user.login,
 										state: body1[position1].state
-									}
+									};
 									pullRequestReviews.push(reviewer);
 								}
 							}
@@ -278,7 +280,7 @@ app.get('/reviews/*', function(req, res) {
 									var reviewer = {
 										name: body1[position2].user.login,
 										state: body1[position2].state
-									}
+									};
 									pullRequestReviews.push(reviewer);
 								}
 							}
@@ -288,7 +290,7 @@ app.get('/reviews/*', function(req, res) {
 									var reviewer = {
 										name: body1[position3].user.login,
 										state: body1[position3].state
-									}
+									};
 									pullRequestReviews.push(reviewer);
 								}
 							}
@@ -472,10 +474,15 @@ handler.on('push', function (event) {
 		var branchName = tempArr[tempArr.length-1];
 		commitDetails.branchName = branchName;
 		commitDetails.priorityNo = '0';
-		utils.isValidJobToAdd(branchName, commitDetails, function(valid){
-			if(valid)
-				queueServices.addNewJob(commitDetails, 'automation', '0');
-		});
+		console.log('the message of the commit'+commitDetails.commitMessage);
+		var index = commitDetails.commitMessage.search("WORK_UNDER_PROGRESS");
+		console.log('the vale of index'+index);
+		if(index === -1) {
+			utils.isValidJobToAdd(branchName, commitDetails, function(valid){
+				if(valid)
+					queueServices.addNewJob(commitDetails, 'automation', '0');
+			});
+		}
 	}else{
 		console.log("commitPayload not found");
 		console.log("Event payload : "+JSON.stringify(event.payload));

@@ -26,7 +26,8 @@ registerMethod.registerToApp = function(data) {
 
 //2.Logout after registration
 registerMethod.redirectToLogout = function() {
-	var emailSuccessStartMsg = "Thank you for registering! Please check your email for instructions on how to begin using your account.";
+	//var emailSuccessStartMsg = "Thank you for registering! Please check your email for instructions on how to begin using your account.";
+	var emailSuccessStartMsg = "Thank you for registering! We sent a verification email to";
 	//var emailSuccessEndMsg = "Please follow the instructions in the email to verify your account. If it doesn't arrive, please check your spam folder, or";
 	var ExistingUserMsg = "It looks like you already have a forum account! A forum account for that username and email address combination already exists";
 	var approvalSuccessMsg = "Thank you for registering! Your account will need to be approved before you have full access to the forums. You will be notified via email once your account has been reviewed.";
@@ -81,7 +82,9 @@ registerMethod.registerMultipleUsers = function(usersCount, callback) {
 	var users = [];
 	var userName;
 	for(var i=0; i<usersCount; i++) {
-		var uname = Math.random().toString(36).substring(7);
+		var name = Math.random().toString(36).substring(7);
+		var timestamp = Math.round(new Date().getTime()/1000);
+		uname=name+timestamp;
 		users.push(uname);
 	}
 	casper.eachThen(users, function(user) {
@@ -135,5 +138,17 @@ registerMethod.registerMember = function(data) {
 				}
 			});
 		});
+	});
+};
+
+
+registerMethod.getUname = function(callback) {
+	var username="";
+	casper.then(function(){
+		var uname = Math.random().toString(36).substring(7);
+		var timestamp = Math.round(new Date().getTime()/1000);
+		username=uname+timestamp;
+	}).then(function(){
+		return callback(username);
 	});
 };

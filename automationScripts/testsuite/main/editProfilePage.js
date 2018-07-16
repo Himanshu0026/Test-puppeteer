@@ -36,9 +36,9 @@ editProfilePage.featureTest = function(){
 	//Verify the shield icon for registered user  on edit profile page by the admin
 	editProfilePageTests.shieldIconRegisteruser();
 	//Verify with invalid birthday(future year)
-	//editProfilePageTests.invalidBirthday();
+	editProfilePageTests.invalidBirthday();
 	//verify with invalid birthday(future month)
-	//editProfilePageTests.invalidFutureMonth();
+	editProfilePageTests.invalidFutureMonth();
 	//verify with enter full name greater then maximum limits(30)
 	editProfilePageTests.verifyFullName();
 

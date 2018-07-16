@@ -428,6 +428,7 @@ profilePageTests.profilePagePostCount=function() {
 				actualcount=actualPostCount.trim();
 			}).then(function(){
 				this.test.assertEquals(actualcount, expectedPostCount, 'both the outputs are equals');
+				this.wait(1000, function(){});
 			}).then(function(){
 				forumLoginMethod.logoutFromApp();
 			});
@@ -453,6 +454,7 @@ profilePageTests.profilePagePostCountAddtopic=function() {
 		actualcount=actualPostCount.trim();
 	}).then(function(){
 		this.test.assertEquals(actualcount, expectedPostCount, 'both the outputs are equals');
+		this.wait(1000, function(){});
 	});
 };
 

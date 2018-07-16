@@ -26,8 +26,8 @@ mailServices.sendMail = function(emailDetails, callback){
 	// setup e-mail data with unicode symbols
 	var mailOptions = {
 		"from": 'noresponse@websitetoolbox.com', // sender address
-    //"to": 'hani@websitetoolbox.com, isneha@websitetoolbox.com',
-    "to": emailDetails.committerEmail+ ', maheshwar@websitetoolbox.com, hani@websitetoolbox.com, isneha@websitetoolbox.com', //list of receivers
+    "to": 'hani@websitetoolbox.com, isneha@websitetoolbox.com',
+    //"to": emailDetails.committerEmail+ ', maheshwar@websitetoolbox.com, hani@websitetoolbox.com, isneha@websitetoolbox.com', //list of receivers
 		"subject": "Forum test result: "+emailDetails.branchName, // Subject line
 		"text": '' +txt+ '' , // plaintext body
 		"attachments": emailDetails.attachments //attachments

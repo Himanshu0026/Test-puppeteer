@@ -307,10 +307,12 @@ privateMessageTestcases.verifyReplyOption = function() {
 			this.test.assertExists('textarea#pmessage_reply');
 			this.click('textarea#pmessage_reply');
 			this.waitForSelector('iframe#pmessage_reply_ifr', function() {
-				this.withFrame('pmessage_reply_ifr', function() {
-					casper.sendKeys('#tinymce', casper.page.event.key.Ctrl, casper.page.event.key.A, {keepFocus: true});
-					casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
-					casper.sendKeys('#tinymce', 'Reply with message....!!!');
+				this.wait('2000', function() {
+					this.withFrame('pmessage_reply_ifr', function() {
+						casper.sendKeys('#tinymce', casper.page.event.key.Ctrl, casper.page.event.key.A, {keepFocus: true});
+						casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
+						casper.sendKeys('#tinymce', 'MessageReplied');
+					});
 				});
 			}).then(function() {
 				this.evaluate(function() {
@@ -322,7 +324,7 @@ privateMessageTestcases.verifyReplyOption = function() {
 					//this.test.assertSelectorHasText('div.message-entry.sent', 'Reply with message....!!!');
 				});
 			}).then(function() {
-				this.click('div#current_msg_details a#display_user');
+				this.click('div#current_msg_details a.username');
 				this.waitForSelector('div#UserProfile', function() {
 					utils.info('profile page found');
 				});
@@ -364,7 +366,7 @@ privateMessageTestcases.verifyOneToOneConversation = function() {
 				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
 			});*/
 		}).then(function() {
-			this.click('div#current_msg_details a#display_user');
+			this.click('div#current_msg_details a.username');
 			this.waitForSelector('div#UserProfile', function() {
 				utils.info('profile page found');
 			});
@@ -469,18 +471,20 @@ privateMessageTestcases.verifyOneToManyConversation = function() {
 			this.test.assertExists('textarea#pmessage_reply');
 			this.click('textarea#pmessage_reply');
 			this.waitForSelector('iframe#pmessage_reply_ifr', function() {
-				this.withFrame('pmessage_reply_ifr', function() {
-					casper.sendKeys('#tinymce', casper.page.event.key.Ctrl, casper.page.event.key.A, {keepFocus: true});
-					casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
-					casper.sendKeys('#tinymce', 'Reply with one receiver message....!!!');
+				this.wait('2000', function() {
+					this.withFrame('pmessage_reply_ifr', function() {
+						casper.sendKeys('#tinymce', casper.page.event.key.Ctrl, casper.page.event.key.A, {keepFocus: true});
+						casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
+						casper.sendKeys('#tinymce', 'MessageReplied');
+					});
 				});
-			}).then(function() {
+			}).wait('2000', function() {
 				this.evaluate(function() {
 					$('div#message_options').show();
 					document.querySelector('#reply_msg_button').click();
 				});
 				this.waitUntilVisible('div.message-entry.sent', function() {
-					this.test.assertSelectorHasText('div.message-entry.sent', 'Reply with one receiver message....!!!');
+					this.test.assertSelectorHasText('div.message-entry.sent', 'MessageReplied');
 				}).then(function() {
 					/*var content = this.fetchText(this.getPageContent());
 					this.reload(function() {
@@ -502,7 +506,7 @@ privateMessageTestcases.verifyOneToManyConversation = function() {
 			this.test.assertSelectorHasText('ul#private_message_dropdown a.pull-left', 'Inbox');
 			this.click('ul#private_message_dropdown a.pull-left');
 		}).waitForSelector('form#pmsg_list', function() {
-			this.test.assertSelectorHasText('ul#pmsg_inbox_listing', 'Reply with one receiver message....!!!');
+			this.test.assertSelectorHasText('ul#pmsg_inbox_listing', 'MessageReplied');
 			forumLoginMethod.logoutFromApp();
 		});
 	}).thenOpen(config.url ,function() {
@@ -516,7 +520,7 @@ privateMessageTestcases.verifyOneToManyConversation = function() {
 			this.test.assertSelectorHasText('ul#private_message_dropdown a.pull-left', 'Inbox');
 			this.click('ul#private_message_dropdown a.pull-left');
 		}).waitForSelector('form#pmsg_list', function() {
-			this.test.assertSelectorHasText('ul#pmsg_inbox_listing', 'Reply with one receiver message....!!!');
+			this.test.assertSelectorHasText('ul#pmsg_inbox_listing', 'MessageReplied');
 			forumLoginMethod.logoutFromApp();
 		});
 	});
@@ -929,10 +933,12 @@ privateMessageTestcases.sendMessageWhoIgnoredYou = function() {
 				this.test.assertExists('textarea#pmessage_reply');
 				this.click('textarea#pmessage_reply');
 				this.waitForSelector('iframe#pmessage_reply_ifr', function() {
-					this.withFrame('pmessage_reply_ifr', function() {
-						casper.sendKeys('#tinymce', casper.page.event.key.Ctrl, casper.page.event.key.A, {keepFocus: true});
-						casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
-						casper.sendKeys('#tinymce', 'Reply with one ignored user message....!!!');
+					this.wait('2000', function() {
+						this.withFrame('pmessage_reply_ifr', function() {
+							casper.sendKeys('#tinymce', casper.page.event.key.Ctrl, casper.page.event.key.A, {keepFocus: true});
+							casper.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
+							casper.sendKeys('#tinymce', 'MessageReplied');
+						});
 					});
 				}).then(function() {
 					this.evaluate(function() {
@@ -940,7 +946,7 @@ privateMessageTestcases.sendMessageWhoIgnoredYou = function() {
 						document.querySelector('#reply_msg_button').click();
 					});
 					this.waitUntilVisible('div.message-entry.sent', function() {
-						this.test.assertSelectorHasText('div.message-entry.sent', 'Reply with one ignored user message....!!!');
+						this.test.assertSelectorHasText('div.message-entry.sent', 'MessageReplied');
 					});
 				});
 				this.mouse.move('form#pmsg_list a.pull-right.btn-primary.send_new_pmsg small');
@@ -1230,8 +1236,8 @@ privateMessageTestcases.leaveConversation = function() {
 			this.test.assertExists('a#leave_conversation i');
 			this.click('a#leave_conversation i');
 		}).waitForText('You have left', function() {
-			this.test.assertSelectorHasText('#forum_header_fixed', 'You have left the ');
-			this.test.assertSelectorHasText('#forum_header_fixed', ' selected conversations.');
+			this.test.assertSelectorHasText('#ajax-msg-top', 'You have left the ');
+			this.test.assertSelectorHasText('#ajax-msg-top', ' selected conversations.');
 		}).then(function() {
 			/*var content = this.fetchText(this.getPageContent());
 			this.reload(function() {

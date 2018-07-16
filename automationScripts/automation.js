@@ -17,7 +17,7 @@ if(feature[0]){
 	utils.info(' It seems, you have not given any option.');
 }
 
-if((feature[0] == "defaultOption" || feature[0] == "thumpsUpDown") && typeof feature[1] == "undefined") {
+if((feature[0] == "defaultOption") && typeof feature[1] == "undefined") {
 	utils.info('you must enter subFeature ');
 }
 
@@ -177,6 +177,179 @@ switch (feature[0]) {
 				test.done();
 			});
 		});
+	break;
+
+	case "thumpsUpDown":
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify thumps up and down functionality from home page with all valid and invalid scenarios', function(test) {
+			var thumpsUpDown = require("./testsuite/main/thumpsUpDown.js");
+			thumpsUpDown.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
+	case "deletePost" :
+		casper.test.begin('Verify deletePost functionality', function(test) {
+			var deletePost = require("./testsuite/main/deletePost.js");
+			deletePost.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
+case "combinationOfSubCategoryAndGroupPermissions":
+	var subFeature = feature[1];
+	switch(subFeature) {
+		case "registerUserTest":
+			casper.test.begin(branchName+ ' : ' + commitId + 'Verify combination of sub category and group permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfSubCategoryAndGroupPermissions = require("./testsuite/main/combinationOfSubCategoryAndGroupPermissions.js");
+				combinationOfSubCategoryAndGroupPermissions.registerUserTest();
+				casper.run(function(){
+					utils.displayError();
+					test.done();
+				});
+			});
+		break;
+		case "unregisterUserTest":
+			casper.test.begin(branchName+ ' : ' + commitId + 'Verify combination of sub category and group permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfSubCategoryAndGroupPermissions = require("./testsuite/main/combinationOfSubCategoryAndGroupPermissions.js");
+				combinationOfSubCategoryAndGroupPermissions.unregisterUserTest();
+				casper.run(function(){
+					utils.displayError();
+					test.done();
+				});
+			});
+		break;
+		case "customUserTest":
+			casper.test.begin(branchName+ ' : ' + commitId + 'Verify combination of sub category and group permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfSubCategoryAndGroupPermissions = require("./testsuite/main/combinationOfSubCategoryAndGroupPermissions.js");
+				combinationOfSubCategoryAndGroupPermissions.customUserTest();
+				casper.run(function(){
+					utils.displayError();
+					test.done();
+				});
+			});
+		break;
+		case "pendingUserTest":
+			casper.test.begin(branchName+ ' : ' + commitId + 'Verify combination of sub category and group permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfSubCategoryAndGroupPermissions = require("./testsuite/main/combinationOfSubCategoryAndGroupPermissions.js");
+				combinationOfSubCategoryAndGroupPermissions.pendingUserTest();
+				casper.run(function(){
+					utils.displayError();
+					test.done();
+				});
+			});
+		break;
+			default:
+			 	utils.info("Please select any sub feature from options given below. For ex: casperjs test automation.js --feature = '<option> <option>'.\n");
+				utils.info('registerUserTest');
+				utils.info('unregisterUserTest');
+				utils.info('customUserTest');
+				utils.info('pendingUserTest');
+				casper.exit();
+		}
+	break;
+
+	case "moveTopicAndPost":
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify Move Topic And Post functionlity',function(test){
+			var moveTopicAndPost=require("./testsuite/main/moveTopicAndPost.js");
+			moveTopicAndPost.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
+	case "moderatorPermissions":
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify moderator permissions functionality from home page with all valid and invalid scenarios', function(test) {
+			var moderatorPermissions = require("./testsuite/main/moderatorPermissions.js");
+			moderatorPermissions.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
+	case "followPinLock" :
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify followPinLock functionality for start new topic from home page with all valid and invalid scenarios ', function(test) {
+			var followpinlock = require("./testsuite/main/followpinlock.js");
+			followpinlock.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
+	case "forumListingPage" :
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify forumListingPage functionality from home page with all valid and invalid scenarios ', function(test) {
+			var forumLogin = require("./testsuite/main/forumListingPage.js");
+			forumLogin.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
+case "postEventMemberApproval":
+		var subFeature = feature[1];
+
+		switch(subFeature) {
+			case "postTest":
+				casper.test.begin(branchName+ ' : ' + commitId + 'Verify post, Event and Member Approval functionality from home page with all valid and invalid scenarios ', function(test) {
+					var postEventMemberApproval = require("./testsuite/main/postEventMemberApproval.js");
+					postEventMemberApproval.postTest();
+					casper.run(function(){
+						utils.displayError();
+						test.done();
+					});
+				});
+			break;
+			case "eventTest":
+				casper.test.begin(branchName+ ' : ' + commitId + 'Verify post, Event and Member Approval functionality from home page with all valid and invalid scenarios ', function(test) {
+					var postEventMemberApproval = require("./testsuite/main/postEventMemberApproval.js");
+					postEventMemberApproval.eventTest();
+					casper.run(function(){
+						utils.displayError();
+						test.done();
+					});
+				});
+			break;
+			case "memberApprovalTest":
+				casper.test.begin(branchName+ ' : ' + commitId + 'Verify post, Event and Member Approval functionality from home page with all valid and invalid scenarios ', function(test) {
+					var postEventMemberApproval = require("./testsuite/main/postEventMemberApproval.js");
+					postEventMemberApproval.eventTest();
+					casper.run(function(){
+						utils.displayError();
+						test.done();
+					});
+				});
+			break;
+			case "memberDeletionTest":
+				casper.test.begin(branchName+ ' : ' + commitId + 'Verify post, Event and Member Approval functionality from home page with all valid and invalid scenarios ', function(test) {
+					var postEventMemberApproval = require("./testsuite/main/postEventMemberApproval.js");
+					postEventMemberApproval.eventTest();
+					casper.run(function(){
+						utils.displayError();
+						test.done();
+					});
+				});
+			break;
+				default:
+				 	utils.info("Please select any sub feature from options given below. For ex: casperjs test automation.js --feature = '<option> <option>'.\n");
+					utils.info('postTest');
+					utils.info('eventTest');
+					utils.info('memberApprovalTest');
+					utils.info('memberDeletionTest');
+					casper.exit();
+		}
 	break;
 
 	default:

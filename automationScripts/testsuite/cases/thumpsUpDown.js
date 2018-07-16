@@ -124,14 +124,7 @@ thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 // method to verify the thumbs up and down for guest user(unregister user)
 thumpsUpDownTestcases.unregisterUserOnPostListingPageLikeDislike = function() {
 		casper.thenOpen(config.backEndUrl , function() {
-		utils.info('CASE 1 [To verify the thumbs up for guest user(unregister user)]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-	}).waitForSelector('div#tab_wrapper',function() {
-		var user = thumpsUpDownJSON.adminUserLogin.username;
-		thumpsUpDownMethod.changeUserGroup(user, 'Administrators');
+		utils.info('CASE 1, 20, 21 and 22 [To verify the thumbs up for guest user(unregister user)]');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]', function() {
@@ -150,15 +143,21 @@ thumpsUpDownTestcases.unregisterUserOnPostListingPageLikeDislike = function() {
 	}).thenOpen(config.url, function() {
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('div#posts-list', function() {
+		this.test.assertExists('i.glyphicon.glyphicon-like-alt', 'Like thump found hence verified');
 		if (this.visible('i.glyphicon.glyphicon-like-alt')) {
 			this.click('i.glyphicon.glyphicon-like-alt');
 			this.waitUntilVisible('#login_register_modal', function() {
-				this.click(' button#bootstrap_close_register_dialog');
+				this.test.assertExists('span#user-login-modal-heading', utils.info('Login pop up window found hence verified'));
+				forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
+			}).then(function() {
+				this.test.assertExists('button.dropdown-toggle a', 'User logged in successfully');
+				forumLoginMethod.logoutFromApp();
 			});
 		} else {
 			utils.error('Like thump not visible');
 		}
 	}).then(function() {
+		this.test.assertExists('i.glyphicon.glyphicon-dislike-alt', 'Dislike thump found hence verified');
 		if (this.visible('i.glyphicon.glyphicon-dislike-alt')) {
 			this.click('i.glyphicon.glyphicon-dislike-alt');
 			this.waitUntilVisible('#login_register_modal', function() {
@@ -207,6 +206,72 @@ thumpsUpDownTestcases.registerUserOnPostListingPageLike = function(data) {
 		forumLoginMethod.loginToApp(data.username, data.password);
 	}).then(function() {
 		thumpsUpDownMethod.clickOnLike();
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
+	});
+};
+
+// Metod To verify the counter of thumbs down
+thumpsUpDownTestcases.verifyDecreasedCountAndIncreasedCount = function() {
+	casper.then(function() {
+		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
+	}).then(function() {
+		utils.info('CASE 11, 10 and 12 [To Verify  with the decreasing order of count]');
+		var earlierCount = this.fetchText('span[id^="total_vote_down_count_"]');
+		var earlierNumber = parseInt(earlierCount);
+		utils.info(' the earlier number = '+earlierNumber);
+		var laterCount;
+		this.click('i.glyphicon.glyphicon-dislike-alt');
+		this.waitForSelector('a.voted-no', function() {
+			utils.info('Post disliked by the user');
+			laterCount = this.fetchText('span[id^="total_vote_down_count_"]');
+			var laterNumber = parseInt(laterCount);
+			utils.info(' the later number = '+laterNumber);
+			if(earlierNumber + 1 == laterNumber) {
+				utils.info(' The count is decreased by 1 after disliked');
+			} else {
+				utils.error(' The count is not decreased by 1 after disliked');
+			}
+		});
+	}).then(function() {
+		var earlierCount = this.fetchText('div.post-options.pull-right span.text-muted a');
+		var earlierNumber = parseInt(earlierCount);
+		utils.info(' the earlier number = '+earlierNumber);
+		var laterCount;
+		this.click('i.glyphicon.glyphicon-like-alt');
+		this.waitForSelector('a.voted-yes', function() {
+			utils.info('Post liked by the user');
+			laterCount = this.fetchText('div.post-options.pull-right span.text-muted a');
+			var laterNumber = parseInt(laterCount);
+			utils.info(' the later number = '+laterNumber);
+			if(earlierNumber + 1 == laterNumber) {
+				utils.info(' The count is increased by 1 after liked');
+			} else {
+				utils.error(' The count is not increased by 1 after liked');
+			}
+		});
+	}).then(function() {
+		var earlierCount = this.fetchText('div.post-options.pull-right span.text-muted a');
+		var earlierNumber = parseInt(earlierCount);
+		utils.info(' the earlier number = '+earlierNumber);
+		var laterCount;
+		this.click('i.glyphicon.glyphicon-like-alt');
+		this.waitWhileVisible('a.voted-yes', function() {
+			utils.info('Post again liked by the user');
+			laterCount = this.fetchText('div.post-options.pull-right span.text-muted a');
+			var laterNumber = parseInt(laterCount);
+			utils.info(' the later number = '+laterNumber);
+			if(earlierNumber == laterNumber + 1) {
+				utils.info(' The count is decreased by 1 after liked again');
+			} else {
+				utils.error(' The count is not decreased by 1 after liked again');
+			}
+		});
+	}).then(function() {
+		this.click('i.glyphicon.glyphicon-like-alt');
+		this.waitForSelector('a.voted-yes', function() {
+			utils.info('Post liked by the user');
+		});
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
 	});
@@ -273,8 +338,9 @@ thumpsUpDownTestcases.clickOnLikersUsername = function() {
 		this.click('div.post-options.pull-right span.text-muted a');
 	}).waitUntilVisible('ul#who-all', function() {
 		this.test.assertSelectorHasText('div#who_liked_dialog h4','People Who Like This');
-		this.test.assertAllVisible('a i.who-username', 'User List visible');
-		this.click('i.who-username');
+		this.test.assertAllVisible('#who-all', 'User List visible');
+		//this.click('i.who-username');
+		this.click('#who-all span.display_name a');
 	}).waitForText("Sorry! You don't have permission to perform this action.");
 	casper.then(function() {
 		forumLoginMethod.logoutFromApp();
@@ -304,8 +370,8 @@ thumpsUpDownTestcases.clickOnLikersUsernameByModerator = function() {
 		this.click('div.post-options.pull-right span.text-muted a');
 	}).waitUntilVisible('ul#who-all', function() {
 		this.test.assertSelectorHasText('div#who_liked_dialog h4','People Who Like This');
-		this.test.assertAllVisible('a i.who-username', 'User List visible');
-		this.click('i.who-username');
+		this.test.assertAllVisible('#who-all', 'User List visible');
+		this.click('#who-all span.display_name a');
 	}).waitForText("Sorry! You don't have permission to perform this action.");
 	casper.then(function() {
 		forumLoginMethod.logoutFromApp();
@@ -327,9 +393,9 @@ thumpsUpDownTestcases.clickOnOwnName = function() {
 		this.click('div.post-options.pull-right span.text-muted a');
 	}).waitUntilVisible('ul#who-all', function() {
 		this.test.assertSelectorHasText('div#who_liked_dialog h4','People Who Like This');
-		this.test.assertAllVisible('a i.who-username', 'User List visible');
+		this.test.assertAllVisible('#who-all', 'User List visible');
 		var username = casper.evaluate(function() {
-			var user = document.querySelectorAll('i.who-username');
+			var user = document.querySelectorAll('#who-all span.display_name a');
 			var len = user.length;
 			for (i=0; i<=len; i++) {
 				var name = user[i].innerHTML;
@@ -353,41 +419,6 @@ thumpsUpDownTestcases.clickOnOwnName = function() {
 		}).then(function() {
 			backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'view_profiles', true);
 		});
-	});
-};
-
-// method To verify the functionality of reputation tab which is showing in profile page-
-thumpsUpDownTestcases.clickReputationTab = function() {
-	casper.thenOpen(config.url, function() {
-		utils.info('CASE 8 [To verify the functionality of reputation tab which is showing in profile page]');
-		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
-	}).then(function() {
-		this.click('i.icon.icon-menu');
-	}).waitForSelector('li#members_list_show a', function() {
-		this.click('li#members_list_show a');
-	}).waitForSelector('div.panel-body.table-responsive', function() {
-		this.click('div.panel-body.table-responsive a');
-	}).waitForSelector('#memberName', function() {
-		var reputationCount = this.fetchText('li.reputation span.profile-count a');
-		var reputationCount2;
-		try {
-			this.click('i.glyphicon.glyphicon-like-alt');
-			this.wait('2000', function() {
-				this.reload(function() {
-					reputationCount2 = casper.fetchText('li.reputation span.profile-count a');
-					if(reputationCount > reputationCount2) {
-						utils.info(' The post is disliked and verified that reputation count is changed.');
-					}
-					if(reputationCount < reputationCount2) {
-						utils.info(' The post is liked and verified that reputation count is changed.');
-					}
-				});
-			});
-		} catch (e) {
-			utils.info(' The clicked user not post any post yet');
-		}
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
@@ -420,164 +451,6 @@ thumpsUpDownTestcases.verifyReputationTab = function() {
 		this.test.assertSelectorHasText('#ddSettings', 'General');
 		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
 		backEndForumRegisterMethod.enableDisableLikesReputation(true);
-	});
-};
-
-// Method to Verify with the increasing  order of count
-thumpsUpDownTestcases.verifyIncreasedCount = function() {
-	casper.thenOpen(config.url, function() {
-		utils.info('CASE 10 [To Verify  with the increasing  order of count]');
-		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
-	}).then(function() {
-		this.test.assertExists('a.topic-title', 'Topic present');
-		this.click('a.topic-title');
-	}).waitForSelector('#posts-list', function() {
-		if(this.exists('a.voted-yes')) {
-			this.click('i.glyphicon.glyphicon-like-alt');
-			this.waitUntilVisible('div#loading_msg', function success() {
-				if (this.visible('div#loading_msg')) {
-		      utils.info(' Loading....');
-					this.waitWhileVisible('div#loading_msg', function() {});
-		    } else {
-					utils.info(' Loading is not displayed.');
-				}
-			}, function fail() {
-				utils.info(' Loading is not displayed.');
-			});
-		}
-	}).then(function() {
-		var earlierCount = this.fetchText('div.post-options.pull-right span.text-muted a');
-		var earlierNumber = parseInt(earlierCount);
-		utils.info(' the earlier number = '+earlierNumber);
-		var laterCount;
-		this.click('i.glyphicon.glyphicon-like-alt');
-		this.waitForSelector('a.voted-yes', function() {
-			utils.info('Post liked by the user');
-			laterCount = this.fetchText('div.post-options.pull-right span.text-muted a');
-			var laterNumber = parseInt(laterCount);
-			utils.info(' the earlier number = '+laterNumber);
-			if(earlierNumber + 1 == laterNumber) {
-				utils.info(' The count is increased by 1 after liked');
-			} else {
-				utils.info(' The count is not increased by 1 after liked');
-			}
-		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
-	});
-};
-
-// Metod To verify the counter of thumbs down
-thumpsUpDownTestcases.verifyDecreasedCount = function() {
-	casper.thenOpen(config.url, function() {
-		utils.info('CASE 11 [To Verify  with the decreasing order of count]');
-		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
-	}).then(function() {
-		this.test.assertExists('a.topic-title', 'Topic present');
-		this.click('a.topic-title');
-	}).waitForSelector('#posts-list', function() {
-		if(this.exists('a.voted-no')) {
-			this.click('i.glyphicon.glyphicon-dislike-alt');
-			this.waitUntilVisible('div#loading_msg', function success() {
-				if (this.visible('div#loading_msg')) {
-		      utils.info(' Loading....');
-					this.waitWhileVisible('div#loading_msg', function() {});
-		    } else {
-					utils.info(' Loading is not displayed.');
-				}
-			}, function fail() {
-				utils.info(' Loading is not displayed.');
-			});
-		}
-	}).then(function() {
-		var earlierCount = this.fetchText('span[id^="total_vote_down_count_"]');
-		var earlierNumber = parseInt(earlierCount);
-		utils.info(' the earlier number = '+earlierNumber);
-		var laterCount;
-		this.click('i.glyphicon.glyphicon-dislike-alt');
-		this.waitForSelector('a.voted-no', function() {
-			utils.info('Post disliked by the user');
-			laterCount = this.fetchText('span[id^="total_vote_down_count_"]');
-			var laterNumber = parseInt(laterCount);
-			utils.info(' the later number = '+laterNumber);
-			if(earlierNumber + 1 == laterNumber) {
-				utils.info(' The count is decreased by 1 after disliked');
-			} else {
-				utils.info(' The count is not decreased by 1 after disliked');
-			}
-		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
-	});
-};
-
-// method To verify the counter when user click on 2 times of thumbs up link
-thumpsUpDownTestcases.verifyTwoTimesClickOnLike = function() {
-	casper.thenOpen(config.url, function() {
-		utils.info('CASE 12 [To verify the counter when user click on 2 times of thumbs up link]');
-		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
-	}).then(function() {
-		this.test.assertExists('a.topic-title', 'Topic present');
-		this.click('a.topic-title');
-	}).waitForSelector('#posts-list', function() {
-		if(this.exists('a.voted-no')) {
-			this.click('i.glyphicon.glyphicon-dislike-alt');
-			this.waitUntilVisible('div#loading_msg', function success() {
-				if (this.visible('div#loading_msg')) {
-		      utils.info(' Loading....');
-					this.waitWhileVisible('div#loading_msg', function() {});
-		    } else {
-					utils.info(' Loading is not displayed.');
-				}
-			}, function fail() {
-				utils.info(' Loading is not displayed.');
-			});
-		}
-	}).then(function() {
-		var earlierCount = this.fetchText('span[id^="total_vote_down_count_"]');
-		var earlierNumber = parseInt(earlierCount);
-		utils.info(' the earlier number = '+earlierNumber);
-		var laterCount;
-		this.click('i.glyphicon.glyphicon-dislike-alt');
-		this.waitForSelector('a.voted-no', function() {
-			utils.info(' Post disliked by the user');
-			laterCount = this.fetchText('span[id^="total_vote_down_count_"]');
-			var laterNumber = parseInt(laterCount);
-			utils.info(' the later number = '+laterNumber);
-			if(earlierNumber + 1 == laterNumber) {
-				utils.info(' The count is increased by 1 after first clicked on disliked');
-			} else {
-				utils.info(' The count is not increased by 1 after disliked');
-			}
-		});
-	}).then(function() {
-		var earlierCount = this.fetchText('span[id^="total_vote_down_count_"]');
-		var earlierNumber = parseInt(earlierCount);
-		utils.info(' the earlier number = '+earlierNumber);
-		var laterCount;
-		this.click('i.glyphicon.glyphicon-dislike-alt');
-		this.waitUntilVisible('div#loading_msg', function success() {
-			if (this.visible('div#loading_msg')) {
-				utils.info(' Loading....');
-				this.waitWhileVisible('div#loading_msg', function() {
-					utils.info(' Again clicked on dislike');
-					laterCount = this.fetchText('span[id^="total_vote_down_count_"]');
-					var laterNumber = parseInt(laterCount);
-					utils.info(' the later number = '+laterNumber);
-					if(earlierNumber - 1 == laterNumber) {
-						utils.info(' The count is decreased by 1 after second clicked on disliked');
-					} else {
-						utils.info(' The count is not decreased by 1 after disliked');
-					}
-				});
-			} else {
-				utils.info(' Loading is not displayed.');
-			}
-		}, function fail() {
-			utils.info(' Loading is not displayed.');
-		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
@@ -659,7 +532,7 @@ thumpsUpDownTestcases.verifyReputation = function() {
 	var earlierRepNum;
 	var laterRepNum;
 	casper.thenOpen(config.url, function() {
-		utils.info('CASE 18 [To verify user reputation]');
+		utils.info('CASE 8, 18 and 14[To verify user reputation]');
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
 	}).waitForSelector('div#topics a[href="/post/printadd"]', function() {
@@ -709,28 +582,6 @@ thumpsUpDownTestcases.verifyReputation = function() {
 		var deletedRepNum = parseInt(deletedRepCount);
 		this.test.assertEquals(laterRepNum, deletedRepNum);
 	}).then(function() {
-		forumLoginMethod.logoutFromApp();
-	});
-};
-
-// Method To verify the like/unlike icon in guest user
-//To verify with log in pop up
-//To verify the login button
-thumpsUpDownTestcases.verifyLikeIconForGuestUser = function() {
-	casper.thenOpen(config.url, function() {
-		utils.info('CASE 20 [To verify the like/unlike icon in guest user]');
-		utils.info('CASE 21 [To verify with log in pop up]');
-		utils.info('CASE 22 [To verify the login button]');
-		this.click("a.topic-title");
-	}).waitForSelector('#posts-list', function() {
-		this.test.assertExists('i.glyphicon.glyphicon-like-alt', 'Like thump found hence verified');
-		this.test.assertExists('i.glyphicon.glyphicon-dislike-alt', 'Dislike thump found hence verified');
-		this.click('i.glyphicon.glyphicon-like-alt');
-	}).waitForSelector('#login_register_modal', function() {
-		this.test.assertExists('span#user-login-modal-heading', utils.info('Login pop up window found hence verified'));
-		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
-	}).then(function() {
-		this.test.assertExists('button.dropdown-toggle a', 'User logged in successfully');
 		forumLoginMethod.logoutFromApp();
 	});
 };
@@ -844,7 +695,7 @@ thumpsUpDownTestcases.verifyListByFbUsers = function() {
 		this.click('div.post-options.pull-right span.text-muted a');
 	}).waitUntilVisible('ul#who-all', function() {
 		this.test.assertSelectorHasText('div#who_liked_dialog h4','People Who Like This');
-		this.test.assertAllVisible('a i.who-username', 'User List visible');
+		this.test.assertAllVisible('#who-all', 'User List visible');
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
 	});
