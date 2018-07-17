@@ -265,6 +265,7 @@ deletePostTests.deletePostCheckboxAdmin=function(){
 			this.click('form[name="posts"] a.topic-title');
 		}).waitForSelector('span#editableSubject', function(){
 			this.test.assertDoesntExist('span#first_coloumn_2', 'post not found on postlisting page');
+			this.wait(1000, function(){});
 		});
 	});
 };
@@ -590,7 +591,7 @@ deletePostTests.deletePostCheckboxRegister=function(){
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('span#editableSubject', function(){
 		this.test.assertDoesntExist('span#first_coloumn_2', 'post not found on postlisting page');
-		this.wait(1000, function(){});
+		this.wait(2000, function(){});
 	});
 };
 
@@ -793,7 +794,7 @@ deletePostTests.deleteOwnTopicDisablePostEnable=function(){
 				this.click('form[name="posts"] a.topic-title');
 			}).waitForSelector('span#editableSubject', function(){
 				this.test.assertDoesntExist('span#first_coloumn_2', 'post not found on postlisting page');
-				this.wait(1000, function(){});
+				this.wait(2000, function(){});
 			});
 		//Verify with delete own post-by drop down of the post
 		}).then(function(){
