@@ -49,9 +49,9 @@ sleep 1
 printf "Executing Automation Script For $1 commitID\nTests executing for FOLLOW PIN LOCK: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./automationScripts/automation.js --feature="followPinLock" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
-#printf "Executing Automation Script For $1 commitID\nTests executing for FORUM-LISTING PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-#casperjs test ./automationScripts/automation.js --feature=forumListingPage --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-#sleep 1
+printf "Executing Automation Script For $1 commitID\nTests executing for FORUM-LISTING PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./automationScripts/automation.js --feature=forumListingPage --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+sleep 1
 #printf "Executing Automation Script For $1 commitID\nTests executing for COMBINATION OF SUB CATEGORY AND GROUP PERMISSION for registered user: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature="combinationOfSubCategoryAndGroupPermissions registerUserTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1
