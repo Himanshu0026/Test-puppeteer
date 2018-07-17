@@ -27,51 +27,51 @@ thumpsUpDown.featureTest = function() {
 		//thumpsUpDownTestcases.createCategoryTestCase();
 
 		// method to verify the thumbs up and down for guest user(unregister user)
-		//thumpsUpDownTestcases.unregisterUserOnPostListingPageLikeDislike();
+		thumpsUpDownTestcases.unregisterUserOnPostListingPageLikeDislike();
 
 		// method to verify try to like/dislike a post of guest user  as a register user
-		//thumpsUpDownTestcases.likeDislikePostOfUnregisteredUserByRegisterUser();
+		thumpsUpDownTestcases.likeDislikePostOfUnregisteredUserByRegisterUser();
 
 		// call method to verify the thumbs up and down for (register user) on Topic listing page
-		//thumpsUpDownTestcases.registerUserOnPostListingPageLike(thumpsUpDownJSON.registeredUserLogin);
+		thumpsUpDownTestcases.registerUserOnPostListingPageLike(thumpsUpDownJSON.registeredUserLogin);
 
 		// Metod To verify the counter of thumbs down
-		//thumpsUpDownTestcases.verifyDecreasedCountAndIncreasedCount();
+		thumpsUpDownTestcases.verifyDecreasedCountAndIncreasedCount();
 
 		//4. method to verify with click on likers/dislikers username when disable view profile permission ->AS A REGISTER USER
 		//28. method to verify likers/dislikers list
-		//thumpsUpDownTestcases.clickOnLikersUsername();
+		thumpsUpDownTestcases.clickOnLikersUsername();
 
 		//5. method to verify with click on likers/dislikers username when disable view profile permission ->AS A Moderator
-		//thumpsUpDownTestcases.clickOnLikersUsernameByModerator();
+		thumpsUpDownTestcases.clickOnLikersUsernameByModerator();
 
 		// method to verify When registered/moderator user click on link of own name from voter list. when disable view profile permission
-		//thumpsUpDownTestcases.clickOnOwnName();
+		thumpsUpDownTestcases.clickOnOwnName();
 
 		// method To verify the reputation functionality of back end(disable)"
-		//thumpsUpDownTestcases.verifyReputationTab();
+		thumpsUpDownTestcases.verifyReputationTab();
 
 		//Method To verify the user account off case
-		//thumpsUpDownTestcases.verifyUserAccountOffCase();
+		thumpsUpDownTestcases.verifyUserAccountOffCase();
 
 		//18. Method To verify user reputation
 		//14. Method to verify the functionality of reputation on profile page
-		//thumpsUpDownTestcases.verifyReputation();
+		thumpsUpDownTestcases.verifyReputation();
 
 		// Method To verify the forget pass word link of pop up window
-		//thumpsUpDownTestcases.verifyForgotPasswordLink();
+		thumpsUpDownTestcases.verifyForgotPasswordLink();
 
 		// Method "to verify create account link on pop up window when new registration is disable"
-		//thumpsUpDownTestcases.verifyCreateAccountInPopUp();
+		thumpsUpDownTestcases.verifyCreateAccountInPopUp();
 
 		// method to delete all the categories from backend
 		thumpsUpDownTestcases.deleteAllCategoriesTestCase();
 
 		// 30 verify combine all forum.
-		//thumpsUpDownTestcases.verifyCombineAllForum();
+		thumpsUpDownTestcases.verifyCombineAllForum();
 
 		// method to create a category General
-		//thumpsUpDownTestcases.createCategoryTestCase();
+		thumpsUpDownTestcases.createCategoryTestCase();
 
 	});
 };
