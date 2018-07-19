@@ -371,21 +371,24 @@ backEndForumRegisterMethod.deleteAllCategories = function() {
 	});
 	console.log('the href of delete tab'+url);
 	casper.click('div.tooltipMenu.forumActionbutton a:nth-child(2)'); // click on delete of manage tab
-	casper.waitWhileSelector(url, function success() {
-	});
-	casper.waitForSelector('input#remove_forum', function success() {
-		this.click('input#remove_forum');
-		this.waitForSelector('div.heading.error_message', function() {
-			var message = this.fetchText('div.heading.error_message');
-			var expectedMsg = "The category has been deleted.";
-			if(message == expectedMsg) {
-				utils.info('Category Deleted');
-			} else {
-				utils.info('Category not Deleted');
-			}
-		});
-	}, function fail(){
-		utils.info('Category doesnt have sub category');
+	//casper.waitWhileSelector(url, function success() {
+	//});
+	//casper.waitForSelector('input#remove_forum', function success() {
+	casper.wait('2000', function() {
+		if(this.assertExists('input#remove_forum')) {
+			this.click('input#remove_forum');
+			this.waitForSelector('div.heading.error_message', function() {
+				var message = this.fetchText('div.heading.error_message');
+				var expectedMsg = "The category has been deleted.";
+				if(message == expectedMsg) {
+					utils.info('Category Deleted');
+				} else {
+					utils.info('Category not Deleted');
+				}
+			});
+		}
+	//}, function fail(){
+		//utils.info('Category doesnt have sub category');
 	});
 };
 
