@@ -83,6 +83,7 @@ followpinlockTest.followedTopicContentPage= function() {
 		}).waitForSelector('span#editableSubject', function(){
 			this.test.assertExists('a#submenu_follow_topic i');
 			this.click('a#submenu_follow_topic i');
+			this.wait(1000, function(){});
 		}).then(function(){
 			this.test.assertExists('ul.nav.pull-right span.caret');
 			this.click('ul.nav.pull-right span.caret');
@@ -103,6 +104,7 @@ followpinlockTest.unfollowedTopicContentPage= function() {
 		}).waitForSelector('span#editableSubject', function(){
 			this.test.assertExists('a#submenu_unfollow_topic i');
 			this.click('a#submenu_unfollow_topic i');
+			this.wait(1000, function(){});
 		}).then(function(){
 			this.test.assertExists('ul.nav.pull-right span.caret');
 			this.click('ul.nav.pull-right span.caret');

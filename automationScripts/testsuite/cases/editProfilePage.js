@@ -499,7 +499,7 @@ editProfilePageTests.invalidFutureMonth=function(){
 		});
 		utils.info('date ='+date);
 		casper.sendKeys('input[name="birthDatepicker"]', date, {reset : true});
-		this.sendKeys('input#birthDatepicker', editProfilePageJSON.birthdayPicker.month);
+	}).then(function(){
 		this.click('button[type="submit"]');
 	}).waitForText('Please provide a valid Birthday.');
 };
@@ -548,12 +548,12 @@ editProfilePageTests.verifyFullName=function(){
 		this.evaluate(function() {
 			document.querySelector('div#ddUsers a[href="/tool/members/mb/fields"]').click();
 		});
-	}).waitForText('Default Profile Fields',function() {		
+	}).waitForText('Default Profile Fields',function() {
 		var setOptions = {"fullName" : "", "instantMessaging" : "", "birthday" : "", "signature" : "", "avatar" : "",		 	 	 "visiblity_name_registration" : "Yes",
 		"visiblity_imType_registration" : "Yes",
-		"visiblity_dob_registration" : "Yes",	
+		"visiblity_dob_registration" : "Yes",
 		"visiblity_signature_registration" : "Yes",
-		"visiblity_avatar_registration" : "Yes"};		 
+		"visiblity_avatar_registration" : "Yes"};
 		backEndForumRegisterMethod.changeDefaultRegistrationOptions(setOptions);
 	});
 };
