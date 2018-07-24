@@ -39,12 +39,12 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategor
 		utils.info(' Method to create category and sub category ');
 		backEndForumRegisterMethod.goToCategoryPage();
 		casper.then(function() {
-			backEndForumRegisterMethod.isCategoryExists(combinationOfSubCategoryAndGroupPermissionsJSON.category, function(err, isExists) {
+			/*backEndForumRegisterMethod.isCategoryExists(combinationOfSubCategoryAndGroupPermissionsJSON.category, function(err, isExists) {
 				if(isExists) {
 					utils.info(' Category already existed');
 					combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory);
 				} else {
-					utils.info(' Category not exist');
+					utils.info(' Category not exist');*/
 					backEndForumRegisterMethod.createCategory(combinationOfSubCategoryAndGroupPermissionsJSON.category);
 					casper.reload(function() {
 						this.waitForText(combinationOfSubCategoryAndGroupPermissionsJSON.category.title, function() {
@@ -53,8 +53,8 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategor
 							combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory);
 						});
 					});
-				}
-			});
+				//}
+			//});
 		});
 	});
 };
