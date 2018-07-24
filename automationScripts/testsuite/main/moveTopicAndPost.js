@@ -5,6 +5,7 @@ var config = require('../../../config/config.json');
 var moveTopicAndPostJSON = require('../../testdata/moveTopicAndPost.json');
 var moveTopicAndPostMethod = require('../methods/moveTopicAndPost.js');
 var forumLoginMethod = require('../methods/login.js');
+var combinationOfSubCategoryAndGroupPermissionsTestcases = require('../cases/combinationOfSubCategoryAndGroupPermissions.js');
 var moderatorPermissionsTestcases = require('../cases/moderatorPermissions.js');
 var moveTopicAndPostTestcases = require('../cases/moveTopicAndPost.js');
 var moveTopicAndPost = module.exports = {};
@@ -17,6 +18,9 @@ moveTopicAndPost.featureTest = function() {
 		forumLoginMethod.loginToForumBackEnd();
 
 	}).then(function() {
+
+		// method to create a category and its sub category and get their id
+		combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory();
 
     //1. Verify move topic from the latest topic page
     moveTopicAndPostTestcases.latestTopicPage('Administrators');
