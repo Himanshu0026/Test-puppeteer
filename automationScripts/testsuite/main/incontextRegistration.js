@@ -29,10 +29,10 @@ incontextRegistration.featureTest = function() {
 		incontextRegistrationTests.doRegistrationByQuoteOnPost();
 
 		//inContext Registration from Topic listing page when 'View Topic Content' permission is Disabled.
-		//incontextRegistrationTests.doRegistrationByViewTopicDisable();
+		incontextRegistrationTests.doRegistrationByViewTopicDisable();
 
 		//inContext Registration from the Forum Main page when 'View Forum' permission is Disabled.
-		//incontextRegistrationTests.doRegistrationByViewForumDisable();
+		incontextRegistrationTests.doRegistrationByViewForumDisable();
 
 		//inContext Registration  when 'View Profile' permission is Disabled.
 		incontextRegistrationTests.doRegistrationByViewProfileDisable();

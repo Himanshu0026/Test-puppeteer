@@ -12,38 +12,6 @@ var category_Id;
 
 var postEventMemberApprovalTestcases = module.exports = {};
 
-// method to register two user neha and isneha
-postEventMemberApprovalTestcases.registerUserTOLogin = function() {
-	//Open Back-End URL And Get Title and logout if logged in
-	casper.thenOpen(config.backEndUrl, function() {
-		//method to Disable -  Email verification and Disable -Approve New Registrations
-		postEventMemberApprovalMethod.disableApproveRegistrationsAndDisableEmail(function(err) {
-			if(!err) {
-				utils.log('Disable Approve New Event functionality method called ','INFO');
-			}
-		});
-		casper.then(function() {
-			//method to set the user permission to Administration
-			postEventMemberApprovalMethod.setAdmin(function(err) {
-				if(!err) {
-					utils.log('Set admin method called ','INFO');
-				}
-			});
-		});
-	});
-	casper.eachThen(postEventMemberApprovalJSON.infoToRegisterUser, function(response) {
-		utils.log("the response data "+response.data,"INFO");
-		var responseData = response.data;
-		postEventMemberApprovalMethod.registerMember(responseData, function(err) {
-			if(!err) {
-				utils.log('Users registered method called successfully', 'INFO');
-			}else {
-				utils.log('Users registered method not called successfully', 'ERROR');
-			}
-		});
-	});
-};
-
 // method to create a topic
 postEventMemberApprovalTestcases.createTopic = function() {
 	casper.thenOpen(config.backEndUrl, function() {
@@ -76,210 +44,182 @@ postEventMemberApprovalTestcases.createTopic = function() {
       this.test.assertSelectorHasText('#ddSettings', 'Security');
       this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
       backEndregisterMethod.setApproveNewPost('99');
+		}).then(function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+			backEndregisterMethod.viewGroupPermissions('Registered Users');
+		}).then(function() {
+			backEndregisterMethod.editGroupPermissions('Registered Users', 'other_post_replies', true);
     });
   });
 };
 
-// method to Approve a pending post from- Approval queue button
-postEventMemberApprovalTestcases.approvalQueueButton = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Case 1 [ Approve a pending post from- Approval queue button ]');
-    this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-    this.waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
-      this.test.assertSelectorHasText('#ddSettings', 'Security');
-      this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
-      backEndregisterMethod.setApproveNewPost('99');
-    });
-  }).then(function() {
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndregisterMethod.viewGroupPermissions('Registered Users');
+// method to create multiple different post
+postEventMemberApprovalTestcases.createMultiplePost = function() {
+	casper.thenOpen(config.url, function() {
+		this.test.assertExists('#inline_search_box', 'Search bar present');
+		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
 	}).then(function() {
-		backEndregisterMethod.editGroupPermissions('Registered Users', 'other_post_replies', true);
-  }).thenOpen(config.url, function() {
-    this.test.assertExists('#inline_search_box', 'Search bar present');
-    forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
-  }).then(function() {
-		postEventMemberApprovalMethod.composePost();
-  }).then(function() {
-  	postEventMemberApprovalMethod.getPostId(function(err, postId) {
-      if(!err) {
-  			casper.waitForSelector('div.post-edit.pull-right.dropdown a', function() {
-  				this.click('a#approvePost_'+postId+' i');
-  			}).waitWhileVisible('span#post_message_'+postId, function() {
-  				this.test.assertDoesntExist('span#post_message_'+postId, 'post is not  visible on the approval queue page');
-  			}).then(function() {
-  				postEventMemberApprovalMethod.deletePost();
-        });
-      }
-  	});
-  }).then(function() {
+		this.click('a[id^="topic_"]');
+	}).waitForSelector('#posts-list', function() {
+		postEventMemberApprovalMethod.composePost('Approve a pending post from- Approve by click on topic');
+	}).then(function() {
+		postEventMemberApprovalMethod.composePost('Approve a pending post from- Delete by click on topic');
+	}).then(function() {
+		//postEventMemberApprovalMethod.composePost('Approve a pending post from- Edit by click on topic');
+	}).then(function() {
+		postEventMemberApprovalMethod.composePost('Approve a pending post from- Approve by all checkbox');
+	}).then(function() {
+		postEventMemberApprovalMethod.composePost('Approve a pending post from- Extra post');
+	}).then(function() {
+		//postEventMemberApprovalMethod.composePost('Approve a pending post from- Move by single checkbox');
+	}).then(function() {
+		postEventMemberApprovalMethod.composePost('Approve a pending post from- Delete by single checkbox');
+	}).then(function() {
+		postEventMemberApprovalMethod.composePost('Approve a pending post from- Approve by single checkbox');
+	}).then(function() {
+		postEventMemberApprovalMethod.composePost('Approve a pending post from- Edit from approval queue button');
+	}).then(function() {
+		postEventMemberApprovalMethod.composePost('Approve a pending post from- Delete from approval queue button');
+	}).then(function() {
+		postEventMemberApprovalMethod.composePost('Approve a pending post from- Approval queue button');
+	}).then(function() {
 		forumLoginMethod.logoutFromApp();
 	});
 };
 
-// method to Approve a pending post -By clicking on topic
-postEventMemberApprovalTestcases.byClickingOnTopic = function() {
+// method to approve or delete the post by the admin user
+postEventMemberApprovalTestcases.postApprovalByAdmin = function() {
 	casper.thenOpen(config.url, function() {
-		utils.info('Case 2 [Approve a pending post -By clicking on topic]');
-    forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
-  }).then(function() {
-		postEventMemberApprovalMethod.composePost();
-  }).then(function() {
-  	postEventMemberApprovalMethod.getPostId(function(err, postId) {
-      if(!err) {
-				casper.waitForSelector('form#approveMembers span.post-body-author a', function() {
-  				this.test.assertExists('form#approveMembers span.post-body-author a', ' Topic button found');
-  				this.click('form#approveMembers span.post-body-author a');
-        }).waitForText('This post is awaiting approval by a moderator.', function() {
-						this.test.assertExists('a#approve_request i', 'approve tick found');
-						this.click('a#approve_request i');
-				}).waitWhileVisible('a#approve_request i',function() {
-          this.test.assertDoesntExist('i.glyphicon.glyphicon-remove', 'delete tick not found');
-					this.test.assertSelectorDoesntHaveText('div.pending-post span.text-danger' ,' This post is awaiting approval by a moderator.');
-				}).then(function() {
-					postEventMemberApprovalMethod.deletePost();
-				});
-      }
-    });
-  }).then(function() {
-    forumLoginMethod.logoutFromApp();
-  });
+		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.adminUserLogin.username, postEventMemberApprovalJSON.adminUserLogin.password);
+	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function() {
+		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'Category link found');
+		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertExists('li#approvalQueue a', 'Approval Queue found');
+		casper.click('li#approvalQueue a');
+	}).waitForSelector('form#approveMembers', function() {
+		this.click("a[id^='approvePost'] i");
+	//}).waitForSelectorTextChange('#feed-main > .col-xs-12:nth-child(1) .post-body-content', function() {
+	}).wait('2000',function() {
+		this.click("a[id^='postDelete'] i");
+	//}).waitForSelectorTextChange('#feed-main > .col-xs-12:nth-child(1) .post-body-content', function() {
+	}).wait('2000',function() {
+		this.click("a[id^='postEdit'] i");
+	}).waitForSelector('#message1_ifr', function() {
+		this.test.assertExists('#message1_ifr', 'message1-ifr found So the post is editable');
+		this.withFrame('message1_ifr', function() {
+			this.sendKeys('#tinymce', "Hello I am Admin and edited the post");
+		});
+	}).then(function() {
+		this.click('div.form-group.cleared input[name="save"]');
+	}).wait('2000',function () {
+		this.click("a[id^='approvePost'] i");
+	//}).waitForSelectorTextChange('#feed-main > .col-xs-12:nth-child(1) .post-body-content', function() {
+	}).wait('2000',function () {
+		this.evaluate(function() {
+			document.querySelector('div.post-edit.pull-right.dropdown input.entry-checkbox:nth-of-type(1)').click();
+		});
+		this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
+		this.test.assertExists('a#approvePending i', 'approve tick on the floating menu');
+		this.click('a#approvePending i');
+	//}).waitForSelectorTextChange('#feed-main > .col-xs-12:nth-child(1) .post-body-content', function() {
+	}).wait('2000',function () {
+		this.evaluate(function() {
+			document.querySelector('div.post-edit.pull-right.dropdown input.entry-checkbox:nth-of-type(1)').click();
+		});
+		this.test.assertExists('div#pending-menu', ' Floating menu is appear on bottom of the page');
+		this.test.assertExists('a#decline_pending', ' Delete tick on the floating menu');
+		this.click('a#decline_pending');
+	}).wait('2000',function () {
+		this.click('#links-nav i.icon');
+	}).waitForSelector('#latest_topics_show a', function() {
+		this.click('#latest_topics_show a');
+	}).waitForSelector('.topics-list', function() {
+		this.click('a[id^="topic_"]');
+	}).waitForSelector('#posts-list', function() {
+		this.test.assertTextExists('This post is awaiting approval by a moderator.', 'This post is awaiting approval by a moderator. found on the page');
+		this.test.assertExists('a#approve_request i', 'approve tick found');
+		this.click('a#approve_request i');
+	}).wait('2000',function () {
+		this.test.assertExists("a[id^='delete_pending_'] i", 'Delete tick found');
+		this.click("a[id^='delete_pending_'] i");
+	}).wait('2000',function () {
+		/*casper.click('#posttoggle_'+postId+' i');
+		casper.mouse.move('#post_list_' +postId);
+		casper.click('a[data-pid="'+postId+'"]');
+	}).waitForSelector('#message1_ifr', function() {
+		this.test.assertExists('#message1_ifr', 'message1-ifr found So the post is editable');
+		this.withFrame('message1_ifr', function() {
+			this.sendKeys('#tinymce', "Hello I am Admin and edited the post");
+		});
+	}).then(function() {
+		this.click('div.form-group.cleared input[name="save"]');
+	}).wait('2000',function () {*/
+	}).then(function() {
+		this.click('#links-nav i.icon');
+	}).waitForSelector('#latest_topics_show a', function() {
+		this.click('#forums_toggle_link a[href="/categories"]');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertExists('li#approvalQueue a', 'Approval Queue found');
+		casper.click('li#approvalQueue a');
+	}).waitForSelector('form#approveMembers', function() {
+		this.test.assertExists('div.subheading input.entry-checkbox', 'check box found');
+		this.evaluate(function(){
+			document.querySelector('div.subheading input.entry-checkbox').click();
+		});
+		this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
+		this.test.assertExists('a#approvePending i', 'APPROVE TICK ON THE FLOATING MENU');
+		this.click('a#approvePending i');
+	}).wait('2000',function () {
+		this.test.assertTextExists("There's currently nothing that needs your approval.");
+	}).then(function() {
+		this.click('#links-nav i.icon');
+	}).waitForSelector('#latest_topics_show a', function() {
+		this.click('#latest_topics_show a');
+	}).waitForSelector('.topics-list', function() {
+		this.click('a[id^="topic_"]');
+	}).waitForSelector('#posts-list', function() {
+		this.test.assertTextExists('Approve a pending post from- Approval queue button', ' found on the page');
+		this.test.assertTextDoesntExist('Approve a pending post from- Delete from approval queue button');
+		this.test.assertTextExists('Approve a pending post from- Edit from approval queue button', ' found on the page');
+		this.test.assertTextExists('Approve a pending post from- Approve by single checkbox', ' found on the page');
+		this.test.assertTextDoesntExist('Approve a pending post from- Delete by single checkbox');
+		this.test.assertTextExists('Approve a pending post from- Approve by single checkbox', ' found on the page');
+		this.test.assertTextExists('Approve a pending post from- Approve by click on topic', ' found on the page');
+		this.test.assertTextDoesntExist('Approve a pending post from- Delete by click on topic');
+		this.test.assertTextExists('Approve a pending post from- Approve by all checkbox', ' found on the page');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
+	});
 };
 
-// method to Approve a pending post by select the pending post by  check box
-postEventMemberApprovalTestcases.byCheckBox = function() {
-	casper.thenOpen(config.url, function() {
-		utils.info('Case 3 [Approve a pending post by select the pending post by  check box ]');
-    forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
-  }).then(function() {
-		postEventMemberApprovalMethod.composePost();
-  }).then(function() {
-  	postEventMemberApprovalMethod.getPostId(function(err, postId) {
-      if(!err) {
-				casper.waitForSelector('div.post-edit.pull-right.dropdown input.entry-checkbox', function() {
-					this.evaluate(function() {
-						document.querySelector('div.post-edit.pull-right.dropdown input.entry-checkbox:nth-of-type(1)').click();
-					});
-					this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
-					this.test.assertExists('a#approvePending i', 'approve tick on the floating menu');
-					this.click('a#approvePending i');
-				}).then(function() {
-					this.test.assertDoesntExist('span#post_message_'+postId ,' post is not visible on the approval queue page');
-				}).then(function() {
-					postEventMemberApprovalMethod.deletePost();
-				});
-      }
-    });
-  }).then(function() {
-    forumLoginMethod.logoutFromApp();
-  });
-};
-
-// method to Approve a pending post by select all pending post by  check box
-postEventMemberApprovalTestcases.byCheckBoxAll = function() {
-	casper.thenOpen(config.url, function() {
-		utils.info('Case 4 [ Approve a pending post by select all pending post by  check box ]');
-    forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
-  }).then(function() {
-		postEventMemberApprovalMethod.composePost();
-  }).then(function() {
-  	postEventMemberApprovalMethod.getPostId(function(err, postId) {
-      if(!err) {
-      	casper.waitForSelector('li.pull-right.user-panel', function() {
-    			this.test.assertExists('div.subheading input.entry-checkbox', 'check box found');
-    			this.evaluate(function(){
-    				document.querySelector('div.subheading input.entry-checkbox').click();
-    			});
-    			this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
-    			this.test.assertExists('a#approvePending i', 'APPROVE TICK ON THE FLOATING MENU');
-    			this.click('a#approvePending i');
-    			this.waitForText("There's currently nothing that needs your approval.");
-        }).then(function() {
-					postEventMemberApprovalMethod.deletePost();
-				});
-      }
-    });
-  }).then(function() {
-    forumLoginMethod.logoutFromApp();
-  });
-};
-
-// method to Delete a pending post from- Approval queue button
-postEventMemberApprovalTestcases.deleteApprovalQueueButton = function() {
-	casper.thenOpen(config.url, function() {
-		utils.info('Case 5 [ Delete a pending post from- Approval queue button ]');
-    forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
-  }).then(function() {
-    postEventMemberApprovalMethod.composePost();
-  }).then(function() {
-    postEventMemberApprovalMethod.getPostId(function(err, postId) {
-      if(!err) {
-				casper.waitForSelector('div.post-edit.pull-right.dropdown a.alert.alert-danger.pull-left', function() {
-					this.click('a#postDelete_'+postId+' i');
-				}).waitWhileVisible('span#post_message_'+postId, function() {
-					this.test.assertDoesntExist('span#post_message_'+postId , 'Post is Deleted from the approval queue');
-				});
-      }
-    });
-  }).then(function() {
-    forumLoginMethod.logoutFromApp();
-  });
-};
-
-// method to Delete a pending post -By clicking on  post
-postEventMemberApprovalTestcases.deleteClickingPost = function() {
-	casper.thenOpen(config.url, function() {
-		utils.info('Case 6 [ Delete a pending post -By clicking on  post ]');
-    forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
-  }).then(function() {
-    postEventMemberApprovalMethod.composePost();
-  }).then(function() {
-    postEventMemberApprovalMethod.getPostId(function(err, postId) {
-      if(!err) {
-				casper.waitForSelector('form#approveMembers span.post-body-author a', function() {
-					this.click('form#approveMembers span.post-body-author a');
-        }).waitForText('This post is awaiting approval by a moderator.', function() {
-						this.test.assertExists('a#delete_pending_'+postId+' i', 'Delete tick found');
-						this.click('a#delete_pending_'+postId+' i');
-				}).waitWhileVisible('a#delete_pending_'+postId+' i',function() {
-          this.test.assertDoesntExist('i.glyphicon.glyphicon-remove', 'delete tick not found');
-					this.test.assertSelectorDoesntHaveText('div.pending-post span.text-danger' ,' This post is awaiting approval by a moderator.');
-        });
-      }
-    });
-  }).then(function() {
-    forumLoginMethod.logoutFromApp();
-  });
-};
-
-// method to Delete a pending post by select the pending post by check box
-postEventMemberApprovalTestcases.deleteByCheckBox = function() {
-	casper.thenOpen(config.url, function() {
-		utils.info('Case 7 [ Delete a pending post by select the pending post by check box]');
-    forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
-  }).then(function() {
-    postEventMemberApprovalMethod.composePost();
-  }).then(function() {
-    postEventMemberApprovalMethod.getPostId(function(err, postId) {
-      if(!err) {
-				casper.waitForSelector('div.post-edit.pull-right.dropdown input.entry-checkbox', function() {
-					this.evaluate(function() {
-						document.querySelector('div.post-edit.pull-right.dropdown input.entry-checkbox:nth-of-type(1)').click();
-					});
-					this.test.assertExists('div#pending-menu', ' Floating menu is appear on bottom of the page');
-					this.test.assertExists('a#decline_pending', ' Delete tick on the floating menu');
-					this.click('a#decline_pending');
-				}).waitWhileVisible('span#post_message_'+postId, function() {
-					this.test.assertDoesntExist('span#post_message_'+postId , ' post is deleted from Approval Queue  on clicking checkbox');
-				});
-      }
-    });
-  }).then(function() {
-    forumLoginMethod.logoutFromApp();
-  });
+// method to approve the post by the moderator
+postEventMemberApprovalTestcases.approveByModerator = function() {
+	casper.thenOpen(config.backEndUrl, function() {
+		utils.info('CASE 1 to 10 [ Approve a pending post from- Approval queue button ]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+	}).waitForSelector('#autosuggest', function() {
+		postEventMemberApprovalMethod.setUserGroupToRegisteredUser(postEventMemberApprovalJSON.adminUserLogin.username);
+	}).then(function() {
+		backEndregisterMethod.goToCategoryPage();
+	}).then(function() {
+		var data = postEventMemberApprovalJSON.adminUserLogin.username;
+		var category = postEventMemberApprovalJSON.category;
+		backEndregisterMethod.addNewModerator(data, category, function(err) {
+			if(!err) {
+				utils.info('Moderator added successfully');
+			}
+		});
+	}).then(function() {
+		// method to approve or delete the post by the admin user
+		postEventMemberApprovalTestcases.postApprovalByAdmin();
+	});
 };
 
 // method to Delete a pending post by select all pending post by  check box
@@ -302,66 +242,6 @@ postEventMemberApprovalTestcases.deleteByAllCheckBox = function() {
 					this.test.assertExists('a#decline_pending', 'DELETE TICK ON THE FLOATING MENU');
 					this.click('a#decline_pending');
         }).waitForText("There's currently nothing that needs your approval.");
-      }
-    });
-  }).then(function() {
-    forumLoginMethod.logoutFromApp();
-  });
-};
-
-// method to edit a pending post from- Approval queue button
-postEventMemberApprovalTestcases.editApprovalQueueButton = function() {
-	casper.thenOpen(config.url, function() {
-		utils.info('Case 9 [ Edit a pending post from- Approval queue button ]');
-    forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
-  }).then(function() {
-    postEventMemberApprovalMethod.composePost();
-  }).then(function() {
-    postEventMemberApprovalMethod.getPostId(function(err, postId) {
-      if(!err) {
-				casper.waitForSelector('div.post-edit.pull-right.dropdown a.alert.alert-gray.pull-left', function() {
-					this.click('a#postEdit_'+postId+' i');
-				}).waitForSelector('#message1_ifr', function() {
-					this.test.assertExists('#message1_ifr', 'message1-ifr found So the post is editable');
-					this.withFrame('message1_ifr', function() {
-				 		this.sendKeys('#tinymce', "Hello I am Admin and edited the post");
-					});
-				}).then(function() {
-					this.click('div.form-group.cleared input[name="save"]');
-				}).wait(5000,function () {
-				});
-      }
-    });
-  }).then(function() {
-    forumLoginMethod.logoutFromApp();
-  });
-};
-
-// method to edit a pending post by clicking on it
-postEventMemberApprovalTestcases.editByClickingPost = function() {
-	casper.thenOpen(config.url, function() {
-		utils.info('Case 10 [ Edit a pending post by clicking on it ]');
-    forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
-  }).then(function() {
-    postEventMemberApprovalMethod.composePost();
-  }).then(function() {
-    postEventMemberApprovalMethod.getPostId(function(err, postId) {
-      if(!err) {
-				casper.waitForSelector('form#approveMembers span.post-body-author a', function() {
-					this.click('form#approveMembers span.post-body-author a');
-				}).waitForText('This post is awaiting approval by a moderator.', function() {
-					casper.click('#posttoggle_'+postId+' i');
-					casper.mouse.move('#post_list_' +postId);
-					casper.click('a[data-pid="'+postId+'"]');
-        }).waitForSelector('#message1_ifr', function() {
-					this.test.assertExists('#message1_ifr', 'message1-ifr found So the post is editable');
-					this.withFrame('message1_ifr', function() {
-				 		this.sendKeys('#tinymce', "Hello I am Admin and edited the post");
-					});
-				}).then(function() {
-					this.click('div.form-group.cleared input[name="save"]');
-				}).wait(5000,function () {
-				});
       }
     });
   }).then(function() {
@@ -4343,63 +4223,6 @@ postEventMemberApprovalTestcases.deleteMemberSettingFour = function() {
 			}
 		});
 	});
-};
-
-// method to approve the post by the moderator
-postEventMemberApprovalTestcases.approveByModerator = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		utils.info('CASE 1 to 10 [ Approve a pending post from- Approval queue button ]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-	}).waitForSelector('#autosuggest', function() {
-		postEventMemberApprovalMethod.setUserGroupToRegisteredUser(postEventMemberApprovalJSON.adminUserLogin.username);
-	}).then(function() {
-		backEndregisterMethod.goToCategoryPage();
-	}).then(function() {
-		var data = postEventMemberApprovalJSON.adminUserLogin.username;
-		var category = postEventMemberApprovalJSON.category;
-		backEndregisterMethod.addNewModerator(data, category, function(err) {
-			if(!err) {
-				utils.info('Moderator added successfully');
-			}
-		});
-	});
-
-	// method to create a topic
-	postEventMemberApprovalTestcases.createTopic();
-
-	// method to Approve a pending post from- Approval queue button
-	postEventMemberApprovalTestcases.approvalQueueButton();
-
-	// method to Approve a pending post -By clicking on topic
-	postEventMemberApprovalTestcases.byClickingOnTopic();
-
-	// method to Approve a pending post byselect the pending post by  check box
-	postEventMemberApprovalTestcases.byCheckBox();
-
-	// method to Approve a pending post by select all pending post by  check box
-	postEventMemberApprovalTestcases.byCheckBoxAll();
-
-	// method to Delete a pending post from- Approval queue button
-	postEventMemberApprovalTestcases.deleteApprovalQueueButton();
-
-	// method to Delete a pending post -By clicking on  post
-	//postEventMemberApprovalTestcases.deleteClickingPost();
-
-	// method to Delete a pending post by select the pending post by  check box
-	postEventMemberApprovalTestcases.deleteByCheckBox();
-
-	// method to edit a pending post from- Approval queue button
-	postEventMemberApprovalTestcases.editApprovalQueueButton();
-
-	// method to edit a pending post by clicking on it
-	postEventMemberApprovalTestcases.editByClickingPost();
-
-	// method to Delete a pending post by select all pending post by  check box
-	postEventMemberApprovalTestcases.deleteByAllCheckBox();
-
 };
 
 // method to move a pending post from- Approval queue Checkbox by a moderator

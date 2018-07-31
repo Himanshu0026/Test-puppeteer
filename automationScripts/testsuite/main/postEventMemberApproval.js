@@ -21,110 +21,47 @@ postEventMemberApproval.postTest = function() {
 		// method to delete all the categories from backend
 		thumpsUpDownTestcases.deleteAllCategoriesTestCase();
 
-		// method to register two user neha and isneha
-		//postEventMemberApprovalTestcases.registerUserTOLogin();
-
 		// method to create a category General
 		thumpsUpDownTestcases.createCategoryTestCase();
 
 		// method to create a topic
 		postEventMemberApprovalTestcases.createTopic();
 
-		// method to Approve a pending post from- Approval queue button
-		postEventMemberApprovalTestcases.approvalQueueButton();
+		// method to create multiple different post
+		postEventMemberApprovalTestcases.createMultiplePost();
 
-		// method to Approve a pending post -By clicking on topic
-		postEventMemberApprovalTestcases.byClickingOnTopic();
-
-		// method to Approve a pending post byselect the pending post by  check box
-		postEventMemberApprovalTestcases.byCheckBox();
-
-		// method to Approve a pending post by select all pending post by  check box
-		postEventMemberApprovalTestcases.byCheckBoxAll();
-
-		// method to Delete a pending post from- Approval queue button
-		postEventMemberApprovalTestcases.deleteApprovalQueueButton();
-
-		// method to Delete a pending post -By clicking on  post
-		//postEventMemberApprovalTestcases.deleteClickingPost();
-
-		// method to Delete a pending post by select the pending post by  check box
-		postEventMemberApprovalTestcases.deleteByCheckBox();
-
-		// method to edit a pending post from- Approval queue button
-		postEventMemberApprovalTestcases.editApprovalQueueButton();
-
-		// method to edit a pending post by clicking on it
-		postEventMemberApprovalTestcases.editByClickingPost();
+		// method to approve or delete the post by the admin user
+		postEventMemberApprovalTestcases.postApprovalByAdmin();
 
 		// method to check the functionality of approve post for guest user
 		postEventMemberApprovalTestcases.unregisterUserApprovePost();
 
-		// method to Delete a pending post by select all pending post by  check box
-		postEventMemberApprovalTestcases.deleteByAllCheckBox();
-
-		// method to delete all the categories from backend
-		thumpsUpDownTestcases.deleteAllCategoriesTestCase();
-
-		// method to create a topic
-		postEventMemberApprovalTestcases.createTopic();
-
-		// method to Approve a pending post from- Approval queue button for combine forum
-		postEventMemberApprovalTestcases.combineForumApprovalQueueButton();
-
-		// method to Approve a pending post -By clicking on topic for combine forum
-		postEventMemberApprovalTestcases.combineForumByClickingOnTopic();
-
-		// method to Approve a pending post by select the pending post by  check box  for combine forum
-		postEventMemberApprovalTestcases.combineForumByCheckBox();
-
-		// method to Approve a pending post by select all pending post by  check box for combine forum
-		postEventMemberApprovalTestcases.combineForumByCheckBoxAll();
-
-		// method to Delete a pending post from- Approval queue button for combine forum
-		postEventMemberApprovalTestcases.combineForumDeleteApprovalQueueButton();
-
-		// method to Delete a pending post -By clicking on  post  for combine forum
-		//postEventMemberApprovalTestcases.combineForumDeleteClickingPost();
-
-		// method to Delete a pending post by select the pending post by  check box for combine forum
-		postEventMemberApprovalTestcases.combineForumDeleteByCheckBox();
-
-		// method to edit a pending post from- Approval queue button for combine forum
-		postEventMemberApprovalTestcases.combineForumEditApprovalQueueButton();
-
-		// method to edit a pending post by clicking on it for combine forum
-		postEventMemberApprovalTestcases.combineForumEditByClickingPost();
-
-		// method to Delete a pending post by select all pending post by check box for combine forum
-		postEventMemberApprovalTestcases.combineForumDeleteByAllCheckBox();
-
-		// method to create a category General
-		thumpsUpDownTestcases.createCategoryTestCase();
+		// method to create multiple different post
+		postEventMemberApprovalTestcases.createMultiplePost();
 
 		// method to approve the post by the moderator
 		postEventMemberApprovalTestcases.approveByModerator();
 
 		// method to move a pending post from- Approval queue Checkbox by a moderator
-		postEventMemberApprovalTestcases.movePostByModeratorApprovalQueueCheckbox();
+		//postEventMemberApprovalTestcases.movePostByModeratorApprovalQueueCheckbox();
 
 		// method to create a topic
-		postEventMemberApprovalTestcases.createTopic();
+		//postEventMemberApprovalTestcases.createTopic();
 
 		// method to move a pending post -By clicking on topic Checkbox by a moderator
-		postEventMemberApprovalTestcases.movePostByModeratorPostListingCheckbox();
+		//postEventMemberApprovalTestcases.movePostByModeratorPostListingCheckbox();
 
 		// method to create a topic
-		postEventMemberApprovalTestcases.createTopic();
+		//postEventMemberApprovalTestcases.createTopic();
 
 		// method to move a pending post from- Approval queue all Checkbox by a moderator
-		postEventMemberApprovalTestcases.movePostByModeratorApprovalQueueAllCheckbox();
+		//postEventMemberApprovalTestcases.movePostByModeratorApprovalQueueAllCheckbox();
 
 		// method to create a topic
-		postEventMemberApprovalTestcases.createTopic();
+		//postEventMemberApprovalTestcases.createTopic();
 
 		// method to move a pending post -By clicking on topic all Checkbox by a moderator
-		postEventMemberApprovalTestcases.movePostByModeratorPostListingAllCheckbox();
+		//postEventMemberApprovalTestcases.movePostByModeratorPostListingAllCheckbox();
 
 	});
 };

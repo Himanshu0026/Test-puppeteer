@@ -62,24 +62,19 @@ postEventMemberApprovalMethod.setUserGroupToRegisteredUser = function(user) {
 };
 
 //*************************method to compose a post by register user ************************************
-postEventMemberApprovalMethod.composePost = function() {
-	utils.info('Inside the composePost method');
-	casper.click('a[id^="topic_"]');
-	casper.waitForSelector('#posts-list', function() {
-		currentUrl = this.getCurrentUrl();
-		this.test.assertSelectorHasText('#sub_post_reply', 'Post a reply');
-		this.click('#sub_post_reply');
-		this.wait('5000', function() {
-			this.withFrame('message_ifr', function() {
-				this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
-				this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
-				this.sendKeys('#tinymce', 'Hello I am Register user');
-			});
+postEventMemberApprovalMethod.composePost = function(msg) {
+	casper.test.assertSelectorHasText('#sub_post_reply', 'Post a reply');
+	casper.click('#sub_post_reply');
+	casper.wait('2000', function() {
+		this.withFrame('message_ifr', function() {
+			this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
+			this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
+			this.sendKeys('#tinymce', msg);
 		});
 	}).then(function() {
 		this.test.assertVisible('#reply_submit');
 		this.click('#reply_submit');
-		this.wait('6000', function() {
+		this.wait('2000', function() {
 		});
 	});
 };
