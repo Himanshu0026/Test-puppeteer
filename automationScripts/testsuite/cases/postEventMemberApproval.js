@@ -80,7 +80,7 @@ postEventMemberApprovalTestcases.createMultiplePost = function() {
 	}).then(function() {
 		postEventMemberApprovalMethod.composePost('Approve a pending post from- Approve by single checkbox');
 	}).then(function() {
-		postEventMemberApprovalMethod.composePost('Approve a pending post from- Edit from approval queue button');
+		//postEventMemberApprovalMethod.composePost('Approve a pending post from- Edit from approval queue button');
 	}).then(function() {
 		postEventMemberApprovalMethod.composePost('Approve a pending post from- Delete from approval queue button');
 	}).then(function() {
@@ -103,11 +103,11 @@ postEventMemberApprovalTestcases.postApprovalByAdmin = function() {
 	}).waitForSelector('form#approveMembers', function() {
 		this.click("a[id^='approvePost'] i");
 	//}).waitForSelectorTextChange('#feed-main > .col-xs-12:nth-child(1) .post-body-content', function() {
-	}).wait('2000',function() {
+	}).wait('1000',function() {
 		this.click("a[id^='postDelete'] i");
 	//}).waitForSelectorTextChange('#feed-main > .col-xs-12:nth-child(1) .post-body-content', function() {
-	}).wait('2000',function() {
-		this.click("a[id^='postEdit'] i");
+	}).wait('1000',function() {
+		/*this.click("a[id^='postEdit'] i");
 	}).waitForSelector('#message1_ifr', function() {
 		this.test.assertExists('#message1_ifr', 'message1-ifr found So the post is editable');
 		this.withFrame('message1_ifr', function() {
@@ -115,10 +115,10 @@ postEventMemberApprovalTestcases.postApprovalByAdmin = function() {
 		});
 	}).then(function() {
 		this.click('div.form-group.cleared input[name="save"]');
-	}).wait('2000',function () {
+	}).wait('1000',function () {
 		this.click("a[id^='approvePost'] i");
 	//}).waitForSelectorTextChange('#feed-main > .col-xs-12:nth-child(1) .post-body-content', function() {
-	}).wait('2000',function () {
+	}).wait('1000',function () {*/
 		this.evaluate(function() {
 			document.querySelector('div.post-edit.pull-right.dropdown input.entry-checkbox:nth-of-type(1)').click();
 		});
@@ -126,14 +126,14 @@ postEventMemberApprovalTestcases.postApprovalByAdmin = function() {
 		this.test.assertExists('a#approvePending i', 'approve tick on the floating menu');
 		this.click('a#approvePending i');
 	//}).waitForSelectorTextChange('#feed-main > .col-xs-12:nth-child(1) .post-body-content', function() {
-	}).wait('2000',function () {
+	}).wait('1000',function () {
 		this.evaluate(function() {
 			document.querySelector('div.post-edit.pull-right.dropdown input.entry-checkbox:nth-of-type(1)').click();
 		});
 		this.test.assertExists('div#pending-menu', ' Floating menu is appear on bottom of the page');
 		this.test.assertExists('a#decline_pending', ' Delete tick on the floating menu');
 		this.click('a#decline_pending');
-	}).wait('2000',function () {
+	}).wait('1000',function () {
 		this.click('#links-nav i.icon');
 	}).waitForSelector('#latest_topics_show a', function() {
 		this.click('#latest_topics_show a');
@@ -143,10 +143,10 @@ postEventMemberApprovalTestcases.postApprovalByAdmin = function() {
 		this.test.assertTextExists('This post is awaiting approval by a moderator.', 'This post is awaiting approval by a moderator. found on the page');
 		this.test.assertExists('a#approve_request i', 'approve tick found');
 		this.click('a#approve_request i');
-	}).wait('2000',function () {
+	}).wait('1000',function () {
 		this.test.assertExists("a[id^='delete_pending_'] i", 'Delete tick found');
 		this.click("a[id^='delete_pending_'] i");
-	}).wait('2000',function () {
+	}).wait('1000',function () {
 		/*casper.click('#posttoggle_'+postId+' i');
 		casper.mouse.move('#post_list_' +postId);
 		casper.click('a[data-pid="'+postId+'"]');
