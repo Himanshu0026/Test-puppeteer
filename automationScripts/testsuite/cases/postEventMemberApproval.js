@@ -184,7 +184,7 @@ postEventMemberApprovalTestcases.postApprovalByAdmin = function() {
 	}).waitForSelector('#posts-list', function() {
 		this.test.assertTextExists('Approve a pending post from- Approval queue button', ' found on the page');
 		this.test.assertTextDoesntExist('Approve a pending post from- Delete from approval queue button');
-		this.test.assertTextExists('Approve a pending post from- Edit from approval queue button', ' found on the page');
+		//this.test.assertTextExists('Approve a pending post from- Edit from approval queue button', ' found on the page');
 		this.test.assertTextExists('Approve a pending post from- Approve by single checkbox', ' found on the page');
 		this.test.assertTextDoesntExist('Approve a pending post from- Delete by single checkbox');
 		this.test.assertTextExists('Approve a pending post from- Approve by single checkbox', ' found on the page');
