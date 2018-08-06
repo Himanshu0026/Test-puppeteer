@@ -63,5 +63,8 @@
 	},
 	"pinMessage":{
 		"expectedMsg":"This topic is pinned. It will display at the top of its category."
+	},
+	"validateErrorMsg":{
+		"submitErrorMsg":"You must enter a title for your message."
 	}
 }

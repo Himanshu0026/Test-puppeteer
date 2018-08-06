@@ -5,6 +5,7 @@ var loginJSON = require('../../testdata/loginData.json');
 var thumpsUpDownJSON = require('../../testdata/thumpsUpDown.json');
 var pollJSON = require('../../testdata/poll.json');
 var forumListingPageJSON  = require('../../testdata/forumListingPage.json');
+var utils = require('../utils.js');
 var pollMethod = require('../methods/poll.js');
 var topicMethod = require('../methods/topic.js');
 var forumLoginMethod = require('../methods/login.js');
@@ -41,17 +42,23 @@ followpinlockTest.enableFollowCheckbox= function() {
 		utils.info(' Case 1[Add New topic by enable Follow check box and verify unfollow topic option on forum listing page]');
 		utils.info('Case 9[Add New topic by enable Follow check box and verify unfollow topic option on latest topic page]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).waitForSelector('a[href="/post/printadd"]', function(){
+	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
 		this.evaluate(function() {
-		  document.querySelector('a[href="/post/printadd"]').click();
+			document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
 		});
-		topicMethod.createTopic(followPinLockJSON.Enablefollow);
+	}).waitForSelector('a[href="#forums"]', function(){
+		deletePostMethod.getCategoryHrefFrontend('General');
+        }).waitForSelector('div#ajax_subscription_vars a', function(){
+                this.click('div#ajax_subscription_vars a');
+        }).waitForSelector('div.post-body.pull-left', function(){
+                utils.enableorDisableCheckbox('follow_thread', true);
+        }).then(function(){
+                topicMethod.createTopic(followPinLockJSON.Enablefollow);
 	}).waitForText(followPinLockJSON.Enablefollow.content, function(){
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary');
-		this.mouse.move('a.pull-right.btn.btn-uppercase.btn-primary');
-		this.test.assertExists('a#submenu_unfollow_topic i');
-		var message=this.getElementAttribute('a#submenu_unfollow_topic i', 'title');
-		this.test.assertEquals(message, followPinLockJSON.Enablefollow.expectedMessage, 'both the text are equal');
+		this.test.assertExists('a#sub_post_reply');
+		this.mouse.move('a#sub_post_reply');
+		this.test.assertVisible('a#submenu_unfollow_topic i');
 	});
 };
 
@@ -60,17 +67,23 @@ followpinlockTest.disableFollowCheckbox= function() {
 	casper.thenOpen(config.url, function(){
 		utils.info(' Case 2[Add New topic by disabling Follow check box and verify follow topic option on Post page]');
 		utils.info('Case 10[Add New topic by disabling Follow check box and verify follow topic option on latest topic page]');
-	}).waitForSelector('a[href="/post/printadd"]', function(){
-		this.evaluate(function() {
-		  document.querySelector('a[href="/post/printadd"]').click();
-		});
-		topicMethod.createTopic(followPinLockJSON.Disablefollow);
-	}).waitForText(followPinLockJSON.Disablefollow.content, function(){
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary');
-		this.mouse.move('a.pull-right.btn.btn-uppercase.btn-primary');
-		this.test.assertExists('#submenu_follow_topic i');
-		var message=this.getElementAttribute('#submenu_follow_topic i', 'title');
-		this.test.assertEquals(message, followPinLockJSON.Disablefollow.expectedMessage, 'both the text are equal');
+        }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+                this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
+                this.evaluate(function() {
+                        document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
+                });
+        }).waitForSelector('a[href="#forums"]', function(){
+                deletePostMethod.getCategoryHrefFrontend('General');
+        }).waitForSelector('div#ajax_subscription_vars a', function(){
+                this.click('div#ajax_subscription_vars a');
+        }).waitForSelector('div.post-body.pull-left', function(){
+                utils.enableorDisableCheckbox('follow_thread', false);
+        }).then(function(){
+                topicMethod.createTopic(followPinLockJSON.Disablefollow);
+        }).waitForText(followPinLockJSON.Disablefollow.content, function(){
+		this.test.assertExists('a#sub_post_reply');
+		this.mouse.move('a#sub_post_reply');
+                this.test.assertVisible('#submenu_follow_topic i');
 	});
 };
 
@@ -102,8 +115,8 @@ followpinlockTest.unfollowedTopicContentPage= function() {
 		this.waitForSelector('form[name="posts"] a.topic-title', function(){
 			this.click('form[name="posts"] a.topic-title');
 		}).waitForSelector('span#editableSubject', function(){
-			this.test.assertExists('a#submenu_unfollow_topic i');
-			this.click('a#submenu_unfollow_topic i');
+            this.test.assertVisible('a#submenu_unfollow_topic i');
+            this.click('a#submenu_unfollow_topic i');
 			this.wait(1000, function(){});
 		}).then(function(){
 			this.test.assertExists('ul.nav.pull-right span.caret');
