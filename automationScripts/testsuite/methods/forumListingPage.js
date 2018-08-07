@@ -35,7 +35,7 @@ forumListingPageMethod.deleteCategories= function(data){
                                }
                        }
               }, data);
-              
+
        }).then(function(){
        		utils.info('heading category deleted successfully');
        });

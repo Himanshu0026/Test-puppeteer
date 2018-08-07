@@ -13,16 +13,33 @@
         "message":" Please enter a name for this category."
 
 },
+
+"subCategoryStartTopicErrorMsg" :{
+	"errorMsg":"Sorry! This category is not accepting new topics or replies."
+},
+
+"lockCategoryMsg":{
+	"msg":"This category is locked. New posts aren't being accepted."
+},
+
+"invalidLinkedCategoryErrorMsg" :{
+	"errorMsg":"Invalid category link."
+
+},
+
 "blankCategoryPassword" :{
         "blankData":""
 },
+
 "linkedtext" :{
         "data":"http://www.google.com"
 },
+
 "moderatorLogin" :{
         "username":"hanimode",
         "password":"hanimode"
 },
+
 "withDescription" : {
     	"title" : "withDescription",
         "description" : "this is withDescription Categories",
@@ -46,17 +63,6 @@
         "linked" : false
 },
 
-"parentCategory" : {
-    	"title" : "parentCategory",
-        "description" : "this is parentCategory",
-        "isSubcategorycheckbox" : false,
-	"isSubcategoryvalue" : false,
-        "passwordprotectcheckbox" : false,
-        "passwordprotectvalue" : "",
-        "lock" : false,
-        "invisible" : false,
-        "linked" : false
-},
 
 "validCategories" : {
     	"title" : "validCategories",
@@ -69,6 +75,7 @@
         "invisible" : false,
         "linked" : false
 },
+
 "withoutTitle" : {
     	"title" : "",
         "description" : "this is validCategories without title",
@@ -89,6 +96,20 @@
         "invisible" : false,
         "linked" : false
 },
+
+
+"parentCategory" : {
+    	"title" : "parentCategory",
+        "description" : "this is parentCategory",
+        "isSubcategorycheckbox" : false,
+	"isSubcategoryvalue" : false,
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" : false,
+        "linked" : false
+},
+
 "subCategory" : {
     	"title" : "subvalidCategories",
         "description" : "this is subvalidCategories Categories",
@@ -101,7 +122,7 @@
         "linked" : false
 },
 
-"enablePasswordProtected" : {
+"enablePassword" : {
     	"title" : "enablePassword",
         "description" : "this is enablePassword Categories",
         "isSubcategorycheckbox" : false,
@@ -112,19 +133,21 @@
         "invisible" : false,
         "linked" : false
 },
-"disablePasswordProtected" : {
+
+"disablePassword" : {
     	"title" : "disablePassword",
         "description" : "this is disablePassword Categories",
         "isSubcategorycheckbox" : false,
-	"isSubcategoryvalue" : false,
+	"isSubcategoryvalue" : "enablePassword",
         "passwordprotectcheckbox" : false,
         "passwordprotectvalue" : "",
         "lock" : false,
         "invisible" : false,
         "linked" : false
 },
+
 "enableLocked" : {
-    	"title" : "enableLock",
+    	"title" : "enableLocked",
         "description" : "this is enableLocked Categories",
         "isSubcategorycheckbox" : false,
 	"isSubcategoryvalue" : false,
@@ -146,6 +169,7 @@
         "invisible" : false,
         "linked" : false
 },
+
 "Invisible" : {
         "title" : "Invisible",
         "description" : "this is Invisible Categories",
@@ -157,6 +181,20 @@
         "invisible" : true,
         "linked" : false
 },
+
+"subInvisible" :{
+
+	"title" : "subInvisible",
+        "description" : "this is Invisible Categories",
+        "isSubcategorycheckbox" : false,
+        "isSubcategoryvalue" : "Invisible",
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" :false,
+        "linked" : false
+},
+
 "enableLinked" : {
     	"title" : "enableLinked",
         "description" : "this is enableLinked",
@@ -170,6 +208,20 @@
 	"linkedtext":"http://www.google.com"
 },
 
+"subenableLinked" : {
+    	"title" : "subenableLinked",
+        "description" : "this is subenableLinked",
+         "isSubcategorycheckbox" : false,
+	"isSubcategoryvalue" : "enableLinked",
+        "passwordprotectcheckbox" : false,
+        "passwordprotectvalue" : "",
+        "lock" : false,
+        "invisible" : false,
+        "linked" : true,
+	"linkedtext":""
+},
+
+
 "invalidLinked" : {
         "title" : "invalidLinked",
         "description" : "this is invalidLinked",
@@ -182,14 +234,15 @@
         "linked" : true,
         "linkedtext":"hellorajan....."
 },
+
 "subEnableLocked" : {
-    "title" : "subenableLocked",
+    "title" : "subEnableLocked",
     "description" : "this is enableLocked Categories",
     "isSubcategorycheckbox" : true,
-    "isSubcategoryvalue" : "validCategories",
+    "isSubcategoryvalue" : "enableLocked",
     "passwordprotectcheckbox" : false,
     "passwordprotectvalue" : "",
-    "lock" : true,
+    "lock" : false,
     "invisible" : false,
     "linked" : false
 }
