@@ -475,7 +475,7 @@ handler.on('push', function (event) {
 		commitDetails.branchName = branchName;
 		commitDetails.priorityNo = '0';
 		console.log('the message of the commit'+commitDetails.commitMessage);
-		var index = commitDetails.commitMessage.search("WORK_UNDER_PROGRESS");
+		var index = commitDetails.commitMessage.search("inprogress");
 		console.log('the vale of index'+index);
 		if(index === -1) {
 			utils.isValidJobToAdd(branchName, commitDetails, function(valid){
