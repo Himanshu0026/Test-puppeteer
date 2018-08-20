@@ -23,7 +23,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 				var testResult = stderr;
 				commitDetails.testResult = testResult;
 				commitDetails.attachments = '';
-				createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
+				//createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
 					mailServices.sendMail(commitDetails, function(err) {
 						if(err)
 							console.error("error occurred while sending email: "+err);
@@ -32,7 +32,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 							console.timeEnd('Automation execution time');
 						return callback();
 					});
-				});
+				//});
 			} else {
 				exec("/etc/automation/bin/oo_automation.sh " +commitDetails.branchName+ ' ' +commitDetails.commitId, function(code, stdout, stderr) {
 					console.log('Exit code : oo_automation : ', code);
@@ -45,7 +45,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 							console.log("fail.txt size: "+fileSize);
 							if(fileSize !== 0) {
 								commitDetails.attachments = [];
-								createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
+								//createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
 
 									//Sending Mail To The Committer After Adding Attachments
 									fs.exists(path, function(exists) {
@@ -90,7 +90,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 											});
 										}
 									});
-								});
+								//});
 							} else {
 							//Executing automation test script
 							console.log("Executing Automation Script For " + commitDetails.commitId + " CommitID");
@@ -165,7 +165,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 												}
 											];
 
-											createStatus.failure(commitDetails, description, function(status) {
+											//createStatus.failure(commitDetails, description, function(status) {
 												//console.log('state of failure : '+status);
 												//Sending Mail To The Committer After Adding Attachments
 												fs.exists(path, function(exists) {
@@ -212,14 +212,14 @@ executorServices.executeJob = function(commitDetails, callback) {
 														});
 													}
 												});
-											});
+											//});
 										} else {
 											console.log('you are not allowed to set the status of the branch.');
 										}
 									} else {
-										createStatus.success(commitDetails, function(status) {
-											console.log('state of success : '+status);
-										});
+										//createStatus.success(commitDetails, function(status) {
+											//console.log('state of success : '+status);
+										//});
 										//Deleting commit specific log files
 										//fs.unlinkSync(automationLogFile);
 										fs.unlinkSync(failLogFile);
