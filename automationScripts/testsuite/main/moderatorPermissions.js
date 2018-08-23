@@ -85,10 +85,10 @@ moderatorPermissions.featureTest = function() {
 		moderatorPermissionsTestcases.verifyDisableDeleteOnePostForModeratorCategoryByCheckbox();
 
 		// method to Verify by delete One topic from category(cat1) by check box Disable
-		//moderatorPermissionsTestcases.verifyDisableDeleteOneTopicForModeratorCategoryByCheckbox();
+		moderatorPermissionsTestcases.verifyDisableDeleteOneTopicForModeratorCategoryByCheckbox();
 
 		// method to Verify by delete all topic from other category by check box Disable
-		//moderatorPermissionsTestcases.verifyDisableDeleteAllTopicForModeratorCategoryByCheckbox();
+		moderatorPermissionsTestcases.verifyDisableDeleteAllTopicForModeratorCategoryByCheckbox();
 
 		// method to Verify by delete post from other category by by check box Disable
 		moderatorPermissionsTestcases.verifyDisableDeleteTopicForOtherCategoryByCheckbox();

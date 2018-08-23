@@ -59,7 +59,7 @@ moderatorPermissionsMethod.clickOnRemoveButtonModerator=function(id) {
 	}).then(function() {
 		this.test.assertExists('a#remove_moderator');
 		this.click('a#remove_moderator');
-	}).wait('1000', function() {
+	}).wait('2000', function() {
 		utils.info(' Moderator Removed');
 	});
 };

@@ -523,7 +523,7 @@ backEndForumRegisterMethod.addNewModerator = function(data, category) {
 				casper.click('div.ui-dialog-buttonset button');
 				//casper.test.assertExists('button.button.btn-m.btn-blue.pull-right','Save button Found');
 				//casper.click('button.button.btn-m.btn-blue.pull-right');
-				casper.wait('1000', function(err) {
+				casper.wait('2000', function(err) {
 				});
 			}
 		});
@@ -552,7 +552,7 @@ backEndForumRegisterMethod.removeModerator=function() {
 		if(this.exists('a#remove_mod_all')){
 			this.click('a#remove_mod_all');
 		}
-	}).wait('1000', function(err) {
+	}).wait('2000', function(err) {
 	});
 };
 
