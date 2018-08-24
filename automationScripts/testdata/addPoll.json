@@ -1,0 +1,81 @@
+{
+	"CheckPollErrorMsgStartTopic"  : {
+		"errorMessage" :"You must enter a title for your message."
+	},
+
+	"checkErrorMsgWithoutContent" :{
+		"errorMessage" :"You must enter a message to post."
+
+	},
+
+	"checkErrorMsgWithoutCategory" :{
+		"errorMessage" :"You must select a category for your message."
+	},
+
+	"withoutTitleTopic" : {
+		"content" : "hellloooooo!!!",
+		"category" : "General"
+	},
+
+	"withoutContentTopic" : {
+		"title" : "NewTopic",
+		"category" : "General"
+	},
+
+	"withoutCategoryTopic" : {
+		"title" : "NewTopic",
+		"content" : "hellloooooo!!!"
+	},
+
+	"addPollCategory" : {
+	    	"title" : "addPollCategory",
+	        "description" : "this is addPollCategory Categories",
+	        "isSubcategorycheckbox" : false,
+		"isSubcategoryvalue" : false,
+	        "passwordprotectcheckbox" : false,
+	        "passwordprotectvalue" : false,
+	        "lock" : false,
+	        "invisible" : false,
+	        "linked" : false
+	},
+
+	"addPollSubcategory" : {
+	    	"title" : "addPollSubcategory",
+	        "description" : "this is addPollSubcategory",
+	        "isSubcategorycheckbox" : true,
+		"isSubcategoryvalue" : "addPollCategory",
+	        "passwordprotectcheckbox" : false,
+	        "passwordprotectvalue" : "",
+	        "lock" : false,
+	        "invisible" : false,
+	        "linked" : false
+	},
+
+	"addpollTopic" :{
+		"title" : "ONEpluse",
+		"content" : "my old topic",
+		"category" : "addPollSubcategory"
+	},
+
+	"addpollTopic" :{
+		"title" : "ONEpluse",
+		"content" : "my old topic",
+		"category" : "General"
+	},
+
+	"checkMessageVotedTopic" :{
+		"message":"You have already voted on this poll."
+	},
+
+	"checkVote" :{
+		"message":"1 vote"
+	},
+
+	"verifyErrorMsgPoll" :{
+		"msg":"Please select at least one poll option."
+	},
+
+	"disableVoteOption" :{
+		"Msg":"You don't have permission to vote."
+	}
+}

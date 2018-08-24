@@ -2,6 +2,7 @@
 'use strict.';
 var config = require('../../../config/config.json');
 var forumLoginMethod = require('../methods/login.js');
+var profilePageTests = require('../cases/profilePage.js');
 var editProfilePageTests = require('../cases/editProfilePage.js');
 var editProfilePage = module.exports = {};
 
@@ -11,6 +12,8 @@ editProfilePage.featureTest = function(){
 		utils.info(" Title of the page :"+this.getTitle());
 		forumLoginMethod.loginToForumBackEnd();
 	}).then(function(){
+	//delete all topics
+	profilePageTests.deleteTopics();
 	//Disable Signature  for Registered user from group Permission
 	editProfilePageTests.editProfileDisableSignature();
 	//Enable Signature  for Registered user from group Permission

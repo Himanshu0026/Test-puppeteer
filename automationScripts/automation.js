@@ -298,6 +298,17 @@ case "combinationOfSubCategoryAndGroupPermissions":
 		});
 	break;
 
+	case "addPoll" :
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify addPoll  functionality form start new topic and postListingPage all valid and invalid scenarios ', function(test) {
+			var addPoll= require("./testsuite/main/addPoll.js");
+			addPoll.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
 case "postEventMemberApproval":
 		var subFeature = feature[1];
 
