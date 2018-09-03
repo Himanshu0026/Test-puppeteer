@@ -219,6 +219,22 @@ postEventMemberApprovalTestcases.approveByModerator = function() {
 	}).then(function() {
 		// method to approve or delete the post by the admin user
 		postEventMemberApprovalTestcases.postApprovalByAdmin();
+	}).thenOpen(config.backEndUrl, function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+    this.waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
+      this.test.assertSelectorHasText('#ddSettings', 'Security');
+      this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
+      backEndregisterMethod.setApproveNewPost('99');
+    });
+	}).then(function() {
+		backEndregisterMethod.removeModerator();
+	}).then(function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+	}).waitForSelector('#autosuggest', function() {
+		postEventMemberApprovalMethod.setAdmin(postEventMemberApprovalJSON.adminUserLogin.username);
 	});
 };
 
