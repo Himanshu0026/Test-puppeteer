@@ -224,7 +224,7 @@ postEventMemberApprovalTestcases.approveByModerator = function() {
     this.waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
       this.test.assertSelectorHasText('#ddSettings', 'Security');
       this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
-      backEndregisterMethod.setApproveNewPost('99');
+      backEndregisterMethod.setApproveNewPost('0');
     });
 	}).then(function() {
 		backEndregisterMethod.removeModerator();
