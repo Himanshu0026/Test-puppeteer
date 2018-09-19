@@ -238,33 +238,6 @@ postEventMemberApprovalTestcases.approveByModerator = function() {
 	});
 };
 
-// method to Delete a pending post by select all pending post by  check box
-postEventMemberApprovalTestcases.deleteByAllCheckBox = function() {
-	casper.thenOpen(config.url, function() {
-		utils.info('Case 8 [ Delete a pending post by select all pending post by  check box ]');
-    forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
-  }).then(function() {
-    postEventMemberApprovalMethod.composePost();
-  }).then(function() {
-    postEventMemberApprovalMethod.getPostId(function(err, postId) {
-      if(!err) {
-				casper.waitForSelector('div.subheading input.entry-checkbox', function() {
-						this.test.assertExists('div.subheading input.entry-checkbox', ' check box found');
-						this.evaluate(function(){
-							document.querySelector('div.subheading input.entry-checkbox').click();
-						});
-						this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
-				}).waitForSelector('div#pending-menu', function() {
-					this.test.assertExists('a#decline_pending', 'DELETE TICK ON THE FLOATING MENU');
-					this.click('a#decline_pending');
-        }).waitForText("There's currently nothing that needs your approval.");
-      }
-    });
-  }).then(function() {
-    forumLoginMethod.logoutFromApp();
-  });
-};
-
 // method to check the functionality of approve post for guest user
 postEventMemberApprovalTestcases.unregisterUserApprovePost = function() {
 	casper.thenOpen(config.backEndUrl, function() {

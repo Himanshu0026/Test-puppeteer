@@ -79,64 +79,6 @@ postEventMemberApprovalMethod.composePost = function(msg) {
 	});
 };
 
-// method to get the id of the post
-postEventMemberApprovalMethod.getPostId = function(callback) {
-	casper.then(function() {
-		forumLoginMethod.logoutFromApp();
-	}).thenOpen(config.url, function() {
-		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.adminUserLogin.username, postEventMemberApprovalJSON.adminUserLogin.password);
-	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function() {
-		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'Category link found');
-		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
-	}).waitForSelector('li[id^="forum_"]', function() {
-		casper.test.assertExists('li#approvalQueue a', 'Approval Queue found');
-		casper.click('li#approvalQueue a');
-	}).waitForSelector('form#approveMembers', function() {
-		var post_id = casper.evaluate(function() {
-			var element=document.querySelectorAll("div[id^='post_message_']");
-			var id = element[element.length-1].id;
-			return id;
-		});
-		postId = post_id.split("_");
-		utils.info('post id ; '+postId[2]);
-		return callback(null, postId[2]);
-	});
-};
-
-// method to get the id of the post
-postEventMemberApprovalMethod.getPostIdForCombineForum = function(callback) {
-	casper.then(function() {
-		forumLoginMethod.logoutFromApp();
-	}).thenOpen(config.url, function() {
-		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.adminUserLogin.username, postEventMemberApprovalJSON.adminUserLogin.password);
-	}).waitForSelector('li.pull-right.user-panel', function() {
-		utils.info('User has been successfuly login to application with admin user');
-		this.test.assertExists('li#approvalQueue a', 'Approval Queue found');
-		this.click('li#approvalQueue a');
-	}).waitForSelector('form#approveMembers', function() {
-		var post_id = this.evaluate(function() {
-			var element=document.querySelectorAll("div[id^='post_message_']");
-			var id = element[element.length-1].id;
-			return id;
-		});
-		postId = post_id.split("_");
-		utils.info('post id ; '+postId[2]);
-		return callback(null, postId[2]);
-	});
-};
-
-//****************** method to delete the approved post*************************
-postEventMemberApprovalMethod.deletePost = function() {
-	casper.thenOpen(currentUrl, function() {
-		utils.info('Inside the deletePost method');
-		this.test.assertExists('form[name="posts"] div#post_list_'+postId[2] + ' input', 'Post to be deleted found');
-		this.click('form[name="posts"] div#post_list_'+postId[2] + ' input');
-	}).waitForSelector('input#deleteposts', function() {
-		this.click('input#deleteposts');
-	}).wait(2000, function() {
-	});
-};
-
 //*************************Method for calendar functionality ***************************************
 
 //*************************Method to enable the event approval from backend ************************

@@ -76,7 +76,7 @@ postEventMemberApproval.eventTest = function() {
 		}).then(function() {
 
 		// method to Approve a pending event -Approval queue button
-		/*postEventMemberApprovalTestcases.eventApprovalByApprovalQueueButton();
+		postEventMemberApprovalTestcases.eventApprovalByApprovalQueueButton();
 
 		// method to Approve a pending event -By clicking on topic
 		postEventMemberApprovalTestcases.eventApprovalByClickingOnEvent();
@@ -94,10 +94,10 @@ postEventMemberApproval.eventTest = function() {
 		postEventMemberApprovalTestcases.eventdeleteByClickingEvent();
 
 		// method to Delete a pending event by select the pending post by  check box
-		postEventMemberApprovalTestcases.eventdeleteByCheckBox();*/
+		postEventMemberApprovalTestcases.eventdeleteByCheckBox();
 
 		// method to Delete a pending event by select all pending post by  check box
-		//postEventMemberApprovalTestcases.eventdeleteByAllCheckBox();
+		postEventMemberApprovalTestcases.eventdeleteByAllCheckBox();
 
 		// method to edit a pending event by clicking on it
 		postEventMemberApprovalTestcases.eventEditByClickingOnIt();
