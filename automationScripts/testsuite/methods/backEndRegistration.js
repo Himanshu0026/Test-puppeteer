@@ -365,11 +365,6 @@ backEndForumRegisterMethod.editUserActions = function(userGroup, action, usersCo
 backEndForumRegisterMethod.deleteAllCategories = function() {
 	casper.mouse.move('li div.select');
 	casper.click('li a.manageAction span');
-	var url = casper.evaluate(function() {
-		var href = document.querySelector('div.tooltipMenu.forumActionbutton a:nth-child(2)').getAttribute('href');
-		return href;
-	});
-	console.log('the href of delete tab'+url);
 	casper.click('div.tooltipMenu.forumActionbutton a:nth-child(2)'); // click on delete of manage tab
 	//casper.waitWhileSelector(url, function success() {
 	//});
@@ -521,8 +516,6 @@ backEndForumRegisterMethod.addNewModerator = function(data, category) {
 				}, false);
 				casper.test.assertExists('div.ui-dialog-buttonset button','Save button Found');
 				casper.click('div.ui-dialog-buttonset button');
-				//casper.test.assertExists('button.button.btn-m.btn-blue.pull-right','Save button Found');
-				//casper.click('button.button.btn-m.btn-blue.pull-right');
 				casper.wait('2000', function(err) {
 				});
 			}

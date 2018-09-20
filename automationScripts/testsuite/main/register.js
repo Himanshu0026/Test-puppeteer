@@ -55,45 +55,6 @@ register.featureTest = function() {
 		//1.Test case to verify registration with valid data and verify message
 		registerTests.registrationWithValidInfo();
 
-		//28.Test case to verify registration for Uppercase letters from A-Z only format
-		//registerTests.registrationForDifferentUserNameFormat(registerJSON.upperCaseLettersOnly, "^[A-Z]+$");
-
-		//29.Test case to verify registration for Uppercase letters from A-Z including space
-		//registerTests.registrationForDifferentUserNameFormat(registerJSON.upperCaseLettersIncludingSpace, "^[A-Z ]+$");
-
-		//30.Test case to verify registration for lowercase letters from A-Z including space
-		//registerTests.registrationForDifferentUserNameFormat(registerJSON.lowerCaseLettersIncludingSpace, "^[a-z ]+$");
-
-		//31.Test case to verify registration for lowercase letters from A-Z only format
-		//registerTests.registrationForDifferentUserNameFormat(registerJSON.lowerCaseLettersOnly, "^[a-z]+$");
-
-		//32.Test case to verify registration for Uppercase and lowercase letters from A-Z
-		//registerTests.registrationForDifferentUserNameFormat(registerJSON.lowerAndUpperCaseLetters, "^[a-zA-Z]+$");
-
-		//33.Test case to verify registration for alphaNumeric characters only
-		//registerTests.registrationForDifferentUserNameFormat(registerJSON.alphaNumericCharactersOnly, "^[a-zA-Z0-9]+$");
-
-		//35.Test case to verify registration for Uppercase and lowercase letters from A-Z including space
-		//registerTests.registrationForDifferentUserNameFormat(registerJSON.lowerAndUpperCaseLettersIncludingSpace, "^[a-zA-Z ]+$");
-
-		//36,37.Test case to verify registration for Uppercase and lowercase letters from A-Z including underscore
-		//registerTests.registrationForDifferentUserNameFormat(registerJSON.lowerAndUpperCaseLettersIncludingUnderscore, "^[a-zA-Z_]+$");
-
-		//38,39.Test case to verify registration for Alphanumeric charecter inculding space
-		//registerTests.registrationForDifferentUserNameFormat(registerJSON.alphaNumericCharacterIncludingSpace, "^[a-zA-Z0-9 ]+$");
-
-		//40,41.Test case to verify registration for Alphanumeric charecter inculding space and under score
-		//registerTests.registrationForDifferentUserNameFormat(registerJSON.alphaNumericCharacterIncludingSpaceAndUnderscore, "^[a-zA-Z_0-9 ]+$");
-
-		//42,43.Test case to verify registration for A custom regular expression
-		//registerTests.registrationForDifferentUserNameFormat(registerJSON.customRegularExpression, "regexp");
-
-		//44.Test case to verify registration All Character And Any Format
-		//registerTests.registrationForDifferentUserNameFormat(registerJSON.allCharacterAndAnyFormat, "");
-
-		//50.Test case to verify Registration when Email address verification- Enabled And Approve new registrations- Enabled
-		//registerTests.registrationForEnabledEmailAndEnabledApproveNewRegistration();
-
 		//47.Test case to verify Registration when Email address verification- Disabled And Approve new registrations- Enable
 		registerTests.registrationForDisabledEmailAndEnableApproveNewRegistration();
 

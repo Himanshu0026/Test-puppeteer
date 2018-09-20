@@ -26,9 +26,7 @@ registerMethod.registerToApp = function(data) {
 
 //2.Logout after registration
 registerMethod.redirectToLogout = function() {
-	//var emailSuccessStartMsg = "Thank you for registering! Please check your email for instructions on how to begin using your account.";
 	var emailSuccessStartMsg = "Thank you for registering! We sent a verification email to";
-	//var emailSuccessEndMsg = "Please follow the instructions in the email to verify your account. If it doesn't arrive, please check your spam folder, or";
 	var ExistingUserMsg = "It looks like you already have a forum account! A forum account for that username and email address combination already exists";
 	var approvalSuccessMsg = "Thank you for registering! Your account will need to be approved before you have full access to the forums. You will be notified via email once your account has been reviewed.";
 	casper.waitForSelector('span.registration_msg', function() {
@@ -47,34 +45,6 @@ registerMethod.redirectToLogout = function() {
 				forumLoginMethod.logoutFromApp();
 			}
 	});
-	/*casper.waitForText(emailSuccessStartMsg, function() {
-		//this.waitForText(emailSuccessEndMsg, function() {
-			this.test.assertExists('div.back-message a:nth-child(1)');
-			this.click('div.back-message a:nth-child(1)');
-			utils.info('User successfully registered and added in the email verification group');
-			this.waitForSelector('ul.nav.pull-right span.caret', function() {
-				forumLoginMethod.logoutFromApp();
-			});
-		//});
-	}, function() {
-		casper.waitForText(approvalSuccessMsg, function() {
-			this.test.assertExists('div.back-message a:nth-child(1)');
-			this.click('div.back-message a:nth-child(1)');
-			utils.info('User successfully registered and added in the pending approval group');
-			this.waitForSelector('ul.nav.pull-right span.caret', function() {
-				forumLoginMethod.logoutFromApp();
-			});
-		}, function() {
-			casper.waitForText(ExistingUserMsg, function() {
-				utils.info('User already exists on the forum');
-			}, function() {
-				utils.info('User successfully registered and added registered group');
-				this.waitForSelector('ul.nav.pull-right span.caret', function() {
-					forumLoginMethod.logoutFromApp();
-				});
-			});
-		});
-	});*/
 };
 
 //3.Method For Multiple Users Registration
@@ -140,7 +110,6 @@ registerMethod.registerMember = function(data) {
 		});
 	});
 };
-
 
 registerMethod.getUname = function(callback) {
 	var username="";
