@@ -14,7 +14,7 @@
 	},
 
 	"expectedMessage":{
-		"Message":" You must select a category for your message."
+		"Message":"Please select a category from the list."
 	},
 	
 	"category" : {
