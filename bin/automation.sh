@@ -70,6 +70,9 @@ sleep 1
 printf "Executing Automation Script For $1 commitID\nTests executing for APPROVAL QUEUE for postTest: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./automationScripts/automation.js --feature="postEventMemberApproval postTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
+printf "Executing Automation Script For $1 commitID\nTests executing for BackArrow: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./automationScripts/automation.js --feature="backArrow" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+sleep 1
 #printf "Executing Automation Script For $1 commitID\nTests executing for APPROVAL QUEUE for eventTest: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature="postEventMemberApproval eventTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1

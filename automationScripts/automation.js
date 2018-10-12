@@ -309,6 +309,17 @@ case "combinationOfSubCategoryAndGroupPermissions":
 		});
 	break;
 
+	case "backArrow" :
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify backArrow  functionality form start new topic and postListingPage all valid and invalid scenarios ', function(test) {
+			var backArrow= require("./testsuite/main/backArrow.js");
+			backArrow.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
 case "postEventMemberApproval":
 		var subFeature = feature[1];
 

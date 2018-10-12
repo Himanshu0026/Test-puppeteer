@@ -1,0 +1,46 @@
+{
+
+        "topicListingPage" : {
+                "Text" :"Latest",
+                "Text1":"New",
+                "Text2":"Top"
+        },
+
+        "ValidCredential" :{
+		"title" : "ONEpluse",
+		"content" : "my old topic",
+		"category" : "backArrowCategory"
+	},
+        "ValidCredentialSubCategory" :{
+		"title" : "ONEpluse",
+		"content" : "my old topic",
+		"category" : "backArrowSubCategory"
+	},
+        "postReply":{
+                "backarrowPostReply":"backarrowReply"
+        },
+
+        "backArrowCategory" : {
+	    	"title" : "backArrowCategory",
+	        "description" : "this is backArrow Categories",
+	        "isSubcategorycheckbox" : false,
+		"isSubcategoryvalue" : false,
+	        "passwordprotectcheckbox" : false,
+	        "passwordprotectvalue" : false,
+	        "lock" : false,
+	        "invisible" : false,
+	        "linked" : false
+	},
+
+        "backArrowSubCategory" : {
+	    	"title" : "backArrowSubCategory",
+	        "description" : "this is backArrow SubCategories",
+	        "isSubcategorycheckbox" : true,
+		"isSubcategoryvalue" : "backArrowCategory",
+	        "passwordprotectcheckbox" : false,
+	        "passwordprotectvalue" : false,
+	        "lock" : false,
+	        "invisible" : false,
+	        "linked" : false
+	}
+}
