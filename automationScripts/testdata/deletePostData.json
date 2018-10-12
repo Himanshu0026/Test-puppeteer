@@ -28,5 +28,9 @@
 		"title" : "ONEpluse",
 		"content" : "my old topic",
 		"category" : "CheckPostCountCategory"
+	},
+
+	"categoryName":{
+		"category":"General"
 	}
 }
