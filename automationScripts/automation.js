@@ -254,6 +254,48 @@ case "combinationOfSubCategoryAndGroupPermissions":
 		}
 	break;
 
+	case "combinationOfCategoryAndGroupPermissions":
+		var subFeature = feature[1];
+		switch(subFeature) {
+			case "registerUserTest":
+			casper.test.begin('Verify Combination of Category and Group Permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
+				combinationOfCategoryAndGroupPermissions.registerUserTest(casper, casper.test);
+				casper.run(function(){
+					test.done();
+				});
+			});
+			break;
+			case "pendingUserTest":
+			casper.test.begin('Verify Combination of Category and Group Permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
+				combinationOfCategoryAndGroupPermissions.pendingUserTest(casper, casper.test);
+				casper.run(function(){
+					test.done();
+				});
+			});
+			break;
+			case "moderatorsUserTest":
+			casper.test.begin('Verify Combination of Category and Group Permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
+				combinationOfCategoryAndGroupPermissions.moderatorsUserTest(casper, casper.test);
+				casper.run(function(){
+					test.done();
+				});
+			});
+			break;
+			case "emailVerificationUserTest":
+			casper.test.begin('Verify Combination of Category and Group Permission functionality from home page with all valid and invalid scenarios ', function(test) {
+				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
+				combinationOfCategoryAndGroupPermissions.emailVerificationUserTest(casper, casper.test);
+				casper.run(function(){
+					test.done();
+				});
+			});
+			break;
+		}
+	break;
+
 	case "moveTopicAndPost":
 		casper.test.begin(branchName+ ' : ' + commitId + ' Verify Move Topic And Post functionlity',function(test){
 			var moveTopicAndPost=require("./testsuite/main/moveTopicAndPost.js");
