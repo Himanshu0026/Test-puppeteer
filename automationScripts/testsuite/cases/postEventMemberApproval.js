@@ -264,3 +264,159 @@ postEventMemberApprovalTestcases.unregisterUserApprovePost = function() {
 		}
 	});
 };
+
+// Test cases for event approval
+
+//method to set the setting of event approval
+postEventMemberApprovalTestcases.eventApprovalSetting = function() {
+	casper.thenOpen(config.backEndUrl , function() {
+		utils.info('Case - Event approval backend setting');
+	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]', function() {
+		this.test.assertSelectorHasText('#ddSettings', 'General');
+		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
+		backEndregisterMethod.enableDisableCalender(true);
+	}).then(function() {
+		this.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
+	}).waitForSelector('div#ddContent', function() {
+		casper.click('div#ddContent a:nth-child(2)');
+	}).waitForSelector('div#tab_wrapper', function() {
+		postEventMemberApprovalMethod.enableDisableEventApproval(true);
+	});
+};
+
+//method to compose multiple post
+postEventMemberApprovalTestcases.composeMultipleEvent = function() {
+	casper.thenOpen(config.url, function() {
+		this.test.assertExists('#inline_search_box', 'Search bar present');
+		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
+	}).then(function() {
+		casper.click('i.icon.icon-menu');
+		try {
+			casper.test.assertExists('ul#calendars_toggle_link i','calender menu found');
+			casper.click('ul#calendars_toggle_link i');
+			casper.test.assertExists('a[href^="/calendar/display?from_month=&from_year=&view="]','First calender found');
+			casper.click('a[href^="/calendar/display?from_month=&from_year=&view="]');
+		} catch (e) {
+				casper.test.assertExists('li#calenders_show a','calender menu found');
+				casper.click('li#calenders_show a');
+		}
+	}).waitForSelector('.calendar-add-event a', function() {
+		postEventMemberApprovalMethod.composeEvent('Approve a pending event from- Approval queue button');
+	}).then(function() {
+		postEventMemberApprovalMethod.composeEvent('Approve a pending event from- Delete from approval queue button');
+	}).then(function() {
+		//postEventMemberApprovalMethod.composeEvent('Approve a pending event from- Edit from approval queue button');
+	}).then(function() {
+		postEventMemberApprovalMethod.composeEvent('Approve a pending event from- Approve by single checkbox');
+	}).then(function() {
+		postEventMemberApprovalMethod.composeEvent('Approve a pending event from- Delete by single checkbox');
+	}).then(function() {
+		postEventMemberApprovalMethod.composeEvent('Approve a pending event from- Extra post');
+	}).then(function() {
+		postEventMemberApprovalMethod.composeEvent('Approve a pending event from- Approve by all checkbox');
+	}).then(function() {
+		postEventMemberApprovalMethod.composeEvent('Approve a pending event from- Delete by click on topic');
+	}).then(function() {
+		postEventMemberApprovalMethod.composeEvent('Approve a pending event from- Approve by click on topic');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
+	});
+};
+
+// method to approve or delete the event by the admin user
+postEventMemberApprovalTestcases.eventApprovalByAdmin = function() {
+	casper.thenOpen(config.url, function() {
+		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.adminUserLogin.username, postEventMemberApprovalJSON.adminUserLogin.password);
+	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function() {
+		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'Category link found');
+		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertExists('li#approvalQueue a', 'Approval Queue found');
+		casper.click('li#approvalQueue a');
+	}).waitForSelector('form#approveMembers', function() {
+		this.click("a[id^='approveEvent'] i");
+	}).wait('1000',function() {
+		this.click("a[id^='deleteEvent'] i");
+	}).wait('1000',function() {
+		this.evaluate(function() {
+			document.querySelector('div.post-edit.pull-right.dropdown input.entry-checkbox:nth-of-type(1)').click();
+		});
+		this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
+		this.test.assertExists('a#approvePending i', 'approve tick on the floating menu');
+		this.click('a#approvePending i');
+	}).wait('1000',function () {
+		this.evaluate(function() {
+			document.querySelector('div.post-edit.pull-right.dropdown input.entry-checkbox:nth-of-type(1)').click();
+		});
+		this.test.assertExists('div#pending-menu', ' Floating menu is appear on bottom of the page');
+		this.test.assertExists('a#decline_pending', ' Delete tick on the floating menu');
+		this.click('a#decline_pending');
+	}).wait('1000',function () {
+		this.click('#event_title a');
+	}).waitForSelector('.calendar-daydetail', function() {
+		this.test.assertTextExists('This event is awaiting moderator approval.', 'This event is awaiting moderator approval. found on the page');
+		this.test.assertDoesntExist("a[id^='approveEvent'] i", 'approve button not found');
+		this.test.assertDoesntExist("a[id^='deleteEvent'] i", 'delete button not found');
+	}).then(function() {
+		this.click('#links-nav i.icon');
+	}).waitForSelector('#latest_topics_show a', function() {
+		this.click('#forums_toggle_link a[href="/categories"]');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertExists('li#approvalQueue a', 'Approval Queue found');
+		casper.click('li#approvalQueue a');
+	}).waitForSelector('form#approveMembers', function() {
+		this.test.assertExists('div.subheading input.entry-checkbox', 'check box found');
+		this.evaluate(function(){
+			document.querySelector('div.subheading input.entry-checkbox').click();
+		});
+		this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
+		this.test.assertExists('a#approvePending i', 'APPROVE TICK ON THE FLOATING MENU');
+		this.click('a#approvePending i');
+	}).wait('2000',function () {
+		this.test.assertTextExists("There's currently nothing that needs your approval.");
+	}).then(function() {
+		/*this.click('#links-nav i.icon');
+	}).waitForSelector('#latest_topics_show a', function() {
+		this.click('#latest_topics_show a');
+	}).waitForSelector('.topics-list', function() {
+		this.click('a[id^="topic_"]');
+	}).waitForSelector('#posts-list', function() {
+		this.test.assertTextExists('Approve a pending post from- Approval queue button', ' found on the page');
+		this.test.assertTextDoesntExist('Approve a pending post from- Delete from approval queue button');
+		//this.test.assertTextExists('Approve a pending post from- Edit from approval queue button', ' found on the page');
+		this.test.assertTextExists('Approve a pending post from- Approve by single checkbox', ' found on the page');
+		this.test.assertTextDoesntExist('Approve a pending post from- Delete by single checkbox');
+		this.test.assertTextExists('Approve a pending post from- Approve by single checkbox', ' found on the page');
+		this.test.assertTextExists('Approve a pending post from- Approve by click on topic', ' found on the page');
+		this.test.assertTextDoesntExist('Approve a pending post from- Delete by click on topic');
+		this.test.assertTextExists('Approve a pending post from- Approve by all checkbox', ' found on the page');*/
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
+	}).then(function() {
+		this.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
+	}).waitForSelector('div#ddContent', function() {
+		casper.click('div#ddContent a:nth-child(2)');
+	}).waitForSelector('div#tab_wrapper', function() {
+	}).then(function() {
+		this.click('li.inactive_tab a');
+	}).waitForSelector('td.userGroupActions', function() {
+		var tableLength = casper.evaluate(function() {
+			var len = document.querySelectorAll('table.text.fullborder tr');
+			return len.length;
+		});
+		var grpName = casper.evaluate(function(tableLength){
+			for(var i=3; i<=tableLength; i++) {
+				var group = document.querySelector('tr:nth-child('+i+') td:nth-child(1) li'); // change li
+				if (group.innerText == 'Registered Users') {
+					document.querySelector('tr:nth-child('+i+') td:nth-child(2) a').click();
+					return (group.innerText);
+				}
+			}
+		},tableLength);
+		utils.info('group ='+grpName);
+	});
+};

@@ -44,3 +44,24 @@ postEventMemberApproval.postTest = function() {
 
 	});
 };
+
+postEventMemberApproval.eventTest = function() {
+
+		casper.start(config.backEndUrl, function() {
+
+			utils.info(" Title of the page :"+this.getTitle());
+			forumLoginMethod.loginToForumBackEnd();
+
+		}).then(function() {
+
+			//method to set the setting of event approval
+			//postEventMemberApprovalTestcases.eventApprovalSetting();
+
+			//method to compose multiple post
+			postEventMemberApprovalTestcases.composeMultipleEvent();
+
+			// method to approve or delete the event by the admin user
+			postEventMemberApprovalTestcases.eventApprovalByAdmin();
+
+	});
+};

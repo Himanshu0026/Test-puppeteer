@@ -58,3 +58,32 @@ postEventMemberApprovalMethod.composePost = function(msg) {
 		});
 	});
 };
+
+//*************************Method to enable the event approval from backend ************************
+postEventMemberApprovalMethod.enableDisableEventApproval = function(value) {
+	casper.then(function() {
+		this.click('li.inactive_tab a');
+	}).waitForSelector('td.userGroupActions', function() {
+		var tableLength = casper.evaluate(function() {
+			var len = document.querySelectorAll('table.text.fullborder tr');
+			return len.length;
+		});
+		var grpName = casper.evaluate(function(tableLength){
+			for(var i=3; i<=tableLength; i++) {
+				var group = document.querySelector('tr:nth-child('+i+') td:nth-child(1) li'); // change li
+				if (group.innerText == 'Registered Users') {
+					document.querySelector('tr:nth-child('+i+') td:nth-child(2) a').click();
+					return (group.innerText);
+				}
+			}
+		},tableLength);
+		utils.info('group ='+grpName);
+	}).waitForSelector('input#t', function() {
+		utils.enableorDisableCheckbox('t', value);
+		this.test.assertExists('button.button.btn-m.btn-blue', 'Save button found');
+		this.click('button.button.btn-m.btn-blue');
+	}).waitForSelector('font[color="red"]', function() {
+		utils.info("Permission changed");
+	});
+};
+

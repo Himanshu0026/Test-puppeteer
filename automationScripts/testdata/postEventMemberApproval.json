@@ -15,28 +15,6 @@
 		"password": "isneha"
 	},
 
-	"infoToRegisterUser" : [{
-		"uname" : "neha",
-		"upass" : "neha",
-		"uemail" : "neha@gmail.com",
-		"fullName" : "Blank Email",
-		"imID" : "Hello",
-		"birthday" : "04/12/1991",
-		"usignature" : "This is my signature blank email",
-		"namePrivate" : true
-	},
-
-	{
-		"uname" : "isneha",
-		"upass" : "isneha",
-		"uemail" : "isneha@gmail.com",
-		"fullName" : "Blank Email",
-		"imID" : "Hello",
-		"birthday" : "04/12/1991",
-		"usignature" : "This is my signature blank email",
-		"namePrivate" : true
-	}],
-
 	"memberInfo" : {
 		"uname": "vishal",
 		"upass": "1234",
