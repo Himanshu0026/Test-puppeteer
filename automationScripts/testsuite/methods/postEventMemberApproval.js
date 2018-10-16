@@ -60,6 +60,7 @@ postEventMemberApprovalMethod.composePost = function(msg) {
 };
 
 //*************************Method to enable the event approval from backend ************************
+
 postEventMemberApprovalMethod.enableDisableEventApproval = function(value) {
 	casper.then(function() {
 		this.click('li.inactive_tab a');
@@ -87,3 +88,28 @@ postEventMemberApprovalMethod.enableDisableEventApproval = function(value) {
 	});
 };
 
+// method to compose event
+postEventMemberApprovalMethod.composeEvent = function(eventInfo) {
+	casper.click('.calendar-add-event a');
+	casper.then(function() {
+		casper.sendKeys('form#PostCalEvent input[name="event_title"]', 'New event');
+		casper.fillSelectors('form#PostCalEvent', {
+				'input#allDay' : 1
+		}, false);
+	}).waitForSelector('#message_ifr', function() {
+		this.test.assertExists('#message_ifr','message-ifr found');
+		this.withFrame('message_ifr', function() {
+			try{
+				this.test.assertExists('#tinymce');
+				this.sendKeys('#tinymce', eventInfo);
+			}catch(e) {
+				this.test.assertDoesntExist('#tinymce');
+			}
+		});
+	}).then(function() {
+		this.click('#post_event_buttton');
+		this.wait('2000', function() {
+
+		});
+	});
+};
