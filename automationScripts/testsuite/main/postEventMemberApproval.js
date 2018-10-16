@@ -55,7 +55,7 @@ postEventMemberApproval.eventTest = function() {
 		}).then(function() {
 
 			//method to set the setting of event approval
-			//postEventMemberApprovalTestcases.eventApprovalSetting();
+			postEventMemberApprovalTestcases.eventApprovalSetting();
 
 			//method to compose multiple post
 			postEventMemberApprovalTestcases.composeMultipleEvent();
