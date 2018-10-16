@@ -395,7 +395,7 @@ postEventMemberApprovalTestcases.eventApprovalByAdmin = function() {
 		this.test.assertTextExists('Approve a pending post from- Approve by all checkbox', ' found on the page');*/
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
-	}).then(function() {
+	}).thenOpen(config.backEndUrl , function() {
 		this.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddContent"]');
 	}).waitForSelector('div#ddContent', function() {
