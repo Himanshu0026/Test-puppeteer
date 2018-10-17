@@ -93,6 +93,8 @@ replyPostTests.quoteEmoji=function() {
                         this.wait(1000, function(){
                                 this.test.assertExists('img.emoji.bbc_img');
                         });
+                }).then(function(){
+                  forumLoginMethod.logoutFromApp();
                 });
         });
 };
