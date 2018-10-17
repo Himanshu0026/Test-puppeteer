@@ -200,6 +200,17 @@ switch (feature[0]) {
 			});
 		});
 	break;
+	
+	case "replyPost" :
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify replyPost functionality from home page with all valid and invalid scenarios ', function(test) {
+			var replyPost = require("./testsuite/main/replyPost.js");
+			replyPost.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
 
 case "combinationOfSubCategoryAndGroupPermissions":
 	var subFeature = feature[1];
