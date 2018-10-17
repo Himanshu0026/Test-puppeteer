@@ -674,3 +674,19 @@ backEndForumRegisterMethod.createCategorySubcategory= function(title, data){
 		});
 	});
 };
+
+backEndForumRegisterMethod.setPostPerPage=function(value){
+	casper.waitForSelector('form[name="posts"]',function() {
+		this.test.assertExists('select#privacy');
+		this.fillSelectors('form[name="posts"]', {
+			'select[name="replies"]' : value
+		});
+		casper.click('button.button.btn-m.btn-blue');
+	}).waitUntilVisible('div#ajax-msg-top', function() {
+		if (this.visible('div#ajax-msg-top')) {
+			utils.info(' Saved....');
+		}else{
+			utils.info(' Saved is not displayed.');
+		}
+	});
+};

@@ -5,6 +5,7 @@ var profilePageJSON=require('../../testdata/profilePageData.json');
 var replyPostJSON=require('../../testdata/replyPost.json');
 var topicJSON = require('../../testdata/topic.json');
 var topicMethod = require('../methods/topic.js');
+var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var forumLoginMethod = require('../methods/login.js');
 var replyPostMethod= require('../methods/replyPost.js');
 var registerMethod=require('../methods/register.js');
@@ -24,6 +25,14 @@ replyPostTests.createTopic=function() {
 	}).waitForText(topicJSON.ValidCredential.content);
 };
 
+replyPostTests.postPerPage=function(value){
+  casper.thenOpen(config.backEndUrl, function(){
+    utils.info('******************************PostPer-Page********************************************');
+    backEndForumRegisterMethod.goToDisplayPage();
+  }).then(function(){
+    backEndForumRegisterMethod.setPostPerPage(value);
+  });
+};
 //Verify with the  reply with quote button in case on pagination
 //add delete method
 replyPostTests.createPagination=function() {
