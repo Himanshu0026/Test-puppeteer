@@ -31,12 +31,11 @@ replyPostTests.createPagination=function() {
                 utils.info('Case 1[Verify with the  reply with quote button in case on pagination]');
         }).waitForSelector('form[name="posts"] a.topic-title', function(){
                 this.click('form[name="posts"] a.topic-title');
-	}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
+        }).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
                 replyPostMethod.createPagination();
-        }).wait(2000, function(){
-                this.reload(function() {
-                        this.test.assertExists('a.btn-subtle.pagination-next-page', 'pagination icon found on postlistingPage');
-                });
+                this.reload(function(){});
+        }).waitForSelector('a.btn-subtle.pagination-next-page', function(){
+                this.test.assertExists('a.btn-subtle.pagination-next-page', 'pagination icon found on postlistingPage');
         }).then(function(){
                 index=9;
                 replyPostMethod.getQuoteIds('a[id^="reply_with_quote_"]', index);
