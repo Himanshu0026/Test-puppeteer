@@ -3,6 +3,7 @@ var config = require('../../../config/config.json');
 var utils = require('../utils.js');
 var forumLoginMethod = require('../methods/login.js');
 var thumpsUpDownTestcases = require('../cases/thumpsUpDown.js');
+var replyPostTests = require('../cases/replyPost.js');
 var ooScriptTestcases = require('../cases/ooScript.js');
 var ooScript = module.exports = {};
 
@@ -22,6 +23,9 @@ ooScript.featureTest = function() {
 		thumpsUpDownTestcases.createCategoryTestCase();
 
 		ooScriptTestcases.createNewTopic();
+
+		//setPostPerPage
+		replyPostTests.postPerPage('50');
 
 	}).thenOpen(config.url+ 'cgi/util/test_object_framework.cgi', function() {
 	}).then(function() {
