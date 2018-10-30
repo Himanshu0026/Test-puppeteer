@@ -7,7 +7,7 @@
 	"app": {
 		"verbose" : true,
 	 	"logLevel" : "debug",
-		"waitTimeout" : "20000",
+		"waitTimeout" : "30000",
 		"viewportSize": {
 			"width": 1024,
 			"height": 768
