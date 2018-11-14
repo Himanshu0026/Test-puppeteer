@@ -427,6 +427,17 @@ case "postEventMemberApproval":
 		}
 	break;
 
+	case "topicsPostCount" :
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify topicsPostCount functionality from home page with all valid and invalid scenarios ', function(test) {
+			var topicsPostCount = require("./testsuite/main/topicscount.js");
+			topicsPostCount.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
 	default:
 		casper.echo("Please select any feature from options given below. For ex: casperjs test automation.js --feature = <option>.\n");
 		casper.echo("Options:");
