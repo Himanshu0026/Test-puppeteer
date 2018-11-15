@@ -19,7 +19,10 @@ replyPostMethod.createPagination= function(){
                                 this.test.assertExists('input[name="submitbutton"]', 'post button found after add content in the text box');
                                 this.test.assertExists('input[name="submitbutton"]');
                                 this.click('input[name="submitbutton"]');
-                        }).waitForText('post reply');
+                        }).waitForText('post reply', function(){
+                          this.wait(2000, function(){
+                          });
+                        });
                 });
         });
 };
