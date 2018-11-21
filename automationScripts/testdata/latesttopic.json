@@ -4,9 +4,16 @@
                 "Text" :"my old topic"
         },
 
+        "Text":{
+                "msg" :"Sign up"
+        },
+
+        "adminUrl" :"https://beta22.websitetoolbox.com/?action=adminlogin",
+        "password" :"test",
+
         "ValidCredential" :{
                 "title" : "ONEpluse",
 		"content" : "hello new topic",
-		"category" : "general"
+		"category" : "General"
         }
 }

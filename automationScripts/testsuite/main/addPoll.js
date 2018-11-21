@@ -37,7 +37,7 @@ addPoll.featureTest = function(){
 		addPollTests.showResultLink();
 		//Verify when disable vote Poll for Registered user from group Permission
 		addPollTests.disableVotePoll();
-		//
+		//enabled the vote permission after add a new poll."
 		addPollTests.disableEnableVotePollCheckError();
 
 

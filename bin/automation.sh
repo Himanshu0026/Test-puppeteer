@@ -82,8 +82,11 @@ sleep 1
 printf "Executing Automation Script For $1 commitID\nTests executing for TOPICS AND POST COUNT: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./automationScripts/automation.js --feature="topicsPostCount" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
-#printf "Executing Automation Script For $1 commitID\nTests executing for APPROVAL QUEUE for memberApprovalTest: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-#casperjs test ./automationScripts/automation.js --feature="postEventMemberApproval memberApprovalTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+printf "Executing Automation Script For $1 commitID\nTests executing for LATEST TOPIC PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./automationScripts/automation.js --feature="latestTopic" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+sleep 1
+#printf "Executing Automation Script For $1 commitID\nTests executing for POST TOPIC USER PERMISSINS for registered user: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#casperjs test ./automationScripts/automation.js --feature="postTopicUserPermission registeredUserTest"  --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1
 #printf "Executing Automation Script For $1 commitID\nTests executing for APPROVAL QUEUE for memberDeletionTest: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature="postEventMemberApproval memberDeletionTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt

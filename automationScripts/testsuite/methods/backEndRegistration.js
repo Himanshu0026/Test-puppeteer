@@ -135,6 +135,20 @@ backEndForumRegisterMethod.enableDisablePolls = function(value) {
 	});
 };
 
+backEndForumRegisterMethod.enableDisablePollsGeneralPage = function(value) {
+	casper.waitForSelector('form[name="posts"]',function() {
+		this.test.assertExists('input#enable_polls');
+		utils.enableorDisableCheckbox('enable_polls', value);
+		this.click('button.button.btn-m.btn-blue');
+	}).waitUntilVisible('div#ajax-msg-top', function() {
+		if (this.visible('div#ajax-msg-top')) {
+      			utils.info(' Saved....');
+    		}else{
+			utils.info(' Saved is not displayed.');
+		}
+	});
+};
+
 backEndForumRegisterMethod.enableDisableMessages = function(value) {
 	casper.waitForSelector('form[name="posts"]',function() {
 		this.test.assertExists('input#allow_pm');

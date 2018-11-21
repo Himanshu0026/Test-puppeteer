@@ -438,6 +438,18 @@ case "postEventMemberApproval":
 		});
 	break;
 
+	case "latestTopic" :
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify latestTopicPage functionality from home page with all valid and invalid scenarios ', function(test) {
+			var latestTopic = require("./testsuite/main/latesttopic.js");
+			latestTopic.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
+
 	default:
 		casper.echo("Please select any feature from options given below. For ex: casperjs test automation.js --feature = <option>.\n");
 		casper.echo("Options:");

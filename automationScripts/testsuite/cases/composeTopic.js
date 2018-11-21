@@ -123,6 +123,7 @@ composeTopicTests.composeTopicPagination=function(){
                		});
 		});
 	}).thenOpen(config.url, function(){
+		this.test.assertExists('a.btn-subtle.pagination-last-page i','pagination icon found on latestTopicpage');
 		this.waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 			this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
 			this.evaluate(function(){

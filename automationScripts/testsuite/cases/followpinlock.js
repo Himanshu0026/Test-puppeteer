@@ -341,6 +341,9 @@ followpinlockTest.lockAnyTopic= function() {
 		this.test.assertExists('a#lock');
 		this.click('a#lock');
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
+                //latesttopicpage
+                //Verify icon when thread is Locked
+                this.test.assertExists('i.glyphicon.glyphicon-lock.help-tooltip', 'lock icon found on topiclistingpage');
 		var message=this.getElementAttribute('i.glyphicon.glyphicon-lock.help-tooltip', 'data-original-title');
     this.test.assertEquals(message, followPinLockJSON.lockTopic.expectedMsg, 'both the text are equal');
 	});
@@ -589,6 +592,8 @@ followpinlockTest.PinIconTopicListingPage= function() {
 		this.test.assertExists('a#pin');
 		this.click('a#pin');
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
+                //pinned icon found
+                this.test.assertExists('i.glyphicon.glyphicon-pushpin.help-tooltip', 'pinned icon found');
 		var message=this.getElementAttribute('i.glyphicon.glyphicon-pushpin.help-tooltip', 'data-original-title');
 		this.test.assertEquals(message, followPinLockJSON.pinMessage.expectedMsg, 'both the text are equal');
 	});

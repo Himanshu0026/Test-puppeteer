@@ -308,6 +308,8 @@ addPollTests.addPollWithOtherUserTopic=function(){
 		this.test.assertExists('a#backArrowPost i', 'back arrow icon found on postListingPage');
         	this.click('a#backArrowPost i');
         }).waitForSelector('form[name="posts"] a.topic-title', function(){
+		//Verify icon when  Poll is being added latesttopicpage
+		this.test.assertExists('span.mod.icons i.glyphicon.glyphicon-stats', 'poll icon found on latesttopicpage');
 		var message=this.getElementAttribute('span.mod.icons i.glyphicon.glyphicon-stats', 'data-original-title');
 		this.test.assertEquals(message, pollJSON.pollInfo.pollMgs, 'both the text are equal');
 	});
@@ -320,6 +322,7 @@ addPollTests.disableAddPollFromModeratorPage=function(){
 		utils.info(' Case 24[Verify when disable Add Poll  for moderator from group Permission, verify able to add poll to other users post]');
 		utils.info(' Case 25[Verify when disable Edit Poll  for moderator from group Permission, verify able to add poll to other users post]');
 		utils.info(' Case 26[Verify when disable Delete Poll  for moderator from group Permission, verify able to add poll to other users post]');
+		utils.info(' Case 1[Verify disable addPoll on latestTopicPage]');
         	backEndForumRegisterMethod.goToCategoryPage();
         }).then(function(){
 		casper.mouse.move('li div.select');
@@ -339,30 +342,38 @@ addPollTests.disableAddPollFromModeratorPage=function(){
 		}).waitForText('Save', function(){
 			backEndForumRegisterMethod.editGroupPermissions('Moderators', 'post_polls', false);
 		});
-	}).then(function(){
-		casper.thenOpen(config.url, function(){
-			//forumLoginMethod.loginToApp(followPinLockJSON.moderatorLogin.username, followPinLockJSON.moderatorLogin.password);
-			this.waitForSelector('form[name="posts"] a.topic-title', function(){
-				this.click('form[name="posts"] a.topic-title');
-			}).waitForSelector('span#editableSubject', function(){
-				//verified the edit button and the delete button on postlistingpage
-				this.test.assertDoesntExist('div[id^="post_list_"] div:nth-child(2) div ul  li a', 'Edit poll button not found on postlistingPage');
-				this.test.assertDoesntExist('a#delete_poll', 'delete button not found postListingPage');
-				this.wait(1000, function(){});
-			}).then(function(){
-				this.test.assertExists('a#links-nav i');
-				this.click('a#links-nav i');
-				this.test.assertExists('li#latest_topics_show a','title present on forum');
-				this.click('li#latest_topics_show a');
-			}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+		this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function(){
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+			this.test.assertSelectorHasText('#ddSettings', 'General');
+			this.click('a[href="/tool/members/mb/settings?tab=General"]');
+		}).waitForSelector('button.button.btn-m.btn-blue', function(){
+			backEndForumRegisterMethod.enableDisablePollsGeneralPage(false);
+		}).then(function(){
+			casper.thenOpen(config.url, function(){
+				//forumLoginMethod.loginToApp(followPinLockJSON.moderatorLogin.username, followPinLockJSON.moderatorLogin.password);
+				this.waitForSelector('form[name="posts"] a.topic-title', function(){
+					this.test.assertDoesntExist('span.mod.icons i.glyphicon.glyphicon-stats','poll selector not visible on latesttopicpage');
+				}).then(function(){
+					this.click('form[name="posts"] a.topic-title');
+				}).waitForSelector('span#editableSubject', function(){
+					//verified the edit button and the delete button on postlistingpage
+					this.test.assertDoesntExist('div[id^="post_list_"] div:nth-child(2) div ul  li a', 'Edit poll button not found on postlistingPage');
+					this.test.assertDoesntExist('a#delete_poll', 'delete button not found postListingPage');
+					this.wait(1000, function(){});
+				}).then(function(){
+					this.test.assertExists('a#links-nav i');
+					this.click('a#links-nav i');
+					this.test.assertExists('li#latest_topics_show a','title present on forum');
+					this.click('li#latest_topics_show a');
+				}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 					var index=2;
 					addPollMethod.gettopicId('a[id^="topic_"]', index);
-			}).waitForSelector('span#editableSubject', function(){
-				//check add poll under dropdown
-				this.test.assertExists('div.topic-tools.pull-right div.dropdown a span','shield icon found on postListingPage');
-				this.click('div.topic-tools.pull-right div.dropdown a span');
-			}).then(function(){
-				this.test.assertTextDoesntExist('Add Poll', 'Add poll option didnt found on postlistingPage');
+				}).waitForSelector('span#editableSubject', function(){
+					//check add poll under dropdown
+					this.test.assertDoesntExist('div.topic-tools.pull-right div.dropdown a span','shield icon found on postListingPage');
+				}).then(function(){
+					this.test.assertTextDoesntExist('Add Poll', 'Add poll option didnt found on postlistingPage');
+				});
 			});
 		});
 	});
@@ -388,6 +399,14 @@ addPollTests.enableAddPollFromModeratorPage=function(){
 	}).waitForSelector('input[name="usertitle"]', function(){
 		addPollMethod.enableDisableModeratorPermission('l', 'm', 'n', true);
 	}).then(function(){
+		//added test for latestTopicPage
+		casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function(){
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+			this.test.assertSelectorHasText('#ddSettings', 'General');
+			this.click('a[href="/tool/members/mb/settings?tab=General"]');
+		}).waitForSelector('button.button.btn-m.btn-blue', function(){
+			backEndForumRegisterMethod.enableDisablePollsGeneralPage(true);
+		});
 		this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
 	                this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	                this.click('a[href="/tool/members/mb/usergroup"]');
@@ -413,7 +432,6 @@ addPollTests.enableAddPollFromModeratorPage=function(){
 		});
 	});
 };
-
 
 //To verify vote now button.
 addPollTests.verifyVoteButtonRegister=function(){
@@ -549,12 +567,4 @@ addPollTests.disableEnableVotePollCheckError=function(){
 			this.click('input[name="pollvotesave"]');
 		}).waitForText(addPollJSON.checkMessageVotedTopic.message);
 	});
-};
-
-addPollTests.checkBackArrow=function(){
-	utils.info('verify back arrow in addPoll cases');
-
-
-
-
 };
