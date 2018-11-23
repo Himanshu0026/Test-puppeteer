@@ -98,7 +98,10 @@ moveTopicAndPostTestcases.topicListingPageUnderCategory = function(userGroup) {
     this.click('#forums_toggle_link a');
   }).waitForText(category.title, function() {
     this.test.assertSelectorHasText('ul[id="'+category_Id+'"] a', category.title);
-    this.click('ul[id="'+category_Id+'"] a');
+    casper.evaluate(function(category_Id) {
+	    document.querySelector('ul[id="'+category_Id+'"] a').click();
+    },category_Id);
+    //this.click('ul[id="'+category_Id+'"] a');
   }).waitForSelector('#topics_tab', function() {
 		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' Start New topic on subcategory page Found');
 		this.click('#ajax_subscription_vars a.start-new-topic-btn');
@@ -136,7 +139,10 @@ moveTopicAndPostTestcases.topicListingPageUnderSubCategory = function(userGroup)
     this.click('#forums_toggle_link a');
   }).waitForText(category.title, function() {
     this.test.assertSelectorHasText('ul[id="'+category_Id+'"] a', category.title);
-    this.click('ul[id="'+category_Id+'"] a');
+    casper.evaluate(function(category_Id) {
+	    document.querySelector('ul[id="'+category_Id+'"] a').click();
+    },category_Id);
+    //this.click('ul[id="'+category_Id+'"] a');
   }).waitForText(subCategory.title, function() {
     this.click('li[id="forum_'+subCategory_Id+'"] a');
   }).waitUntilVisible('.topics-list', function() {
@@ -246,7 +252,10 @@ moveTopicAndPostTestcases.topicListingPageUnderCategoryForRegisteredUserWhenDisa
     this.click('#forums_toggle_link a');
   }).waitForText(category.title, function() {
     this.test.assertSelectorHasText('ul[id="'+category_Id+'"] a', category.title);
-    this.click('ul[id="'+category_Id+'"] a');
+    casper.evaluate(function(category_Id) {
+	    document.querySelector('ul[id="'+category_Id+'"] a').click();
+    },category_Id);
+    //this.click('ul[id="'+category_Id+'"] a');
   }).waitForSelector('#topics_tab', function() {
     this.click('#topics_tab');
   }).waitForSelector('.topics-list', function() {
@@ -278,6 +287,9 @@ moveTopicAndPostTestcases.topicListingPageUnderSubCategoryForRegisteredUserWhenD
     this.click('#forums_toggle_link a');
   }).waitForText(category.title, function() {
     this.test.assertSelectorHasText('ul[id="'+category_Id+'"] a', category.title);
+    casper.evaluate(function(category_Id) {
+	    document.querySelector('ul[id="'+category_Id+'"] a').click();
+    },category_Id);
     this.click('ul[id="'+category_Id+'"] a');
   }).waitForText(subCategory.title, function() {
     this.click('li[id="forum_'+subCategory_Id+'"] a');
