@@ -329,6 +329,7 @@ app.get('/branches/*', function(req, res) {
 			console.log('err : '+err);
 			res.send(err);
 		}else if(body.message) {
+			console.log('body.message : '+body.message);
 			res.render('branchStats', {
 				branchStats: '',
 				error: body.message
@@ -385,6 +386,16 @@ app.get('/branches/*', function(req, res) {
 								userName: body.commit.author.name,
 								automationStatus: body1[0].state,
 								description: body1[0].description,
+								date: commitDate + ' | ' + time,
+								commitUpdate: timeDiff
+							};
+							sendBranchStats();
+						} else {
+							branchStats = {
+								name: branchName,
+								userName: body.commit.author.name,
+								automationStatus: 'inprogress',
+								description: 'inprogress',
 								date: commitDate + ' | ' + time,
 								commitUpdate: timeDiff
 							};

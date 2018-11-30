@@ -73,6 +73,13 @@
 		"port" : 6379
 	},
 
+	"db" : {
+		"host"     : "betadb.websitetoolbox.com",
+		"user"     : "maheshwar",
+		"password" : "maheshwar",
+		"database" : "mb"
+	},
+
 	"permissionSettingMsg" : "Your user group settings have been updated.",
 
 	"beta" : 0,

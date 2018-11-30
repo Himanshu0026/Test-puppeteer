@@ -94,5 +94,7 @@ sleep 1
 cat "$AUTOMATION_HOME"/log/automation.txt | grep -E 'FAIL|TypeError:|ResourceError:'> "$AUTOMATION_HOME"/log/fail.txt
 cat "$AUTOMATION_HOME"/log/automation.txt | grep -i "tests execut" > "$AUTOMATION_HOME"/log/result.txt
 cat "$AUTOMATION_HOME"/log/result.txt
+cat /var/log/apache2/error.log | grep -v 'duplicate query found\|Duplicate query found\|SELECT\|WHERE\|FROM\|DBALIAS\|DB Profiler' > "$AUTOMATION_HOME"/log/apacheLog.txt
+cp /dev/null /var/log/apache2/error.log
 rm "$AUTOMATION_HOME"/log/result.txt
 exit 0

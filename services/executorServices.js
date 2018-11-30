@@ -4,6 +4,7 @@ require('shelljs/global');
 
 var fs = require('fs');
 var result;
+var sqlConnection = require('../connection.js');
 var mailServices = require('./mailServices.js');
 var createStatus = require('./createStatus.js');
 var attachmentServices = require('./attachmentServices.js');
@@ -34,16 +35,20 @@ executorServices.executeJob = function(commitDetails, callback) {
 					});
 				//});
 			} else {
+				sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "Registered Users" AND uid =116');
+				sqlConnection('delete from calendar_permissions where uid="116";');
 				exec("/etc/automation/bin/oo_automation.sh " +commitDetails.branchName+ ' ' +commitDetails.commitId, function(code, stdout, stderr) {
 					console.log('Exit code : oo_automation : ', code);
 					console.log('Program output : oo_automation : ', stdout);
 					console.log('Program stderr: oo_automation : ', stderr);
 					var failLogFile = '/etc/automation/log/fail.txt';
+					var apacheLogFile = '/etc/automation/log/apacheLog.txt';
 					fs.stat(failLogFile, function(err, fileStat) {
 						if (fileStat) {
 							var fileSize = fileStat.size;
 							console.log("fail.txt size: "+fileSize);
 							if(fileSize !== 0) {
+								commitDetails.apacheLogFile = apacheLogFile;
 								commitDetails.attachments = [];
 								//createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
 
@@ -155,6 +160,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 											}
 											//Adding test result with commit details
 											commitDetails.testResult = testResult;
+											commitDetails.apacheLogFile = apacheLogFile;
 											//Addling log files as attachments
 											commitDetails.attachments = [
 												/*{
@@ -162,6 +168,9 @@ executorServices.executeJob = function(commitDetails, callback) {
 												},*/
 												{
 													path: failLogFile
+												},
+												{
+													path: apacheLogFile
 												}
 											];
 
@@ -237,6 +246,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 						}
 					});
 				});
+				return callback();
 			}
 		});
 	} else {
