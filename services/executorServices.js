@@ -246,7 +246,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 						}
 					});
 				});
-				return callback();
+				//return callback();
 			}
 		});
 	} else {
