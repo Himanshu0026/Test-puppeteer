@@ -40,7 +40,9 @@ executorServices.executeJob = function(commitDetails, callback) {
 				//sqlConnection('DELETE FROM forums WHERE uid="116";');
 				//sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")');
 				//sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ');
-				sqlConnection('SELECT max(posts), userid,user FROM members WHERE uid="116" and user="hani";');
+				var values = sqlConnection('SELECT max(posts), userid,user FROM members WHERE uid="116" and user="hani";');
+				console.log("the type of values"+typeof(values)+" ,the values are"+values);
+				//sqlConnection('REPLACE INTO top_posters (uid,userid,posts) VALUE (12,26995029,1206)');
 				exec("/etc/automation/bin/oo_automation.sh " +commitDetails.branchName+ ' ' +commitDetails.commitId, function(code, stdout, stderr) {
 					console.log('Exit code : oo_automation : ', code);
 					console.log('Program output : oo_automation : ', stdout);
