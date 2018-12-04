@@ -35,11 +35,12 @@ executorServices.executeJob = function(commitDetails, callback) {
 					});
 				//});
 			} else {
-				sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "Registered Users" AND uid =116');
-				sqlConnection('DELETE FROM calendar_permissions WHERE uid="116";');
-				sqlConnection('DELETE FROM forums WHERE uid="116";');
-				sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")');
-				sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ');
+				//sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "Registered Users" AND uid =116');
+				//sqlConnection('DELETE FROM calendar_permissions WHERE uid="116";');
+				//sqlConnection('DELETE FROM forums WHERE uid="116";');
+				//sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")');
+				//sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ');
+				sqlConnection('SELECT max(posts), userid,user FROM members WHERE uid="116" and user="hani";');
 				exec("/etc/automation/bin/oo_automation.sh " +commitDetails.branchName+ ' ' +commitDetails.commitId, function(code, stdout, stderr) {
 					console.log('Exit code : oo_automation : ', code);
 					console.log('Program output : oo_automation : ', stdout);
