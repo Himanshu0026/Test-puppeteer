@@ -44,7 +44,8 @@ executorServices.executeJob = function(commitDetails, callback) {
 					if(err){
 						console.log(err);
 					}else{
-						console.log(result[0].max(posts));
+						console.log('the result is'+result);
+						console.log(result[0].userid);
 					}
 				});
 				//var rows = JSON.parse(JSON.stringify(values));
