@@ -44,11 +44,15 @@ executorServices.executeJob = function(commitDetails, callback) {
 					if(err){
 						console.log(err);
 					}else{
+						var post = result[0].posts;
+						var userid = result[0].userid;
+						var user = result[0].user;
 						console.log('the result is'+result);
-						console.log(result[0].userid);
-						console.log(result[0].user);
-						console.log(result[0].posts);
-						sqlConnection('REPLACE INTO top_posters (uid,userid,posts) VALUE (result[0].posts,result[0].userid,result[0].user)', function(err, result){
+						console.log(post);
+						console.log(userid);
+						console.log(user);
+						var query = 'REPLACE INTO top_posters (uid,userid,posts) VALUE (post,userid,user);';
+						sqlConnection(query, function(err, result){
 							console.log(result);
 						});
 					}
