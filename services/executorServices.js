@@ -40,12 +40,14 @@ executorServices.executeJob = function(commitDetails, callback) {
 				//sqlConnection('DELETE FROM forums WHERE uid="116";');
 				//sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")');
 				//sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ');
-				sqlConnection('SELECT max(posts), userid,user FROM members WHERE uid="116" and user="hani";', function(err, result){
+				sqlConnection('SELECT max(posts) AS posts, userid,user FROM members WHERE uid="116" and user="hani";', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 						console.log('the result is'+result);
 						console.log(result[0].userid);
+						console.log(result[0].user);
+						console.log(result[0].posts);
 					}
 				});
 				//var rows = JSON.parse(JSON.stringify(values));
