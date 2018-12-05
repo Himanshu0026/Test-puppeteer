@@ -14,7 +14,7 @@ var sqlConnection = function sqlConnection(sqlType) {
       return console.error(error.message);
     }
     console.log(results);
-    console.log(fields);
+    //console.log(fields);
     connection.end(); // close the connection
     return (results) ;
     // Execute the callback
