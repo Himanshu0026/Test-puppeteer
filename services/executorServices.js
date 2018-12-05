@@ -48,6 +48,9 @@ executorServices.executeJob = function(commitDetails, callback) {
 						console.log(result[0].userid);
 						console.log(result[0].user);
 						console.log(result[0].posts);
+						sqlConnection('REPLACE INTO top_posters (uid,userid,posts) VALUE (result[0].posts,result[0].userid,result[0].user)', function(err, result){
+							console.log(result);
+						});
 					}
 				});
 				//var rows = JSON.parse(JSON.stringify(values));
