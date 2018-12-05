@@ -1,7 +1,7 @@
 var mysql = require('mysql');
 var config = require('./config/config.json');
 
-var sqlConnection = function sqlConnection(sqlType) {
+var sqlConnection = function sqlConnection(sqlType, callback) {
 
   var connection = mysql.createConnection(config.db);
 
@@ -16,7 +16,7 @@ var sqlConnection = function sqlConnection(sqlType) {
     console.log(results);
     //console.log(fields);
     connection.end(); // close the connection
-    return (results) ;
+    return callback(null, results) ;
     // Execute the callback
     //next.apply(this, arguments);
   });

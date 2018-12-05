@@ -40,13 +40,19 @@ executorServices.executeJob = function(commitDetails, callback) {
 				//sqlConnection('DELETE FROM forums WHERE uid="116";');
 				//sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")');
 				//sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ');
-				var values = sqlConnection('SELECT max(posts), userid,user FROM members WHERE uid="116" and user="hani";');
+				sqlConnection('SELECT max(posts), userid,user FROM members WHERE uid="116" and user="hani";', function(err, result){
+					if(err){
+						console.log(err);
+					}else{
+						console.log(result[0].max(posts));
+					}
+				});
 				//var rows = JSON.parse(JSON.stringify(values));
 				//console.log("the type of values"+typeof(values)+" ,the values are"+values);
 				//sqlConnection('REPLACE INTO top_posters (uid,userid,posts) VALUE (12,26995029,1206)');
 				exec("/etc/automation/bin/oo_automation.sh " +commitDetails.branchName+ ' ' +commitDetails.commitId, function(code, stdout, stderr) {
 					//var rows = JSON.parse(JSON.stringify(values));
-					console.log("the type of values"+typeof(values)+" ,the values are"+values.max(posts));
+					//console.log("the type of values"+typeof(values)+" ,the values are"+values.max(posts));
 					console.log('Exit code : oo_automation : ', code);
 					console.log('Program output : oo_automation : ', stdout);
 					console.log('Program stderr: oo_automation : ', stderr);
