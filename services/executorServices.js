@@ -54,7 +54,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 						console.log(userid);
 						console.log(user);
 						console.log(values);
-						var query = 'REPLACE INTO top_posters (uid,userid,posts) SET ("116",?,?);';
+						var query = 'REPLACE INTO top_posters (uid,userid,posts) VALUES ("116",?,?);';
 						query = mysql.format(query, values);
 						sqlConnection(query,values, function(err, result){
 							console.log(result);
