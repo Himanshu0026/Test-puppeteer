@@ -5,6 +5,7 @@ require('shelljs/global');
 var fs = require('fs');
 var result;
 var sqlConnection = require('../connection.js');
+var mysql = require('mysql');
 var mailServices = require('./mailServices.js');
 var createStatus = require('./createStatus.js');
 var attachmentServices = require('./attachmentServices.js');
