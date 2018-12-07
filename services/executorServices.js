@@ -52,12 +52,12 @@ executorServices.executeJob = function(commitDetails, callback) {
 					if(err){
 						console.log(err);
 					}else{
-					}
-				});
-				sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")', function(err, result){
-					if(err){
-						console.log(err);
-					}else{
+						sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")', function(err, result){
+							if(err){
+								console.log(err);
+							}else{
+							}
+						});
 					}
 				});
 				sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ', function(err, result){
