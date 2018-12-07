@@ -36,24 +36,17 @@ executorServices.executeJob = function(commitDetails, callback) {
 					});
 				//});
 			} else {
-				//sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "Registered Users" AND uid =116');
-				//sqlConnection('DELETE FROM calendar_permissions WHERE uid="116";');
-				//sqlConnection('DELETE FROM forums WHERE uid="116";');
-				//sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")');
-				//sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ');
+				sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "Registered Users" AND uid =116');
+				sqlConnection('DELETE FROM calendar_permissions WHERE uid="116";');
+				sqlConnection('DELETE FROM forums WHERE uid="116";');
+				sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")');
+				sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ');
 				sqlConnection('SELECT max(posts) AS posts, userid,user FROM members WHERE uid="116" and user="hani";', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 						var post = result[0].posts;
 						var userid = result[0].userid;
-						var user = result[0].user;
-						var values = [userid,post];
-						console.log('the result is'+result);
-						console.log(post);
-						console.log(userid);
-						console.log(user);
-						console.log(values);
 						var deleteTopPoster = 'DELETE FROM top_posters WHERE uid="116" AND userid="'+userid+'";';
 						var query = 'INSERT INTO top_posters (uid,userid,posts) VALUES ("116",'+userid+','+post+');';
 						sqlConnection(deleteTopPoster, function(err, result){
@@ -71,18 +64,9 @@ executorServices.executeJob = function(commitDetails, callback) {
 								});
 							}
 						});
-						//query = mysql.format(query, values);
-						//sqlConnection(query,values, function(err, result){
-							//console.log(result);
-						//});
 					}
 				});
-				//var rows = JSON.parse(JSON.stringify(values));
-				//console.log("the type of values"+typeof(values)+" ,the values are"+values);
-				//sqlConnection('REPLACE INTO top_posters (uid,userid,posts) VALUE (12,26995029,1206)');
 				exec("/etc/automation/bin/oo_automation.sh " +commitDetails.branchName+ ' ' +commitDetails.commitId, function(code, stdout, stderr) {
-					//var rows = JSON.parse(JSON.stringify(values));
-					//console.log("the type of values"+typeof(values)+" ,the values are"+values.max(posts));
 					console.log('Exit code : oo_automation : ', code);
 					console.log('Program output : oo_automation : ', stdout);
 					console.log('Program stderr: oo_automation : ', stderr);
