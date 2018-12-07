@@ -36,11 +36,36 @@ executorServices.executeJob = function(commitDetails, callback) {
 					});
 				//});
 			} else {
-				sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "Registered Users" AND uid =116');
-				sqlConnection('DELETE FROM calendar_permissions WHERE uid="116";');
-				sqlConnection('DELETE FROM forums WHERE uid="116";');
-				sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")');
-				sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ');
+				sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "Registered Users" AND uid =116', function(err, result){
+					if(err){
+						console.log(err);
+					}else{
+					}
+				});
+				sqlConnection('DELETE FROM calendar_permissions WHERE uid="116";', function(err, result){
+					if(err){
+						console.log(err);
+					}else{
+					}
+				});
+				sqlConnection('DELETE FROM forums WHERE uid="116";', function(err, result){
+					if(err){
+						console.log(err);
+					}else{
+					}
+				});
+				sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")', function(err, result){
+					if(err){
+						console.log(err);
+					}else{
+					}
+				});
+				sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ', function(err, result){
+					if(err){
+						console.log(err);
+					}else{
+					}
+				});
 				sqlConnection('SELECT max(posts) AS posts, userid,user FROM members WHERE uid="116" and user="hani";', function(err, result){
 					if(err){
 						console.log(err);
