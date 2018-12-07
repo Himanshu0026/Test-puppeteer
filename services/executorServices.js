@@ -54,7 +54,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 						console.log(userid);
 						console.log(user);
 						console.log(values);
-						var deleteTopPoster = 'DELETE FROM top_posters WHERE uid="116" AND userid="userid";';
+						var deleteTopPoster = 'DELETE FROM top_posters WHERE uid="116" AND userid="'+userid+'";';
 						var query = 'REPLACE INTO top_posters (uid,userid,posts) VALUES ("116",?,?);';
 						sqlConnection(deleteTopPoster, function(err, result){
 							if(err){
