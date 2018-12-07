@@ -54,11 +54,23 @@ executorServices.executeJob = function(commitDetails, callback) {
 						console.log(userid);
 						console.log(user);
 						console.log(values);
+						var deleteTopPoster = 'DELETE FROM top_posters WHERE uid="116" AND userid="userid";';
 						var query = 'REPLACE INTO top_posters (uid,userid,posts) VALUES ("116",?,?);';
-						query = mysql.format(query, values);
-						sqlConnection(query,values, function(err, result){
-							console.log(result);
+						sqlConnection(deleteTopPoster, function(err, result){
+							if(err){
+								console.log(err);
+							}else{
+								console.log('the result is'+result);
+								query = mysql.format(query, values);
+								sqlConnection(query,values, function(err, result){
+									console.log(result);
+								});
+							}
 						});
+						//query = mysql.format(query, values);
+						//sqlConnection(query,values, function(err, result){
+							//console.log(result);
+						//});
 					}
 				});
 				//var rows = JSON.parse(JSON.stringify(values));
