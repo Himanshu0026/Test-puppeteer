@@ -1,8 +1,10 @@
-var forumLoginMethod = require('../methods/login.js');
-var topicMethod = require('../methods/topic.js');
-var composeTopicJSON=require('../../testdata/composeTopic.json');
 var profilePageJSON=require('../../testdata/profilePageData.json');
 var topicJSON = require('../../testdata/topic.json');
+var composeTopicJSON=require('../../testdata/composeTopic.json');
+var deletePostJSON = require('../../testdata/deletePostData.json');
+var loginJSON = require('../../testdata/loginData.json');
+var forumLoginMethod = require('../methods/login.js');
+var topicMethod = require('../methods/topic.js');
 var deletePostMethod= module.exports = {};
 deletePostMethod.postId="";
 

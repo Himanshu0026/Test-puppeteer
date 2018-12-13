@@ -352,7 +352,7 @@ incontextRegistrationTests.doRegistrationByVoteOnpost = function() {
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
 			this.click('div.panel-body.table-responsive ul li:nth-child(1) span:nth-child(1) span:nth-child(2) h4 a span');
 		}).waitForSelector('a#guest_user_vote', function() {
-			this.test.assertSelectorHasText('a#guest_user_vote', 'create an account or  log in');
+			this.test.assertSelectorHasText('a#guest_user_vote', 'sign up or  log in');
 			this.click('a#guest_user_vote');
       registerTests.registrationWithValidInfo();
     });

@@ -7,7 +7,7 @@
 	"app": {
 		"verbose" : true,
 	 	"logLevel" : "debug",
-		"waitTimeout" : "20000",
+		"waitTimeout" : "30000",
 		"viewportSize": {
 			"width": 1024,
 			"height": 768
@@ -16,8 +16,8 @@
 
 	"backendCred" : {
 		"uname" : "beta12",
-  	"upass" : "test",
-    "apiKey" : "4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q"
+  		"upass" : "test",
+		"apiKey" : "4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q"
 	},
 
 	"fbInfo" : {
@@ -71,6 +71,13 @@
 	"redis" : {
 		"host" : "127.0.0.1",
 		"port" : 6379
+	},
+
+	"db" : {
+		"host"     : "betadb.websitetoolbox.com",
+		"user"     : "maheshwar",
+		"password" : "maheshwar",
+		"database" : "mb"
 	},
 
 	"permissionSettingMsg" : "Your user group settings have been updated.",

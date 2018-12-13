@@ -1,0 +1,21 @@
+{
+
+        "topicContent" :{
+                "Text" :"my old topic"
+        },
+
+        "Text":{
+                "msg" :"Sign up"
+        },
+
+        "adminUrl" :"https://beta22.websitetoolbox.com/?action=adminlogin",
+        "adminurlStaging" :"https://beta21.websitetoolbox.com/?action=adminlogin",
+        "adminurlautomation" :"https://beta12.websitetoolbox.com/?action=adminlogin",
+        "password" :"test",
+
+        "ValidCredential" :{
+                "title" : "ONEpluse",
+		"content" : "hello new topic",
+		"category" : "General"
+        }
+}

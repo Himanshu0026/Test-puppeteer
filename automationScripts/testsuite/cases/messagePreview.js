@@ -90,7 +90,7 @@ messagePreviewTests.verifySenderSingleMessage = function() {
 		this.test.assertExists('#messages-menu');
 		this.test.assertExists('a#delete_conversation i');
 		this.click('a#delete_conversation i');
-	}).then(function(){
+	}).waitForText('The conversation has been deleted', function() {
 		this.test.assertTextExists('Your inbox is empty', 'Text found on the page');
 		utils.info('All messages has been deleted');
 	}).then(function(){
@@ -212,7 +212,7 @@ messagePreviewTests.messagePreviewSendMessageFourUsers= function(){
 				this.test.assertExists('#messages-menu');
 				this.test.assertExists('a#delete_conversation i');
 				this.click('a#delete_conversation i');
-			}).then(function(){
+			}).waitForText('The conversations has been deleted', function() {
 				this.test.assertTextExists('Your inbox is empty', 'Text found on the page');
 				utils.info('All messages has been deleted');
 				forumLoginMethod.logoutFromApp();
@@ -367,8 +367,6 @@ messagePreviewTests.messagePreviewSendMessageSingleUser= function(){
 			}).waitForSelector('input#select_allbox', function(){
 				this.waitForText('hello');
 			});
-		}).then(function(){
-			//privateMessageMethod.deleteAllPrivateMessage();
 		}).then(function(){
 			forumLoginMethod.logoutFromApp();
 		});

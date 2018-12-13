@@ -114,6 +114,7 @@ thumpsUpDownMethod.clickOnLike = function() {
 	casper.test.assertExists('form[name="posts"] a.topic-title', 'Topic present');
 	casper.click('form[name="posts"] a.topic-title');
 	casper.waitForSelector('div#posts-list', function() {
+		this.test.assertExists('i.glyphicon.glyphicon-like-alt', 'Like thump exists');
 		if (this.visible('i.glyphicon.glyphicon-like-alt')) {
 			this.click('i.glyphicon.glyphicon-like-alt');
 			this.waitForSelector('a.voted-yes', function() {
@@ -129,6 +130,7 @@ thumpsUpDownMethod.clickOnLike = function() {
 // method to clicked on dislike thump
 thumpsUpDownMethod.clickOnDisLike = function() {
 	casper.waitForSelector('div#posts-list', function() {
+		this.test.assertExists('i.glyphicon.glyphicon-dislike-alt', 'Like thump not exists');
 		if (this.visible('i.glyphicon.glyphicon-dislike-alt')) {
 			this.click('i.glyphicon.glyphicon-dislike-alt');
 			this.waitForSelector('a.voted-no', function() {

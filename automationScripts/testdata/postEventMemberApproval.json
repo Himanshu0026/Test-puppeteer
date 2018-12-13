@@ -1,7 +1,7 @@
 {
-	"RegisteredUserLogin" : {
+	"registeredUserLogin" : {
 		"username": "neha",
-		"password": "123"
+		"password": "neha"
 	},
 
 	"newTopic" : {
@@ -10,32 +10,32 @@
 		"category" : "General"
 	},
 
-	"AdminUserLogin" : {
+	"adminUserLogin" : {
 		"username": "isneha",
-		"password": "1234"
+		"password": "isneha"
 	},
 
-	"infoToRegisterUser" : [{
-		"uname" : "neha",
-		"upass" : "123",
-		"uemail" : "neha@gmail.com",
+	"memberInfo" : {
+		"uname": "vishal",
+		"upass": "1234",
+		"uemail" : "vishal@gmail.com",
 		"fullName" : "Blank Email",
 		"imID" : "Hello",
 		"birthday" : "04/12/1991",
 		"usignature" : "This is my signature blank email",
-		"namePrivate" : true,
-		"expectedErrorMsg" : "Please enter your email address."
+		"namePrivate" : true
 	},
 
-	{
-		"uname" : "isneha",
-		"upass" : "1234",
-		"uemail" : "isneha@gmail.com",
-		"fullName" : "Blank Email",
-		"imID" : "Hello",
-		"birthday" : "04/12/1991",
-		"usignature" : "This is my signature blank email",
-		"namePrivate" : true,
-		"expectedErrorMsg" : "Please enter your email address."
-	}]
+	"category" : {
+		"title" : "General",
+		"description" : "To test parent category"
+	},
+
+	"otherCategory" : {
+		"title" : "New Category",
+		"description" : "To test parent category"
+	},
+
+	"userToDelete" : "vishal"
+
 }

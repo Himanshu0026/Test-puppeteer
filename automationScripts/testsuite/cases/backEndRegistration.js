@@ -2,11 +2,15 @@
 var backEndRegisterJSON = require('../../testdata/backEndRegisterData.json');
 var forumLoginMethod = require('../methods/login.js');
 var backEndregisterMethod = require('../methods/backEndRegistration.js');
+var registerMethod = require('../methods/register.js');
 var utils = require('../utils.js');
 var backEndregisterTests = module.exports = {};
 
 //Test Case for Verifying Error Messages While User Registering With Blank User Name.
 backEndregisterTests.doRegister = function() {
+	var uname="";
+	var blankUserPassword="";
+	var validInfo="";
 	utils.info('Case1[Verifying Error Messages While User Registering With Blank User Name]');
 	casper.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
 		casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
@@ -22,13 +26,17 @@ backEndregisterTests.doRegister = function() {
 		backEndregisterMethod.addUser(backEndRegisterJSON.invalidEmailId);
 	}).waitForText('You entered an invalid email address.', function() {
 		utils.info('Case 4[User Registered With Blank Password]');
-		var uname = Math.random().toString(36).substring(7);
-		var blankUserPassword = {
+		registerMethod.getUname(function(username){
+			uname=username;
+		});
+	}).then(function(){
+		blankUserPassword = {
 			"uname" : uname,
 			"upass" : "",
 			"uemail" : uname+ "@wt.com",
 			"pNote" : "This is my personal note blank password"
 		};
+	}).then(function(){
 		backEndregisterMethod.addUser(blankUserPassword);
 	}).waitUntilVisible('div#ajax-msg-top', function() {
 		if (this.visible('div#ajax-msg-top')) {
@@ -38,13 +46,18 @@ backEndregisterTests.doRegister = function() {
 		}
 	}).then(function() {
 		utils.info('Case 5[Register User With Valid Information]');
-		var uname = Math.random().toString(36).substring(7);
-		var validInfo = {
+		registerMethod.getUname(function(username){
+			uname=username;
+		});
+	}).then(function(){
+		//var uname = Math.random().toString(36).substring(7);
+		validInfo = {
 			"uname" : uname,
 			"upass" : "1234",
 			"uemail" : uname+ "@wt.com",
 			"pNote" : "This is my personal note with valid info.."
 		};
+	}).then(function(){
 		backEndregisterMethod.addUser(validInfo);
 	}).waitUntilVisible('div#ajax-msg-top', function() {
 		if (this.visible('div#ajax-msg-top')) {

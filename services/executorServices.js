@@ -4,6 +4,8 @@ require('shelljs/global');
 
 var fs = require('fs');
 var result;
+var sqlConnection = require('../connection.js');
+var mysql = require('mysql');
 var mailServices = require('./mailServices.js');
 var createStatus = require('./createStatus.js');
 var attachmentServices = require('./attachmentServices.js');
@@ -15,6 +17,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 	//Executing gitdeploy.sh to update Forum's code for given branch name
 	//if(commitDetails.branchName == "automation"){
 	console.log("Starting execution for commitDetails : "+commitDetails);
+	console.time('Automation execution time');
 	if(commitDetails.branchName) {
 		exec("/home/automation/gitdeploy.sh -p ssh " +commitDetails.branchName, function(code, stdout, stderr) {
 			if (code !== 0) {
@@ -28,20 +31,78 @@ executorServices.executeJob = function(commitDetails, callback) {
 							console.error("error occurred while sending email: "+err);
 						else
 							console.log("Mail sent successfully.");
+							console.timeEnd('Automation execution time');
 						return callback();
 					});
 				});
 			} else {
+				sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "Registered Users" AND uid =116', function(err, result){
+					if(err){
+						console.log(err);
+					}else{
+					}
+				});
+				sqlConnection('DELETE FROM calendar_permissions WHERE uid="116";', function(err, result){
+					if(err){
+						console.log(err);
+					}else{
+					}
+				});
+				sqlConnection('DELETE FROM forums WHERE uid="116";', function(err, result){
+					if(err){
+						console.log(err);
+					}else{
+						sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")', function(err, result){
+							if(err){
+								console.log(err);
+							}else{
+							}
+						});
+					}
+				});
+				sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ', function(err, result){
+					if(err){
+						console.log(err);
+					}else{
+					}
+				});
+				sqlConnection('SELECT max(posts) AS posts, userid,user FROM members WHERE uid="116" and user="hani";', function(err, result){
+					if(err){
+						console.log(err);
+					}else{
+						var post = result[0].posts;
+						var userid = result[0].userid;
+						var deleteTopPoster = 'DELETE FROM top_posters WHERE uid="116" AND userid="'+userid+'";';
+						var query = 'INSERT INTO top_posters (uid,userid,posts) VALUES ("116",'+userid+','+post+');';
+						sqlConnection(deleteTopPoster, function(err, result){
+							if(err){
+								console.log(err);
+							}else{
+								console.log('the result is'+result);
+								//query = mysql.format(query, values);
+								sqlConnection(query, function(err, result){
+									if(err){
+										console.log(err);
+									}else{
+										console.log(result);
+									}
+								});
+							}
+						});
+					}
+				});
 				exec("/etc/automation/bin/oo_automation.sh " +commitDetails.branchName+ ' ' +commitDetails.commitId, function(code, stdout, stderr) {
 					console.log('Exit code : oo_automation : ', code);
 					console.log('Program output : oo_automation : ', stdout);
 					console.log('Program stderr: oo_automation : ', stderr);
 					var failLogFile = '/etc/automation/log/fail.txt';
+					var apacheLogFile = '/etc/automation/log/apacheLog.txt';
 					fs.stat(failLogFile, function(err, fileStat) {
 						if (fileStat) {
 							var fileSize = fileStat.size;
 							console.log("fail.txt size: "+fileSize);
 							if(fileSize !== 0) {
+								commitDetails.apacheLogFile = apacheLogFile;
 								commitDetails.attachments = [];
 								createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
 
@@ -64,6 +125,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 															//Deleting Old Directory That Contains Screenshots
 															attachmentServices.deleteFolderRecursive(path, function() {
 																//Deleting commit specific log files
+																console.timeEnd('Automation execution time');
 																console.log("Commit specific log files deleted.");
 																return callback();
 															});
@@ -81,6 +143,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 												//Deleting commit specific log files
 												//fs.unlinkSync(automationLogFile);
 												fs.unlinkSync(failLogFile);
+												console.timeEnd('Automation execution time');
 												console.log("Commit specific log files deleted.");
 												return callback();
 											});
@@ -126,6 +189,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 								if (err.code == 'ENOENT') {
 									console.log('fail.log does not exist.');
 								}
+								console.timeEnd('Automation execution time');
 								return callback();
 							} else {
 								if (fileStat) {
@@ -150,6 +214,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 											}
 											//Adding test result with commit details
 											commitDetails.testResult = testResult;
+											commitDetails.apacheLogFile = apacheLogFile;
 											//Addling log files as attachments
 											commitDetails.attachments = [
 												/*{
@@ -157,6 +222,9 @@ executorServices.executeJob = function(commitDetails, callback) {
 												},*/
 												{
 													path: failLogFile
+												},
+												{
+													path: apacheLogFile
 												}
 											];
 
@@ -183,6 +251,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 																			//Deleting commit specific log files
 																			//fs.unlinkSync(automationLogFile);
 																			fs.unlinkSync(failLogFile);
+																			console.timeEnd('Automation execution time');
 																			console.log("Commit specific log files deleted.");
 																			return callback();
 																		});
@@ -200,6 +269,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 															//Deleting commit specific log files
 															//fs.unlinkSync(automationLogFile);
 															fs.unlinkSync(failLogFile);
+															console.timeEnd('Automation execution time');
 															console.log("Commit specific log files deleted.");
 															return callback();
 														});
@@ -216,9 +286,11 @@ executorServices.executeJob = function(commitDetails, callback) {
 										//Deleting commit specific log files
 										//fs.unlinkSync(automationLogFile);
 										fs.unlinkSync(failLogFile);
+										console.timeEnd('Automation execution time');
 										return callback();
 									}
 								} else {
+									console.timeEnd('Automation execution time');
 									return callback();
 								}
 							}
@@ -231,6 +303,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 			}
 		});
 	} else {
+		console.timeEnd('Automation execution time');
 		return callback();
 	}
 };

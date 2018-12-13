@@ -132,6 +132,10 @@ profilePageTests.profilePageAfterStartTopic=function(){
 			this.click('form[name="posts"] a.topic-title');
 		}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
 			this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Post a reply');
+			//Verify with the visiblity of  reply button.
+			//verify with the reply button on top of the page.
+			this.test.assertVisible('a#sub_post_reply', 'reply pot button found on postListingPage');
+		}).then(function(){
 			this.evaluate(function() {
 				document.querySelector('a#sub_post_reply').click();
 			});
@@ -142,6 +146,9 @@ profilePageTests.profilePageAfterStartTopic=function(){
 					casper.sendKeys('#tinymce', profilePageJSON.addPost.Post );
 				});
 			}).then(function(){
+				//verify with the post button on bottom of the page after add some content in the text box
+				//verify with the post button on bottom of the page with blank text box.
+				this.test.assertExists('input[name="submitbutton"]', 'post button found after add content in the text box');
 				this.test.assertExists('input[name="submitbutton"]');
 				this.click('input[name="submitbutton"]');
 			}).waitForText('post reply', function(){
@@ -428,6 +435,7 @@ profilePageTests.profilePagePostCount=function() {
 				actualcount=actualPostCount.trim();
 			}).then(function(){
 				this.test.assertEquals(actualcount, expectedPostCount, 'both the outputs are equals');
+				this.wait(1000, function(){});
 			}).then(function(){
 				forumLoginMethod.logoutFromApp();
 			});
@@ -453,6 +461,7 @@ profilePageTests.profilePagePostCountAddtopic=function() {
 		actualcount=actualPostCount.trim();
 	}).then(function(){
 		this.test.assertEquals(actualcount, expectedPostCount, 'both the outputs are equals');
+		this.wait(1000, function(){});
 	});
 };
 

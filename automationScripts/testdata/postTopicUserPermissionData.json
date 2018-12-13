@@ -1,0 +1,40 @@
+{
+	"registeredUserLogin" : {
+		"username": "neha",
+		"password": "neha"
+	},
+
+	"otherUserLogin" : {
+		"username": "abc",
+		"password": "abc"
+	},
+
+	"adminUserLogin" : {
+		"username": "isneha",
+		"password": "isneha"
+	},
+
+	"newTopic" : {
+		"title" : "New Topic",
+		"content" : "hellloooooo!!!!!!!!!",
+		"category" : "General"
+	},
+
+	"groupName" : "New Custom Group",
+
+	"categoryA" : {
+		"title" : "General",
+		"description" : "To test parent category"
+	},
+
+	"category" : {
+		"title" : "cat1",
+		"description" : "To test parent category"
+	},
+
+	"subCategory" : {
+		"title" : "cat1a",
+		"description" : "To test child category"
+	}
+
+}

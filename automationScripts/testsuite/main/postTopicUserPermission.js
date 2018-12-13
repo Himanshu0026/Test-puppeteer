@@ -4,6 +4,7 @@
 var config = require('../../../config/config.json');
 var utils = require('../utils.js');
 var forumLoginMethod = require('../methods/login.js');
+var thumpsUpDownTestcases = require('../cases/thumpsUpDown.js');
 var postTopicUserPermissionJSON = require('../../testdata/postTopicUserPermissionData.json');
 var postTopicUserPermissionTestcases = require('../cases/postTopicUserPermission.js');
 var combinationOfSubCategoryAndGroupPermissionsTestcases = require('../cases/combinationOfSubCategoryAndGroupPermissions.js');
@@ -18,6 +19,9 @@ postTopicUserPermission.registeredUserTest = function() {
 		forumLoginMethod.loginToForumBackEnd();
 
 	}).then(function() {
+
+		// method to delete all the categories from backend
+		//thumpsUpDownTestcases.deleteAllCategoriesTestCase();
 
 		// method to create a category and its sub category and get their id
 		combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory();

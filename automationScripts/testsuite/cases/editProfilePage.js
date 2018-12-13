@@ -378,20 +378,20 @@ editProfilePageTests.shieldIcon=function(){
 };
 
 //Verify the tool tip on the shield icon
-//
 editProfilePageTests.toolTipShieldIcon=function(){
-
+	var actualtooltip="";
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 11[Verify the tool tip on the shield icon]');
 		this.test.assertExists('ul.nav.pull-right span.caret', 'dropdown toggle button present');
 		this.click('ul.nav.pull-right span.caret');
 		this.click('span.pull-right.user-nav-panel li:nth-child(4) a');
 	}).waitForSelector('form[name="PostTopic"] span.text-muted', function(){
-		var actualtooltip = casper.evaluate(function(){
+		actualtooltip = casper.evaluate(function(){
 			var id = document.querySelector('form[name="PostTopic"] span.text-muted').getAttribute('data-original-title');
 			return id;
 		});
-		//this.test.assertEquals(actualtooltip, editProfilePageJSON.shieldIcon.expectedtooltip, 'both the tooltip are equal actual and expected');
+	}).then(function(){
+		this.test.assertEquals(actualtooltip, editProfilePageJSON.shieldIcon.expectedtooltip, 'both the tooltip are equal actual and expected');
 	});
 };
 
@@ -471,7 +471,7 @@ editProfilePageTests.invalidBirthday=function(){
 	}).waitForSelector('div#userSignature textarea', function(){
 		this.sendKeys('input#birthDatepicker', editProfilePageJSON.birthdayPicker.date);
 		this.click('button[type="submit"]');
-	}).waitForText('Valid years for your Birthday are from 1900 to 2017.');
+	}).waitForText('Valid years for your Birthday are from 1900 to 2018.');
 };
 
 //Verify with invalid birthday(future month)
@@ -484,7 +484,22 @@ editProfilePageTests.invalidFutureMonth=function(){
 		this.click('ul.nav.pull-right span.caret');
 		this.click('span.pull-right.user-nav-panel li:nth-child(4) a');
 	}).waitForSelector('div#userSignature textarea', function(){
-		this.sendKeys('input#birthDatepicker', editProfilePageJSON.birthdayPicker.month);
+		var date = casper.evaluate(function() {
+			var today = new Date();
+	    		var tomorrow = new Date(today);
+	    	tomorrow.setDate(today.getDate()+4);
+	    	if(today.getDate() > 28) {
+			tomorrow.setMonth(today.getMonth()+1);
+	    	}
+			var day = tomorrow.getDate();
+			var month = tomorrow.getMonth()+1;
+			var year = tomorrow.getFullYear();
+			var bdaydate = month + "/" + day + "/" + year;
+			return bdaydate;
+		});
+		utils.info('date ='+date);
+		casper.sendKeys('input[name="birthDatepicker"]', date, {reset : true});
+	}).then(function(){
 		this.click('button[type="submit"]');
 	}).waitForText('Please provide a valid Birthday.');
 };
@@ -505,8 +520,6 @@ editProfilePageTests.verifyFullName=function(){
 		 "visiblity_signature_settings" : "Yes", "visiblity_avatar_registration" : ""};
 		 backEndForumRegisterMethod.changeDefaultRegistrationOptions(setOptions);
 	}).thenOpen(config.url, function(){
-		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-	}).then(function(){
 		this.test.assertExists('ul.nav.pull-right span.caret', 'dropdown toggle button present');
 		this.click('ul.nav.pull-right span.caret');
 		this.click('span.pull-right.user-nav-panel li:nth-child(4) a');
@@ -535,12 +548,12 @@ editProfilePageTests.verifyFullName=function(){
 		this.evaluate(function() {
 			document.querySelector('div#ddUsers a[href="/tool/members/mb/fields"]').click();
 		});
-	}).waitForText('Default Profile Fields',function() {		
+	}).waitForText('Default Profile Fields',function() {
 		var setOptions = {"fullName" : "", "instantMessaging" : "", "birthday" : "", "signature" : "", "avatar" : "",		 	 	 "visiblity_name_registration" : "Yes",
 		"visiblity_imType_registration" : "Yes",
-		"visiblity_dob_registration" : "Yes",	
+		"visiblity_dob_registration" : "Yes",
 		"visiblity_signature_registration" : "Yes",
-		"visiblity_avatar_registration" : "Yes"};		 
+		"visiblity_avatar_registration" : "Yes"};
 		backEndForumRegisterMethod.changeDefaultRegistrationOptions(setOptions);
 	});
 };

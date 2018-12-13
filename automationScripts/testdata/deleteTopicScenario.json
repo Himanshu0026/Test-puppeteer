@@ -1,0 +1,16 @@
+
+
+{
+    	"topicCount" : {
+    		"expectedCount":"1",
+                "expectedTopicCount":"10",
+                "expectedCountMultipledelete":"8"
+        },
+        "deleteTopic":{
+                "expectedCount":"0"
+                
+        },
+        "deleteTopicYearSelected":{
+                "expectedCount":"7"
+        }
+}

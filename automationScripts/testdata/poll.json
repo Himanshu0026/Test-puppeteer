@@ -5,5 +5,20 @@
 		"option1" : "Modi",
 		"option2" : "Rahul",
 		"multiplechoicebox" : true
-	}
+	},
+	
+    "pollInfo" :{
+    	"pollMgs":"This topic has poll"
+    },
+    	
+
+   "pollErrorMessage" :{
+   	"errorMessage" :"Please enter at least two options for your poll."
+   },
+   
+   "expectedTooltip":{
+   	"tooltipErrorMsg":"Please enter a poll question."
+   }
+
+
 }
