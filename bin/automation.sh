@@ -1,10 +1,10 @@
 #!/bin/sh
 AUTOMATION_HOME='/etc/automation'
 cd $AUTOMATION_HOME
-printf "Executing Automation Script For $1 commitID\nTests executing for LOGIN: \n" > "$AUTOMATION_HOME"/log/automation.txt
+printf "Executing Automation Script For $1 commitID\nTask -> LOGIN: " > "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./automationScripts/automation.js --feature=login --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
-printf "Executing Automation Script For $1 commitID\nTests executing for BACKEND REGISTRATION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+printf "Executing Automation Script For $1 commitID\nTask -> BACKEND REGISTRATION: " >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./automationScripts/automation.js --feature=backEndRegistration --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
 #printf "Executing Automation Script For $1 commitID\nTests executing for FORGOT PASSWORD: \n" >> "$AUTOMATION_HOME"/log/automation.txt
