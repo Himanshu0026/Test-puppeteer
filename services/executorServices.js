@@ -157,7 +157,14 @@ executorServices.executeJob = function(commitDetails, callback) {
 							console.log('Exit code:', code);
 							console.log('Program output:', stdout);
 							console.log('Program stderr:', stderr);
-							var testResult = stdout;
+							exec("grep 'FAIL' "+stdout, function(code, stdout, stderr) {
+								var testResult = stdout;
+								console.log('testResult', testResult);
+							});
+							var testResult = stdout;// | grep -E 'FAIL' grep 'FAIL' stdout;
+							//testResult = jQuery.grep(stdout, function( stdout ) {
+							  //return a == 'FAIL';
+							//});
 							//var automationLogFile = '/etc/automation/log/automation.txt';
 							var failLogFile = '/etc/automation/log/fail.txt';
 							if(stdout) {
