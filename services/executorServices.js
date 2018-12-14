@@ -153,7 +153,8 @@ executorServices.executeJob = function(commitDetails, callback) {
 							} else {
 							//Executing automation test script
 							console.log("Executing Automation Script For " + commitDetails.commitId + " CommitID");
-							exec("/etc/automation/bin/automation.sh | grep -E 'FAIL'" +commitDetails.branchName+ ' ' +commitDetails.commitId, function(code, stdout, stderr) {
+							//exec("/etc/automation/bin/automation.sh | grep -E 'FAIL'" +commitDetails.branchName+ ' ' +commitDetails.commitId, function(code, stdout, stderr) {
+							exec("/etc/automation/bin/automation.sh | grep -E 'FAIL'" , function(code, stdout, stderr) {
 							console.log('Exit code:', code);
 							console.log('Program output:', stdout);
 							console.log('Program stderr:', stderr);
