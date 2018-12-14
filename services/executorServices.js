@@ -25,7 +25,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 				var testResult = stderr;
 				commitDetails.testResult = testResult;
 				commitDetails.attachments = '';
-				createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
+				//createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
 					mailServices.sendMail(commitDetails, function(err) {
 						if(err)
 							console.error("error occurred while sending email: "+err);
@@ -34,7 +34,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 							console.timeEnd('Automation execution time');
 						return callback();
 					});
-				});
+				//});
 			} else {
 				sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "Registered Users" AND uid =116', function(err, result){
 					if(err){
@@ -104,7 +104,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 							if(fileSize !== 0) {
 								commitDetails.apacheLogFile = apacheLogFile;
 								commitDetails.attachments = [];
-								createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
+								//createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
 
 									//Sending Mail To The Committer After Adding Attachments
 									fs.exists(path, function(exists) {
@@ -149,7 +149,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 											});
 										}
 									});
-								});
+								//});
 							} else {
 							//Executing automation test script
 							console.log("Executing Automation Script For " + commitDetails.commitId + " CommitID");
@@ -157,15 +157,12 @@ executorServices.executeJob = function(commitDetails, callback) {
 							console.log('Exit code:', code);
 							console.log('Program output:', stdout);
 							console.log('Program stderr:', stderr);
-							var stdoutput = stdout;
-							exec("grep 'FAIL' "+stdoutput, function(code, stdout, stderr) {
-								var testResult = stdout;
-								console.log('testResult', testResult);
-							});
-							var testResult = stdout;// | grep -E 'FAIL' grep 'FAIL' stdout;
-							//testResult = jQuery.grep(stdout, function( stdout ) {
-							  //return a == 'FAIL';
+							//var stdoutput = stdout;
+							//exec("grep 'FAIL' "+stdoutput, function(code, stdout, stderr) {
+								//var testResult = stdout;
+								//console.log('testResult', testResult);
 							//});
+							var testResult = stdout;
 							//var automationLogFile = '/etc/automation/log/automation.txt';
 							var failLogFile = '/etc/automation/log/fail.txt';
 							if(stdout) {
@@ -236,7 +233,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 												}
 											];
 
-											createStatus.failure(commitDetails, description, function(status) {
+											//createStatus.failure(commitDetails, description, function(status) {
 												console.log('state of failure : '+status);
 												//Sending Mail To The Committer After Adding Attachments
 												fs.exists(path, function(exists) {
@@ -283,14 +280,14 @@ executorServices.executeJob = function(commitDetails, callback) {
 														});
 													}
 												});
-											});
+											//});
 										} else {
 											console.log('you are not allowed to set the status of the branch.');
 										}
 									} else {
-										createStatus.success(commitDetails, function(status) {
-											console.log('state of success : '+status);
-										});
+										//createStatus.success(commitDetails, function(status) {
+											//console.log('state of success : '+status);
+										//});
 										//Deleting commit specific log files
 										//fs.unlinkSync(automationLogFile);
 										fs.unlinkSync(failLogFile);
