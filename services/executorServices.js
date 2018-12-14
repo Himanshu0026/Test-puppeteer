@@ -157,7 +157,8 @@ executorServices.executeJob = function(commitDetails, callback) {
 							console.log('Exit code:', code);
 							console.log('Program output:', stdout);
 							console.log('Program stderr:', stderr);
-							exec("grep 'FAIL' "+stdout, function(code, stdout, stderr) {
+							var stdoutput = stdout;
+							exec("grep 'FAIL' "+stdoutput, function(code, stdout, stderr) {
 								var testResult = stdout;
 								console.log('testResult', testResult);
 							});
