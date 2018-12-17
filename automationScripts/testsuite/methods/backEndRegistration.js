@@ -647,6 +647,14 @@ backEndForumRegisterMethod.enableDisableCategoryPermissions = function(id, value
 	});
 };
 
+backEndForumRegisterMethod.enableDisableDeleteProfilePermissions = function(id, value) {
+	utils.enableorDisableCheckbox(id, value);
+	casper.waitUntilVisible('div#loading_msg', function success() {
+		utils.info("Permission changed");
+	}, function fail() {
+		utils.info("Permission not changed");
+	});
+};
 
 //Method for filling data in a category create form
 backEndForumRegisterMethod.createCategorySubcategory= function(title, data){

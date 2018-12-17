@@ -449,6 +449,16 @@ case "postEventMemberApproval":
 		});
 	break;
 
+	case "memberDelete" :
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify Member-Delete functionality from home page with all valid and invalid scenarios ', function(test) {
+			var memberDelete = require("./testsuite/main/memberdelete.js");
+			memberDelete.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
 
 	default:
 		casper.echo("Please select any feature from options given below. For ex: casperjs test automation.js --feature = <option>.\n");
