@@ -85,6 +85,9 @@ sleep 1
 printf "\nExecuting Automation Script For $1 commitID Task -> LATEST TOPIC PAGE: " >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./automationScripts/automation.js --feature="latestTopic" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
+printf "Executing Automation Script For $1 commitID\nTests executing for MEMBER DELETE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./automationScripts/automation.js --feature="memberDelete" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+sleep 1
 #printf "Executing Automation Script For $1 commitID\nTests executing for POST TOPIC USER PERMISSINS for registered user: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature="postTopicUserPermission registeredUserTest"  --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1

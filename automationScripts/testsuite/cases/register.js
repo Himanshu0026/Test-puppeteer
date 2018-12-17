@@ -2,8 +2,10 @@
 var registerJSON = require('../../testdata/registerData.json');
 var config = require('../../../config/config.json');
 var registerMethod = require('../methods/register.js');
+var memberDeleteJSON=require('../../testdata/memberdelete.json');
 var forumLoginMethod = require('../methods/login.js');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
+var memberDeleteMethod = require('../methods/memberdelete.js');
 var utils = require('../utils.js');
 var registerTests = module.exports = {};
 
@@ -302,6 +304,7 @@ registerTests.registrationForDisabledEmailAndDisabledApproveNewRegistration = fu
 };
 
 //50.Test case to verify Registration when Email address verification- Enabled And Approve new registrations- Enabled
+//Need to create a pending user in this case.
 registerTests.registrationForEnabledEmailAndEnabledApproveNewRegistration = function() {
 	var randomUser="";
 	casper.thenOpen(config.backEndUrl, function() {
@@ -349,5 +352,35 @@ registerTests.registrationForEnabledEmailAndEnabledApproveNewRegistration = func
 		registerMethod.registerToApp(randomUser);
 	}).waitForText(randomUser.expectedErrorMsg, function() {
 		registerMethod.redirectToLogout();
+	});
+};
+
+
+//create user in pending approvval and delete it.
+registerTests.deletePendingApproveUser=function(){
+        casper.thenOpen(config.backEndUrl, function(){
+		utils.info('************************MEMBER DELETE TESTCASES->Pending Approvval User****************************');
+		utils.info('Case 1[Verify by delete one topic -selecting by check box register user]');
+                this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
+        	        this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+                }).waitForSelector('div#ddUsers a[href="/tool/members/mb/addusers"]', function() {
+        		this.test.assertSelectorHasText('#ddUsers', 'New User');
+        		this.click('div#ddUsers a[href="/tool/members/mb/addusers"]');
+                }).then(function(){
+                        memberDeleteMethod.registermembers('Pending Approval', function(uname){
+                                pendingapproveUser=uname;
+                        });
+		}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
+	                this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+	                this.click('a[href="/tool/members/mb/usergroup"]');
+	        }).waitForSelector('input#autosuggest', function(){
+	                this.sendKeys('input#autosuggest', pendingapproveUser, {keepFocus: true});
+	                this.page.sendEvent("keypress", this.page.event.key.Enter);
+	        }).waitForSelector('form[name="ugfrm"]', function(){
+	                this.click('a#delete_user');
+	        }).waitForSelector('input#autosuggest', function(){
+	                this.sendKeys('input#autosuggest', pendingapproveUser, {keepFocus: true});
+	                this.page.sendEvent("keypress", this.page.event.key.Enter);
+	        }).waitForText(memberDeleteJSON.deleteUsers.expectedErrorMsg);
 	});
 };
