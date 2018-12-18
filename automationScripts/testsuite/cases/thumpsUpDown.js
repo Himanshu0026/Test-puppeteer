@@ -9,6 +9,7 @@ var registerMethod = require('../methods/register.js');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var topicMethod = require('../methods/topic.js');
 var forumLoginMethod = require('../methods/login.js');
+var sqlConnection = require('../connection.js');
 var thumpsUpDownTestcases = module.exports = {};
 
 function deleteCategoriesHandler(i) {
@@ -107,7 +108,7 @@ thumpsUpDownTestcases.createCategoryTestCase = function() {
 
 // method to delete all the categories from backend
 thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
-	casper.thenOpen(config.backEndUrl, function() {
+	/*casper.thenOpen(config.backEndUrl, function() {
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
 		var totalCategories = casper.evaluate(function(){
@@ -118,6 +119,18 @@ thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 		for(i = 0; i<totalCategories; i++){
 			casper.then(deleteCategoriesHandler(i));
 		}
+	});*/
+	casper.thenOpen(config.backEndUrl , function() {
+		var query = 'DELETE FROM forums WHERE uid="116";';
+		var deleteCategory = casper.evaluate(function(query) {
+			sqlConnection(query, function(err, result){
+				if(err){
+					console.log(err);
+				}else{
+				}
+			});
+			return;
+		}, query);
 	});
 };
 
