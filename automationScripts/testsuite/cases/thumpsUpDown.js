@@ -9,7 +9,7 @@ var registerMethod = require('../methods/register.js');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var topicMethod = require('../methods/topic.js');
 var forumLoginMethod = require('../methods/login.js');
-var sqlConnection = require('../connection.js');
+var sqlConnection = require('../../../connection.js');
 var thumpsUpDownTestcases = module.exports = {};
 
 function deleteCategoriesHandler(i) {
