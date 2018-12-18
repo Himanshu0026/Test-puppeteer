@@ -34,6 +34,7 @@ mailServices.sendMail = function(emailDetails, callback){
 	};
 	console.log("mailOptions : "+JSON.stringify(mailOptions));
 	//Initiating mail sending
+  console.log("mailOptions : "+mailOptions);
 	transporter.sendMail(mailOptions, function(error, info){
 		if(error){
 			return callback(error);
