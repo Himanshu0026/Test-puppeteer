@@ -135,14 +135,16 @@ thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 	casper.then(function() {
 		var query = 'DELETE FROM forums WHERE uid="116";';
 		var deleteCategory = casper.evaluate(function(query) {
-			sqlConnection(query, function(err, result){
+			 var result = sqlConnection(query, function(err, result){
 				if(err){
 					console.log(err);
 				}else{
+					return result;
 				}
 			});
-			return;
+			return result;
 		}, query);
+		utils.info('the deleted categroy result'+deleteCategory);
 	});
 };
 
