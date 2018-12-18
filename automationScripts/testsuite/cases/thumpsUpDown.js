@@ -89,7 +89,7 @@ thumpsUpDownTestcases.registerUserTOLogin = function() {
 
 // method to create a category General
 thumpsUpDownTestcases.createCategoryTestCase = function() {
-	casper.thenOpen(config.backEndUrl, function() {
+	/*casper.thenOpen(config.backEndUrl, function() {
 		utils.info(' * Method to create category and sub category *');
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
@@ -103,6 +103,18 @@ thumpsUpDownTestcases.createCategoryTestCase = function() {
 				});
 			}
 		});
+	});*/
+	casper.then(function() {
+		var query = 'INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1");';
+		var deleteCategory = casper.evaluate(function(query) {
+			sqlConnection(query, function(err, result){
+				if(err){
+					console.log(err);
+				}else{
+				}
+			});
+			return;
+		}, query);
 	});
 };
 
@@ -120,7 +132,7 @@ thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 			casper.then(deleteCategoriesHandler(i));
 		}
 	});*/
-	casper.thenOpen(config.backEndUrl , function() {
+	casper.then(function() {
 		var query = 'DELETE FROM forums WHERE uid="116";';
 		var deleteCategory = casper.evaluate(function(query) {
 			sqlConnection(query, function(err, result){
