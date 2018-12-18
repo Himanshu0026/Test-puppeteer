@@ -89,7 +89,7 @@ thumpsUpDownTestcases.registerUserTOLogin = function() {
 
 // method to create a category General
 thumpsUpDownTestcases.createCategoryTestCase = function() {
-	/*casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen(config.backEndUrl, function() {
 		utils.info(' * Method to create category and sub category *');
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
@@ -103,8 +103,8 @@ thumpsUpDownTestcases.createCategoryTestCase = function() {
 				});
 			}
 		});
-	});*/
-	casper.then(function() {
+	});
+	/*casper.then(function() {
 		var query = 'INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1");';
 		var deleteCategory = casper.evaluate(function(query) {
 			sqlConnection(query, function(err, result){
@@ -115,12 +115,12 @@ thumpsUpDownTestcases.createCategoryTestCase = function() {
 			});
 			return;
 		}, query);
-	});
+	});*/
 };
 
 // method to delete all the categories from backend
 thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
-	/*casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen(config.backEndUrl, function() {
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
 		var totalCategories = casper.evaluate(function(){
@@ -131,8 +131,8 @@ thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 		for(i = 0; i<totalCategories; i++){
 			casper.then(deleteCategoriesHandler(i));
 		}
-	});*/
-	casper.then(function() {
+	});
+	/*casper.then(function() {
 		utils.info('Test case to delete the catgories');
 		var query = 'DELETE FROM forums WHERE uid="116";';
 		var deleteCategory = casper.evaluate(function(query) {
@@ -147,7 +147,7 @@ thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 			return result;
 		}, query);
 		utils.info('the deleted categroy result'+deleteCategory);
-	});
+	});*/
 };
 
 // method to verify the thumbs up and down for guest user(unregister user)

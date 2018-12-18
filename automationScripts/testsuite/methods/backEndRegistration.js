@@ -383,7 +383,7 @@ backEndForumRegisterMethod.deleteAllCategories = function() {
 	//casper.waitWhileSelector(url, function success() {
 	//});
 	//casper.waitForSelector('input#remove_forum', function success() {
-	casper.wait('2000', function() {
+	casper.wait('4000', function() {
 		if(this.exists('input#remove_forum')) {
 			this.click('input#remove_forum');
 			this.waitForSelector('div.heading.error_message', function() {
