@@ -133,12 +133,14 @@ thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 		}
 	});*/
 	casper.then(function() {
+		utils.info('Test case to delete the catgories');
 		var query = 'DELETE FROM forums WHERE uid="116";';
 		var deleteCategory = casper.evaluate(function(query) {
-			 var result = sqlConnection(query, function(err, result){
+			 var result = sqlConnection('DELETE FROM forums WHERE uid="116";', function(err, result){
 				if(err){
 					console.log(err);
 				}else{
+					console.log(result);
 					return result;
 				}
 			});
