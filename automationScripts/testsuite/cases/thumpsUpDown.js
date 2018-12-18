@@ -108,7 +108,7 @@ thumpsUpDownTestcases.createCategoryTestCase = function() {
 
 // method to delete all the categories from backend
 thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
-	casper.thenOpen(config.backEndUrl, function() {
+	/*casper.thenOpen(config.backEndUrl, function() {
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
 		var totalCategories = casper.evaluate(function(){
@@ -119,8 +119,8 @@ thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 		for(i = 0; i<totalCategories; i++){
 			casper.then(deleteCategoriesHandler(i));
 		}
-	});
-	/*casper.thenOpen(config.backEndUrl , function() {
+	});*/
+	casper.thenOpen(config.backEndUrl , function() {
 		var query = 'DELETE FROM forums WHERE uid="116";';
 		var deleteCategory = casper.evaluate(function(query) {
 			sqlConnection(query, function(err, result){
@@ -131,7 +131,7 @@ thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 			});
 			return;
 		}, query);
-	});*/
+	});
 };
 
 // method to verify the thumbs up and down for guest user(unregister user)
