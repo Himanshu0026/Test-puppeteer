@@ -1,8 +1,8 @@
 #!/bin/sh
 AUTOMATION_HOME='/etc/automation'
 cd $AUTOMATION_HOME
-printf "Executing Automation Script For $1 commitID\nTests executing for LOGIN: " | sed -r 's/'$(echo -e "\033")'\[[0-9]{1,2}(;([0-9]{1,2})?)?[mK]//g' | tee ~/"$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./automationScripts/automation.js --feature=login --branchName=$1 --commitId=$2 | sed -r 's/'$(echo -e "\033")'\[[0-9]{1,2}(;([0-9]{1,2})?)?[mK]//g' | tee ~/ "$AUTOMATION_HOME"/log/automation.txt
+printf "Executing Automation Script For $1 commitID\nTests executing for LOGIN: " >> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./automationScripts/automation.js --feature=login --branchName=$1 --commitId=$2 | sed 's/\x1b\[[0-9;]*m//g'>> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
 printf "Executing Automation Script For $1 commitID\nTests executing for BACKEND REGISTRATION: " >> "$AUTOMATION_HOME"/log/automation.txt
 casperjs test ./automationScripts/automation.js --feature=backEndRegistration --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
