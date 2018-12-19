@@ -163,7 +163,8 @@ executorServices.executeJob = function(commitDetails, callback) {
 								//var testResult = stdout;
 								//console.log('testResult', testResult);
 							//});
-							var testResult = stdout;
+							var testStdout = stdout;
+							var testResult = testStdout.replace(/\u001b\[.*?m/g, '');
 							//var automationLogFile = '/etc/automation/log/automation.txt';
 							var failLogFile = '/etc/automation/log/fail.txt';
 							if(stdout) {
