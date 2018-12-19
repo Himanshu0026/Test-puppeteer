@@ -2,10 +2,10 @@
 AUTOMATION_HOME='/etc/automation'
 cd $AUTOMATION_HOME
 printf "Executing Automation Script For $1 commitID\nTests executing for LOGIN: " >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./automationScripts/automation.js --feature=login --branchName=$1 --commitId=$2 | sed 's/\x1b\[[0-9;]*m//g'>> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./automationScripts/automation.js --feature=login --branchName=$1 --commitId=$2 | sed 's/\x1b\[[0-9;]*m//g' >> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
 printf "Executing Automation Script For $1 commitID\nTests executing for BACKEND REGISTRATION: " >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./automationScripts/automation.js --feature=backEndRegistration --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./automationScripts/automation.js --feature=backEndRegistration --branchName=$1 --commitId=$2 | sed 's/\x1b\[[0-9;]*m//g' >> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
 #printf "Executing Automation Script For $1 commitID\nTests executing for FORGOT PASSWORD: \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature=forgotPassword --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
@@ -26,7 +26,7 @@ sleep 1
 #casperjs test ./automationScripts/automation.js --feature=incontextRegistration --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
 #sleep 1
 printf "Executing Automation Script For $1 commitID\nTests executing for PRIVATE MESSAGE: " >> "$AUTOMATION_HOME"/log/automation.txt
-casperjs test ./automationScripts/automation.js --feature=privateMessage --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+casperjs test ./automationScripts/automation.js --feature=privateMessage --branchName=$1 --commitId=$2 | sed 's/\x1b\[[0-9;]*m//g' >> "$AUTOMATION_HOME"/log/automation.txt
 sleep 1
 #printf "Executing Automation Script For $1 commitID\nTests executing for MESSAGE PREVIEW(In Private Message): \n" >> "$AUTOMATION_HOME"/log/automation.txt
 #casperjs test ./automationScripts/automation.js --feature=messagePreview --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt

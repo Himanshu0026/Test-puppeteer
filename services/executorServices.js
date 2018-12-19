@@ -164,7 +164,6 @@ executorServices.executeJob = function(commitDetails, callback) {
 								//console.log('testResult', testResult);
 							//});
 							var testResult = stdout;
-							console.log('The data in the testResult is:', testResult);
 							//var automationLogFile = '/etc/automation/log/automation.txt';
 							var failLogFile = '/etc/automation/log/fail.txt';
 							if(stdout) {
@@ -221,7 +220,6 @@ executorServices.executeJob = function(commitDetails, callback) {
 											}
 											//Adding test result with commit details
 											commitDetails.testResult = testResult;
-											console.log('the data under commitDetails.testResult'+commitDetails.testResult);
 											commitDetails.apacheLogFile = apacheLogFile;
 											//Addling log files as attachments
 											commitDetails.attachments = [
