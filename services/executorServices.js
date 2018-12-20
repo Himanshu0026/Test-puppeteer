@@ -169,14 +169,14 @@ executorServices.executeJob = function(commitDetails, callback) {
 							var testResult2 = testResult1.split('\n');
 							var string = '';
 							var i;
-							for ( i = 1; i <= (testResult.length-2); i++) {
-								var search = testResult[i+1].search('PASS');
+							for ( i = 1; i <= (testResult2.length-2); i++) {
+								var search = testResult2[i+1].search('PASS');
 								var temp ='';
 						    if ( search === 0){
 						       temp ='';
 						      //i+1;
 						    } else {
-						      temp = testResult[i] +'/n'+testResult[i+1];
+						      temp = testResult2[i] +'/n'+testResult2[i+1];
 						      string = string + temp;
 						    }
 								i++;
