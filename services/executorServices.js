@@ -165,7 +165,22 @@ executorServices.executeJob = function(commitDetails, callback) {
 							//});
 							//var testResult = '';
 							var testStdout = stdout;
-							var testResult = testStdout.replace(/\u001b\[.*?m/g, '');
+							var testResult1 = testStdout.replace(/\u001b\[.*?m/g, '');
+							var testResult = testResult1.split('\n');
+							var string = '';
+							var i;
+							for ( i = 1; i <= (testResult.length-2); i++) {
+								var search = testResult[i+1].search('PASS');
+								var temp ='';
+						    if ( search === 0){
+						       temp ='';
+						      //i+1;
+						    } else {
+						      temp = testResult[i] +'/n'+testResult[i+1];
+						      string = string + temp;
+						    }
+								i++;
+							}
 							//var testResult2= testResult1.replace(/\nPASS/g, 'PASS');
 							//var testResult3 = testResult2.replace(/\nFAIL/g, 'FAIL');
 							/*var testResult4 = testResult3.split('\n').forEach(function(line) {
