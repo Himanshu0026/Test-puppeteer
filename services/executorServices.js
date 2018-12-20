@@ -163,16 +163,16 @@ executorServices.executeJob = function(commitDetails, callback) {
 								//var testResult = stdout;
 								//console.log('testResult', testResult);
 							//});
-							var testResult = '';
+							//var testResult = '';
 							var testStdout = stdout;
-							var testResult1 = testStdout.replace(/\u001b\[.*?m/g, '');
-							var testResult2= testResult1.replace(/\nPASS/g, 'PASS');
-							var testResult3 = testResult2.replace(/\nFAIL/g, 'FAIL');
-							var testResult4 = testResult3.split('\n').forEach(function(line) {
+							var testResult = testStdout.replace(/\u001b\[.*?m/g, '');
+							//var testResult2= testResult1.replace(/\nPASS/g, 'PASS');
+							//var testResult3 = testResult2.replace(/\nFAIL/g, 'FAIL');
+							/*var testResult4 = testResult3.split('\n').forEach(function(line) {
 						  	if (line.match('FAIL')) {
 						      testResult += line;
 						    }
-						  });
+						  });*/
 							//var automationLogFile = '/etc/automation/log/automation.txt';
 							var failLogFile = '/etc/automation/log/fail.txt';
 							if(stdout) {
