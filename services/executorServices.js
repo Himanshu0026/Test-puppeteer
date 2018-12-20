@@ -167,7 +167,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 							var testResult1 = testStdout.replace(/\u001b\[.*?m/g, '');
 							var testResult2= testResult1.replace(/\nPASS/g, 'PASS');
 							var testResult3 = testResult2.replace(/\nFAIL/g, 'FAIL');
-							var testResult = testResult3.split('\n').forEach((line),function() {
+							var testResult = testResult3.split('\n').forEach(function(line) {
 						  	if (line.match('FAIL')) {
 						      line.join();
 						    }
