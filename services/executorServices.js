@@ -179,7 +179,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 						      temp = testResult2[i] +'/n'+testResult2[i+1];
 						      string = string + temp;
 						    }
-								i++;
+								i=i+1;
 							}
 							var testResult = string;
 							//var testResult2= testResult1.replace(/\nPASS/g, 'PASS');
