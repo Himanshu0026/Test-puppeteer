@@ -166,20 +166,16 @@ executorServices.executeJob = function(commitDetails, callback) {
 							//var testResult = '';
 							var testStdout = stdout;
 							var testResult1 = testStdout.replace(/\u001b\[.*?m/g, '');
-							var testResult2 = testResult1.split('\n');
+							var testResult2= testResult1.replace(/\nPASS/g, 'PASS');
+							var testResult3 = testResult2.replace(/\nFAIL/g, 'FAIL');
+							var testResult4 = testResult3.split('\n');
 							var string = '';
 							var i;
-							for ( i = 1; i <= (testResult2.length-2); i++) {
-								var search = testResult2[i+1].search('PASS');
-								var temp ='';
-						    if ( search === 0){
-						       temp ='';
-						      //i+1;
-						    } else {
-						      temp = testResult2[i] +'/n'+testResult2[i+1];
-						      string = string + temp;
+							for ( i = 1; i <= (testResult4.length); i++) {
+								var search = testResult4[i].search('FAIL');
+						    if ( search !== (-1)){
+						      string = string + testResult4[i];
 						    }
-								i=i+1;
 							}
 							var testResult = string;
 							//var testResult2= testResult1.replace(/\nPASS/g, 'PASS');
