@@ -171,10 +171,10 @@ executorServices.executeJob = function(commitDetails, callback) {
 							var testResult4 = testResult3.split('\n');
 							var string = '';
 							var i;
-							for ( i = 1; i <= (testResult4.length); i++) {
+							for ( i = 1; i <= (testResult4.length-1); i++) {
 								var search = testResult4[i].search('FAIL');
 						    if ( search !== (-1)){
-						      string = string + testResult4[i];
+						      string = string +'\n'+ testResult4[i];
 						    }
 							}
 							var testResult = string;
