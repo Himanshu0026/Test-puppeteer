@@ -119,10 +119,11 @@ registerTests.invalidBirthdayDate = function(data) {
 		registerMethod.registerToApp(data);
 	}).waitUntilVisible('div.panel-body .alert', function(){
 		var text = casper.fetchText('div.panel-body .alert');
-		if(text === data.expectedErrorMsg){
+		//utils.info("@@@@@@@@@@@@@@@@@@"+text);
+		if(casper.test.assertTextExists('Please provide a valid Birthday.')){
 			casper.test.assertTextExists('Please provide a valid Birthday.');
 		}else {
-			casper.test.assertTextExists('Valid years for your Birthday are from 1900 to 2018.');
+			casper.test.assertTextExists('Valid years for your Birthday are from 1900 to 2019.');
 		}
 	});
 };

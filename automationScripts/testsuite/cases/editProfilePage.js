@@ -471,7 +471,7 @@ editProfilePageTests.invalidBirthday=function(){
 	}).waitForSelector('div#userSignature textarea', function(){
 		this.sendKeys('input#birthDatepicker', editProfilePageJSON.birthdayPicker.date);
 		this.click('button[type="submit"]');
-	}).waitForText('Valid years for your Birthday are from 1900 to 2018.');
+	}).waitForText('Valid years for your Birthday are from 1900 to 2019.');
 };
 
 //Verify with invalid birthday(future month)
