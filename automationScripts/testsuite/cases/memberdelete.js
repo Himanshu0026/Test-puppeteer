@@ -82,12 +82,15 @@ memberdeleteTests.verifyDeleteuserGrp=function(){
                 count='1';
                 backEndForumRegisterMethod.editUserActions('Pending Email Verification', 'Delete', count);
         }).then(function(){
+                this.wait(1000, function(){});
                 backEndForumRegisterMethod.viewUsers('Pending Email Verification');
+                this.wait(1000, function(){});
         }).then(function(){
                 //delete from all users checkbox
                 count='all';
                 backEndForumRegisterMethod.editUserActions('Pending Email Verification', 'Delete', count);
         }).then(function(){
+                this.wait(1000, function(){});
                 this.test.assertDoesntExist('#groupUsersList tr td input[name^="user_id"]', 'users not exists');
         });
 };
