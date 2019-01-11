@@ -82,12 +82,15 @@ memberdeleteTests.verifyDeleteuserGrp=function(){
                 count='1';
                 backEndForumRegisterMethod.editUserActions('Pending Email Verification', 'Delete', count);
         }).then(function(){
+                this.wait(1000, function(){});
                 backEndForumRegisterMethod.viewUsers('Pending Email Verification');
+                this.wait(1000, function(){});
         }).then(function(){
                 //delete from all users checkbox
                 count='all';
                 backEndForumRegisterMethod.editUserActions('Pending Email Verification', 'Delete', count);
         }).then(function(){
+                this.wait(1000, function(){});
                 this.test.assertDoesntExist('#groupUsersList tr td input[name^="user_id"]', 'users not exists');
         });
 };
@@ -237,10 +240,9 @@ memberdeleteTests.deleteAdminmembersPage=function(){
                 index=1;
                 memberDeleteMethod.memberCheckBoxValue('input[name^="delete_member"] ', index);
         }).waitForSelector('div#members-menu', function(){
+                this.test.assertSelectorHasText('div#members-menu span' , '2');
                 this.click('a#del_mem_btn');
-                this.click('span.left-side input');
-        }).waitForSelector('div#members-menu', function(){
-                this.click('a#del_mem_btn');
+                this.wait(2000, function(){});
         }).then(function(){
                 if (casper.visible('input#passwrd')) {
                         utils.info('password pop-up appeared on members page');
