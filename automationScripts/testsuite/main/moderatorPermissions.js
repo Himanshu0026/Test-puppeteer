@@ -214,7 +214,7 @@ moderatorPermissions.featureTest = function() {
 		moderatorPermissionsTestcases.verifyDisableDeletePollForOtherCategory();
 
 		// method to Verfiy with delete a moderator for category(cat1)
-    moderatorPermissionsTestcases.deleteModerator();
+		moderatorPermissionsTestcases.deleteModerator();
 
   });
 };

@@ -9,7 +9,6 @@ var registerMethod = require('../methods/register.js');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var topicMethod = require('../methods/topic.js');
 var forumLoginMethod = require('../methods/login.js');
-var sqlConnection = require('../../../connection.js');
 var thumpsUpDownTestcases = module.exports = {};
 
 function deleteCategoriesHandler(i) {
@@ -104,18 +103,6 @@ thumpsUpDownTestcases.createCategoryTestCase = function() {
 			}
 		});
 	});
-	/*casper.then(function() {
-		var query = 'INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1");';
-		var deleteCategory = casper.evaluate(function(query) {
-			sqlConnection(query, function(err, result){
-				if(err){
-					console.log(err);
-				}else{
-				}
-			});
-			return;
-		}, query);
-	});*/
 };
 
 // method to delete all the categories from backend
@@ -132,22 +119,6 @@ thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 			casper.then(deleteCategoriesHandler(i));
 		}
 	});
-	/*casper.then(function() {
-		utils.info('Test case to delete the catgories');
-		var query = 'DELETE FROM forums WHERE uid="116";';
-		var deleteCategory = casper.evaluate(function(query) {
-			 var result = sqlConnection('DELETE FROM forums WHERE uid="116";', function(err, result){
-				if(err){
-					console.log(err);
-				}else{
-					console.log(result);
-					return result;
-				}
-			});
-			return result;
-		}, query);
-		utils.info('the deleted categroy result'+deleteCategory);
-	});*/
 };
 
 // method to verify the thumbs up and down for guest user(unregister user)
@@ -576,8 +547,6 @@ thumpsUpDownTestcases.verifyReputation = function() {
 	}).waitForSelector('span.profile-title', function() {
 		this.test.assertExists('li.reputation span.profile-label.text-muted', 'Reputation available');
 		var earlierRepCount = this.fetchText('li.reputation span.profile-count a');
-		//utils.info(' The earlier reputation count fetch text is = '+earlierRepCount);
-		//utils.info(typeof(earlierRepCount));
 		earlierRepCount = earlierRepCount.split(',').join('');
 		earlierRepNum = parseInt(earlierRepCount);
 		utils.info(' The earlier reputation count is = '+earlierRepNum);
@@ -597,8 +566,6 @@ thumpsUpDownTestcases.verifyReputation = function() {
 	}).waitForSelector('span.profile-title', function() {
 		this.test.assertExists('li.reputation span.profile-label.text-muted', 'Reputation available');
 		var laterRepCount = this.fetchText('li.reputation span.profile-count a');
-		//utils.info(' The later reputation count fetch text is = '+laterRepCount);
-		//utils.info(typeof(laterRepCount));
 		laterRepCount = laterRepCount.split(',').join('');
 		laterRepNum = parseInt(laterRepCount);
 		utils.info(' The later reputation count is = '+laterRepNum);
@@ -614,8 +581,6 @@ thumpsUpDownTestcases.verifyReputation = function() {
 		this.click('i.glyphicon.glyphicon-trash.text-muted.pull-right');
 	}).wait('2000', function() {
 		var deletedRepCount = casper.fetchText('li.reputation span.profile-count a');
-		//utils.info(' The deleted reputation count fetch text is = '+deletedRepCount);
-		//utils.info(typeof(deletedRepCount));
 		deletedRepCount = deletedRepCount.split(',').join('');
 		var deletedRepNum = parseInt(deletedRepCount);
 		this.test.assertEquals(laterRepNum, deletedRepNum);

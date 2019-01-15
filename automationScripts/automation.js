@@ -32,7 +32,6 @@ switch (feature[0]) {
 				test.done();
 			});
 		});
-
 	break;
 
 	case "login":
@@ -200,7 +199,7 @@ switch (feature[0]) {
 			});
 		});
 	break;
-	
+
 	case "replyPost" :
 		casper.test.begin(branchName+ ' : ' + commitId + ' Verify replyPost functionality from home page with all valid and invalid scenarios ', function(test) {
 			var replyPost = require("./testsuite/main/replyPost.js");
@@ -472,8 +471,22 @@ case "postEventMemberApproval":
 		casper.echo("register");
 		casper.echo("incontextRegistration");
 		casper.echo("privateMessage");
+		casper.echo("messagePreview");
 		casper.echo("editProfilePage");
 		casper.echo("composeTopic");
 		casper.echo("profilePage");
+		casper.echo("thumpsUpDown");
+		casper.echo("deletePost");
+		casper.echo("followPinLock");
+		casper.echo("forumListingPage");
+		casper.echo("moveTopicAndPost");
+		casper.echo("addPoll");
+		casper.echo("postEventMemberApproval postTest");
+		casper.echo("backArrow");
+		casper.echo("postEventMemberApproval eventTest");
+		casper.echo("replyPost");
+		casper.echo("topicsPostCount");
+		casper.echo("latestTopic");
+		casper.echo("memberDelete");
 		casper.exit();
 }

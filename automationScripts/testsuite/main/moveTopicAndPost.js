@@ -85,7 +85,7 @@ moveTopicAndPost.featureTest = function() {
 		// 29. Verify move post from the post listing page into the new topic
 		moveTopicAndPostTestcases.postListingPageNewTopic('Administrators');
 
-		// method to Verfiy with Add a moderator for category(Registered Users) by scenario 2
+		// method to Verfiy with Add a moderator for category(General) by scenario 2
 		moderatorPermissionsTestcases.addModeratorByScenarioTwo();
 
 		// 37. Verify move post from the profile page into the new topic
@@ -106,7 +106,7 @@ moveTopicAndPost.featureTest = function() {
 		// 42. Verify move post from the post listing page into the new topic
 		moveTopicAndPostTestcases.postListingPageNewTopic('Moderators');
 
-		// method to Verfiy with delete a moderator for category(Registered Users)
+		// method to Verfiy with delete a moderator for category(General)
 		moderatorPermissionsTestcases.deleteModerator();
 
 	});
