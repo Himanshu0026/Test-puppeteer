@@ -82,6 +82,11 @@ queueServices.addNewJob = function(jobArg, type, priorityNo){
 				console.log('new added job priority is '+job.data.priorityNo);
 				var newBranch = job.data.branchName;
 				//if(job.data.priorityNo === '-10') {
+					jobQueue.active(function(err, ids){
+						ids.forEach( function( id ) {
+							console.log("the job data " +job.data.branchName);
+						});
+					});
 					jobQueue.inactive( function( err, ids ) {
 						ids.forEach( function( id ) {
 							console.log("the parameter in the inactive " +id);
