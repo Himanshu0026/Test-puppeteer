@@ -7,7 +7,7 @@
 	"app": {
 		"verbose" : true,
 	 	"logLevel" : "debug",
-		"waitTimeout" : "30000",
+		"waitTimeout" : "20000",
 		"viewportSize": {
 			"width": 1024,
 			"height": 768
@@ -16,7 +16,7 @@
 
 	"backendCred" : {
 		"uname" : "beta12",
-  		"upass" : "test",
+		"upass" : "test",
 		"apiKey" : "4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q"
 	},
 

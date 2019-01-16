@@ -383,7 +383,7 @@ backEndForumRegisterMethod.deleteAllCategories = function() {
 	//casper.waitWhileSelector(url, function success() {
 	//});
 	//casper.waitForSelector('input#remove_forum', function success() {
-	casper.wait('2000', function() {
+	casper.wait('4000', function() {
 		if(this.exists('input#remove_forum')) {
 			this.click('input#remove_forum');
 			this.waitForSelector('div.heading.error_message', function() {
@@ -647,6 +647,14 @@ backEndForumRegisterMethod.enableDisableCategoryPermissions = function(id, value
 	});
 };
 
+backEndForumRegisterMethod.enableDisableDeleteProfilePermissions = function(id, value) {
+	utils.enableorDisableCheckbox(id, value);
+	casper.waitUntilVisible('div#loading_msg', function success() {
+		utils.info("Permission changed");
+	}, function fail() {
+		utils.info("Permission not changed");
+	});
+};
 
 //Method for filling data in a category create form
 backEndForumRegisterMethod.createCategorySubcategory= function(title, data){

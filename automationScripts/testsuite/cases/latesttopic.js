@@ -29,7 +29,7 @@ latestTopicTests.useraccountOnOff = function() {
                 this.waitForSelector('form[name="posts" ] li a', function(){
                         this.test.assertExists('form[name="posts"] a.topic-title', 'topics found on latestTopicpage');
                         this.test.assertTextDoesntExist(latestTopicJSON.Text.msg, 'Log In sign up icon not found on topicListingpage');
-                }).thenOpen(latestTopicJSON.adminurlStaging, function(){
+                }).thenOpen(latestTopicJSON.adminurlautomation, function(){
                         this.waitForSelector('input.btn.btn-primary', function(){
                                 casper.sendKeys('input[name="pass"]', latestTopicJSON.password);
                                 casper.click('input[name="Submit"]');

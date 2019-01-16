@@ -58,6 +58,9 @@ register.featureTest = function() {
 		//47.Test case to verify Registration when Email address verification- Disabled And Approve new registrations- Enable
 		registerTests.registrationForDisabledEmailAndEnableApproveNewRegistration();
 
+		//create user in pending approvval and delete it.
+		registerTests.deletePendingApproveUser();
+
 		//49.Test case to verify Registration when Email address verification- Disabled And Approve new registrations- Disabled
 		registerTests.registrationForDisabledEmailAndDisabledApproveNewRegistration();
 

@@ -471,7 +471,7 @@ editProfilePageTests.invalidBirthday=function(){
 	}).waitForSelector('div#userSignature textarea', function(){
 		this.sendKeys('input#birthDatepicker', editProfilePageJSON.birthdayPicker.date);
 		this.click('button[type="submit"]');
-	}).waitForText('Valid years for your Birthday are from 1900 to 2018.');
+	}).waitForText('Valid years for your Birthday are from 1900 to');
 };
 
 //Verify with invalid birthday(future month)
@@ -501,7 +501,14 @@ editProfilePageTests.invalidFutureMonth=function(){
 		casper.sendKeys('input[name="birthDatepicker"]', date, {reset : true});
 	}).then(function(){
 		this.click('button[type="submit"]');
-	}).waitForText('Please provide a valid Birthday.');
+	}).waitUntilVisible('div.panel-body .alert', function(){
+		var text = casper.fetchText('div.panel-body .alert');
+		if(text === 'Please provide a valid Birthday.'){
+			casper.test.assertTextExists('Please provide a valid Birthday.');
+		}else {
+			casper.test.assertTextExists('Valid years for your Birthday are from 1900 to');
+		}
+	});
 };
 
 //Verify with enter full name greater then maximum limits(30)

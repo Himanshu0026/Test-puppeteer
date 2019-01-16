@@ -1,0 +1,12 @@
+{
+        "deleteUsers" : {
+          "expectedErrorMsg" : "There is no user with username",
+          "expectedMsg" :"There are currently no users in this group."
+        },
+
+        "checkedUser" :{
+                "expectedErrorMsg" :"There is no account with the username you specified."
+        }
+
+
+}

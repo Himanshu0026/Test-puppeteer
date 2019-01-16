@@ -32,7 +32,6 @@ switch (feature[0]) {
 				test.done();
 			});
 		});
-
 	break;
 
 	case "login":
@@ -200,7 +199,7 @@ switch (feature[0]) {
 			});
 		});
 	break;
-	
+
 	case "replyPost" :
 		casper.test.begin(branchName+ ' : ' + commitId + ' Verify replyPost functionality from home page with all valid and invalid scenarios ', function(test) {
 			var replyPost = require("./testsuite/main/replyPost.js");
@@ -449,6 +448,16 @@ case "postEventMemberApproval":
 		});
 	break;
 
+	case "memberDelete" :
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify Member-Delete functionality from home page with all valid and invalid scenarios ', function(test) {
+			var memberDelete = require("./testsuite/main/memberdelete.js");
+			memberDelete.featureTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
 
 	default:
 		casper.echo("Please select any feature from options given below. For ex: casperjs test automation.js --feature = <option>.\n");
@@ -462,8 +471,22 @@ case "postEventMemberApproval":
 		casper.echo("register");
 		casper.echo("incontextRegistration");
 		casper.echo("privateMessage");
+		casper.echo("messagePreview");
 		casper.echo("editProfilePage");
 		casper.echo("composeTopic");
 		casper.echo("profilePage");
+		casper.echo("thumpsUpDown");
+		casper.echo("deletePost");
+		casper.echo("followPinLock");
+		casper.echo("forumListingPage");
+		casper.echo("moveTopicAndPost");
+		casper.echo("addPoll");
+		casper.echo("postEventMemberApproval postTest");
+		casper.echo("backArrow");
+		casper.echo("postEventMemberApproval eventTest");
+		casper.echo("replyPost");
+		casper.echo("topicsPostCount");
+		casper.echo("latestTopic");
+		casper.echo("memberDelete");
 		casper.exit();
 }

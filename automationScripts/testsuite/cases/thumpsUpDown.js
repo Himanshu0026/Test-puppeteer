@@ -547,6 +547,7 @@ thumpsUpDownTestcases.verifyReputation = function() {
 	}).waitForSelector('span.profile-title', function() {
 		this.test.assertExists('li.reputation span.profile-label.text-muted', 'Reputation available');
 		var earlierRepCount = this.fetchText('li.reputation span.profile-count a');
+		earlierRepCount = earlierRepCount.split(',').join('');
 		earlierRepNum = parseInt(earlierRepCount);
 		utils.info(' The earlier reputation count is = '+earlierRepNum);
 	}).then(function() {
@@ -565,6 +566,7 @@ thumpsUpDownTestcases.verifyReputation = function() {
 	}).waitForSelector('span.profile-title', function() {
 		this.test.assertExists('li.reputation span.profile-label.text-muted', 'Reputation available');
 		var laterRepCount = this.fetchText('li.reputation span.profile-count a');
+		laterRepCount = laterRepCount.split(',').join('');
 		laterRepNum = parseInt(laterRepCount);
 		utils.info(' The later reputation count is = '+laterRepNum);
 		this.test.assertEquals(earlierRepNum + 3, laterRepNum);
@@ -579,6 +581,7 @@ thumpsUpDownTestcases.verifyReputation = function() {
 		this.click('i.glyphicon.glyphicon-trash.text-muted.pull-right');
 	}).wait('2000', function() {
 		var deletedRepCount = casper.fetchText('li.reputation span.profile-count a');
+		deletedRepCount = deletedRepCount.split(',').join('');
 		var deletedRepNum = parseInt(deletedRepCount);
 		this.test.assertEquals(laterRepNum, deletedRepNum);
 	}).then(function() {

@@ -45,7 +45,7 @@ postEventMemberApprovalMethod.setUserGroupToRegisteredUser = function(user) {
 postEventMemberApprovalMethod.composePost = function(msg) {
 	casper.test.assertSelectorHasText('#sub_post_reply', 'Post a reply');
 	casper.click('#sub_post_reply');
-	casper.wait('2000', function() {
+	casper.wait('3000', function() {
 		this.withFrame('message_ifr', function() {
 			this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
 			this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
@@ -54,7 +54,7 @@ postEventMemberApprovalMethod.composePost = function(msg) {
 	}).then(function() {
 		this.test.assertVisible('#reply_submit');
 		this.click('#reply_submit');
-		this.wait('2000', function() {
+		this.wait('3000', function() {
 		});
 	});
 };
@@ -108,7 +108,7 @@ postEventMemberApprovalMethod.composeEvent = function(eventInfo) {
 		});
 	}).then(function() {
 		this.click('#post_event_buttton');
-		this.wait('2000', function() {
+		this.wait('3000', function() {
 
 		});
 	});
