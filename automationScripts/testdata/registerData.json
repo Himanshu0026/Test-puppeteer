@@ -80,7 +80,7 @@
 		"usignature" : "This is my signature 18",
 		"namePrivate" : true,
 		"expectedErrorMsg" : "Please provide a valid Birthday.",
-		"expectedYearErrorMsg" : "Valid years for your Birthday are from 1900 to 2019."
+		"expectedYearErrorMsg" : "Valid years for your Birthday are from 1900 to"
 	},
 
 	"invalidEmail" : {

@@ -166,9 +166,9 @@ executorServices.executeJob = function(commitDetails, callback) {
 							var i;
 							for ( i = 1; i <= (testResult4.length-1); i++) {
 								var search = testResult4[i].search('FAIL');
-						    if ( search !== (-1)){
-						      string = string +'\n'+ testResult4[i];
-						    }
+								if ( search !== (-1)){
+									string = string +'\n'+ testResult4[i];
+								}
 							}
 							var testResult = string;
 							//var automationLogFile = '/etc/automation/log/automation.txt';

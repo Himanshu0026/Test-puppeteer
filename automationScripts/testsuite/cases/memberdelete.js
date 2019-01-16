@@ -7,7 +7,6 @@ var forumLoginMethod = require('../methods/login.js');
 var memberDeleteMethod = require('../methods/memberdelete.js');
 memberdeleteTests = module.exports = {};
 var pendingUser='';
-//var useradmn="";
 //Verify by register members for member delete-Task
 memberdeleteTests.registermembers=function(){
         casper.thenOpen(config.backEndUrl, function(){

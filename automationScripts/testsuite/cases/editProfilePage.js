@@ -471,7 +471,7 @@ editProfilePageTests.invalidBirthday=function(){
 	}).waitForSelector('div#userSignature textarea', function(){
 		this.sendKeys('input#birthDatepicker', editProfilePageJSON.birthdayPicker.date);
 		this.click('button[type="submit"]');
-	}).waitForText('Valid years for your Birthday are from 1900 to 2019.');
+	}).waitForText('Valid years for your Birthday are from 1900 to');
 };
 
 //Verify with invalid birthday(future month)
@@ -506,7 +506,7 @@ editProfilePageTests.invalidFutureMonth=function(){
 		if(text === 'Please provide a valid Birthday.'){
 			casper.test.assertTextExists('Please provide a valid Birthday.');
 		}else {
-			casper.test.assertTextExists('Valid years for your Birthday are from 1900 to 2018.');
+			casper.test.assertTextExists('Valid years for your Birthday are from 1900 to');
 		}
 	});
 };
