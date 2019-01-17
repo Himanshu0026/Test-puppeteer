@@ -101,7 +101,7 @@ queueServices.addNewJob = function(jobArg, type, priorityNo){
 							});
 						});
 					});
-					kue.Job.active(function(err, ids){
+					jobQueue.active(function(err, ids){
 						ids.forEach( function( id ) {
 							console.log("the job data of active " +job.data.branchName);
 						});
