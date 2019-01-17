@@ -4,7 +4,9 @@ casper.options.viewportSize = config.app.viewportSize;
 casper.options.verbose = config.app.verbose;
 casper.options.logLevel = config.app.logLevel;
 casper.options.waitTimeout = config.app.waitTimeout;
+//casper.options.pageSettings.userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11";
 var jsErrorCount = 0;
+utils.info('casper.options.pageSettings.userAgent '+casper.options.pageSettings.userAgent);
 var commitId = casper.cli.get('commitId');
 var branchName = casper.cli.get('branchName');
 
