@@ -83,7 +83,7 @@ queueServices.addNewJob = function(jobArg, type, priorityNo){
 				var newBranch = job.data.branchName;
 				//if(job.data.priorityNo === '-10') {
 					kue.Job.rangeByState( 'active', 0, -1, 'asc', function( err, jobs ) {
-						console.log("the job data by rangeByState " +jobs);
+						console.log("the job data by rangeByState " +jobs.data);
 					});
 					jobQueue.inactive( function( err, ids ) {
 						ids.forEach( function( id ) {
