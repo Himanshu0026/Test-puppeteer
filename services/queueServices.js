@@ -103,7 +103,7 @@ queueServices.addNewJob = function(jobArg, type, priorityNo){
 					});
 					jobQueue.active(function(err, ids){
 						ids.forEach( function( id ) {
-							console.log("the job data of active " +job.data.branchName);
+							//console.log("the job data of active " +job.data.branchName);
 						});
 					});
 			} else
