@@ -20,7 +20,7 @@ thumpsUpDownMethod.changeUserGroup = function(user, userGroup) {
 				this.test.assertSelectorHasText('#frmChangeUsersGroupFinal', 'Pending Email Verification');
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
 					'Administrators' : '',
-					'Registered Users' : 'checked',
+					'General' : 'checked',
 					'Moderators' : '',
 					'Pending Email Verification' : ''
 				}, true);
@@ -29,14 +29,14 @@ thumpsUpDownMethod.changeUserGroup = function(user, userGroup) {
 				this.test.assertSelectorHasText('#frmChangeUsersGroupFinal', 'Pending Approval');
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
 					'Administrators' : '',
-					'Registered Users' : 'checked',
+					'General' : 'checked',
 					'Moderators' : '',
 					'Pending Approval' : ''
 				}, true);
 			} catch(e) {
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
 					'Administrators' : '',
-					'Registered Users' : 'checked',
+					'General' : 'checked',
 					'Moderators' : ''
 				}, true);
 			}
@@ -45,54 +45,54 @@ thumpsUpDownMethod.changeUserGroup = function(user, userGroup) {
 			if(userGroup == 'Administrators') {
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
 					'Administrators' : 'checked',
-					'Registered Users' : ''
+					'General' : ''
 				}, true);
 			}else if (userGroup == 'Moderators') {
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
 					'Moderators' : 'checked',
-					'Registered Users' : ''
+					'General' : ''
 				}, true);
-			}else if (userGroup == 'Registered Users') {
+			}else if (userGroup == 'General') {
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
-					'Registered Users' : 'checked',
+					'General' : 'checked',
 					'Administrators' : ''
 				}, true);
 			}else if (userGroup == 'Pending Email Verification') {
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
 					'Pending Email Verification' : 'checked',
-					'Registered Users' : ''
+					'General' : ''
 				}, true);
 			}else if (userGroup == 'Pending Approval') {
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
 					'Pending Approval' : 'checked',
-					'Registered Users' : ''
+					'General' : ''
 				}, true);
 			}
 		}, function fail() {
 			if(userGroup == 'Administrators') {
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
 					'Administrators' : 'checked',
-					'Registered Users' : ''
+					'General' : ''
 				}, true);
 			}else if (userGroup == 'Moderators') {
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
 					'Moderators' : 'checked',
-					'Registered Users' : ''
+					'General' : ''
 				}, true);
-			}else if (userGroup == 'Registered Users') {
+			}else if (userGroup == 'General') {
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
-					'Registered Users' : 'checked',
+					'General' : 'checked',
 					'Administrators' : ''
 				}, true);
 			}else if (userGroup == 'Pending Email Verification') {
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
 					'Pending Email Verification' : 'checked',
-					'Registered Users' : ''
+					'General' : ''
 				}, true);
 			}else if (userGroup == 'Pending Approval') {
 				casper.fillLabels('form#frmChangeUsersGroupFinal', {
 					'Pending Approval' : 'checked',
-					'Registered Users' : ''
+					'General' : ''
 				}, true);
 			}
 		}).then(function() {

@@ -558,9 +558,9 @@ profilePageTests.profilePageEditUserIcon=function(){
                 this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
                 this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-        	backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+        	backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'change_username', true);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'change_username', true);
 	}).thenOpen(config.url, function(){
 		this.test.assertExists('ul.nav.pull-right span.caret');
 		this.click('ul.nav.pull-right span.caret');

@@ -24,9 +24,9 @@ registerTests.registrationBackendSetting = function() {
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndForumRegisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
-			backEndForumRegisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_messageboard', true);
+			backEndForumRegisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_messageboard', true);
 		});
 	}).then(function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');

@@ -36,23 +36,23 @@ executorServices.executeJob = function(commitDetails, callback) {
 					});
 				//});
 			} else {
-				sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "Registered Users" AND uid =12', function(err, result){
+				sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "Registered Users" AND uid =116', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 					}
 				});
-				sqlConnection('DELETE FROM calendar_permissions WHERE uid="12";', function(err, result){
+				sqlConnection('DELETE FROM calendar_permissions WHERE uid="116";', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 					}
 				});
-				sqlConnection('DELETE FROM forums WHERE uid="12";', function(err, result){
+				sqlConnection('DELETE FROM forums WHERE uid="116";', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
-						sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("12", "General", "General", "1")', function(err, result){
+						sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")', function(err, result){
 							if(err){
 								console.log(err);
 							}else{
@@ -60,20 +60,20 @@ executorServices.executeJob = function(commitDetails, callback) {
 						});
 					}
 				});
-				sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=12 ', function(err, result){
+				sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 					}
 				});
-				sqlConnection('SELECT max(posts) AS posts, userid,user FROM members WHERE uid="12" and user="hani";', function(err, result){
+				sqlConnection('SELECT max(posts) AS posts, userid,user FROM members WHERE uid="116" and user="hani";', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 						var post = result[0].posts;
 						var userid = result[0].userid;
-						var deleteTopPoster = 'DELETE FROM top_posters WHERE uid="12" AND userid="'+userid+'";';
-						var query = 'INSERT INTO top_posters (uid,userid,posts) VALUES ("12",'+userid+','+post+');';
+						var deleteTopPoster = 'DELETE FROM top_posters WHERE uid="116" AND userid="'+userid+'";';
+						var query = 'INSERT INTO top_posters (uid,userid,posts) VALUES ("116",'+userid+','+post+');';
 						sqlConnection(deleteTopPoster, function(err, result){
 							if(err){
 								console.log(err);

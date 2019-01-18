@@ -34,11 +34,11 @@ composeTopicMethod.startTopicPermissionForCategory=function(status){
   		casper.wait(5000, function(){
   			casper.test.assertExists('#list_usergroup');
   			casper.click('#list_usergroup');
-  			casper.sendKeys('#list_usergroup','Registered Users');
+  			casper.sendKeys('#list_usergroup','General');
 				registerUserId = casper.evaluate(function(){
 					for(var i=1; i<=7; i++) {
 						var x1 = document.querySelector('select#list_usergroup option:nth-child('+i+')');
-						if (x1.innerText == 'Registered Users') {
+						if (x1.innerText == 'General') {
 							var x2 = document.querySelector('select#list_usergroup option:nth-child('+i+')').getAttribute('value');
 							return x2;
 						}

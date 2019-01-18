@@ -25,9 +25,9 @@ thumpsUpDownTestcases.registrationBackendSetting = function() {
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndForumRegisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
-			backEndForumRegisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_messageboard', true);
+			backEndForumRegisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_messageboard', true);
 		});
 	}).then(function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
@@ -177,9 +177,9 @@ thumpsUpDownTestcases.likeDislikePostOfUnregisteredUserByRegisterUser = function
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndForumRegisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
-			backEndForumRegisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'post_threads', true);
+			backEndForumRegisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', true);
 		});
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
@@ -324,9 +324,9 @@ thumpsUpDownTestcases.clickOnLikersUsername = function() {
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+			backEndForumRegisterMethod.viewGroupPermissions('General');
 		}).then(function() {
-			backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'view_profiles', false);
+			backEndForumRegisterMethod.editGroupPermissions('General', 'view_profiles', false);
 		});
 	}).thenOpen(config.url, function() {
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.otherUser.username, thumpsUpDownJSON.otherUser.password);
@@ -415,9 +415,9 @@ thumpsUpDownTestcases.clickOnOwnName = function() {
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+			backEndForumRegisterMethod.viewGroupPermissions('General');
 		}).then(function() {
-			backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'view_profiles', true);
+			backEndForumRegisterMethod.editGroupPermissions('General', 'view_profiles', true);
 		});
 	});
 };

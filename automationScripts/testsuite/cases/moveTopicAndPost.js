@@ -326,9 +326,9 @@ moveTopicAndPostTestcases.profilePageForRegisteredUserWhenDisabled = function() 
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+		backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'move_own_threads', false);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'move_own_threads', false);
 	});
 };
 

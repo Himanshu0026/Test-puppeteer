@@ -48,9 +48,9 @@ postEventMemberApprovalTestcases.createTopic = function() {
 		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndregisterMethod.viewGroupPermissions('Registered Users');
+			backEndregisterMethod.viewGroupPermissions('General');
 		}).then(function() {
-			backEndregisterMethod.editGroupPermissions('Registered Users', 'other_post_replies', true);
+			backEndregisterMethod.editGroupPermissions('General', 'other_post_replies', true);
     });
   });
 };
@@ -245,9 +245,9 @@ postEventMemberApprovalTestcases.unregisterUserApprovePost = function() {
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+		backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 	}).then(function() {
-		backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'other_post_replies', false);
+		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'other_post_replies', false);
   }).thenOpen(config.url, function() {
 		try {
 			this.test.assertExists('a.topic-title', 'Composed topic is found');
@@ -395,7 +395,7 @@ postEventMemberApprovalTestcases.eventApprovalByAdmin = function() {
 		var grpName = casper.evaluate(function(tableLength){
 			for(var i=3; i<=tableLength; i++) {
 				var group = document.querySelector('tr:nth-child('+i+') td:nth-child(1) li'); // change li
-				if (group.innerText == 'Registered Users') {
+				if (group.innerText == 'General') {
 					document.querySelector('tr:nth-child('+i+') td:nth-child(2) a').click();
 					return (group.innerText);
 				}

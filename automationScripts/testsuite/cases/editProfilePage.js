@@ -18,9 +18,9 @@ editProfilePageTests.editProfileDisableSignature=function(){
                 this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
                 this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-        	backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+        	backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'allow_signature', false);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'allow_signature', false);
 	}).then(function(){
 		this.test.assertSelectorHasText('div#tab_wrapper p font','Your user group settings have been updated.');
 	}).thenOpen(config.url, function(){
@@ -43,9 +43,9 @@ editProfilePageTests.editProfileEnableSignature=function(){
                 this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
                 this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-        	backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+        	backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'allow_signature', true);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'allow_signature', true);
 	}).then(function(){
 		this.test.assertSelectorHasText('div#tab_wrapper p font','Your user group settings have been updated.');
 	}).then(function(){
@@ -225,9 +225,9 @@ editProfilePageTests.disableCustomTitle=function(){
                 this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
                 this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-        	backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+        	backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'allow_customtitle', false);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'allow_customtitle', false);
 	}).then(function(){
 		this.test.assertSelectorHasText('div#tab_wrapper p font','Your user group settings have been updated.');
 	}).thenOpen(config.url, function(){
@@ -250,9 +250,9 @@ editProfilePageTests.enableCustomTitle=function(){
                 this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
                 this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-        	backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+        	backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'allow_customtitle', true);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'allow_customtitle', true);
 	}).then(function(){
 		this.test.assertSelectorHasText('div#tab_wrapper p font','Your user group settings have been updated.');
 	}).thenOpen(config.url, function(){
@@ -404,9 +404,9 @@ editProfilePageTests.shieldIconRegisteruser=function(){
                 this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
                 this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-        	backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+        	backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'post_threads', true);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'post_threads', true);
 	}).thenOpen(config.url, function(){
 		this.test.assertExists('a[href="/post/printadd"]');
 		this.evaluate(function() {
