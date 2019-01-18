@@ -36,7 +36,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 					});
 				//});
 			} else {
-				sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "Registered Users" AND uid =116', function(err, result){
+				sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "General" AND uid =116', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
