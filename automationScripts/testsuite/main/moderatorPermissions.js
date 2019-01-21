@@ -70,7 +70,7 @@ moderatorPermissions.featureTest = function() {
 		moderatorPermissionsTestcases.verifyDisableEditPostForOtherCategory();
 
 		// method to Verify by edit post from category(cat1)
-		moderatorPermissionsTestcases.verifyEnableEditPostForModeratorCategory();
+		//moderatorPermissionsTestcases.verifyEnableEditPostForModeratorCategory();
 
 		// method to Verify by edit post from other category
 		moderatorPermissionsTestcases.verifyEnableEditPostForOtherCategory();
