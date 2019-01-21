@@ -356,22 +356,23 @@ backEndForumRegisterMethod.viewUsers = function(userGroup) {
 backEndForumRegisterMethod.editUserActions = function(userGroup, action, usersCount) {
 	casper.waitForSelector('div#tab_wrapper', function() {
 		this.test.assertTextExists(userGroup, 'User groups contains : ' +userGroup+ ' : so identification done');
-		if(usersCount == 25) {
-			this.evaluate(function() {
-				$('#groupUsersList tr td input:checkbox[name="user_id"]:lt(25)').prop('checked', true);
-			});
-		} else if(usersCount == 'all') {
+		if(usersCount == 'all') {
 			this.click('input[name="allbox"]');
+		}else{
+			this.click('#groupUsersList tr td input[name^="user_id"]');
+			
 		}
-		this.test.assertExists('div#floatingActionMenu');
-		this.test.assertSelectorHasText('div#floatingActionMenu', 'Selected');
-		if(action == 'Delete') {
-			action = 'delete_members';
-		}
-		this.fillSelectors('form[name="dbfrm"]', {
-			'select[name="action"]': action
-		}, true);
-		this.wait(2000, function(){});
+		this.then(function(){
+			this.test.assertExists('div#floatingActionMenu');
+			this.test.assertSelectorHasText('div#floatingActionMenu', 'Selected');
+			if(action == 'Delete') {
+				action = 'delete_members';
+			}
+			this.fillSelectors('form[name="dbfrm"]', {
+				'select[name="action"]': action
+			}, true);
+			this.wait(2000, function(){});
+		});
 	});
 };
 

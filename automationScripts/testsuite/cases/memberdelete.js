@@ -61,37 +61,39 @@ memberdeleteTests.verifyDeleteSearchSection=function(){
 //checked delete from usergroup settings.
 //backend delete functionality checked all, single, and from delete icon.
 memberdeleteTests.verifyDeleteuserGrp=function(){
-        casper.thenOpen(config.backEndUrl, function(){
-                utils.info('************************MEMBER DELETE TESTCASES****************************');
-        	utils.info('Case 3[Verify by delete users ]');
-        }).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
-        	this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-        	this.click('a[href="/tool/members/mb/usergroup"]');
-        }).waitForSelector('div#tab_wrapper', function(){
-                backEndForumRegisterMethod.viewUsers('Pending Email Verification');
-        }).waitForSelector('input[name="allbox"]', function(){
-                this.test.assertTextDoesntExist(pendingUser, 'user doesnt exist on users page on backend settings');
-                this.click('a.userlist-delete');
-                //same page reload none selector change
-                this.wait(2000, function(){});
-        }).waitForSelector('input[name="allbox"]', function(){
-                this.click('input[name="allbox"]');
-        }).waitForSelector('select[name="action"]', function(){
-                //delete single user from checkbox
-                count='1';
-                backEndForumRegisterMethod.editUserActions('Pending Email Verification', 'Delete', count);
-        }).then(function(){
-                this.wait(2000, function(){});
-                backEndForumRegisterMethod.viewUsers('Pending Email Verification');
-                this.wait(2000, function(){});
-        }).then(function(){
-                //delete from all users checkbox
-                count='all';
-                backEndForumRegisterMethod.editUserActions('Pending Email Verification', 'Delete', count);
-        }).then(function(){
-                this.wait(2000, function(){});
-                this.test.assertDoesntExist('#groupUsersList tr td input[name^="user_id"]', 'users not exists');
-        });
+  casper.thenOpen(config.backEndUrl, function(){
+    utils.info('************************MEMBER DELETE TESTCASES****************************');
+    utils.info('Case 3[Verify by delete users ]');
+  }).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
+    this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+    this.click('a[href="/tool/members/mb/usergroup"]');
+  }).waitForSelector('div#tab_wrapper', function(){
+    backEndForumRegisterMethod.viewUsers('Pending Email Verification');
+  }).waitForSelector('input[name="allbox"]', function(){
+    this.test.assertTextDoesntExist(pendingUser, 'user doesnt exist on users page on backend settings');
+    this.click('a.userlist-delete');
+    //same page reload none selector change
+    this.wait(2000, function(){});
+  }).waitForSelector('input[name="allbox"]', function(){
+    this.click('input[name="allbox"]');
+  }).waitForSelector('select[name="action"]', function(){
+    //delete single user from checkbox
+    count='1';
+    backEndForumRegisterMethod.editUserActions('Pending Email Verification', 'Delete', count);
+    this.wait(1000, function(){});
+  }).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
+    this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+    this.click('a[href="/tool/members/mb/usergroup"]');
+  }).waitForSelector('div#tab_wrapper', function(){
+    backEndForumRegisterMethod.viewUsers('Pending Email Verification');
+  }).then(function(){
+    //delete from all users checkbox
+    count='all';
+    backEndForumRegisterMethod.editUserActions('Pending Email Verification', 'Delete', count);
+  }).then(function(){
+    this.test.assertDoesntExist('#groupUsersList tr td input[name^="user_id"]', 'users not exists');
+  });
+
 };
 
 //Verify Delete Account Pending Email Users on Account  Profile page Delete own Account Disable
