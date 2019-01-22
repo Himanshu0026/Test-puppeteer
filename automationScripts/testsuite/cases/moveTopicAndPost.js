@@ -261,7 +261,7 @@ moveTopicAndPostTestcases.topicListingPageUnderCategoryForRegisteredUserWhenDisa
   }).waitUntilVisible('.topics-list', function() {
 		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' Start New topic on subcategory page Found');
 		this.click('#ajax_subscription_vars a.start-new-topic-btn');
-		topicMethod.createTopic(moveTopicAndPostJSON.subCategoryTopic);
+		topicMethod.createTopic(moveTopicAndPostJSON.categoryTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
 		this.click('#backArrowPost');
 	}).waitUntilVisible('#topics_tab', function() {
@@ -304,7 +304,7 @@ moveTopicAndPostTestcases.topicListingPageUnderSubCategoryForRegisteredUserWhenD
   }).waitUntilVisible('.topics-list', function() {
 		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' Start New topic on subcategory page Found');
 		this.click('#ajax_subscription_vars a.start-new-topic-btn');
-		topicMethod.createTopic(moveTopicAndPostJSON.categoryTopic);
+		topicMethod.createTopic(moveTopicAndPostJSON.subCategoryTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
 		this.click('#backArrowPost');
 	}).waitUntilVisible('#topics_tab', function() {
