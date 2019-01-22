@@ -560,7 +560,31 @@ editProfilePageTests.verifyFullName=function(){
 		"visiblity_imType_registration" : "Yes",
 		"visiblity_dob_registration" : "Yes",
 		"visiblity_signature_registration" : "Yes",
-		"visiblity_avatar_registration" : "Yes"};
+		"visiblity_avatar_registration" : "Yes",
+		"visiblity_imType_settings" :"Yes"};
 		backEndForumRegisterMethod.changeDefaultRegistrationOptions(setOptions);
+	});
+};
+
+//Verify with none option in instant message.
+//Verify with aim option in instant message.
+//Verify with Google talk option in instant message.
+//Verify with JABBER option in instant message.
+editProfilePageTests.instantMsg=function(){
+	casper.thenOpen(config.url, function(){
+		utils.info('Case 16[Verify with none option in instant message.]');
+		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+	}).then(function(){
+		this.test.assertExists('ul.nav.pull-right span.caret', 'dropdown toggle button present');
+		this.click('ul.nav.pull-right span.caret');
+		this.click('span.pull-right.user-nav-panel li:nth-child(4) a');
+	}).waitForSelector('div#userSignature textarea', function(){
+		editProfileMethod.verifyInstantMsg('AIM', 'hello-aim');
+	}).then(function(){
+		editProfileMethod.verifyInstantMsg('Google Talk', 'hello-talk');
+	}).then(function(){
+		editProfileMethod.verifyInstantMsg('Jabber', 'hello-jabber');
+	}).then(function(){
+		editProfileMethod.verifyInstantMsg('None');
 	});
 };

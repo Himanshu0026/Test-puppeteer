@@ -108,3 +108,25 @@ composeTopicMethod.getPostCount= function(data) {
 		});
 	});
 };
+
+composeTopicMethod.postPreview= function(data) {
+	casper.waitForSelector('div.post-body.pull-left', function(){
+	  this.test.assertExists('div.post-body.pull-left');
+	  this.sendKeys('input[name="subject"]', data.title, {reset:true});
+	  this.withFrame('message_ifr', function(){
+			this.sendKeys('#tinymce', this.page.event.key.Ctrl, this.page.event.key.A, {keepFocus: true});
+			this.sendKeys('#tinymce', this.page.event.key.Backspace, {keepFocus: true});
+			this.sendKeys('#tinymce', data.content);
+		});
+	  if(this.exists('#all_forums_dropdown')){
+	   this.click('#all_forums_dropdown');
+	   this.fill('form[name="PostTopic"]', {
+	    'forum' : data.category
+	    }, false);
+	   }
+	  }).then(function(){
+			this.click('button#previewpost_sbt');
+		}).waitForText(composeTopicJSON.ValidCredential.content, function(){
+			this.click('#post_submit');
+	  });
+};
