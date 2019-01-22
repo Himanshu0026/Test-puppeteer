@@ -21,6 +21,12 @@
     "category" : "cat1a"
   },
 
+  "categoryTopic" : {
+    "title" : "New Topic",
+    "content" : "hellloooooo!!!!!!!!!",
+    "category" : "cat1"
+  },
+
 	"adminUserLogin" : {
 		"username": "isneha",
 		"password": "isneha"
