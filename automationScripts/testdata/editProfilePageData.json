@@ -17,6 +17,9 @@
 	"customTitle":{
 		"addTitle":"member",
 		"editTitle":"membernew"
+	},
+	"alertMsg":{
+		"msg":"Your settings have been updated."
 	}
 
  }

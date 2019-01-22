@@ -13,7 +13,6 @@ composeTopicTests = module.exports = {};
 //Verify Compose Topic on Category Listing Page (For Guest/Registered User/Admin)
 //"Verify Compost Topic on Topic Listing Page under category (For Guest/Registered User/Admin)"
 //Verify Preview Post of Compose Topic  (For Registered User/Admin)
-
 // method to create a category General
 composeTopicTests.createCategoryTestCase = function() {
 	casper.thenOpen(config.backEndUrl, function() {
@@ -47,7 +46,8 @@ composeTopicTests.addTopic=function(username, password){
 		this.evaluate(function(){
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary.start-new-topic-btn').click();
 		});
-		topicMethod.createTopic(composeTopicJSON.ValidCredential);
+	}).then(function(){
+		composeTopicMethod.postPreview(composeTopicJSON.ValidCredential);
 	}).waitForText(composeTopicJSON.ValidCredential.content, function(){
 		this.test.assertExists('a#links-nav i');
 		this.click('a#links-nav i');
@@ -61,6 +61,7 @@ composeTopicTests.addTopic=function(username, password){
 };
 
 //Verify Compose Topic on Latest Topic Page (Registered)
+//Verify postpreview on latesttopicpage for registered user.
 composeTopicTests.composeLatestTopicRegister=function(){
 
 	casper.thenOpen(config.url, function(){
@@ -71,7 +72,7 @@ composeTopicTests.composeLatestTopicRegister=function(){
 		this.evaluate(function(){
 			document.querySelector('a[href="/post/printadd"]').click();
 		});
-		topicMethod.createTopic(composeTopicJSON.ValidCredential);
+		composeTopicMethod.postPreview(composeTopicJSON.ValidCredential);
 	}).waitForText(composeTopicJSON.ValidCredential.content, function(){
 		this.test.assertExists('a#backArrowPost');
 		this.click('a#backArrowPost');
@@ -160,16 +161,41 @@ composeTopicTests.composeTopicWithoutCategory=function(username, password){
 		utils.info('Case 4[Verify Preview Post of Compose Topic on postlisting page (For Registered User/Admin)]');
 		forumLoginMethod.loginToApp(username, password);
 	}).waitForSelector('a[href="/post/printadd"]', function(){
-               this.evaluate(function(){
-               		document.querySelector('a[href="/post/printadd"]').click();
-               });
-               topicMethod.createTopic(composeTopicJSON.ValidTopic);
-       }).then(function(){
+    this.evaluate(function(){
+      document.querySelector('a[href="/post/printadd"]').click();
+    });
+    topicMethod.createTopic(composeTopicJSON.ValidTopic);
+  }).then(function(){
 		var message=this.getElementAttribute('select#all_forums_dropdown', 'data-original-title');
 		this.test.assertEquals(message, composeTopicJSON.expectedMessage.Message, 'both the text are equal');
-      	}).then(function(){
-      		forumLoginMethod.logoutFromApp();
-      	});
+  }).then(function(){
+    forumLoginMethod.logoutFromApp();
+  });
+};
+
+//Verify postPreview from general user from categoryListingPage
+composeTopicTests.composeTopicPostPreview=function(username, password){
+	casper.thenOpen(config.url, function(){
+		utils.info('******************************ComposeTopic********************************************');
+		utils.info('Case 5[Verify postPreview from general user from categoryListingPage]');
+		forumLoginMethod.loginToApp(username, password);
+	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
+		this.evaluate(function(){
+			document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
+		});
+	}).waitForSelector('a[href="#forums"]', function(){
+		deletePostMethod.getCategoryHrefFrontend('ComposeCategory');
+	}).waitForSelector('a#forum-title', function(){
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary.start-new-topic-btn');
+		this.evaluate(function(){
+			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary.start-new-topic-btn').click();
+		});
+	}).then(function(){
+		composeTopicMethod.postPreview(composeTopicJSON.ValidCredential);
+	}).waitForText(composeTopicJSON.ValidCredential.content,function(){
+		forumLoginMethod.logoutFromApp();
+	});
 };
 
 //Verify with the guest user without selecting any category.
@@ -177,56 +203,30 @@ composeTopicTests.composeTopicGuestWithoutCategory=function(){
 
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('******************************ComposeTopic********************************************');
-		utils.info('Case 5[Verify Preview Post of Compose Topic on postlisting page for guest user]');
+		utils.info('Case 6[Verify Preview Post of Compose Topic on postlisting page for guest user]');
 	}).then(function(){
 		this.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-              	this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-                this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function(){
-                	this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+    this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+    this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function(){
+      this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			backEndForumRegisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
-              	}).then(function(){
+    }).then(function(){
 			backEndForumRegisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', true);
 		}).thenOpen(config.url, function(){
 			this.waitForSelector('a[href="/post/printadd"]', function(){
-               			this.evaluate(function(){
-               				document.querySelector('a[href="/post/printadd"]').click();
-               			});
-               			topicMethod.createTopic(composeTopicJSON.ValidTopic);
-               		}).then(function(){
+        this.evaluate(function(){
+        	document.querySelector('a[href="/post/printadd"]').click();
+        });
+        topicMethod.createTopic(composeTopicJSON.ValidTopic);
+        }).then(function(){
 				var message=this.getElementAttribute('select#all_forums_dropdown', 'data-original-title');
 				this.test.assertEquals(message, composeTopicJSON.expectedMessage.Message, 'both the text are equal');
 			});
 		});
         });
 };
-//already checked in incontextlogin
-//Verify Compose Topic on Category/topic Listing Page(if  start new topic permission is disabled) (For Guest User)
-composeTopicTests.composeTopicGueststartTopicEnable=function(){
 
-	casper.thenOpen(config.backEndUrl, function(){
-		utils.info('******************************ComposeTopic********************************************');
-		utils.info('Case 6[Verify Preview Post of Compose Topic on postlisting page for guest user]');
-	}).then(function(){
-		this.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-              	this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-                this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function(){
-                	this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
-              	}).then(function(){
-			backEndForumRegisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', true);
-		}).thenOpen(config.url, function(){
-			this.waitForSelector('a[href="/post/printadd"]', function(){
-               			this.evaluate(function(){
-               				document.querySelector('a[href="/post/printadd"]').click();
-               			});
-               		}).then(function(){
-               			this.test.assertExists('a#guest_user_create_account', 'create an account found');
-               		});
-		});
-	});
-};
 //new case issue in the case.
 //Verify Compose Topic on topic listing page(if start new topic permission is disabled of one cateogry) (For Register User)
 composeTopicTests.composeTopicRegisterstartTopicdisablecategory=function(){
@@ -256,21 +256,60 @@ composeTopicTests.composeTopicRegisterstartTopicdisablecategory=function(){
 	});
 };
 
+//Verify post-Preview for guest user on latestTopicPage, topicListingPage and categoryListingPage
+composeTopicTests.composeTopicGuestUserPostPreview=function(){
+	casper.thenOpen(config.url, function(){
+		utils.info('******************************ComposeTopic********************************************');
+		utils.info('Case 8[Verify post-Preview for guest user on latestTopicPage, topicListingPage and categoryListingPage for guest user]');
+	}).waitForSelector('a[href="/post/printadd"]', function(){
+		this.evaluate(function(){
+			document.querySelector('a[href="/post/printadd"]').click();
+		});
+		composeTopicMethod.postPreview(composeTopicJSON.ValidCredential);
+	}).waitForText(composeTopicJSON.ValidCredential.content, function(){
+		this.test.assertExists('a#links-nav i');
+		this.click('a#links-nav i');
+		this.test.assertExists('li#latest_topics_show a','title present on forum');
+		this.click('li#latest_topics_show a');
+	}).waitForSelector('a[href="/post/printadd"]', function(){
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
+ 		this.evaluate(function(){
+			document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
+ 		});
+	}).waitForSelector('a[href="#forums"]', function(){
+		this.test.assertExist('div#forums a span', 'start topic found on categorylistingPage');
+		this.evaluate(function(){
+			document.querySelector('div#forums a span').click();
+		});
+	}).then(function(){
+		composeTopicMethod.postPreview(composeTopicJSON.ValidCredential);
+	}).waitForText(composeTopicJSON.ValidCredential.content, function(){
+		this.test.assertExists('a#backArrowPost');
+		this.click('a#backArrowPost');
+	}).waitForSelector('div#ajax_subscription_vars a span', function(){
+		this.evaluate(function(){
+			document.querySelector('div#ajax_subscription_vars a span').click();
+		});
+	}).then(function(){
+		composeTopicMethod.postPreview(composeTopicJSON.ValidCredential);
+	}).waitForText(composeTopicJSON.ValidCredential.content);
+};
+
 //Verify Compose Topic on topic listing page(if start new topic permission is disabled of one cateogry) (For Guest User)
 composeTopicTests.composeTopicGueststartTopicdisblecategory=function(){
 
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('******************************ComposeTopic********************************************');
-		utils.info('Case 8[Verify Preview Post of Compose Topic on postlisting page for guest user]');
+		utils.info('Case 9[Verify Preview Post of Compose Topic on postlisting page for guest user]');
 		composeTopicMethod.startTopicPermissionForCategory(true);
 	}).then(function(){
 		this.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-              	this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-                this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function(){
-                	this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+    this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+    this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function(){
+    this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			backEndForumRegisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
-              	}).then(function(){
+    }).then(function(){
 			backEndForumRegisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', false);
 		}).thenOpen(config.url, function(){
 			this.evaluate(function(){
@@ -280,11 +319,11 @@ composeTopicTests.composeTopicGueststartTopicdisblecategory=function(){
 			deletePostMethod.getCategoryHrefFrontend('General');
 		}).waitForSelector('div#ajax_subscription_vars a', function(){
 			this.evaluate(function(){
-               			document.querySelector('div#ajax_subscription_vars a').click();
-               		});
-               	}).then(function(){
-               		this.test.assertExists('span#user-login-modal-heading', 'model-pop-up opened successfully');
-               	});
+      	document.querySelector('div#ajax_subscription_vars a').click();
+      });
+      }).then(function(){
+        this.test.assertExists('span#user-login-modal-heading', 'model-pop-up opened successfully');
+      });
 	});
 };
 
@@ -293,14 +332,14 @@ composeTopicTests.permissionSettings=function(){
 
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('******************************ComposeTopic********************************************');
-                utils.info('Case 9[Verify to set 100 topics per-page]');
+    utils.info('Case 10[Verify to set 100 topics per-page]');
 		composeTopicMethod.startTopicPermissionForCategory(true);
 	}).then(function(){
-                backEndForumRegisterMethod.goToDisplayPage();
-        }).then(function(){
-                backEndForumRegisterMethod.setTopicsPerPage('100');
-        }).then(function(){
-        	this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
+    backEndForumRegisterMethod.goToDisplayPage();
+  }).then(function(){
+    backEndForumRegisterMethod.setTopicsPerPage('100');
+  }).then(function(){
+    this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
 			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 			this.click('a[href="/tool/members/mb/usergroup"]');
 		}).waitForSelector('div#tab_wrapper', function(){

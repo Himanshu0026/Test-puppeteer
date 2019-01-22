@@ -44,6 +44,7 @@ editProfilePage.featureTest = function(){
 	editProfilePageTests.invalidFutureMonth();
 	//verify with enter full name greater then maximum limits(30)
 	editProfilePageTests.verifyFullName();
-
+	//Verify with none option in instant message, Aim, Jabber
+	editProfilePageTests.instantMsg();
 	});
 };
