@@ -184,9 +184,9 @@ composeTopicTests.composeTopicGuestWithoutCategory=function(){
                 this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function(){
                 	this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndForumRegisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
               	}).then(function(){
-			backEndForumRegisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'post_threads', true);
+			backEndForumRegisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', true);
 		}).thenOpen(config.url, function(){
 			this.waitForSelector('a[href="/post/printadd"]', function(){
                			this.evaluate(function(){
@@ -213,9 +213,9 @@ composeTopicTests.composeTopicGueststartTopicEnable=function(){
                 this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function(){
                 	this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndForumRegisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
               	}).then(function(){
-			backEndForumRegisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'post_threads', true);
+			backEndForumRegisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', true);
 		}).thenOpen(config.url, function(){
 			this.waitForSelector('a[href="/post/printadd"]', function(){
                			this.evaluate(function(){
@@ -269,9 +269,9 @@ composeTopicTests.composeTopicGueststartTopicdisblecategory=function(){
                 this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function(){
                 	this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndForumRegisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
               	}).then(function(){
-			backEndForumRegisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'post_threads', false);
+			backEndForumRegisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', false);
 		}).thenOpen(config.url, function(){
 			this.evaluate(function(){
 				document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
@@ -304,12 +304,12 @@ composeTopicTests.permissionSettings=function(){
 			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 			this.click('a[href="/tool/members/mb/usergroup"]');
 		}).waitForSelector('div#tab_wrapper', function(){
-			backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+			backEndForumRegisterMethod.viewGroupPermissions('General');
 		}).waitForText('Save', function(){
-			backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'delete_threads', true);
+			backEndForumRegisterMethod.editGroupPermissions('General', 'delete_threads', true);
 		}).then(function(){
-			backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
-			backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'delete_posts', true);
+			backEndForumRegisterMethod.viewGroupPermissions('General');
+			backEndForumRegisterMethod.editGroupPermissions('General', 'delete_posts', true);
 		});
 	});
 };

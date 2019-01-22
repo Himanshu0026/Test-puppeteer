@@ -97,20 +97,20 @@ moveTopicAndPostTestcases.topicListingPageUnderCategory = function(userGroup) {
     this.click('.icon.icon-menu');
     this.click('#forums_toggle_link a');
   }).waitForText(category.title, function() {
-    this.test.assertSelectorHasText('ul[id="'+category_Id+'"] a', category.title);
+    /*this.test.assertSelectorHasText('ul[id="'+category_Id+'"] a', category.title);
     casper.evaluate(function(category_Id) {
 	    document.querySelector('ul[id="'+category_Id+'"] a').click();
-    },category_Id);
-    //this.click('ul[id="'+category_Id+'"] a');
-  }).waitForSelector('#topics_tab', function() {
+    },category_Id);*/
+    this.click('span.forum-title');
+  }).waitForSelector('#topics', function() {
 		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' Start New topic on subcategory page Found');
 		this.click('#ajax_subscription_vars a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.newTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
 		this.click('#backArrowPost');
-	}).waitUntilVisible('#topics_tab', function() {
-    this.click('#topics_tab');
-  }).waitForSelector('.topics-list', function() {
+	//}).waitUntilVisible('#topics_tab', function() {
+    //this.click('#topics_tab');
+  }).waitForSelector('#topics', function() {
     this.test.assertExists('ul li:nth-child(1) span.mod.icons.pull-right input');
     this.click('ul li:nth-child(1) span.mod.icons.pull-right input');
   }).then(function() {
@@ -148,7 +148,7 @@ moveTopicAndPostTestcases.topicListingPageUnderSubCategory = function(userGroup)
   }).waitUntilVisible('.topics-list', function() {
 		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' Start New topic on subcategory page Found');
 		this.click('#ajax_subscription_vars a.start-new-topic-btn');
-		topicMethod.createTopic(moveTopicAndPostJSON.newTopic);
+		topicMethod.createTopic(moveTopicAndPostJSON.subCategoryTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
 		this.click('#backArrowPost');
 	}).waitUntilVisible('#topics', function() {
@@ -258,7 +258,15 @@ moveTopicAndPostTestcases.topicListingPageUnderCategoryForRegisteredUserWhenDisa
     //this.click('ul[id="'+category_Id+'"] a');
   }).waitForSelector('#topics_tab', function() {
     this.click('#topics_tab');
-  }).waitForSelector('.topics-list', function() {
+  }).waitUntilVisible('.topics-list', function() {
+		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' Start New topic on subcategory page Found');
+		this.click('#ajax_subscription_vars a.start-new-topic-btn');
+		topicMethod.createTopic(moveTopicAndPostJSON.categoryTopic);
+	}).waitForText('hellloooooo!!!!!!!!!', function() {
+		this.click('#backArrowPost');
+	}).waitUntilVisible('#topics_tab', function() {
+		this.click('#topics_tab');
+	}).waitForSelector('#topics', function() {
     this.test.assertExists('ul li:nth-child(1) span.mod.icons.pull-right input');
     this.click('ul li:nth-child(1) span.mod.icons.pull-right input');
   }).waitUntilVisible('#topics-menu', function() {
@@ -326,9 +334,9 @@ moveTopicAndPostTestcases.profilePageForRegisteredUserWhenDisabled = function() 
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+		backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'move_own_threads', false);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'move_own_threads', false);
 	});
 };
 

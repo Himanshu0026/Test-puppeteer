@@ -17,9 +17,9 @@ inContextLoginTests.doLoginByStartTopicEnable = function() {
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
-			backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'post_threads', true);
+			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', true);
 		});
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('#topics a[href="/post/printadd"]', function() {
@@ -44,9 +44,9 @@ inContextLoginTests.doLoginByStartTopicDisable = function() {
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+		backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 	}).then(function() {
-		backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'post_threads', false);
+		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', false);
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('#topics a[href="/post/printadd"]', function() {
 			this.test.assertSelectorHasText('div#topics', 'Start New Topic');
@@ -66,9 +66,9 @@ inContextLoginTests.doLoginByQuoteOnPost = function() {
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+		backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 	}).then(function() {
-		backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'other_post_replies', false);
+		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'other_post_replies', false);
 	}).then(function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 		this.waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Display"]', function() {
@@ -115,9 +115,9 @@ inContextLoginTests.doLoginByViewTopicDisable = function() {
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+		backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 	}).then(function() {
-		backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_thread_content', false);
+		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_thread_content', false);
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
@@ -137,9 +137,9 @@ inContextLoginTests.doLoginByViewForumDisable = function() {
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+		backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 	}).then(function() {
-		backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_messageboard', false);
+		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_messageboard', false);
 	}).thenOpen(config.url, function() {
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).then(function() {
@@ -155,15 +155,15 @@ inContextLoginTests.doLoginByViewProfileDisable = function() {
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+		backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 	}).then(function() {
-		backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_messageboard', true);
+		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_messageboard', true);
 	}).then(function() {
-		backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
-		backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_thread_content', true);
+		backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
+		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_thread_content', true);
 	}).then(function() {
-		backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
-		backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_profiles', false);
+		backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
+		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_profiles', false);
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
@@ -194,12 +194,12 @@ inContextLoginTests.doLoginByViewCalenderEnable = function() {
 		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
-			backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_calendar', true);
+			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_calendar', true);
 		}).then(function() {
-			backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
-			backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_messageboard', true);
+			backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
+			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_messageboard', true);
 		});
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('i.icon.icon-menu', function() {
@@ -236,9 +236,9 @@ inContextLoginTests.doLoginByReputationEnableTopicLike = function() {
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+		backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 	}).then(function() {
-		backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_thread_content', true);
+		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_thread_content', true);
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
 			this.click('i.glyphicon.glyphicon-like-alt');
@@ -310,9 +310,9 @@ inContextLoginTests.doLoginByEmailButton = function() {
 		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
-			backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_profiles', true);
+			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_profiles', true);
 		});
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
@@ -382,9 +382,9 @@ inContextLoginTests.doLoginByPostEventDisable = function() {
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+		backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 	}).then(function() {
-		backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'post_events', false);
+		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_events', false);
 	}).then(function() {
 		forumLoginMethod.logoutFromForumBackEnd();
 	}).thenOpen(config.url ,function() {

@@ -611,9 +611,9 @@ privateMessageTestcases.sendPMToMaxAndMoreThanMaxRecipient = function() {
   	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndregisterMethod.viewUsers('Registered Users');
+			backEndregisterMethod.viewUsers('General');
 		}).then(function() {
-			backEndregisterMethod.editUserActions('Registered Users', 'Delete', recipients.length);
+			backEndregisterMethod.editUserActions('General', 'Delete', recipients.length);
 		});
 	});*/
 };

@@ -89,6 +89,7 @@ casper.test.on('fail', function(failure) {
 //Method To Catch JS Errors
 casper.on("page.error", function(msg, trace) {
 	var str = msg;
+	console.log('Inside the js error catch method');
 	str = str.match('TypeError:');
 	if(str) {
 		msg = msg + ' at line ' + trace[0].line + ' in ' + trace[0].function + ' function occurred in ' + trace[0].file + ' file';

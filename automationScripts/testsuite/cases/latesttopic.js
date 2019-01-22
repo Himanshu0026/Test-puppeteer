@@ -56,13 +56,13 @@ latestTopicTests.viewTopicPermission = function() {
                 this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
                         this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
                         this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-                        backEndregisterMethod.viewGroupPermissions('Registered Users');
+                        backEndregisterMethod.viewGroupPermissions('General');
                 }).then(function() {
-                        backEndregisterMethod.editGroupPermissions('Registered Users', 'view_thread_content', false);
+                        backEndregisterMethod.editGroupPermissions('General', 'view_thread_content', false);
                 }).then(function(){
-                        backEndregisterMethod.viewGroupPermissions('Registered Users');
+                        backEndregisterMethod.viewGroupPermissions('General');
                 }).then(function(){
-                        backEndregisterMethod.editGroupPermissions('Registered Users', 'view_others_threads', false);
+                        backEndregisterMethod.editGroupPermissions('General', 'view_others_threads', false);
                 }).thenOpen(config.url, function(){
                         forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
                 }).waitForSelector('a[href="/post/printadd"]', function(){
@@ -102,13 +102,13 @@ latestTopicTests.viewOtherUsersTopic = function() {
                 this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
                         this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
                         this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-                        backEndregisterMethod.viewGroupPermissions('Registered Users');
+                        backEndregisterMethod.viewGroupPermissions('General');
                 }).then(function() {
-                        backEndregisterMethod.editGroupPermissions('Registered Users', 'view_others_threads', true);
+                        backEndregisterMethod.editGroupPermissions('General', 'view_others_threads', true);
                 }).then(function(){
-                        backEndregisterMethod.viewGroupPermissions('Registered Users');
+                        backEndregisterMethod.viewGroupPermissions('General');
                 }).then(function(){
-                        backEndregisterMethod.editGroupPermissions('Registered Users', 'view_thread_content', true);
+                        backEndregisterMethod.editGroupPermissions('General', 'view_thread_content', true);
                 });
         });
 };

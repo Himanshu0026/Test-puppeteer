@@ -70,7 +70,7 @@ moderatorPermissions.featureTest = function() {
 		moderatorPermissionsTestcases.verifyDisableEditPostForOtherCategory();
 
 		// method to Verify by edit post from category(cat1)
-		moderatorPermissionsTestcases.verifyEnableEditPostForModeratorCategory();
+		//moderatorPermissionsTestcases.verifyEnableEditPostForModeratorCategory();
 
 		// method to Verify by edit post from other category
 		moderatorPermissionsTestcases.verifyEnableEditPostForOtherCategory();
@@ -214,7 +214,7 @@ moderatorPermissions.featureTest = function() {
 		moderatorPermissionsTestcases.verifyDisableDeletePollForOtherCategory();
 
 		// method to Verfiy with delete a moderator for category(cat1)
-    moderatorPermissionsTestcases.deleteModerator();
+		moderatorPermissionsTestcases.deleteModerator();
 
   });
 };

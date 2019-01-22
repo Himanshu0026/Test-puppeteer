@@ -18,9 +18,9 @@ editProfilePageTests.editProfileDisableSignature=function(){
                 this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
                 this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-        	backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+        	backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'allow_signature', false);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'allow_signature', false);
 	}).then(function(){
 		this.test.assertSelectorHasText('div#tab_wrapper p font','Your user group settings have been updated.');
 	}).thenOpen(config.url, function(){
@@ -43,9 +43,9 @@ editProfilePageTests.editProfileEnableSignature=function(){
                 this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
                 this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-        	backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+        	backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'allow_signature', true);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'allow_signature', true);
 	}).then(function(){
 		this.test.assertSelectorHasText('div#tab_wrapper p font','Your user group settings have been updated.');
 	}).then(function(){
@@ -225,9 +225,9 @@ editProfilePageTests.disableCustomTitle=function(){
                 this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
                 this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-        	backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+        	backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'allow_customtitle', false);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'allow_customtitle', false);
 	}).then(function(){
 		this.test.assertSelectorHasText('div#tab_wrapper p font','Your user group settings have been updated.');
 	}).thenOpen(config.url, function(){
@@ -250,9 +250,9 @@ editProfilePageTests.enableCustomTitle=function(){
                 this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
                 this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-        	backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+        	backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'allow_customtitle', true);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'allow_customtitle', true);
 	}).then(function(){
 		this.test.assertSelectorHasText('div#tab_wrapper p font','Your user group settings have been updated.');
 	}).thenOpen(config.url, function(){
@@ -404,9 +404,9 @@ editProfilePageTests.shieldIconRegisteruser=function(){
                 this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
                 this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-        	backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+        	backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'post_threads', true);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'post_threads', true);
 	}).thenOpen(config.url, function(){
 		this.test.assertExists('a[href="/post/printadd"]');
 		this.evaluate(function() {
@@ -471,7 +471,7 @@ editProfilePageTests.invalidBirthday=function(){
 	}).waitForSelector('div#userSignature textarea', function(){
 		this.sendKeys('input#birthDatepicker', editProfilePageJSON.birthdayPicker.date);
 		this.click('button[type="submit"]');
-	}).waitForText('Valid years for your Birthday are from 1900 to 2018.');
+	}).waitForText('Valid years for your Birthday are from 1900 to');
 };
 
 //Verify with invalid birthday(future month)
@@ -501,7 +501,14 @@ editProfilePageTests.invalidFutureMonth=function(){
 		casper.sendKeys('input[name="birthDatepicker"]', date, {reset : true});
 	}).then(function(){
 		this.click('button[type="submit"]');
-	}).waitForText('Please provide a valid Birthday.');
+	}).waitUntilVisible('div.panel-body .alert', function(){
+		var text = casper.fetchText('div.panel-body .alert');
+		if(text === 'Please provide a valid Birthday.'){
+			casper.test.assertTextExists('Please provide a valid Birthday.');
+		}else {
+			casper.test.assertTextExists('Valid years for your Birthday are from 1900 to');
+		}
+	});
 };
 
 //Verify with enter full name greater then maximum limits(30)
