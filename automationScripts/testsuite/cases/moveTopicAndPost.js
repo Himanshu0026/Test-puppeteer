@@ -261,7 +261,7 @@ moveTopicAndPostTestcases.topicListingPageUnderCategoryForRegisteredUserWhenDisa
   }).waitUntilVisible('.topics-list', function() {
 		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' Start New topic on subcategory page Found');
 		this.click('#ajax_subscription_vars a.start-new-topic-btn');
-		topicMethod.createTopic(moveTopicAndPostJSON.categoryTopic);
+		topicMethod.createTopic(moveTopicAndPostJSON.subCategoryTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
 		this.click('#backArrowPost');
 	}).waitUntilVisible('#topics_tab', function() {
@@ -302,6 +302,14 @@ moveTopicAndPostTestcases.topicListingPageUnderSubCategoryForRegisteredUserWhenD
   }).waitForText(subCategory.title, function() {
     this.click('li[id="forum_'+subCategory_Id+'"] a');
   }).waitUntilVisible('.topics-list', function() {
+		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' Start New topic on subcategory page Found');
+		this.click('#ajax_subscription_vars a.start-new-topic-btn');
+		topicMethod.createTopic(moveTopicAndPostJSON.categoryTopic);
+	}).waitForText('hellloooooo!!!!!!!!!', function() {
+		this.click('#backArrowPost');
+	}).waitUntilVisible('#topics_tab', function() {
+		this.click('#topics_tab');
+	}).waitForSelector('#topics', function() {
     this.test.assertExists('ul li:nth-child(1) span.mod.icons.pull-right input');
     this.click('ul li:nth-child(1) span.mod.icons.pull-right input');
   }).waitUntilVisible('#topics-menu', function() {
