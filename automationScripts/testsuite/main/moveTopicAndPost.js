@@ -22,38 +22,38 @@ moveTopicAndPost.featureTest = function() {
 		// method to create a category and its sub category and get their id
 		combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory();
 
-    //1. Verify move topic from the latest topic page
-    moveTopicAndPostTestcases.latestTopicPage('Administrators');
+		//1. Verify move topic from the latest topic page
+		moveTopicAndPostTestcases.latestTopicPage('Administrators');
 
-    // 2. Verify move topic from the topic listing page[Home Page]
-    moveTopicAndPostTestcases.topicListingPage('Administrators');
+		// 2. Verify move topic from the topic listing page[Home Page]
+		moveTopicAndPostTestcases.topicListingPage('Administrators');
 
-    // 3. Verify move topic from the topic listing page under category
-    moveTopicAndPostTestcases.topicListingPageUnderCategory('Administrators');
+		// 3. Verify move topic from the topic listing page under category
+		moveTopicAndPostTestcases.topicListingPageUnderCategory('Administrators');
 
-    // 4. Verify move topic from the topic listing page under sub category
-    moveTopicAndPostTestcases.topicListingPageUnderSubCategory('Administrators');
+		// 4. Verify move topic from the topic listing page under sub category
+		moveTopicAndPostTestcases.topicListingPageUnderSubCategory('Administrators');
 
-    // 5. Verify move topic from the profile page
-    moveTopicAndPostTestcases.profilePage('Administrators');
+		// 5. Verify move topic from the profile page
+		moveTopicAndPostTestcases.profilePage('Administrators');
 
 		//8. Verify move topic from the latest topic page
-    moveTopicAndPostTestcases.latestTopicPage('Registered Users');
+		moveTopicAndPostTestcases.latestTopicPage('General');
 
 		// 9. Verify move topic from the topic listing page[Home Page]
-    moveTopicAndPostTestcases.topicListingPage('Registered Users');
+		moveTopicAndPostTestcases.topicListingPage('General');
 
-    // 10. Verify move topic from the topic listing page under category
-    moveTopicAndPostTestcases.topicListingPageUnderCategory('Registered Users');
+		// 10. Verify move topic from the topic listing page under category
+		moveTopicAndPostTestcases.topicListingPageUnderCategory('General');
 
-    // 11. Verify move topic from the topic listing page under sub category
-    moveTopicAndPostTestcases.topicListingPageUnderSubCategory('Registered Users');
+		// 11. Verify move topic from the topic listing page under sub category
+		moveTopicAndPostTestcases.topicListingPageUnderSubCategory('General');
 
-    // 12. Verify move topic from the profile page
-    moveTopicAndPostTestcases.profilePage('Registered Users');
+		// 12. Verify move topic from the profile page
+		moveTopicAndPostTestcases.profilePage('General');
 
 		// 13. Verify move topic from the latest topic page (own topic for registered user when disable "move topic" permission)
-		moveTopicAndPostTestcases.latestTopicPageForRegisteredUserWhenDisabled('Registered Users');
+		moveTopicAndPostTestcases.latestTopicPageForRegisteredUserWhenDisabled('General');
 
 		// 14. Verify move topic from the topic listing page[Home Page] for (own post for registered user when disable "move topic" permission)
 		moveTopicAndPostTestcases.topicListingPageForRegisteredUserWhenDisabled();
@@ -86,7 +86,7 @@ moveTopicAndPost.featureTest = function() {
 		moveTopicAndPostTestcases.postListingPageNewTopic('Administrators');
 
 		// method to Verfiy with Add a moderator for category(General) by scenario 2
-    moderatorPermissionsTestcases.addModeratorByScenarioTwo();
+		moderatorPermissionsTestcases.addModeratorByScenarioTwo();
 
 		// 37. Verify move post from the profile page into the new topic
 		moveTopicAndPostTestcases.profilePageNewTopic('Moderators');
@@ -107,7 +107,7 @@ moveTopicAndPost.featureTest = function() {
 		moveTopicAndPostTestcases.postListingPageNewTopic('Moderators');
 
 		// method to Verfiy with delete a moderator for category(General)
-    moderatorPermissionsTestcases.deleteModerator();
+		moderatorPermissionsTestcases.deleteModerator();
 
-  });
+	});
 };

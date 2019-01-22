@@ -356,22 +356,23 @@ backEndForumRegisterMethod.viewUsers = function(userGroup) {
 backEndForumRegisterMethod.editUserActions = function(userGroup, action, usersCount) {
 	casper.waitForSelector('div#tab_wrapper', function() {
 		this.test.assertTextExists(userGroup, 'User groups contains : ' +userGroup+ ' : so identification done');
-		if(usersCount == 25) {
-			this.evaluate(function() {
-				$('#groupUsersList tr td input:checkbox[name="user_id"]:lt(25)').prop('checked', true);
-			});
-		} else if(usersCount == 'all') {
+		if(usersCount == 'all') {
 			this.click('input[name="allbox"]');
+		}else{
+			this.click('#groupUsersList tr td input[name^="user_id"]');
+			
 		}
-		this.test.assertExists('div#floatingActionMenu');
-		this.test.assertSelectorHasText('div#floatingActionMenu', 'Selected');
-		if(action == 'Delete') {
-			action = 'delete_members';
-		}
-		this.fillSelectors('form[name="dbfrm"]', {
-			'select[name="action"]': action
-		}, true);
-		this.wait(2000, function(){});
+		this.then(function(){
+			this.test.assertExists('div#floatingActionMenu');
+			this.test.assertSelectorHasText('div#floatingActionMenu', 'Selected');
+			if(action == 'Delete') {
+				action = 'delete_members';
+			}
+			this.fillSelectors('form[name="dbfrm"]', {
+				'select[name="action"]': action
+			}, true);
+			this.wait(2000, function(){});
+		});
 	});
 };
 
@@ -383,7 +384,7 @@ backEndForumRegisterMethod.deleteAllCategories = function() {
 	//casper.waitWhileSelector(url, function success() {
 	//});
 	//casper.waitForSelector('input#remove_forum', function success() {
-	casper.wait('2000', function() {
+	casper.wait('4000', function() {
 		if(this.exists('input#remove_forum')) {
 			this.click('input#remove_forum');
 			this.waitForSelector('div.heading.error_message', function() {
@@ -647,6 +648,14 @@ backEndForumRegisterMethod.enableDisableCategoryPermissions = function(id, value
 	});
 };
 
+backEndForumRegisterMethod.enableDisableDeleteProfilePermissions = function(id, value) {
+	utils.enableorDisableCheckbox(id, value);
+	casper.waitUntilVisible('div#loading_msg', function success() {
+		utils.info("Permission changed");
+	}, function fail() {
+		utils.info("Permission not changed");
+	});
+};
 
 //Method for filling data in a category create form
 backEndForumRegisterMethod.createCategorySubcategory= function(title, data){

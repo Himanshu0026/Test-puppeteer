@@ -635,12 +635,12 @@ deletePostTests.deleteOwnTopicEnablePostDisable=function(){
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-		backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+		backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'delete_threads', true);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'delete_threads', true);
 	}).then(function(){
-		backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'delete_posts', false);
+		backEndForumRegisterMethod.viewGroupPermissions('General');
+		backEndForumRegisterMethod.editGroupPermissions('General', 'delete_posts', false);
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.deleteTopicUser.username, loginJSON.deleteTopicUser.password);
 	}).then(function(){
@@ -755,12 +755,12 @@ deletePostTests.deleteOwnTopicDisablePostEnable=function(){
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-		backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+		backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'delete_threads', false);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'delete_threads', false);
 	}).then(function(){
-		backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'delete_posts', true);
+		backEndForumRegisterMethod.viewGroupPermissions('General');
+		backEndForumRegisterMethod.editGroupPermissions('General', 'delete_posts', true);
 	}).thenOpen(config.url, function(){
 		this.waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 			this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a');
@@ -770,9 +770,9 @@ deletePostTests.deleteOwnTopicDisablePostEnable=function(){
 		}).waitForSelector('form#inlineSearchForm', function(){
 			deletePostMethod.getCategoryHrefFrontend('General');
 		}).waitForSelector('form[name="posts"] a.topic-title', function(){
-			this.evaluate(function() {
+			/*this.evaluate(function() {
 				document.querySelector('input[name="id"]').click();
-			});
+			});*/
 			this.test.assertDoesntExist('a#delete i');
 			this.wait(1000, function(){});
 		//Verify by delete one topic -selecting by dropdown topic disable post enable
@@ -871,12 +871,12 @@ deletePostTests.deleteTopicCheckboxdisablePostdisable=function(){
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-		backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+		backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'delete_threads', false);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'delete_threads', false);
 	}).then(function(){
-		backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'delete_posts', false);
+		backEndForumRegisterMethod.viewGroupPermissions('General');
+		backEndForumRegisterMethod.editGroupPermissions('General', 'delete_posts', false);
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
@@ -942,12 +942,12 @@ deletePostTests.deleteOwnProfilePageTopicDisablePostDisable=function(){
 			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 			this.click('a[href="/tool/members/mb/usergroup"]');
 		}).waitForSelector('div#tab_wrapper', function(){
-			backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+			backEndForumRegisterMethod.viewGroupPermissions('General');
 		}).waitForText('Save', function(){
-			backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'delete_threads', true);
+			backEndForumRegisterMethod.editGroupPermissions('General', 'delete_threads', true);
 		}).then(function(){
-			backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
-			backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'delete_posts', true);
+			backEndForumRegisterMethod.viewGroupPermissions('General');
+			backEndForumRegisterMethod.editGroupPermissions('General', 'delete_posts', true);
 		});
 	});
 };

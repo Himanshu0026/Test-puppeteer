@@ -4,6 +4,7 @@ var loginJSON = require('../../testdata/loginData.json');
 var profilePageJSON=require('../../testdata/profilePageData.json');
 var topicJSON = require('../../testdata/topic.json');
 var composeTopicJSON=require('../../testdata/composeTopic.json');
+var memberDeleteJSON=require('../../testdata/memberdelete.json');
 var topicMethod = require('../methods/topic.js');
 var deletePostMethod = require('../methods/deletePost.js');
 var thumpsUpDownMethod = require('../methods/thumpsUpDown.js');
@@ -557,9 +558,9 @@ profilePageTests.profilePageEditUserIcon=function(){
                 this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
                 this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-        	backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+        	backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'change_username', true);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'change_username', true);
 	}).thenOpen(config.url, function(){
 		this.test.assertExists('ul.nav.pull-right span.caret');
 		this.click('ul.nav.pull-right span.caret');
@@ -595,21 +596,45 @@ profilePageTests.profilePageEditUserIcon=function(){
 
 
 //Verify with delete icon delete register user
+//admin user->delete other user account from settings page.
+//create topic from this register user and delete it from admin user
 profilePageTests.profilePageDeleteUser= function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 19[Verify with delete icon delete register user]');
-		this.test.assertExists('ul.nav.pull-right span.caret');
-		this.click('ul.nav.pull-right span.caret');
-		this.evaluate(function() {
-			document.querySelector('a#user-nav-panel-profile').click();
+		utils.info('Case 19[MemberDelete -> Verify with create topic from this register user and delete it from admin user]');
+	}).waitForSelector('a[href="/post/printadd"]', function(){
+		casper.evaluate(function(){
+		  document.querySelector('a[href="/post/printadd"]').click();
 		});
+	}).then(function(){
+		topicMethod.createTopic(topicJSON.ValidCredential);
+	}).waitForText(topicJSON.ValidCredential.content, function(){
+		forumLoginMethod.logoutFromApp();
+	}).thenOpen(config.url, function(){
+		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
+	}).waitForSelector('form[name="posts"] a.topic-title', function(){
+		var userHref = casper.evaluate(function() {
+			var userId = document.querySelectorAll('div.panel-body.table-responsive ul li:nth-child(1) span.col-md-9 span.image-wrapper a');
+			return userId[0].getAttribute('href');
+		});
+		this.click('a[href="'+userHref+'"]');
 	}).waitForSelector('a#PostsOFUser', function(){
-		this.click('a#deleteAccountDialog i');
-	}).waitForSelector('div#userAccountName', function(){
-		this.test.assertSelectorHasText('div#userAccountName h3', 'Are you sure you would like to permanently delete the account');
+		this.click('a#anchor_tab_edit i');
+	}).waitForSelector('a[aria-controls="Account Settings"]', function(){
+		//clicked on account settings icon on settings page
+		this.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('a#deleteAccountDialog', function(){
+		this.click('a#deleteAccountDialog');
+	}).waitForSelector('a#deleteAccount', function(){
+		this.test.assertExists('a#deleteAccount');
 		this.click('a#deleteAccount');
-	}).waitForSelector('a#td_tab_login', function(){
-		this.test.assertExists('a#td_tab_login', 'login button found');
+	}).waitForText('Top 25 Posters', function(){
+		forumLoginMethod.logoutFromApp();
+	}).then(function(){
+		//verified register user which deleted by admin from settings page
+		this.thenOpen(config.url, function(){
+			forumLoginMethod.loginToApp(registerUser, registerUser);
+		}).waitForText(memberDeleteJSON.checkedUser.expectedErrorMsg);
 	});
 };
 

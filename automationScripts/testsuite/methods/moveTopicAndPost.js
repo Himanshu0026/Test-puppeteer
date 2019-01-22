@@ -80,7 +80,7 @@ moveTopicAndPostMethod.fillMovePostDetails = function(data, movedDestination) {
 moveTopicAndPostMethod.assignLoginDetails = function(userGroup) {
 	var loginUserName = "";
 	var loginPassWord = "";
-	if(userGroup =='Registered Users') {
+	if(userGroup =='General') {
 		loginUserName = moveTopicAndPostJSON.registeredUserLogin.username;
 		loginPassWord = moveTopicAndPostJSON.registeredUserLogin.password;
 	}

@@ -78,13 +78,13 @@ loginByPrivacyOptionTests.doLoginByCalender=function() {
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
-			backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_calendar', true);
+			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_calendar', true);
 		}).then(function() {
-			backEndregisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
-			backEndregisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_messageboard', true);
+			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_messageboard', true);
 		});
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('i.icon.icon-menu', function() {
