@@ -258,7 +258,7 @@ moveTopicAndPostTestcases.topicListingPageUnderCategoryForRegisteredUserWhenDisa
     //this.click('ul[id="'+category_Id+'"] a');
   }).waitForSelector('#topics_tab', function() {
     this.click('#topics_tab');
-  }).waitForSelector('.topics-list', function() {
+  }).waitUntilVisible('.topics-list', function() {
     this.test.assertExists('ul li:nth-child(1) span.mod.icons.pull-right input');
     this.click('ul li:nth-child(1) span.mod.icons.pull-right input');
   }).waitUntilVisible('#topics-menu', function() {
