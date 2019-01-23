@@ -3,6 +3,7 @@
 var executorServices = require('./executorServices.js');
 var redisClient;
 var kue = require('kue');
+var current_running_branch;
 
 var queueServices = module.exports = {};
 
@@ -31,6 +32,9 @@ jobQueue.on('job enqueue',
 //Initiating job processing
 jobQueue.process('pushRequest', function(job, done) {
 	console.log("started job id is "+ job.id );
+	console.log("started branch name is "+ job.data.branchName );
+	current_running_branch = job.data.branchName;
+	console.log("data of the current_running_branch"+ current_running_branch );
 	/*console.log('started job branch name '+job.data.branchName);
 	console.log('started job priority is '+job.data.priorityNo);
 	var newBranch = job.data.branchName;
@@ -80,6 +84,7 @@ queueServices.addNewJob = function(jobArg, type, priorityNo){
 				console.log("new added job id is "+ job.id );
 				console.log('new added job branch name '+job.data.branchName);
 				console.log('new added job priority is '+job.data.priorityNo);
+				console.log('Current running automation branch '+current_running_branch);
 				var newBranch = job.data.branchName;
 				//if(job.data.priorityNo === '-10') {
 					/*kue.Job.rangeByState( 'active', 0, -1, 'asc', function( err, jobs ) {

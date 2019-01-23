@@ -55,6 +55,12 @@ executorServices.executeJob = function(commitDetails, callback) {
 					}else{
 					}
 				});
+				sqlConnection('DELETE FROM calendar_events WHERE uid="116";', function(err, result){
+					if(err){
+						console.log(err);
+					}else{
+					}
+				});
 				sqlConnection('DELETE FROM forums WHERE uid="116";', function(err, result){
 					if(err){
 						console.log(err);
