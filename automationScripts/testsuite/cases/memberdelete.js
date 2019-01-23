@@ -9,40 +9,40 @@ memberdeleteTests = module.exports = {};
 var pendingUser='';
 //Verify by register members for member delete-Task
 memberdeleteTests.registermembers=function(){
-        casper.thenOpen(config.backEndUrl, function(){
+    casper.thenOpen(config.backEndUrl, function(){
 		utils.info('************************MEMBER DELETE TESTCASES****************************');
 		utils.info('Case 1[Verify by delete one topic -selecting by check box register user]');
-                this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
-        	        this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-                }).waitForSelector('div#ddUsers a[href="/tool/members/mb/addusers"]', function() {
-        		this.test.assertSelectorHasText('#ddUsers', 'New User');
-        		this.click('div#ddUsers a[href="/tool/members/mb/addusers"]');
-                }).then(function(){
-                        memberDeleteMethod.registermembers('Pending Email Verification', function(uname){
-                                pendingUser=uname;
-                        });
-                }).then(function(){
-                        memberDeleteMethod.registermembers('Pending Email Verification', function(memberRegister){
-                                userpd=memberRegister;
-                        });
-                }).then(function(){
-                        memberDeleteMethod.registermembers('Pending Email Verification', function(memberRegister){
-                                users=memberRegister;
-                        });
-                }).then(function(){
-                        memberDeleteMethod.registermembers('Pending Email Verification', function(memberRegister){
-                                user=memberRegister;
-                        });
-                });
-        });
+    this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
+      this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+    }).waitForSelector('div#ddUsers a[href="/tool/members/mb/addusers"]', function() {
+      this.test.assertSelectorHasText('#ddUsers', 'New User');
+      this.click('div#ddUsers a[href="/tool/members/mb/addusers"]');
+    }).then(function(){
+      memberDeleteMethod.registermembers('Pending Email Verification', function(uname){
+        pendingUser=uname;
+      });
+    }).then(function(){
+      memberDeleteMethod.registermembers('Pending Email Verification', function(memberRegister){
+        userpd=memberRegister;
+      });
+    }).then(function(){
+      memberDeleteMethod.registermembers('Pending Email Verification', function(memberRegister){
+        users=memberRegister;
+      });
+    }).then(function(){
+      memberDeleteMethod.registermembers('Pending Email Verification', function(memberRegister){
+        user=memberRegister;
+      });
+    });
+  });
 };
 
 //Verify delete users from search section from backend settings
 //checked after deletion same user in search box.
 memberdeleteTests.verifyDeleteSearchSection=function(){
-        casper.thenOpen(config.backEndUrl, function(){
-                utils.info('************************MEMBER DELETE TESTCASES****************************');
-        	utils.info('Case 2[Verify delete users from search section from backend settings]');
+  casper.thenOpen(config.backEndUrl, function(){
+    utils.info('************************MEMBER DELETE TESTCASES****************************');
+    utils.info('Case 2[Verify delete users from search section from backend settings]');
         }).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
                 this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
                 this.click('a[href="/tool/members/mb/usergroup"]');

@@ -6,6 +6,7 @@ var topicJSON = require('../../testdata/topic.json');
 var editProfilePageJSON=require('../../testdata/editProfilePageData.json');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var profilePageMethod= require('../methods/profilePage.js');
+var editProfileMethod= require('../methods/editProfilePage.js');
 var forumLoginMethod = require('../methods/login.js');
 var editProfilePageTests = module.exports = {};
 

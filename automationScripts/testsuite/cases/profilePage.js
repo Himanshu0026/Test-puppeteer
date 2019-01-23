@@ -21,9 +21,8 @@ profilePageTests.deleteTopics=function() {
 	casper.thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
 	}).waitForSelector('div.panel-heading span input', function(){
-
 		if (this.exists('div.panel-heading span input')) {
-    			this.test.assertExists('div.panel-heading span input');
+    	this.test.assertExists('div.panel-heading span input');
 			this.evaluate(function() {
 				document.querySelector('input[name="allbox"]').click();
 			});
@@ -434,9 +433,12 @@ profilePageTests.profilePagePostCount=function() {
 			}).waitForSelector('a#PostsOFUser', function(){
 				var actualPostCount=casper.fetchText('li:nth-child(1) span.profile-count');
 				actualcount=actualPostCount.trim();
+				//timeout occurs sometime added wait
+				this.wait(1000, function(){});
 			}).then(function(){
 				this.test.assertEquals(actualcount, expectedPostCount, 'both the outputs are equals');
-				this.wait(1000, function(){});
+				//timeout occurs sometime added wait.
+				this.wait(2000, function(){});
 			}).then(function(){
 				forumLoginMethod.logoutFromApp();
 			});
@@ -460,9 +462,12 @@ profilePageTests.profilePagePostCountAddtopic=function() {
 	}).waitForSelector('a#PostsOFUser', function(){
 		var actualPostCount=casper.fetchText('li:nth-child(1) span.profile-count');
 		actualcount=actualPostCount.trim();
+		//timeout occurs sometime added wait
+		this.wait(1000, function(){});
 	}).then(function(){
 		this.test.assertEquals(actualcount, expectedPostCount, 'both the outputs are equals');
-		this.wait(1000, function(){});
+		//timeout occurs sometime added wait
+		this.wait(2000, function(){});
 	});
 };
 
