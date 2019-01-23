@@ -307,9 +307,7 @@ moveTopicAndPostTestcases.topicListingPageUnderSubCategoryForRegisteredUserWhenD
 		topicMethod.createTopic(moveTopicAndPostJSON.subCategoryTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
 		this.click('#backArrowPost');
-	}).waitUntilVisible('#topics_tab', function() {
-		this.click('#topics_tab');
-	}).waitForSelector('#topics', function() {
+	}).waitUntilVisible('.topics-list', function() {
     this.test.assertExists('ul li:nth-child(1) span.mod.icons.pull-right input');
     this.click('ul li:nth-child(1) span.mod.icons.pull-right input');
   }).waitUntilVisible('#topics-menu', function() {
