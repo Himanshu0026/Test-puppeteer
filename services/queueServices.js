@@ -1,12 +1,12 @@
 //This script is responsible for creating job queue and serves each job one by one.
 'use strict.';
 var executorServices = require('./executorServices.js');
+var globalCurrentRunningBranch = require('./globalVariable.js');
 var redisClient;
+var fs = require('fs');
 var kue = require('kue');
 var current_running_branch;
-
 var queueServices = module.exports = {};
-
 //Creating job queue
 var jobQueue = kue.createQueue();
 
@@ -25,45 +25,16 @@ jobQueue.on('job enqueue',
 				if (err) throw err;
 					console.log('removed completed job #%d', job.id);
 			});
+			globalCurrentRunningBranch.global.resetCurrentRunningBranch();
 		});
 	}
 );
 
 //Initiating job processing
 jobQueue.process('pushRequest', function(job, done) {
-	console.log("started job id is "+ job.id );
 	console.log("started branch name is "+ job.data.branchName );
 	current_running_branch = job.data.branchName;
-	console.log("data of the current_running_branch"+ current_running_branch );
-	/*console.log('started job branch name '+job.data.branchName);
-	console.log('started job priority is '+job.data.priorityNo);
-	var newBranch = job.data.branchName;
-	//if(job.data.priorityNo === '-10') {
-		jobQueue.inactive( function( err, ids ) {
-			ids.forEach( function( id ) {
-				console.log("the parameter in the inactive " +id);
-				console.log("the job data id " +job.id);
-				console.log("the job data " +job.data.branchName);
-				kue.Job.get( id, function( err, job ) {
-					console.log("job Id = " +job.id+ " || name = " +job.data.branchName);
-					if (job.data.branchName == newBranch) {
-						job.remove(function(err){
-							if (err) throw err;
-								console.log('removed inactive job for the already completed job with high priority with job id #%d', job.id);
-						});
-					}
-				});
-			});
-		});*/
-		/*redisClient.exists("pendingCommit_"+newBranch, function(err, isExist){
-			if(isExist){
-				console.log('Inside the method to remove the pending branch for the same branch');
-				redisClient.del("pendingCommit_"+newBranch);
-			}else {
-				console.log('No pending branch to remove for the same branch');
-			}
-		});*/
-	//}
+	globalCurrentRunningBranch.global.setCurrentRunningBranch(current_running_branch);
 	executorServices.executeJob(job.data, done);
 });
 
@@ -84,33 +55,38 @@ queueServices.addNewJob = function(jobArg, type, priorityNo){
 				console.log("new added job id is "+ job.id );
 				console.log('new added job branch name '+job.data.branchName);
 				console.log('new added job priority is '+job.data.priorityNo);
-				console.log('Current running automation branch '+current_running_branch);
+				var globalCurrentRunningBranchData = globalCurrentRunningBranch.global.getCurrentRunningBranch();
+				console.log('globalCurrentRunningBranchData is = '+globalCurrentRunningBranchData);
 				var newBranch = job.data.branchName;
-				//if(job.data.priorityNo === '-10') {
-					/*kue.Job.rangeByState( 'active', 0, -1, 'asc', function( err, jobs ) {
-						//console.log("the job data by rangeByState " +jobs.data.branchName);
-					});*/
-					jobQueue.inactive( function( err, ids ) {
-						ids.forEach( function( id ) {
-							console.log("the parameter in the inactive " +id);
-							console.log("the job data id " +job.id);
-							console.log("the job data " +job.data.branchName);
-							kue.Job.get( id, function( err, job ) {
-								console.log("job Id = " +job.id+ " || name = " +job.data.branchName);
-								if (job.data.branchName == newBranch && job.id != currentJobId) {
-									job.remove(function(err){
-										if (err) throw err;
-											console.log('removed inactive job for the already completed job with high priority with job id #%d', job.id);
-									});
-								}
-							});
+				if (newBranch === globalCurrentRunningBranchData) {
+					exec("/etc/automation/bin/stop_phantom.sh" , function(code, stdout, stderr) {
+						console.log('Exit code inside the stop_phantom.sh :', code);
+						console.log( 'STOP_PHANTOMJS' );
+						var stopFile = '/etc/automation/log/stop.txt';
+						fs.writeFile(stopFile, 'STOP_PHANTOMJS', function (err) {
+							if (err)
+								console.log(err);
+							else
+								console.log('Write operation complete.');
 						});
 					});
-					/*jobQueue.active(function(err, ids){
-						ids.forEach( function( id ) {
-							console.log("the job data of active " +job.data.branchName);
+				}
+				jobQueue.inactive( function( err, ids ) {
+					ids.forEach( function( id ) {
+						console.log("the parameter in the inactive " +id);
+						console.log("the job data id " +job.id);
+						console.log("the job data " +job.data.branchName);
+						kue.Job.get( id, function( err, job ) {
+							console.log("job Id = " +job.id+ " || name = " +job.data.branchName);
+							if (job.data.branchName == newBranch && job.id != currentJobId) {
+								job.remove(function(err){
+									if (err) throw err;
+										console.log('removed inactive job for the already completed job with high priority with job id #%d', job.id);
+								});
+							}
 						});
-					});*/
+					});
+				});
 			} else
 				console.log("Getting error while adding job in queue: "+err);
 		});

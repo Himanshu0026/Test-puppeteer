@@ -489,10 +489,7 @@ handler.on('push', function (event) {
 		var index = commitDetails.commitMessage.search("inprogress");
 		console.log('the vale of index'+index);
 		if(index === -1) {
-			//utils.isValidJobToAdd(branchName, commitDetails, function(valid){
-				//if(valid)
-					queueServices.addNewJob(commitDetails, 'automation', '0');
-			//});
+			queueServices.addNewJob(commitDetails, 'automation', '0');
 		}
 	}else{
 		console.log("commitPayload not found");
