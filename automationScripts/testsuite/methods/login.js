@@ -24,11 +24,11 @@ forumLoginMethod.loginToApp = function(username, password) {
 		casper.click('form[name="frmLogin"] button[type="submit"]');
 	}
 
-	casper.then(function() {
-		if(casper.exists('a.default-user')) {
-			this.test.assertTextExists('Search', 'Page contains "Search" : so identification done');
-		}
-	});
+	//casper.waitForSelector('.user-panel', function() {
+		//if(casper.exists('a.default-user')) {
+			//this.test.assertTextExists('Search', 'Page contains "Search" : so identification done');
+		//}
+	//});
 };
 
 //Method for logout from application
