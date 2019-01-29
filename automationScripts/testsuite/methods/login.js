@@ -38,7 +38,9 @@ forumLoginMethod.logoutFromApp = function() {
 	}).waitForSelector('a#logout', function() {
     this.test.assertTextExists('Log Out', 'Page contains "Log Out" : so identification done');
 		this.click('a#logout');
-  }).waitForText('Login');
+  }).waitUntilVisible('#td_tab_login', function() {
+
+	});
 };
 
 //Login To Forum Back End
