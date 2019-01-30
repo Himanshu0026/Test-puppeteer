@@ -27,11 +27,11 @@ forumLoginMethod.loginToApp = function(username, password) {
 		}
 	});
 
-	casper.waitWhileVisible('#td_tab_login', function() {
+	//casper.waitWhileVisible('#td_tab_login', function() {
 		//if(casper.exists('a.default-user')) {
 			//this.test.assertTextExists('Search', 'Page contains "Search" : so identification done');
 		//}
-	});
+	//});
 };
 
 //Method for logout from application
