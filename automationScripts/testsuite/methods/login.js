@@ -9,12 +9,15 @@ forumLoginMethod.loginToApp = function(username, password) {
     utils.info('Login button not visible!');
   } else {
     utils.info('Login button is visible!');
+		casper.click('#td_tab_login');
   }
 
-	casper.fill('form[name="frmLogin"]', {
-		'member': username,
-		'pw' : password
-	}, false);
+	casper.then(function() {
+		casper.fill('form[name="frmLogin"]', {
+			'member': username,
+			'pw' : password
+		}, false);
+	});
 
 	try {
 		casper.test.assertExists('form[name="frmLogin"] input[type="submit"]');
