@@ -17,21 +17,21 @@ forumLoginMethod.loginToApp = function(username, password) {
 			'member': username,
 			'pw' : password
 		}, false);
+	}).then(function(){
+		try {
+			casper.test.assertExists('form[name="frmLogin"] input[type="submit"]');
+			casper.click('form[name="frmLogin"] input[type="submit"]');
+		} catch(e) {
+			casper.test.assertExists('form[name="frmLogin"] button[type="submit"]');
+			casper.click('form[name="frmLogin"] button[type="submit"]');
+		}
 	});
 
-	try {
-		casper.test.assertExists('form[name="frmLogin"] input[type="submit"]');
-		casper.click('form[name="frmLogin"] input[type="submit"]');
-	} catch(e) {
-		casper.test.assertExists('form[name="frmLogin"] button[type="submit"]');
-		casper.click('form[name="frmLogin"] button[type="submit"]');
-	}
-
-	//casper.waitForSelector('.user-panel', function() {
+	casper.waitWhileVisible('#td_tab_login', function() {
 		//if(casper.exists('a.default-user')) {
 			//this.test.assertTextExists('Search', 'Page contains "Search" : so identification done');
 		//}
-	//});
+	});
 };
 
 //Method for logout from application

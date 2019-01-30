@@ -248,14 +248,14 @@ then
   sleep 1
 fi
 
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for MODERATOR RERMISSION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature="moderatorPermissions" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for MODERATOR RERMISSION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature="moderatorPermissions" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
 
 cat "$AUTOMATION_HOME"/log/automation.txt | grep -E 'FAIL|TypeError:|ResourceError:'> "$AUTOMATION_HOME"/log/fail.txt
 cat "$AUTOMATION_HOME"/log/automation.txt | grep -i "tests execut" > "$AUTOMATION_HOME"/log/result.txt
