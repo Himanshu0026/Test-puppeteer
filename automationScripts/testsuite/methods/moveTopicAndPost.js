@@ -96,5 +96,5 @@ moveTopicAndPostMethod.assignLoginDetails = function(userGroup) {
 	}
   casper.then(function() {
     forumLoginMethod.loginToApp(loginUserName, loginPassWord);
-  });
+  }).waitWhileVisible('#td_tab_login', function() {});
 };
