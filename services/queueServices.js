@@ -5,7 +5,6 @@ var globalCurrentRunningBranch = require('./globalVariable.js');
 var redisClient;
 var fs = require('fs');
 var kue = require('kue');
-var current_running_branch;
 var queueServices = module.exports = {};
 //Creating job queue
 var jobQueue = kue.createQueue();
@@ -33,8 +32,7 @@ jobQueue.on('job enqueue',
 //Initiating job processing
 jobQueue.process('pushRequest', function(job, done) {
 	console.log("started branch name is "+ job.data.branchName );
-	current_running_branch = job.data.branchName;
-	globalCurrentRunningBranch.global.setCurrentRunningBranch(current_running_branch);
+	globalCurrentRunningBranch.global.setCurrentRunningBranch(job.data.branchName);
 	executorServices.executeJob(job.data, done);
 });
 

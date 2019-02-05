@@ -15,7 +15,7 @@ globalCurrentRunningBranch.global = {
 	skipAutomation: function() {
 		globalCurrentRunningBranch.global.allowAutomation = false;
 	},
-  isAutomationAllowed: function() {
+	isAutomationAllowed: function() {
 		return globalCurrentRunningBranch.global.allowAutomation;
 	}
 };
