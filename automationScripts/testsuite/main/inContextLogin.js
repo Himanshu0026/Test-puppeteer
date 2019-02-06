@@ -5,6 +5,7 @@ var config = require('../../../config/config.json');
 var inContextLoginTests = require('../cases/inContextLogin.js');
 var utils = require('../utils.js');
 var forumLoginMethod = require('../methods/login.js');
+var registerTests = require('../cases/register.js');
 var inContextLogin = module.exports = {};
 
 inContextLogin.featureTest = function() {
@@ -15,6 +16,9 @@ inContextLogin.featureTest = function() {
 		forumLoginMethod.loginToForumBackEnd();
 
 	}).then(function() {
+
+		// Test case to set up all the backend setting for registration task
+		//registerTests.registrationBackendSetting();
 
 		//Incontext login from start new topic button when start new topic button is enabled
 		inContextLoginTests.doLoginByStartTopicEnable();
@@ -51,9 +55,6 @@ inContextLogin.featureTest = function() {
 
 		//inContext Login from vote on post from post list
 		inContextLoginTests.doLoginByVoteOnpost();
-
-		//inContext Login when 'Post Event' permission is Disabled.
-		inContextLoginTests.doLoginByPostEventDisable();
 
 	});
 };

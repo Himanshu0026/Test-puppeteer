@@ -74,7 +74,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 					}
 				});
 				//sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ', function(err, result){
-				sqlConnection("UPDATE settings SET post_approval=0, threadsperpage =100, repliesperpage=50, enable_calendar='checked', reputation='checked', enable_polls='checked', enable_social_bookmarking='checked', allowpm='checked', reqreg='checked', file_uploading='checked', reqregapp='', confirmemail='checked', new_user_registration='checked'  WHERE uid=116;", function(err, result){
+				sqlConnection("UPDATE settings SET post_approval=0, allow_emails='checked', threadsperpage =100, repliesperpage=50, enable_calendar='checked', reputation='checked', enable_polls='checked', enable_social_bookmarking='checked', allowpm='checked', reqreg='checked', file_uploading='checked', reqregapp='', confirmemail='checked', new_user_registration='checked'  WHERE uid=116;", function(err, result){
 					if(err){
 						console.log(err);
 					}else{

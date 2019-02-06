@@ -7,20 +7,21 @@ var utils = require('../utils.js');
 var loginJSON = require('../../testdata/loginData.json');
 var topicJSON = require('../../testdata/topic.json');
 var pollJSON = require('../../testdata/poll.json');
+var registerTests = require('../cases/register.js');
 var inContextLoginTests = module.exports = {};
 
 //Testcase Incontext login from Start New Topic button when start new topic button is enabled
 inContextLoginTests.doLoginByStartTopicEnable = function() {
 	casper.then(function() {
 		utils.info('Case 1[Incontext login from Start New Topic button when its permission is ON.]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		/*this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
 			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', true);
-		});
+		});*/
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('#topics a[href="/post/printadd"]', function() {
 			this.test.assertSelectorHasText('div#topics', 'Start New Topic');
@@ -30,9 +31,22 @@ inContextLoginTests.doLoginByStartTopicEnable = function() {
 			this.click('a#guest_user_create_account');
 		}).waitForText('Create an account or log in to start a topic.', function() {
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).then(function() {
+			forumLoginMethod.logoutFromApp();
 		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
+	}).thenOpen(config.url ,function() {
+		utils.info('Case 1[Incontext Registration from Start New Topic button when its permission is ON.]');
+		this.waitForSelector('a[href="/post/printadd"]', function() {
+			this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+			this.evaluate(function() {
+				document.querySelector('a[href="/post/printadd"]').click();
+			});
+		}).waitForText('Create an account or log in', function() {
+			this.test.assertSelectorHasText('a#guest_user_create_account', 'Create an account or log in');
+			this.click('a#guest_user_create_account');
+		}).waitForText('Create an account or log in to start a topic.', function() {
+			registerTests.registrationWithValidInfo();
+		});
 	});
 };
 
@@ -51,10 +65,9 @@ inContextLoginTests.doLoginByStartTopicDisable = function() {
 		this.waitForSelector('#topics a[href="/post/printadd"]', function() {
 			this.test.assertSelectorHasText('div#topics', 'Start New Topic');
 			this.click('#topics a[href="/post/printadd"]');
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitUntilVisible('#login_register_modal', function() {
+			this.capture('fdgdfg1.png');
 		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
@@ -100,10 +113,9 @@ inContextLoginTests.doLoginByQuoteOnPost = function() {
 			this.click('div.panel-body.table-responsive ul li:nth-child(1) span:nth-child(1) span:nth-child(2) h4 a span');
 		}).then(function() {
 			this.click('a[id^="reply_with_quote_"]');
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitUntilVisible('#login_register_modal', function() {
+			this.capture('fdgdfg2.png');
 		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
@@ -122,10 +134,9 @@ inContextLoginTests.doLoginByViewTopicDisable = function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
 			this.click('div.panel-body.table-responsive ul li:nth-child(1) span:nth-child(1) span:nth-child(2) h4 a span');
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitUntilVisible('#login_register_modal', function() {
+			this.capture('fdgdfg3.png');
 		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
@@ -141,14 +152,13 @@ inContextLoginTests.doLoginByViewForumDisable = function() {
 	}).then(function() {
 		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_messageboard', false);
 	}).thenOpen(config.url, function() {
-		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
+		//this.test.assertTextExists('google', 'page body contains "google"');
 	});
 };
 
 //inContext Login  when 'View Profile' permission is Disabled.
 inContextLoginTests.doLoginByViewProfileDisable = function() {
+	var userHref;
 	casper.thenOpen(config.backEndUrl , function() {
 		utils.info('Case 6[Incontext Login from Topic listing page when View Topic Content permission is Disabled.]');
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
@@ -167,22 +177,21 @@ inContextLoginTests.doLoginByViewProfileDisable = function() {
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
-			var userHref = casper.evaluate(function() {
-				var userId = document.querySelectorAll('div.panel-body.table-responsive ul li:nth-child(1) span.col-md-9 span.image-wrapper a');
+			userHref = casper.evaluate(function() {
+				var userId = document.querySelectorAll('ul li span.image-wrapper a');
 				return userId[0].getAttribute('href');
 			});
 			this.click('a[href="'+userHref+'"]');
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitUntilVisible('#login_register_modal', function() {
+			this.capture('fdgdfg4.png');
 		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
 //inContext Login when 'View Calendar' permission is enabled fromm group permission.
 inContextLoginTests.doLoginByViewCalenderEnable = function() {
 	casper.thenOpen(config.backEndUrl , function() {
-		utils.info('Case 7[Incontext Login Login when View Calendar permission is Disabled.]');
+		utils.info('Case 7[Incontext Login Login when View Calendar permission is Enabled and Post event Disabled -> Case 13.]');
 		this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 	  }).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
@@ -196,10 +205,7 @@ inContextLoginTests.doLoginByViewCalenderEnable = function() {
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
-			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_calendar', true);
-		}).then(function() {
-			backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
-			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_messageboard', true);
+			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_calendar', false);
 		});
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('i.icon.icon-menu', function() {
@@ -210,10 +216,10 @@ inContextLoginTests.doLoginByViewCalenderEnable = function() {
 			});
 		}).waitForSelector('i.glyphicon.glyphicon-plus', function() {
 			this.click('i.glyphicon.glyphicon-plus');
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitUntilVisible('.alert', function() {
+			test.assertTextExists('Please login or');
+			this.capture('fdgdfg6.png');
 		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
@@ -223,29 +229,28 @@ inContextLoginTests.doLoginByReputationEnableTopicLike = function() {
 		utils.info('Case 8[Incontext Login while Like this post from Topic page]');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]', function() {
+	/*}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]', function() {
 		this.test.assertSelectorHasText('#ddSettings', 'General');
 		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
-		backEndregisterMethod.enableDisableLikesReputation(true);
+		backEndregisterMethod.enableDisableLikesReputation(true);*/
 	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
 		this.test.assertSelectorHasText('#ddSettings', 'Security');
 		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
 		backEndregisterMethod.setPrivacy('public');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function () {
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		/*this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 		backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 	}).then(function() {
-		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_thread_content', true);
+		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_thread_content', true);*/
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
 			this.click('i.glyphicon.glyphicon-like-alt');
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitUntilVisible('#login_register_modal', function() {
+			this.capture('fdgdfg7.png');
 		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
@@ -253,22 +258,21 @@ inContextLoginTests.doLoginByReputationEnableTopicLike = function() {
 inContextLoginTests.doLoginByReputationEnablePostDislike = function() {
 	casper.thenOpen(config.backEndUrl , function() {
 		utils.info('Case 9[Incontext Login while Dislike this post from Topic page]');
-	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+	/*}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]', function() {
 		this.test.assertSelectorHasText('#ddSettings', 'General');
 		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
-		backEndregisterMethod.enableDisableLikesReputation(true);
+		backEndregisterMethod.enableDisableLikesReputation(true);*/
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
 			this.click('div.panel-body.table-responsive ul li:nth-child(1) span:nth-child(1) span:nth-child(2) h4 a span');
 			this.waitUntilVisible('i.glyphicon.glyphicon-dislike-alt', function() {
 				this.click('i.glyphicon.glyphicon-dislike-alt');
-				forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+			}).waitUntilVisible('#login_register_modal', function() {
+				this.capture('fdgdfg8.png');
 			});
 		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
@@ -276,22 +280,21 @@ inContextLoginTests.doLoginByReputationEnablePostDislike = function() {
 inContextLoginTests.doLoginByReputationEnablePostLike = function() {
 	casper.thenOpen(config.backEndUrl , function() {
 		utils.info('Case 10[Incontext Login while Like this post from Topic page]');
-	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+	/*}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]', function() {
 		this.test.assertSelectorHasText('#ddSettings', 'General');
 		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
-		backEndregisterMethod.enableDisableLikesReputation(true);
+		backEndregisterMethod.enableDisableLikesReputation(true);*/
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
 			this.click('div.panel-body.table-responsive ul li:nth-child(1) span:nth-child(1) span:nth-child(2) h4 a span');
 			this.waitUntilVisible('i.glyphicon.glyphicon-like-alt', function() {
 				this.click('i.glyphicon.glyphicon-like-alt');
-				forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+			}).waitUntilVisible('#login_register_modal', function() {
+				this.capture('fdgdfg9.png');
 			});
 		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
@@ -299,26 +302,25 @@ inContextLoginTests.doLoginByReputationEnablePostLike = function() {
 inContextLoginTests.doLoginByEmailButton = function() {
 	casper.thenOpen(config.backEndUrl , function() {
 		utils.info('Case 11[Incontext Login from Email button on Profile view screen of any user.]');
-		this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+		/*this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 		}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
 			this.test.assertSelectorHasText('#ddSettings', 'Security');
 			this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
-			backEndregisterMethod.enableDisableUserToUserEmailing(true);
-		}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function () {
-			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
-		}).then(function() {
-			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_profiles', true);
-		});
+			backEndregisterMethod.enableDisableUserToUserEmailing(true);*/
+	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function () {
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
+		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
+		backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
+	}).then(function() {
+		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_profiles', true);
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
 			var userHref = casper.evaluate(function() {
-				var userId = document.querySelectorAll('div.panel-body.table-responsive ul li:nth-child(1) span.col-md-9 span.image-wrapper a');
+				var userId = document.querySelectorAll('ul li span.image-wrapper a');
 				return userId[0].getAttribute('href');
 			});
 			casper.evaluate(function(userHref) {
@@ -327,11 +329,10 @@ inContextLoginTests.doLoginByEmailButton = function() {
 			this.waitForSelector('a#send_email', function() {
 				this.test.assertSelectorHasText('a#send_email', 'Email');
 				this.click('a#send_email');
-				forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+			}).waitUntilVisible('#login_register_modal', function() {
+				this.capture('fdgdfg9.png');
 			});
 		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
@@ -339,12 +340,12 @@ inContextLoginTests.doLoginByEmailButton = function() {
 inContextLoginTests.doLoginByVoteOnpost = function() {
 	casper.thenOpen(config.backEndUrl , function() {
 		utils.info('Case 12[Incontext Login from vote on post from post list]');
-	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+	/*}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]', function() {
 		this.test.assertSelectorHasText('#ddSettings', 'General');
 		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
-		backEndregisterMethod.enableDisablePolls(true);
+		backEndregisterMethod.enableDisablePolls(true);*/
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
@@ -368,37 +369,10 @@ inContextLoginTests.doLoginByVoteOnpost = function() {
 			this.test.assertSelectorHasText('a#guest_user_vote', 'sign up or  log in');
 			this.click('a#guest_user_vote');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).then(function() {
+			forumLoginMethod.logoutFromApp();
 		});
 	}).then(function() {
-		forumLoginMethod.logoutFromApp();
-	});
-};
 
-//inContext Login when 'Post Event' permission is Disabled.
-inContextLoginTests.doLoginByPostEventDisable = function() {
-	casper.thenOpen(config.backEndUrl , function() {
-		utils.info('Case 13[Incontext Login when View Calendar permission is Disabled.]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
-	}).then(function() {
-		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_events', false);
-	}).then(function() {
-		forumLoginMethod.logoutFromForumBackEnd();
-	}).thenOpen(config.url ,function() {
-		this.waitForSelector('i.icon.icon-menu', function() {
-			this.click('i.icon.icon-menu');
-			this.test.assertSelectorHasText('a[href="/calendar"]', 'Calendar');
-			this.evaluate(function() {
-				document.querySelector('li a[href="/calendar"]').click();
-			});
-		}).waitForSelector('i.glyphicon.glyphicon-plus', function() {
-			this.click('i.glyphicon.glyphicon-plus');
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
