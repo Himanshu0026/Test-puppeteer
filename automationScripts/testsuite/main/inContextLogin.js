@@ -18,7 +18,7 @@ inContextLogin.featureTest = function() {
 	}).then(function() {
 
 		// Test case to set up all the backend setting for registration task
-		//registerTests.registrationBackendSetting();
+		registerTests.registrationBackendSetting();
 
 		//Incontext login from start new topic button when start new topic button is enabled
 		inContextLoginTests.doLoginByStartTopicEnable();
