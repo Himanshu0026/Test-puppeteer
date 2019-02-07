@@ -72,14 +72,14 @@ incontextRegistrationTests.doRegistrationWhenUserAccountOff = function() {
     this.test.assertSelectorHasText('#ddSettings', 'General');
     this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
 		backEndregisterMethod.enableDisableUserAccounts(true);
-	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
+	/*}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
 		casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 		backEndregisterMethod.viewUsers('Pending Email Verification');
 	}).then(function() {
-		backEndregisterMethod.editUserActions('Pending Email Verification', 'Delete', 'all');
+		backEndregisterMethod.editUserActions('Pending Email Verification', 'Delete', 'all');*/
 	}).then(function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
