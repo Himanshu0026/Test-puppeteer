@@ -45,9 +45,10 @@ incontextRegistrationTests.doRegistrationFromReplyPostWithCreateAccount = functi
      });
     }).waitUntilVisible('#guest_user', function() {
       this.click('#guest_user');
-    }).waitForSelector('form[name="PostTopic"]', function() {
-      //registerTests.registrationWithValidInfo();
-    });
+		}).waitUntilVisible('#login_register_modal', function() {
+			this.test.assertTextExists('Create Account', 'Create Account appears on the page');
+			this.test.assertTextExists('Log In', 'Log In appears on the page');
+		});
 	});
 };
 

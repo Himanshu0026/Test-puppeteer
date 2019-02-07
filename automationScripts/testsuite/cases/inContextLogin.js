@@ -14,14 +14,14 @@ var inContextLoginTests = module.exports = {};
 inContextLoginTests.doLoginByStartTopicEnable = function() {
 	casper.then(function() {
 		utils.info('Case 1[Incontext login from Start New Topic button when its permission is ON.]');
-		/*this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
 			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', true);
-		});*/
+		});
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('#topics a[href="/post/printadd"]', function() {
 			this.test.assertSelectorHasText('div#topics', 'Start New Topic');
@@ -66,7 +66,8 @@ inContextLoginTests.doLoginByStartTopicDisable = function() {
 			this.test.assertSelectorHasText('div#topics', 'Start New Topic');
 			this.click('#topics a[href="/post/printadd"]');
 		}).waitUntilVisible('#login_register_modal', function() {
-			this.capture('fdgdfg1.png');
+			this.test.assertTextExists('Create Account', 'Create Account appears on the page');
+			this.test.assertTextExists('Log In', 'Log In appears on the page');
 		});
 	});
 };
@@ -110,11 +111,12 @@ inContextLoginTests.doLoginByQuoteOnPost = function() {
 		this.test.assertSelectorHasText('li#latest_topics_show', 'Topics');
 		this.click('li#latest_topics_show a');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
-			this.click('div.panel-body.table-responsive ul li:nth-child(1) span:nth-child(1) span:nth-child(2) h4 a span');
+			this.click('ul li:nth-child(1) .topic-title');
 		}).then(function() {
 			this.click('a[id^="reply_with_quote_"]');
 		}).waitUntilVisible('#login_register_modal', function() {
-			this.capture('fdgdfg2.png');
+			this.test.assertTextExists('Create Account', 'Create Account appears on the page');
+			this.test.assertTextExists('Log In', 'Log In appears on the page');
 		});
 	});
 };
@@ -133,9 +135,9 @@ inContextLoginTests.doLoginByViewTopicDisable = function() {
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
-			this.click('div.panel-body.table-responsive ul li:nth-child(1) span:nth-child(1) span:nth-child(2) h4 a span');
-		}).waitUntilVisible('#login_register_modal', function() {
-			this.capture('fdgdfg3.png');
+			this.click('ul li:nth-child(1) .topic-title');
+		}).waitUntilVisible('.alert', function() {
+			this.test.assertTextExists('Please login or');
 		});
 	});
 };
@@ -152,13 +154,13 @@ inContextLoginTests.doLoginByViewForumDisable = function() {
 	}).then(function() {
 		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_messageboard', false);
 	}).thenOpen(config.url, function() {
-		//this.test.assertTextExists('google', 'page body contains "google"');
+	}).waitUntilVisible('.alert', function() {
+		this.test.assertTextExists('Please login or');
 	});
 };
 
 //inContext Login  when 'View Profile' permission is Disabled.
 inContextLoginTests.doLoginByViewProfileDisable = function() {
-	var userHref;
 	casper.thenOpen(config.backEndUrl , function() {
 		utils.info('Case 6[Incontext Login from Topic listing page when View Topic Content permission is Disabled.]');
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
@@ -177,13 +179,13 @@ inContextLoginTests.doLoginByViewProfileDisable = function() {
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
-			userHref = casper.evaluate(function() {
+			var userHref = casper.evaluate(function() {
 				var userId = document.querySelectorAll('ul li span.image-wrapper a');
 				return userId[0].getAttribute('href');
 			});
 			this.click('a[href="'+userHref+'"]');
-		}).waitUntilVisible('#login_register_modal', function() {
-			this.capture('fdgdfg4.png');
+		}).waitUntilVisible('.alert', function() {
+			this.test.assertTextExists('Please login or');
 		});
 	});
 };
@@ -198,14 +200,6 @@ inContextLoginTests.doLoginByViewCalenderEnable = function() {
 			this.test.assertSelectorHasText('#ddSettings', 'Security');
 			this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
 			backEndregisterMethod.setPrivacy('private');
-		}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function () {
-			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-		}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
-		}).then(function() {
-			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_calendar', false);
 		});
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('i.icon.icon-menu', function() {
@@ -214,11 +208,8 @@ inContextLoginTests.doLoginByViewCalenderEnable = function() {
 			this.evaluate(function() {
 				document.querySelector('li a[href="/calendar"]').click();
 			});
-		}).waitForSelector('i.glyphicon.glyphicon-plus', function() {
-			this.click('i.glyphicon.glyphicon-plus');
 		}).waitUntilVisible('.alert', function() {
-			test.assertTextExists('Please login or');
-			this.capture('fdgdfg6.png');
+			this.test.assertTextExists('Please login or');
 		});
 	});
 };
@@ -249,7 +240,8 @@ inContextLoginTests.doLoginByReputationEnableTopicLike = function() {
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
 			this.click('i.glyphicon.glyphicon-like-alt');
 		}).waitUntilVisible('#login_register_modal', function() {
-			this.capture('fdgdfg7.png');
+			this.test.assertTextExists('Create Account', 'Create Account appears on the page');
+			this.test.assertTextExists('Log In', 'Log In appears on the page');
 		});
 	});
 };
@@ -266,11 +258,12 @@ inContextLoginTests.doLoginByReputationEnablePostDislike = function() {
 		backEndregisterMethod.enableDisableLikesReputation(true);*/
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
-			this.click('div.panel-body.table-responsive ul li:nth-child(1) span:nth-child(1) span:nth-child(2) h4 a span');
+			this.click('ul li:nth-child(1) .topic-title');
 			this.waitUntilVisible('i.glyphicon.glyphicon-dislike-alt', function() {
 				this.click('i.glyphicon.glyphicon-dislike-alt');
 			}).waitUntilVisible('#login_register_modal', function() {
-				this.capture('fdgdfg8.png');
+				this.test.assertTextExists('Create Account', 'Create Account appears on the page');
+				this.test.assertTextExists('Log In', 'Log In appears on the page');
 			});
 		});
 	});
@@ -288,11 +281,12 @@ inContextLoginTests.doLoginByReputationEnablePostLike = function() {
 		backEndregisterMethod.enableDisableLikesReputation(true);*/
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
-			this.click('div.panel-body.table-responsive ul li:nth-child(1) span:nth-child(1) span:nth-child(2) h4 a span');
+			this.click('ul li:nth-child(1) .topic-title');
 			this.waitUntilVisible('i.glyphicon.glyphicon-like-alt', function() {
 				this.click('i.glyphicon.glyphicon-like-alt');
 			}).waitUntilVisible('#login_register_modal', function() {
-				this.capture('fdgdfg9.png');
+				this.test.assertTextExists('Create Account', 'Create Account appears on the page');
+				this.test.assertTextExists('Log In', 'Log In appears on the page');
 			});
 		});
 	});
@@ -330,7 +324,8 @@ inContextLoginTests.doLoginByEmailButton = function() {
 				this.test.assertSelectorHasText('a#send_email', 'Email');
 				this.click('a#send_email');
 			}).waitUntilVisible('#login_register_modal', function() {
-				this.capture('fdgdfg9.png');
+				this.test.assertTextExists('Create Account', 'Create Account appears on the page');
+				this.test.assertTextExists('Log In', 'Log In appears on the page');
 			});
 		});
 	});
@@ -350,7 +345,7 @@ inContextLoginTests.doLoginByVoteOnpost = function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).waitForSelector('form[name="posts"] a.topic-title', function() {
-		this.click('div.panel-body.table-responsive ul li:nth-child(1) span:nth-child(1) span:nth-child(2) h4 a span');
+		this.click('ul li:nth-child(1) .topic-title');
 	}).then(function() {
 		this.test.assertSelectorHasText('a#sub_post_reply', 'Post a reply');
 		this.test.assert(this.mouseEvent('mouseover', 'div[id^="post_list_"]'));
@@ -364,15 +359,13 @@ inContextLoginTests.doLoginByVoteOnpost = function() {
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function() {
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
-			this.click('div.panel-body.table-responsive ul li:nth-child(1) span:nth-child(1) span:nth-child(2) h4 a span');
+			this.click('ul li:nth-child(1) .topic-title');
 		}).waitForSelector('a#guest_user_vote', function() {
 			this.test.assertSelectorHasText('a#guest_user_vote', 'sign up or  log in');
 			this.click('a#guest_user_vote');
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-		}).then(function() {
-			forumLoginMethod.logoutFromApp();
+		}).waitUntilVisible('#login_register_modal', function() {
+			this.test.assertTextExists('Create Account', 'Create Account appears on the page');
+			this.test.assertTextExists('Log In', 'Log In appears on the page');
 		});
-	}).then(function() {
-
 	});
 };
