@@ -93,12 +93,9 @@ loginByPrivacyOptionTests.doLoginByCalender=function() {
 			this.evaluate(function() {
 				document.querySelector('li a[href="/calendar"]').click();
 			});
-		}).waitForSelector('i.glyphicon.glyphicon-plus', function() {
-			this.click('i.glyphicon.glyphicon-plus');
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitUntilVisible('.alert', function() {
+			this.test.assertTextExists('Please login or');
 		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
