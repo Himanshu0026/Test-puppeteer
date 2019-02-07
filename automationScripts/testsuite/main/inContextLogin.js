@@ -20,6 +20,9 @@ inContextLogin.featureTest = function() {
 		// Test case to set up all the backend setting for registration task
 		registerTests.registrationBackendSetting();
 
+		//Incontext Login while Like this Topic from list of topics
+		inContextLoginTests.doLoginByReputationEnableTopicLike();
+
 		//Incontext login from start new topic button when start new topic button is enabled
 		inContextLoginTests.doLoginByStartTopicEnable();
 
@@ -39,10 +42,7 @@ inContextLogin.featureTest = function() {
 		inContextLoginTests.doLoginByViewProfileDisable();
 
 		//inContext Login when 'View Calendar' permission is Enabled.
-		inContextLoginTests.doLoginByViewCalenderEnable();
-
-		//Incontext Login while Like this Topic from list of topics
-		inContextLoginTests.doLoginByReputationEnableTopicLike();
+		//inContextLoginTests.doLoginByViewCalenderEnable();
 
 		//Incontext Login while Dislike this post from  list of Topics page
 		inContextLoginTests.doLoginByReputationEnablePostDislike();
