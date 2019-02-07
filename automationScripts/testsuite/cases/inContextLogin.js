@@ -12,7 +12,7 @@ var inContextLoginTests = module.exports = {};
 
 //Testcase Incontext login from Start New Topic button when start new topic button is enabled
 inContextLoginTests.doLoginByStartTopicEnable = function() {
-	casper.then(function() {
+	casper.thenOpen(config.backEndUrl , function() {
 		utils.info('Case 1[Incontext login from Start New Topic button when its permission is ON.]');
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
