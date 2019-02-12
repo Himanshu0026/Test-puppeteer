@@ -31,6 +31,7 @@ postEventMemberApprovalTestcases.createTopic = function() {
   }).thenOpen(config.url, function() {
     this.test.assertExists('#inline_search_box', 'Search bar present');
 		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.adminUserLogin.username, postEventMemberApprovalJSON.adminUserLogin.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('#topics a[href="/post/printadd"]', function() {
 	  this.test.assertSelectorHasText('div#topics', 'Start New Topic');
 	  this.click('#topics a[href="/post/printadd"]');
@@ -60,7 +61,7 @@ postEventMemberApprovalTestcases.createMultiplePost = function() {
 	casper.thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.click('a[id^="topic_"]');
 	}).waitForSelector('#posts-list', function() {
 		postEventMemberApprovalMethod.composePost('Approve a pending post from- Approve by click on topic');
@@ -93,6 +94,7 @@ postEventMemberApprovalTestcases.createMultiplePost = function() {
 postEventMemberApprovalTestcases.postApprovalByAdmin = function() {
 	casper.thenOpen(config.url, function() {
 		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.adminUserLogin.username, postEventMemberApprovalJSON.adminUserLogin.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function() {
 		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'Category link found');
 		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
@@ -292,7 +294,7 @@ postEventMemberApprovalTestcases.composeMultipleEvent = function() {
 	casper.thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.registeredUserLogin.username, postEventMemberApprovalJSON.registeredUserLogin.password);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		casper.click('i.icon.icon-menu');
 		try {
 			casper.test.assertExists('ul#calendars_toggle_link i','calender menu found');
@@ -330,6 +332,7 @@ postEventMemberApprovalTestcases.composeMultipleEvent = function() {
 postEventMemberApprovalTestcases.eventApprovalByAdmin = function() {
 	casper.thenOpen(config.url, function() {
 		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.adminUserLogin.username, postEventMemberApprovalJSON.adminUserLogin.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function() {
 		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'Category link found');
 		casper.click('ul.nav.nav-tabs li:nth-child(2) a');

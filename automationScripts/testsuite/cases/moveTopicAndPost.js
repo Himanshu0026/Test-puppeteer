@@ -204,6 +204,7 @@ moveTopicAndPostTestcases.latestTopicPageForRegisteredUserWhenDisabled = functio
 		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'move_own_threads', false);
 	}).thenOpen(config.url, function() {
     forumLoginMethod.loginToApp(moveTopicAndPostJSON.registeredUserLogin.username, moveTopicAndPostJSON.registeredUserLogin.password);
+	}).waitWhileVisible('#td_tab_login', function() {
   }).waitForSelector('.icon.icon-menu', function() {
     this.click('.icon.icon-menu');
     this.test.assertSelectorHasText('#latest_topics_show', 'Topics');
@@ -223,7 +224,7 @@ moveTopicAndPostTestcases.topicListingPageForRegisteredUserWhenDisabled = functi
 	casper.then(function() {
     utils.info('Case 14 [ Verify move topic from the topic listing page[Home Page] for (own post for registered user when disable "move topic" permission) ]');
     forumLoginMethod.loginToApp(moveTopicAndPostJSON.registeredUserLogin.username, moveTopicAndPostJSON.registeredUserLogin.password);
-  }).then(function() {
+  }).waitWhileVisible('#td_tab_login', function() {
     this.test.assertExists('ul li:nth-child(1) span.mod.icons.pull-right input');
     this.click('ul li:nth-child(1) span.mod.icons.pull-right input');
   }).waitUntilVisible('#topics-menu', function() {
@@ -247,7 +248,8 @@ moveTopicAndPostTestcases.topicListingPageUnderCategoryForRegisteredUserWhenDisa
 		});
 	}).thenOpen(config.url, function() {
     forumLoginMethod.loginToApp(moveTopicAndPostJSON.registeredUserLogin.username, moveTopicAndPostJSON.registeredUserLogin.password);
-  }).waitForSelector('.icon.icon-menu', function() {
+	}).waitWhileVisible('#td_tab_login', function() {
+	}).waitForSelector('.icon.icon-menu', function() {
     this.click('.icon.icon-menu');
     this.click('#forums_toggle_link a');
   }).waitForText(category.title, function() {
@@ -290,6 +292,7 @@ moveTopicAndPostTestcases.topicListingPageUnderSubCategoryForRegisteredUserWhenD
 		});
 	}).thenOpen(config.url, function() {
     forumLoginMethod.loginToApp(moveTopicAndPostJSON.registeredUserLogin.username, moveTopicAndPostJSON.registeredUserLogin.password);
+	}).waitWhileVisible('#td_tab_login', function() {
   }).waitForSelector('.icon.icon-menu', function() {
     this.click('.icon.icon-menu');
     this.click('#forums_toggle_link a');
@@ -302,6 +305,12 @@ moveTopicAndPostTestcases.topicListingPageUnderSubCategoryForRegisteredUserWhenD
   }).waitForText(subCategory.title, function() {
     this.click('li[id="forum_'+subCategory_Id+'"] a');
   }).waitUntilVisible('.topics-list', function() {
+		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' Start New topic on subcategory page Found');
+		this.click('#ajax_subscription_vars a.start-new-topic-btn');
+		topicMethod.createTopic(moveTopicAndPostJSON.subCategoryTopic);
+	}).waitForText('hellloooooo!!!!!!!!!', function() {
+		this.click('#backArrowPost');
+	}).waitUntilVisible('.topics-list', function() {
     this.test.assertExists('ul li:nth-child(1) span.mod.icons.pull-right input');
     this.click('ul li:nth-child(1) span.mod.icons.pull-right input');
   }).waitUntilVisible('#topics-menu', function() {

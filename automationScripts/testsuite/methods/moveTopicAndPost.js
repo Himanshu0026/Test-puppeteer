@@ -15,7 +15,8 @@ moveTopicAndPostMethod.fillMoveTopicDetails = function(categoryId) {
     },false);
     this.test.assertExists('form[name="admindd"] button');
     this.click('form[name="admindd"] button');
-  }).waitForText('The Community Forum');
+  //}).waitForText('The Community Forum');
+  }).wait('2000',function(){});
 };
 
 // Method to move the topic
@@ -73,7 +74,8 @@ moveTopicAndPostMethod.fillMovePostDetails = function(data, movedDestination) {
       casper.test.assertExists('button#move_posts','Move Posts button Found');
       casper.click('button#move_posts');
     });
-  }).waitForText('The Community Forum');
+  //}).waitForText('The Community Forum');
+  }).wait('2000',function(){});
 };
 
 //method to assign login details of userGroup
@@ -94,5 +96,5 @@ moveTopicAndPostMethod.assignLoginDetails = function(userGroup) {
 	}
   casper.then(function() {
     forumLoginMethod.loginToApp(loginUserName, loginPassWord);
-  });
+  }).waitWhileVisible('#td_tab_login', function() {});
 };

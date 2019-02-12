@@ -26,11 +26,14 @@ composeTopic.featureTest = function(){
 		//Verify Compose Topic without  selecting any category(Registered User/Admin)
 		composeTopicTests.composeTopicWithoutCategory(loginJSON.validInfo.username, loginJSON.validInfo.password);
 		composeTopicTests.composeTopicWithoutCategory(loginJSON.adminUser.username, loginJSON.adminUser.password);
+		//Verify postPreview from general user from categoryListingPage
+		composeTopicTests.composeTopicPostPreview(loginJSON.ValidCredential.username, loginJSON.ValidCredential.password);
 		//Verify with the guest user without selecting any category.
 		composeTopicTests.composeTopicGuestWithoutCategory();
-		//composeTopicTests.composeTopicRegisterstartTopicdisablecategory();
-		//Verify Compose Topic on Category/topic Listing Page(if  start new topic permission is disabled) (For Guest User)
-		//composeTopicTests.composeTopicGueststartTopicEnable
+		//Verify Compose Topic on topic listing page(if start new topic permission is disabled of one cateogry) (For Register User)
+		composeTopicTests.composeTopicRegisterstartTopicdisablecategory();
+		//Verify post-Preview for guest user on latestTopicPage, topicListingPage and categoryListingPage
+		composeTopicTests.composeTopicGuestUserPostPreview();
 		//Verify Compose Topic on topic listing page(if start new topic permission is disabled of one cateogry) (For Guest User)
 		composeTopicTests.composeTopicGueststartTopicdisblecategory();
 		//Verify backend-setings

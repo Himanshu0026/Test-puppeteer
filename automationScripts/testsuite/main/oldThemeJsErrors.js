@@ -20,7 +20,7 @@ oldThemeJsErrors.featureTest = function() {
   });
   casper.thenOpen(config.url, function() {
     forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-  }).wait('7000', function() {
+  }).waitUntilVisible('#reg_link_user', function() {
 		this.test.assertExists('#td_tab_newpost a', ' Latest Topic found');
 		this.click('#td_tab_newpost a');
 	}).waitForSelector('form[name="posts"]', function() {
@@ -30,7 +30,7 @@ oldThemeJsErrors.featureTest = function() {
 	}).waitForSelector('div.middle_container', function() {
     utils.info(' redirected to category listing page successfully');
 	}).thenOpen(config.url+'tool/members/mb/skins?action=install_skin&subaction=skins&skin_id=51&search_skin=Angela&sorted=', function() {
-	
+
 	}).waitForText("The Angela theme has been activated.", function() {
 		utils.activateNewTheme();
 	});

@@ -67,7 +67,7 @@ loginByPrivacyOptionTests.doLoginByMember = function() {
 loginByPrivacyOptionTests.doLoginByCalender=function() {
 	casper.thenOpen(config.backEndUrl , function() {
 		utils.info('Case 5[Check Login from Calender option is side menu]');
-	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
+	/*}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
   }).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]', function() {
 		this.test.assertSelectorHasText('#ddSettings', 'General');
@@ -85,7 +85,7 @@ loginByPrivacyOptionTests.doLoginByCalender=function() {
 			backEndregisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
 			backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_messageboard', true);
-		});
+		});*/
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('i.icon.icon-menu', function() {
 			this.click('i.icon.icon-menu');
@@ -93,12 +93,9 @@ loginByPrivacyOptionTests.doLoginByCalender=function() {
 			this.evaluate(function() {
 				document.querySelector('li a[href="/calendar"]').click();
 			});
-		}).waitForSelector('i.glyphicon.glyphicon-plus', function() {
-			this.click('i.glyphicon.glyphicon-plus');
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitUntilVisible('.alert', function() {
+			this.test.assertTextExists('Please login or');
 		});
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 

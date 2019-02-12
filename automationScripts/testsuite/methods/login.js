@@ -9,26 +9,29 @@ forumLoginMethod.loginToApp = function(username, password) {
     utils.info('Login button not visible!');
   } else {
     utils.info('Login button is visible!');
+		casper.click('#td_tab_login');
   }
 
-	casper.fill('form[name="frmLogin"]', {
-		'member': username,
-		'pw' : password
-	}, false);
-
-	try {
-		casper.test.assertExists('form[name="frmLogin"] input[type="submit"]');
-		casper.click('form[name="frmLogin"] input[type="submit"]');
-	} catch(e) {
-		casper.test.assertExists('form[name="frmLogin"] button[type="submit"]');
-		casper.click('form[name="frmLogin"] button[type="submit"]');
-	}
-
 	casper.then(function() {
-		if(casper.exists('a.default-user')) {
-			this.test.assertTextExists('Search', 'Page contains "Search" : so identification done');
+		casper.fill('form[name="frmLogin"]', {
+			'member': username,
+			'pw' : password
+		}, false);
+	}).then(function(){
+		try {
+			casper.test.assertExists('form[name="frmLogin"] input[type="submit"]');
+			casper.click('form[name="frmLogin"] input[type="submit"]');
+		} catch(e) {
+			casper.test.assertExists('form[name="frmLogin"] button[type="submit"]');
+			casper.click('form[name="frmLogin"] button[type="submit"]');
 		}
 	});
+
+	//casper.waitWhileVisible('#td_tab_login', function() {
+		//if(casper.exists('a.default-user')) {
+			//this.test.assertTextExists('Search', 'Page contains "Search" : so identification done');
+		//}
+	//});
 };
 
 //Method for logout from application
@@ -38,7 +41,9 @@ forumLoginMethod.logoutFromApp = function() {
 	}).waitForSelector('a#logout', function() {
     this.test.assertTextExists('Log Out', 'Page contains "Log Out" : so identification done');
 		this.click('a#logout');
-  }).waitForText('Login');
+  }).waitUntilVisible('#td_tab_login', function() {
+
+	});
 };
 
 //Login To Forum Back End
