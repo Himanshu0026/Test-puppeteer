@@ -2,9 +2,8 @@ var config = require('../../../config/config.json');
 var loginJSON = require('../../testdata/loginData.json');
 var forumLoginMethod = require('../methods/login.js');
 var composeTopicTests = require('../cases/composeTopic.js');
-var profilePageTests = require('../cases/profilePage.js');
+var profilePageMethod = require('../methods/profilePage.js');
 var composeTopic = module.exports = {};
-
 
 composeTopic.featureTest = function(){
 	casper.start(config.backEndUrl, function() {
@@ -12,15 +11,6 @@ composeTopic.featureTest = function(){
 		forumLoginMethod.loginToForumBackEnd();
 	}).then(function(){
 		composeTopicTests.createCategoryTestCase();
-		//delete topics
-		profilePageTests.deleteTopics();
-		//Verify Preview Post of Compose Topic (For Registered User/Admin)
-		//Verify Compose Topic on Category Listing Page (For Registered User/Admin)
-		//Verify by Add New Topic  by topic listing page under  category
-		composeTopicTests.addTopic(loginJSON.ValidCredential.username, loginJSON.ValidCredential.password);
-		composeTopicTests.addTopic(loginJSON.adminUser.username, loginJSON.adminUser.password);
-		//Verify Compost Topic on Latest Topic Page (For Guest/Registered User/Admin)
-		composeTopicTests.composeLatestTopicRegister();
 		//Verify Compose Topic when there is no pagination available (For Guest/Registered User/Admin)
 		composeTopicTests.composeTopicPagination();
 		//Verify Compose Topic without  selecting any category(Registered User/Admin)
@@ -28,17 +18,16 @@ composeTopic.featureTest = function(){
 		composeTopicTests.composeTopicWithoutCategory(loginJSON.adminUser.username, loginJSON.adminUser.password);
 		//Verify postPreview from general user from categoryListingPage
 		composeTopicTests.composeTopicPostPreview(loginJSON.ValidCredential.username, loginJSON.ValidCredential.password);
-		//Verify with the guest user without selecting any category.
-		composeTopicTests.composeTopicGuestWithoutCategory();
 		//Verify Compose Topic on topic listing page(if start new topic permission is disabled of one cateogry) (For Register User)
 		composeTopicTests.composeTopicRegisterstartTopicdisablecategory();
+		//Verify with the guest user without selecting any category.
 		//Verify post-Preview for guest user on latestTopicPage, topicListingPage and categoryListingPage
 		composeTopicTests.composeTopicGuestUserPostPreview();
 		//Verify Compose Topic on topic listing page(if start new topic permission is disabled of one cateogry) (For Guest User)
-		composeTopicTests.composeTopicGueststartTopicdisblecategory();
+		//composeTopicTests.composeTopicGueststartTopicdisblecategory();
 		//Verify backend-setings
 		composeTopicTests.permissionSettings();
-		
-		
+
+		profilePageMethod.deleteTopics();
 	});
 };

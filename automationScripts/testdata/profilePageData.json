@@ -16,5 +16,9 @@
 	"checkValidation":{
 		"postTab":"hasn't made any  posts yet.",
 		"topicStartedTab":"hasn't started any  topics yet."
+	},
+
+	"expectedPostCount" :{
+		"count" :"2"
 	}
 }

@@ -143,3 +143,24 @@ profilePageMethod.newaddTopicPost= function(){
 };
 
 
+profilePageMethod.deleteTopics=function() {
+	casper.thenOpen(config.url, function(){
+		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
+	}).waitForSelector('div.panel-heading span input', function(){
+
+		if (this.exists('div.panel-heading span input')) {
+    			this.test.assertExists('div.panel-heading span input');
+			this.evaluate(function() {
+				document.querySelector('input[name="allbox"]').click();
+			});
+			this.test.assertExists('a#delete');
+			this.click('a#delete');
+			this.then(function(){
+				forumLoginMethod.logoutFromApp();
+			});
+		}
+	}, function(){
+		utils.info('topics not found');
+		forumLoginMethod.logoutFromApp();
+	});
+};

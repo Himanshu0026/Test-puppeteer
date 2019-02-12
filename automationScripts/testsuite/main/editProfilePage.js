@@ -12,8 +12,6 @@ editProfilePage.featureTest = function(){
 		utils.info(" Title of the page :"+this.getTitle());
 		forumLoginMethod.loginToForumBackEnd();
 	}).then(function(){
-	//delete all topics
-	profilePageTests.deleteTopics();
 	//Disable Signature  for Registered user from group Permission
 	editProfilePageTests.editProfileDisableSignature();
 	//Enable Signature  for Registered user from group Permission
@@ -23,27 +21,22 @@ editProfilePage.featureTest = function(){
 	//verify with edit signature
 	editProfilePageTests.editSignatures();
 	//Verify with delete signature
-	editProfilePageTests.deleteSignature();
+	//editProfilePageTests.deleteSignature();
 	//Disable CustomTitle  for Registered user from group Permission
 	editProfilePageTests.disableCustomTitle();
 	//Verify by add a custom user title.
 	editProfilePageTests.enableCustomTitle();
 	//Verify with edit custom member title.
 	editProfilePageTests.editCustomTitle();
-	//Verify with delete custom user title
-	editProfilePageTests.deleteCustomTitle();
 	//Verify the shield icon for registered user  on edit profile page
-	editProfilePageTests.shieldIcon();
 	//Verify the tool tip on the shield icon
-	editProfilePageTests.toolTipShieldIcon();
+	editProfilePageTests.shieldIcon();
 	//Verify the shield icon for registered user  on edit profile page by the admin
 	editProfilePageTests.shieldIconRegisteruser();
 	//Verify with invalid birthday(future year)
-	editProfilePageTests.invalidBirthday();
 	//verify with invalid birthday(future month)
-	editProfilePageTests.invalidFutureMonth();
 	//verify with enter full name greater then maximum limits(30)
-	editProfilePageTests.verifyFullName();
+	editProfilePageTests.invalidBirthday();
 	//Verify with none option in instant message, Aim, Jabber
 	editProfilePageTests.instantMsg();
 	});

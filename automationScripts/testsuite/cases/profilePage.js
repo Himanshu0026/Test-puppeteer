@@ -16,33 +16,34 @@ var registerMethod=require('../methods/register.js');
 var profilePageTests = module.exports = {};
 var registerUser='';
 
-//add delete method
-profilePageTests.deleteTopics=function() {
-	casper.thenOpen(config.url, function(){
-		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).waitForSelector('div.panel-heading span input', function(){
-		if (this.exists('div.panel-heading span input')) {
-    	this.test.assertExists('div.panel-heading span input');
+//Verify with sending message by message button when message permission is disable from back end
+profilePageTests.profilePageMessageButtonDisable=function(){
+	casper.thenOpen(config.backEndUrl, function(){
+		utils.info('Case 1[Verify with sending message by message button when message permission is disable from back end]');
+	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function(){
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+		this.test.assertSelectorHasText('#ddSettings', 'General');
+		this.click('a[href="/tool/members/mb/settings?tab=General"]');
+	}).waitForSelector('button.button.btn-m.btn-blue', function(){
+		backEndForumRegisterMethod.enableDisableMessages(false);
+	}).thenOpen(config.url, function(){
+		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+	}).waitForSelector('ul.nav.pull-right span.caret', function(){
+			this.click('ul.nav.pull-right span.caret');
 			this.evaluate(function() {
-				document.querySelector('input[name="allbox"]').click();
+				document.querySelector('a#user-nav-panel-profile').click();
 			});
-			this.test.assertExists('a#delete');
-			this.click('a#delete');
-			this.then(function(){
-				forumLoginMethod.logoutFromApp();
-			});
-		}
-	}, function(){
-		utils.info('topics not found');
-		forumLoginMethod.logoutFromApp();
+		this.waitForSelector('a#PostsOFUser', function(){
+			this.test.assertDoesntExist('a#send_message', 'message button not found on profilePage');
+		});
 	});
 };
 
 //Verify with sending message by message button.
 profilePageTests.profilePageMessageButton=function(){
 	var pmessage = "";
-	casper.then(function(){
-		utils.info('Case 1 [Verify with sending message by message button.]');
+	casper.thenOpen(config.backEndUrl, function(){
+		utils.info('Case 2 [Verify with sending message by message button.]');
 		this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function(){
 			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 			this.test.assertSelectorHasText('#ddSettings', 'General');
@@ -50,7 +51,6 @@ profilePageTests.profilePageMessageButton=function(){
 		}).waitForSelector('button.button.btn-m.btn-blue', function(){
 			backEndForumRegisterMethod.enableDisableMessages(true);
 		}).thenOpen(config.url, function(){
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 			this.waitForSelector('ul.nav.pull-right span.caret', function(){
 				this.click('ul.nav.pull-right span.caret');
 				this.evaluate(function() {
@@ -69,31 +69,9 @@ profilePageTests.profilePageMessageButton=function(){
 					"pmessage" : pmessage
 				};
 				privateMessageMethod.newMessage(senderMsgInfo);
+			}).then(function(){
+				forumLoginMethod.logoutFromApp();
 			});
-		});
-	});
-};
-
-//Verify with sending message by message button when message permission is disable from back end
-
-profilePageTests.profilePageMessageButtonDisable=function(){
-	casper.thenOpen(config.backEndUrl, function(){
-		utils.info('Case 2[Verify with sending message by message button when message permission is disable from back end]');
-	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function(){
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-		this.test.assertSelectorHasText('#ddSettings', 'General');
-		this.click('a[href="/tool/members/mb/settings?tab=General"]');
-	}).waitForSelector('button.button.btn-m.btn-blue', function(){
-		backEndForumRegisterMethod.enableDisableMessages(false);
-	}).thenOpen(config.url, function(){
-		this.waitForSelector('ul.nav.pull-right span.caret', function(){
-			this.click('ul.nav.pull-right span.caret');
-			this.evaluate(function() {
-				document.querySelector('a#user-nav-panel-profile').click();
-			});
-		}).waitForSelector('a#PostsOFUser', function(){
-			this.test.assertDoesntExist('a#send_message', 'message button not found on profilePage');
-			forumLoginMethod.logoutFromApp();
 		});
 	});
 };
@@ -101,6 +79,7 @@ profilePageTests.profilePageMessageButtonDisable=function(){
 //Verify all post tab before start a topic/or post.
 profilePageTests.profilePageAllPostTab=function(){
 	casper.thenOpen(config.url, function(){
+		utils.info('Case 3[Verify all post tab before start a topic/or post.]');
 		forumLoginMethod.loginToApp(loginJSON.pmMsgUser.username, loginJSON.pmMsgUser.password);
 	}).waitForSelector('ul.nav.pull-right span.caret', function(){
 		this.click('ul.nav.pull-right span.caret');
@@ -111,26 +90,31 @@ profilePageTests.profilePageAllPostTab=function(){
 		this.click('a#PostsOFUser');
 	}).waitForSelector('div.alert.alert-info.text-center', function(){
 		this.test.assertSelectorHasText('li:nth-child(1) span.profile-count', '0');
+	}).waitForSelector('a#Topics_Started', function(){
+		this.click('a#Topics_Started');
+		//also verified postcount on profilePage
+	}).waitForSelector('div.alert.alert-info.text-center', function(){
+		this.test.assertSelectorHasText('li:nth-child(1) span.profile-count', '0');
 	});
 };
 
 //Verify with All post tab after start a topic/post
 profilePageTests.profilePageAfterStartTopic=function(){
-	//for another post 10 seconds wait
 	casper.thenOpen(config.url, function(){
-		this.waitForSelector('a[href="/post/printadd"]', function(){
-			this.evaluate(function() {
-				document.querySelector('a[href="/post/printadd"]').click();
-			});
-			topicMethod.createTopic(composeTopicJSON.ValidCredential);
-		}).waitForText(composeTopicJSON.ValidCredential.content, function(){
-			forumLoginMethod.logoutFromApp();
-		}).thenOpen(config.url, function(){
-			forumLoginMethod.loginToApp(loginJSON.pmMsgUser.username, loginJSON.pmMsgUser.password);
-		}).waitForSelector('form[name="posts"] a.topic-title', function(){
-			this.test.assertExists('form[name="posts"] a.topic-title');
-			this.click('form[name="posts"] a.topic-title');
-		}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
+		utils.info('Case 4[Verify with All post tab after start a topic/post]');
+	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
+		this.evaluate(function(){
+			document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
+		});
+	}).waitForSelector('a[href="#forums"]', function(){
+		deletePostMethod.getCategoryHrefFrontend('ComposeCategory');
+	}).waitForSelector('div#ajax_subscription_vars a', function(){
+		this.click('div#ajax_subscription_vars a');
+	}).then(function(){
+		topicMethod.createTopic(composeTopicJSON.ValidCredential);
+	}).waitForText(composeTopicJSON.ValidCredential.content, function(){
+		this.waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
 			this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Post a reply');
 			//Verify with the visiblity of  reply button.
 			//verify with the reply button on top of the page.
@@ -159,38 +143,14 @@ profilePageTests.profilePageAfterStartTopic=function(){
 				});
 			}).waitForSelector('a#PostsOFUser', function(){
 				this.click('a#PostsOFUser');
-			}).waitForText('post reply');
-		});
-	});
-};
-
-//Verify with All post tab after delete a topic/post
-profilePageTests.profilePageDeletePost=function(){
-	casper.thenOpen(config.url, function(){
-		utils.info('Case 5[Verify with All post tab after delete a topic/post]');
-	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
-		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
-		this.evaluate(function(){
-			document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
-		});
-	}).waitForSelector('a[href="#forums"]', function(){
-		deletePostMethod.getCategoryHrefFrontend('ComposeCategory');
-	}).waitForSelector('a#forum-title', function(){
-		this.waitForSelector('input[name="allbox"]', function(){
-			this.evaluate(function(){
-				document.querySelector('input[name="allbox"]').click();
+			}).waitForText('post reply', function(){
+				var actualPostCount=casper.fetchText('li:nth-child(1) span.profile-count');
+				actualcount=actualPostCount.trim();
+				//timeout occurs sometime added wait
+				this.wait(1000, function(){});
+			}).then(function(){
+				this.test.assertEquals(actualcount, profilePageJSON.expectedPostCount.count, 'both the outputs are equals');
 			});
-			this.test.assertExists('a#delete', 'delete icon found on topic listing page');
-			this.click('a#delete');
-		}).waitForSelector('ul.nav.pull-right span.caret', function(){
-			this.click('ul.nav.pull-right span.caret');
-			this.evaluate(function() {
-				document.querySelector('a#user-nav-panel-profile').click();
-			});
-		}).waitForSelector('a#PostsOFUser', function(){
-			this.click('a#PostsOFUser');
-		}).waitForSelector('div.alert.alert-info.text-center', function(){
-			this.test.assertSelectorHasText('li:nth-child(1) span.profile-count', '0');
 		});
 	});
 };
@@ -199,7 +159,7 @@ profilePageTests.profilePageDeletePost=function(){
 //verify with before start a topic.
 profilePageTests.profilePageTopicTab=function() {
 	casper.thenOpen(config.url, function(){
-		utils.info('Case 7[Verify with Topic started tab before start a topic..]');
+		utils.info('Case 5[Verify with Topic started tab before start a topic..]');
 	}).then(function(){
 		this.waitForSelector('ul.nav.pull-right span.caret', function(){
 			this.click('ul.nav.pull-right span.caret');
@@ -217,12 +177,11 @@ profilePageTests.profilePageTopicTab=function() {
 //Verify with topic started tab after start a topic.
 profilePageTests.profilePageTopicTabCreateTopic=function() {
 	casper.thenOpen(config.url, function(){
-		utils.info('Case 8[Verify with topic started tab after start a topic.]');
+		utils.info('Case 6[Verify with topic started tab after start a topic.]');
 		this.waitForSelector('a[href="/post/printadd"]', function(){
 			this.evaluate(function() {
 				document.querySelector('a[href="/post/printadd"]').click();
 			});
-		//10seconds wait is needed for another topic
 		}).then(function(){
 			topicMethod.createTopic(composeTopicJSON.ValidCredential);
 		}).waitForText(composeTopicJSON.ValidCredential.content, function(){
@@ -241,7 +200,7 @@ profilePageTests.profilePageTopicTabCreateTopic=function() {
 //Verify with All post tab after delete a topic/post
 profilePageTests.profilePageTopicEditTopicTitle=function() {
 	casper.thenOpen(config.url, function(){
-		utils.info('Case 9[verify with edit topic title]');
+		utils.info('Case 7[verify with edit topic title]');
 		this.waitForSelector('form[name="posts"] a.topic-title', function(){
 			casper.click('form[name="posts"] a.topic-title');
 		}).waitForSelector('small#editTopic', function(){
@@ -261,56 +220,16 @@ profilePageTests.profilePageTopicEditTopicTitle=function() {
 			var topicTitle=this.getHTML('div#feed-main div div div span.post-body-author a');
 			this.test.assertNotEquals(topicTitle, profilePageJSON.editTopicTitle.oldTitle, 'both the title are not equals');
 		}).then(function(){
-			this.test.assertExists('input[name="id"]', 'delete dropdown open successfully');
-			this.click('input[type="checkbox"]');
-		}).then(function(){
-			this.test.assertExists('a#delete', 'delete pop-up found');
-			this.click('a#delete');
-			this.wait(1000, function(){});
-		}).then(function(){
 			forumLoginMethod.logoutFromApp();
 		});
-	});
-};
-
-//delete topics
-profilePageTests.deleteTopic=function() {
-	casper.thenOpen(config.url, function(){
-		utils.info('************************Delete Users Topics*********************');
-		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
-		if (this.exists('div.panel-heading span input')) {
-    			this.test.assertExists('div.panel-heading span input');
-			this.evaluate(function() {
-				document.querySelector('input[name="allbox"]').click();
-			});
-			this.test.assertExists('a#delete');
-			this.click('a#delete');
-			this.wait(1000, function(){});
-		}
-	}).then(function(){
-		this.test.assertTextDoesntExist('ONEpluse', 'page doesnt contain post reply post');
-	}).then(function(){
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
 //Likes tab
 //Verify with like the post.
 profilePageTests.profilePageLikesTab=function(){
-	casper.thenOpen(config.backEndUrl , function(){
-		utils.info('Case 11[Verify with like the post.]');
-		this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
-			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-		}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]', function() {
-			this.test.assertSelectorHasText('#ddSettings', 'General');
-			this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]');
-			backEndForumRegisterMethod.enableDisableLikesReputation(true);
-		}).then(function(){
-			profilePageMethod.addTopicPost();
-		}).then(function(){
-			forumLoginMethod.logoutFromApp();
-		}).thenOpen(config.url, function(){
+	 casper.thenOpen(config.url, function(){
+			utils.info('Case 8[Verify with like the post.]');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.username );
 		}).waitForSelector('form[name="posts"] a.topic-title', function(){
 			this.click('form[name="posts"] a.topic-title');
@@ -318,10 +237,10 @@ profilePageTests.profilePageLikesTab=function(){
 				if(this.visible('i.glyphicon.glyphicon-like-alt')){
 					this.click('i.glyphicon.glyphicon-like-alt');
 					this.waitForSelector('a.text-muted.voted-yes', function(){
-						utils.info(' Post liked by the user');
+						utils.info('Post liked by the user');
 					});
 				}else{
-					utils.error(' like thump not visible');
+					utils.error('like thump not visible');
 				}
 			});
 		}).then(function(){
@@ -346,10 +265,10 @@ profilePageTests.profilePageLikesTab=function(){
 				if (this.visible('i.glyphicon.glyphicon-dislike-alt')){
 					this.click('i.glyphicon.glyphicon-dislike-alt');
 					this.waitForSelector('a.dislike_post.text-muted.voted-no', function() {
-						utils.info(' Post disliked by the user');
+						utils.info('Post disliked by the user');
 					});
 				} else {
-					utils.error(' Dislike thump not visible');
+					utils.error('Dislike thump not visible');
 				}
 			}).then(function(){
 				this.test.assertExists('ul.nav.pull-right span.caret');
@@ -361,18 +280,18 @@ profilePageTests.profilePageLikesTab=function(){
 
 			}).wait(1000, function(){});
 				this.test.assertTextDoesntExist(profilePageJSON.editTopic.oldText, 'page doesnt contain hey there topic');
+			}).then(function(){
 				forumLoginMethod.logoutFromApp();
 			});
-		});
-	//});
-};
+		//});
+	};
 
 //verify with delete the post that you liked
 profilePageTests.profilePageDeleteLikePost=function(){
 	var index=1;
 	//login by admin user to delete the liked post--------
 	casper.thenOpen(config.url, function(){
-		utils.info('Case 12[Verify with delete the post that you liked.]');
+		utils.info('Case 9[Verify with delete the post that you liked.]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
 		this.click('form[name="posts"] a.topic-title');
@@ -406,6 +325,37 @@ profilePageTests.profilePageDeleteLikePost=function(){
 		this.click('span.feed-filter.top.cleared a:nth-child(3)');
 	}).then(function(){
 		this.test.assertTextDoesntExist('post reply', 'page doesnt contain post reply post');
+	}).then(function(){
+		this.waitForSelector('ul.nav.pull-right span.caret', function(){
+			this.click('ul.nav.pull-right span.caret');
+			this.evaluate(function() {
+				document.querySelector('a#user-nav-panel-profile').click();
+			});
+		}).waitForSelector('a#PostsOFUser', function(){
+			this.click('a#PostsOFUser');
+		}).waitForSelector('div.alert.alert-info.text-center', function(){
+			this.test.assertSelectorHasText('li:nth-child(1) span.profile-count', '0');
+		}).then(function(){
+			forumLoginMethod.logoutFromApp();
+		});
+	});
+};
+
+//Verify with All post tab after delete a topic/post
+profilePageTests.profilePageDeletePost=function(){
+	casper.thenOpen(config.url, function(){
+		utils.info('Case 10[Verify with All post tab after delete a topic/post]');
+		forumLoginMethod.loginToApp(loginJSON.pmMsgUser.username, loginJSON.pmMsgUser.password);
+	}).waitForSelector('ul.nav.pull-right span.caret', function(){
+		this.click('ul.nav.pull-right span.caret');
+		this.evaluate(function() {
+			document.querySelector('a#user-nav-panel-profile').click();
+		});
+	}).waitForSelector('a#PostsOFUser', function(){
+		this.click('a#PostsOFUser');
+	}).waitForSelector('div.alert.alert-info.text-center', function(){
+		this.test.assertSelectorHasText('li:nth-child(1) span.profile-count', '0');
+	}).then(function(){
 		forumLoginMethod.logoutFromApp();
 	});
 };
@@ -415,7 +365,7 @@ profilePageTests.profilePagePostCount=function() {
 	var expectedPostCount="0";
 	var actualcount;
 	casper.thenOpen(config.backEndUrl, function(){
-		utils.info('Case 13[Verify post count for newly register user.]');
+		utils.info('Case 11[Verify post count for newly register user.]');
 		this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 		}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
@@ -451,7 +401,7 @@ profilePageTests.profilePagePostCountAddtopic=function() {
 	var expectedPostCount="2";
 	var actualcount="0";
 	casper.thenOpen(config.url, function(){
-		utils.info('Case 14[Verify post count with add topic/post]');
+		utils.info('Case 12[Verify post count with add topic/post]');
 		profilePageMethod.addTopicPost();
 	}).then(function(){
 		this.test.assertExists('ul.nav.pull-right span.caret');
@@ -473,9 +423,9 @@ profilePageTests.profilePagePostCountAddtopic=function() {
 
 //Verify with delete the post
 profilePageTests.profilePagePostCountDeletePost=function(){
-	var expectedPostCount="0";
 	casper.thenOpen(config.url, function(){
-		utils.info('Case 15[Verify post count with delete the post]');
+		utils.info('Case 13[Verify post count with delete the post]');
+		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
 	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
 		this.evaluate(function(){
@@ -508,7 +458,7 @@ profilePageTests.profilePagePostCountDeletePost=function(){
 //verify with reputation link after disable the permissions
 profilePageTests.profilePageReputationDisable=function(){
 	casper.thenOpen(config.backEndUrl , function() {
-		utils.info('Case 16[Verify with reputation link after disable the permissions]');
+		utils.info('Case 14[Verify with reputation link after disable the permissions]');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]', function() {
@@ -534,7 +484,7 @@ profilePageTests.profilePageReputationDisable=function(){
 
 profilePageTests.profilePageReputationEnable=function(){
 	casper.thenOpen(config.backEndUrl , function() {
-		utils.info('Case 17[Verify with reputation link after enable the permissions]');
+		utils.info('Case 15[Verify with reputation link after enable the permissions]');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=General"]', function() {
@@ -557,17 +507,14 @@ profilePageTests.profilePageReputationEnable=function(){
 profilePageTests.profilePageEditUserIcon=function(){
 	var oldUserName="";
 	var newUsername="hell";
-	casper.thenOpen(config.backEndUrl, function(){
-		utils.info('Case 18[Verify with edit user icon.]');
-	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
-                this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-                this.click('a[href="/tool/members/mb/usergroup"]');
-	}).waitForSelector('div#tab_wrapper', function(){
-        	backEndForumRegisterMethod.viewGroupPermissions('General');
-	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('General', 'change_username', true);
-	}).thenOpen(config.url, function(){
-		this.test.assertExists('ul.nav.pull-right span.caret');
+	casper.thenOpen(config.url, function(){
+		utils.info('Case 16[Verify with edit user icon.]');
+		registerMethod.registerMultipleUsers(1, function(users){
+			registerUser = users;
+		});
+	}).then(function(){
+		forumLoginMethod.loginToApp(registerUser, registerUser);
+	}).waitForSelector('ul.nav.pull-right span.caret', function(){
 		this.click('ul.nav.pull-right span.caret');
 		this.evaluate(function() {
 			document.querySelector('a#user-nav-panel-profile').click();
@@ -599,14 +546,13 @@ profilePageTests.profilePageEditUserIcon=function(){
 	});
 };
 
-
 //Verify with delete icon delete register user
 //admin user->delete other user account from settings page.
 //create topic from this register user and delete it from admin user
 profilePageTests.profilePageDeleteUser= function(){
 	casper.thenOpen(config.url, function(){
-		utils.info('Case 19[Verify with delete icon delete register user]');
-		utils.info('Case 19[MemberDelete -> Verify with create topic from this register user and delete it from admin user]');
+		utils.info('Case 17[Verify with delete icon delete register user]');
+		utils.info('Case 17[MemberDelete -> Verify with create topic from this register user and delete it from admin user]');
 	}).waitForSelector('a[href="/post/printadd"]', function(){
 		casper.evaluate(function(){
 		  document.querySelector('a[href="/post/printadd"]').click();
@@ -646,7 +592,7 @@ profilePageTests.profilePageDeleteUser= function(){
 //Verify after like the post(one user like your only one post)for newly register user.
 profilePageTests.profilePageReputationCount=function(){
 	casper.thenOpen(config.url, function(){
-		utils.info('Case 20[Verify with delete icon delete register user check reputation count]');
+		utils.info('Case 18[Verify with delete icon delete register user check reputation count]');
 		profilePageMethod.newaddTopicPost();
 	}).then(function(){
 		forumLoginMethod.logoutFromApp();
@@ -693,7 +639,7 @@ profilePageTests.profilePageReputationCount=function(){
 //Verify after like the post(one user like your multiple post one post)
 profilePageTests.profilePageReputationCountMultiplePostLike=function(){
 	casper.thenOpen(config.url, function(){
-		utils.info('Case 21[Verify after like the post(one user like your multiple post one post)]');
+		utils.info('Case 19[Verify after like the post(one user like your multiple post one post)]');
 		profilePageMethod.newaddTopicPost();
 	}).then(function(){
 		forumLoginMethod.logoutFromApp();
