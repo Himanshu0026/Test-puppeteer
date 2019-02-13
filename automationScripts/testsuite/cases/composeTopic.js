@@ -37,6 +37,7 @@ composeTopicTests.composeTopicPagination=function(){
     backEndForumRegisterMethod.setTopicsPerPage('10');
   }).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.ValidCredential.username, loginJSON.ValidCredential.password);
+	}).waitWhileVisible('#td_tab_login', function() {
   }).waitForSelector('a[href="/post/printadd"]', function(){
     this.repeat(11, function(){
       this.evaluate(function(){
@@ -93,6 +94,7 @@ composeTopicTests.composeTopicWithoutCategory=function(username, password){
 		utils.info('Case 2[Verify Preview Post of Compose Topic on postlisting page (For Registered User/Admin)]');
 		utils.info('Case 2[Verify Compose Topic without  selecting any category(Registered)]');
 		forumLoginMethod.loginToApp(username, password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('a[href="/post/printadd"]', function(){
     this.evaluate(function(){
       document.querySelector('a[href="/post/printadd"]').click();
@@ -112,6 +114,7 @@ composeTopicTests.composeTopicPostPreview=function(username, password){
 		utils.info('******************************ComposeTopic********************************************');
 		utils.info('Case 3[Verify postPreview from general user from categoryListingPage]');
 		forumLoginMethod.loginToApp(username, password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
 		this.evaluate(function(){
@@ -141,6 +144,7 @@ composeTopicTests.composeTopicRegisterstartTopicdisablecategory=function(){
 	}).then(function(){
 		casper.thenOpen(config.url, function(){
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 			this.evaluate(function(){
 				document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();

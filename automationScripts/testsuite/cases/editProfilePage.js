@@ -24,7 +24,7 @@ editProfilePageTests.editProfileDisableSignature=function(){
 		this.test.assertSelectorHasText('div#tab_wrapper p font','Your user group settings have been updated.');
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-	}).then(function(){
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertExists('ul.nav.pull-right span.caret', 'dropdown toggle button present');
 		this.click('ul.nav.pull-right span.caret');
 		this.click('span.pull-right.user-nav-panel li:nth-child(4) a');
@@ -124,7 +124,7 @@ editProfilePageTests.editProfileEnableSignature=function(){
 				forumLoginMethod.logoutFromApp();
 			}).thenOpen(config.url, function(){
 				forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-			}).then(function(){
+			}).waitWhileVisible('#td_tab_login', function() {
 				this.test.assertExists('form[name="posts"] a.topic-title', 'topic found on forum');
 				this.click('form[name="posts"] a.topic-title');
 			}).waitForText('My new signature');
@@ -196,7 +196,7 @@ editProfilePageTests.disableCustomTitle=function(){
 		this.test.assertSelectorHasText('div#tab_wrapper p font','Your user group settings have been updated.');
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-	}).then(function(){
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertExists('ul.nav.pull-right span.caret', 'dropdown toggle button present');
 		this.click('ul.nav.pull-right span.caret');
 		this.click('span.pull-right.user-nav-panel li:nth-child(4) a');
@@ -254,7 +254,7 @@ editProfilePageTests.editCustomTitle=function(){
 				}
 		  }).thenOpen(config.url, function(){
 				forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-			}).then(function(){
+			}).waitWhileVisible('#td_tab_login', function() {
 				this.test.assertExists('ul.nav.pull-right span.caret');
 			  this.click('ul.nav.pull-right span.caret');
 			  this.click('span.pull-right.user-nav-panel li:nth-child(4) a');
@@ -338,7 +338,7 @@ editProfilePageTests.shieldIconRegisteruser=function(){
 	casper.thenOpen(config.url, function(){
 			utils.info('Case 9[Verify the shield icon for registered user  on edit profile pgae by the admin.]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).then(function(){
+	}).waitWhileVisible('#td_tab_login', function() {
 		var userId = casper.evaluate(function(){
 			var userId = document.querySelector('div#topics div div div form div div:nth-child(3) ul li span:nth-child(1) span:nth-child(1) a');
 			var userHref=userId.getAttribute('href');
@@ -373,7 +373,7 @@ editProfilePageTests.invalidBirthday=function(){
 		 backEndForumRegisterMethod.changeDefaultRegistrationOptions(setOptions);
 	 }).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-	}).then(function(){
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertExists('ul.nav.pull-right span.caret', 'dropdown toggle button present');
 		this.click('ul.nav.pull-right span.caret');
 		this.click('span.pull-right.user-nav-panel li:nth-child(4) a');

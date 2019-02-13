@@ -28,6 +28,7 @@ profilePageTests.profilePageMessageButtonDisable=function(){
 		backEndForumRegisterMethod.enableDisableMessages(false);
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('ul.nav.pull-right span.caret', function(){
 			this.click('ul.nav.pull-right span.caret');
 			this.evaluate(function() {
@@ -81,6 +82,7 @@ profilePageTests.profilePageAllPostTab=function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 3[Verify all post tab before start a topic/or post.]');
 		forumLoginMethod.loginToApp(loginJSON.pmMsgUser.username, loginJSON.pmMsgUser.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('ul.nav.pull-right span.caret', function(){
 		this.click('ul.nav.pull-right span.caret');
 		this.evaluate(function() {
@@ -231,6 +233,7 @@ profilePageTests.profilePageLikesTab=function(){
 	 casper.thenOpen(config.url, function(){
 			utils.info('Case 8[Verify with like the post.]');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.username );
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('form[name="posts"] a.topic-title', function(){
 			this.click('form[name="posts"] a.topic-title');
 			this.waitForSelector('div#posts-list', function(){
@@ -259,6 +262,7 @@ profilePageTests.profilePageLikesTab=function(){
 		//dislike the topic/post which already liked by the register user---------
 		}).thenOpen(config.url, function(){
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.username);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('form[name="posts"] a.topic-title', function(){
 			this.click('form[name="posts"] a.topic-title');
 			this.waitForSelector('div#posts-list', function(){
@@ -293,6 +297,7 @@ profilePageTests.profilePageDeleteLikePost=function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 9[Verify with delete the post that you liked.]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('span#first_coloumn_2 div div div:nth-child(1) div a i', function(){
@@ -346,6 +351,7 @@ profilePageTests.profilePageDeletePost=function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 10[Verify with All post tab after delete a topic/post]');
 		forumLoginMethod.loginToApp(loginJSON.pmMsgUser.username, loginJSON.pmMsgUser.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('ul.nav.pull-right span.caret', function(){
 		this.click('ul.nav.pull-right span.caret');
 		this.evaluate(function() {
@@ -374,7 +380,7 @@ profilePageTests.profilePagePostCount=function() {
 			backEndForumRegisterMethod.enableDisableApproveNewRegistrations(false);
 		}).thenOpen(config.url, function(){
 			forumLoginMethod.loginToApp(loginJSON.pmMsgUser.username, loginJSON.pmMsgUser.password);
-		}).then(function(){
+		}).waitWhileVisible('#td_tab_login', function() {
 			this.waitForSelector('ul.nav.pull-right span.caret', function(){
 				this.click('ul.nav.pull-right span.caret');
 				this.evaluate(function() {
@@ -426,6 +432,7 @@ profilePageTests.profilePagePostCountDeletePost=function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 13[Verify post count with delete the post]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
 		this.evaluate(function(){
@@ -471,7 +478,8 @@ profilePageTests.profilePageReputationDisable=function(){
 		});
 	}).then(function(){
 		forumLoginMethod.loginToApp(registerUser, registerUser);
-		this.waitForSelector('ul.nav.pull-right span.caret', function(){
+		this.waitWhileVisible('#td_tab_login', function() {
+		}).waitForSelector('ul.nav.pull-right span.caret', function(){
 			this.click('ul.nav.pull-right span.caret');
 			this.evaluate(function() {
 				document.querySelector('a#user-nav-panel-profile').click();
@@ -514,6 +522,7 @@ profilePageTests.profilePageEditUserIcon=function(){
 		});
 	}).then(function(){
 		forumLoginMethod.loginToApp(registerUser, registerUser);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('ul.nav.pull-right span.caret', function(){
 		this.click('ul.nav.pull-right span.caret');
 		this.evaluate(function() {
@@ -563,6 +572,7 @@ profilePageTests.profilePageDeleteUser= function(){
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
 		var userHref = casper.evaluate(function() {
 			var userId = document.querySelectorAll('div.panel-body.table-responsive ul li:nth-child(1) span.col-md-9 span.image-wrapper a');
@@ -585,6 +595,7 @@ profilePageTests.profilePageDeleteUser= function(){
 		//verified register user which deleted by admin from settings page
 		this.thenOpen(config.url, function(){
 			forumLoginMethod.loginToApp(registerUser, registerUser);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForText(memberDeleteJSON.checkedUser.expectedErrorMsg);
 	});
 };
@@ -599,24 +610,27 @@ profilePageTests.profilePageReputationCount=function(){
 	//like single post from 3 different users
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
 		thumpsUpDownMethod.clickOnLike();
 	}).then(function(){
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.ValidCredential.username, loginJSON.ValidCredential.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
 		thumpsUpDownMethod.clickOnLike();
 	}).then(function(){
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).then(function(){
+	}).waitWhileVisible('#td_tab_login', function() {
 		thumpsUpDownMethod.clickOnLike();
 	}).then(function(){
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(profilePageMethod.newUserData, profilePageMethod.newUserData);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
 		this.test.assertExists('ul.nav.pull-right span.caret');
 		this.click('ul.nav.pull-right span.caret');
@@ -645,6 +659,7 @@ profilePageTests.profilePageReputationCountMultiplePostLike=function(){
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(profilePageMethod.newUserData, profilePageMethod.newUserData);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
@@ -665,6 +680,7 @@ profilePageTests.profilePageReputationCountMultiplePostLike=function(){
 			forumLoginMethod.logoutFromApp();
 		}).thenOpen(config.url, function(){
 			forumLoginMethod.loginToApp(loginJSON.pmMsgUser.username, loginJSON.pmMsgUser.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('form[name="posts"] a.topic-title', function(){
 			thumpsUpDownMethod.clickOnLike();
 		}).wait(1000, function(){
@@ -677,6 +693,7 @@ profilePageTests.profilePageReputationCountMultiplePostLike=function(){
 			forumLoginMethod.logoutFromApp();
 		}).thenOpen(config.url, function(){
 			forumLoginMethod.loginToApp(profilePageMethod.newUserData, profilePageMethod.newUserData);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('ul.nav.pull-right span.caret', function(){
 			this.test.assertExists('ul.nav.pull-right span.caret');
 			this.click('ul.nav.pull-right span.caret');

@@ -13,7 +13,6 @@ var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var forumLoginMethod = require('../methods/login.js');
 var profilePageMethod= require('../methods/profilePage.js');
 var deletePostMethod = require('../methods/deletePost.js');
-var profilePageTests = require('../cases/profilePage.js');
 deletePostTests = module.exports = {};
 
 //code written for remove the dependency issues
@@ -40,6 +39,7 @@ deletePostTests.deletePostCreateCategory = function() {
 deletePostTests.deleteAllTopicCheckboxAdmin=function(){
 	casper.thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('a[href="/post/printadd"]', function(){
 		this.test.assertExists('a[href="/post/printadd"]', 'start new topic selector present on forum');
 		casper.evaluate(function() {
@@ -200,6 +200,7 @@ deletePostTests.deletePostDropDownAdminUser=function(){
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
 		this.evaluate(function() {
@@ -337,7 +338,7 @@ deletePostTests.deletePostProfilePageAdmin=function(){
 		}).then(function(){
 			forumLoginMethod.logoutFromApp();
 		}).then(function(){
-			profilePageTests.deleteTopics();
+			profilePageMethod.deleteTopics();
 		});
 	});
 };
@@ -831,7 +832,7 @@ deletePostTests.deleteOwnTopicDisablePostEnable=function(){
 			}).then(function(){
 				forumLoginMethod.logoutFromApp();
 			}).then(function(){
-				profilePageTests.deleteTopics();
+				profilePageMethod.deleteTopics();
 			});
 		});
 	});

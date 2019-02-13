@@ -13,7 +13,6 @@ var deletePostMethod = require('../methods/deletePost.js');
 var profilePageMethod= require('../methods/profilePage.js');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var moderatorPermissionsMethod = require('../methods/moderatorPermissions.js');
-var profilePageTests = require('../cases/profilePage.js');
 var followpinlockTest=module.exports = {};
 
 followpinlockTest.addModeratorByScenarioOne = function() {
@@ -561,7 +560,7 @@ followpinlockTest.voteOptionAgainstLockedTopic= function(){
 	}).then(function(){
 		forumLoginMethod.logoutFromApp();
 	}).then(function(){
-    profilePageTests.deleteTopics();
+    profilePageMethod.deleteTopics();
   });
 };
 
