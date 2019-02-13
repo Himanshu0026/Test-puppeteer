@@ -131,122 +131,122 @@ then
   sleep 1
 fi
 
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for THUMPS UP AND DOWN: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature=thumpsUpDown --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
-
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for DELETE POST: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature=deletePost --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
-
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for FOLLOW PIN LOCK: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature="followPinLock" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
-
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for FORUM-LISTING PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature=forumListingPage --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
-
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for MOVE TOPIC AND POST: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature="moveTopicAndPost" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
-
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for ADD POLL: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature=addPoll --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
-
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for POST APPROVAL: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature="postEventMemberApproval postTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
-
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for BackArrow: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature="backArrow" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
-
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for EVENT APPROVAL: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature="postEventMemberApproval eventTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
-
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for replyPost: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature="replyPost" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
-
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for TOPICS AND POST COUNT: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature="topicsPostCount" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
-
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for LATEST TOPIC PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature="latestTopic" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
-
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for MEMBER DELETE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature="memberDelete" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for THUMPS UP AND DOWN: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature=thumpsUpDown --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
+#
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for DELETE POST: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature=deletePost --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
+#
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for FOLLOW PIN LOCK: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature="followPinLock" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
+#
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for FORUM-LISTING PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature=forumListingPage --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
+#
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for MOVE TOPIC AND POST: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature="moveTopicAndPost" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
+#
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for ADD POLL: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature=addPoll --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
+#
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for POST APPROVAL: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature="postEventMemberApproval postTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
+#
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for BackArrow: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature="backArrow" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
+#
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for EVENT APPROVAL: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature="postEventMemberApproval eventTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
+#
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for replyPost: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature="replyPost" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
+#
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for TOPICS AND POST COUNT: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature="topicsPostCount" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
+#
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for LATEST TOPIC PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature="latestTopic" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
+#
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for MEMBER DELETE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature="memberDelete" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
 
 # checkAutomattionStatusToSkip
 #
