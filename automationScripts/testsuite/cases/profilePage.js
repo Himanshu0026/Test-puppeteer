@@ -595,7 +595,6 @@ profilePageTests.profilePageDeleteUser= function(){
 		//verified register user which deleted by admin from settings page
 		this.thenOpen(config.url, function(){
 			forumLoginMethod.loginToApp(registerUser, registerUser);
-		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForText(memberDeleteJSON.checkedUser.expectedErrorMsg);
 	});
 };
