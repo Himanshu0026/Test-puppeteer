@@ -244,6 +244,7 @@ deletePostTests.deletePostCheckboxAdmin=function(){
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
 		this.evaluate(function() {
@@ -348,7 +349,7 @@ deletePostTests.deletePostRegisteruser=function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 9[Verify by delete one topic -selecting by check box]');
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-	}).then(function(){
+	}).waitWhileVisible('#td_tab_login', function() {
 		casper.evaluate(function() {
 		  document.querySelector('a[href="/post/printadd"]').click();
 		});
@@ -644,7 +645,7 @@ deletePostTests.deleteOwnTopicEnablePostDisable=function(){
 		backEndForumRegisterMethod.editGroupPermissions('General', 'delete_posts', false);
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.deleteTopicUser.username, loginJSON.deleteTopicUser.password);
-	}).then(function(){
+	}).waitWhileVisible('#td_tab_login', function() {
 		casper.evaluate(function() {
 		  document.querySelector('a[href="/post/printadd"]').click();
 		});
@@ -683,6 +684,7 @@ deletePostTests.deleteOwnTopicDropdownTopicPostDisable=function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 17[Verify by delete one topic -selecting by check box register user]');
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('a[href="/post/printadd"]', function(){
 		this.test.assertExists('a[href="/post/printadd"]');
 		casper.evaluate(function() {
@@ -847,7 +849,7 @@ deletePostTests.deleteOwnProfilePageTopicdisablePostEnable=function(){
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.deleteTopicUser.username, loginJSON.deleteTopicUser.password);
-	}).then(function(){
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertExists('ul.nav.pull-right span.caret');
 		this.click('ul.nav.pull-right span.caret');
 		this.click('a#user-nav-panel-profile');
@@ -880,6 +882,7 @@ deletePostTests.deleteTopicCheckboxdisablePostdisable=function(){
 		backEndForumRegisterMethod.editGroupPermissions('General', 'delete_posts', false);
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a');
 		this.evaluate(function() {
@@ -960,6 +963,7 @@ deletePostTests.deleteTopicNewTop=function(data){
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 35[Verify with Delete Single Topic from New and Top from topiclistingpage.]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('a[href="/post/printadd"]', function(){
 		this.evaluate(function(){
 			document.querySelector('a[href="/post/printadd"]').click();
@@ -1102,7 +1106,7 @@ deletePostTests.checkTopicCountDeletedUser=function(){
 	}).waitForSelector('a#td_tab_login', function(){
 		casper.thenOpen(config.url, function(){
 			forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-		}).then(function(){
+		}).waitWhileVisible('#td_tab_login', function() {
 			this.test.assertExists('a.page-numbers.text-muted.open-popover', 'count present on topiclistingPage');
 		}).then(function(){
 			this.test.assertExists('input[name="id"]', 'topics checkbox found on topiclistingpage');

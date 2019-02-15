@@ -161,8 +161,9 @@ forumListingPageTest.verifyVariousSubCategoriesFrontEnd = function(){
 	}).waitForSelector('a[href="#forums"]', function(){
 	//checked for linked category on forumListingpage
 		deletePostMethod.getCategoryHrefFrontend(forumListingPageJSON.enableLinked.title);
-	}).waitForSelector('div#lga', function(){
-		this.test.assertExists('div#lga');
+	}).waitForUrl(forumListingPageJSON.linkedtext.data, function(){
+		utils.info('linked category url opened successfully');
+		//this.test.assertExists('div#lga');
 	}).thenOpen(config.url, function(){
 		this.test.assertExists('a#links-nav i');
 		this.click('a#links-nav i');
