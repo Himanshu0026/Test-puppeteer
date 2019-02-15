@@ -76,6 +76,7 @@ forumListingPageTest.verifyVariousCategoriesFrontEnd = function(){
 		utils.info('Case 2[Validate category with title field]');
                 utils.info('Case 3[Validate category with description field]');
                 forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+				}).waitWhileVisible('#td_tab_login', function() {
         }).waitForSelector('div#topics ul li:nth-child(2) a',function(){
    		this.test.assertExists('div#topics ul li:nth-child(2) a');
        		this.click('div#topics ul li:nth-child(2) a');

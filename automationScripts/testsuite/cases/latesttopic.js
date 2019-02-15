@@ -65,6 +65,7 @@ latestTopicTests.viewTopicPermission = function() {
                         backEndregisterMethod.editGroupPermissions('General', 'view_others_threads', false);
                 }).thenOpen(config.url, function(){
                         forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+                }).waitWhileVisible('#td_tab_login', function() {
                 }).waitForSelector('a[href="/post/printadd"]', function(){
                         this.test.assertTextDoesntExist(latestTopicJSON.topicContent.Text, 'topics text cannot be found on topicslistingpage');
                 }).then(function(){
@@ -79,6 +80,7 @@ latestTopicTests.viewOtherUsersTopic = function() {
                 //created topics from register user (haniuser)
                 utils.info('Case 3 [Verify Latest topics when View others topic content permission  is OFF register user.]');
                 forumLoginMethod.loginToApp(loginJSON.deleteTopicUser.username, loginJSON.deleteTopicUser.password);
+        }).waitWhileVisible('#td_tab_login', function() {
         }).waitForSelector('a[href="/post/printadd"]', function(){
                 this.test.assertExists('a[href="/post/printadd"]', 'start new topic selector present on forum');
                 casper.evaluate(function() {
@@ -95,6 +97,7 @@ latestTopicTests.viewOtherUsersTopic = function() {
                 forumLoginMethod.logoutFromApp();
         }).thenOpen(config.url, function(){
                 forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+        }).waitWhileVisible('#td_tab_login', function() {
         }).waitForSelector('a[href="/post/printadd"]', function(){
                 this.test.assertDoesntExist(latestTopicJSON.ValidCredential.title, ' topics cannot be found on topiclistingpage');
         }).thenOpen(config.backEndUrl, function(){

@@ -37,6 +37,7 @@ backArrowTests.readAllPost = function() {
 	        utils.info('Case 1[Verify back arrow with Read all post button on topic listing page]');
 	}).waitForSelector('a[href="/post/printadd"]', function(){
                 forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+        }).waitWhileVisible('#td_tab_login', function() {
         }).waitForSelector('a[href="/post/printadd"]', function(){
 		this.evaluate(function() {
 		  document.querySelector('a[href="/post/printadd"]').click();
@@ -292,6 +293,7 @@ backArrowTests.lockcategorySubcategory = function() {
         casper.thenOpen(config.url, function(){
                 utils.info('Case 8[Verify back arrow with lock option on topic listing page]');
                 forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
+        }).waitWhileVisible('#td_tab_login', function() {
         }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
                 this.click('ul.nav.nav-tabs li:nth-child(2) a');
         }).waitForSelector('a[href="#forums"]', function(){
