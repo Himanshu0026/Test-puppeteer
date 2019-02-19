@@ -53,37 +53,14 @@ queueServices.addNewJob = function(jobArg, type, priorityNo){
 					var currentJobId = job.id;
 					var newBranch = job.data.branchName;
 					queueServices.stopAutomation(newBranch);
-					jobQueue.inactive( function( err, ids ) {
-						ids.forEach( function( id ) {
-							kue.Job.get( id, function( err, job ) {
-								if (job.data.branchName == newBranch && job.id != currentJobId) {
-									job.remove(function(err){
-										if (err) throw err;
-											console.log('removed inactive job for the already completed job with high priority with job id #%d', job.id);
-									});
-								}
-							});
-						});
-					});
+					queueServices.removeInactiveJobs(currentJobId);
 				} else
 					console.log("Getting error while adding job in queue: "+err);
 			});
 		} else {
 			var newBranch = jobArg.branchName;
 			queueServices.stopAutomation(newBranch);
-			jobQueue.inactive( function( err, ids ) {
-				ids.forEach( function( id ) {
-					console.log("the parameter in the inactive " +id);
-					kue.Job.get( id, function( err, job ) {
-						if (job.data.branchName == newBranch ) {
-							job.remove(function(err){
-								if (err) throw err;
-									console.log('removed inactive job for the inprogress branch job id #%d', job.id);
-							});
-						}
-					});
-				});
-			});
+			queueServices.removeInactiveJobs(0);
 		}
 	}else {
 		var job = jobQueue.create('backstop', jobArg).priority(priorityNo).save( function(err){
@@ -112,4 +89,20 @@ queueServices.stopAutomation = function(newBranch) {
 			});
 		});
 	}
+};
+
+queueServices.removeInactiveJobs = function(currentJobId) {
+	jobQueue.inactive( function( err, ids ) {
+		ids.forEach( function( id ) {
+			console.log("the parameter in the inactive " +id);
+			kue.Job.get( id, function( err, job ) {
+				if (job.data.branchName == newBranch || (job.data.branchName == newBranch && job.id != currentJobId)) {
+					job.remove(function(err){
+						if (err) throw err;
+							console.log('removed inactive job for the inprogress branch job id #%d', job.id);
+					});
+				}
+			});
+		});
+	});
 };
