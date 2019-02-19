@@ -95,7 +95,7 @@ queueServices.addNewJob = function(jobArg, type, priorityNo){
 		} else {
 			var globalCurrentRunningBranchData = globalCurrentRunningBranch.global.getCurrentRunningBranch();
 			console.log('globalCurrentRunningBranchData is = '+globalCurrentRunningBranchData);
-			var newBranch = jobArg.data.branchName;
+			var newBranch = jobArg.branchName;
 			if (newBranch === globalCurrentRunningBranchData) {
 				exec("/etc/automation/bin/stop_phantom.sh" , function(code, stdout, stderr) {
 					console.log('Exit code inside the stop_phantom.sh :', code);
