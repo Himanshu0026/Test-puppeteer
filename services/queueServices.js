@@ -46,40 +46,16 @@ jobQueue.process('backstop', function(job, done){
 //Adding new job in queue of "pushRequest" type
 queueServices.addNewJob = function(jobArg, type, priorityNo){
 	if(type == 'automation') {
-		console.log('the message of the commit'+jobArg.commitMessage);
 		var index = jobArg.commitMessage.search("inprogress");
-		console.log('the vale of index'+index);
 		if(index === -1 || jobArg.priorityNo === '-10') {
 			var job = jobQueue.create('pushRequest', jobArg).priority(priorityNo).save( function(err){
 				if( !err ) {
-					console.log( job.id );
 					var currentJobId = job.id;
-					console.log("new added job id is "+ job.id );
-					console.log('new added job branch name '+job.data.branchName);
-					console.log('new added job priority is '+job.data.priorityNo);
-					var globalCurrentRunningBranchData = globalCurrentRunningBranch.global.getCurrentRunningBranch();
-					console.log('globalCurrentRunningBranchData is = '+globalCurrentRunningBranchData);
 					var newBranch = job.data.branchName;
-					if (newBranch === globalCurrentRunningBranchData) {
-						exec("/etc/automation/bin/stop_phantom.sh" , function(code, stdout, stderr) {
-							console.log('Exit code inside the stop_phantom.sh :', code);
-							console.log( 'STOP_PHANTOMJS' );
-							var stopFile = '/etc/automation/log/stop.txt';
-							fs.writeFile(stopFile, 'STOP_PHANTOMJS', function (err) {
-								if (err)
-									console.log(err);
-								else
-									console.log('Write operation complete.');
-							});
-						});
-					}
+					queueServices.stopAutomation(newBranch);
 					jobQueue.inactive( function( err, ids ) {
 						ids.forEach( function( id ) {
-							console.log("the parameter in the inactive " +id);
-							console.log("the job data id " +job.id);
-							console.log("the job data " +job.data.branchName);
 							kue.Job.get( id, function( err, job ) {
-								console.log("job Id = " +job.id+ " || name = " +job.data.branchName);
 								if (job.data.branchName == newBranch && job.id != currentJobId) {
 									job.remove(function(err){
 										if (err) throw err;
@@ -93,33 +69,16 @@ queueServices.addNewJob = function(jobArg, type, priorityNo){
 					console.log("Getting error while adding job in queue: "+err);
 			});
 		} else {
-			var globalCurrentRunningBranchData = globalCurrentRunningBranch.global.getCurrentRunningBranch();
-			console.log('globalCurrentRunningBranchData is = '+globalCurrentRunningBranchData);
 			var newBranch = jobArg.branchName;
-			if (newBranch === globalCurrentRunningBranchData) {
-				exec("/etc/automation/bin/stop_phantom.sh" , function(code, stdout, stderr) {
-					console.log('Exit code inside the stop_phantom.sh :', code);
-					console.log( 'STOP_PHANTOMJS' );
-					var stopFile = '/etc/automation/log/stop.txt';
-					fs.writeFile(stopFile, 'STOP_PHANTOMJS', function (err) {
-						if (err)
-							console.log(err);
-						else
-							console.log('Write operation complete.');
-					});
-				});
-			}
+			queueServices.stopAutomation(newBranch);
 			jobQueue.inactive( function( err, ids ) {
 				ids.forEach( function( id ) {
 					console.log("the parameter in the inactive " +id);
-					//console.log("the job data id " +job.id);
-					//console.log("the job data " +job.data.branchName);
 					kue.Job.get( id, function( err, job ) {
-						console.log("job Id = " +job.id+ " || name = " +job.data.branchName);
 						if (job.data.branchName == newBranch ) {
 							job.remove(function(err){
 								if (err) throw err;
-									console.log('removed inactive job for the already completed job with high priority with job id #%d', job.id);
+									console.log('removed inactive job for the inprogress branch job id #%d', job.id);
 							});
 						}
 					});
@@ -139,4 +98,18 @@ queueServices.addNewJob = function(jobArg, type, priorityNo){
 queueServices.getRedisClient = function(redisStorageClient){
 	redisClient = redisStorageClient;
 	//return redisClient;
+};
+
+queueServices.stopAutomation = function(newBranch) {
+	if (newBranch === globalCurrentRunningBranch.global.getCurrentRunningBranch()) {
+		exec("/etc/automation/bin/stop_phantom.sh" , function(code, stdout, stderr) {
+			var stopFile = '/etc/automation/log/stop.txt';
+			fs.writeFile(stopFile, 'STOP_PHANTOMJS', function (err) {
+				if (err)
+					console.log(err);
+				else
+					console.log('Write operation complete.');
+			});
+		});
+	}
 };
