@@ -13,17 +13,10 @@ var sqlConnection = function sqlConnection(sqlType, callback) {
     if (error) {
       return console.error(error.message);
     }
-    //console.log(results);
-    //console.log(fields);
     connection.end(); // close the connection
     return callback(null, results) ;
-    // Execute the callback
-    //next.apply(this, arguments);
   });
 };
 
 
 module.exports = sqlConnection;
-
-/////const GET_MEMBER = 'SELECT * FROM members WHERE uid=116 AND user="neha" AND deleted=0';
-//const SELECT_FROM_SETTINGS = 'SELECT * FROM settings WHERE uid=116';

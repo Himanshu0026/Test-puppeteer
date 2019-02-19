@@ -92,13 +92,10 @@ executorServices.executeJob = function(commitDetails, callback) {
 							if(err){
 								console.log(err);
 							}else{
-								//console.log('the result is'+result);
-								//query = mysql.format(query, values);
 								sqlConnection(query, function(err, result){
 									if(err){
 										console.log(err);
 									}else{
-										//console.log(result);
 									}
 								});
 							}
