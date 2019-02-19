@@ -53,14 +53,14 @@ queueServices.addNewJob = function(jobArg, type, priorityNo){
 					var currentJobId = job.id;
 					var newBranch = job.data.branchName;
 					queueServices.stopAutomation(newBranch);
-					queueServices.removeInactiveJobs(currentJobId);
+					queueServices.removeInactiveJobs(currentJobId,newBranch);
 				} else
 					console.log("Getting error while adding job in queue: "+err);
 			});
 		} else {
 			var newBranch = jobArg.branchName;
 			queueServices.stopAutomation(newBranch);
-			queueServices.removeInactiveJobs(0);
+			queueServices.removeInactiveJobs(0,newBranch);
 		}
 	}else {
 		var job = jobQueue.create('backstop', jobArg).priority(priorityNo).save( function(err){
@@ -91,7 +91,7 @@ queueServices.stopAutomation = function(newBranch) {
 	}
 };
 
-queueServices.removeInactiveJobs = function(currentJobId) {
+queueServices.removeInactiveJobs = function(currentJobId,newBranch) {
 	jobQueue.inactive( function( err, ids ) {
 		ids.forEach( function( id ) {
 			console.log("the parameter in the inactive " +id);
