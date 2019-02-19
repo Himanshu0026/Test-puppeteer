@@ -13,7 +13,7 @@ var sqlConnection = function sqlConnection(sqlType, callback) {
     if (error) {
       return console.error(error.message);
     }
-    console.log(results);
+    //console.log(results);
     //console.log(fields);
     connection.end(); // close the connection
     return callback(null, results) ;
