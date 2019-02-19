@@ -112,11 +112,11 @@ queueServices.addNewJob = function(jobArg, type, priorityNo){
 			jobQueue.inactive( function( err, ids ) {
 				ids.forEach( function( id ) {
 					console.log("the parameter in the inactive " +id);
-					console.log("the job data id " +job.id);
-					console.log("the job data " +job.data.branchName);
+					//console.log("the job data id " +job.id);
+					//console.log("the job data " +job.data.branchName);
 					kue.Job.get( id, function( err, job ) {
 						console.log("job Id = " +job.id+ " || name = " +job.data.branchName);
-						if (job.data.branchName == newBranch && job.id != currentJobId) {
+						if (job.data.branchName == newBranch ) {
 							job.remove(function(err){
 								if (err) throw err;
 									console.log('removed inactive job for the already completed job with high priority with job id #%d', job.id);
