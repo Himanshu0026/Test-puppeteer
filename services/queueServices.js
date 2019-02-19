@@ -49,7 +49,7 @@ queueServices.addNewJob = function(jobArg, type, priorityNo){
 		console.log('the message of the commit'+jobArg.commitMessage);
 		var index = jobArg.commitMessage.search("inprogress");
 		console.log('the vale of index'+index);
-		if(index === -1) {
+		if(index === -1 || jobArg.priorityNo === '-10') {
 			var job = jobQueue.create('pushRequest', jobArg).priority(priorityNo).save( function(err){
 				if( !err ) {
 					console.log( job.id );
