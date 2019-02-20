@@ -96,7 +96,7 @@ queueServices.removeInactiveJobs = function(currentJobId,newBranch) {
 		ids.forEach( function( id ) {
 			console.log("the parameter in the inactive " +id);
 			kue.Job.get( id, function( err, job ) {
-				if (job.data.branchName == newBranch || (job.data.branchName == newBranch && job.id != currentJobId)) {
+				if (job.data.branchName == newBranch && job.id != currentJobId) {
 					job.remove(function(err){
 						if (err) throw err;
 							console.log('removed inactive job', job.id);
