@@ -99,7 +99,7 @@ queueServices.removeInactiveJobs = function(currentJobId,newBranch) {
 				if (job.data.branchName == newBranch || (job.data.branchName == newBranch && job.id != currentJobId)) {
 					job.remove(function(err){
 						if (err) throw err;
-							console.log('removed inactive job for the inprogress branch job id #%d', job.id);
+							console.log('removed inactive job', job.id);
 					});
 				}
 			});
