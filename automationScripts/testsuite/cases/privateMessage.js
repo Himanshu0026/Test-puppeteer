@@ -771,10 +771,10 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			});
 		}).waitUntilVisible('#messages-menu', function() {
 			this.test.assertExists('#messages-menu');
-			this.test.assertExists('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.click('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.test.assertExists('li#move_to_saved_btn a');
-			this.click('li#move_to_saved_btn a');
+			this.test.assertExists('#move_to_saved_btn i');
+			this.click('#move_to_saved_btn i');
+			//this.test.assertExists('li#move_to_saved_btn a');
+			//this.click('li#move_to_saved_btn a');
 		}).waitForText('The conversation has been archived.', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'The conversation has been archived.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
@@ -785,10 +785,10 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			});
 		}).waitUntilVisible('#messages-menu', function() {
 			this.test.assertExists('#messages-menu');
-			this.test.assertExists('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.click('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.test.assertExists('li#move_to_inbox_btn a');
-			this.click('li#move_to_inbox_btn a');
+			this.test.assertExists('#move_to_inbox_btn i');
+			this.click('#move_to_inbox_btn i');
+			//this.test.assertExists('li#move_to_inbox_btn a');
+			//this.click('li#move_to_inbox_btn a');
 		}).waitForText('The conversation has been moved to Inbox.', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'The conversation has been moved to Inbox.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
@@ -800,10 +800,10 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			});
 		}).waitUntilVisible('#messages-menu', function() {
 			this.test.assertExists('#messages-menu');
-			this.test.assertExists('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.click('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.test.assertExists('li#move_to_saved_btn a');
-			this.click('li#move_to_saved_btn a');
+			this.test.assertExists('#move_to_saved_btn i');
+			this.click('#move_to_saved_btn i');
+			//this.test.assertExists('li#move_to_saved_btn a');
+			//this.click('li#move_to_saved_btn a');
 		}).waitForText('2 conversations have been archived.', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', '2 conversations have been archived.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
@@ -815,10 +815,10 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			});
 		}).waitUntilVisible('#messages-menu', function() {
 			this.test.assertExists('#messages-menu');
-			this.test.assertExists('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.click('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.test.assertExists('li#move_to_inbox_btn a');
-			this.click('li#move_to_inbox_btn a');
+			this.test.assertExists('#move_to_inbox_btn i');
+			this.click('#move_to_inbox_btn i');
+			//this.test.assertExists('li#move_to_inbox_btn a');
+			//this.click('li#move_to_inbox_btn a');
 		}).waitForText('2 conversations have been moved to Inbox.', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', '2 conversations have been moved to Inbox.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
@@ -829,10 +829,10 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			});
 		}).waitUntilVisible('#messages-menu', function() {
 			this.test.assertExists('#messages-menu');
-			this.test.assertExists('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.click('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.test.assertExists('li#move_to_saved_btn a');
-			this.click('li#move_to_saved_btn a');
+			this.test.assertExists('#move_to_saved_btn i');
+			this.click('#move_to_saved_btn i');
+			//this.test.assertExists('li#move_to_saved_btn a');
+			//this.click('li#move_to_saved_btn a');
 		}).waitForText('conversations have been archived.', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'conversations have been archived.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
@@ -843,10 +843,10 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			});
 		}).waitUntilVisible('#messages-menu', function() {
 			this.test.assertExists('#messages-menu');
-			this.test.assertExists('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.click('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.test.assertExists('li#move_to_inbox_btn a');
-			this.click('li#move_to_inbox_btn a');
+			this.test.assertExists('#move_to_inbox_btn i');
+			this.click('#move_to_inbox_btn i');
+			//this.test.assertExists('li#move_to_inbox_btn a');
+			//this.click('li#move_to_inbox_btn a');
 		}).waitForText('conversations have been moved to Inbox.', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'conversations have been moved to Inbox.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
