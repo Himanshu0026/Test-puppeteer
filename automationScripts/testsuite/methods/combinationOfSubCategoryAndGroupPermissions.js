@@ -201,7 +201,7 @@ combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndse
 combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails = function(userGroup) {
 	var loginUserName = "";
 	var loginPassWord = "";
-	if(userGroup =='Registered Users') {
+	if(userGroup =='General') {
 		loginUserName = combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username;
 		loginPassWord = combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password;
 	}

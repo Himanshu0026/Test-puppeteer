@@ -64,9 +64,9 @@ forumListingPageTest.createVariousCategories = function(){
 		//create a parent category for interchange the sub-category
         	 backEndForumRegisterMethod.createCategorySubcategory(forumListingPageJSON.parentCategory.title, forumListingPageJSON.parentCategory);
         }).then(function(){
-		//backEndForumRegisterMethod.createCategoryForumListing(forumListingPageJSON.withoutTitle);
-	//}).waitForSelector('div#ui-id-7', function(){
-	      // this.test.assertSelectorHasText('div#ui-id-7', 'Please enter a title for this category');
+		backEndForumRegisterMethod.createCategoryForumListing(forumListingPageJSON.withoutTitle);
+	}).waitForSelector('div#ui-id-7', function(){
+	       this.test.assertSelectorHasText('div#ui-id-7', 'Please enter a title for this category');
 	});
 };
 
@@ -196,16 +196,13 @@ forumListingPageTest.disableVariousCategories = function(){
        		this.click('input#forum_pw_cb');
         }).then(function(){
                 this.click('form[name="frmOptions"] button');
-		/*this.waitForSelector('div#loading_msg', function(){
+		this.waitForSelector('div#loading_msg', function(){
 		       utils.info(casper.fetchText('div#loading_msg'));
 		       utils.info('passwordProtected Category edited');
 	        }, function fail(){
 		       utils.error('disable invisible Category not created');
 		       utils.error('Loading... not found');
-	       });*/
-	}).waitUntilVisible('div#ajax-msg-top', function(){
-		//to remove the error msg used reload
-		this.reload(function(){});
+	       });
         }).waitForSelector('a#addForumButton', function(){
 		this.test.assertDoesntExist('span.edit_forum_status_img.protected', 'password protected category not found on category Page');
 		//this.wait(1000, function(){});
@@ -225,10 +222,6 @@ forumListingPageTest.disableVariousCategories = function(){
 		       utils.error('disable invisible Category not created');
 		       utils.error('Loading... not found');
 	       });*/
-		
-	}).waitUntilVisible('div#ajax-msg-top', function(){
-		//to remove the error msg used reload
-		this.reload(function(){});
         }).waitForSelector('a#addForumButton', function(){
 	//disable linked category
         	this.reload(function(){
@@ -238,10 +231,7 @@ forumListingPageTest.disableVariousCategories = function(){
        		this.sendKeys('input[name="forum_link"]', ' ',  {reset:true});
         }).then(function(){
 		this.click('form[name="frmOptions"] button');
-	}).waitUntilVisible('div#ajax-msg-top', function(){
-		//to remove the error msg used reload
-		this.reload(function(){});
-  }).waitForSelector('a#addForumButton', function(){
+        }).waitForSelector('a#addForumButton', function(){
 		this.test.assertDoesntExist('span.edit_forum_status_img linked', 'Linked category not found on category Page');
 	 //disable invisible category
         }).then(function(){
@@ -252,10 +242,14 @@ forumListingPageTest.disableVariousCategories = function(){
        		utils.enableorDisableCheckbox('forum_invisible', false);
        	}).then(function(){
 		this.click('form[name="frmOptions"] button');
-	}).waitUntilVisible('div#ajax-msg-top', function(){
-		//to remove the error msg used reload
-		this.reload(function(){});
-	}).waitForSelector('a#addForumButton', function(){
+		this.waitForSelector('div#loading_msg', function(){
+		       utils.info(casper.fetchText('div#loading_msg'));
+		       utils.info('Invisible Category edited');
+	        }, function fail(){
+		       utils.error('disable invisible Category not created');
+		       utils.error('Loading... not found');
+	        });
+        }).waitForSelector('a#addForumButton', function(){
 		this.test.assertTextExists('Invisible','Invisble category and sub-category present on backend categoryPage');
 	});
 };
@@ -283,7 +277,6 @@ forumListingPageTest.verifyCases = function(){
 		this.wait(1000, function(){});
         }).then(function(){
 		this.click('form[name="frmOptions"] button');
-
 		/*this.waitForSelector('div#loading_msg', function(){
 		       utils.info(casper.fetchText('div#loading_msg'));
 		       utils.info('changed the child category parent category');
@@ -291,10 +284,7 @@ forumListingPageTest.verifyCases = function(){
 		       utils.error('disable invisible Category not created');
 		       utils.error('Loading... not found');
 	       });*/
-		}).waitUntilVisible('div.heading.error_message', function(){
-		//to remove the error msg used reload
-		this.reload(function(){});
-	}).waitForSelector('a#addForumButton', function(){
+        }).waitForSelector('a#addForumButton', function(){
 		backEndForumRegisterMethod.createCategorySubcategory(forumListingPageJSON.invalidLinked.title, forumListingPageJSON.invalidLinked);
 		//verify error msg of linked category
 	}).waitForText(forumListingPageJSON.invalidLinkedCategoryErrorMsg.errorMsg);

@@ -360,7 +360,7 @@ backEndForumRegisterMethod.editUserActions = function(userGroup, action, usersCo
 			this.click('input[name="allbox"]');
 		}else{
 			this.click('#groupUsersList tr td input[name^="user_id"]');
-			
+
 		}
 		this.then(function(){
 			this.test.assertExists('div#floatingActionMenu');
@@ -381,34 +381,22 @@ backEndForumRegisterMethod.deleteAllCategories = function() {
 	casper.mouse.move('li div.select');
 	casper.click('li a.manageAction span');
 	casper.then(function(){
-		var deletehref = this.evaluate(function(){
+		var deletehref = this.evaluate(function() {
 			var del	=document.querySelector('div.tooltipMenu.forumActionbutton a:nth-child(2)').getAttribute('href');
-    	return del;
+			return del;
 		});
-		utils.info('href is.......*****'+deletehref);
-		if(deletehref.indexOf("show_delete_forum")!=-1){
+		if(deletehref.indexOf("show_delete_forum")!=-1) {
 			this.click('div.tooltipMenu.forumActionbutton a:nth-child(2)');
-			 this.waitForSelector('input#remove_forum', function(){
-						this.click('input#remove_forum');
-						this.waitForSelector('div.heading.error_message', function() {
-						var message = this.fetchText('div.heading.error_message');
-						var expectedMsg = "The category has been deleted.";
-						if(message == expectedMsg) {
-							utils.info('Category Deleted');
-						} else {
-							utils.info('Category not Deleted');
-						}
-			 		});
-				});
-		}else{
+			this.waitForSelector('input#remove_forum', function(){
+				this.click('input#remove_forum');
+				this.waitForSelectorTextChange('#sortable > ul > li:first-child > div:first-child > a.forumName', function() {});
+			});
+		} else {
 			casper.then(function(){
 				this.click('div.tooltipMenu.forumActionbutton a:nth-child(2)');
-			}).waitUntilVisible('div#ajax-msg-top', function(){
-				casper.waitWhileVisible('div#ajax-msg-top', function(){});
+				this.waitForSelectorTextChange('#sortable > ul > li:first-child > div:first-child > a.forumName', function() {});
 			});
 		}
-	//}, function fail(){
-		//utils.info('Category doesnt have sub category');
 	});
 };
 
@@ -435,37 +423,15 @@ backEndForumRegisterMethod.createCategory = function(data) {
 		this.evaluate(function() {
 		  document.querySelector('button.button.btn-m.btn-blue').click();
 		});
-	}).waitUntilVisible('div#ajax-msg-top', function(){
-		casper.waitWhileVisible('div#ajax-msg-top', function(){});
-		// utils.info(casper.fetchText('div#loading_msg'));
-		// utils.info('Category created');
-	}, function fail() {
-		var title = data.title;
-		try{
-			casper.test.assertExists('div#sortable ul li', 'Category list present');
-			var isCatExists = casper.evaluate(function(title) {
-				var totalCategories = document.querySelectorAll('div#sortable ul li');
-			   	for(var i=1; i<=(totalCategories.length); i++) {
-					var category = document.querySelector('div#sortable ul li:nth-child('+i+') div:nth-child(1) a');
-					if (category.innerText == title) {
-						return true;
-					}
-				}
-			},title);
-			if(isCatExists === true) {
-				utils.info('Category created');
-			} else {
-				utils.error('Category not created');
-			}
-		} catch (e) {
-			utils.error('Category not created');
+	}).waitForText(data.title, function() {
+		if(this.test.assertTextExists(data.title)) {
+			utils.info('Category created');
 		}
 	});
 };
 
 
 backEndForumRegisterMethod.createCategoryForumListing = function(data) {
-
 	casper.test.assertExists('a#addForumButton', 'Add category tab found');
 	casper.click('a#addForumButton');
 	casper.waitForSelector('form#edit_forum_form', function() {
@@ -477,8 +443,10 @@ backEndForumRegisterMethod.createCategoryForumListing = function(data) {
 			  document.querySelector('button.button.btn-m.btn-blue').click();
 			});
 		});
-	}).waitUntilVisible('div#ajax-msg-top', function(){
-		casper.waitWhileVisible('div#ajax-msg-top', function(){});
+	}).waitForText(data.title, function() {
+		if(this.test.assertTextExists(data.title)) {
+			utils.info('Category created');
+		}
 	});
 };
 
