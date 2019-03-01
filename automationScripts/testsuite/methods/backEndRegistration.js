@@ -419,13 +419,31 @@ backEndForumRegisterMethod.createCategory = function(data) {
 	casper.waitForSelector('form#edit_forum_form', function() {
 		this.sendKeys('input[name="forum_name"]', data.title, {reset:true});
 		this.sendKeys('textarea[name="forum_description"]', data.description, {reset:true});
-		this.test.assertExists('button.button.btn-m.btn-blue', 'Save button found');
-		this.evaluate(function() {
-		  document.querySelector('button.button.btn-m.btn-blue').click();
-		});
-	}).waitForText(data.title, function() {
-		if(this.test.assertTextExists(data.title)) {
-			utils.info('Category created');
+		this.test.assertExists('[aria-describedby="addedit_forum_dialog"] .ui-dialog-buttonpane .ui-state-default', 'Save button found');
+		this.click('[aria-describedby="addedit_forum_dialog"] .ui-dialog-buttonpane .ui-state-default');
+	}).waitUntilVisible('div#loading_msg', function success() {
+		utils.info(casper.fetchText('div#loading_msg'));
+		utils.info('Category created');
+	}, function fail() {
+		var title = data.title;
+		try{
+			casper.test.assertExists('div#sortable ul li', 'Category list present');
+			var isCatExists = casper.evaluate(function(title) {
+				var totalCategories = document.querySelectorAll('div#sortable ul li');
+			   	for(var i=1; i<=(totalCategories.length); i++) {
+					var category = document.querySelector('div#sortable ul li:nth-child('+i+') div:nth-child(1) a');
+					if (category.innerText == title) {
+						return true;
+					}
+				}
+			},title);
+			if(isCatExists === true) {
+				utils.info('Category created');
+			} else {
+				utils.error('Category not created');
+			}
+		} catch (e) {
+			utils.error('Category not created');
 		}
 	});
 };
@@ -443,10 +461,8 @@ backEndForumRegisterMethod.createCategoryForumListing = function(data) {
 			  document.querySelector('button.button.btn-m.btn-blue').click();
 			});
 		});
-	}).waitForText(data.title, function() {
-		if(this.test.assertTextExists(data.title)) {
-			utils.info('Category created');
-		}
+	}).then(function(){
+		utils.info('category created succesfully');
 	});
 };
 

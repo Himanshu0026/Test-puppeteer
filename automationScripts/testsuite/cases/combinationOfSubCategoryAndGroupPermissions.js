@@ -15,47 +15,20 @@ var subCategory_Id;
 var other_subCategory_Id;
 var combinationOfSubCategoryAndGroupPermissionsTestcases = module.exports = {};
 
-// method to register users neha, isneha etc
-combinationOfSubCategoryAndGroupPermissionsTestcases.registerUserTOLogin = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
-		this.test.assertSelectorHasText('#ddSettings', 'Security');
-		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
-		backEndForumRegisterMethod.enableDisableEmailAddressVerification(false);
-	}).then(function() {
-		backEndForumRegisterMethod.enableDisableApproveNewRegistrations(false);
-	}).then(function() {
-		backEndForumRegisterMethod.enableDisableHumanVerification(false);
-	}).eachThen(combinationOfSubCategoryAndGroupPermissionsJSON.infoToRegisterUser, function(response) {
-		var responseData = response.data;
-		registerMethod.registerMember(responseData);
-	});
-};
-
 // method to create a category cat1 and its sub categories cat1a and cat1b
 combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory = function() {
 	casper.thenOpen(config.backEndUrl, function() {
 		utils.info(' Method to create category and sub category ');
 		backEndForumRegisterMethod.goToCategoryPage();
 		casper.then(function() {
-			/*backEndForumRegisterMethod.isCategoryExists(combinationOfSubCategoryAndGroupPermissionsJSON.category, function(err, isExists) {
-				if(isExists) {
-					utils.info(' Category already existed');
+			backEndForumRegisterMethod.createCategory(combinationOfSubCategoryAndGroupPermissionsJSON.category);
+			casper.reload(function() {
+				this.waitForText(combinationOfSubCategoryAndGroupPermissionsJSON.category.title, function() {
+					combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.subCategory);
+				}).then(function() {
 					combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory);
-				} else {
-					utils.info(' Category not exist');*/
-					backEndForumRegisterMethod.createCategory(combinationOfSubCategoryAndGroupPermissionsJSON.category);
-					casper.reload(function() {
-						this.waitForText(combinationOfSubCategoryAndGroupPermissionsJSON.category.title, function() {
-							combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.subCategory);
-						}).then(function() {
-							combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory);
-						});
-					});
-				//}
-			//});
+				});
+			});
 		});
 	});
 };
