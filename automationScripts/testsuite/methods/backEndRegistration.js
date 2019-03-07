@@ -425,7 +425,7 @@ backEndForumRegisterMethod.createCategory = function(data) {
 		utils.info(casper.fetchText('div#loading_msg'));
 		utils.info('Category created');
 	}, function fail() {
-		var title = data.title;
+		/*var title = data.title;
 		try{
 			casper.test.assertExists('div#sortable ul li', 'Category list present');
 			var isCatExists = casper.evaluate(function(title) {
@@ -444,7 +444,7 @@ backEndForumRegisterMethod.createCategory = function(data) {
 			}
 		} catch (e) {
 			utils.error('Category not created');
-		}
+		}*/
 	});
 };
 

@@ -92,16 +92,16 @@ thumpsUpDownTestcases.createCategoryTestCase = function() {
 		utils.info(' * Method to create category and sub category *');
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
-		backEndForumRegisterMethod.isCategoryExists(thumpsUpDownJSON.category, function(err, isExists) {
-			if(isExists) {
-				utils.info(' Category already existed');
-			} else {
-				utils.info(' Category not exist');
-				casper.then(function() {
+		//backEndForumRegisterMethod.isCategoryExists(thumpsUpDownJSON.category, function(err, isExists) {
+			//if(isExists) {
+				//utils.info(' Category already existed');
+			//} else {
+				//utils.info(' Category not exist');
+				//casper.then(function() {
 					backEndForumRegisterMethod.createCategory(thumpsUpDownJSON.category);
-				});
-			}
-		});
+				//});
+			//}
+		//});
 	});
 };
 
