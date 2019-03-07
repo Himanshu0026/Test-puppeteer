@@ -97,7 +97,7 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory = functi
 		utils.info('Test case 5 [ Method to verify with other sub-categories ]');
 		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 		this.test.assertExists('li#forum_'+other_subCategory_Id+' a' , ' cat1b visible');
-		this.test.assertSelectorHasText('#forum_'+subCategory_Id+' a.help-tooltip', 'Private');
+		this.test.assertSelectorHasText('#forum_'+subCategory_Id+' a.help-tooltip', 'Donors Only');
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitForText("Sorry! You don't have permission to perform this action.").thenOpen(config.backEndUrl, function() {
 		backEndForumRegisterMethod.goToCategoryPage();
