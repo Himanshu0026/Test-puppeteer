@@ -174,7 +174,7 @@ forumListingPageTest.verifyVariousSubCategoriesFrontEnd = function(){
 	}).waitForSelector('a[href="#forums"]', function(){
 	//checked invisible category
 		this.test.assertTextDoesntExist('Invisible','Invisble category and sub-category not present on forumListingpage');
-		this.test.assertTextDoesntExist('subInvisible','Invisble category and sub-category not present on forumListingpage');
+		//this.test.assertTextDoesntExist('subInvisible','Invisble category and sub-category not present on forumListingpage');
 	});
 };
 
