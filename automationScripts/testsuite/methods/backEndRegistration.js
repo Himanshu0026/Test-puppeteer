@@ -461,7 +461,7 @@ backEndForumRegisterMethod.createCategoryForumListing = function(data) {
 			  document.querySelector('button.button.btn-m.btn-blue').click();
 			});
 		});
-	}).then(function(){
+	}).wait('2000',function(){
 		utils.info('category created succesfully');
 	});
 };
