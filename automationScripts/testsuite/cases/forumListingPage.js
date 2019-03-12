@@ -284,7 +284,7 @@ forumListingPageTest.verifyCases = function(){
 		       utils.error('disable invisible Category not created');
 		       utils.error('Loading... not found');
 	       });*/
-        }).waitForSelector('a#addForumButton', function(){
+			 }).waitUntilVisible('a#addForumButton', function(){
 		backEndForumRegisterMethod.createCategorySubcategory(forumListingPageJSON.invalidLinked.title, forumListingPageJSON.invalidLinked);
 		//verify error msg of linked category
 	}).waitForText(forumListingPageJSON.invalidLinkedCategoryErrorMsg.errorMsg);

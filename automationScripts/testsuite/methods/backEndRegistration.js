@@ -688,7 +688,7 @@ backEndForumRegisterMethod.createCategorySubcategory= function(title, data){
 				utils.info('subcategory value cannot be found on forum');
 			}
 			this.click('form[name="frmOptions"] button');
-		}).waitUntilVisible('div.heading.error_message', function(){});
+		}).waitUntilVisible('.heading.error_message', function(){});
 	});
 };
 
