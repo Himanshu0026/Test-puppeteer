@@ -63,7 +63,7 @@ registerMethod.registerMultipleUsers = function(usersCount, callback) {
 			this.test.assertExists('a[href="/register/register"]', 'Register');
 			this.click('a[href="/register/register"]');
 		}).waitForSelector('form[name="PostTopic"]', function() {
-			this.test.assertSelectorHasText('h2', 'Member Registration');
+			this.test.assertSelectorHasText('h2', 'Sign Up');
 			this.fill('form[name="PostTopic"]', {
 				'member' : userName,
 				'email': userName+ '@wt.com',
