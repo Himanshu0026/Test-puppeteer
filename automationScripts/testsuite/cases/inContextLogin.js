@@ -10,10 +10,10 @@ var pollJSON = require('../../testdata/poll.json');
 var registerTests = require('../cases/register.js');
 var inContextLoginTests = module.exports = {};
 
-//Testcase Incontext login from Start New Topic button when start new topic button is enabled
+//Testcase Incontext login from New Topic button when New Topic button is enabled
 inContextLoginTests.doLoginByStartTopicEnable = function() {
 	casper.thenOpen(config.backEndUrl , function() {
-		utils.info('Case 1[Incontext login from Start New Topic button when its permission is ON.]');
+		utils.info('Case 1[Incontext login from New Topic button when its permission is ON.]');
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
@@ -24,7 +24,7 @@ inContextLoginTests.doLoginByStartTopicEnable = function() {
 		});
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('#topics a[href="/post/printadd"]', function() {
-			this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+			this.test.assertSelectorHasText('div#topics', 'New Topic');
 			this.click('#topics a[href="/post/printadd"]');
 		}).waitForText('Create an account or log in', function() {
 			this.test.assertSelectorHasText('a#guest_user_create_account', 'Create an account or log in');
@@ -35,9 +35,9 @@ inContextLoginTests.doLoginByStartTopicEnable = function() {
 			forumLoginMethod.logoutFromApp();
 		});
 	}).thenOpen(config.url ,function() {
-		utils.info('Case 1[Incontext Registration from Start New Topic button when its permission is ON.]');
+		utils.info('Case 1[Incontext Registration from New Topic button when its permission is ON.]');
 		this.waitForSelector('a[href="/post/printadd"]', function() {
-			this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+			this.test.assertSelectorHasText('div#topics', 'New Topic');
 			this.evaluate(function() {
 				document.querySelector('a[href="/post/printadd"]').click();
 			});
@@ -50,10 +50,10 @@ inContextLoginTests.doLoginByStartTopicEnable = function() {
 	});
 };
 
-//Testcase Incontext login from Start New Topic button when start new topic button is disabled
+//Testcase Incontext login from New Topic button when New Topic button is disabled
 inContextLoginTests.doLoginByStartTopicDisable = function() {
 	casper.thenOpen(config.backEndUrl , function() {
-		utils.info('Case 2[Incontext login from Start New Topic button when its permission is OFF.]');
+		utils.info('Case 2[Incontext login from New Topic button when its permission is OFF.]');
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
@@ -63,7 +63,7 @@ inContextLoginTests.doLoginByStartTopicDisable = function() {
 		backEndregisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', false);
 	}).thenOpen(config.url ,function() {
 		this.waitForSelector('#topics a[href="/post/printadd"]', function() {
-			this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+			this.test.assertSelectorHasText('div#topics', 'New Topic');
 			this.click('#topics a[href="/post/printadd"]');
 		}).waitUntilVisible('#login_register_modal', function() {
 			this.test.assertTextExists('Create Account', 'Create Account appears on the page');
@@ -101,7 +101,7 @@ inContextLoginTests.doLoginByQuoteOnPost = function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).waitForSelector('#topics a[href="/post/printadd"]', function() {
-	  this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+	  this.test.assertSelectorHasText('div#topics', 'New Topic');
 	  this.click('#topics a[href="/post/printadd"]');
 		topicMethod.createTopic(topicJSON.newTopic);
 	}).then(function() {
@@ -347,7 +347,7 @@ inContextLoginTests.doLoginByVoteOnpost = function() {
 	}).waitForSelector('form[name="posts"] a.topic-title', function() {
 		this.click('ul li:nth-child(1) .topic-title');
 	}).then(function() {
-		this.test.assertSelectorHasText('a#sub_post_reply', 'Post a reply');
+		this.test.assertSelectorHasText('a#sub_post_reply', 'Reply');
 		this.test.assert(this.mouseEvent('mouseover', 'div[id^="post_list_"]'));
 		this.test.assertExists('i.glyphicon.glyphicon-chevron-down');
 		this.click('i.glyphicon.glyphicon-chevron-down');

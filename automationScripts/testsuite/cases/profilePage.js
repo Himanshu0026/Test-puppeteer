@@ -117,7 +117,7 @@ profilePageTests.profilePageAfterStartTopic=function(){
 		topicMethod.createTopic(composeTopicJSON.ValidCredential);
 	}).waitForText(composeTopicJSON.ValidCredential.content, function(){
 		this.waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
-			this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Post a reply');
+			this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Reply');
 			//Verify with the visiblity of  reply button.
 			//verify with the reply button on top of the page.
 			this.test.assertVisible('a#sub_post_reply', 'reply pot button found on postListingPage');
@@ -662,7 +662,7 @@ profilePageTests.profilePageReputationCountMultiplePostLike=function(){
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
-		this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Post a reply');
+		this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Reply');
 		this.evaluate(function(){
 			document.querySelector('a#sub_post_reply').click();
 		});

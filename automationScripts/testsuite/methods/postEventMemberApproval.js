@@ -43,7 +43,7 @@ postEventMemberApprovalMethod.setUserGroupToRegisteredUser = function(user) {
 
 //*************************method to compose a post by register user ************************************
 postEventMemberApprovalMethod.composePost = function(msg) {
-	casper.test.assertSelectorHasText('#sub_post_reply', 'Post a reply');
+	casper.test.assertSelectorHasText('#sub_post_reply', 'Reply');
 	casper.click('#sub_post_reply');
 	casper.wait('2000', function() {
 		this.withFrame('message_ifr', function() {

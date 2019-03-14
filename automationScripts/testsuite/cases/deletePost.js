@@ -41,7 +41,7 @@ deletePostTests.deleteAllTopicCheckboxAdmin=function(){
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
 	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('a[href="/post/printadd"]', function(){
-		this.test.assertExists('a[href="/post/printadd"]', 'start new topic selector present on forum');
+		this.test.assertExists('a[href="/post/printadd"]', 'New Topic selector present on forum');
 		casper.evaluate(function() {
 			document.querySelector('a[href="/post/printadd"]').click();
 		});

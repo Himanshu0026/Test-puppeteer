@@ -393,10 +393,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPrivacyOptionFromBac
 	});
 };
 
-// method to verify with start new topic
+// method to verify with New Topic
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopic = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 10 [ Method to verify with start new topic ]');
+		utils.info(' Test case 10 [ Method to verify with New Topic ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -437,7 +437,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopic = func
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -447,10 +447,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopic = func
 	});
 };
 
-// method to Verify with click on start new topic button for private category
+// method to Verify with click on New Topic button for private category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPrivateCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 11 [ Method to Verify with click on start new topic button for private category ]');
+		utils.info(' Test case 11 [ Method to Verify with click on New Topic button for private category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -485,10 +485,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPriv
 	});
 };
 
-// method to Verify with click on start new topic button for  sub-category of private category
+// method to Verify with click on New Topic button for  sub-category of private category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForSubCategoryOfPrivateCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 12 [ Method to Verify with click on start new topic button for  sub-category of private category ]');
+		utils.info(' Test case 12 [ Method to Verify with click on New Topic button for  sub-category of private category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.otherSubCategory;
 
@@ -519,10 +519,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForSubC
 	});
 };
 
-// method to verify start new topic with other categories
+// method to verify New Topic with other categories
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOtherCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 13 [ Method to verify start new topic with other categories ]');
+		utils.info(' Test case 13 [ Method to verify New Topic with other categories ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.otherCategory;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -541,7 +541,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOthe
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -551,10 +551,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOthe
 	});
 };
 
-// method to Verify with click on start new topic button for private category
+// method to Verify with click on New Topic button for private category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPrivateCategoryWhenGropuPermissionDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 14 [ Method to Verify with click on start new topic button for private category ]');
+		utils.info(' Test case 14 [ Method to Verify with click on New Topic button for private category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -589,7 +589,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPriv
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -602,7 +602,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPriv
 // method to verify with other categories
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOtherCategoryWhenGroupPermissionDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 15 [ Method to verify Start New Topic with other categories When Group Permission Disable ]');
+		utils.info(' Test case 15 [ Method to verify New Topic with other categories When Group Permission Disable ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.otherCategory;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -630,10 +630,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOthe
 	});
 };
 
-// method to Verify with click on start new topic when both permission disable
+// method to Verify with click on New Topic when both permission disable
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicWhenBothPermissionDisable = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 16 [ Method to Verify with click on start new topic when both permission disable ]');
+		utils.info(' Test case 16 [ Method to Verify with click on New Topic when both permission disable ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -741,7 +741,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopic = functio
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -835,7 +835,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyOnOwnTopicForDi
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -932,7 +932,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForSubCate
 		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -1029,7 +1029,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForOtherCa
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -1092,7 +1092,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForAllCate
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -1143,10 +1143,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForAllCate
 	});
 };
 
-// method to verify with start new topic and post a reply for enabled category
+// method to verify with New Topic and post a reply for enabled category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabled = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 25 [ Method to verify with start new topic and post a reply for enabled category ]');
+		utils.info(' Test case 25 [ Method to verify with New Topic and post a reply for enabled category ]');
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
     casper.waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
       this.test.assertSelectorHasText('#ddSettings', 'Security');
@@ -1187,7 +1187,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabled 
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -1198,10 +1198,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabled 
 	});
 };
 
-// method to verify with start new topic and post a reply for sub categoryof enabled category
+// method to verify with New Topic and post a reply for sub categoryof enabled category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledForSubCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 26 [ Method to verify with start new topic and post a reply for sub categoryof enabled category ]');
+		utils.info(' Test case 26 [ Method to verify with New Topic and post a reply for sub categoryof enabled category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.otherSubCategory;
 
@@ -1223,7 +1223,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledF
 		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -1234,10 +1234,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledF
 	});
 };
 
-// method to verify with start new topic and post a reply for disabled category
+// method to verify with New Topic and post a reply for disabled category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalDisabledCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 27 [ Method to verify with start new topic and post a reply for disabled category ]');
+		utils.info(' Test case 27 [ Method to verify with New Topic and post a reply for disabled category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -1266,7 +1266,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalDisabled
 		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -1276,10 +1276,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalDisabled
 	});
 };
 
-// method to verify with start new topic and post a reply for enabled category
+// method to verify with New Topic and post a reply for enabled category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledCategoryAndDisabledGroup = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 28 [ Method to verify with start new topic and post a reply for enabled category ]');
+		utils.info(' Test case 28 [ Method to verify with New Topic and post a reply for enabled category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -1313,7 +1313,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledC
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -1324,10 +1324,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledC
 	});
 };
 
-// method to verify with start new topic and post a reply for other category
+// method to verify with New Topic and post a reply for other category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalOtherCategory = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 29 [ Method to verify with start new topic and post a reply for other category ]');
+		utils.info(' Test case 29 [ Method to verify with New Topic and post a reply for other category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.otherCategory;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -1346,7 +1346,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalOtherCat
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -1394,7 +1394,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalDisabled
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -1753,10 +1753,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPrivacyOptionFromBac
 	});
 };
 
-// method to verify with start new topic for Unregistered Users
+// method to verify with New Topic for Unregistered Users
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForUnregisteredUsers = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 10 [ Method to verify with start new topic for Unregistered Users ]');
+		utils.info(' Test case 10 [ Method to verify with New Topic for Unregistered Users ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -1795,7 +1795,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForUnre
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -1803,10 +1803,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForUnre
 	});
 };
 
-// method to Verify with click on start new topic button for private category for Unregistered Users
+// method to Verify with click on New Topic button for private category for Unregistered Users
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPrivateCategoryForUnregisteredUsers = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 11 [ Method to Verify with click on start new topic button for private category for Unregistered Users ]');
+		utils.info(' Test case 11 [ Method to Verify with click on New Topic button for private category for Unregistered Users ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -1830,17 +1830,17 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPriv
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
 	}).waitForText("Create Account");
 };
 
-// method to Verify with click on start new topic button for  sub-category of private category for Unregistered Users
+// method to Verify with click on New Topic button for  sub-category of private category for Unregistered Users
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForSubCategoryOfPrivateCategoryForUnregisteredUsers = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 12 [ Method to Verify with click on start new topic button for  sub-category of private category for Unregistered Users ]');
+		utils.info(' Test case 12 [ Method to Verify with click on New Topic button for  sub-category of private category for Unregistered Users ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.otherSubCategory;
 
@@ -1860,17 +1860,17 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForSubC
 		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
 	}).waitForText("Create Account");
 };
 
-// method to verify start new topic with other categories for Unregistered Users
+// method to verify New Topic with other categories for Unregistered Users
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOtherCategoryForUnregisteredUsers = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 13 [ Method to verify start new topic with other categories for Unregistered Users ]');
+		utils.info(' Test case 13 [ Method to verify New Topic with other categories for Unregistered Users ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.otherCategory;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -1887,7 +1887,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOthe
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -1895,10 +1895,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOthe
 	});
 };
 
-// method to Verify with click on start new topic button for private category for Unregistered Users
+// method to Verify with click on New Topic button for private category for Unregistered Users
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPrivateCategoryWhenGropuPermissionDisableForUnregisteredUsers = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 14 [ Method to Verify with click on start new topic button for private category for Unregistered Users ]');
+		utils.info(' Test case 14 [ Method to Verify with click on New Topic button for private category for Unregistered Users ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -1931,7 +1931,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPriv
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -1942,7 +1942,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPriv
 // method to verify with other categories for Unregistered Users
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOtherCategoryWhenGroupPermissionDisableForUnregisteredUsers = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 15 [ Method to verify Start New Topic with other categories When Group Permission Disable for Unregistered Users ]');
+		utils.info(' Test case 15 [ Method to verify New Topic with other categories When Group Permission Disable for Unregistered Users ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.otherCategory;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -1959,17 +1959,17 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOthe
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
 	}).waitForText("Create Account");
 };
 
-// method to Verify with click on start new topic when both permission disable for Unregistered Users
+// method to Verify with click on New Topic when both permission disable for Unregistered Users
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicWhenBothPermissionDisableForUnregisteredUsers = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 16 [ Method to Verify with click on start new topic when both permission disable for Unregistered Users ]');
+		utils.info(' Test case 16 [ Method to Verify with click on New Topic when both permission disable for Unregistered Users ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -2002,7 +2002,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicWhenBot
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -2074,7 +2074,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForUnregis
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -2158,7 +2158,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyOnOwnTopicForDi
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -2250,7 +2250,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForSubCate
 		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -2339,7 +2339,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForOtherCa
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -2437,10 +2437,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForAllCate
 	});
 };
 
-// method to verify with start new topic and post a reply for enabled category for Unregistered Users
+// method to verify with New Topic and post a reply for enabled category for Unregistered Users
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledForUnregisteredUsers = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 25 [ Method to verify with start new topic and post a reply for enabled category for Unregistered Users ]');
+		utils.info(' Test case 25 [ Method to verify with New Topic and post a reply for enabled category for Unregistered Users ]');
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
     casper.waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
       this.test.assertSelectorHasText('#ddSettings', 'Security');
@@ -2479,7 +2479,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledF
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -2487,10 +2487,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledF
 	}).waitForText('Thank you for your post! Your post is currently being reviewed and will be displayed on the forum once it is approved.');
 };
 
-// method to verify with start new topic and post a reply for sub categoryof enabled category for Unregistered Users
+// method to verify with New Topic and post a reply for sub categoryof enabled category for Unregistered Users
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledForSubCategoryForUnregisteredUsers = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 26 [ Method to verify with start new topic and post a reply for sub categoryof enabled category for Unregistered Users ]');
+		utils.info(' Test case 26 [ Method to verify with New Topic and post a reply for sub categoryof enabled category for Unregistered Users ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.otherSubCategory;
 
@@ -2510,7 +2510,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledF
 		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -2518,10 +2518,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledF
 	}).waitForText('Thank you for your post! Your post is currently being reviewed and will be displayed on the forum once it is approved.');
 };
 
-// method to verify with start new topic and post a reply for disabled category for Unregistered Users
+// method to verify with New Topic and post a reply for disabled category for Unregistered Users
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalDisabledCategoryForUnregisteredUsers = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 27 [ Method to verify with start new topic and post a reply for disabled category for Unregistered Users ]');
+		utils.info(' Test case 27 [ Method to verify with New Topic and post a reply for disabled category for Unregistered Users ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -2548,7 +2548,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalDisabled
 		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -2556,10 +2556,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalDisabled
 	});
 };
 
-// method to verify with start new topic and post a reply for enabled category for Unregistered Users
+// method to verify with New Topic and post a reply for enabled category for Unregistered Users
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledCategoryAndDisabledGroupForUnregisteredUsers = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 28 [ Method to verify with start new topic and post a reply for enabled category for Unregistered Users ]');
+		utils.info(' Test case 28 [ Method to verify with New Topic and post a reply for enabled category for Unregistered Users ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -2591,7 +2591,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledC
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -2599,10 +2599,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledC
 	}).waitForText('Thank you for your post! Your post is currently being reviewed and will be displayed on the forum once it is approved.');
 };
 
-// method to verify with start new topic and post a reply for other category for Unregistered Users
+// method to verify with New Topic and post a reply for other category for Unregistered Users
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalOtherCategoryForUnregisteredUsers = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 29 [ Method to verify with start new topic and post a reply for other category for Unregistered Users ]');
+		utils.info(' Test case 29 [ Method to verify with New Topic and post a reply for other category for Unregistered Users ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.otherCategory;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -2619,7 +2619,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalOtherCat
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -2663,7 +2663,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalDisabled
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -3056,10 +3056,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPrivacyOptionFromBac
 	});
 };
 
-// method to verify with start new topic
+// method to verify with New Topic
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 10 [ Method to verify with start new topic ]');
+		utils.info(' Test case 10 [ Method to verify with New Topic ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -3100,7 +3100,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForCust
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -3110,10 +3110,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForCust
 	});
 };
 
-// method to Verify with click on start new topic button for private category
+// method to Verify with click on New Topic button for private category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPrivateCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 11 [ Method to Verify with click on start new topic button for private category ]');
+		utils.info(' Test case 11 [ Method to Verify with click on New Topic button for private category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -3148,10 +3148,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPriv
 	});
 };
 
-// method to Verify with click on start new topic button for  sub-category of private category
+// method to Verify with click on New Topic button for  sub-category of private category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForSubCategoryOfPrivateCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 12 [ Method to Verify with click on start new topic button for  sub-category of private category ]');
+		utils.info(' Test case 12 [ Method to Verify with click on New Topic button for  sub-category of private category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.otherSubCategory;
 
@@ -3182,10 +3182,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForSubC
 	});
 };
 
-// method to verify start new topic with other categories
+// method to verify New Topic with other categories
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOtherCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 13 [ Method to verify start new topic with other categories ]');
+		utils.info(' Test case 13 [ Method to verify New Topic with other categories ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.otherCategory;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -3204,7 +3204,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOthe
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -3214,10 +3214,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOthe
 	});
 };
 
-// method to Verify with click on start new topic button for private category
+// method to Verify with click on New Topic button for private category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPrivateCategoryWhenGropuPermissionDisableForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 14 [ Method to Verify with click on start new topic button for private category ]');
+		utils.info(' Test case 14 [ Method to Verify with click on New Topic button for private category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -3252,7 +3252,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPriv
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -3265,7 +3265,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForPriv
 // method to verify with other categories
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOtherCategoryWhenGroupPermissionDisableForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 15 [ Method to verify Start New Topic with other categories When Group Permission Disable ]');
+		utils.info(' Test case 15 [ Method to verify New Topic with other categories When Group Permission Disable ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.otherCategory;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -3293,10 +3293,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicForOthe
 	});
 };
 
-// method to Verify with click on start new topic when both permission disable
+// method to Verify with click on New Topic when both permission disable
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithStartNewTopicWhenBothPermissionDisableForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 16 [ Method to Verify with click on start new topic when both permission disable ]');
+		utils.info(' Test case 16 [ Method to Verify with click on New Topic when both permission disable ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -3404,7 +3404,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForCustomU
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -3498,7 +3498,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyOnOwnTopicForDi
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -3595,7 +3595,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForSubCate
 		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -3692,7 +3692,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForOtherCa
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -3755,7 +3755,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForAllCate
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -3806,10 +3806,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithReplyTopicForAllCate
 	});
 };
 
-// method to verify with start new topic and post a reply for enabled category
+// method to verify with New Topic and post a reply for enabled category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 25 [ Method to verify with start new topic and post a reply for enabled category ]');
+		utils.info(' Test case 25 [ Method to verify with New Topic and post a reply for enabled category ]');
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
     casper.waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
       this.test.assertSelectorHasText('#ddSettings', 'Security');
@@ -3850,7 +3850,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledF
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -3861,10 +3861,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledF
 	});
 };
 
-// method to verify with start new topic and post a reply for sub categoryof enabled category
+// method to verify with New Topic and post a reply for sub categoryof enabled category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledForSubCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 26 [ Method to verify with start new topic and post a reply for sub categoryof enabled category ]');
+		utils.info(' Test case 26 [ Method to verify with New Topic and post a reply for sub categoryof enabled category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.otherSubCategory;
 
@@ -3886,7 +3886,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledF
 		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -3897,10 +3897,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledF
 	});
 };
 
-// method to verify with start new topic and post a reply for disabled category
+// method to verify with New Topic and post a reply for disabled category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalDisabledCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 27 [ Method to verify with start new topic and post a reply for disabled category ]');
+		utils.info(' Test case 27 [ Method to verify with New Topic and post a reply for disabled category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -3929,7 +3929,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalDisabled
 		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -3939,10 +3939,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalDisabled
 	});
 };
 
-// method to verify with start new topic and post a reply for enabled category
+// method to verify with New Topic and post a reply for enabled category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledCategoryAndDisabledGroupForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 28 [ Method to verify with start new topic and post a reply for enabled category ]');
+		utils.info(' Test case 28 [ Method to verify with New Topic and post a reply for enabled category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.category;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -3976,7 +3976,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledC
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -3987,10 +3987,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabledC
 	});
 };
 
-// method to verify with start new topic and post a reply for other category
+// method to verify with New Topic and post a reply for other category
 combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalOtherCategoryForCustomUser = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' Test case 29 [ Method to verify with start new topic and post a reply for other category ]');
+		utils.info(' Test case 29 [ Method to verify with New Topic and post a reply for other category ]');
 		var category = combinationOfCategoryAndGroupPermissionsJSON.otherCategory;
 		var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory;
 
@@ -4009,7 +4009,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalOtherCat
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -4057,7 +4057,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalDisabled
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});

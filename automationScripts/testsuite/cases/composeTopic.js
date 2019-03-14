@@ -135,7 +135,7 @@ composeTopicTests.composeTopicPostPreview=function(username, password){
 };
 
 //new case issue in the case.
-//Verify Compose Topic on topic listing page(if start new topic permission is disabled of one cateogry) (For Register User)
+//Verify Compose Topic on topic listing page(if New Topic permission is disabled of one cateogry) (For Register User)
 composeTopicTests.composeTopicRegisterstartTopicdisablecategory=function(){
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('******************************ComposeTopic********************************************');
@@ -224,7 +224,7 @@ composeTopicTests.composeTopicGuestUserPostPreview=function(){
 
 
 //need to add in incontextlogin tasks--------------
-//Verify Compose Topic on topic listing page(if start new topic permission is disabled of one cateogry) (For Guest User)
+//Verify Compose Topic on topic listing page(if New Topic permission is disabled of one cateogry) (For Guest User)
 /*composeTopicTests.composeTopicGueststartTopicdisblecategory=function(){
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('******************************ComposeTopic********************************************');

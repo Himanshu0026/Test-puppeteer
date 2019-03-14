@@ -13,7 +13,7 @@ inContextLoginMethod.startTopicCheckedUncheckedMethod=function(status, casper , 
 		if(isExists) {
 			utils.enableorDisableCheckbox('post_threads', status, casper, function(err) {
 				if(!err)
-					utils.log(' Successfully checked start new topic ','INFO');
+					utils.log(' Successfully checked New Topic ','INFO');
 			});
 			casper.click('button.button.btn-m.btn-blue');
 			wait.waitForVisible('div#tab_wrapper .heading[color="red"]' , casper , function(err , isExists){
@@ -25,7 +25,7 @@ inContextLoginMethod.startTopicCheckedUncheckedMethod=function(status, casper , 
 				}
 			});
 		}else{
-			utils.log(' start new topic checkbox not found','INFO');
+			utils.log(' New Topic checkbox not found','INFO');
 		}
 	});
 };

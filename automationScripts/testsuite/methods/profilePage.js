@@ -67,7 +67,7 @@ profilePageMethod.addTopicPost= function(){
 		this.test.assertExists('form[name="posts"] a.topic-title');
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
-		this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Post a reply');
+		this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Reply');
 		this.evaluate(function() {
 				document.querySelector('a#sub_post_reply').click();
 			});
@@ -117,7 +117,7 @@ profilePageMethod.newaddTopicPost= function(){
 		this.test.assertExists('form[name="posts"] a.topic-title');
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
-		this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Post a reply');
+		this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Reply');
 		this.evaluate(function() {
 				document.querySelector('a#sub_post_reply').click();
 			});

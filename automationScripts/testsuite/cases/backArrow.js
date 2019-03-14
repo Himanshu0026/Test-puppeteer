@@ -141,11 +141,11 @@ backArrowTests.latestTopicPage = function() {
 };
 
 //back-arrow cases of start-new topic
-//"Verify with Start new topic on topic listing page and than cancel it"
+//"Verify with New Topic on topic listing page and than cancel it"
 //verify back-arrow on forumListingpage
 backArrowTests.startNewtopicPage = function() {
         casper.thenOpen(config.url, function(){
-                utils.info('Case 5[Verify with Start new topic on topic listing page and than cancel it]');
+                utils.info('Case 5[Verify with New Topic on topic listing page and than cancel it]');
         }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
                 this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
                 this.evaluate(function() {
@@ -158,7 +158,7 @@ backArrowTests.startNewtopicPage = function() {
 		  document.querySelector('div#ajax_subscription_vars a').click();
 		});
         }).waitForSelector('div.post-body.pull-left', function(){
-                this.test.assertExists('button#cancel_post', 'cancel button found on start new topic Page');
+                this.test.assertExists('button#cancel_post', 'cancel button found on New Topic Page');
                 this.click('button#cancel_post');
         }).waitForText(backArrowJSON.topicListingPage.Text, function(){
                 this.test.assertExists('a#back_arrow_topic');
@@ -223,10 +223,10 @@ backArrowTests.profilePage = function() {
                         this.click('a#backArrowPost i');
                 }).waitForText(backArrowJSON.topicListingPage.Text, function(){
                         //verify using cancel button
-                        this.test.assertExists('div#ajax_subscription_vars a', 'start new topic button found under-category page');
+                        this.test.assertExists('div#ajax_subscription_vars a', 'New Topic button found under-category page');
                         this.click('div#ajax_subscription_vars a');
                 }).waitForSelector('div.post-body.pull-left', function(){
-                        this.test.assertExists('button#cancel_post', 'cancel button found after clicked on start new topic button');
+                        this.test.assertExists('button#cancel_post', 'cancel button found after clicked on New Topic button');
                         this.click('button#cancel_post');
                 }).waitForText(backArrowJSON.topicListingPage.Text);
         });

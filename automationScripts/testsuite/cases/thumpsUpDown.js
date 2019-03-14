@@ -136,7 +136,7 @@ thumpsUpDownTestcases.unregisterUserOnPostListingPageLikeDislike = function() {
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.adminUserLogin.username, thumpsUpDownJSON.adminUserLogin.password);
 	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('div#topics a[href="/post/printadd"]', function() {
-	  this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+	  this.test.assertSelectorHasText('div#topics', 'New Topic');
 	  this.click('div#topics a[href="/post/printadd"]');
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
 	}).then(function() {
@@ -184,7 +184,7 @@ thumpsUpDownTestcases.likeDislikePostOfUnregisteredUserByRegisterUser = function
 		});
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
-	  this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+	  this.test.assertSelectorHasText('div#topics', 'New Topic');
 	  this.click('div#topics a[href="/post/printadd"]');
 	}).then(function() {
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
@@ -538,7 +538,7 @@ thumpsUpDownTestcases.verifyReputation = function() {
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
 	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('div#topics a[href="/post/printadd"]', function() {
-	  this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+	  this.test.assertSelectorHasText('div#topics', 'New Topic');
 	  this.click('div#topics a[href="/post/printadd"]');
 	}).then(function() {
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
@@ -649,7 +649,7 @@ thumpsUpDownTestcases.reputationCountFbUser = function() {
 	}).thenOpen(config.url, function() {
 		forumLoginMethod.loginByFacebookUser();
 	}).then(function() {
-		this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+		this.test.assertSelectorHasText('div#topics', 'New Topic');
 	  this.click('div#topics a[href="/post/printadd"]');
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
 	}).waitForSelector('div#posts-list', function() {
@@ -713,7 +713,7 @@ thumpsUpDownTestcases.verifyCombineAllForum = function() {
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.otherUser.username, thumpsUpDownJSON.otherUser.password);
 	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('div#topics a[href="/post/printadd"]', function() {
-		this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+		this.test.assertSelectorHasText('div#topics', 'New Topic');
 		this.click('div#topics a[href="/post/printadd"]');
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
 	}).then(function() {

@@ -33,7 +33,7 @@ moveTopicAndPostTestcases.latestTopicPage = function(userGroup) {
     this.test.assertSelectorHasText('#latest_topics_show', 'Topics');
     this.click('#latest_topics_show a');
   }).then(function() {
-		this.test.assertExists('#topics a.start-new-topic-btn', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#topics a.start-new-topic-btn', ' New Topic on subcategory page Found');
 		this.click('#topics a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.newTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
@@ -64,7 +64,7 @@ moveTopicAndPostTestcases.topicListingPage = function(userGroup) {
 	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
 	}).then(function() {
-		this.test.assertExists('#topics a.start-new-topic-btn', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#topics a.start-new-topic-btn', ' New Topic on subcategory page Found');
 		this.click('#topics a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.newTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
@@ -103,7 +103,7 @@ moveTopicAndPostTestcases.topicListingPageUnderCategory = function(userGroup) {
     },category_Id);*/
     this.click('span.forum-title');
   }).waitForSelector('#topics', function() {
-		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' New Topic on subcategory page Found');
 		this.click('#ajax_subscription_vars a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.newTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
@@ -146,7 +146,7 @@ moveTopicAndPostTestcases.topicListingPageUnderSubCategory = function(userGroup)
   }).waitForText(subCategory.title, function() {
     this.click('li[id="forum_'+subCategory_Id+'"] a');
   }).waitUntilVisible('.topics-list', function() {
-		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' New Topic on subcategory page Found');
 		this.click('#ajax_subscription_vars a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.subCategoryTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
@@ -261,7 +261,7 @@ moveTopicAndPostTestcases.topicListingPageUnderCategoryForRegisteredUserWhenDisa
   }).waitForSelector('#topics_tab', function() {
     this.click('#topics_tab');
   }).waitUntilVisible('.topics-list', function() {
-		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' New Topic on subcategory page Found');
 		this.click('#ajax_subscription_vars a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.categoryTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
@@ -305,7 +305,7 @@ moveTopicAndPostTestcases.topicListingPageUnderSubCategoryForRegisteredUserWhenD
   }).waitForText(subCategory.title, function() {
     this.click('li[id="forum_'+subCategory_Id+'"] a');
   }).waitUntilVisible('.topics-list', function() {
-		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' New Topic on subcategory page Found');
 		this.click('#ajax_subscription_vars a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.subCategoryTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
@@ -387,7 +387,7 @@ moveTopicAndPostTestcases.profilePageNewTopic = function(userGroup) {
 	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
 	}).then(function() {
-		this.test.assertExists('#topics a.start-new-topic-btn', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#topics a.start-new-topic-btn', ' New Topic on subcategory page Found');
 		this.click('#topics a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.newTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
@@ -421,7 +421,7 @@ moveTopicAndPostTestcases.profilePageExistingTopic = function(userGroup) {
     utils.info('Case 27 [ Verify move post from the profile page into the existing topic ]');
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
 	}).then(function() {
-		this.test.assertExists('#topics a.start-new-topic-btn', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#topics a.start-new-topic-btn', ' New Topic on subcategory page Found');
 		this.click('#topics a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.newTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
@@ -434,7 +434,7 @@ moveTopicAndPostTestcases.profilePageExistingTopic = function(userGroup) {
 		utils.info('The destination url = '+url);
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('#topics a.start-new-topic-btn', function() {
-		this.test.assertSelectorHasText('#topics a.start-new-topic-btn', 'Start New Topic');
+		this.test.assertSelectorHasText('#topics a.start-new-topic-btn', 'New Topic');
 		this.click('#topics a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.newTopic);
   }).waitForSelector('.nav.pull-right button.dropdown-toggle span', function() {
@@ -466,7 +466,7 @@ moveTopicAndPostTestcases.postListingPageExistingPage = function(userGroup) {
     utils.info('Case 28 [Verify move topic from the latest topic page]');
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
 	}).then(function() {
-		this.test.assertExists('#topics a.start-new-topic-btn', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#topics a.start-new-topic-btn', ' New Topic on subcategory page Found');
 		this.click('#topics a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.newTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
@@ -479,7 +479,7 @@ moveTopicAndPostTestcases.postListingPageExistingPage = function(userGroup) {
 		utils.info('The destination url = '+url);
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('#topics a.start-new-topic-btn', function() {
-		this.test.assertSelectorHasText('#topics a.start-new-topic-btn', 'Start New Topic');
+		this.test.assertSelectorHasText('#topics a.start-new-topic-btn', 'New Topic');
 		this.click('#topics a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.newTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
@@ -508,7 +508,7 @@ moveTopicAndPostTestcases.postListingPageNewTopic = function(userGroup) {
 	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
 	}).then(function() {
-		this.test.assertExists('#topics a.start-new-topic-btn', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#topics a.start-new-topic-btn', ' New Topic on subcategory page Found');
 		this.click('#topics a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.newTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {

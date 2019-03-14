@@ -33,7 +33,7 @@ postEventMemberApprovalTestcases.createTopic = function() {
 		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.adminUserLogin.username, postEventMemberApprovalJSON.adminUserLogin.password);
 	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('#topics a[href="/post/printadd"]', function() {
-	  this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+	  this.test.assertSelectorHasText('div#topics', 'New Topic');
 	  this.click('#topics a[href="/post/printadd"]');
 		topicMethod.createTopic(postEventMemberApprovalJSON.newTopic);
 	}).then(function() {

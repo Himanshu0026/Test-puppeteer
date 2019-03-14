@@ -66,8 +66,8 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory = functi
 		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		utils.info('Test case 6 [ Method to verify start new topic button with the sub-category cat1a ]');
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		utils.info('Test case 6 [ Method to verify New Topic button with the sub-category cat1a ]');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -121,7 +121,7 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory = functi
 			});
 		});
 	}).thenOpen(config.url, function() {
-		utils.info('Test case 7 [ Method to verify start new topic button with the sub-category cat1a(Disable) ]');
+		utils.info('Test case 7 [ Method to verify New Topic button with the sub-category cat1a(Disable) ]');
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
 		this.click('ul.nav.nav-tabs li:nth-child(2) a');
@@ -145,10 +145,10 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory = functi
 	}).then(function() {
 		this.click('#backArrowPost i');
 	}).waitForSelector('#back_arrow_topic i', function() {
-		utils.info('Test case 8 [ Method to verify start new topic button with the parent category cat1 ]');
+		utils.info('Test case 8 [ Method to verify New Topic button with the parent category cat1 ]');
 		this.click('#back_arrow_topic i');
 	}).waitForSelector('#forums', function() {
-		this.test.assertExists('#ajax_subscription_vars a', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#ajax_subscription_vars a', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('#ajax_subscription_vars a').click();
 		});
@@ -163,7 +163,7 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory = functi
 		this.test.assertVisible('li#forum_'+other_subCategory_Id+' a' , ' cat1b visible');
 		this.click('li#forum_'+other_subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		this.test.assertExists('#ajax_subscription_vars a', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#ajax_subscription_vars a', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('#ajax_subscription_vars a').click();
 		});
@@ -221,7 +221,7 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory = functi
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
 		this.test.assertDoesntExist('a#fancy_attach_ i', ' Attachment link not found');
-		this.test.assertExists('#ajax_subscription_vars a', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#ajax_subscription_vars a', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('#ajax_subscription_vars a').click();
 		});
@@ -246,7 +246,7 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory = functi
 		this.test.assertExists('li#forum_'+subCategory_Id+' a' , ' cat1a visible');
 		this.click('li#forum_'+subCategory_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		this.test.assertExists('#ajax_subscription_vars a', ' Start New topic on subcategory page Found');
+		this.test.assertExists('#ajax_subscription_vars a', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('#ajax_subscription_vars a').click();
 		});
