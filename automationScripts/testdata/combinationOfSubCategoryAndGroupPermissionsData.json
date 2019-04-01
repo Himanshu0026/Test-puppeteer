@@ -50,7 +50,7 @@
 		"usignature" : "This is my signature blank email",
 		"namePrivate" : true
 	},
-	
+
 	{
 		"uname" : "customUser",
 		"upass" : "customUser",
@@ -113,12 +113,16 @@
 
 	"subCategory" : {
 		"title" : "cat1a",
-		"description" : "To test child category"
+		"description" : "To test child category",
+		"isSubcategorycheckbox" : true,
+		"category" : "cat1"
 	},
 
 	"otherSubCategory" : {
 		"title" : "cat1b",
-		"description" : "To test other child category"
+		"description" : "To test other child category",
+		"isSubcategorycheckbox" : true,
+		"category" : "cat1"
 	},
 
 	"startTopic" : {

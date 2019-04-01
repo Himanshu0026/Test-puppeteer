@@ -636,11 +636,12 @@ backEndForumRegisterMethod.goToCategoryPermission = function(id) {
 //*************************Method to change the permission of Category of View Category from backend ************************
 backEndForumRegisterMethod.enableDisableCategoryPermissions = function(id, value) {
 	utils.enableorDisableCheckbox(id, value);
-	casper.waitUntilVisible('div#loading_msg', function success() {
+	casper.wait('2000', function() {});
+	/*casper.waitUntilVisible('div#loading_msg', function success() {
 		utils.info("Permission changed");
 	}, function fail() {
 		utils.info("Permission not changed");
-	});
+	});*/
 };
 
 backEndForumRegisterMethod.enableDisableDeleteProfilePermissions = function(id, value) {
