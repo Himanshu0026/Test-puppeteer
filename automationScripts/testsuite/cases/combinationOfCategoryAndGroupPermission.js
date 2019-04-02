@@ -363,12 +363,16 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithCategory = function(
 		casper.test.assertVisible('li#forum_'+category_Id+' a' , ' cat1 visible on category listing page');
 		this.click('li#forum_'+category_Id+' a');
 	}).waitForSelector('div#category_list', function() {
+		this.click('#topics_tab');
+	}).waitUntilVisible('#topics', function() {
 		this.test.assertExists('a[id^="topic_"]', ' Composed topic is found');
 		this.click('a[id^="topic_"]');
 	}).waitForSelector('div#posts-list', function() {
 		postEventMemberApprovalMethod.composePost("Replied the post");
 		this.click('#backArrowPost i');
-	}).then(function() {
+	}).waitForSelector('#back_arrow_topic i', function() {
+		this.click('#back_arrow_topic i');
+	}).waitForSelector('li[id^="forum_"]', function() {
 		utils.info('Test case 23 [ Method to verify with other categories ]');
 		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
 		this.click('ul.nav.nav-tabs li:nth-child(2) a');
