@@ -355,7 +355,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithCategory = function(
 			}
 		});
 	}).thenOpen(config.url, function() {
-		utils.info('Test case 22 [ Method to Verify with reply topics option  for enabled catagory(cat1) ]');
+		utils.info('Test case 22 [ Method to Verify with reply topics option  for enabled catagory(cat2) ]');
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
 		this.click('ul.nav.nav-tabs li:nth-child(2) a');
@@ -369,10 +369,16 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithCategory = function(
 		this.click('a[id^="topic_"]');
 	}).waitForSelector('div#posts-list', function() {
 		postEventMemberApprovalMethod.composePost("Replied the post");
+	}).then(function() {
 		this.click('#backArrowPost i');
 	}).waitForSelector('#back_arrow_topic i', function() {
 		this.click('#back_arrow_topic i');
 	}).waitForSelector('li[id^="forum_"]', function() {
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
+	}).then(function() {
+		forumLoginMethod.loginToApp(combinationOfCategoryAndGroupPermissionsJSON.userLogin.username, combinationOfCategoryAndGroupPermissionsJSON.userLogin.password);
+	}).waitForSelector('li.pull-right.user-panel', function() {
 		utils.info('Test case 23 [ Method to verify with other categories ]');
 		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');
 		this.click('ul.nav.nav-tabs li:nth-child(2) a');
@@ -384,6 +390,11 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithCategory = function(
 		this.click('a[id^="topic_"]');
 	}).waitForSelector('div#posts-list', function() {
 		this.test.assertNotVisible('#sub_post_reply', ' Reply option not visible');
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
+	}).thenOpen(config.url, function() {
+		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
+	}).waitForSelector('li.pull-right.user-panel', function() {
 	});
 };
 
@@ -549,6 +560,10 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithPostApprovalEnabled 
 			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
 		}).then(function() {
 			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'post_approval', true);
+		}).then(function() {
+			backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+		}).then(function() {
+			backEndForumRegisterMethod.editGroupPermissions(userGroup, 'other_post_replies', true);
 		});
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
