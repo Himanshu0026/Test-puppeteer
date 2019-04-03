@@ -185,6 +185,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithCategory = function(
 			document.querySelector('#ajax_subscription_vars a').click();
 		});
 	}).waitForSelector('#topic-details', function() {
+		topicMethod.createTopic(combinationOfCategoryAndGroupPermissionsJSON.startTopic);
 	}).thenOpen(config.backEndUrl, function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
