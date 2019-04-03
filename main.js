@@ -52,14 +52,14 @@ app.get('/', function(req, res) {
 });
 
 app.get('/usergroups', function(req, res) {
-	connection.query(Usergroups.getAllUsergroupsSQL(), function() {
-        if(!err) {
-            res.status(200).json({
-                message:"Products listed.",
-                usergroups:data
-            });
-        }
-    });
+	sqlConnection(Usergroups.getAllUsergroupsSQL(), function() {
+		if(!err) {
+			res.status(200).json({
+				message:"Usergroups listed.",
+				usergroups:data
+			});
+		}
+	});
 });
 
 //Handling Branches Page
@@ -499,7 +499,7 @@ handler.on('push', function (event) {
 		var branchName = tempArr[tempArr.length-1];
 		commitDetails.branchName = branchName;
 		commitDetails.priorityNo = '0';
-		queueServices.addNewJob(commitDetails, 'automation', '0');
+		//queueServices.addNewJob(commitDetails, 'automation', '0');
 	}else{
 		console.log("commitPayload not found");
 		console.log("Event payload : "+JSON.stringify(event.payload));
