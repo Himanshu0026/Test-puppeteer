@@ -29,7 +29,7 @@ executorServices.redisClient = redisClient;
 var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: config.webhook.secret });
 app.use(handler);
-app.use("/usergroups",usergroups);
+//app.use("/usergroups",usergroups);
 
 gitBranchServices.managePendingCommits(redisClient);
 queueServices.getRedisClient(redisClient);
