@@ -52,7 +52,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/usergroups', function(req, res) {
-	connection.query(Usergroups.getAllProductSQL(), function() {
+	connection.query(Usergroups.getAllUsergroupsSQL(), function() {
         if(!err) {
             res.status(200).json({
                 message:"Products listed.",
