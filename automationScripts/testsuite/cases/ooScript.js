@@ -66,7 +66,7 @@ ooScriptTestcases.createNewTopic = function() {
     this.test.assertExists('#inline_search_box', 'Search bar present');
     forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
   }).waitForSelector('#topics a[href="/post/printadd"]', function() {
-    this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+    this.test.assertSelectorHasText('div#topics', 'New Topic');
     this.click('#topics a[href="/post/printadd"]');
     topicMethod.createTopic(topicJSON.newTopic);
   }).then(function() {

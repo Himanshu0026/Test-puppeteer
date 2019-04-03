@@ -1,6 +1,5 @@
 var config = require('../../../config/config.json');
 var backArrowTests = require('../cases/backArrow.js');
-var profilePageTests = require('../cases/profilePage.js');
 var profilePageMethod= require('../methods/profilePage.js');
 var forumLoginMethod = require('../methods/login.js');
 var backArrow = module.exports = {};
@@ -40,6 +39,6 @@ backArrow.featureTest = function(){
 		backArrowTests.UnpincategorySubcategory();
 
 		//delete all topics
-		profilePageTests.deleteTopics();
+		profilePageMethod.deleteTopics();
 	});
 };

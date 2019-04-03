@@ -8,10 +8,12 @@ memberDeleteMethod.addUser = function(userInfo, data) {
 			'pw' : userInfo.upass,
 			'email' : userInfo.uemail,
 			'note' : userInfo.pNote,
-		        'usergroupid' : data
-                }, false);
-        }).then(function(){
-                this.click('form[name="frmAddUser"] button');
+		   'usergroupid' : data
+    }, false);
+  }).then(function(){
+    this.click('form[name="frmAddUser"] button');
+	}).waitUntilVisible('div#ajax-msg-top', function(){
+		utils.info('user created successfully');
 	});
 };
 
@@ -30,7 +32,7 @@ memberDeleteMethod.registermembers = function(data, callback) {
 	}).then(function(){
 		memberDeleteMethod.addUser(memberRegister, data);
 	}).then(function(){
-		return callback (uname);
+		return callback(uname);
 	});
 };
 

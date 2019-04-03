@@ -15,34 +15,22 @@
 		"category" : "General"
 	},
 
+  "subCategoryTopic" : {
+    "title" : "New Topic",
+    "content" : "hellloooooo!!!!!!!!!",
+    "category" : "cat1a"
+  },
+
+  "categoryTopic" : {
+    "title" : "New Topic",
+    "content" : "hellloooooo!!!!!!!!!",
+    "category" : "cat1"
+  },
+
 	"adminUserLogin" : {
 		"username": "isneha",
 		"password": "isneha"
 	},
-
-	"infoToRegisterUser" : [{
-		"uname" : "neha",
-		"upass" : "neha",
-		"uemail" : "neha@gmail.com",
-		"fullName" : "Blank Email",
-		"imID" : "Hello",
-		"birthday" : "04/12/1991",
-		"usignature" : "This is my signature blank email",
-		"namePrivate" : true,
-		"expectedErrorMsg" : "Please enter your email address."
-	},
-
-	{
-		"uname" : "isneha",
-		"upass" : "isneha",
-		"uemail" : "isneha@gmail.com",
-		"fullName" : "Blank Email",
-		"imID" : "Hello",
-		"birthday" : "04/12/1991",
-		"usignature" : "This is my signature blank email",
-		"namePrivate" : true,
-		"expectedErrorMsg" : "Please enter your email address."
-	}],
 
   "category" : {
     "title" : "cat1",

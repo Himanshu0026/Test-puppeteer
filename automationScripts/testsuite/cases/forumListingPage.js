@@ -76,6 +76,7 @@ forumListingPageTest.verifyVariousCategoriesFrontEnd = function(){
 		utils.info('Case 2[Validate category with title field]');
                 utils.info('Case 3[Validate category with description field]');
                 forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+				}).waitWhileVisible('#td_tab_login', function() {
         }).waitForSelector('div#topics ul li:nth-child(2) a',function(){
    		this.test.assertExists('div#topics ul li:nth-child(2) a');
        		this.click('div#topics ul li:nth-child(2) a');
@@ -161,8 +162,9 @@ forumListingPageTest.verifyVariousSubCategoriesFrontEnd = function(){
 	}).waitForSelector('a[href="#forums"]', function(){
 	//checked for linked category on forumListingpage
 		deletePostMethod.getCategoryHrefFrontend(forumListingPageJSON.enableLinked.title);
-	}).waitForSelector('div#lga', function(){
-		this.test.assertExists('div#lga');
+	}).waitForUrl(forumListingPageJSON.linkedtext.data, function(){
+		utils.info('linked category url opened successfully');
+		//this.test.assertExists('div#lga');
 	}).thenOpen(config.url, function(){
 		this.test.assertExists('a#links-nav i');
 		this.click('a#links-nav i');
@@ -282,7 +284,7 @@ forumListingPageTest.verifyCases = function(){
 		       utils.error('disable invisible Category not created');
 		       utils.error('Loading... not found');
 	       });*/
-        }).waitForSelector('a#addForumButton', function(){
+			 }).waitUntilVisible('a#addForumButton', function(){
 		backEndForumRegisterMethod.createCategorySubcategory(forumListingPageJSON.invalidLinked.title, forumListingPageJSON.invalidLinked);
 		//verify error msg of linked category
 	}).waitForText(forumListingPageJSON.invalidLinkedCategoryErrorMsg.errorMsg);

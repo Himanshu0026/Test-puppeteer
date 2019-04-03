@@ -29,7 +29,7 @@ latestTopicTests.useraccountOnOff = function() {
                 this.waitForSelector('form[name="posts" ] li a', function(){
                         this.test.assertExists('form[name="posts"] a.topic-title', 'topics found on latestTopicpage');
                         this.test.assertTextDoesntExist(latestTopicJSON.Text.msg, 'Log In sign up icon not found on topicListingpage');
-                }).thenOpen(latestTopicJSON.adminurlautomation, function(){
+                }).thenOpen(latestTopicJSON.adminurlStaging, function(){
                         this.waitForSelector('input.btn.btn-primary', function(){
                                 casper.sendKeys('input[name="pass"]', latestTopicJSON.password);
                                 casper.click('input[name="Submit"]');
@@ -56,15 +56,16 @@ latestTopicTests.viewTopicPermission = function() {
                 this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
                         this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
                         this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-                        backEndregisterMethod.viewGroupPermissions('Registered Users');
+                        backEndregisterMethod.viewGroupPermissions('General');
                 }).then(function() {
-                        backEndregisterMethod.editGroupPermissions('Registered Users', 'view_thread_content', false);
+                        backEndregisterMethod.editGroupPermissions('General', 'view_thread_content', false);
                 }).then(function(){
-                        backEndregisterMethod.viewGroupPermissions('Registered Users');
+                        backEndregisterMethod.viewGroupPermissions('General');
                 }).then(function(){
-                        backEndregisterMethod.editGroupPermissions('Registered Users', 'view_others_threads', false);
+                        backEndregisterMethod.editGroupPermissions('General', 'view_others_threads', false);
                 }).thenOpen(config.url, function(){
                         forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+                }).waitWhileVisible('#td_tab_login', function() {
                 }).waitForSelector('a[href="/post/printadd"]', function(){
                         this.test.assertTextDoesntExist(latestTopicJSON.topicContent.Text, 'topics text cannot be found on topicslistingpage');
                 }).then(function(){
@@ -79,8 +80,9 @@ latestTopicTests.viewOtherUsersTopic = function() {
                 //created topics from register user (haniuser)
                 utils.info('Case 3 [Verify Latest topics when View others topic content permission  is OFF register user.]');
                 forumLoginMethod.loginToApp(loginJSON.deleteTopicUser.username, loginJSON.deleteTopicUser.password);
+        }).waitWhileVisible('#td_tab_login', function() {
         }).waitForSelector('a[href="/post/printadd"]', function(){
-                this.test.assertExists('a[href="/post/printadd"]', 'start new topic selector present on forum');
+                this.test.assertExists('a[href="/post/printadd"]', 'New Topic selector present on forum');
                 casper.evaluate(function() {
                 	document.querySelector('a[href="/post/printadd"]').click();
                 });
@@ -95,6 +97,7 @@ latestTopicTests.viewOtherUsersTopic = function() {
                 forumLoginMethod.logoutFromApp();
         }).thenOpen(config.url, function(){
                 forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+        }).waitWhileVisible('#td_tab_login', function() {
         }).waitForSelector('a[href="/post/printadd"]', function(){
                 this.test.assertDoesntExist(latestTopicJSON.ValidCredential.title, ' topics cannot be found on topiclistingpage');
         }).thenOpen(config.backEndUrl, function(){
@@ -102,13 +105,13 @@ latestTopicTests.viewOtherUsersTopic = function() {
                 this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
                         this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
                         this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-                        backEndregisterMethod.viewGroupPermissions('Registered Users');
+                        backEndregisterMethod.viewGroupPermissions('General');
                 }).then(function() {
-                        backEndregisterMethod.editGroupPermissions('Registered Users', 'view_others_threads', true);
+                        backEndregisterMethod.editGroupPermissions('General', 'view_others_threads', true);
                 }).then(function(){
-                        backEndregisterMethod.viewGroupPermissions('Registered Users');
+                        backEndregisterMethod.viewGroupPermissions('General');
                 }).then(function(){
-                        backEndregisterMethod.editGroupPermissions('Registered Users', 'view_thread_content', true);
+                        backEndregisterMethod.editGroupPermissions('General', 'view_thread_content', true);
                 });
         });
 };

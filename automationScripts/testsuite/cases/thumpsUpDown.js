@@ -25,9 +25,9 @@ thumpsUpDownTestcases.registrationBackendSetting = function() {
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndForumRegisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
-			backEndForumRegisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_messageboard', true);
+			backEndForumRegisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_messageboard', true);
 		});
 	}).then(function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
@@ -92,16 +92,16 @@ thumpsUpDownTestcases.createCategoryTestCase = function() {
 		utils.info(' * Method to create category and sub category *');
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
-		backEndForumRegisterMethod.isCategoryExists(thumpsUpDownJSON.category, function(err, isExists) {
-			if(isExists) {
-				utils.info(' Category already existed');
-			} else {
-				utils.info(' Category not exist');
-				casper.then(function() {
+		//backEndForumRegisterMethod.isCategoryExists(thumpsUpDownJSON.category, function(err, isExists) {
+			//if(isExists) {
+				//utils.info(' Category already existed');
+			//} else {
+				//utils.info(' Category not exist');
+				//casper.then(function() {
 					backEndForumRegisterMethod.createCategory(thumpsUpDownJSON.category);
-				});
-			}
-		});
+				//});
+			//}
+		//});
 	});
 };
 
@@ -134,8 +134,9 @@ thumpsUpDownTestcases.unregisterUserOnPostListingPageLikeDislike = function() {
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.adminUserLogin.username, thumpsUpDownJSON.adminUserLogin.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('div#topics a[href="/post/printadd"]', function() {
-	  this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+	  this.test.assertSelectorHasText('div#topics', 'New Topic');
 	  this.click('div#topics a[href="/post/printadd"]');
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
 	}).then(function() {
@@ -149,7 +150,7 @@ thumpsUpDownTestcases.unregisterUserOnPostListingPageLikeDislike = function() {
 			this.waitUntilVisible('#login_register_modal', function() {
 				this.test.assertExists('span#user-login-modal-heading', utils.info('Login pop up window found hence verified'));
 				forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
-			}).then(function() {
+			}).waitWhileVisible('#td_tab_login', function() {
 				this.test.assertExists('button.dropdown-toggle a', 'User logged in successfully');
 				forumLoginMethod.logoutFromApp();
 			});
@@ -177,20 +178,20 @@ thumpsUpDownTestcases.likeDislikePostOfUnregisteredUserByRegisterUser = function
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndForumRegisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
-			backEndForumRegisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'post_threads', true);
+			backEndForumRegisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', true);
 		});
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
-	  this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+	  this.test.assertSelectorHasText('div#topics', 'New Topic');
 	  this.click('div#topics a[href="/post/printadd"]');
 	}).then(function() {
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
 		this.waitForText('hellloooooo!!!!!!!!!');
 	}).thenOpen(config.url, function() {
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		thumpsUpDownMethod.clickOnLike();
 	}).then(function() {
 		thumpsUpDownMethod.clickOnDisLike();
@@ -204,7 +205,7 @@ thumpsUpDownTestcases.registerUserOnPostListingPageLike = function(data) {
 	casper.thenOpen(config.url, function() {
 		utils.info('CASE 3 [To verify the thumbs up and down for (register user) on Post listing page]');
 		forumLoginMethod.loginToApp(data.username, data.password);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		thumpsUpDownMethod.clickOnLike();
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
@@ -215,7 +216,7 @@ thumpsUpDownTestcases.registerUserOnPostListingPageLike = function(data) {
 thumpsUpDownTestcases.verifyDecreasedCountAndIncreasedCount = function() {
 	casper.then(function() {
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		utils.info('CASE 11, 10 and 12 [To Verify  with the decreasing order of count]');
 		var earlierCount = this.fetchText('span[id^="total_vote_down_count_"]');
 		var earlierNumber = parseInt(earlierCount);
@@ -297,7 +298,7 @@ thumpsUpDownTestcases.emailVerificationUserOnPostListingPage = function() {
 		thumpsUpDownMethod.changeUserGroup(user, 'Pending Email Verification');
 	}).thenOpen(config.url, function() {
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.emailUser.username, thumpsUpDownJSON.emailUser.username);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertExists('form[name="posts"] a.topic-title', ' Topic present');
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('div#posts-list', function() {
@@ -324,13 +325,13 @@ thumpsUpDownTestcases.clickOnLikersUsername = function() {
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+			backEndForumRegisterMethod.viewGroupPermissions('General');
 		}).then(function() {
-			backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'view_profiles', false);
+			backEndForumRegisterMethod.editGroupPermissions('General', 'view_profiles', false);
 		});
 	}).thenOpen(config.url, function() {
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.otherUser.username, thumpsUpDownJSON.otherUser.password);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertExists('form[name="posts"] a.topic-title', 'Topic present');
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('div#posts-list', function() {
@@ -362,7 +363,7 @@ thumpsUpDownTestcases.clickOnLikersUsernameByModerator = function() {
 		});
 	}).thenOpen(config.url, function() {
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.otherUser.username, thumpsUpDownJSON.otherUser.password);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertExists('form[name="posts"] a.topic-title', 'Topic present');
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('div#posts-list', function() {
@@ -385,7 +386,7 @@ thumpsUpDownTestcases.clickOnOwnName = function() {
 	casper.thenOpen(config.url, function() {
 		utils.info('CASE 6 [method to verify When registered/moderator user click on link of own name from voter list when disable view profile permission');
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertExists('form[name="posts"] a.topic-title', 'Topic present');
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('div#posts-list', function() {
@@ -415,9 +416,9 @@ thumpsUpDownTestcases.clickOnOwnName = function() {
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+			backEndForumRegisterMethod.viewGroupPermissions('General');
 		}).then(function() {
-			backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'view_profiles', true);
+			backEndForumRegisterMethod.editGroupPermissions('General', 'view_profiles', true);
 		});
 	});
 };
@@ -434,7 +435,7 @@ thumpsUpDownTestcases.verifyReputationTab = function() {
 		backEndForumRegisterMethod.enableDisableLikesReputation(false);
 	}).thenOpen(config.url, function() {
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.click('i.icon.icon-menu');
 	}).waitForSelector('li#members_list_show a', function() {
 		this.click('li#members_list_show a');
@@ -535,8 +536,9 @@ thumpsUpDownTestcases.verifyReputation = function() {
 		utils.info('CASE 8, 18 and 14[To verify user reputation]');
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('div#topics a[href="/post/printadd"]', function() {
-	  this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+	  this.test.assertSelectorHasText('div#topics', 'New Topic');
 	  this.click('div#topics a[href="/post/printadd"]');
 	}).then(function() {
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
@@ -559,7 +561,7 @@ thumpsUpDownTestcases.verifyReputation = function() {
 		});
 	}).then(function() {
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.click('ul.nav.pull-right span.caret');
 		this.test.assertExists('a#user-nav-panel-profile', 'Profile tab found');
 		this.click('a#user-nav-panel-profile');
@@ -647,7 +649,7 @@ thumpsUpDownTestcases.reputationCountFbUser = function() {
 	}).thenOpen(config.url, function() {
 		forumLoginMethod.loginByFacebookUser();
 	}).then(function() {
-		this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+		this.test.assertSelectorHasText('div#topics', 'New Topic');
 	  this.click('div#topics a[href="/post/printadd"]');
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
 	}).waitForSelector('div#posts-list', function() {
@@ -709,15 +711,16 @@ thumpsUpDownTestcases.verifyCombineAllForum = function() {
 	casper.thenOpen(config.url, function() {
 		utils.info('CASE 30 [To verify combine all forum]');
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.otherUser.username, thumpsUpDownJSON.otherUser.password);
+	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('div#topics a[href="/post/printadd"]', function() {
-		this.test.assertSelectorHasText('div#topics', 'Start New Topic');
+		this.test.assertSelectorHasText('div#topics', 'New Topic');
 		this.click('div#topics a[href="/post/printadd"]');
 		topicMethod.createTopic(thumpsUpDownJSON.newTopic);
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function() {
 		forumLoginMethod.loginToApp(thumpsUpDownJSON.registeredUserLogin.username, thumpsUpDownJSON.registeredUserLogin.password);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		thumpsUpDownMethod.clickOnLike();
 	}).then(function() {
 		thumpsUpDownMethod.clickOnDisLike();

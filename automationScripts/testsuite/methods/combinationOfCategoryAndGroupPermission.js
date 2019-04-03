@@ -147,7 +147,7 @@ combinationOfCategoryAndGroupPermissionsMethod.disableViewCategory = function(ca
 
 //*************************Method to enable Start Topics for registered User from backend ************************
 combinationOfCategoryAndGroupPermissionsMethod.enableStartTopics = function(callback) {
-	casper.test.assertExists('input#post_threads', utils.log('Start New topic checkbox found', 'INFO'));
+	casper.test.assertExists('input#post_threads', utils.log('New Topic checkbox found', 'INFO'));
 	utils.enableorDisableCheckbox('post_threads', true, function(err) {
 		if(!err) {
 			utils.log('checkbox is checked', 'INFO');
@@ -165,7 +165,7 @@ combinationOfCategoryAndGroupPermissionsMethod.enableStartTopics = function(call
 
 //*************************Method to enable Start Topics for registered User from backend ************************
 combinationOfCategoryAndGroupPermissionsMethod.disableStartTopics = function(callback) {
-	casper.test.assertExists('input#post_threads', utils.log('Start New topic checkbox found', 'INFO'));
+	casper.test.assertExists('input#post_threads', utils.log('New Topic checkbox found', 'INFO'));
 	utils.enableorDisableCheckbox('post_threads', false, function(err) {
 		if(!err) {
 			utils.log('checkbox is unchecked', 'INFO');
@@ -793,7 +793,7 @@ combinationOfCategoryAndGroupPermissionsMethod.isSubCategoryExists = function(da
 	}
 };
 
-// method to start new topic with attachment
+// method to New Topic with attachment
 combinationOfCategoryAndGroupPermissionsMethod.uploadAttachmentWithTopic = function(data, callback) {
 	casper.click('a.pull-right.btn.btn-uppercase.btn-primary ');
 	wait.waitForElement('div.post-body.pull-left', function(err, isExists) {

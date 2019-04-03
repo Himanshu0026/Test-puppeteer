@@ -17,7 +17,7 @@ postEventMemberApprovalMethod.setAdmin = function(user) {
 		this.test.assertSelectorHasText('.ui-dialog-title', 'Change User Group');
 		casper.fillLabels('form#frmChangeUsersGroupFinal', {
 			'Administrators' : 'checked',
-			'Registered Users' : ''
+			'General' : ''
 		}, true);
 	}).wait('2000', function() {
 
@@ -34,7 +34,7 @@ postEventMemberApprovalMethod.setUserGroupToRegisteredUser = function(user) {
 		this.test.assertSelectorHasText('.ui-dialog-title', 'Change User Group');
 		casper.fillLabels('form#frmChangeUsersGroupFinal', {
 			'Administrators' : '',
-			'Registered Users' : 'checked'
+			'General' : 'checked'
 		}, true);
 	}).wait('2000', function() {
 
@@ -43,9 +43,9 @@ postEventMemberApprovalMethod.setUserGroupToRegisteredUser = function(user) {
 
 //*************************method to compose a post by register user ************************************
 postEventMemberApprovalMethod.composePost = function(msg) {
-	casper.test.assertSelectorHasText('#sub_post_reply', 'Post a reply');
+	casper.test.assertSelectorHasText('#sub_post_reply', 'Reply');
 	casper.click('#sub_post_reply');
-	casper.wait('3000', function() {
+	casper.wait('2000', function() {
 		this.withFrame('message_ifr', function() {
 			this.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
 			this.sendKeys('#tinymce', casper.page.event.key.Backspace, {keepFocus: true});
@@ -72,7 +72,7 @@ postEventMemberApprovalMethod.enableDisableEventApproval = function(value) {
 		var grpName = casper.evaluate(function(tableLength){
 			for(var i=3; i<=tableLength; i++) {
 				var group = document.querySelector('tr:nth-child('+i+') td:nth-child(1) li'); // change li
-				if (group.innerText == 'Registered Users') {
+				if (group.innerText == 'General') {
 					document.querySelector('tr:nth-child('+i+') td:nth-child(2) a').click();
 					return (group.innerText);
 				}

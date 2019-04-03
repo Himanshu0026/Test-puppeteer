@@ -32,7 +32,7 @@
 },
 
 "linkedtext" :{
-        "data":"http://www.google.com"
+        "data":"https://www.websitetoolbox.com/"
 },
 
 "moderatorLogin" :{
@@ -205,7 +205,7 @@
         "lock" : false,
         "invisible" : false,
         "linked" : true,
-	"linkedtext":"http://www.google.com"
+	"linkedtext":"https://www.websitetoolbox.com/"
 },
 
 "subenableLinked" : {

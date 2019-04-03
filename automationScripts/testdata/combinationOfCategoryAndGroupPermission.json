@@ -40,96 +40,23 @@
 		"password": "isneha"
 	},
 
-	"infoToRegisterUser" : [{
-		"uname" : "neha",
-		"upass" : "neha",
-		"uemail" : "neha@gmail.com",
-		"fullName" : "Blank Email",
-		"imID" : "Hello",
-		"birthday" : "04/12/1991",
-		"usignature" : "This is my signature blank email",
-		"namePrivate" : true
-	},
-
-	{
-		"uname" : "isneha12",
-		"upass" : "isneha12",
-		"uemail" : "isneha12@gmail.com",
-		"fullName" : "Blank Email",
-		"imID" : "Hello",
-		"birthday" : "04/12/1991",
-		"usignature" : "This is my signature blank email",
-		"namePrivate" : true
-	},
-
-	{
-		"uname" : "customUser",
-		"upass" : "customUser",
-		"uemail" : "customUser@gmail.com",
-		"fullName" : "Blank Email",
-		"imID" : "Hello",
-		"birthday" : "04/12/1991",
-		"usignature" : "This is my signature blank email",
-		"namePrivate" : true
-	},
-
-	{
-		"uname": "pendingUser",
-		"upass": "pendingUser",
-		"uemail" : "pendingUser@gmail.com",
-		"fullName" : "Blank Email",
-		"imID" : "Hello",
-		"birthday" : "04/12/1991",
-		"usignature" : "This is my signature blank email",
-		"namePrivate" : true
-	},
-
-	{
-		"uname": "emailUser",
-		"upass": "emailUser",
-		"uemail" : "emailUser@gmail.com",
-		"fullName" : "Blank Email",
-		"imID" : "Hello",
-		"birthday" : "04/12/1991",
-		"usignature" : "This is my signature blank email",
-		"namePrivate" : true
-	},
-
-	{
-		"uname": "moderatorsUser",
-		"upass": "moderatorsUser",
-		"uemail" : "moderatorsUser@gmail.com",
-		"fullName" : "Blank Email",
-		"imID" : "Hello",
-		"birthday" : "04/12/1991",
-		"usignature" : "This is my signature blank email",
-		"namePrivate" : true
-	},
-
-	{
-		"uname" : "isneha",
-		"upass" : "isneha",
-		"uemail" : "isneha@gmail.com",
-		"fullName" : "Blank Email",
-		"imID" : "Hello",
-		"birthday" : "04/12/1991",
-		"usignature" : "This is my signature blank email",
-		"namePrivate" : true
-	}],
-
 	"category" : {
-		"title" : "cat1",
+		"title" : "cat2",
 		"description" : "To test parent category"
 	},
 
 	"subCategory" : {
-		"title" : "cat1a",
-		"description" : "To test child category"
+		"title" : "cat2a",
+		"description" : "To test child category",
+		"isSubcategorycheckbox" : true,
+		"category" : "cat2"
 	},
 
 	"otherSubCategory" : {
-		"title" : "cat1b",
-		"description" : "To test other child category"
+		"title" : "cat2b",
+		"description" : "To test other child category",
+		"isSubcategorycheckbox" : true,
+		"category" : "cat2"
 	},
 
 	"otherCategory" : {
@@ -140,7 +67,7 @@
 	"startTopic" : {
 		"title" : "New Topic",
 		"content" : "hellloooooo!!!!!!!!!",
-		"category" : "cat1"
+		"category" : "cat2"
 	},
 
 	"groupName" : "New Custom Group"

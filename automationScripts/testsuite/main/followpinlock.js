@@ -3,7 +3,7 @@
 var config = require('../../../config/config.json');
 var followpinlockTest = require('../cases/followpinlock.js');
 var forumLoginMethod = require('../methods/login.js');
-var profilePageTests = require('../cases/profilePage.js');
+var profilePageMethod= require('../methods/profilePage.js');
 var followpinlock = module.exports = {};
 
 followpinlock.featureTest  = function(){
@@ -15,7 +15,7 @@ followpinlock.featureTest  = function(){
 		followpinlockTest.addModeratorByScenarioOne();
 	}).then(function(){
 		//delete all topics
-		profilePageTests.deleteTopics();
+		profilePageMethod.deleteTopics();
 		//1.Test case for Add New topic by enable Follow check box and verify unfollow topic option on forum listing page
 		followpinlockTest.enableFollowCheckbox();
 

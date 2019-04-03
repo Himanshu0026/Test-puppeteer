@@ -485,15 +485,7 @@ handler.on('push', function (event) {
 		var branchName = tempArr[tempArr.length-1];
 		commitDetails.branchName = branchName;
 		commitDetails.priorityNo = '0';
-		console.log('the message of the commit'+commitDetails.commitMessage);
-		var index = commitDetails.commitMessage.search("inprogress");
-		console.log('the vale of index'+index);
-		if(index === -1) {
-			//utils.isValidJobToAdd(branchName, commitDetails, function(valid){
-				//if(valid)
-					queueServices.addNewJob(commitDetails, 'automation', '0');
-			//});
-		}
+		queueServices.addNewJob(commitDetails, 'automation', '0');
 	}else{
 		console.log("commitPayload not found");
 		console.log("Event payload : "+JSON.stringify(event.payload));

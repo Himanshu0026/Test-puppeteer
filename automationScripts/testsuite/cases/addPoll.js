@@ -442,9 +442,9 @@ addPollTests.verifyVoteButtonRegister=function(){
 	        this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	        this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-	        backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+	        backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'vote_on_polls', true);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'vote_on_polls', true);
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
@@ -516,9 +516,9 @@ addPollTests.disableVotePoll=function(){
 	        this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	        this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-	        backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+	        backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'vote_on_polls', false);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'vote_on_polls', false);
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
@@ -555,9 +555,9 @@ addPollTests.disableEnableVotePollCheckError=function(){
 	        this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	        this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-	        backEndForumRegisterMethod.viewGroupPermissions('Registered Users');
+	        backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
-		backEndForumRegisterMethod.editGroupPermissions('Registered Users', 'vote_on_polls', true);
+		backEndForumRegisterMethod.editGroupPermissions('General', 'vote_on_polls', true);
 	}).thenOpen(config.url, function(){
 		this.waitForSelector('form[name="posts"] a.topic-title', function(){
 			this.click('form[name="posts"] a.topic-title');
