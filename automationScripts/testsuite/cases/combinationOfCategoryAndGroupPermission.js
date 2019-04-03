@@ -179,7 +179,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithCategory = function(
 	}).waitForSelector('li[id^="forum_"]', function() {
 		this.click('li#forum_'+other_category_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		utils.info('Test case 13 [ Method to verify start new topic with other categories  ]');
+		utils.info('Test case 13 [   Method to verify start new topic with other categories  ]');
 		this.test.assertExists('#ajax_subscription_vars a', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('#ajax_subscription_vars a').click();
