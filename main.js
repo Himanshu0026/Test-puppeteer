@@ -52,11 +52,11 @@ app.get('/', function(req, res) {
 });
 
 app.get('/usergroups', function(req, res) {
-	sqlConnection(Usergroups.getAllUsergroupsSQL(), function() {
+	sqlConnection(Usergroups.getAllUsergroupsSQL(), function(err, result) {
 		if(!err) {
 			res.status(200).json({
 				message:"Usergroups listed.",
-				usergroups:data
+				usergroups:result
 			});
 		}
 	});
