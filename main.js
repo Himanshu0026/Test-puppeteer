@@ -8,6 +8,7 @@ var path = require('path');
 var fs = require('fs');
 var sqlConnection = require('./connection.js');
 var Usergroups = require('./api/usergroup.js');
+var routes = require('./api/usergroupController.js');
 var request = require('request');
 var moment = require('moment');
 var config = require('./config/config.json');
@@ -29,7 +30,7 @@ executorServices.redisClient = redisClient;
 var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: config.webhook.secret });
 app.use(handler);
-//app.use("/usergroups",usergroups);
+app.use("/usergroups",routes);
 
 gitBranchServices.managePendingCommits(redisClient);
 queueServices.getRedisClient(redisClient);
@@ -49,17 +50,6 @@ app.get('/qa', function(req, res) {
 
 app.get('/', function(req, res) {
 	res.sendFile(__dirname+'/backstopjs/backstop_data/html_report/index.html');
-});
-
-app.get('/usergroups', function(req, res) {
-	sqlConnection(Usergroups.getAllUsergroupsSQL(), function(err, result) {
-		if(!err) {
-			res.status(200).json({
-				message:"Usergroups listed.",
-				usergroups:result
-			});
-		}
-	});
 });
 
 //Handling Branches Page
