@@ -386,11 +386,11 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithCategory = function(
 	}).waitForSelector('li[id^="forum_"]', function() {
 		casper.test.assertVisible('li#forum_'+other_category_Id+' a' , ' General visible on category listing page');
 		this.click('li#forum_'+other_category_Id+' a');
-	}).waitForSelector('div#category_list', function() {
+	/*}).waitForSelector('div#category_list', function() {
 		this.test.assertExists('a[id^="topic_"]', ' Composed topic is found');
 		this.click('a[id^="topic_"]');
 	}).waitForSelector('div#posts-list', function() {
-		this.test.assertNotVisible('#sub_post_reply', ' Reply option not visible');
+		this.test.assertNotVisible('#sub_post_reply', ' Reply option not visible');*/
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function() {
