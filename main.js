@@ -30,7 +30,25 @@ executorServices.redisClient = redisClient;
 var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: config.webhook.secret });
 app.use(handler);
-app.use("/usergroups",routes);
+app.use("/usergroups", routes);
+
+//if we are here then the specified request is not found
+app.use(function(req,res,next) {
+    var err = new Error("Not Found");
+    err.status = 404;
+    next(err);
+});
+
+//all other requests are not implemented.
+app.use(function(err,req, res, next)  {
+   res.status(err.status || 501);
+   res.json({
+       error: {
+           code: err.status || 501,
+           message: err.message
+       }
+   });
+});
 
 gitBranchServices.managePendingCommits(redisClient);
 queueServices.getRedisClient(redisClient);
