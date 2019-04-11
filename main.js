@@ -32,6 +32,22 @@ var handler = createHandler({ path: '/webhook', secret: config.webhook.secret })
 app.use(handler);
 app.use("/usergroups", routes);
 
+gitBranchServices.managePendingCommits(redisClient);
+queueServices.getRedisClient(redisClient);
+
+//Setting views directory and view engine
+app.use(express.static(__dirname + '/public'));
+app.set('views', path.join(__dirname, '/views'));
+app.set('view engine', 'ejs');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+//Handling QA Page
+app.get('/qa', function(req, res) {
+	res.render('index');
+});
+
 //if we are here then the specified request is not found
 app.use(function(req,res,next) {
     var err = new Error("Not Found");
@@ -48,22 +64,6 @@ app.use(function(err,req, res, next)  {
            message: err.message
        }
    });
-});
-
-gitBranchServices.managePendingCommits(redisClient);
-queueServices.getRedisClient(redisClient);
-
-//Setting views directory and view engine
-app.use(express.static(__dirname + '/public'));
-app.set('views', path.join(__dirname, '/views'));
-app.set('view engine', 'ejs');
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-//Handling QA Page
-app.get('/qa', function(req, res) {
-	res.render('index');
 });
 
 app.get('/', function(req, res) {
