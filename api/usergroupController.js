@@ -2,11 +2,12 @@ var sqlConnection = require('../connection.js');
 var Usergroups = require('./usergroup.js');
 var express = require('express');
 var app = express();
+var routes = express.Router();
 
-var routes = module.exports = {};
+module.exports = routes;
 
-app.get('/usergroups', function(req, res) {
-	sqlConnection(Usergroups.getAllUsergroupsSQL(), function(err, result) {
+routes.get('/usergroups', function(req, res) {
+	sqlConnection(Usergroups.getAllUsergroupsSQL(116), function(err, result) {
 		if(!err) {
 			res.status(200).json({
 				message:"Usergroups listed.",
