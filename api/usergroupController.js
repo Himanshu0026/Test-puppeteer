@@ -6,7 +6,7 @@ var routes = express.Router();
 
 module.exports = routes;
 
-routes.get('/usergroups', function(req, res) {
+routes.get("/usergroups", function(req, res) {
 	sqlConnection(Usergroups.getAllUsergroupsSQL(116), function(err, result) {
 		if(!err) {
 			res.status(200).json({
