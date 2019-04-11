@@ -4,8 +4,6 @@ var express = require('express');
 var app = express();
 var routes = express.Router();
 
-module.exports = routes;
-
 routes.get("/usergroups", function(req, res, next) {
 	sqlConnection(Usergroups.getAllUsergroupsSQL(116), function(err, result) {
 		if(!err) {
@@ -16,3 +14,5 @@ routes.get("/usergroups", function(req, res, next) {
 		}
 	});
 });
+
+module.exports = routes;
