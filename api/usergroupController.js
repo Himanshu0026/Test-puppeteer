@@ -15,4 +15,19 @@ routes.get("/usergroups", function(req, res, next) {
 	});
 });
 
+routes.get("/enabledViewCategory", function(req, res, next) {
+	var field = 'view_forum';
+	var value = '1';
+	var uid = '116';
+	var title = 'General';
+	sqlConnection(Usergroups.getAllUsergroupsSQL(uid,field,value,title), function(err, result) {
+		if(!err) {
+			res.status(200).json({
+				message:"enabled the view category permission.",
+				usergroups:result
+			});
+		}
+	});
+});
+
 module.exports = routes;

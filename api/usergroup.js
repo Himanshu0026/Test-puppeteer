@@ -5,7 +5,7 @@ Usergroups.getAllUsergroupsSQL = function(uid) {
     return sql;
 };
 
-Usergroups.updateUsergroupsSQL = function(uid,fields,values) {
-  var sql ='UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=0, view_thread_content=1, view_others_threads=1, post_replies=1, view_calendar=1, post_events=0, view_others_events=1, approval_of_events=1, view_messageboard=1  WHERE title = "Not Signed Up / Not Logged In" AND uid =116;';
+Usergroups.updateUsergroupsSQL = function(uid,field,value,title) {
+  var sql ='UPDATE usergroups SET '+field+ '=' +value+ 'WHERE uid = "'+uid+'" AND title ='+title+';';
   return sql;
 };
