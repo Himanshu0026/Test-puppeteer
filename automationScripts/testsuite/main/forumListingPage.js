@@ -6,8 +6,6 @@ var forumListingPageTest = require('../cases/forumListingPage.js');
 var forumListingPage = module.exports = {};
 
 forumListingPage.featureTest = function(){
-
-
 	casper.start(config.url, function() {
 		utils.info(" Title of the page :"+this.getTitle());
 	}).thenOpen(config.backEndUrl, function(){
@@ -35,11 +33,5 @@ forumListingPage.featureTest = function(){
 		forumListingPageTest.verifySubCategoriesDisableOptions();
 
 		forumListingPageTest.verifyCases();
-
-		//thumpsUpDownTestcases.deleteAllCategoriesTestCase();
-
-		// method to create a category General
-
-
 	});
 };

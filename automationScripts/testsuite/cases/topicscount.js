@@ -1,16 +1,11 @@
 var config = require('../../../config/config.json');
 var loginJSON = require('../../testdata/loginData.json');
 var topicsCountJSON = require('../../testdata/topicscount.json');
-var profilePageJSON=require('../../testdata/profilePageData.json');
-var topicJSON = require('../../testdata/topic.json');
-var deleteTopicScenarioJSON= require('../../testdata/deleteTopicScenario.json');
 var topicJSON = require('../../testdata/topic.json');
 var topicMethod = require('../methods/topic.js');
 var registerMethod = require('../methods/register.js');
-var profilePageMethod= require('../methods/profilePage.js');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var forumLoginMethod = require('../methods/login.js');
-var profilePageMethod= require('../methods/profilePage.js');
 var deletePostMethod = require('../methods/deletePost.js');
 topicsCountTests = module.exports = {};
 
@@ -21,17 +16,15 @@ topicsCountTests.createCategory = function() {
 		utils.info(' * Method to create category and sub category *');
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
-                try{
-                        this.test.assertTextExist(topicsCountJSON.category.title, 'category found on category page');
-                }catch(e){
-                        backEndForumRegisterMethod.createCategory(topicsCountJSON.category);
-			this.reload(function() {
-				this.waitForText(topicsCountJSON.category.title, function(){
-					backEndForumRegisterMethod.createCategorySubcategory(topicsCountJSON.topicsCountSubCategory.title, topicsCountJSON.topicsCountSubCategory);
-				});
-
+    try{
+      this.test.assertTextExist(topicsCountJSON.category.title, 'category found on category page');
+    }catch(e){
+			casper.then(function(){
+      	backEndForumRegisterMethod.createCategory(topicsCountJSON.category);
+			}).waitForText(topicsCountJSON.category.title, function(){
+				backEndForumRegisterMethod.createCategorySubcategory(topicsCountJSON.topicsCountSubCategory.title, topicsCountJSON.topicsCountSubCategory);
 			});
-                }
+		}
 	});
 };
 
