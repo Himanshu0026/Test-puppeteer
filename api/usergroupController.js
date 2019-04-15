@@ -4,7 +4,7 @@ var express = require('express');
 var app = express();
 var routes = express.Router();
 
-routes.get("/usergroups", function(req, res, next) {
+routes.get("/", function(req, res, next) {
 	sqlConnection(Usergroups.getAllUsergroupsSQL(116), function(err, result) {
 		if(!err) {
 			res.status(200).json({
@@ -20,7 +20,7 @@ routes.get("/enabledViewCategory", function(req, res, next) {
 	var value = '1';
 	var uid = '116';
 	var title = 'General';
-	sqlConnection(Usergroups.getAllUsergroupsSQL(uid,field,value,title), function(err, result) {
+	sqlConnection(Usergroups.updateUsergroupsSQL(uid,field,value,title), function(err, result) {
 		if(!err) {
 			res.status(200).json({
 				message:"enabled the view category permission.",
