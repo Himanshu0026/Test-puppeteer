@@ -197,52 +197,98 @@ forumListingPageTest.disableVariousCategories = function(){
 		this.waitForSelector('div#loading_msg', function(){
 			utils.info(casper.fetchText('div#loading_msg'));
 		  utils.info('passwordProtected Category edited');
-		}).waitWhileVisible('form[name="frmOptions"] button',function(){
-	  }).waitForSelector('a#addForumButton', function(){
-			this.test.assertNotVisible('span.edit_forum_status_img.protected', 'password protected category not found on category Page');
-			this.wait(1000, function(){});
-		}).waitForSelector('a#addForumButton', function(){
-			this.reload(function(){
-				forumListingPageMethod.editCategory(forumListingPageJSON.enableLocked.title);
-			});
-		}).waitForSelector('form[name="frmOptions"] button', function(){
-  	//locked category-unlocked sub-category cannot be unlocked due to issue in unlocking the sub-category.
-    	utils.enableorDisableCheckbox('forum_locked', false);
-		}).then(function(){
-			this.click('form[name="frmOptions"] button');
-		}).waitForSelector('a#addForumButton', function(){
-			//disable linked category
-    	this.reload(function(){
-				forumListingPageMethod.editCategory(forumListingPageJSON.enableLinked.title);
-			});
-  	}).waitForSelector('form[name="frmOptions"] button', function(){
-    	this.sendKeys('input[name="forum_link"]', ' ',  {reset:true});
-  	}).then(function(){
-			this.click('form[name="frmOptions"] button');
-  	}).waitForSelector('a#addForumButton', function(){
-			this.test.assertDoesntExist('span.edit_forum_status_img linked', 'Linked category not found on category Page');
-	 		//disable invisible category
-  	}).then(function(){
-	  	this.reload(function(){
-				forumListingPageMethod.editCategory(forumListingPageJSON.Invisible.title);
-			});
-  	}).waitForSelector('form[name="frmOptions"] button', function(){
-    	utils.enableorDisableCheckbox('forum_invisible', false);
-  	}).then(function(){
-			this.click('form[name="frmOptions"] button');
-			this.waitForSelector('div#loading_msg', function(){
-		  	utils.info(casper.fetchText('div#loading_msg'));
-		  	utils.info('Invisible Category edited');
-	 		}, function fail(){
-		  	utils.error('disable invisible Category not created');
-		  	utils.error('Loading... not found');
-	  	});
-    }).waitForSelector('a#addForumButton', function(){
-			this.test.assertTextExists('Invisible','Invisble category and sub-category present on backend categoryPage');
-     });
-   });
+			if (casper.visible('input#forum_name')) {
+					utils.info('still on edit-category page');
+					this.waitForSelector('a#addForumButton', function(){
+						this.test.assertNotVisible('span.edit_forum_status_img.protected', 'password protected category not found on category Page');
+						this.wait(1000, function(){});
+						}).waitForSelector('a#addForumButton', function(){
+							this.reload(function(){
+								forumListingPageMethod.editCategory(forumListingPageJSON.enableLocked.title);
+							});
+						}).waitForSelector('form[name="frmOptions"] button', function(){
+		  			//locked category-unlocked sub-category cannot be unlocked due to issue in unlocking the sub-category.
+		    		utils.enableorDisableCheckbox('forum_locked', false);
+					}).then(function(){
+						this.click('form[name="frmOptions"] button');
+					}).waitForSelector('a#addForumButton', function(){
+						//disable linked category
+		    		this.reload(function(){
+							forumListingPageMethod.editCategory(forumListingPageJSON.enableLinked.title);
+						});
+		  		}).waitForSelector('form[name="frmOptions"] button', function(){
+		    		this.sendKeys('input[name="forum_link"]', ' ',  {reset:true});
+		  		}).then(function(){
+						this.click('form[name="frmOptions"] button');
+		  		}).waitForSelector('a#addForumButton', function(){
+						this.test.assertDoesntExist('span.edit_forum_status_img linked', 'Linked category not found on category Page');
+			 			//disable invisible category
+		  		}).then(function(){
+			  		this.reload(function(){
+							forumListingPageMethod.editCategory(forumListingPageJSON.Invisible.title);
+						});
+		  		}).waitForSelector('form[name="frmOptions"] button', function(){
+		    		utils.enableorDisableCheckbox('forum_invisible', false);
+		  		}).then(function(){
+						this.click('form[name="frmOptions"] button');
+						this.waitForSelector('div#loading_msg', function(){
+				  		utils.info(casper.fetchText('div#loading_msg'));
+				  		utils.info('Invisible Category edited');
+			 			}, function fail(){
+				  		utils.error('disable invisible Category not created');
+				  		utils.error('Loading... not found');
+			  		});
+		    	}).waitForSelector('a#addForumButton', function(){
+						this.test.assertTextExists('Invisible','Invisble category and sub-category present on backend categoryPage');
+		     	});
+			} else {
+				utils.info('comes on categories page');
+				this.waitForSelector('a#addForumButton', function(){
+					this.test.assertNotVisible('span.edit_forum_status_img.protected', 'password protected category not found on category Page');
+					this.wait(1000, function(){});
+				}).waitForSelector('a#addForumButton', function(){
+					this.reload(function(){
+						forumListingPageMethod.editCategory(forumListingPageJSON.enableLocked.title);
+					});
+				}).waitForSelector('form[name="frmOptions"] button', function(){
+  			//locked category-unlocked sub-category cannot be unlocked due to issue in unlocking the sub-category.
+    		utils.enableorDisableCheckbox('forum_locked', false);
+			}).then(function(){
+				this.click('form[name="frmOptions"] button');
+			}).waitForSelector('a#addForumButton', function(){
+				//disable linked category
+    		this.reload(function(){
+					forumListingPageMethod.editCategory(forumListingPageJSON.enableLinked.title);
+				});
+  		}).waitForSelector('form[name="frmOptions"] button', function(){
+    		this.sendKeys('input[name="forum_link"]', ' ',  {reset:true});
+  		}).then(function(){
+				this.click('form[name="frmOptions"] button');
+  		}).waitForSelector('a#addForumButton', function(){
+				this.test.assertDoesntExist('span.edit_forum_status_img linked', 'Linked category not found on category Page');
+	 			//disable invisible category
+  		}).then(function(){
+	  		this.reload(function(){
+					forumListingPageMethod.editCategory(forumListingPageJSON.Invisible.title);
+				});
+  		}).waitForSelector('form[name="frmOptions"] button', function(){
+    		utils.enableorDisableCheckbox('forum_invisible', false);
+  		}).then(function(){
+				this.click('form[name="frmOptions"] button');
+				this.waitForSelector('div#loading_msg', function(){
+		  		utils.info(casper.fetchText('div#loading_msg'));
+		  		utils.info('Invisible Category edited');
+	 			}, function fail(){
+		  		utils.error('disable invisible Category not created');
+		  		utils.error('Loading... not found');
+	  		});
+    	}).waitForSelector('a#addForumButton', function(){
+				this.test.assertTextExists('Invisible','Invisble category and sub-category present on backend categoryPage');
+     	});
+   	}
+	 });
+ });
 };
-
 
 //Verify the sub category for changing the parent category
 //Verify the error message to create a category as linked
