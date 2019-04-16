@@ -13,7 +13,7 @@ settingRoutes.get("/getUID", function(req, res, next) {
       //var uid = json.stringify(data);
 			res.status(200).json({
 				message:"UID found.",
-				userID:data
+				UID:data
 			});
 		}
 	});
