@@ -19,7 +19,7 @@ routes.get("/getUsergroupID", function(req, res, next) {
 			res.send(err);
 		}
 		if(response.statusCode == 200) {
-			console.log('got the response in it'+body);
+			console.log('got the response in it'+JSON.stringify(body));
 			uid = body.userID.uid;
 			console.log('dfhhhhhh'+uid);
 			var title = 'General';
