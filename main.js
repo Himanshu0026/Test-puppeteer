@@ -35,7 +35,7 @@ var handler = createHandler({ path: '/webhook', secret: config.webhook.secret })
 app.use(handler);
 app.use(cors());
 app.use("/usergroups", routes);
-app.use("/settings", settingRoutes);
+//app.use("/settings", settingRoutes);
 
 gitBranchServices.managePendingCommits(redisClient);
 queueServices.getRedisClient(redisClient);
