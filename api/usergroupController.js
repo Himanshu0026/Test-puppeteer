@@ -4,12 +4,13 @@ var express = require('express');
 var app = express();
 var routes = express.Router();
 
-routes.get("/", function(req, res, next) {
-	sqlConnection(Usergroups.getAllUsergroupsSQL(116), function(err, result) {
+routes.get("/getUsergroupID", function(req, res, next) {
+	var uid = '116';
+	sqlConnection(Usergroups.getUsergroupID(uid), function(err, result) {
 		if(!err) {
 			res.status(200).json({
-				message:"Usergroups listed.",
-				usergroups:result
+				message:"UsergroupID found.",
+				usergroupID:result
 			});
 		}
 	});
