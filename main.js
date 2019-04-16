@@ -8,8 +8,10 @@ var path = require('path');
 var fs = require('fs');
 var sqlConnection = require('./connection.js');
 var Usergroups = require('./api/usergroup.js');
+var setting = require('./api/setting.js');
 var cors = require('cors');
 var routes = require('./api/usergroupController.js');
+var settingRoutes = require('./api/settingController.js');
 var request = require('request');
 var moment = require('moment');
 var config = require('./config/config.json');
@@ -33,6 +35,7 @@ var handler = createHandler({ path: '/webhook', secret: config.webhook.secret })
 app.use(handler);
 app.use(cors());
 app.use("/usergroups", routes);
+app.use("/setting", settingRoutes);
 
 gitBranchServices.managePendingCommits(redisClient);
 queueServices.getRedisClient(redisClient);

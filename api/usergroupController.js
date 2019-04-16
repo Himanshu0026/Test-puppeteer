@@ -6,7 +6,8 @@ var routes = express.Router();
 
 routes.get("/getUsergroupID", function(req, res, next) {
 	var uid = '116';
-	sqlConnection(Usergroups.getUsergroupID(uid), function(err, result) {
+	var title = 'General';
+	sqlConnection(Usergroups.getUsergroupID(uid,title), function(err, result) {
 		if(!err) {
 			res.status(200).json({
 				message:"UsergroupID found.",
