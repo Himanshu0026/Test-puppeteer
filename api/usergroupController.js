@@ -1,5 +1,6 @@
 var sqlConnection = require('../connection.js');
 var Usergroups = require('./usergroup.js');
+var config = require('../config/config.json');
 var request = require('request');
 var express = require('express');
 var app = express();
@@ -10,7 +11,7 @@ routes.get("/getUsergroupID", function(req, res, next) {
 	console.log('inside the getUsergroupID');
 	request({
 		url: config.apiLocalUrl+'/settings/getUID',
-		//headers: { 'user-agent' : 'git-technetium' },
+		headers: { 'user-agent' : 'git-technetium' },
 		json: true
 	}, function(err, response, body) {
 		if(err) {
