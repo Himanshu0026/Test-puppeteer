@@ -8,7 +8,7 @@ var routes = express.Router();
 
 routes.get("/getUsergroupID", function(req, res, next) {
 	request({
-		url: config.url+':8081/settings/getUID',
+		url: config.apiLocalUrl+'/settings/getUID',
 		//headers: { 'user-agent' : 'git-technetium' },
 		json: true
 	}, function(err, response, body) {

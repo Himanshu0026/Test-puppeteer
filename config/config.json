@@ -3,6 +3,7 @@
 	"failedScreenShotsLocation": "/var/tmp/",
 	"url": "http://beta21.websitetoolbox.com/",
 	"backEndUrl": "http://beta21.websitetoolbox.com/tool/members/login",
+	"apiLocalUrl":"http://beta21.websitetoolbox.com:8081",
 
 	"app": {
 		"verbose" : true,
