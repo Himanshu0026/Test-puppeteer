@@ -1,6 +1,6 @@
 var sqlConnection = require('../connection.js');
 var setting = require('./setting.js');
-var config = require('./config/config.json');
+var config = require('../config/config.json');
 var express = require('express');
 var app = express();
 var routes = express.Router();
