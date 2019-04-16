@@ -9,7 +9,8 @@ var settingRoutes = express.Router();
 settingRoutes.get("/getUID", function(req, res, next) {
 	sqlConnection(settings.getUID(user), function(err, result) {
 		if(!err) {
-      var uid = result[0].uid;
+      var data = result[0].uid;
+      var uid = json.stringify(data);
 			res.status(200).json({
 				message:"UID found.",
 				userID:uid
