@@ -34,7 +34,7 @@ var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: config.webhook.secret });
 app.use(handler);
 app.use(cors());
-//app.use("/usergroups", routes);
+app.use("/usergroups", routes);
 app.use("/settings", settingRoutes);
 
 gitBranchServices.managePendingCommits(redisClient);
