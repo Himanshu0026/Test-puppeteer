@@ -16,3 +16,5 @@ settingRoutes.get("/getUID", function(req, res, next) {
 		}
 	});
 });
+
+module.exports = settingRoutes;
