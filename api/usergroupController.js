@@ -11,7 +11,7 @@ routes.get("/getUsergroupID", function(req, res, next) {
 	console.log('inside the getUsergroupID');
 	request({
 		url: config.apiLocalUrl+'/settings/getUID',
-		headers: { 'user-agent' : 'git-technetium' },
+		//headers: { 'user-agent' : 'git-technetium' },
 		json: true
 	}, function(err, response, body) {
 		if(err) {
@@ -19,7 +19,7 @@ routes.get("/getUsergroupID", function(req, res, next) {
 			res.send(err);
 		}
 		if(response.statusCode == 200) {
-			console.log('got the response in it');
+			console.log('got the response in it'+body);
 			uid = body.userID.uid;
 			console.log('dfhhhhhh'+uid);
 			var title = 'General';
