@@ -7,6 +7,7 @@ var uid;
 var routes = express.Router();
 
 routes.get("/getUsergroupID", function(req, res, next) {
+	console.log('inside the getUsergroupID');
 	request({
 		url: config.apiLocalUrl+'/settings/getUID',
 		//headers: { 'user-agent' : 'git-technetium' },
@@ -17,6 +18,7 @@ routes.get("/getUsergroupID", function(req, res, next) {
 			res.send(err);
 		}
 		if(response.statusCode == 200) {
+			console.log('got the response in it');
 			uid = body.userID.uid;
 			var title = 'General';
 			sqlConnection(Usergroups.getUsergroupID(uid,title), function(err, result) {
