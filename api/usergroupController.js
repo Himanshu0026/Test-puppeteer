@@ -21,6 +21,7 @@ routes.get("/getUsergroupID", function(req, res, next) {
 		if(response.statusCode == 200) {
 			console.log('got the response in it');
 			uid = body.userID.uid;
+			console.log('dfhhhhhh'+uid);
 			var title = 'General';
 			sqlConnection(Usergroups.getUsergroupID(uid,title), function(err, result) {
 				if(!err) {
