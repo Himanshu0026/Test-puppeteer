@@ -1,27 +1,40 @@
 var sqlConnection = require('../connection.js');
 var Usergroups = require('./usergroup.js');
+var request = require('request');
 var express = require('express');
 var app = express();
+var uid;
 var routes = express.Router();
 
 routes.get("/getUsergroupID", function(req, res, next) {
-	var uid = '116';
-	var title = 'General';
-	sqlConnection(Usergroups.getUsergroupID(uid,title), function(err, result) {
-		if(!err) {
-			res.status(200).json({
-				message:"UsergroupID found.",
-				usergroupID:result
+	request({
+		url: config.url+':8081/settings/getUID',
+		//headers: { 'user-agent' : 'git-technetium' },
+		json: true
+	}, function(err, response, body) {
+		if(err) {
+			console.log('err : '+err);
+			res.send(err);
+		}
+		if(response.statusCode == 200) {
+			uid = body.userID.uid;
+			var title = 'General';
+			sqlConnection(Usergroups.getUsergroupID(uid,title), function(err, result) {
+				if(!err) {
+					res.status(200).json({
+						message:"UsergroupID found.",
+						usergroupID:result
+					});
+				}
 			});
+		}else {
+			res.send('The uid not found');
 		}
 	});
 });
 
 routes.get("/enabledViewCategory", function(req, res, next) {
-	var field = 'view_forum';
-	var value = '1';
-	var uid = '116';
-	var title = 'General';
+
 	sqlConnection(Usergroups.updateUsergroupsSQL(uid,field,value,title), function(err, result) {
 		if(!err) {
 			res.status(200).json({
