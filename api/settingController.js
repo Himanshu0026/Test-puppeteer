@@ -11,7 +11,7 @@ settingRoutes.get("/getUID", function(req, res, next) {
 		if(!err) {
 			res.status(200).json({
 				message:"UID found.",
-				userID:result
+				userID:result[0].uid
 			});
 		}
 	});
