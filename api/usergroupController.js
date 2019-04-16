@@ -28,7 +28,7 @@ routes.get("/getUsergroupID", function(req, res, next) {
 				if(!err) {
 					res.status(200).json({
 						message:"UsergroupID found.",
-						usergroupID:result
+						usergroupID:result[0].usergroupid
 					});
 				}
 			});
