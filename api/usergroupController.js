@@ -11,7 +11,20 @@ var routes = express.Router();
 
 routes.get("/getUsergroupID/*", function(req, res, next) {
 	var groupTitle = req.url.split('/')[2];
-	uid = settings.setUID();
+	settings.setUID(function(err, uid) {
+		if(!err) {
+			uid = uid;
+			console.log('the uid is'+uid);
+			sqlConnection(Usergroups.getUsergroupID(uid,groupTitle), function(err, result) {
+				if(!err) {
+					res.status(200).json({
+						message:"UsergroupID found.",
+						usergroupID:result[0].usergroupid
+					});
+				}
+			});
+		}
+	});
 	/*console.log('the uid is'+uid);
 	sqlConnection(Usergroups.getUsergroupID(uid,groupTitle), function(err, result) {
 		if(!err) {
