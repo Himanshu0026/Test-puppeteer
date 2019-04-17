@@ -19,6 +19,7 @@ settings.setUID = function() {
 		}
 		if(response.statusCode == 200) {
 			uid = body.UID;
+      console.log('thghgggggggggggggggggggg'+uid);
 			return uid;
 		}else {
 			res.send('The uid not found');
