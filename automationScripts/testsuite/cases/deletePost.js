@@ -259,7 +259,7 @@ deletePostTests.deletePostCheckboxAdmin=function(){
 		var index=1;
 		deletePostMethod.deletePostCheckBoxId('input[name="pid"]', index);
 	}).then(function(){
-		this.click('input#deleteposts');
+		this.click('#deleteposts');
 	}).wait(1000, function(){
 		//checked post is present on postlisting page
 		this.thenOpen(config.url, function(){
@@ -300,7 +300,7 @@ deletePostTests.deleteMultiplePostAdmin=function(){
 		var index=1;
 		deletePostMethod.deletePostCheckBoxId('input[name="pid"]', index);
 	}).then(function(){
-		this.click('input#deleteposts');
+		this.click('#deleteposts');
 		this.wait(1000, function(){});
 	}).then(function(){
 		this.test.assertDoesntExist('i.glyphicon.glyphicon-chevron-down');
@@ -585,7 +585,7 @@ deletePostTests.deletePostCheckboxRegister=function(){
 		var index=1;
 		deletePostMethod.deletePostCheckBoxId('input[name="pid"]', index);
 	}).then(function(){
-		this.click('input#deleteposts');
+		this.click('#deleteposts');
 		this.wait(1000, function(){});
 	//checked post is present on postlisting page
 	}).thenOpen(config.url, function(){
@@ -789,7 +789,7 @@ deletePostTests.deleteOwnTopicDisablePostEnable=function(){
 			var index=1;
 			deletePostMethod.deletePostCheckBoxId('input[name="pid"]', index);
 		}).then(function(){
-			this.click('input#deleteposts');
+			this.click('#deleteposts');
 		}).then(function(){
 			//checked post is present on postlisting page
 			this.thenOpen(config.url, function(){

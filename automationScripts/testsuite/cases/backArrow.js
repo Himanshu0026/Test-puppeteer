@@ -419,8 +419,8 @@ backArrowTests.UnpincategorySubcategory = function() {
     this.evaluate(function() {
       document.querySelector('input#firstpid').click();
     });
-  }).waitForSelector('input#deleteposts', function(){
-		this.click('input#deleteposts');
+  }).waitForSelector('#deleteposts', function(){
+		this.click('#deleteposts');
   }).waitForSelector('a#back_arrow_topic i', function(){
     this.test.assertExists('input[name="id"]', 'checkbox present on undercategory topics');
     this.evaluate(function() {
