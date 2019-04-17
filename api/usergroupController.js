@@ -1,5 +1,6 @@
 var sqlConnection = require('../connection.js');
 var Usergroups = require('./usergroup.js');
+var settings = require('./setting.js');
 var config = require('../config/config.json');
 var automationData = require('../config/automationData.json');
 var request = require('request');
@@ -10,26 +11,14 @@ var routes = express.Router();
 
 routes.get("/getUsergroupID/*", function(req, res, next) {
 	var groupTitle = req.url.split('/')[2];
-	request({
-		url: config.apiLocalUrl+'/settings/getUID',
-		json: true
-	}, function(err, response, body) {
-		if(err) {
-			console.log('err : '+err);
-			res.send(err);
-		}
-		if(response.statusCode == 200) {
-			uid = body.UID;
-			sqlConnection(Usergroups.getUsergroupID(uid,groupTitle), function(err, result) {
-				if(!err) {
-					res.status(200).json({
-						message:"UsergroupID found.",
-						usergroupID:result[0].usergroupid
-					});
-				}
+	uid = settings.setUID();
+	console.log('the uid is'+uid);
+	sqlConnection(Usergroups.getUsergroupID(uid,groupTitle), function(err, result) {
+		if(!err) {
+			res.status(200).json({
+				message:"UsergroupID found.",
+				usergroupID:result[0].usergroupid
 			});
-		}else {
-			res.send('The uid not found');
 		}
 	});
 });
