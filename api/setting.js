@@ -19,8 +19,6 @@ settings.setUID = function(callback) {
 		}
 		if(res.statusCode == 200) {
 			uid = body.UID;
-      console.log('thghgggggggggggggggggggg'+uid);
-			//res.send(uid);
       return callback(null, uid);
 		}else {
 			res.send('The uid not found');

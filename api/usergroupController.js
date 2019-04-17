@@ -14,7 +14,6 @@ routes.get("/getUsergroupID/*", function(req, res, next) {
 	settings.setUID(function(err, uid) {
 		if(!err) {
 			uid = uid;
-			console.log('the uid is'+uid);
 			sqlConnection(Usergroups.getUsergroupID(uid,groupTitle), function(err, result) {
 				if(!err) {
 					res.status(200).json({
@@ -25,31 +24,16 @@ routes.get("/getUsergroupID/*", function(req, res, next) {
 			});
 		}
 	});
-	/*console.log('the uid is'+uid);
-	sqlConnection(Usergroups.getUsergroupID(uid,groupTitle), function(err, result) {
-		if(!err) {
-			res.status(200).json({
-				message:"UsergroupID found.",
-				usergroupID:result[0].usergroupid
-			});
-		}
-	});*/
 });
 
-routes.get("/enabledViewCategory/*", function(req, res, next) {
-	var groupTitle = req.url.split('/')[2];
-	var field = automationData.enabledViewCategory.field;
-	var value = automationData.enabledViewCategory.value;
-	request({
-		url: config.apiLocalUrl+'/settings/getUID',
-		json: true
-	}, function(err, response, body) {
-		if(err) {
-			console.log('err : '+err);
-			res.send(err);
-		}
-		if(response.statusCode == 200) {
-			uid = body.UID;
+routes.get("/:title/:field/:value", function(req, res, next) {
+	var groupTitle = req.params.title;
+	var field = req.params.field;
+	var value = req.params.value;
+	settings.setUID(function(err, uid) {
+		if(!err) {
+			uid = uid;
+			console.log('the uid is'+uid);
 			sqlConnection(Usergroups.updateUsergroupsSQL(uid,field,value,groupTitle), function(err, result) {
 				if(!err) {
 					res.status(200).json({
@@ -58,8 +42,6 @@ routes.get("/enabledViewCategory/*", function(req, res, next) {
 					});
 				}
 			});
-		}else {
-			res.send('The uid not found');
 		}
 	});
 });
