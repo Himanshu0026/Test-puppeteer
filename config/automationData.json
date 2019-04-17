@@ -3,6 +3,66 @@
   "enabledViewCategory" : {
      "field": "view_forum",
      "value": "1"
+  },
+
+  "enabledStartTopic" : {
+     "field": "post_threads",
+     "value": "1"
+  },
+
+  "enabledReplyTopic" : {
+     "field": "other_post_replies",
+     "value": "1"
+  },
+
+  "enabledUploadAttachments" : {
+     "field": "upload_attachments",
+     "value": "1"
+  },
+
+  "enabledViewAttachments" : {
+     "field": "view_attachments",
+     "value": "1"
+  },
+
+  "enabledRequirePostApproval" : {
+     "field": "post_approval",
+     "value": "1"
+  },
+
+  "enabledViewTopicContent" : {
+     "field": "view_thread_content",
+     "value": "1"
+  },
+
+  "enabledViewOthersTopic" : {
+     "field": "view_others_threads",
+     "value": "1"
+  },
+
+  "enabledReplyOwnTopic" : {
+     "field": "post_replies",
+     "value": "1"
+  },
+
+  "enabledEditOwnPosts" : {
+     "field": "edit_posts",
+     "value": "1"
+  },
+
+  "enabledDeleteOwnPost" : {
+     "field": "delete_posts",
+     "value": "1"
+  },
+
+  "enabledDeleteOwnTopics" : {
+     "field": "delete_threads",
+     "value": "1"
+  },
+
+  "enabledMoveOwnTopics" : {
+     "field": "move_own_threads",
+     "value": "1"
   }
 
 }
