@@ -2,8 +2,7 @@
 
   "enabledViewCategory" : {
      "field": "view_forum",
-     "value": "1",
-     "title": "General"
+     "value": "1"
   }
 
 }
