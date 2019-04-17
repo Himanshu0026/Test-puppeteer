@@ -7,8 +7,10 @@ var app = express();
 var uid;
 var routes = express.Router();
 
-routes.get("/getUsergroupID", function(req, res, next) {
+routes.get("/getUsergroupID/*", function(req, res, next) {
 	console.log('inside the getUsergroupID');
+	var groupTitle = req.url.split('/')[2];
+	console.log('the group title is'+groupTitle);
 	request({
 		url: config.apiLocalUrl+'/settings/getUID',
 		json: true
@@ -19,8 +21,8 @@ routes.get("/getUsergroupID", function(req, res, next) {
 		}
 		if(response.statusCode == 200) {
 			uid = body.UID;
-			var title = 'General';
-			sqlConnection(Usergroups.getUsergroupID(uid,title), function(err, result) {
+			//var title = 'General';
+			sqlConnection(Usergroups.getUsergroupID(uid,groupTitle), function(err, result) {
 				if(!err) {
 					res.status(200).json({
 						message:"UsergroupID found.",
@@ -34,8 +36,9 @@ routes.get("/getUsergroupID", function(req, res, next) {
 	});
 });
 
-routes.get("/enabledViewCategory", function(req, res, next) {
-
+routes.get("/enabledViewCategory/*", function(req, res, next) {
+	var groupTitle = req.url.split('/')[2];
+	console.log('the group title is'+groupTitle);
 	sqlConnection(Usergroups.updateUsergroupsSQL(uid,field,value,title), function(err, result) {
 		if(!err) {
 			res.status(200).json({
