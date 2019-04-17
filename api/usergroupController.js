@@ -64,8 +64,8 @@ routes.get("/enabledViewCategory/*", function(req, res, next) {
 
 routes.get("/enabledStartTopic", function(req, res, next) {
 	var groupTitle = req.url.split('/')[2];
-	var field = automationData.enabledViewCategory.field;
-	var value = automationData.enabledViewCategory.value;
+	var field = automationData.enabledStartTopic.field;
+	var value = automationData.enabledStartTopic.value;
 	request({
 		url: config.apiLocalUrl+'/settings/getUID',
 		json: true
