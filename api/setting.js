@@ -17,7 +17,7 @@ settings.setUID = function(callback) {
 			console.log('err : '+err);
 			res.send(err);
 		}
-		if(response.statusCode == 200) {
+		if(res.statusCode == 200) {
 			uid = body.UID;
       console.log('thghgggggggggggggggggggg'+uid);
 			res.send(uid);
