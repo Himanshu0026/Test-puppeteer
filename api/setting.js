@@ -12,7 +12,7 @@ settings.setUID = function(callback) {
 	request({
 		url: config.apiLocalUrl+'/settings/getUID',
 		json: true
-	}, function(err, response, body) {
+	}, function(err, res, body) {
 		if(err) {
 			console.log('err : '+err);
 			res.send(err);
