@@ -220,6 +220,15 @@ forumListingPageTest.disableVariousCategories = function(){
 		    		this.sendKeys('input[name="forum_link"]', ' ',  {reset:true});
 		  		}).then(function(){
 						this.click('form[name="frmOptions"] button');
+						//linked category cannot be disabled sometime
+						//add changes
+						this.waitForSelector('div#loading_msg', function(){
+				  		utils.info(casper.fetchText('div#loading_msg'));
+				  		utils.info('Linked Category edited');
+			 			}, function fail(){
+				  		utils.error('disable Linked Category not created');
+				  		utils.error('Loading... not found');
+			  		});
 		  		}).waitForSelector('a#addForumButton', function(){
 						this.test.assertDoesntExist('span.edit_forum_status_img linked', 'Linked category not found on category Page');
 			 			//disable invisible category
@@ -264,6 +273,15 @@ forumListingPageTest.disableVariousCategories = function(){
     		this.sendKeys('input[name="forum_link"]', ' ',  {reset:true});
   		}).then(function(){
 				this.click('form[name="frmOptions"] button');
+				//linked category cannot be disabled sometime
+				//add changes
+				this.waitForSelector('div#loading_msg', function(){
+					utils.info(casper.fetchText('div#loading_msg'));
+					utils.info('Linked Category edited');
+				}, function fail(){
+					utils.error('disable Linked Category not created');
+					utils.error('Loading... not found');
+				});
   		}).waitForSelector('a#addForumButton', function(){
 				this.test.assertDoesntExist('span.edit_forum_status_img linked', 'Linked category not found on category Page');
 	 			//disable invisible category
@@ -364,7 +382,7 @@ forumListingPageTest.verifyCategoriesDisableOptions = function(){
     deletePostMethod.getCategoryHrefFrontend(forumListingPageJSON.enableLinked.title);
 	}).waitForSelector('span.forum-title', function(){
 		//Verify linked category
-		this.test.assertDoesntExist('div#lga', 'linked category not navigated to google.com url successfully');
+		this.test.assertDoesntExist('div#lga', 'linked category not navigated to websitetoolbox.com url successfully');
   }).then(function(){
     this.test.assertExists('a#links-nav i');
 		this.click('a#links-nav i');
