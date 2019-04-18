@@ -8,6 +8,11 @@ settings.getUID = function(user) {
     return sql;
 };
 
+settings.updateSettings = function(uid,field,value) {
+  var sql ='UPDATE settings SET '+field+ '=' +value+ ' WHERE uid = "'+uid+'";';
+  return sql;
+};
+
 settings.setUID = function(callback) {
 	request({
 		url: config.apiLocalUrl+'/settings/getUID',
