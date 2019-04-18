@@ -21,9 +21,13 @@ backArrowTests.createbackArrowCategory = function() {
     }catch(e){
       casper.then(function(){
 		    backEndForumRegisterMethod.createCategory(backArrowJSON.backArrowCategory);
-      }).waitForText(backArrowJSON.backArrowCategory.title, function(){
-				backEndForumRegisterMethod.createCategorySubcategory(backArrowJSON.backArrowCategory.title, backArrowJSON.backArrowSubCategory);
-			});
+      }).wait(1000, function(){
+        this.reload(function() {
+          this.waitForText(backArrowJSON.backArrowCategory.title, function(){
+				    backEndForumRegisterMethod.createCategorySubcategory(backArrowJSON.backArrowCategory.title, backArrowJSON.backArrowSubCategory);
+			    });
+        });
+      });
     }
 	});
 };

@@ -21,8 +21,12 @@ topicsCountTests.createCategory = function() {
     }catch(e){
 			casper.then(function(){
       	backEndForumRegisterMethod.createCategory(topicsCountJSON.category);
-			}).waitForText(topicsCountJSON.category.title, function(){
-				backEndForumRegisterMethod.createCategorySubcategory(topicsCountJSON.topicsCountSubCategory.title, topicsCountJSON.topicsCountSubCategory);
+			}).wait(1000, function(){
+				this.reload(function() {
+					this.waitForText(topicsCountJSON.category.title, function(){
+						backEndForumRegisterMethod.createCategorySubcategory(topicsCountJSON.topicsCountSubCategory.title, topicsCountJSON.topicsCountSubCategory);
+					});
+				});
 			});
 		}
 	});
