@@ -218,7 +218,7 @@ forumListingPageTest.disableVariousCategories = function(){
 						});
 		  		}).waitForSelector('form[name="frmOptions"] button', function(){
 		    		this.sendKeys('input[name="forum_link"]', ' ',  {reset:true});
-		  		}).then(function(){
+					}).wait(2000, function(){
 						this.click('form[name="frmOptions"] button');
 						//linked category cannot be disabled sometime
 						//add changes
@@ -271,7 +271,7 @@ forumListingPageTest.disableVariousCategories = function(){
 				});
   		}).waitForSelector('form[name="frmOptions"] button', function(){
     		this.sendKeys('input[name="forum_link"]', ' ',  {reset:true});
-  		}).then(function(){
+  		}).wait(2000, function(){
 				this.click('form[name="frmOptions"] button');
 				//linked category cannot be disabled sometime
 				//add changes
