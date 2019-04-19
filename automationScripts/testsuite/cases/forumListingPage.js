@@ -12,7 +12,7 @@ var forumListingPageTest=module.exports = {};
 //1.Test case for Verify to add the heading on the category(add, edit, removed category haeding)
 forumListingPageTest.headingOnCategory = function(){
 	casper.thenOpen(config.backEndUrl, function(){
-		utils.info('Case 14[Test case for Verify to add the heading on the category]');
+		utils.info('Case 1[Test case for Verify to add the heading on the category]');
     backEndForumRegisterMethod.goToCategoryPage();
   }).then(function(){
     forumListingPageMethod.createCategoryHeading(forumListingPageJSON.categoryHeading.data);
@@ -36,7 +36,7 @@ forumListingPageTest.headingOnCategory = function(){
 //Verfiy with create a parent category.
 forumListingPageTest.createVariousCategories = function(){
 	casper.thenOpen(config.backEndUrl, function(){
-    utils.info('Case 1[Test case for Verify to add the category without title field]');
+    utils.info('Case 2[Test case for Verify to add the category without title field]');
     utils.info('****************************************FORUMLISTING - PAGE********************************************');
     backEndForumRegisterMethod.goToCategoryPage();
   }).then(function(){
@@ -71,8 +71,8 @@ forumListingPageTest.createVariousCategories = function(){
 forumListingPageTest.verifyVariousCategoriesFrontEnd = function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('****************************************FORUMLISTING - PAGE********************************************');
-		utils.info('Case 2[Validate category with title field]');
-    utils.info('Case 3[Validate category with description field]');
+		utils.info('Case 3[Validate category with title field]');
+    utils.info('Case 4[Validate category with description field]');
     forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).waitWhileVisible('#td_tab_login', function() {
   }).waitForSelector('div#topics ul li:nth-child(2) a',function(){
@@ -81,7 +81,7 @@ forumListingPageTest.verifyVariousCategoriesFrontEnd = function(){
   }).waitForText(forumListingPageJSON.validCategories.title, function(){
     this.test.assertTextExists(forumListingPageJSON.validCategories.description,'Description found on forumListingPage of frontEnd');
   }).then(function(){
-		utils.info('Case 4[Validate sub-category on forumListingPage frontEnd]');
+		utils.info('Case 5[Validate sub-category on forumListingPage frontEnd]');
 		deletePostMethod.getCategoryHrefFrontend('validCategories');
 	}).waitForSelector('div.panel.panel-default', function(){
 		this.test.assertTextExists(forumListingPageJSON.subCategory.title,'Description found on forumListingPage of frontEnd');
@@ -92,7 +92,7 @@ forumListingPageTest.verifyVariousCategoriesFrontEnd = function(){
 	}).then(function(){
 		this.click('ul#forums_toggle_link a');
 	}).waitForSelector('a[href="#forums"]', function(){
-		utils.info('Case 5[Validate passwordProtected category on forumListingPage frontEnd]');
+		utils.info('Case 6[Validate passwordProtected category on forumListingPage frontEnd]');
 		deletePostMethod.getCategoryHrefFrontend(forumListingPageJSON.enablePassword.title);
   }).waitForSelector('input[name="pass"]', function(){
     casper.sendKeys('input[name="pass"]', forumListingPageJSON.enablePassword.passwordprotectvalue);
@@ -119,7 +119,7 @@ forumListingPageTest.verifyVariousCategoriesFrontEnd = function(){
 forumListingPageTest.createVariousSubCategories = function(){
   casper.thenOpen(config.backEndUrl, function(){
     utils.info('****************************************FORUMLISTING - PAGE********************************************');
-    utils.info('Case 6[validate various ]');
+    utils.info('Case 7[validate various ]');
     backEndForumRegisterMethod.goToCategoryPage();
   }).then(function(){
     //create sub-category lock
@@ -136,10 +136,11 @@ forumListingPageTest.createVariousSubCategories = function(){
   });
 };
 
+//add changes-onlyCategory-removed invisble sub-category testcase.
 forumListingPageTest.verifyVariousSubCategoriesFrontEnd = function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('****************************************FORUMLISTING - PAGE********************************************');
-		utils.info('Case 7[Validate sub-category with title field]');
+		utils.info('Case 8[Validate sub-category with title field]');
     this.test.assertExists('div#topics ul li:nth-child(2) a');
     this.click('div#topics ul li:nth-child(2) a');
   }).waitForText(forumListingPageJSON.subEnableLocked.title, function(){
@@ -162,17 +163,6 @@ forumListingPageTest.verifyVariousSubCategoriesFrontEnd = function(){
 		deletePostMethod.getCategoryHrefFrontend(forumListingPageJSON.enableLinked.title);
 	}).waitForUrl(forumListingPageJSON.linkedtext.data, function(){
 		utils.info('linked category url opened successfully');
-		//this.test.assertExists('div#lga');
-	}).thenOpen(config.url, function(){
-		this.test.assertExists('a#links-nav i');
-		this.click('a#links-nav i');
-		this.test.assertExists('ul#forums_toggle_link a','categories link found on menu bar');
-	}).then(function(){
-		this.click('ul#forums_toggle_link a');
-	}).waitForSelector('a[href="#forums"]', function(){
-	//checked invisible category
-		this.test.assertTextDoesntExist('Invisible','Invisble category and sub-category not present on forumListingpage');
-		this.test.assertTextDoesntExist('subInvisible','Invisble category and sub-category not present on forumListingpage');
 	});
 };
 
@@ -183,7 +173,7 @@ forumListingPageTest.disableVariousCategories = function(){
   //disable all the categories from backend and verify it on frontEnd
 	casper.thenOpen(config.backEndUrl, function(){
     utils.info('****************************************FORUMLISTING - PAGE********************************************');
-    utils.info('Case 8[disable all the categories from backend and verify it on frontEnd]');
+    utils.info('Case 9[disable all the categories from backend and verify it on frontEnd]');
     backEndForumRegisterMethod.goToCategoryPage();
   }).waitForSelector('a#addForumButton', function(){
     //disable password protected category
@@ -193,119 +183,44 @@ forumListingPageTest.disableVariousCategories = function(){
     this.click('input#forum_pw_cb');
 		this.wait(1000, function(){});
   }).then(function(){
-    this.click('form[name="frmOptions"] button');
-		this.waitForSelector('div#loading_msg', function(){
-			utils.info(casper.fetchText('div#loading_msg'));
-		  utils.info('passwordProtected Category edited');
-			if (casper.visible('input#forum_name')) {
-					utils.info('still on edit-category page');
-					this.waitForSelector('a#addForumButton', function(){
-						this.test.assertNotVisible('span.edit_forum_status_img.protected', 'password protected category not found on category Page');
-						this.wait(1000, function(){});
-						}).waitForSelector('a#addForumButton', function(){
-							this.reload(function(){
-								forumListingPageMethod.editCategory(forumListingPageJSON.enableLocked.title);
-							});
-						}).waitForSelector('form[name="frmOptions"] button', function(){
-		  			//locked category-unlocked sub-category cannot be unlocked due to issue in unlocking the sub-category.
-		    		utils.enableorDisableCheckbox('forum_locked', false);
-					}).then(function(){
-						this.click('form[name="frmOptions"] button');
-					}).waitForSelector('a#addForumButton', function(){
-						//disable linked category
-		    		this.reload(function(){
-							forumListingPageMethod.editCategory(forumListingPageJSON.enableLinked.title);
-						});
-		  		}).waitForSelector('form[name="frmOptions"] button', function(){
-		    		this.sendKeys('input[name="forum_link"]', ' ',  {reset:true});
-					}).wait(2000, function(){
-						this.click('form[name="frmOptions"] button');
-						//linked category cannot be disabled sometime
-						//add changes
-						this.waitForSelector('div#loading_msg', function(){
-				  		utils.info(casper.fetchText('div#loading_msg'));
-				  		utils.info('Linked Category edited');
-			 			}, function fail(){
-				  		utils.error('disable Linked Category not created');
-				  		utils.error('Loading... not found');
-			  		});
-		  		}).waitForSelector('a#addForumButton', function(){
-						this.test.assertDoesntExist('span.edit_forum_status_img linked', 'Linked category not found on category Page');
-			 			//disable invisible category
-		  		}).then(function(){
-			  		this.reload(function(){
-							forumListingPageMethod.editCategory(forumListingPageJSON.Invisible.title);
-						});
-		  		}).waitForSelector('form[name="frmOptions"] button', function(){
-		    		utils.enableorDisableCheckbox('forum_invisible', false);
-		  		}).then(function(){
-						this.click('form[name="frmOptions"] button');
-						this.waitForSelector('div#loading_msg', function(){
-				  		utils.info(casper.fetchText('div#loading_msg'));
-				  		utils.info('Invisible Category edited');
-			 			}, function fail(){
-				  		utils.error('disable invisible Category not created');
-				  		utils.error('Loading... not found');
-			  		});
-		    	}).waitForSelector('a#addForumButton', function(){
-						this.test.assertTextExists('Invisible','Invisble category and sub-category present on backend categoryPage');
-		     	});
-			} else {
-				utils.info('comes on categories page');
-				this.waitForSelector('a#addForumButton', function(){
-					this.test.assertNotVisible('span.edit_forum_status_img.protected', 'password protected category not found on category Page');
-					this.wait(1000, function(){});
-				}).waitForSelector('a#addForumButton', function(){
-					this.reload(function(){
-						forumListingPageMethod.editCategory(forumListingPageJSON.enableLocked.title);
-					});
-				}).waitForSelector('form[name="frmOptions"] button', function(){
-  			//locked category-unlocked sub-category cannot be unlocked due to issue in unlocking the sub-category.
-    		utils.enableorDisableCheckbox('forum_locked', false);
-			}).then(function(){
-				this.click('form[name="frmOptions"] button');
-			}).waitForSelector('a#addForumButton', function(){
-				//disable linked category
-    		this.reload(function(){
-					forumListingPageMethod.editCategory(forumListingPageJSON.enableLinked.title);
-				});
-  		}).waitForSelector('form[name="frmOptions"] button', function(){
-    		this.sendKeys('input[name="forum_link"]', ' ',  {reset:true});
-  		}).wait(2000, function(){
-				this.click('form[name="frmOptions"] button');
-				//linked category cannot be disabled sometime
-				//add changes
-				this.waitForSelector('div#loading_msg', function(){
-					utils.info(casper.fetchText('div#loading_msg'));
-					utils.info('Linked Category edited');
-				}, function fail(){
-					utils.error('disable Linked Category not created');
-					utils.error('Loading... not found');
-				});
-  		}).waitForSelector('a#addForumButton', function(){
-				this.test.assertDoesntExist('span.edit_forum_status_img linked', 'Linked category not found on category Page');
-	 			//disable invisible category
-  		}).then(function(){
-	  		this.reload(function(){
-					forumListingPageMethod.editCategory(forumListingPageJSON.Invisible.title);
-				});
-  		}).waitForSelector('form[name="frmOptions"] button', function(){
-    		utils.enableorDisableCheckbox('forum_invisible', false);
-  		}).then(function(){
-				this.click('form[name="frmOptions"] button');
-				this.waitForSelector('div#loading_msg', function(){
-		  		utils.info(casper.fetchText('div#loading_msg'));
-		  		utils.info('Invisible Category edited');
-	 			}, function fail(){
-		  		utils.error('disable invisible Category not created');
-		  		utils.error('Loading... not found');
-	  		});
-    	}).waitForSelector('a#addForumButton', function(){
-				this.test.assertTextExists('Invisible','Invisble category and sub-category present on backend categoryPage');
-     	});
-   	}
-	 });
- });
+    this.click('[aria-describedby="addedit_forum_dialog"] .ui-dialog-buttonpane .ui-state-default');
+	}).wait(2000, function(){
+		this.test.assertNotVisible('span.edit_forum_status_img.protected', 'password protected category not found on category Page');
+	}).waitForSelector('a#addForumButton', function(){
+		this.reload(function(){
+			forumListingPageMethod.editCategory(forumListingPageJSON.enableLocked.title);
+		});
+	}).waitForSelector('[aria-describedby="addedit_forum_dialog"] .ui-dialog-buttonpane .ui-state-default', function(){
+		//locked category-unlocked sub-category cannot be unlocked due to issue in unlocking the sub-category.
+		utils.enableorDisableCheckbox('forum_locked', false);
+	}).then(function(){
+		this.click('[aria-describedby="addedit_forum_dialog"] .ui-dialog-buttonpane .ui-state-default');
+	}).waitForSelector('a#addForumButton', function(){
+		//disable linked category
+		this.reload(function(){
+			forumListingPageMethod.editCategory(forumListingPageJSON.enableLinked.title);
+		});
+	}).waitForSelector('form[name="frmOptions"] button', function(){
+		this.sendKeys('input[name="forum_link"]', ' ',  {reset:true});
+		this.wait(1000, function(){});
+	}).then(function(){
+		this.click('[aria-describedby="addedit_forum_dialog"] .ui-dialog-buttonpane .ui-state-default');
+	}).wait(2000, function(){
+		this.test.assertDoesntExist('span.edit_forum_status_img linked', 'Linked category not found on category Page');
+	}).waitForSelector('a#addForumButton', function(){
+	//disable invisible category
+	}).then(function(){
+		this.reload(function(){
+			forumListingPageMethod.editCategory(forumListingPageJSON.Invisible.title);
+		});
+	}).waitForSelector('[aria-describedby="addedit_forum_dialog"] .ui-dialog-buttonpane .ui-state-default', function(){
+		utils.enableorDisableCheckbox('forum_invisible', false);
+	}).then(function(){
+		this.click('[aria-describedby="addedit_forum_dialog"] .ui-dialog-buttonpane .ui-state-default');
+	}).wait(2000, function(){
+	}).waitForSelector('a#addForumButton', function(){
+		this.test.assertTextExists('Invisible','Invisble category and sub-category present on backend categoryPage');
+	});
 };
 
 //Verify the sub category for changing the parent category
@@ -314,9 +229,9 @@ forumListingPageTest.disableVariousCategories = function(){
 forumListingPageTest.verifyCases = function(){
 	casper.thenOpen(config.backEndUrl, function(){
 	 	utils.info('****************************************FORUMLISTING - PAGE********************************************');
-    utils.info('Case 9[Verify the sub category for changing the parent category]');
-    utils.info('Case 10[Verify the error message to create a category as linked]');
-    utils.info('Case 11[Verify unlocked the sub-category which locked on backend]');
+    utils.info('Case 10[Verify the sub category for changing the parent category]');
+    utils.info('Case 11[Verify the error message to create a category as linked]');
+    utils.info('Case 12[Verify unlocked the sub-category which locked on backend]');
     backEndForumRegisterMethod.goToCategoryPage();
   }).waitForSelector('a#addForumButton', function(){
 		forumListingPageMethod.editSubCategory(forumListingPageJSON.subEnableLocked.title, forumListingPageJSON.enableLocked.title);
@@ -329,18 +244,13 @@ forumListingPageTest.verifyCases = function(){
     }, false);
 		this.wait(1000, function(){});
   }).then(function(){
-		this.click('form[name="frmOptions"] button');
-		/*this.waitForSelector('div#loading_msg', function(){
-		  utils.info(casper.fetchText('div#loading_msg'));
-		  utils.info('changed the child category parent category');
-	  }, function fail(){
-		  utils.error('disable invisible Category not created');
-		  utils.error('Loading... not found');
-	  });*/
-	}).waitUntilVisible('a#addForumButton', function(){
-		backEndForumRegisterMethod.createCategorySubcategory(forumListingPageJSON.invalidLinked.title, forumListingPageJSON.invalidLinked);
-		//verify error msg of linked category
-	}).waitForText(forumListingPageJSON.invalidLinkedCategoryErrorMsg.errorMsg);
+		this.click('[aria-describedby="addedit_forum_dialog"] .ui-dialog-buttonpane .ui-state-default');
+	}).wait(2000, function(){
+		this.waitForSelector('a#addForumButton', function(){
+			backEndForumRegisterMethod.createCategorySubcategory(forumListingPageJSON.invalidLinked.title, forumListingPageJSON.invalidLinked);
+			//verify error msg of linked category
+		}).waitForText(forumListingPageJSON.invalidLinkedCategoryErrorMsg.errorMsg);
+	});
 };
 
 
@@ -348,7 +258,7 @@ forumListingPageTest.verifyCases = function(){
 forumListingPageTest.verifyCategoriesDisableOptions = function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('****************************************FORUMLISTING - PAGE********************************************');
-		utils.info('Case 12[Disable categories options verified on forum frontEnd]');
+		utils.info('Case 13[Disable categories options verified on forum frontEnd]');
 	 	this.test.assertExists('div#topics ul li:nth-child(2) a');
     this.click('div#topics ul li:nth-child(2) a');
   }).waitForSelector('a[href="#forums"]', function(){
@@ -400,7 +310,7 @@ forumListingPageTest.verifyCategoriesDisableOptions = function(){
 forumListingPageTest.verifySubCategoriesDisableOptions = function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('****************************************FORUMLISTING - PAGE********************************************');
-		utils.info('Case 13[Disable sub-categories options verified on forum frontEnd]');
+		utils.info('Case 14[Disable sub-categories options verified on forum frontEnd]');
 		this.test.assertExists('div#topics ul li:nth-child(2) a');
     this.click('div#topics ul li:nth-child(2) a');
   }).waitForSelector('a[href="#forums"]', function(){
