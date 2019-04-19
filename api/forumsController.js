@@ -55,7 +55,7 @@ forumsRoutes.get("/delete", function(req, res, next) {
 });
 
 forumsRoutes.get("/delete/:forumid", function(req, res, next) {
-	var title = req.params.forumid;
+	var forumid = req.params.forumid;
 	settings.setUID(function(err, uid) {
 		if(!err) {
 			uid = uid;
