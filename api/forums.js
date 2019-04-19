@@ -3,7 +3,7 @@ var uid;
 var forums = module.exports = {};
 
 forums.getforumID = function(uid, title) {
-    var sql = 'SELECT forumid FROM forums WHERE username = "'+title+ '" AND uid = "'+uid+ '" ;';
+    var sql = 'SELECT forumid FROM forums WHERE title = "'+title+ '" AND uid = "'+uid+ '" ;';
     return sql;
 };
 
