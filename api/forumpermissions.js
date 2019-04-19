@@ -5,3 +5,9 @@ forumPermissions.updateForumPermissionsSQL = function(uid, forumid, usergroupID,
   console.log(sql);
   return sql;
 };
+
+forumPermissions.getForumPermissionsSQL = function(uid, forumid, usergroupID) {
+  var sql ='Select * FROM forum_permissions WHERE uid = "'+uid+'" AND forumid ="'+forumid+'" AND usergroupid ="'+usergroupID+'";';
+  console.log(sql);
+  return sql;
+};

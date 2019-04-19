@@ -24,4 +24,22 @@ forumPermissionsRoutes.get("/:forumid/:usergroupID/:field/:value", function(req,
 	});
 });
 
+forumPermissionsRoutes.get("/:forumid/:usergroupID", function(req, res, next) {
+  var forumid = req.params.forumid;
+  var usergroupID = req.params.usergroupID;
+	settings.setUID(function(err, uid) {
+		if(!err) {
+			uid = uid;
+			sqlConnection(forumPermissions.getForumPermissionsSQL(uid, forumid, usergroupID), function(err, result) {
+				if(!err) {
+					res.status(200).json({
+						message:"changed the permission.",
+            result:result
+          });
+				}
+			});
+		}
+	});
+});
+
 module.exports = forumPermissionsRoutes;
