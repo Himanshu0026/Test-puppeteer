@@ -3,7 +3,7 @@ var uid;
 var forums = module.exports = {};
 
 forums.getforumID = function(uid, title) {
-    var sql = 'SELECT forumid FROM forums WHERE username = "'+title+ 'AND uid = "'+uid+ '" ;';
+    var sql = 'SELECT forumid FROM forums WHERE username = "'+title+ '" AND uid = "'+uid+ '" ;';
     return sql;
 };
 
@@ -13,7 +13,7 @@ forums.addForum = function(uid, title, description) {
 };
 
 forums.deleteForum = function(uid, forumid) {
-    var sql = 'DELETE FROM forums WHERE uid="'+uid+ 'AND forumid = "'+forumid+'";';
+    var sql = 'DELETE FROM forums WHERE uid="'+uid+ '" AND forumid = "'+forumid+'";';
     return sql;
 };
 
