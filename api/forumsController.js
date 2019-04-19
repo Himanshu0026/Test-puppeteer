@@ -1,7 +1,6 @@
 var sqlConnection = require('../connection.js');
 var settings = require('./setting.js');
 var forums = require('./forums.js');
-var config = require('../config/config.json');
 var express = require('express');
 var app = express();
 var forumsRoutes = express.Router();
