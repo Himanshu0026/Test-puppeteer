@@ -59,7 +59,7 @@ forumsRoutes.get("/delete/:forumid", function(req, res, next) {
 	settings.setUID(function(err, uid) {
 		if(!err) {
 			uid = uid;
-			sqlConnection(forums.addForum(uid, forumid), function(err, result) {
+			sqlConnection(forums.deleteForum(uid, forumid), function(err, result) {
 				if(!err) {
 					res.status(200).json({
 						message:"Category Deleted"
