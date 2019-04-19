@@ -37,7 +37,7 @@ routes.get("/:title/:field/:value", function(req, res, next) {
 			sqlConnection(Usergroups.updateUsergroupsSQL(uid,field,value,groupTitle), function(err, result) {
 				if(!err) {
 					res.status(200).json({
-						message:"enabled the view category permission.",
+						message:"changed the permission.",
 						usergroups:result
 					});
 				}
