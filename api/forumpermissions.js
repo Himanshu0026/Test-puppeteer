@@ -14,7 +14,13 @@ forumPermissions.getForumPermissionsSQL = function(uid, forumid, usergroupID) {
   return sql;
 };
 
-forumPermissions.setPermission = function(forumid, usergroupID){
+forumPermissions.addForumPermissionsSQL = function(uid, forumid, usergroupID, field, value) {
+  var sql ='INSERT INTO forum_permissions ('+field+') VALUES ("'+value+'") WHERE uid = "'+uid+'" AND forumid ="'+forumid+'" AND usergroupid ="'+usergroupID+'";';
+  //console.log(sql);
+  return sql;
+};
+
+forumPermissions.setPermission = function(uid, forumid, usergroupID, field, value){
   request({
 		url: config.apiLocalUrl+'/updateForumPermissions/getPermission/'+forumid+'/'+usergroupID,
 		json: true
@@ -24,7 +30,23 @@ forumPermissions.setPermission = function(forumid, usergroupID){
 			res.send(err);
 		}
 		if(res.statusCode == 200) {
-      console.log(body.result.length);
+      if(body.result.length === 0){
+        sqlConnection(forumPermissions.addForumPermissionsSQL(uid, forumid, usergroupID, field, value), function(err, result) {
+  				if(!err) {
+  					res.status(200).json({
+  						message:"changed the permission."
+            });
+  				}
+  			});
+      } else {
+        sqlConnection(forumPermissions.updateForumPermissionsSQL(uid, forumid, usergroupID, field, value), function(err, result) {
+  				if(!err) {
+  					res.status(200).json({
+  						message:"changed the permission."
+            });
+  				}
+  			});
+      }
 		}else {
 			res.send('The uid not found');
 		}

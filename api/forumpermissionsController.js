@@ -13,14 +13,7 @@ forumPermissionsRoutes.get("/:forumid/:usergroupID/:field/:value", function(req,
 	settings.setUID(function(err, uid) {
 		if(!err) {
 			uid = uid;
-      forumPermissions.setPermission(forumid, usergroupID);
-			/*sqlConnection(forumPermissions.updateForumPermissionsSQL(uid, forumid, usergroupID, field, value), function(err, result) {
-				if(!err) {
-					res.status(200).json({
-						message:"changed the permission."
-          });
-				}
-			});*/
+      forumPermissions.setPermission(uid, forumid, usergroupID, field, value);
 		}
 	});
 });
