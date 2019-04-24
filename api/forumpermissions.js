@@ -16,7 +16,7 @@ forumPermissions.getForumPermissionsSQL = function(uid, forumid, usergroupID) {
 };
 
 forumPermissions.addForumPermissionsSQL = function(uid, forumid, usergroupID, field, value) {
-  var sql ='INSERT INTO forum_permissions ('+field+') VALUES ("'+value+'") WHERE uid = "'+uid+'" AND forumid ="'+forumid+'" AND usergroupid ="'+usergroupID+'";';
+  var sql ='INSERT INTO forum_permissions ('+uid+','+forumid+','+usergroupID+','+field+') VALUES ("'+uid+'",'+forumid+','+usergroupID+',"'+value+'");';
   //console.log(sql);
   return sql;
 };
