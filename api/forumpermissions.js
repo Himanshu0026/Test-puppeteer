@@ -1,4 +1,5 @@
 var request = require('request');
+var config = require('../config/config.json');
 var forumPermissions = module.exports = {};
 
 forumPermissions.updateForumPermissionsSQL = function(uid, forumid, usergroupID, field, value) {
