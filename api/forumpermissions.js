@@ -24,7 +24,7 @@ forumPermissions.setPermission = function(forumid, usergroupID){
 			res.send(err);
 		}
 		if(res.statusCode == 200) {
-      console.log(body.result);
+      console.log(body.result.length);
 		}else {
 			res.send('The uid not found');
 		}
