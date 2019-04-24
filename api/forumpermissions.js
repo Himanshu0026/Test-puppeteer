@@ -1,4 +1,5 @@
 var request = require('request');
+var sqlConnection = require('../connection.js');
 var config = require('../config/config.json');
 var forumPermissions = module.exports = {};
 
