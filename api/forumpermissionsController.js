@@ -32,7 +32,6 @@ forumPermissionsRoutes.get("/:forumid/:usergroupID", function(req, res, next) {
 			uid = uid;
 			sqlConnection(forumPermissions.getForumPermissionsSQL(uid, forumid, usergroupID), function(err, result) {
 				if(!err) {
-          var results = json.stringify(result);
 					res.status(200).json({
 						message:"changed the permission.",
             result:results
