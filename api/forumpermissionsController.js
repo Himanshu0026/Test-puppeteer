@@ -34,7 +34,7 @@ forumPermissionsRoutes.get("/:forumid/:usergroupID", function(req, res, next) {
 				if(!err) {
 					res.status(200).json({
 						message:"changed the permission.",
-            result:results
+            result:result
           });
 				}
 			});
