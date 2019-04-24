@@ -7,9 +7,7 @@ forumPermissions.updateForumPermissionsSQL = function(uid, forumid, usergroupID,
 };
 
 forumPermissions.getForumPermissionsSQL = function(uid, forumid, usergroupID) {
-  //var sql ='Select * FROM forum_permissions WHERE uid = "'+uid+'" AND forumid ="'+forumid+'" AND usergroupid ="'+usergroupID+'";';
-  var sql ='SELECT view_forum FROM forum_permissions WHERE uid = "'+uid+'" AND forumid ="'+forumid+'";';
-
+  var sql ='Select * FROM forum_permissions WHERE uid = "'+uid+'" AND forumid ="'+forumid+'" AND usergroupid ="'+usergroupID+'";';
   console.log(sql);
   return sql;
 };
