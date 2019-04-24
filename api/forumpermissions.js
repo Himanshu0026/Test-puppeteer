@@ -21,7 +21,7 @@ forumPermissions.addForumPermissionsSQL = function(uid, forumid, usergroupID, fi
   return sql;
 };
 
-forumPermissions.setPermission = function(uid, forumid, usergroupID, field, value){
+forumPermissions.setPermission = function(uid, forumid, usergroupID, field, value, callback){
   request({
 		url: config.apiLocalUrl+'/updateForumPermissions/getPermission/'+forumid+'/'+usergroupID,
 		json: true
@@ -34,17 +34,13 @@ forumPermissions.setPermission = function(uid, forumid, usergroupID, field, valu
       if(body.result.length === 0){
         sqlConnection(forumPermissions.addForumPermissionsSQL(uid, forumid, usergroupID, field, value), function(err, result) {
   				if(!err) {
-  					res.status(200).json({
-  						message:"changed the permission."
-            });
+  					return callback(null);
   				}
   			});
       } else {
         sqlConnection(forumPermissions.updateForumPermissionsSQL(uid, forumid, usergroupID, field, value), function(err, result) {
   				if(!err) {
-  					res.status(200).json({
-  						message:"changed the permission."
-            });
+  					return callback(null);
   				}
   			});
       }
