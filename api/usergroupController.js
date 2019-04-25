@@ -9,8 +9,8 @@ var app = express();
 var uid;
 var routes = express.Router();
 
-routes.get("/getUsergroupID/*", function(req, res, next) {
-	var groupTitle = req.url.split('/')[2];
+routes.get("/getUsergroupID/:grouptitle", function(req, res, next) {
+	var groupTitle = req.params.grouptitle;
 	settings.setUID(function(err, uid) {
 		if(!err) {
 			uid = uid;
