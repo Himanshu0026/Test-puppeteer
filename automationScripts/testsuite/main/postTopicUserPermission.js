@@ -24,7 +24,7 @@ postTopicUserPermission.registeredUserTest = function() {
 		//thumpsUpDownTestcases.deleteAllCategoriesTestCase();
 
 		// method to create a category and its sub category and get their id
-		combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory();
+		//combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory();
 
 		// method to verify permission message after clicking on any topic
 		postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable('Registered Users');

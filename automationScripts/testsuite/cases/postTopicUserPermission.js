@@ -31,7 +31,7 @@ postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable = function(userGro
 	casper.then(function() {
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
-	}).thenOpen(config.backEndUrl, function() {
+	/*}).thenOpen(config.backEndUrl, function() {
 		utils.info('Test case 1a [verify permission message after clicking on any topic]');
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
@@ -39,9 +39,10 @@ postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable = function(userGro
 		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
 	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'view_thread_content', false);
-	});
-	casper.thenOpen(config.url, function() {
+		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'view_thread_content', false);*/
+	}).thenOpen("http://beta21.websitetoolbox.com:8081/usergroups/", function() {
+
+	}).thenOpen(config.url, function() {
 		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('i.icon.icon-menu');
@@ -50,9 +51,6 @@ postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable = function(userGro
 	}).waitForSelector('form[name="posts"] a.topic-title', function() {
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForText("Sorry! You don't have permission to perform this action.");
-	casper.then(function() {
-		forumLoginMethod.logoutFromApp();
-	});
 };
 
 // method to Verify permission message after creating new topic

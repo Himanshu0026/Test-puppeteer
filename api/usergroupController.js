@@ -26,7 +26,7 @@ routes.get("/getUsergroupID/:grouptitle(*)", function(req, res, next) {
 	});
 });
 
-routes.get("/:title/:field/:value", function(req, res, next) {
+routes.get("/:title(*)/:field/:value", function(req, res, next) {
 	var groupTitle = req.params.title;
 	var field = req.params.field;
 	var value = req.params.value;
