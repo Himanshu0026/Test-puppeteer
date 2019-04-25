@@ -11,7 +11,6 @@ var routes = express.Router();
 
 routes.get("/getUsergroupID/:grouptitle(*)", function(req, res, next) {
 	var groupTitle = req.params.grouptitle;
-	console.log('dgdjjjjjjjjjjjjjjjjj'+groupTitle);
 	settings.setUID(function(err, uid) {
 		if(!err) {
 			uid = uid;
