@@ -694,22 +694,12 @@ postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserEnable = f
 
 // method to Disable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic on the post screen
 postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTopicDisable = function(userGroup) {
-	casper.thenOpen(config.backEndUrl, function() {
-		utils.info('Test case 19 [Disable Delete Own Topic for Registered user from group Permission and Verify delete option against topic on the post screen]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
+	casper.thenOpen("http://beta21.websitetoolbox.com:8081/usergroups/"+userGroup+"/delete_threads/0", function() {
 	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'delete_threads', false);
-	});
-	casper.then(function() {
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
 	});
 	casper.thenOpen(config.url, function() {
-		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('i.icon.icon-menu');
 		this.test.assertExists('ul#forums_toggle_link li a', 'Category link found in the side menu');
@@ -728,29 +718,19 @@ postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTop
 	}).waitForSelector('li[id^="forum_"]', function() {
 		utils.info('Back button navigated to the previous page');
 	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to Enable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic on the post screen
 postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTopicEnable = function(userGroup) {
 	var topicHref;
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen("http://beta21.websitetoolbox.com:8081/usergroups/"+userGroup+"/delete_threads/1", function() {
 		utils.info('Test case 20 [Enable Delete Own Topic for Registered user from group Permission and Verify delete option against topic on the post screen]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
 	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'delete_threads', true);
-	});
-	casper.then(function() {
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
 	});
 	casper.thenOpen(config.url, function() {
-		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('i.icon.icon-menu');
 		this.test.assertExists('ul#forums_toggle_link li a', 'Category link found in the side menu');
@@ -774,28 +754,18 @@ postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTop
 			this.test.assertDoesntExist(selector, 'Deleted Topic not show');
 		});
 	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to Disable "Delete Own Topic" for Registered user from group Permission and Verify delete option on drop down on the post listing page
 postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredFromDropDownOnPostListingPageDisable = function(userGroup) {
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen("http://beta21.websitetoolbox.com:8081/usergroups/"+userGroup+"/delete_threads/0", function() {
 		utils.info('Test case 21 [Disable Delete Own Topic for Registered user from group Permission and Verify delete option on drop down on the post listing page]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
 	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'delete_threads', false);
-	});
-	casper.then(function() {
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
 	});
 	casper.thenOpen(config.url, function() {
-		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('i.icon.icon-menu');
 		this.test.assertExists('ul#forums_toggle_link li a', 'Category link found in the side menu');
@@ -810,28 +780,18 @@ postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredFromDropDownOn
 	}).waitForSelector('ul.dropdown-menu.right', function() {
 		this.test.assertDoesntExist('a[id^="delete_first_post_"]', 'Delete button not show');
 	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to Enable "Delete Own Topic" for Registered user from group Permission and Verify delete option on drop down on the post listing page
 postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredFromDropDownOnPostListingPageEnable = function(userGroup) {
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen("http://beta21.websitetoolbox.com:8081/usergroups/"+userGroup+"/delete_threads/1", function() {
 		utils.info('Test case 22 [Enable Delete Own Topic for Registered user from group Permission and Verify delete option on drop down on the post listing page]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
 	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'delete_threads', true);
-	});
-	casper.then(function() {
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
 	});
 	casper.thenOpen(config.url, function() {
-		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('i.icon.icon-menu');
 		this.test.assertExists('ul#forums_toggle_link li a', 'Category link found in the side menu');
@@ -857,29 +817,19 @@ postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredFromDropDownOn
 			this.test.assertDoesntExist(selector, 'Deleted Topic not show');
 		});
 	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify when delete own post is disable and delete own topic enable
 postTopicUserPermissionTestcases.verifyDeleteOwnPostDisableAndTopicEnableForRegisteredUser = function(userGroup) {
 	var topicHref;
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen("http://beta21.websitetoolbox.com:8081/usergroups/"+userGroup+"/delete_posts/0", function() {
 		utils.info('Test case 23 [When delete own post is disable and delete own topic enable and Verify permission on Frontend]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
 	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'delete_posts', false);
-	});
-	casper.then(function() {
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
 	});
 	casper.thenOpen(config.url, function() {
-		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('i.icon.icon-menu');
 		this.test.assertExists('ul#forums_toggle_link li a', 'Category link found in the side menu');
@@ -908,28 +858,18 @@ postTopicUserPermissionTestcases.verifyDeleteOwnPostDisableAndTopicEnableForRegi
 			this.test.assertDoesntExist('a[href="'+topicHref+'"]', 'Deleted Topic not show');
 		});
 	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to verify when delete own post is disable and delete own topic disable
 postTopicUserPermissionTestcases.verifyDeleteOwnPostAndTopicDisableForRegisteredUser = function(userGroup) {
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen("http://beta21.websitetoolbox.com:8081/usergroups/"+userGroup+"/delete_threads/0", function() {
 		utils.info('Test case 24 [When delete own post is disable and delete own topic disable and Verify permission on Frontend]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
 	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'delete_threads', false);
-	});
-	casper.then(function() {
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
 	});
 	casper.thenOpen(config.url, function() {
-		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('i.icon.icon-menu');
 		this.test.assertExists('ul#forums_toggle_link li a', 'Category link found in the side menu');
@@ -950,28 +890,18 @@ postTopicUserPermissionTestcases.verifyDeleteOwnPostAndTopicDisableForRegistered
 	}).waitForSelector('ul.dropdown-menu.right', function() {
 		this.test.assertDoesntExist('a[id^="delete_first_post_"]', 'Delete button not show');
 	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to Disable "Move Own Post" for Registered user from group Permission and Verify Move option against topic in the topic list
 postTopicUserPermissionTestcases.verifyMoveOwnTopicDisable = function(userGroup) {
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen("http://beta21.websitetoolbox.com:8081/usergroups/"+userGroup+"/move_own_threads/0", function() {
 		utils.info('Test case 25 [Disable Move Own Post for Registered user from group Permission and Verify Move option against topic in the topic list]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
 	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'move_own_threads', false);
-	});
-	casper.then(function() {
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
 	});
 	casper.thenOpen(config.url, function() {
-		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('i.icon.icon-menu');
 		this.test.assertExists('ul#forums_toggle_link li a', 'Category link found in the side menu');
@@ -989,28 +919,14 @@ postTopicUserPermissionTestcases.verifyMoveOwnTopicDisable = function(userGroup)
 			utils.error('checkbox not found');
 		}
 	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to Move Own Topic shown on User's Profile page For disable setting
 postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageDisable = function(userGroup) {
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen("http://beta21.websitetoolbox.com:8081/usergroups/"+userGroup+"/move_own_threads/0", function() {
 		utils.info("Test case 28 [Move Own Topic shown on User's Profile page For disable setting]");
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
-	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'move_own_threads', false);
-	}).then(function() {
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
-	}).then(function() {
+	}).thenOpen("http://beta21.websitetoolbox.com:8081/usergroups/"+userGroup+"/delete_threads/1", function() {
 		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'delete_threads', true);
 	});
 	casper.then(function() {
@@ -1018,7 +934,6 @@ postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageDisable =
 		postTopicUserPermissionTestcases.createTopic(userGroup);
 	});
 	casper.thenOpen(config.url, function() {
-		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('li.pull-right.user-panel span.caret');
 	}).waitUntilVisible('li ul.dropdown-menu', function() {
@@ -1035,13 +950,6 @@ postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageDisable =
 		});
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
-	}).thenOpen(config.backEndUrl, function() {
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
-	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'move_own_threads', true);
+	}).thenOpen("http://beta21.websitetoolbox.com:8081/usergroups/"+userGroup+"/move_own_threads/1", function() {
 	});
 };
