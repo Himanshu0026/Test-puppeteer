@@ -195,6 +195,7 @@ forumListingPageTest.disableVariousCategories = function(){
 		utils.enableorDisableCheckbox('forum_locked', false);
 	}).then(function(){
 		this.click('[aria-describedby="addedit_forum_dialog"] .ui-dialog-buttonpane .ui-state-default');
+	}).wait(2000, function(){
 	}).waitForSelector('a#addForumButton', function(){
 		//disable linked category
 		this.reload(function(){

@@ -25,7 +25,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 				var testResult = stderr;
 				commitDetails.testResult = testResult;
 				commitDetails.attachments = '';
-				//createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
+				createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
 					mailServices.sendMail(commitDetails, function(err) {
 						if(err)
 							console.error("error occurred while sending email: "+err);
@@ -34,14 +34,14 @@ executorServices.executeJob = function(commitDetails, callback) {
 							console.timeEnd('Automation execution time');
 						return callback();
 					});
-				//});
+				});
 			} else {
-				//sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "General" AND uid =116', function(err, result){
-				sqlConnection('UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=1, upload_attachments=1, view_attachments=1, view_thread_content=1, view_others_threads=1, post_replies=1, edit_posts=1, delete_posts=1, delete_threads=1, move_own_threads=1, post_approval=1, upload_attachments=1, upload_avatar=1, view_calendar=1, post_events=1, edit_own_events=1, delete_own_events=1, view_others_events=1, edit_profile=1, delete_profile=1, allow_signature=1, allow_customtitle=1, change_username=1, memberslist_viewable=1, approval_of_events=0, post_polls=1, vote_on_polls=1, view_messageboard=1  WHERE title = "General" AND uid =116;', function(err, result){
+				//sqlConnection('UPDATE usergroups SET view_profiles =1 WHERE title = "General" AND uid =12', function(err, result){
+				sqlConnection('UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=1, upload_attachments=1, view_attachments=1, view_thread_content=1, view_others_threads=1, post_replies=1, edit_posts=1, delete_posts=1, delete_threads=1, move_own_threads=1, post_approval=1, upload_attachments=1, upload_avatar=1, view_calendar=1, post_events=1, edit_own_events=1, delete_own_events=1, view_others_events=1, edit_profile=1, delete_profile=1, allow_signature=1, allow_customtitle=1, change_username=1, memberslist_viewable=1, approval_of_events=0, post_polls=1, vote_on_polls=1, view_messageboard=1  WHERE title = "General" AND uid =12;', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
-						sqlConnection('UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=0, view_thread_content=1, view_others_threads=1, post_replies=1, view_calendar=1, post_events=0, view_others_events=1, approval_of_events=1, view_messageboard=1  WHERE title = "Not Signed Up / Not Logged In" AND uid =116;', function(err, result){
+						sqlConnection('UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=0, view_thread_content=1, view_others_threads=1, post_replies=1, view_calendar=1, post_events=0, view_others_events=1, approval_of_events=1, view_messageboard=1  WHERE title = "Not Signed Up / Not Logged In" AND uid =12;', function(err, result){
 							if(err){
 								console.log(err);
 							}else{
@@ -49,23 +49,23 @@ executorServices.executeJob = function(commitDetails, callback) {
 						});
 					}
 				});
-				sqlConnection('DELETE FROM calendar_permissions WHERE uid="116";', function(err, result){
+				sqlConnection('DELETE FROM calendar_permissions WHERE uid="12";', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 					}
 				});
-				sqlConnection('DELETE FROM calendar_events WHERE uid="116";', function(err, result){
+				sqlConnection('DELETE FROM calendar_events WHERE uid="12";', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 					}
 				});
-				sqlConnection('DELETE FROM forums WHERE uid="116";', function(err, result){
+				sqlConnection('DELETE FROM forums WHERE uid="12";', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
-						sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")', function(err, result){
+						sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("12", "General", "General", "1")', function(err, result){
 							if(err){
 								console.log(err);
 							}else{
@@ -73,29 +73,32 @@ executorServices.executeJob = function(commitDetails, callback) {
 						});
 					}
 				});
-				//sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=116 ', function(err, result){
-				sqlConnection("UPDATE settings SET post_approval=0, allow_emails='checked', threadsperpage =100, repliesperpage=50, enable_calendar='checked', reputation='checked', enable_polls='checked', enable_social_bookmarking='checked', allowpm='checked', reqreg='checked', file_uploading='checked', reqregapp='', confirmemail='checked', new_user_registration='checked'  WHERE uid=116;", function(err, result){
+				//sqlConnection('UPDATE settings SET post_approval=0 WHERE uid=12 ', function(err, result){
+				sqlConnection("UPDATE settings SET post_approval=0, allow_emails='checked', threadsperpage =100, repliesperpage=50, enable_calendar='checked', reputation='checked', enable_polls='checked', enable_social_bookmarking='checked', allowpm='checked', reqreg='checked', file_uploading='checked', reqregapp='', confirmemail='checked', new_user_registration='checked'  WHERE uid=12;", function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 					}
 				});
-				sqlConnection('SELECT max(posts) AS posts, userid,user FROM members WHERE uid="116" and user="hani";', function(err, result){
+				sqlConnection('SELECT max(posts) AS posts, userid,user FROM members WHERE uid="12" and user="hani";', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 						var post = result[0].posts;
 						var userid = result[0].userid;
-						var deleteTopPoster = 'DELETE FROM top_posters WHERE uid="116" AND userid="'+userid+'";';
-						var query = 'INSERT INTO top_posters (uid,userid,posts) VALUES ("116",'+userid+','+post+');';
+						var deleteTopPoster = 'DELETE FROM top_posters WHERE uid="12" AND userid="'+userid+'";';
+						var query = 'INSERT INTO top_posters (uid,userid,posts) VALUES ("12",'+userid+','+post+');';
 						sqlConnection(deleteTopPoster, function(err, result){
 							if(err){
 								console.log(err);
 							}else{
+								console.log('the result is'+result);
+								//query = mysql.format(query, values);
 								sqlConnection(query, function(err, result){
 									if(err){
 										console.log(err);
 									}else{
+										console.log(result);
 									}
 								});
 							}
@@ -115,7 +118,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 							if(fileSize !== 0) {
 								commitDetails.apacheLogFile = apacheLogFile;
 								commitDetails.attachments = [];
-								//createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
+								createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
 
 									//Sending Mail To The Committer After Adding Attachments
 									fs.exists(path, function(exists) {
@@ -160,7 +163,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 											});
 										}
 									});
-								//});
+								});
 							} else {
 								//Executing automation test script
 								console.log("Executing Automation Script For " + commitDetails.commitId + " CommitID");
@@ -270,8 +273,8 @@ executorServices.executeJob = function(commitDetails, callback) {
 																		}
 																	];
 
-																	//createStatus.failure(commitDetails, description, function(status) {
-																		//console.log('state of failure : '+status);
+																	createStatus.failure(commitDetails, description, function(status) {
+																		console.log('state of failure : '+status);
 																		//Sending Mail To The Committer After Adding Attachments
 																		fs.exists(path, function(exists) {
 																			if(exists) {
@@ -317,14 +320,14 @@ executorServices.executeJob = function(commitDetails, callback) {
 																				});
 																			}
 																		});
-																	//});
+																	});
 																	} else {
 																		console.log('you are not allowed to set the status of the branch.');
 																	}
 																} else {
-																	//createStatus.success(commitDetails, function(status) {
-																		//console.log('state of success : '+status);
-																	//});
+																	createStatus.success(commitDetails, function(status) {
+																		console.log('state of success : '+status);
+																	});
 																	//Deleting commit specific log files
 																	//fs.unlinkSync(automationLogFile);
 																	fs.unlinkSync(failLogFile);
