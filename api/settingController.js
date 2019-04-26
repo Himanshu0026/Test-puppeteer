@@ -27,7 +27,7 @@ settingRoutes.get("/:field/:value", function(req, res, next) {
 			sqlConnection(settings.updateSettings(uid,field,value), function(err, result) {
 				if(!err) {
 					res.status(200).json({
-						message:"enabled the view category permission.",
+						message:"enabled the setting permission.",
 						usergroups:result
 					});
 				}

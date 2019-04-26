@@ -9,7 +9,7 @@ settings.getUID = function(user) {
 };
 
 settings.updateSettings = function(uid,field,value) {
-  var sql ='UPDATE settings SET '+field+ '=' +value+ ' WHERE uid = "'+uid+'";';
+  var sql ='UPDATE settings SET '+field+ '="' +value+ '" WHERE uid = "'+uid+'";';
   return sql;
 };
 
