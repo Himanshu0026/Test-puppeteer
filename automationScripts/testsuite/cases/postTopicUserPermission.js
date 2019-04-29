@@ -209,7 +209,7 @@ postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserEnable
 postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategory = function(userGroup) {
 	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_others_threads/0", function() {
 		utils.info("Test case 6a [Verify View Others's Topic on frontend from category when there is no own topic]");
-	}).waitForSelector('li.pull-right.user-panel', function() {
+	}).thenOpen(config.url, function() {
 		this.click('i.icon.icon-menu');
 		this.test.assertExists('ul#forums_toggle_link li a', 'Category link found in the side menu');
 		this.click('ul#forums_toggle_link li a');
@@ -398,6 +398,7 @@ postTopicUserPermissionTestcases.verifyReplyOwnTopicForRegisterUserDisable = fun
 	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/post_replies/0", function() {
 		utils.info('Test case 10 [Disable Reply Own Topic for Registered user from group Permission and Verify permission on Frontend]');
 	}).thenOpen(config.url, function() {
+		postTopicUserPermissionTestcases.createTopic(userGroup);
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('i.icon.icon-menu');
 		this.test.assertExists('ul#forums_toggle_link li a', 'Category link found in the side menu');
@@ -605,8 +606,8 @@ postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTop
 	}).waitForSelector('div[id^="post_list"]', function() {
 		this.click('input#firstpid');
 	}).waitUntilVisible('div#posts-menu', function() {
-		this.test.assertExists('input#deleteposts', 'Delete option found');
-		this.click('input#deleteposts');
+		this.test.assertExists('#deleteposts', 'Delete option found');
+		this.click('#deleteposts');
 	}).waitForText("Sorry! You don't have permission to perform this action.", function() {
 		this.click('div.back-message a');
 	}).waitForSelector('li[id^="forum_"]', function() {
@@ -636,7 +637,7 @@ postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserAgainstTop
 		this.mouse.move('input#firstpid');
 		this.click('input#firstpid');
 	}).waitUntilVisible('div#posts-menu', function() {
-		this.test.assertExists('input#deleteposts', 'Delete option found');
+		this.test.assertExists('#deleteposts', 'Delete option found');
 	}).then(function() {
 	});
 };
@@ -752,6 +753,7 @@ postTopicUserPermissionTestcases.verifyDeleteOwnPostAndTopicDisableForRegistered
 // method to Disable "Move Own Post" for Registered user from group Permission and Verify Move option against topic in the topic list
 postTopicUserPermissionTestcases.verifyMoveOwnTopicDisable = function(userGroup) {
 	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/move_own_threads/0", function() {
+	}).thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/delete_threads/1", function() {
 		utils.info('Test case 25 [Disable Move Own Post for Registered user from group Permission and Verify Move option against topic in the topic list]');
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
@@ -776,7 +778,7 @@ postTopicUserPermissionTestcases.verifyMoveOwnTopicDisable = function(userGroup)
 
 // method to Move Own Topic shown on User's Profile page For disable setting
 postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageDisable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/delete_threads/1", function() {
+	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/delete_posts/1", function() {
 		utils.info("Test case 28 [Move Own Topic shown on User's Profile page For disable setting]");
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
