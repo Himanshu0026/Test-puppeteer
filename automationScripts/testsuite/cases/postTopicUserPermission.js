@@ -166,38 +166,19 @@ postTopicUserPermissionTestcases.verifyClickOnNewTopicEnable = function(userGrou
 
 // method to Disable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend
 postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserDisable = function(userGroup) {
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_thread_content/0", function() {
 		utils.info('Test case 3 [Disable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
-	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'view_thread_content', false);
 	}).thenOpen(config.url, function() {
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('div.alert.alert-info',function() {
 		this.test.assertExists('input#member' , 'Login page opened');
-		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails('Registered Users');
-	}).waitForSelector('li.pull-right.user-panel', function() {
-		this.test.assertExists('div#posts-list' , 'Topic content showed');
-	}).then(function() {
-		forumLoginMethod.logoutFromApp();
 	});
 };
 
 // method to Enable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend
 postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserEnable = function(userGroup) {
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_thread_content/1", function() {
 		utils.info('Test case 4 [Enable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
-	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'view_thread_content', true);
 	}).thenOpen(config.url, function() {
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('div[id^="post_list"]', function() {
@@ -366,15 +347,8 @@ postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryEnable = funct
 
 // method to Disable "View Others' Topic" for un-registered user from group Permission
 postTopicUserPermissionTestcases.verifyViewOthersTopicForUnregisteredUserWhenNoTopicCreatedDisable = function(userGroup) {
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_others_threads/0", function() {
 		utils.info('Test case 9a [Enable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend]');
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
-	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'view_others_threads', false);
 	}).thenOpen(config.url, function() {
 		this.click('i.icon.icon-menu');
 		this.test.assertExists('ul#forums_toggle_link li a', 'Category link found in the side menu');
@@ -382,14 +356,7 @@ postTopicUserPermissionTestcases.verifyViewOthersTopicForUnregisteredUserWhenNoT
 	}).waitForSelector('li[id^="forum_"]', function() {
 		this.click('li[id^="forum_"] a');
 	}).waitForText("This category doesn't have any topics yet.", function() {
-	}).thenOpen(config.backEndUrl, function() {
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-		this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-		backEndForumRegisterMethod.viewGroupPermissions(userGroup);
-	}).then(function() {
-		backEndForumRegisterMethod.editGroupPermissions(userGroup, 'view_others_threads', true);
+	}).thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_others_threads/1", function() {
 	});
 };
 
@@ -796,6 +763,7 @@ postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageDisable =
 			});
 		});
 	}).then(function() {
+		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/move_own_threads/1", function() {
 	});
 };

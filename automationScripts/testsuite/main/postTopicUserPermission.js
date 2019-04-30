@@ -36,12 +36,6 @@ postTopicUserPermission.registeredUserTest = function() {
 		// method to Verify compose message functionality from the Topic listing page
 		postTopicUserPermissionTestcases.verifyClickOnNewTopicEnable('General');
 
-		// method to Disable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend
-		//postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserDisable('Unregistered / Not Logged In');
-
-		// method to Enable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend
-		//postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserEnable('Unregistered / Not Logged In');
-
 		// method to Verify View Others's Topic on frontend from category
 		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategory('General');
 
@@ -50,9 +44,6 @@ postTopicUserPermission.registeredUserTest = function() {
 
 		// method to Enable "View Other Topic" for Registered user from group Permission and verify permission on frontend
 		postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryEnable('General');
-
-		// method to Disable "View Others' Topic" for un-registered user from group Permission
-		//postTopicUserPermissionTestcases.verifyViewOthersTopicForUnregisteredUserWhenNoTopicCreatedDisable('Unregistered / Not Logged In');
 
 		// method to Disable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend
 		postTopicUserPermissionTestcases.verifyReplyOwnTopicForRegisterUserDisable('General');
@@ -104,6 +95,15 @@ postTopicUserPermission.registeredUserTest = function() {
 
 		// method to Move Own Topic shown on User's Profile page For disable setting
 		postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageDisable('General');
+
+		// method to Disable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserDisable('Not Signed Up / Not Logged In');
+
+		// method to Enable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend
+		postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserEnable('Not Signed Up / Not Logged In');
+
+		// method to Disable "View Others' Topic" for un-registered user from group Permission
+		postTopicUserPermissionTestcases.verifyViewOthersTopicForUnregisteredUserWhenNoTopicCreatedDisable('Not Signed Up / Not Logged In');
 
 	});
 };
