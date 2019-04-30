@@ -13,20 +13,24 @@ var topicMethod = require('../methods/topic.js');
 var addPollTests=module.exports = {};
 //changes in create category method
 addPollTests.createCategoryTestCase = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' * Method to create category and sub category *');
-		backEndForumRegisterMethod.goToCategoryPage();
-	}).waitForSelector('a#addForumButton', function() {
-		try{
-			this.test.assertTextExist(addPollJSON.addPollCategory.title, 'category found on category page');
+  casper.thenOpen(config.backEndUrl, function() {
+    utils.info(' * Method to create category and sub category *');
+    backEndForumRegisterMethod.goToCategoryPage();
+  }).waitForSelector('a#addForumButton', function() {
+    try{
+      this.test.assertTextExist(addPollJSON.addPollCategory.title, 'category found on category page');
     }catch(e){
-			casper.then(function(){
-		    backEndForumRegisterMethod.createCategory(addPollJSON.addPollCategory);
-			}).waitForText(addPollJSON.addPollCategory.title, function(){
-				backEndForumRegisterMethod.createCategorySubcategory(addPollJSON.addPollCategory.title, addPollJSON.addPollSubcategory);
-			});
-		}
-	});
+      casper.then(function(){
+        backEndForumRegisterMethod.createCategory(addPollJSON.addPollCategory);
+      }).wait(1000, function(){
+        this.reload(function(){
+      	  this.waitForText(addPollJSON.addPollCategory.title, function(){
+            backEndForumRegisterMethod.createCategorySubcategory(addPollJSON.addPollCategory.title, addPollJSON.addPollSubcategory);
+          });
+        });
+      });
+    }
+  });
 };
 
 //login with moderator

@@ -13,54 +13,55 @@ backArrowTests = module.exports = {};
 
 backArrowTests.createbackArrowCategory = function() {
   casper.thenOpen(config.backEndUrl, function() {
-		utils.info(' * Method to create category and sub category *');
-		backEndForumRegisterMethod.goToCategoryPage();
-	}).waitForSelector('a#addForumButton', function() {
-		try{
+    utils.info(' * Method to create category and sub category *');
+    backEndForumRegisterMethod.goToCategoryPage();
+  }).waitForSelector('a#addForumButton', function() {
+    try{
       this.test.assertTextExist(backArrowJSON.backArrowCategory.title, 'category found on category page');
     }catch(e){
       casper.then(function(){
-		    backEndForumRegisterMethod.createCategory(backArrowJSON.backArrowCategory);
+        backEndForumRegisterMethod.createCategory(backArrowJSON.backArrowCategory);
       }).wait(1000, function(){
         this.reload(function() {
           this.waitForText(backArrowJSON.backArrowCategory.title, function(){
-				    backEndForumRegisterMethod.createCategorySubcategory(backArrowJSON.backArrowCategory.title, backArrowJSON.backArrowSubCategory);
-			    });
+            backEndForumRegisterMethod.createCategorySubcategory(backArrowJSON.backArrowCategory.title, backArrowJSON.backArrowSubCategory);
+          });
         });
       });
     }
-	});
+  });
 };
 
 // method to create a category General
 backArrowTests.readAllPost = function() {
   casper.thenOpen(config.url, function(){
-	  utils.info('Case 1[Verify back arrow with Read all post button on topic listing page]');
-	}).waitForSelector('a[href="/post/printadd"]', function(){
+    utils.info('Case 1[Verify back arrow with Read all post button on topic listing page]');
+  }).waitForSelector('a[href="/post/printadd"]', function(){
     forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
   }).waitWhileVisible('#td_tab_login', function() {
+
   }).waitForSelector('a[href="/post/printadd"]', function(){
-		this.evaluate(function() {
-		  document.querySelector('a[href="/post/printadd"]').click();
-		});
-	}).then(function(){
-		topicMethod.createTopic(topicJSON.ValidCredential);
-	}).waitForText(topicJSON.ValidCredential.content, function(){
+    this.evaluate(function() {
+      document.querySelector('a[href="/post/printadd"]').click();
+    });
+  }).then(function(){
+    topicMethod.createTopic(topicJSON.ValidCredential);
+  }).waitForText(topicJSON.ValidCredential.content, function(){
     this.test.assertExists('a#backArrowPost', 'back arrow found after created a topic');
     this.click('a#backArrowPost');
   }).waitForText(backArrowJSON.topicListingPage.Text, function(){
     this.test.assertExists('a#links-nav i');
-		this.click('a#links-nav i');
-		this.test.assertExists('li#latest_topics_show a','title present on forum');
-		this.click('li#latest_topics_show a');
-	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
-		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
-		this.evaluate(function() {
-			document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
-		});
-	}).waitForSelector('a[href="#forums"]', function(){
-		deletePostMethod.getCategoryHrefFrontend('General');
-	}).waitForSelector('span.topic-content h4 a', function(){
+    this.click('a#links-nav i');
+    this.test.assertExists('li#latest_topics_show a','title present on forum');
+    this.click('li#latest_topics_show a');
+  }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+    this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
+    this.evaluate(function() {
+      document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
+    });
+  }).waitForSelector('a[href="#forums"]', function(){
+    deletePostMethod.getCategoryHrefFrontend('General');
+  }).waitForSelector('span.topic-content h4 a', function(){
     this.test.assertExists('span.icon.icon-sweep', 'read all topics icon found on page');
     this.click('span.icon.icon-sweep');
   }).waitForSelector('a#back_arrow_topic', function(){
