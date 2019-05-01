@@ -24,7 +24,7 @@ privateMessageTestcases.disablePM = function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 		});
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertDoesntExist('i#private_message_notification');
 		forumLoginMethod.logoutFromApp();
 	});
@@ -44,7 +44,7 @@ privateMessageTestcases.enablePM = function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 		});
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertExists('i#private_message_notification');
 		forumLoginMethod.logoutFromApp();
 	});
@@ -57,7 +57,7 @@ privateMessageTestcases.sendPMByMsgIcon = function() {
 	}).then(function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertExists('i#private_message_notification');
 		this.click('i#private_message_notification');
 		this.waitForSelector('ul#private_message_dropdown span.pull-right', function() {
@@ -380,6 +380,7 @@ privateMessageTestcases.verifyOneToOneConversation = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.ValidCredential.username, loginJSON.ValidCredential.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -408,6 +409,7 @@ privateMessageTestcases.verifyOneToManyConversation = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -440,6 +442,7 @@ privateMessageTestcases.verifyOneToManyConversation = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.ValidCredential.username, loginJSON.ValidCredential.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -457,6 +460,7 @@ privateMessageTestcases.verifyOneToManyConversation = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.pmMsgUser.username, loginJSON.pmMsgUser.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -499,6 +503,7 @@ privateMessageTestcases.verifyOneToManyConversation = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -513,6 +518,7 @@ privateMessageTestcases.verifyOneToManyConversation = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.ValidCredential.username, loginJSON.ValidCredential.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -564,6 +570,7 @@ privateMessageTestcases.sendPMToMaxAndMoreThanMaxRecipient = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -611,9 +618,9 @@ privateMessageTestcases.sendPMToMaxAndMoreThanMaxRecipient = function() {
   	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndregisterMethod.viewUsers('Registered Users');
+			backEndregisterMethod.viewUsers('General');
 		}).then(function() {
-			backEndregisterMethod.editUserActions('Registered Users', 'Delete', recipients.length);
+			backEndregisterMethod.editUserActions('General', 'Delete', recipients.length);
 		});
 	});*/
 };
@@ -628,6 +635,7 @@ privateMessageTestcases.read_unreadCheckbox = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -750,6 +758,7 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -762,10 +771,10 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			});
 		}).waitUntilVisible('#messages-menu', function() {
 			this.test.assertExists('#messages-menu');
-			this.test.assertExists('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.click('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.test.assertExists('li#move_to_saved_btn a');
-			this.click('li#move_to_saved_btn a');
+			this.test.assertExists('#move_to_saved_btn i');
+			this.click('#move_to_saved_btn i');
+			//this.test.assertExists('li#move_to_saved_btn a');
+			//this.click('li#move_to_saved_btn a');
 		}).waitForText('The conversation has been archived.', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'The conversation has been archived.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
@@ -776,10 +785,10 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			});
 		}).waitUntilVisible('#messages-menu', function() {
 			this.test.assertExists('#messages-menu');
-			this.test.assertExists('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.click('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.test.assertExists('li#move_to_inbox_btn a');
-			this.click('li#move_to_inbox_btn a');
+			this.test.assertExists('#move_to_inbox_btn i');
+			this.click('#move_to_inbox_btn i');
+			//this.test.assertExists('li#move_to_inbox_btn a');
+			//this.click('li#move_to_inbox_btn a');
 		}).waitForText('The conversation has been moved to Inbox.', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'The conversation has been moved to Inbox.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
@@ -791,10 +800,10 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			});
 		}).waitUntilVisible('#messages-menu', function() {
 			this.test.assertExists('#messages-menu');
-			this.test.assertExists('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.click('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.test.assertExists('li#move_to_saved_btn a');
-			this.click('li#move_to_saved_btn a');
+			this.test.assertExists('#move_to_saved_btn i');
+			this.click('#move_to_saved_btn i');
+			//this.test.assertExists('li#move_to_saved_btn a');
+			//this.click('li#move_to_saved_btn a');
 		}).waitForText('2 conversations have been archived.', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', '2 conversations have been archived.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
@@ -806,10 +815,10 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			});
 		}).waitUntilVisible('#messages-menu', function() {
 			this.test.assertExists('#messages-menu');
-			this.test.assertExists('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.click('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.test.assertExists('li#move_to_inbox_btn a');
-			this.click('li#move_to_inbox_btn a');
+			this.test.assertExists('#move_to_inbox_btn i');
+			this.click('#move_to_inbox_btn i');
+			//this.test.assertExists('li#move_to_inbox_btn a');
+			//this.click('li#move_to_inbox_btn a');
 		}).waitForText('2 conversations have been moved to Inbox.', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', '2 conversations have been moved to Inbox.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
@@ -820,10 +829,10 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			});
 		}).waitUntilVisible('#messages-menu', function() {
 			this.test.assertExists('#messages-menu');
-			this.test.assertExists('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.click('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.test.assertExists('li#move_to_saved_btn a');
-			this.click('li#move_to_saved_btn a');
+			this.test.assertExists('#move_to_saved_btn i');
+			this.click('#move_to_saved_btn i');
+			//this.test.assertExists('li#move_to_saved_btn a');
+			//this.click('li#move_to_saved_btn a');
 		}).waitForText('conversations have been archived.', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'conversations have been archived.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
@@ -834,10 +843,10 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			});
 		}).waitUntilVisible('#messages-menu', function() {
 			this.test.assertExists('#messages-menu');
-			this.test.assertExists('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.click('span#move_conversation_dropdown a i.glyphicon.glyphicon-right-arrow');
-			this.test.assertExists('li#move_to_inbox_btn a');
-			this.click('li#move_to_inbox_btn a');
+			this.test.assertExists('#move_to_inbox_btn i');
+			this.click('#move_to_inbox_btn i');
+			//this.test.assertExists('li#move_to_inbox_btn a');
+			//this.click('li#move_to_inbox_btn a');
 		}).waitForText('conversations have been moved to Inbox.', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'conversations have been moved to Inbox.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
@@ -862,6 +871,7 @@ privateMessageTestcases.ignore_unIgnoreUser = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -921,6 +931,7 @@ privateMessageTestcases.sendMessageWhoIgnoredYou = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.pmMsgUser.username, loginJSON.pmMsgUser.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -961,6 +972,7 @@ privateMessageTestcases.sendMessageWhoIgnoredYou = function() {
 		}).waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -1002,6 +1014,7 @@ privateMessageTestcases.verifyMessageIconCountCaseOne = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -1039,6 +1052,7 @@ privateMessageTestcases.verifyMessageIconCountCaseOne = function() {
 			this.waitForSelector('#inline_search_box', function() {
 				this.test.assertExists('#inline_search_box', 'Search bar present');
 				forumLoginMethod.loginToApp(recipients, recipients);
+			}).waitWhileVisible('#td_tab_login', function() {
 			}).waitForSelector('span.badge.notif', function() {
 				this.test.assertExists('span.badge.notif');
 				this.test.assertSelectorHasText('span.badge.notif', '3');
@@ -1085,6 +1099,7 @@ privateMessageTestcases.verifyMessageIconCountCaseTwo = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -1108,6 +1123,7 @@ privateMessageTestcases.verifyMessageIconCountCaseTwo = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.pmMsgUser.username, loginJSON.pmMsgUser.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -1125,6 +1141,7 @@ privateMessageTestcases.verifyMessageIconCountCaseTwo = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.ValidCredential.username, loginJSON.ValidCredential.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -1148,6 +1165,7 @@ privateMessageTestcases.verifyMessageIconCountCaseTwo = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(recipients, recipients);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('span.badge.notif', function() {
 			this.test.assertExists('span.badge.notif');
 			this.test.assertSelectorHasText('span.badge.notif', '3');
@@ -1185,6 +1203,7 @@ privateMessageTestcases.leaveConversation = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -1263,6 +1282,7 @@ privateMessageTestcases.deleteConversation = function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		}).waitWhileVisible('#td_tab_login', function() {
 		}).waitForSelector('i#private_message_notification', function() {
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -1344,7 +1364,7 @@ privateMessageTestcases.refreshPmPageAfterSendingMessage = function() {
 	}).then(function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-	}).then(function() {
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertExists('i#private_message_notification');
 		this.click('i#private_message_notification');
 		this.waitForSelector('ul#private_message_dropdown a.pull-left', function() {

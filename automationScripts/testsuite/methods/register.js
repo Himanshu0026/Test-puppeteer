@@ -60,10 +60,10 @@ registerMethod.registerMultipleUsers = function(usersCount, callback) {
 	casper.eachThen(users, function(user) {
 		userName = user.data;
 		this.waitForSelector('#inline_search_box', function() {
-			this.test.assertExists('a[href="/register/register"]', 'Register');
+			this.test.assertExists('a[href="/register/register"]', 'Sign Up');
 			this.click('a[href="/register/register"]');
 		}).waitForSelector('form[name="PostTopic"]', function() {
-			this.test.assertSelectorHasText('h2', 'Member Registration');
+			this.test.assertSelectorHasText('h2', 'Sign Up');
 			this.fill('form[name="PostTopic"]', {
 				'member' : userName,
 				'email': userName+ '@wt.com',
@@ -93,7 +93,7 @@ registerMethod.registerMember = function(data) {
 			utils.info(' No user logged in');
 		}
 		casper.waitForSelector('li.pull-right a[href="/register/register"]', function() {
-			this.test.assertExists('li.pull-right a[href="/register/register"]', 'Register button found');
+			this.test.assertExists('li.pull-right a[href="/register/register"]', 'Sign Up button found');
 			this.click('li.pull-right a[href="/register/register"]');
 		}).waitForSelector('form[name="PostTopic"] input[name="member"]', function() {
 			registerMethod.registerToApp(data, function(err) {

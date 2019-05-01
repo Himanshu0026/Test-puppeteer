@@ -13,7 +13,6 @@ var deletePostMethod = require('../methods/deletePost.js');
 var profilePageMethod= require('../methods/profilePage.js');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var moderatorPermissionsMethod = require('../methods/moderatorPermissions.js');
-var profilePageTests = require('../cases/profilePage.js');
 var followpinlockTest=module.exports = {};
 
 followpinlockTest.addModeratorByScenarioOne = function() {
@@ -42,7 +41,8 @@ followpinlockTest.enableFollowCheckbox= function() {
 		utils.info(' Case 1[Add New topic by enable Follow check box and verify unfollow topic option on forum listing page]');
 		utils.info('Case 9[Add New topic by enable Follow check box and verify unfollow topic option on latest topic page]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+  }).waitWhileVisible('#td_tab_login', function() {
+  }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
 		this.evaluate(function() {
 			document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
@@ -320,7 +320,8 @@ followpinlockTest.lockAnyTopic= function() {
 		utils.info(' Case 18[Lock any topic and Verify Lock option of topic listing page[Home page]]');
 		utils.info('Case 24[Add New topic by enable lock check box and verify unlock topic option on latest topic page]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).waitForSelector('a[href="/post/printadd"]', function(){
+  }).waitWhileVisible('#td_tab_login', function() {
+  }).waitForSelector('a[href="/post/printadd"]', function(){
 		this.evaluate(function() {
 		  document.querySelector('a[href="/post/printadd"]').click();
 		});
@@ -419,7 +420,7 @@ followpinlockTest.unlockTopicProfilePage= function(){
   casper.thenOpen(config.url, function(){
 		utils.info('Case 29[un-Lock topic from Profile page and verify unlocked topic]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).then(function(){
+	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertExists('ul.nav.pull-right span.caret');
 		this.click('ul.nav.pull-right span.caret');
 		this.test.assertExists('a#user-nav-panel-profile');
@@ -452,7 +453,8 @@ followpinlockTest.lockTopicPostPage= function() {
 		utils.info('Case 30[Lock any topic from post page and verify locked message from postlisting page]');
 		utils.info('Case 31[UnLock any locked  topic from post page and verify that the locked message should be disappeared (need test case 29)]');
 		forumLoginMethod.loginToApp(followPinLockJSON.moderatorLogin.username, followPinLockJSON.moderatorLogin.password);
-	}).waitForSelector('a[href="/post/printadd"]', function(){
+  }).waitWhileVisible('#td_tab_login', function() {
+  }).waitForSelector('a[href="/post/printadd"]', function(){
 		this.evaluate(function() {
 		  document.querySelector('a[href="/post/printadd"]').click();
 		});
@@ -485,7 +487,8 @@ followpinlockTest.ReplyPostOptionAgainstLockedTopic= function(){
   casper.thenOpen(config.url, function(){
 		utils.info('Case 32[Verify Reply a Post option against locked topic on post page for registered user]');
 		forumLoginMethod.loginToApp(forumListingPageJSON.moderatorLogin.username, forumListingPageJSON.moderatorLogin.password);
-	}).waitForSelector('a[href="/post/printadd"]', function(){
+  }).waitWhileVisible('#td_tab_login', function() {
+  }).waitForSelector('a[href="/post/printadd"]', function(){
 		this.evaluate(function() {
 		  document.querySelector('a[href="/post/printadd"]').click();
 		});
@@ -503,7 +506,8 @@ followpinlockTest.ReplyPostOptionAgainstLockedTopic= function(){
 			forumLoginMethod.logoutFromApp();
 		}).thenOpen(config.url, function(){
 			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-		}).waitForSelector('form[name="posts"] a.topic-title', function(){
+    }).waitWhileVisible('#td_tab_login', function() {
+    }).waitForSelector('form[name="posts"] a.topic-title', function(){
 			this.click('form[name="posts"] a.topic-title');
 		}).waitForSelector('span#editableSubject', function(){
 			this.test.assertDoesntExist('a#sub_post_reply', 'post reply button not found');
@@ -518,7 +522,8 @@ followpinlockTest.voteOptionAgainstLockedTopic= function(){
   casper.thenOpen(config.url, function(){
 		utils.info('Case 33[Verify Vote option against locked topic on post page]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).waitForSelector('a[href="/post/printadd"]', function(){
+  }).waitWhileVisible('#td_tab_login', function() {
+  }).waitForSelector('a[href="/post/printadd"]', function(){
 		this.evaluate(function() {
 		  document.querySelector('a[href="/post/printadd"]').click();
 		});
@@ -550,7 +555,8 @@ followpinlockTest.voteOptionAgainstLockedTopic= function(){
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-	}).waitForSelector('form[name="posts"] a.topic-title', function(){
+  }).waitWhileVisible('#td_tab_login', function() {
+  }).waitForSelector('form[name="posts"] a.topic-title', function(){
 		this.click('form[name="posts"] a.topic-title');
 	}).waitForSelector('input[name="pollvotesave"]', function(){
 		this.mouse.move('input[name="pollvotesave"]');
@@ -561,7 +567,7 @@ followpinlockTest.voteOptionAgainstLockedTopic= function(){
 	}).then(function(){
 		forumLoginMethod.logoutFromApp();
 	}).then(function(){
-    profilePageTests.deleteTopics();
+    profilePageMethod.deleteTopics();
   });
 };
 
@@ -572,7 +578,8 @@ followpinlockTest.PinIconTopicListingPage= function() {
   casper.thenOpen(config.url, function(){
 		utils.info('Case 34[Pin any topic and Verify Pin icon of topic listing page[Home page]]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).waitForSelector('a[href="/post/printadd"]', function(){
+  }).waitWhileVisible('#td_tab_login', function() {
+  }).waitForSelector('a[href="/post/printadd"]', function(){
 		this.evaluate(function() {
 		  document.querySelector('a[href="/post/printadd"]').click();
 		});
@@ -648,7 +655,8 @@ followpinlockTest.enablePinVerifyPinOptionSubCategoryTopic= function(){
   casper.thenOpen(config.url, function(){
 		utils.info('Case 40[Add New topic by enable pin check box and verify unpin topic option on topic listing page for sub category topic]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+  }).waitWhileVisible('#td_tab_login', function() {
+  }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 		this.click('ul.nav.nav-tabs li:nth-child(2) a');
 	}).waitForSelector('a[href="#forums"]', function(){
 		deletePostMethod.getCategoryHrefFrontend('newCategory');
@@ -707,6 +715,7 @@ followpinlockTest.pinTopicVerifyModeratorShieldIcon= function() {
   casper.thenOpen(config.url, function(){
 		utils.info('Case 42[un-Pin any topic and Verify Pin icon of post listing page under category]');
 		forumLoginMethod.loginToApp(forumListingPageJSON.moderatorLogin.username, forumListingPageJSON.moderatorLogin.password);
+  }).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('a[href="/post/printadd"]', function(){
 		this.evaluate(function() {
 		  document.querySelector('a[href="/post/printadd"]').click();
@@ -778,7 +787,8 @@ followpinlockTest.pinTopicVerifyUnderCategoryPageModeratorShieldIcon= function()
   casper.thenOpen(config.url, function(){
 		utils.info('Case 46[Pin any topic and Verify Pin icon under category page from moderator shield icon]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+  }).waitWhileVisible('#td_tab_login', function() {
+  }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 		this.click('ul.nav.nav-tabs li:nth-child(2) a');
 	}).waitForSelector('a[href="#forums"]', function(){
 		deletePostMethod.getCategoryHrefFrontend('General');
@@ -815,7 +825,8 @@ followpinlockTest.unPinTopicVerifyUnderCategoryPageModeratorShieldIcon= function
   casper.thenOpen(config.url, function(){
 		utils.info('Case 47[Pin any topic and Verify Pin icon under category page from moderator shield icon]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+  }).waitWhileVisible('#td_tab_login', function() {
+  }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 		this.click('ul.nav.nav-tabs li:nth-child(2) a');
 	}).waitForSelector('a[href="#forums"]', function(){
 		deletePostMethod.getCategoryHrefFrontend('General');
@@ -851,7 +862,8 @@ followpinlockTest.pinTopicVerifyUnderSubCategoryPageModeratorShieldIcon= functio
   casper.thenOpen(config.url, function(){
 		utils.info('Case 48[Pin any topic and Verify Pin icon under sub category page from moderator shield icon]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+  }).waitWhileVisible('#td_tab_login', function() {
+  }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 		this.click('ul.nav.nav-tabs li:nth-child(2) a');
 	}).waitForSelector('a[href="#forums"]', function(){
 		deletePostMethod.getCategoryHrefFrontend('newCategory');
@@ -892,7 +904,8 @@ followpinlockTest.unPinTopicVerifyUnderSubCategoryPageModeratorShieldIcon= funct
   casper.thenOpen(config.url, function(){
 		utils.info('Case 49[Un-Pin any topic and Verify Pin icon under sub category page from moderator shield icon]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
-	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+  }).waitWhileVisible('#td_tab_login', function() {
+  }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
 		this.click('ul.nav.nav-tabs li:nth-child(2) a');
 	}).waitForSelector('a[href="#forums"]', function(){
 		deletePostMethod.getCategoryHrefFrontend('newCategory');

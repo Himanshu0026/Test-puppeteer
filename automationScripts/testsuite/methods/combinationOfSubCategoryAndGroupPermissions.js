@@ -35,24 +35,13 @@ combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory = function(d
 	casper.test.assertExists('a#addForumButton', 'Add category tab found');
 	casper.click('a#addForumButton');
 	casper.waitForSelector('form#edit_forum_form', function() {
-		casper.sendKeys('input[name="forum_name"]', data.title, {reset:true});
-		casper.sendKeys('textarea[name="forum_description"]', data.description, {reset:true});
-		utils.enableorDisableCheckbox('isSubcategory', true);
-		casper.then(function() {
-			var catId = casper.evaluate(function() {
-				var id = document.querySelectorAll('#parentid option');
-				var len = id.length;
-				for(var i =1; i<=len; i++) {
-					var cat = document.querySelector('#parentid option:nth-child('+i+')');
-					if(cat.innerText == 'cat1') {
-						var catValue = document.querySelector('#parentid option:nth-child('+i+')').getAttribute('value');
-						return catValue;
-					}
-				}
-			});
-			casper.fillSelectors('div#parentOpt', {
-				'select[name="parentid"]': catId
-			}, false);
+		this.fill('form[name=frmOptions]',{
+			'forum_name': data.title,
+			'forum_description': data.description,
+			'isSubcategory': data.isSubcategorycheckbox,
+			'parentid': data.category
+		},false);
+		this.then(function() {
 			casper.test.assertExists('button.button.btn-m.btn-blue', 'Save button found');
 			casper.click('button.button.btn-m.btn-blue');
 			casper.waitForText('The category has been created.');
@@ -63,12 +52,13 @@ combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory = function(d
 //*************************Method to get the id of sub category from backend ************************
 combinationOfSubCategoryAndGroupPermissionsMethod.getIdOfSubCategory = function(data, callback) {
 	var title = data.title;
+	var category = data.category;
 	casper.waitForSelector('a#addForumButton', function() {
-		subCategoryId = casper.evaluate(function(title) {
+		subCategoryId = casper.evaluate(function(title, category) {
 			var totalCat = document.querySelectorAll('div#wrapper li a.forumName.atree');
 			for(var i=1; i<=totalCat.length; i++) {
 				var cat = document.querySelector('div#wrapper li:nth-child('+i+') a.forumName.atree');
-				if (cat.innerText == 'cat1') {
+				if (cat.innerText == category) {
 					var catId = document.querySelector("div#wrapper li:nth-child("+i+')').getAttribute('id');
 					var totalSubCat = document.querySelectorAll('li[id="'+catId+'"] ul li');
 					for(var j=1; j<=totalSubCat.length; j++) {
@@ -80,7 +70,7 @@ combinationOfSubCategoryAndGroupPermissionsMethod.getIdOfSubCategory = function(
 					}
 				}
 			}
-		},title);
+		},title,category);
 		utils.info('The id of the subcategory ='+subCategoryId);
 		return callback(null, subCategoryId);
 	});
@@ -201,7 +191,7 @@ combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndse
 combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails = function(userGroup) {
 	var loginUserName = "";
 	var loginPassWord = "";
-	if(userGroup =='Registered Users') {
+	if(userGroup =='General') {
 		loginUserName = combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.username;
 		loginPassWord = combinationOfSubCategoryAndGroupPermissionsJSON.registeredUserLogin.password;
 	}

@@ -16,7 +16,7 @@ postTopicUserPermissionTestcases.createTopic = function(userGroup) {
 	casper.thenOpen(config.url, function() {
 		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
 	}).waitForSelector('li.pull-right.user-panel', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});
@@ -338,7 +338,7 @@ postTopicUserPermissionTestcases.verifyViewOthersTopicBySearchingTopic = functio
 		utils.info("Test case 7 [Verify View Others's Topic in topic list inside category]");
 		forumLoginMethod.loginToApp(postTopicUserPermissionJSON.otherUserLogin.username, postTopicUserPermissionJSON.otherUserLogin.password);
 	}).waitForSelector('li.pull-right.user-panel', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});

@@ -24,9 +24,9 @@ registerTests.registrationBackendSetting = function() {
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
 			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndForumRegisterMethod.viewGroupPermissions('Unregistered / Not Logged In');
+			backEndForumRegisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
 		}).then(function() {
-			backEndForumRegisterMethod.editGroupPermissions('Unregistered / Not Logged In', 'view_messageboard', true);
+			backEndForumRegisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'view_messageboard', true);
 		});
 	}).then(function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
@@ -365,29 +365,30 @@ registerTests.registrationForEnabledEmailAndEnabledApproveNewRegistration = func
 
 //create user in pending approvval and delete it.
 registerTests.deletePendingApproveUser=function(){
-        casper.thenOpen(config.backEndUrl, function(){
+	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('************************MEMBER DELETE TESTCASES->Pending Approvval User****************************');
 		utils.info('Case 1[Verify by delete one topic -selecting by check box register user]');
-                this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
-        	        this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-                }).waitForSelector('div#ddUsers a[href="/tool/members/mb/addusers"]', function() {
-        		this.test.assertSelectorHasText('#ddUsers', 'New User');
-        		this.click('div#ddUsers a[href="/tool/members/mb/addusers"]');
-                }).then(function(){
-                        memberDeleteMethod.registermembers('Pending Approval', function(uname){
-                                pendingapproveUser=uname;
-                        });
-		}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
-	                this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	                this.click('a[href="/tool/members/mb/usergroup"]');
-	        }).waitForSelector('input#autosuggest', function(){
-	                this.sendKeys('input#autosuggest', pendingapproveUser, {keepFocus: true});
-	                this.page.sendEvent("keypress", this.page.event.key.Enter);
-	        }).waitForSelector('form[name="ugfrm"]', function(){
-	                this.click('a#delete_user');
-	        }).waitForSelector('input#autosuggest', function(){
-	                this.sendKeys('input#autosuggest', pendingapproveUser, {keepFocus: true});
-	                this.page.sendEvent("keypress", this.page.event.key.Enter);
-	        }).waitForText(memberDeleteJSON.deleteUsers.expectedErrorMsg);
+	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/addusers"]', function() {
+		this.test.assertSelectorHasText('#ddUsers', 'New User');
+		this.click('div#ddUsers a[href="/tool/members/mb/addusers"]');
+	}).then(function(){
+		memberDeleteMethod.registermembers('Pending Approval', function(uname){
+			pendingapproveUser=uname;
+		});
+	}).then(function(){
+		this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+			this.click('a[href="/tool/members/mb/usergroup"]');
+		}).waitForSelector('input#autosuggest', function(){
+			this.sendKeys('input#autosuggest', pendingapproveUser, {keepFocus: true});
+			this.page.sendEvent("keypress", this.page.event.key.Enter);
+		}).waitForSelector('form[name="ugfrm"]', function(){
+			this.click('a#delete_user');
+		}).waitForSelector('input#autosuggest', function(){
+			this.sendKeys('input#autosuggest', pendingapproveUser, {keepFocus: true});
+			this.page.sendEvent("keypress", this.page.event.key.Enter);
+		}).waitForText(memberDeleteJSON.deleteUsers.expectedErrorMsg);
 	});
 };

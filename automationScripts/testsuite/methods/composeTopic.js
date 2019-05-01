@@ -34,11 +34,11 @@ composeTopicMethod.startTopicPermissionForCategory=function(status){
   		casper.wait(5000, function(){
   			casper.test.assertExists('#list_usergroup');
   			casper.click('#list_usergroup');
-  			casper.sendKeys('#list_usergroup','Registered Users');
+  			casper.sendKeys('#list_usergroup','General');
 				registerUserId = casper.evaluate(function(){
 					for(var i=1; i<=7; i++) {
 						var x1 = document.querySelector('select#list_usergroup option:nth-child('+i+')');
-						if (x1.innerText == 'Registered Users') {
+						if (x1.innerText == 'General') {
 							var x2 = document.querySelector('select#list_usergroup option:nth-child('+i+')').getAttribute('value');
 							return x2;
 						}
@@ -107,4 +107,26 @@ composeTopicMethod.getPostCount= function(data) {
 			});
 		});
 	});
+};
+
+composeTopicMethod.postPreview= function(data) {
+	casper.waitForSelector('div.post-body.pull-left', function(){
+	  this.test.assertExists('div.post-body.pull-left');
+	  this.sendKeys('input[name="subject"]', data.title, {reset:true});
+	  this.withFrame('message_ifr', function(){
+			this.sendKeys('#tinymce', this.page.event.key.Ctrl, this.page.event.key.A, {keepFocus: true});
+			this.sendKeys('#tinymce', this.page.event.key.Backspace, {keepFocus: true});
+			this.sendKeys('#tinymce', data.content);
+		});
+	  if(this.exists('#all_forums_dropdown')){
+	   this.click('#all_forums_dropdown');
+	   this.fill('form[name="PostTopic"]', {
+	    'forum' : data.category
+	    }, false);
+	   }
+	  }).then(function(){
+			this.click('button#previewpost_sbt');
+		}).waitForText(composeTopicJSON.ValidCredential.content, function(){
+			this.click('#post_submit');
+	  });
 };

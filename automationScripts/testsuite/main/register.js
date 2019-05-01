@@ -9,7 +9,7 @@ var forumLoginMethod = require('../methods/login.js');
 var register = module.exports = {};
 
 register.featureTest = function() {
-	
+
 		casper.start(config.backEndUrl, function() {
 
 			utils.info(" Title of the page :"+this.getTitle());
@@ -20,7 +20,7 @@ register.featureTest = function() {
 		}).then(function() {
 
 		// Test case to set up all the backend setting for registration task
-		registerTests.registrationBackendSetting();
+		//registerTests.registrationBackendSetting();
 
 		//2.Test case to verify registration with user name blank data
 		registerTests.registrationWithInvalidData(registerJSON.blankUsername, 'Blank Username');

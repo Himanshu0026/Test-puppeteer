@@ -38,22 +38,22 @@ moveTopicAndPost.featureTest = function() {
 		moveTopicAndPostTestcases.profilePage('Administrators');
 
 		//8. Verify move topic from the latest topic page
-		moveTopicAndPostTestcases.latestTopicPage('Registered Users');
+		moveTopicAndPostTestcases.latestTopicPage('General');
 
 		// 9. Verify move topic from the topic listing page[Home Page]
-		moveTopicAndPostTestcases.topicListingPage('Registered Users');
+		moveTopicAndPostTestcases.topicListingPage('General');
 
 		// 10. Verify move topic from the topic listing page under category
-		moveTopicAndPostTestcases.topicListingPageUnderCategory('Registered Users');
+		moveTopicAndPostTestcases.topicListingPageUnderCategory('General');
 
 		// 11. Verify move topic from the topic listing page under sub category
-		moveTopicAndPostTestcases.topicListingPageUnderSubCategory('Registered Users');
+		moveTopicAndPostTestcases.topicListingPageUnderSubCategory('General');
 
 		// 12. Verify move topic from the profile page
-		moveTopicAndPostTestcases.profilePage('Registered Users');
+		moveTopicAndPostTestcases.profilePage('General');
 
 		// 13. Verify move topic from the latest topic page (own topic for registered user when disable "move topic" permission)
-		moveTopicAndPostTestcases.latestTopicPageForRegisteredUserWhenDisabled('Registered Users');
+		moveTopicAndPostTestcases.latestTopicPageForRegisteredUserWhenDisabled('General');
 
 		// 14. Verify move topic from the topic listing page[Home Page] for (own post for registered user when disable "move topic" permission)
 		moveTopicAndPostTestcases.topicListingPageForRegisteredUserWhenDisabled();

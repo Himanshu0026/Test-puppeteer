@@ -17,7 +17,7 @@ moderatorPermissionsTestcases.createTopic = function(userDetails, category) {
 	casper.thenOpen(config.url, function() {
     forumLoginMethod.loginToApp(userDetails.username, userDetails.password);
 	}).waitForSelector('li.pull-right.user-panel', function() {
-		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' Start New topic on subcategory page Found');
+		this.test.assertExists('a.pull-right.btn.btn-uppercase.btn-primary', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('a.pull-right.btn.btn-uppercase.btn-primary').click();
 		});

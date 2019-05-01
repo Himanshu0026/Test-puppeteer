@@ -16,8 +16,8 @@
 
 	"backendCred" : {
 		"uname" : "beta12",
-		"upass" : "test",
-		"apiKey" : "4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q"
+  		"upass" : "test",
+    	"apiKey" : "4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q"
 	},
 
 	"fbInfo" : {

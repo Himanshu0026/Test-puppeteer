@@ -2,7 +2,6 @@
 var config = require('../../../config/config.json');
 var replyPostTests = require('../cases/replyPost.js');
 var profilePageMethod= require('../methods/profilePage.js');
-var profilePageTests = require('../cases/profilePage.js');
 var forumLoginMethod = require('../methods/login.js');
 var replyPost = module.exports = {};
 
@@ -22,6 +21,6 @@ replyPost.featureTest = function(){
     //setPostPerPage
     replyPostTests.postPerPage('50');
     //delete all topics
-    profilePageTests.deleteTopics();
+    profilePageMethod.deleteTopics();
   });
 };
