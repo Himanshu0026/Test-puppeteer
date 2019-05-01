@@ -20,10 +20,10 @@ composeTopicTests.createCategoryTestCase = function() {
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
 		try{
-    	this.test.assertTextExist(composeTopicJSON.category.title, 'category found on category page');
-    }catch(e){
-		  backEndForumRegisterMethod.createCategory(composeTopicJSON.category);
-    }
+			this.test.assertTextExist(composeTopicJSON.category.title, 'category found on category page');
+		}catch(e){
+			backEndForumRegisterMethod.createCategory(composeTopicJSON.category);
+		}
 	});
 };
 
@@ -31,33 +31,34 @@ composeTopicTests.createCategoryTestCase = function() {
 composeTopicTests.composeTopicPagination=function(){
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('******************************ComposeTopic********************************************');
-    utils.info('Case 1[Verify to create 10 topics for pagination and Delete from Pagination.]');
-    backEndForumRegisterMethod.goToDisplayPage();
-  }).then(function(){
-    backEndForumRegisterMethod.setTopicsPerPage('10');
-  }).thenOpen(config.url, function(){
+		utils.info('Case 1[Verify to create 10 topics for pagination and Delete from Pagination.]');
+		backEndForumRegisterMethod.goToDisplayPage();
+	}).then(function(){
+		backEndForumRegisterMethod.setTopicsPerPage('10');
+	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.ValidCredential.username, loginJSON.ValidCredential.password);
 	}).waitWhileVisible('#td_tab_login', function() {
-  }).waitForSelector('a[href="/post/printadd"]', function(){
-    this.repeat(11, function(){
-      this.evaluate(function(){
-        document.querySelector('a[href="/post/printadd"]').click();
-      });
-    	this.then(function(){
-      	topicMethod.createTopic(composeTopicJSON.ValidCredential);
-    	}).waitForText(composeTopicJSON.ValidCredential.content, function(){
-      	this.test.assertExists('a#links-nav');
-      	this.click('a#links-nav');
-    	}).waitForSelector('li#latest_topics_show a', function(){
+
+	}).waitForSelector('a[href="/post/printadd"]', function(){
+		this.repeat(11, function(){
+			this.evaluate(function(){
+				document.querySelector('a[href="/post/printadd"]').click();
+			});
+			this.then(function(){
+				topicMethod.createTopic(composeTopicJSON.ValidCredential);
+			}).waitForText(composeTopicJSON.ValidCredential.content, function(){
+				this.test.assertExists('a#links-nav');
+				this.click('a#links-nav');
+			}).waitForSelector('li#latest_topics_show a', function(){
 				this.test.assertExists('li#latest_topics_show a');
-      	this.click('li#latest_topics_show a');
-    	}).waitForSelector('a[href="/post/printadd"]', function(){
-      	this.evaluate(function(){
-        	document.querySelector('a[href="/post/printadd"]').click();
-      	});
+				this.click('li#latest_topics_show a');
+			}).waitForSelector('a[href="/post/printadd"]', function(){
+				this.evaluate(function(){
+					document.querySelector('a[href="/post/printadd"]').click();
+				});
 				this.wait(1000, function(){});
-    	});
-  	});
+			});
+		});
 	}).thenOpen(config.url, function(){
 		this.test.assertExists('a.btn-subtle.pagination-last-page i','pagination icon found on latestTopicpage');
 		this.waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
@@ -69,21 +70,21 @@ composeTopicTests.composeTopicPagination=function(){
 			deletePostMethod.getCategoryHrefFrontend('ComposeCategory');
 		}).waitForSelector('a#forum-title', function(){
 			this.test.assertExists('a.btn-subtle.pagination-last-page i','pagination icon found on page');
-  	}).then(function(){
-    	this.repeat(2, function() {
+		}).then(function(){
+			this.repeat(2, function() {
 				if (this.exists('div.panel-heading span input')) {
-    			this.test.assertExists('div.panel-heading span input');
+					this.test.assertExists('div.panel-heading span input');
 					this.evaluate(function() {
 						document.querySelector('input[name="allbox"]').click();
 					});
 					this.test.assertExists('a#delete');
 					this.click('a#delete');
 				}
-	  	});
-  	}).then(function(){
-    	forumLoginMethod.logoutFromApp();
-  	});
- 	});
+			});
+		}).then(function(){
+			forumLoginMethod.logoutFromApp();
+		});
+	});
 };
 
 //changes done according to neeraj sir branch.
@@ -96,16 +97,16 @@ composeTopicTests.composeTopicWithoutCategory=function(username, password){
 		forumLoginMethod.loginToApp(username, password);
 	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('a[href="/post/printadd"]', function(){
-    this.evaluate(function(){
-      document.querySelector('a[href="/post/printadd"]').click();
-    });
-    topicMethod.createTopic(composeTopicJSON.ValidTopic);
-  }).then(function(){
+		this.evaluate(function(){
+			document.querySelector('a[href="/post/printadd"]').click();
+		});
+		topicMethod.createTopic(composeTopicJSON.ValidTopic);
+	}).then(function(){
 		var message=this.getElementAttribute('select#all_forums_dropdown', 'data-original-title');
 		this.test.assertEquals(message, composeTopicJSON.expectedMessage.Message, 'both the text are equal');
-  }).then(function(){
-    forumLoginMethod.logoutFromApp();
-  });
+	}).then(function(){
+		forumLoginMethod.logoutFromApp();
+	});
 };
 
 //Verify postPreview from general user from categoryListingPage
@@ -173,12 +174,12 @@ composeTopicTests.composeTopicGuestUserPostPreview=function(){
 		utils.info('Case 5[Verify error message for guest user without selecting any category.]');
 	}).then(function(){
 		this.test.assertExists('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-    this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-    this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function(){
-    this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function(){
+			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
 			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
 			backEndForumRegisterMethod.viewGroupPermissions('Not Signed Up / Not Logged In');
-    }).then(function(){
+		}).then(function(){
 			backEndForumRegisterMethod.editGroupPermissions('Not Signed Up / Not Logged In', 'post_threads', true);
 		}).thenOpen(config.url, function(){
 			this.waitForSelector('a[href="/post/printadd"]', function(){
@@ -198,9 +199,9 @@ composeTopicTests.composeTopicGuestUserPostPreview=function(){
 				this.click('li#latest_topics_show a');
 			}).waitForSelector('a[href="/post/printadd"]', function(){
 				this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
- 				this.evaluate(function(){
+				this.evaluate(function(){
 					document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
- 				});
+				});
 			}).waitForSelector('a[href="#forums"]', function(){
 				this.test.assertExist('div#forums a span', 'start topic found on categorylistingPage');
 				this.evaluate(function(){
@@ -259,11 +260,11 @@ composeTopicTests.composeTopicGuestUserPostPreview=function(){
 composeTopicTests.permissionSettings=function(){
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('******************************ComposeTopic********************************************');
-    utils.info('Case 7[Verify to set 100 topics per-page]');
+		utils.info('Case 7[Verify to set 100 topics per-page]');
 		composeTopicMethod.startTopicPermissionForCategory(true);
 	}).then(function(){
-    backEndForumRegisterMethod.goToDisplayPage();
-  }).then(function(){
-    backEndForumRegisterMethod.setTopicsPerPage('100');
-  });
+		backEndForumRegisterMethod.goToDisplayPage();
+	}).then(function(){
+		backEndForumRegisterMethod.setTopicsPerPage('100');
+	});
 };

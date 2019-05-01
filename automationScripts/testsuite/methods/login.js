@@ -6,12 +6,11 @@ var utils = require('../utils.js');
 //Method for login to application by passing username and password
 forumLoginMethod.loginToApp = function(username, password) {
 	if (!casper.visible('#td_tab_login')) {
-    utils.info('Login button not visible!');
-  } else {
-    utils.info('Login button is visible!');
+		utils.info('Login button not visible!');
+	} else {
+		utils.info('Login button is visible!');
 		casper.click('#td_tab_login');
   }
-
 	casper.then(function() {
 		casper.fill('form[name="frmLogin"]', {
 			'member': username,
@@ -26,12 +25,6 @@ forumLoginMethod.loginToApp = function(username, password) {
 			casper.click('form[name="frmLogin"] button[type="submit"]');
 		}
 	});
-
-	//casper.waitWhileVisible('#td_tab_login', function() {
-		//if(casper.exists('a.default-user')) {
-			//this.test.assertTextExists('Search', 'Page contains "Search" : so identification done');
-		//}
-	//});
 };
 
 //Method for logout from application
@@ -39,10 +32,9 @@ forumLoginMethod.logoutFromApp = function() {
 	casper.waitForSelector('ul.nav.pull-right span.caret', function() {
 		this.click('ul.nav.pull-right span.caret');
 	}).waitForSelector('a#logout', function() {
-    this.test.assertTextExists('Log Out', 'Page contains "Log Out" : so identification done');
+		this.test.assertTextExists('Log Out', 'Page contains "Log Out" : so identification done');
 		this.click('a#logout');
-  }).waitUntilVisible('#td_tab_login', function() {
-
+	}).waitUntilVisible('#td_tab_login', function() {
 	});
 };
 
@@ -56,8 +48,8 @@ forumLoginMethod.loginToForumBackEnd = function() {
 		}, false);
 		this.click('form[name="frmLogin"] button');
 		this.waitForSelector(('#my_account_forum_menu'), function() {
-		  this.test.assertSelectorHasText('#ddGeneral', 'View Your Forum');
-		  this.test.assertTextExists(config.backendCred.uname, 'Page contains ' +config.backendCred.uname+ ' : so identification done');
+			this.test.assertSelectorHasText('#ddGeneral', 'View Your Forum');
+			this.test.assertTextExists(config.backendCred.uname, 'Page contains ' +config.backendCred.uname+ ' : so identification done');
 		});
 	});
 };

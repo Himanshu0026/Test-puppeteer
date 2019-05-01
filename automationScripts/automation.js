@@ -501,5 +501,8 @@ case "postEventMemberApproval":
 		casper.echo("topicsPostCount");
 		casper.echo("latestTopic");
 		casper.echo("memberDelete");
+		casper.echo("combinationOfSubCategoryAndGroupPermissions registerUserTest");
+		casper.echo("combinationOfCategoryAndGroupPermissions registerUserTest");
+		casper.echo("postTopicUserPermission registeredUserTest");
 		casper.exit();
 }

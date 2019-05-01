@@ -179,12 +179,13 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithCategory = function(
 	}).waitForSelector('li[id^="forum_"]', function() {
 		this.click('li#forum_'+other_category_Id+' a');
 	}).waitUntilVisible('#topics', function() {
-		utils.info('Test case 13 [ Method to verify start new topic with other categories  ]');
+		utils.info('Test case 13 [   Method to verify start new topic with other categories  ]');
 		this.test.assertExists('#ajax_subscription_vars a', ' New Topic on subcategory page Found');
 		this.evaluate(function() {
 			document.querySelector('#ajax_subscription_vars a').click();
 		});
 	}).waitForSelector('#topic-details', function() {
+		topicMethod.createTopic(combinationOfCategoryAndGroupPermissionsJSON.startTopic);
 	}).thenOpen(config.backEndUrl, function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 		this.waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
@@ -385,11 +386,11 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithCategory = function(
 	}).waitForSelector('li[id^="forum_"]', function() {
 		casper.test.assertVisible('li#forum_'+other_category_Id+' a' , ' General visible on category listing page');
 		this.click('li#forum_'+other_category_Id+' a');
-	}).waitForSelector('div#category_list', function() {
+	/*}).waitForSelector('div#category_list', function() {
 		this.test.assertExists('a[id^="topic_"]', ' Composed topic is found');
 		this.click('a[id^="topic_"]');
 	}).waitForSelector('div#posts-list', function() {
-		this.test.assertNotVisible('#sub_post_reply', ' Reply option not visible');
+		this.test.assertNotVisible('#sub_post_reply', ' Reply option not visible');*/
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function() {

@@ -2,6 +2,8 @@
 AUTOMATION_HOME='/etc/automation'
 AUTOMATION_ALLOW=1
 
+cat "$AUTOMATION_HOME"/log/stop.txt
+
 checkAutomattionStatusToSkip()
 {
   echo "Inside checkAutomation"

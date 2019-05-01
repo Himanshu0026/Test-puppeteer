@@ -226,14 +226,14 @@ memberdeleteTests.enabledeleteUsersprofilePage=function(){
 //admin deleted itself on members page
 memberdeleteTests.deleteAdminmembersPage=function(){
   casper.thenOpen(config.url, function(){
-		utils.info('************************MEMBER DELETE TESTCASES****************************');
-	  utils.info('Case 6[Verify admin Delete other users Account  Through  Members Check box on Members page]');
+    utils.info('************************MEMBER DELETE TESTCASES****************************');
+    utils.info('Case 6[Verify admin Delete other users Account  Through  Members Check box on Members page]');
     forumLoginMethod.loginToApp(admin, admin);
   }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
     this.test.assertExists('a#links-nav i');
 		this.click('a#links-nav i');
-		this.test.assertExists('li#members_list_show a','members found on members page');
-		this.click('li#members_list_show a');
+    this.test.assertExists('li#members_list_show a','members found on members page');
+    this.click('li#members_list_show a');
   }).waitForSelector('form#memberListFrm div.panel-heading li', function(){
     this.click('form#memberListFrm div.panel-heading ul li:nth-child(3) a', 'clicked on new level on top-posters page');
   }).waitForSelector('input[name="delete_member"]', function(){
@@ -253,7 +253,7 @@ memberdeleteTests.deleteAdminmembersPage=function(){
       }).then(function(){
         this.click('button#confirm_submit');
       }).waitForText('Top 25 Posters', function(){
-      //verified two users which deleted
+        //verified two users which deleted
         this.thenOpen(config.url, function(){
           forumLoginMethod.loginToApp(admin, admin);
         }).waitForText(memberDeleteJSON.checkedUser.expectedErrorMsg);
