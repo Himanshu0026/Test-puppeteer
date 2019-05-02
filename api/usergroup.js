@@ -1,8 +1,8 @@
 var Usergroups = module.exports = {};
 
 Usergroups.getUsergroupID = function(uid, title) {
-    var sql = 'SELECT usergroupid FROM usergroups WHERE uid = "'+uid+'" AND title ="'+title+'";';
-    return sql;
+  var sql = 'SELECT usergroupid FROM usergroups WHERE uid = "'+uid+'" AND title ="'+title+'";';
+  return sql;
 };
 
 Usergroups.updateUsergroupsSQL = function(uid,field,value,title) {

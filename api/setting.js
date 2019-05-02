@@ -4,8 +4,8 @@ var uid;
 var settings = module.exports = {};
 
 settings.getUID = function(user) {
-    var sql = 'SELECT uid FROM settings WHERE username = "'+user+'" ;';
-    return sql;
+  var sql = 'SELECT uid FROM settings WHERE username = "'+user+'" ;';
+  return sql;
 };
 
 settings.updateSettings = function(uid,field,value) {
@@ -14,19 +14,19 @@ settings.updateSettings = function(uid,field,value) {
 };
 
 settings.setUID = function(callback) {
-	request({
-		url: config.apiLocalUrl+'/settings/getUID',
-		json: true
-	}, function(err, res, body) {
-		if(err) {
-			console.log('err : '+err);
-			res.send(err);
-		}
-		if(res.statusCode == 200) {
-			uid = body.UID;
+  request({
+    url: config.apiLocalUrl+'/settings/getUID',
+    json: true
+  }, function(err, res, body) {
+    if(err) {
+      console.log('err : '+err);
+      res.send(err);
+    }
+    if(res.statusCode == 200) {
+      uid = body.UID;
       return callback(null, uid);
-		}else {
-			res.send('The uid not found');
-		}
-	});
+    }else {
+      res.send('The uid not found');
+    }
+  });
 };

@@ -24,7 +24,7 @@ forumsRoutes.get("/getID/:title", function(req, res, next) {
 
 forumsRoutes.get("/add/:title/:description", function(req, res, next) {
 	var title = req.params.title;
-  var description = req.params.description;
+	var description = req.params.description;
 	settings.setUID(function(err, uid) {
 		if(!err) {
 			uid = uid;
