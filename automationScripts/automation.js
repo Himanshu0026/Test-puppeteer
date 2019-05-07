@@ -401,7 +401,7 @@ case "postEventMemberApproval":
 			case "memberApprovalTest":
 				casper.test.begin(branchName+ ' : ' + commitId + 'Verify post, Event and Member Approval functionality from home page with all valid and invalid scenarios ', function(test) {
 					var postEventMemberApproval = require("./testsuite/main/postEventMemberApproval.js");
-					postEventMemberApproval.eventTest();
+					postEventMemberApproval.memberTest();
 					casper.run(function(){
 						utils.displayError();
 						test.done();

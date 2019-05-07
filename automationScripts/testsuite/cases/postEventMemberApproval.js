@@ -412,6 +412,10 @@ postEventMemberApprovalTestcases.eventApprovalByAdmin = function() {
 postEventMemberApprovalTestcases.memberApprovalByAdmin = function() {
 	casper.thenOpen(config.apiLocalUrl+"/settings/reqregapp/checked", function() {
 	}).thenOpen(config.url, function() {
+		registerMethod.registerMultipleUsers(11, function(users) {
+			recipients = users;
+		});
+	}).then(function() {
 		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.adminUserLogin.username, postEventMemberApprovalJSON.adminUserLogin.password);
 	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function() {
@@ -452,7 +456,7 @@ postEventMemberApprovalTestcases.memberApprovalByAdmin = function() {
 		this.click('#decline_member');
 	}).wait('2000',function () {
 
-	}).then(function() {
+	/*}).then(function() {
 		this.click('#links-nav i.icon');
 	}).waitForSelector('#latest_topics_show a', function() {
 		this.click('#forums_toggle_link a[href="/categories"]');
@@ -468,7 +472,7 @@ postEventMemberApprovalTestcases.memberApprovalByAdmin = function() {
 		this.test.assertExists('a#approvePending i', 'APPROVE TICK ON THE FLOATING MENU');
 		this.click('a#approvePending i');
 	}).wait('2000',function () {
-		this.test.assertTextExists("There's currently nothing that needs your approval.");
+		this.test.assertTextExists("There's currently nothing that needs your approval.");*/
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
 	});
