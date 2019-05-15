@@ -3,7 +3,6 @@ var loginJSON = require('../../testdata/loginData.json');
 var topicsCountJSON = require('../../testdata/topicscount.json');
 var topicJSON = require('../../testdata/topic.json');
 var topicMethod = require('../methods/topic.js');
-var registerMethod = require('../methods/register.js');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var forumLoginMethod = require('../methods/login.js');
 var deletePostMethod = require('../methods/deletePost.js');
@@ -49,6 +48,7 @@ topicsCountTests.topicsCount = function() {
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 1[Verify the Number of Topics from the Followed content page ]');
 		utils.info('Case 1[Verify the Number of posts from the Followed content page ]');
+		//forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).waitForSelector('a[href="/post/printadd"]', function(){
 		this.test.assertExists('ul.nav.pull-right span.caret');
 		this.click('ul.nav.pull-right span.caret');
@@ -144,5 +144,3 @@ topicsCountTests.combineallforumTopicCount=function(){
 		this.click('input#firstpid', 'clicked on postlistingpage checkbox');
 	}).waitForText(topicsCountJSON.followedTopicsCount.count);
 };
-
-//

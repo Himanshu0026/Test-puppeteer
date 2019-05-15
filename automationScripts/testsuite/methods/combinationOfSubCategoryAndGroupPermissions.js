@@ -43,9 +43,11 @@ combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory = function(d
 		},false);
 		this.then(function() {
 			casper.test.assertExists('button.button.btn-m.btn-blue', 'Save button found');
-			casper.click('button.button.btn-m.btn-blue');
-			casper.waitForText('The category has been created.');
-		});
+			this.evaluate(function() {
+			  document.querySelector('button.button.btn-m.btn-blue').click();
+			});
+			//casper.waitForText('The category has been created.');
+		}).wait('2000', function() {});
 	});
 };
 
@@ -98,23 +100,23 @@ combinationOfSubCategoryAndGroupPermissionsMethod.isSubCategoryExists = function
 
 // method to select the user group on permission page of category setting
 combinationOfSubCategoryAndGroupPermissionsMethod.selectUserGroup = function(data, callback) {
-var group = data;
+	var group = data;
 	var groupId = casper.evaluate(function(group) {
-		var totalGroup = document.querySelectorAll('select#list_usergroup option');
+		var totalGroup = document.querySelectorAll('#displayUsergroups li');
 	   	for(var i=1; i<=(totalGroup.length); i++) {
-			var groupText = document.querySelector('select#list_usergroup option:nth-child('+i+')');
+			var groupText = document.querySelector('#displayUsergroups li:nth-child('+i+') a');
 			if (groupText.innerText == group) {
-				var groupValue = document.querySelector('select#list_usergroup option:nth-child('+i+')').getAttribute('value');
-				return groupValue;
+				var groupValue = document.querySelector('#displayUsergroups li:nth-child('+i+')').getAttribute('id');
+				var groupId = groupValue.split('_');
+				return groupId[1];
 			}
 		}
 	},group);
 	utils.info('The option value of group'+groupId);
 	casper.then(function() {
-		casper.test.assertExists('#list_usergroup', '#list_usergroup');
-		casper.click('#list_usergroup');
-		casper.sendKeys('#list_usergroup',group);
-	}).wait('2000', function() {
+		casper.test.assertExists('#usergroup_'+groupId, 'usergroup id found');
+		casper.click('#usergroup_'+groupId);
+	}).wait('3000', function() {
 		return callback(null,groupId);
 	});
 };
@@ -127,7 +129,10 @@ combinationOfSubCategoryAndGroupPermissionsMethod.createCustomGroup = function(d
 	casper.waitForSelector('input[name="title"]', function() {
 		this.sendKeys('input[name="title"]', data, {reset:true});
 		this.test.assertExists('button.button.btn-m.btn-blue', ' Save button found');
-		this.click('button.button.btn-m.btn-blue');
+		//this.click('button.button.btn-m.btn-blue');
+		this.evaluate(function() {
+			document.querySelector('button.button.btn-m.btn-blue').click();
+		});
 	}).waitForSelector('font[color="red"]', function() {
 		var messageText = this.fetchText('font[color="red"]');
 		var successMsg = "The user group has been created.";

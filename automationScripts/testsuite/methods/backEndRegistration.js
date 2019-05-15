@@ -417,43 +417,14 @@ backEndForumRegisterMethod.createCategory = function(data) {
 	casper.test.assertExists('a#addForumButton', 'Add category tab found');
 	casper.click('a#addForumButton');
 	casper.waitForSelector('form#edit_forum_form', function() {
-		this.sendKeys('input[name="forum_name"]', data.title, {reset:true});
+		/*this.sendKeys('input[name="forum_name"]', data.title, {reset:true});
 		this.sendKeys('textarea[name="forum_description"]', data.description, {reset:true});
-		this.test.assertExists('[aria-describedby="addedit_forum_dialog"] .ui-dialog-buttonpane .ui-state-default', 'Save button found');
-		this.click('[aria-describedby="addedit_forum_dialog"] .ui-dialog-buttonpane .ui-state-default');
-	}).waitUntilVisible('div#loading_msg', function success() {
-		utils.info(casper.fetchText('div#loading_msg'));
-		utils.info('Category created');
-	}, function fail() {
-		/*var title = data.title;
-		try{
-			casper.test.assertExists('div#sortable ul li', 'Category list present');
-			var isCatExists = casper.evaluate(function(title) {
-				var totalCategories = document.querySelectorAll('div#sortable ul li');
-			   	for(var i=1; i<=(totalCategories.length); i++) {
-					var category = document.querySelector('div#sortable ul li:nth-child('+i+') div:nth-child(1) a');
-					if (category.innerText == title) {
-						return true;
-					}
-				}
-			},title);
-			if(isCatExists === true) {
-				utils.info('Category created');
-			} else {
-				utils.error('Category not created');
-			}
-		} catch (e) {
-			utils.error('Category not created');
-		}*/
-	});
-};
-
-
-backEndForumRegisterMethod.createCategoryForumListing = function(data) {
-	casper.test.assertExists('a#addForumButton', 'Add category tab found');
-	casper.click('a#addForumButton');
-	casper.waitForSelector('form#edit_forum_form', function() {
-		this.fillSelectors('form#edit_forum_form', {
+		this.test.assertExists('button.button.btn-m.btn-blue', 'Save button found');
+		//this.click('button.button.btn-m.btn-blue');
+		this.evaluate(function() {
+		  document.querySelector('button.button.btn-m.btn-blue').click();
+		});*/
+		this.fillSelectors('form[name=frmOptions]', {
 			'input[name="forum_name"]': data.title,
 			'textarea[name="forum_description"]': data.description
 		}).then(function() {
@@ -461,9 +432,32 @@ backEndForumRegisterMethod.createCategoryForumListing = function(data) {
 			  document.querySelector('button.button.btn-m.btn-blue').click();
 			});
 		});
-	}).wait('2000',function(){
-		utils.info('category created succesfully');
+	}).waitUntilVisible('div#loading_msg', function success() {
+		utils.info(casper.fetchText('div#loading_msg'));
+		utils.info('Category created');
+	}, function fail() {
+
 	});
+};
+
+
+backEndForumRegisterMethod.createCategoryForumListing = function(data) {
+	casper.then(function(){
+		casper.test.assertExists('a#addForumButton', 'Add category tab found');
+		casper.click('a#addForumButton');
+		casper.waitUntilVisible('button.button.btn-m.btn-blue', function() {
+			this.fillSelectors('form[name=frmOptions]', {
+				'input[name="forum_name"]': data.title,
+				'textarea[name="forum_description"]': data.description
+			}).then(function() {
+				this.evaluate(function() {
+			  	document.querySelector('button.button.btn-m.btn-blue').click();
+				});
+			});
+		}).wait(2000, function(){
+			utils.info('Category created');
+		});
+  });
 };
 
 
@@ -513,20 +507,30 @@ backEndForumRegisterMethod.getIdOfCategory = function(data, callback) {
 
 //Method to Add new moderarator
 backEndForumRegisterMethod.addNewModerator = function(data, category) {
-	casper.waitForSelector('a[href^="/tool/members/mb/moderators?action=new"]', function() {
+	casper.waitForSelector('a.addForumModeratorButton', function() {
 		this.evaluate(function() {
-		  document.querySelector('a[href^="/tool/members/mb/moderators?action=new"]').click();
+		  document.querySelector('a.addForumModeratorButton').click();
 		});
-	}).waitUntilVisible('form#add_mod_form',function() {
+	}).waitUntilVisible('.add-moderator ',function() {
 		backEndForumRegisterMethod.getIdOfCategory(category, function(err, category_id){
 			if(!err) {
-				casper.sendKeys('input[name="user"]', data, {reset:true});
 				casper.fillSelectors('form[name="posts"]', {
 					'select[name="forum_id"]': category_id
 				}, false);
-				casper.test.assertExists('div.ui-dialog-buttonset button','Save button Found');
-				casper.click('div.ui-dialog-buttonset button');
-				casper.wait('2000', function(err) {
+				casper.sendKeys('input[name="user"]', data, {keepFocus: true});
+				//casper.click('ul.ui-autocomplete li');
+				casper.sendKeys('input[name="user"]', casper.page.event.key.Enter, {keepFocus:true} );
+				casper.then(function() {
+					//casper.click('ul.ui-autocomplete li:nth-child(1)');
+					//casper.test.assertExists('div.ui-dialog-buttonset button','Save button Found');
+					//casper.click('div.ui-dialog-buttonset button');
+					casper.test.assertExists('button.button.btn-m.btn-blue.pull-right','Save button Found');
+					//casper.click('button.button.btn-m.btn-blue.pull-right');
+					casper.evaluate(function() {
+					  document.querySelector('button.button.btn-m.btn-blue.pull-right').click();
+					});
+					casper.wait('1000', function(err) {
+					});
 				});
 			}
 		});
@@ -548,9 +552,12 @@ backEndForumRegisterMethod.removeModerator=function() {
 		this.click('a.moderateAction[data-forumid="'+firstLiId+'"]');
 		this.test.assertExists('div#forumModerator'+firstLiId + ' a:last-child');
 		this.click('div#forumModerator'+firstLiId + ' a:last-child');
-	}).waitForSelector('a#remove_moderator',function () {
-			this.test.assertExists('a#remove_moderator');
-			this.click('a#remove_moderator');
+	}).waitForSelector('.remove_mod',function () {
+			this.test.assertExists('.remove_mod');
+			//this.click('.remove_mod');
+			casper.evaluate(function() {
+				document.querySelector('.remove_mod').click();
+			});
 	}).then(function() {
 		if(this.exists('a#remove_mod_all')){
 			this.click('a#remove_mod_all');
@@ -628,7 +635,10 @@ backEndForumRegisterMethod.goToCategoryPermission = function(id) {
 	casper.wait('2000',function() {
 	}).then(function() {
 		this.click('div[id="forumAction'+id+'"] a.change_perm');
-	}).waitForSelector('span#inheritance', function() {
+		casper.wait('2000',function() {});
+	}).waitForSelector('#displayUsergroups', function() {
+		//this.click('div#addedit_forum_dialog button.close');
+	}).wait('3000', function(){
 		utils.info("Change Permission Page opened");
 	});
 };
@@ -636,12 +646,7 @@ backEndForumRegisterMethod.goToCategoryPermission = function(id) {
 //*************************Method to change the permission of Category of View Category from backend ************************
 backEndForumRegisterMethod.enableDisableCategoryPermissions = function(id, value) {
 	utils.enableorDisableCheckbox(id, value);
-	casper.wait('2000', function() {});
-	/*casper.waitUntilVisible('div#loading_msg', function success() {
-		utils.info("Permission changed");
-	}, function fail() {
-		utils.info("Permission not changed");
-	});*/
+	casper.wait('4000', function() {});
 };
 
 backEndForumRegisterMethod.enableDisableDeleteProfilePermissions = function(id, value) {
@@ -658,8 +663,9 @@ backEndForumRegisterMethod.createCategorySubcategory= function(title, data){
 	casper.then(function(){
 		casper.test.assertExists('a#addForumButton', 'Add category tab found');
 		casper.click('a#addForumButton');
-		this.waitForSelector('form[name=frmOptions]', function(){
-			this.fill('form[name=frmOptions]',{
+		this.waitUntilVisible('div.modal-body', function(){
+			this.test.assertExists('form#edit_forum_form', 'category forum found successfully');
+			this.fill('form#edit_forum_form',{
 				'forum_name': data.title,
 				'forum_description': data.description,
 				'isSubcategory': data.isSubcategorycheckbox,
@@ -688,8 +694,19 @@ backEndForumRegisterMethod.createCategorySubcategory= function(title, data){
 			}catch(e){
 				utils.info('subcategory value cannot be found on forum');
 			}
-			this.click('form[name="frmOptions"] button');
-		}).waitUntilVisible('.heading.error_message', function(){});
+			//this.click('form[name="frmOptions"] button');
+			/*casper.evaluate(function() {
+				document.querySelector('button.button.btn-m.btn-blue.pull-right').click();
+			});*/
+			casper.then(function(){
+				this.evaluate(function() {
+			  	document.querySelector('button.button.btn-m.btn-blue').click();
+				});
+			}).wait(2000, function(){
+					this.waitUntilVisible('div.forum_organize', function(){
+				});
+			});
+		});
 	});
 };
 

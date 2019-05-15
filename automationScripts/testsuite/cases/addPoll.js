@@ -11,26 +11,26 @@ var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var pollMethod = require('../methods/poll.js');
 var topicMethod = require('../methods/topic.js');
 var addPollTests=module.exports = {};
-//changes in create category method
+
 addPollTests.createCategoryTestCase = function() {
-  casper.thenOpen(config.backEndUrl, function() {
-    utils.info(' * Method to create category and sub category *');
-    backEndForumRegisterMethod.goToCategoryPage();
-  }).waitForSelector('a#addForumButton', function() {
-    try{
-      this.test.assertTextExist(addPollJSON.addPollCategory.title, 'category found on category page');
-    }catch(e){
-      casper.then(function(){
-        backEndForumRegisterMethod.createCategory(addPollJSON.addPollCategory);
-      }).wait(1000, function(){
-        this.reload(function(){
-      	  this.waitForText(addPollJSON.addPollCategory.title, function(){
-            backEndForumRegisterMethod.createCategorySubcategory(addPollJSON.addPollCategory.title, addPollJSON.addPollSubcategory);
-          });
-        });
-      });
-    }
-  });
+	casper.thenOpen(config.backEndUrl, function() {
+		utils.info(' * Method to create category and sub category *');
+		backEndForumRegisterMethod.goToCategoryPage();
+	}).waitForSelector('a#addForumButton', function() {
+		try{
+			this.test.assertTextExist(addPollJSON.addPollCategory.title, 'category found on category page');
+		}catch(e){
+			casper.then(function(){
+				backEndForumRegisterMethod.createCategory(addPollJSON.addPollCategory);
+			}).wait(1000, function(){
+				this.reload(function() {
+					this.waitForText(addPollJSON.addPollCategory.title, function(){
+						backEndForumRegisterMethod.createCategorySubcategory(addPollJSON.addPollCategory.title, addPollJSON.addPollSubcategory);
+					});
+				});
+			});
+		}
+	});
 };
 
 //login with moderator
@@ -43,26 +43,26 @@ addPollTests.createPollShieldIcon=function(){
 		forumLoginMethod.loginToApp(followPinLockJSON.moderatorLogin.username, followPinLockJSON.moderatorLogin.password);
 	}).waitForSelector('a[href="/post/printadd"]', function(){
 		this.evaluate(function() {
-		  document.querySelector('a[href="/post/printadd"]').click();
+			document.querySelector('a[href="/post/printadd"]').click();
 		});
 	}).then(function(){
 		topicMethod.createTopic(topicJSON.newTopic);
 	}).waitForText(topicJSON.newTopic.content, function(){
 		this.test.assertExists('div.topic-tools.pull-right div.dropdown a span','shield icon found on postListingPage');
-                this.click('div.topic-tools.pull-right div.dropdown a span');
-        }).then(function(){
-                this.test.assertExists('div.topic-tools.pull-right ul li:last-child a');
+		this.click('div.topic-tools.pull-right div.dropdown a span');
+	}).then(function(){
+		this.test.assertExists('div.topic-tools.pull-right ul li:last-child a');
 		this.click('div.topic-tools.pull-right ul li:last-child a');
-        }).waitForSelector('input#poll_question', function(){
+	}).waitForSelector('input#poll_question', function(){
 		//checked preview button on add poll page
 		this.test.assertExists('button#pollPreviewSbt','poll preview button ');
 		this.click('button#pollPreviewSbt');
 	}).then(function(){
-        	pollMethod.createPoll(pollJSON.pollData);
-        }).waitForText('Vote', function() {
-        	this.test.assertExists('a#backArrowPost i', 'back arrow icon found on postListingPage');
-        	this.click('a#backArrowPost i');
-        }).waitForSelector('form[name="posts"] a.topic-title', function(){
+		pollMethod.createPoll(pollJSON.pollData);
+	}).waitForText('Vote', function() {
+		this.test.assertExists('a#backArrowPost i', 'back arrow icon found on postListingPage');
+		this.click('a#backArrowPost i');
+	}).waitForSelector('form[name="posts"] a.topic-title', function(){
 		var message=this.getElementAttribute('span.mod.icons i.glyphicon.glyphicon-stats', 'data-original-title');
 		this.test.assertEquals(message, pollJSON.pollInfo.pollMgs, 'both the text are equal');
 	});
@@ -76,41 +76,41 @@ addPollTests.checkShieldIconPostListingPage=function(){
 		utils.info('********************************ADD POLL TEST-CASES ********************************************');
 		utils.info(' Case 2["To verify to create a poll on a topic without adding poll options.When Post Poll option is enabled in backend."]');
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
-                this.click('form[name="posts"] a.topic-title');
-        }).waitForSelector('span#editableSubject', function(){
+		this.click('form[name="posts"] a.topic-title');
+	}).waitForSelector('span#editableSubject', function(){
 		//delete poll functionality covered here for moderator
-            	this.test.assertExists('div.panel-heading div div i','polled topic found on postlistingPage');
-        	this.click('div.panel-heading div div i');
-        	this.click('a#delete_poll');
-        	this.wait(1000, function(){});
-        }).waitForSelector('div.topic-tools.pull-right div.dropdown a', function(){
-        	this.test.assertExists('div.topic-tools.pull-right div.dropdown a span','shield icon found on postListingPage');
-                this.click('div.topic-tools.pull-right div.dropdown a span');
-        }).then(function(){
-                this.test.assertExists('div.topic-tools.pull-right ul li:last-child a');
+		this.test.assertExists('div.panel-heading div div i','polled topic found on postlistingPage');
+		this.click('div.panel-heading div div i');
+		this.click('a#delete_poll');
+		this.wait(1000, function(){});
+	}).waitForSelector('div.topic-tools.pull-right div.dropdown a', function(){
+		this.test.assertExists('div.topic-tools.pull-right div.dropdown a span','shield icon found on postListingPage');
+		this.click('div.topic-tools.pull-right div.dropdown a span');
+	}).then(function(){
+		this.test.assertExists('div.topic-tools.pull-right ul li:last-child a');
 		this.click('div.topic-tools.pull-right ul li:last-child a');
-        }).waitForSelector('input#poll_question', function(){
-        	this.sendKeys('#poll_question', pollJSON.pollData.pollQuestion);
+	}).waitForSelector('input#poll_question', function(){
+		this.sendKeys('#poll_question', pollJSON.pollData.pollQuestion);
 		this.sendKeys('#public', pollJSON.pollData.votecheckbox);
 		this.sendKeys('#multiple', pollJSON.pollData.multiplechoicebox);
-        }).then(function(){
+	}).then(function(){
 		this.test.assertExists('button#save_poll','save poll button found on post-poll page');
 		this.click('button#save_poll', 'save button clicked');
 	}).waitForText(pollJSON.pollErrorMessage.errorMessage1, function(){
-        	this.sendKeys('#poll_question', "", { reset: true});
-        	this.sendKeys('#public', pollJSON.pollData.votecheckbox);
+		this.sendKeys('#poll_question', "", { reset: true});
+		this.sendKeys('#public', pollJSON.pollData.votecheckbox);
 		this.sendKeys('#multiple', pollJSON.pollData.multiplechoicebox);
 		this.sendKeys('span#poll_option_1 div input',pollJSON.pollData.option1);
 		this.sendKeys('span#poll_option_2 div input',pollJSON.pollData.option2);
-        }).then(function(){
-        	this.test.assertExists('#save_poll', 'save poll button found on forum');
-        	this.click('#save_poll');
-        }).wait(1000, function(){
-        	var message=this.getElementAttribute('input#poll_question', 'data-original-title');
+	}).then(function(){
+		this.test.assertExists('#save_poll', 'save poll button found on forum');
+		this.click('#save_poll');
+	}).wait(1000, function(){
+		var message=this.getElementAttribute('input#poll_question', 'data-original-title');
 		this.test.assertEquals(message, pollJSON.expectedTooltip.tooltipErrorMsg, 'both the actual and expected error messsages are equal');
 		this.wait(1000, function(){});
-        }).then(function(){
-        	this.sendKeys('#poll_question', pollJSON.pollData.pollQuestion);
+	}).then(function(){
+		this.sendKeys('#poll_question', pollJSON.pollData.pollQuestion);
 		this.sendKeys('#public', pollJSON.pollData.votecheckbox);
 		this.sendKeys('#multiple', pollJSON.pollData.multiplechoicebox);
 		this.sendKeys('span#poll_option_1 div input',pollJSON.pollData.option1);
@@ -125,31 +125,31 @@ addPollTests.checkVotingTimeout=function(){
 		utils.info(' Case 12[To verify option Edit]');
 		utils.info(' Case 13[To verify Delete poll]');
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
-                this.click('form[name="posts"] a.topic-title');
-        }).waitForSelector('span#editableSubject', function(){
-        	this.test.assertExists('div.topic-tools.pull-right div.dropdown a span','shield icon found on postListingPage');
-                this.click('div.topic-tools.pull-right div.dropdown a span');
-        }).then(function(){
-                this.test.assertExists('div.topic-tools.pull-right ul li:last-child a');
+		this.click('form[name="posts"] a.topic-title');
+	}).waitForSelector('span#editableSubject', function(){
+		this.test.assertExists('div.topic-tools.pull-right div.dropdown a span','shield icon found on postListingPage');
+		this.click('div.topic-tools.pull-right div.dropdown a span');
+	}).then(function(){
+		this.test.assertExists('div.topic-tools.pull-right ul li:last-child a');
 		this.click('div.topic-tools.pull-right ul li:last-child a');
-        }).waitForSelector('button#pollPreviewSbt', function(){
-        	this.sendKeys('#poll_question', pollJSON.pollData.pollQuestion);
-        	this.sendKeys('#public', pollJSON.pollData.votecheckbox);
+	}).waitForSelector('button#pollPreviewSbt', function(){
+		this.sendKeys('#poll_question', pollJSON.pollData.pollQuestion);
+		this.sendKeys('#public', pollJSON.pollData.votecheckbox);
 		this.sendKeys('#multiple', pollJSON.pollData.multiplechoicebox);
 		this.sendKeys('span#poll_option_1 div input',pollJSON.pollData.option1);
 		this.sendKeys('span#poll_option_2 div input',pollJSON.pollData.option2);
-        }).then(function(){
+	}).then(function(){
 		this.test.assertExists('a[href="#poll-timeout"] small', 'edit poll time out selector found on addPoll Page');
 		this.click('a[href="#poll-timeout"] small');
-        }).then(function(){
+	}).then(function(){
 		this.click('input#timeout2');
 		var date = casper.evaluate(function() {
 			var today = new Date();
-	    		var tomorrow = new Date(today);
-	    	tomorrow.setDate(today.getDate()+4);
-	    	if(today.getDate() > 28) {
-			tomorrow.setMonth(today.getMonth()+1);
-	    	}
+			var tomorrow = new Date(today);
+			tomorrow.setDate(today.getDate()+4);
+			if(today.getDate() > 28) {
+				tomorrow.setMonth(today.getMonth()+1);
+			}
 			var day = tomorrow.getDate();
 			var month = tomorrow.getMonth()+1;
 			var year = tomorrow.getFullYear();
@@ -161,8 +161,8 @@ addPollTests.checkVotingTimeout=function(){
 		this.click('button#save_poll', 'save button clicked');
 	}).waitForText('Vote', function(){
 		this.test.assertExists('a#backArrowPost i', 'back arrow icon found on postListingPage');
-        	this.click('a#backArrowPost i');
-        }).waitForSelector('form[name="posts"] a.topic-title', function(){
+		this.click('a#backArrowPost i');
+	}).waitForSelector('form[name="posts"] a.topic-title', function(){
 		var message=this.getElementAttribute('span.mod.icons i.glyphicon.glyphicon-stats', 'data-original-title');
 		this.test.assertEquals(message, pollJSON.pollInfo.pollMgs, 'both the text are equal');
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
@@ -173,19 +173,19 @@ addPollTests.checkVotingTimeout=function(){
 		this.evaluate(function() {
 			document.querySelector('div[id^="post_list_"] div:nth-child(2) div ul  li a').click();
 		});
-        }).waitForSelector('#poll_question', function(){
-        	this.sendKeys('#poll_question', "newPoll", { reset: true});
-        	this.wait(1000, function(){});
-        }).then(function(){
+	}).waitForSelector('#poll_question', function(){
+		this.sendKeys('#poll_question', "newPoll", { reset: true});
+		this.wait(1000, function(){});
+	}).then(function(){
 		this.click('button[name="pollsave"]');
-        }).waitForText('newPoll', function(){
+	}).waitForText('newPoll', function(){
 		this.test.assertExists('div.panel-heading div div i','polled topic found on postlistingPage');
-        	this.click('div.panel-heading div div i');
-        	this.click('a#delete_poll');
-        	this.wait(1000, function(){});
-        }).waitForSelector('a[href^="/profile/"]', function(){
-        	this.test.assertTextDoesntExist('newPoll', 'Text not found on postListingPage');
-        });
+		this.click('div.panel-heading div div i');
+		this.click('a#delete_poll');
+		this.wait(1000, function(){});
+	}).waitForSelector('a[href^="/profile/"]', function(){
+		this.test.assertTextDoesntExist('newPoll', 'Text not found on postListingPage');
+	});
 };
 
 
@@ -210,28 +210,28 @@ addPollTests.verifyPollErrorMessageStartTopic=function(){
 		this.click('a[href="#poll"]');
 	}).waitForSelector('a[href="#poll"]', function(){
 		pollMethod.createPoll(pollJSON.pollData);
-	//check with blank data
+		//check with blank data
 	}).waitForText(addPollJSON.CheckPollErrorMsgStartTopic.errorMessage, function(){
 		addPollMethod.createTopic(addPollJSON.withoutTitleTopic);
 	}).then(function(){
 		this.click('a[href="#poll"]');
 	}).waitForSelector('a[href="#poll"]', function(){
 		pollMethod.createPoll(pollJSON.pollData);
-	//checked without title
+		//checked without title
 	}).waitForText(addPollJSON.CheckPollErrorMsgStartTopic.errorMessage, function(){
 		addPollMethod.createTopic(addPollJSON.withoutContentTopic);
 	}).then(function(){
 		this.click('a[href="#poll"]');
 	}).waitForSelector('a[href="#poll"]', function(){
 		pollMethod.createPoll(pollJSON.pollData);
-	//checked without content
+		//checked without content
 	}).waitForText(checkErrorMsgWithoutContent, function(){
 		addPollMethod.createTopic(addPollJSON.withoutCategoryTopic);
 	}).then(function(){
 		this.click('a[href="#poll"]');
 	}).waitForSelector('a[href="#poll"]', function(){
 		pollMethod.createPoll(pollJSON.pollData);
-	//checked without category
+		//checked without category
 	}).waitForText(addPollJSON.checkErrorMsgWithoutCategory.errorMessage);
 };
 
@@ -302,8 +302,8 @@ addPollTests.addPollWithOtherUserTopic=function(){
 		pollMethod.createPoll(pollJSON.pollData);
 	}).waitForText('Vote', function() {
 		this.test.assertExists('a#backArrowPost i', 'back arrow icon found on postListingPage');
-        	this.click('a#backArrowPost i');
-        }).waitForSelector('form[name="posts"] a.topic-title', function(){
+		this.click('a#backArrowPost i');
+	}).waitForSelector('form[name="posts"] a.topic-title', function(){
 		//Verify icon when  Poll is being added latesttopicpage
 		this.test.assertExists('span.mod.icons i.glyphicon.glyphicon-stats', 'poll icon found on latesttopicpage');
 		var message=this.getElementAttribute('span.mod.icons i.glyphicon.glyphicon-stats', 'data-original-title');
@@ -319,8 +319,8 @@ addPollTests.disableAddPollFromModeratorPage=function(){
 		utils.info(' Case 25[Verify when disable Edit Poll  for moderator from group Permission, verify able to add poll to other users post]');
 		utils.info(' Case 26[Verify when disable Delete Poll  for moderator from group Permission, verify able to add poll to other users post]');
 		utils.info(' Case 1[Verify disable addPoll on latestTopicPage]');
-        	backEndForumRegisterMethod.goToCategoryPage();
-        }).then(function(){
+		backEndForumRegisterMethod.goToCategoryPage();
+	}).then(function(){
 		casper.mouse.move('li div.select');
 		this.test.assertExists('a.moderateAction', 'moderator dropdown found on categorylistingPage');
 		this.click('a.moderateAction');
@@ -331,10 +331,10 @@ addPollTests.disableAddPollFromModeratorPage=function(){
 		addPollMethod.enableDisableModeratorPermission('l', 'm', 'n', false);
 	}).then(function(){
 		this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
-	                this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	                this.click('a[href="/tool/members/mb/usergroup"]');
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+			this.click('a[href="/tool/members/mb/usergroup"]');
 		}).waitForSelector('div#tab_wrapper', function(){
-	        	backEndForumRegisterMethod.viewGroupPermissions('Moderators');
+			backEndForumRegisterMethod.viewGroupPermissions('Moderators');
 		}).waitForText('Save', function(){
 			backEndForumRegisterMethod.editGroupPermissions('Moderators', 'post_polls', false);
 		});
@@ -384,8 +384,8 @@ addPollTests.enableAddPollFromModeratorPage=function(){
 		utils.info(' Case 27[Verify when disable Add Poll  for moderator from group Permission, verify able to add poll to other users post]');
 		utils.info(' Case 28[Verify when disable Edit Poll  for moderator from group Permission, verify able to add poll to other users post]');
 		utils.info(' Case 29[Verify when disable Delete Poll  for moderator from group Permission, verify able to add poll to other users post]');
-        	backEndForumRegisterMethod.goToCategoryPage();
-        }).then(function(){
+		backEndForumRegisterMethod.goToCategoryPage();
+	}).then(function(){
 		casper.mouse.move('li div.select');
 		this.test.assertExists('a.moderateAction', 'moderator dropdown found on categorylistingPage');
 		this.click('a.moderateAction');
@@ -404,10 +404,10 @@ addPollTests.enableAddPollFromModeratorPage=function(){
 			backEndForumRegisterMethod.enableDisablePollsGeneralPage(true);
 		});
 		this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
-	                this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	                this.click('a[href="/tool/members/mb/usergroup"]');
+			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+			this.click('a[href="/tool/members/mb/usergroup"]');
 		}).waitForSelector('div#tab_wrapper', function(){
-	        	backEndForumRegisterMethod.viewGroupPermissions('Moderators');
+			backEndForumRegisterMethod.viewGroupPermissions('Moderators');
 		}).waitForText('Save', function(){
 			backEndForumRegisterMethod.editGroupPermissions('Moderators', 'post_polls', true);
 		});
@@ -435,10 +435,10 @@ addPollTests.verifyVoteButtonRegister=function(){
 		utils.info('********************************ADD POLL TEST-CASES ********************************************');
 		utils.info(' Case 30[To verify vote now button.]');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
-	        this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	        this.click('a[href="/tool/members/mb/usergroup"]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-	        backEndForumRegisterMethod.viewGroupPermissions('General');
+		backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
 		backEndForumRegisterMethod.editGroupPermissions('General', 'vote_on_polls', true);
 	}).thenOpen(config.url, function(){
@@ -509,10 +509,10 @@ addPollTests.disableVotePoll=function(){
 		utils.info('********************************ADD POLL TEST-CASES ********************************************');
 		utils.info(' Case 32[To verify vote now button.]');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
-	        this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	        this.click('a[href="/tool/members/mb/usergroup"]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-	        backEndForumRegisterMethod.viewGroupPermissions('General');
+		backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
 		backEndForumRegisterMethod.editGroupPermissions('General', 'vote_on_polls', false);
 	}).thenOpen(config.url, function(){
@@ -548,10 +548,10 @@ addPollTests.disableEnableVotePollCheckError=function(){
 		utils.info('********************************ADD POLL TEST-CASES ********************************************');
 		utils.info(' Case 33[enabled the vote permission after add a new poll."]');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
-	        this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	        this.click('a[href="/tool/members/mb/usergroup"]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-	        backEndForumRegisterMethod.viewGroupPermissions('General');
+		backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
 		backEndForumRegisterMethod.editGroupPermissions('General', 'vote_on_polls', true);
 	}).thenOpen(config.url, function(){

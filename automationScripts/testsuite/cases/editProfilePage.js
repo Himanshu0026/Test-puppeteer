@@ -186,10 +186,10 @@ editProfilePageTests.disableCustomTitle=function(){
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('Case 5[Disable CustomTitile  for Registered user from group Permission]');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
-    this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-    this.click('a[href="/tool/members/mb/usergroup"]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		this.click('a[href="/tool/members/mb/usergroup"]');
 	}).waitForSelector('div#tab_wrapper', function(){
-    backEndForumRegisterMethod.viewGroupPermissions('General');
+		backEndForumRegisterMethod.viewGroupPermissions('General');
 	}).waitForText('Save', function(){
 		backEndForumRegisterMethod.editGroupPermissions('General', 'allow_customtitle', false);
 	}).then(function(){
@@ -230,57 +230,60 @@ editProfilePageTests.enableCustomTitle=function(){
 editProfilePageTests.editCustomTitle=function(){
 	casper.thenOpen(config.url , function(){
 		utils.info('Case 7[Verify with edit custom member title]');
-	}).waitForSelector('ul.nav.pull-right span.caret', function(){
-		this.test.assertExists('ul.nav.pull-right span.caret');
-		this.click('ul.nav.pull-right span.caret');
-		this.click('span.pull-right.user-nav-panel li:nth-child(4) a');
-	}).waitForSelector('button[name="submit"]', function(){
-		try{
-			this.test.assertExists('a#change_user_title small', 'edit-customTitle selector not found on editprofilePage');
-			casper.then(function(){
-				forumLoginMethod.logoutFromApp();
-			});
-		}catch(e){
-			utils.info('comes in catch part');
-			casper.test.assertExists('div#custom_user_title input');
-			casper.click('div#custom_user_title input');
-			casper.sendKeys('div#custom_user_title input', editProfilePageJSON.customTitle.addTitle);
-			this.wait(1000, function(){
-				this.click('button[type="submit"]');
-				this.wait(1000, function(){});
-			}).then(function(){
-				forumLoginMethod.logoutFromApp();
-			});
-		}
-	}).thenOpen(config.url, function(){
-		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
-	}).waitWhileVisible('#td_tab_login', function() {
-		this.test.assertExists('ul.nav.pull-right span.caret');
-		this.click('ul.nav.pull-right span.caret');
-		this.click('span.pull-right.user-nav-panel li:nth-child(4) a');
-	}).waitForSelector('button[type="submit"]', function(){
-		this.click('a#change_user_title small');
-		this.sendKeys('form.form-inline.editableform div div div:nth-child(1) input', editProfilePageJSON.customTitle.addTitle);
-		this.wait(1000, function(){
-			this.click('button[type="submit"]');
-			this.wait(1000, function(){
-			//delete custom title on editProfilePage
-			 this.click('a#change_user_title small');
-			 var str = casper.fetchText('form.form-inline.editableform div div div:nth-child(1) input');
-			  this.wait(1000, function(){
-				  if(str.length !==null) {
-					  for(var i =0; i<str.length;i++) {
-						 this.sendKeys('form.form-inline.editableform div div div:nth-child(1) input', casper.page.event.key.Backspace, {keepFocus: true});
-					  }
-				  }
-			  }).then(function(){
-					this.wait(2000, function(){
-						this.click('button.btn.btn-primary.btn-sm.editable-submit');
-						this.wait(2000, function(){
-							this.click('form.form-horizontal  button[name="submit"]');
-						}).waitForSelector('div#custom_user_title input:nth-child(1)', function(){
-							this.test.assertTextDoesntExist(str);
-						}).waitForText('Your settings have been updated.');
+		this.waitForSelector('ul.nav.pull-right span.caret', function(){
+			this.test.assertExists('ul.nav.pull-right span.caret');
+			this.click('ul.nav.pull-right span.caret');
+			this.click('span.pull-right.user-nav-panel li:nth-child(4) a');
+			this.waitForSelector('button[name="submit"]', function(){
+				try{
+					this.test.assertExists('a#change_user_title small', 'edit-customTitle selector not found on editprofilePage');
+					casper.then(function(){
+						forumLoginMethod.logoutFromApp();
+					});
+				}catch(e){
+					utils.info('comes in catch part');
+					casper.test.assertExists('div#custom_user_title input');
+					casper.click('div#custom_user_title input');
+					casper.sendKeys('div#custom_user_title input', editProfilePageJSON.customTitle.addTitle);
+					this.wait(1000, function(){
+						this.click('button[type="submit"]');
+						this.wait(1000, function(){});
+					}).then(function(){
+						forumLoginMethod.logoutFromApp();
+					});
+				}
+			}).thenOpen(config.url, function(){
+				forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+			}).waitWhileVisible('#td_tab_login', function() {
+				this.test.assertExists('ul.nav.pull-right span.caret');
+				this.click('ul.nav.pull-right span.caret');
+				this.click('span.pull-right.user-nav-panel li:nth-child(4) a');
+				this.waitForSelector('button[type="submit"]', function(){
+					this.click('a#change_user_title small');
+					this.sendKeys('form.form-inline.editableform div div div:nth-child(1) input', editProfilePageJSON.customTitle.addTitle);
+					this.wait(1000, function(){
+						this.click('button[type="submit"]');
+						this.wait(1000, function(){
+							//delete custom title on editProfilePage
+							this.click('a#change_user_title small');
+							var str = casper.fetchText('form.form-inline.editableform div div div:nth-child(1) input');
+							this.wait(1000, function(){
+								if(str.length !==null) {
+									for(var i =0; i<str.length;i++) {
+										this.sendKeys('form.form-inline.editableform div div div:nth-child(1) input', casper.page.event.key.Backspace, {keepFocus: true});
+									}
+								}
+							}).then(function(){
+								this.wait(2000, function(){
+									this.click('button.btn.btn-primary.btn-sm.editable-submit');
+									this.wait(2000, function(){
+										this.click('form.form-horizontal  button[name="submit"]');
+									}).waitForSelector('div#custom_user_title input:nth-child(1)', function(){
+										this.test.assertTextDoesntExist(str);
+									}).waitForText('Your settings have been updated.');
+								});
+							});
+						});
 					});
 				});
 			});
@@ -293,8 +296,8 @@ editProfilePageTests.shieldIcon=function(){
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('Case 8[Verify the shield icon for registered user  on edit profile page]');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
-    this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-    this.click('a[href="/tool/members/mb/fields"]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		this.click('a[href="/tool/members/mb/fields"]');
 	}).waitForSelector('a[href="fields?action=new_edit_field&new=1"]', function(){
 		if (this.visible('input[name="allbox"]')){
 			this.click('input[name="allbox"]');
@@ -307,9 +310,9 @@ editProfilePageTests.shieldIcon=function(){
 					});
 				});
 			});
-	  }else{
+		}else{
 			this.click('a[href="fields?action=new_edit_field&new=1"]');
-	  }
+		}
 	}).waitForSelector('input[name="fieldname"]', function(){
 		backEndForumRegisterMethod.addField('private', true);
 	}).thenOpen(config.url, function(){
@@ -364,11 +367,11 @@ editProfilePageTests.invalidBirthday=function(){
 		this.click('div#ddUsers a[href="/tool/members/mb/fields"]');
 	}).waitForText('Default Profile Fields', function(){
 		var setOptions = {"fullName" : "", "instantMessaging" : "", "birthday" : "", "signature" : "", "avatar" : "",
-		 "visiblity_name_registration" : "",
-		 "visiblity_imType_registration" : "", "visiblity_dob_settings" : "Yes",
-		 "visiblity_signature_settings" : "Yes", "visiblity_name_settings" : "Yes", "visiblity_avatar_registration" : ""};
-		 backEndForumRegisterMethod.changeDefaultRegistrationOptions(setOptions);
-	 }).thenOpen(config.url, function(){
+		"visiblity_name_registration" : "",
+		"visiblity_imType_registration" : "", "visiblity_dob_settings" : "Yes",
+		"visiblity_signature_settings" : "Yes", "visiblity_name_settings" : "Yes", "visiblity_avatar_registration" : ""};
+		backEndForumRegisterMethod.changeDefaultRegistrationOptions(setOptions);
+	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).waitWhileVisible('#td_tab_login', function() {
 		this.test.assertExists('ul.nav.pull-right span.caret', 'dropdown toggle button present');
@@ -380,11 +383,11 @@ editProfilePageTests.invalidBirthday=function(){
 	}).waitForText('Valid years for your Birthday are from 1900 to', function(){
 		var date = casper.evaluate(function() {
 			var today = new Date();
-	    		var tomorrow = new Date(today);
-	    	tomorrow.setDate(today.getDate()+4);
-	    	if(today.getDate() > 28) {
-			tomorrow.setMonth(today.getMonth()+1);
-	    	}
+			var tomorrow = new Date(today);
+			tomorrow.setDate(today.getDate()+4);
+			if(today.getDate() > 28) {
+				tomorrow.setMonth(today.getMonth()+1);
+			}
 			var day = tomorrow.getDate();
 			var month = tomorrow.getMonth()+1;
 			var year = tomorrow.getFullYear();
@@ -403,21 +406,21 @@ editProfilePageTests.invalidBirthday=function(){
 			casper.test.assertTextExists('Valid years for your Birthday are from 1900 to');
 		}
 	}).waitForSelector('button[type="submit"]', function(){
-			casper.sendKeys('input[name="name"]', editProfilePageJSON.birthdayPicker.fullName);
-			this.click('button[type="submit"]');
-		}).then(function(){
-			this.test.assertExists('ul.nav.pull-right span.caret', 'dropdown toggle button present');
-			this.click('ul.nav.pull-right span.caret');
-			this.click('a#user-nav-panel-profile');
-		}).waitForSelector('a#PostsOFUser', function(){
-			var fullname=this.getHTML('div#UserProfile div:nth-child(1) ul li:nth-child(1) span:nth-child(2)');
-			var newfullname=fullname.trim();
-			var fullnameLength=newfullname.length;
-			var actuallength=parseInt(fullnameLength);
-			if(actuallength===50){
-				utils.info('fullname is not greater than the expected character');
-			}
-		});
+		casper.sendKeys('input[name="name"]', editProfilePageJSON.birthdayPicker.fullName);
+		this.click('button[type="submit"]');
+	}).then(function(){
+		this.test.assertExists('ul.nav.pull-right span.caret', 'dropdown toggle button present');
+		this.click('ul.nav.pull-right span.caret');
+		this.click('a#user-nav-panel-profile');
+	}).waitForSelector('a#PostsOFUser', function(){
+		var fullname=this.getHTML('div#UserProfile div:nth-child(1) ul li:nth-child(1) span:nth-child(2)');
+		var newfullname=fullname.trim();
+		var fullnameLength=newfullname.length;
+		var actuallength=parseInt(fullnameLength);
+		if(actuallength===50){
+			utils.info('fullname is not greater than the expected character');
+		}
+	});
 };
 
 //Verify with none option in instant message.

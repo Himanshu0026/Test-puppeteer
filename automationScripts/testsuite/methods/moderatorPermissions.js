@@ -19,7 +19,7 @@ moderatorPermissionsMethod.goToModerator = function(id) {
 //*************************Method to click On Add Moderator from backend ************************
 moderatorPermissionsMethod.clickOnAddModerator = function(id) {
 	casper.click('div[id="forumModerator'+id+'"] a.addForumModerator');
-	casper.waitUntilVisible('div#add_mod_dialog form#add_mod_form', function() {
+	casper.waitUntilVisible('#add_mod_dialog', function() {
 		utils.info(" Add Moderator form opened");
 	});
 };
@@ -28,7 +28,7 @@ moderatorPermissionsMethod.clickOnAddModerator = function(id) {
 moderatorPermissionsMethod.clickOnAddedModerator = function(id) {
 	casper.mouse.move('div[id="forumModerator'+id+'"] a.editForumModerator');
 	casper.click('div[id="forumModerator'+id+'"] a.editForumModerator');
-	casper.waitUntilVisible('#add_mod_form', function success() {
+	casper.waitUntilVisible('#add_mod_dialog', function success() {
 		utils.info("  Moderator form opened");
 	}, function fail() {
 		utils.error('  Moderator form not opened');
@@ -42,10 +42,10 @@ moderatorPermissionsMethod.FillModeratorDetails = function(data, id) {
 	casper.fillSelectors('form[name="posts"]', {
 		'select[name="forum_id"]': id
 	}, false).then(function() {
-		this.test.assertExists('div.ui-dialog-buttonset button',' Save button Found');
-		this.click('div.ui-dialog-buttonset button');
-		//casper.test.assertExists('button.button.btn-m.btn-blue.pull-right','Save button Found');
-		//casper.click('button.button.btn-m.btn-blue.pull-right');
+		//this.test.assertExists('div.ui-dialog-buttonset button',' Save button Found');
+		//this.click('div.ui-dialog-buttonset button');
+		casper.test.assertExists('button.button.btn-m.btn-blue.pull-right','Save button Found');
+		casper.click('button.button.btn-m.btn-blue.pull-right');
 	}).then(function() {
 	  moderatorPermissionsMethod.waitForLoadingMessage();
 	});

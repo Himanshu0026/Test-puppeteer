@@ -9,14 +9,14 @@ latestTopicTests = module.exports = {};
 //user account off case(admin and guest user case)
 latestTopicTests.useraccountOnOff = function() {
   casper.then(function(){
-	utils.info('Case 1 [user account off case(admin and guest user case)]');
-	this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function(){
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-		this.test.assertSelectorHasText('#ddSettings', 'General');
-		this.click('a[href="/tool/members/mb/settings?tab=General"]');
-	}).waitForSelector('button.button.btn-m.btn-blue', function(){
-		backEndregisterMethod.enableDisableUserAccounts(false);
-  });
+    utils.info('Case 1 [user account off case(admin and guest user case)]');
+    this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function(){
+      this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+      this.test.assertSelectorHasText('#ddSettings', 'General');
+      this.click('a[href="/tool/members/mb/settings?tab=General"]');
+    }).waitForSelector('button.button.btn-m.btn-blue', function(){
+      backEndregisterMethod.enableDisableUserAccounts(false);
+    });
   }).thenOpen(config.url, function(){
     this.waitForSelector('form[name="posts" ] li a', function(){
       this.test.assertExists('form[name="posts"] a.topic-title', 'topics found on latestTopicpage');
@@ -25,17 +25,17 @@ latestTopicTests.useraccountOnOff = function() {
       this.waitForSelector('input.btn.btn-primary', function(){
         casper.sendKeys('input[name="pass"]', latestTopicJSON.password);
         casper.click('input[name="Submit"]');
-    }).waitForSelector('a[href="/post/printadd"]', function(){
-      this.test.assertExists('form[name="posts"] a.topic-title', 'topics found on latestTopicpage for admin');
-    });
+      }).waitForSelector('a[href="/post/printadd"]', function(){
+        this.test.assertExists('form[name="posts"] a.topic-title', 'topics found on latestTopicpage for admin');
+      });
     });
   }).thenOpen(config.backEndUrl, function(){
     this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function(){
-			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-			this.test.assertSelectorHasText('#ddSettings', 'General');
-			this.click('a[href="/tool/members/mb/settings?tab=General"]');
-		}).waitForSelector('button.button.btn-m.btn-blue', function(){
-			backEndregisterMethod.enableDisableUserAccounts(true);
+      this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
+      this.test.assertSelectorHasText('#ddSettings', 'General');
+      this.click('a[href="/tool/members/mb/settings?tab=General"]');
+    }).waitForSelector('button.button.btn-m.btn-blue', function(){
+      backEndregisterMethod.enableDisableUserAccounts(true);
     });
   });
 };
@@ -69,7 +69,7 @@ latestTopicTests.viewTopicPermission = function() {
 //Verify Latest topics when View others topic content permission  is OFF register user.
 latestTopicTests.viewOtherUsersTopic = function() {
   casper.thenOpen(config.url, function(){
-  //created topics from register user (haniuser)
+    //created topics from register user (haniuser)
     utils.info('Case 3 [Verify Latest topics when View others topic content permission  is OFF register user.]');
     forumLoginMethod.loginToApp(loginJSON.deleteTopicUser.username, loginJSON.deleteTopicUser.password);
   }).waitWhileVisible('#td_tab_login', function() {
