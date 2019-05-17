@@ -21,3 +21,8 @@ forums.deleteAllForums = function(uid) {
   var sql = 'DELETE FROM forums WHERE uid = "'+uid+ '";';
   return sql;
 };
+
+forums.addSubForum = function(uid, title, description, parentid) {
+  var sql = 'INSERT INTO forums (uid, title, description,parentid) VALUES ("'+uid+ '" ,"'+title+ '" ,"'+description+ '" ,"'+parentid+ '");';
+  return sql;
+};

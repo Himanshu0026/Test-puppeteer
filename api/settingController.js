@@ -20,9 +20,9 @@ settingRoutes.get("/getUID", function(req, res, next) {
 settingRoutes.get("/:field/:value", function(req, res, next) {
 	var field = req.params.field;
 	var value = req.params.value;
-	settings.setUID(function(err, uid) {
-		if(!err) {
-			uid = uid;
+	//settings.setUID(function(err, uid) {
+		//if(!err) {
+	var uid = settings.setUID();
 			console.log('the uid is'+uid);
 			sqlConnection(settings.updateSettings(uid,field,value), function(err, result) {
 				if(!err) {
@@ -32,8 +32,8 @@ settingRoutes.get("/:field/:value", function(req, res, next) {
 					});
 				}
 			});
-		}
-	});
+		//}
+	//});
 });
 
 module.exports = settingRoutes;

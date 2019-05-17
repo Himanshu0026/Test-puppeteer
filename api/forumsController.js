@@ -70,4 +70,37 @@ forumsRoutes.get("/delete/:forumid", function(req, res, next) {
 	});
 });
 
+forumsRoutes.get("/add/subCategory:title/:description/:parentCategory", function(req, res, next) {
+	var title = req.params.title;
+	var description = req.params.description;
+	var parentCategory = req.params.parentCategory;
+	var parentId;
+	settings.setUID(function(err, uid) {
+		if(!err) {
+			uid = uid;
+			request({
+				url: config.apiLocalUrl+'/forums/getID/parentCategory',
+				json: true
+			}, function(err, res, body) {
+				if(err) {
+					console.log('err : '+err);
+					res.send(err);
+				}
+				if(res.statusCode == 200) {
+					parentId = body.forumid;
+					sqlConnection(forums.addSubForum(uid, title, description, parentId), function(err, result) {
+						if(!err) {
+							res.status(200).json({
+								message:"Sub Category Created"
+							});
+						}
+					});
+				}else {
+					res.send('The forumId not found');
+				}
+			});
+		}
+	});
+});
+
 module.exports = forumsRoutes;

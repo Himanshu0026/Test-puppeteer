@@ -13,7 +13,7 @@ settings.updateSettings = function(uid,field,value) {
   return sql;
 };
 
-settings.setUID = function(callback) {
+settings.setUID = function() {
   request({
     url: config.apiLocalUrl+'/settings/getUID',
     json: true
@@ -24,7 +24,7 @@ settings.setUID = function(callback) {
     }
     if(res.statusCode == 200) {
       uid = body.UID;
-      return callback(null, uid);
+      return uid;
     }else {
       res.send('The uid not found');
     }
