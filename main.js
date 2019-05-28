@@ -27,6 +27,8 @@ app.use(express.static(__dirname + '/backstopjs/backstop_data'));
 //Initializing Redis client
 var redisClient = utils.initRedisClient();
 executorServices.redisClient = redisClient;
+let abc1 = "testing the let";
+console.log('the testing code is '+abc1);
 
 //Creating github webhook handler
 var createHandler = require('github-webhook-handler');
