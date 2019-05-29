@@ -3,6 +3,7 @@ var settings = require('./setting.js');
 var forumPermissions = require('./forumpermissions.js');
 var express = require('express');
 var app = express();
+var config = require('../config/config.json');
 var user = config.backendCred.uname;
 var uid;
 var router = express.Router();
