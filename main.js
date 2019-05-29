@@ -7,10 +7,11 @@ var http = require('http');
 var path = require('path');
 var fs = require('fs');
 var sqlConnection = require('./connection.js');
-var routes = require('./api/usergroupController.js');
-var settingRoutes = require('./api/settingController.js');
-var forumsRoutes = require('./api/forumsController.js');
-var forumPermissionsRoutes = require('./api/forumpermissionsController.js');
+//var routes = require('./api/usergroupController.js');
+var routes = require('./api/controller.js');
+//var settingRoutes = require('./api/settingController.js');
+//var forumsRoutes = require('./api/forumsController.js');
+//var forumPermissionsRoutes = require('./api/forumpermissionsController.js');
 var request = require('request');
 var moment = require('moment');
 var config = require('./config/config.json');
@@ -27,17 +28,16 @@ app.use(express.static(__dirname + '/backstopjs/backstop_data'));
 //Initializing Redis client
 var redisClient = utils.initRedisClient();
 executorServices.redisClient = redisClient;
-let abc1 = "testing the let";
-console.log('the testing code is '+abc1);
 
 //Creating github webhook handler
 var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: config.webhook.secret });
 app.use(handler);
-app.use("/usergroups", routes);
-app.use("/settings", settingRoutes);
-app.use("/forums", forumsRoutes);
-app.use("/updateForumPermissions", forumPermissionsRoutes);
+//app.use("/usergroups", routes);
+//app.use("/settings", settingRoutes);
+//app.use("/forums", forumsRoutes);
+app.use("/qaapi", routes);
+//app.use("/updateForumPermissions", forumPermissionsRoutes);
 
 gitBranchServices.managePendingCommits(redisClient);
 queueServices.getRedisClient(redisClient);

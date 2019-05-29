@@ -20,7 +20,6 @@ settingRoutes.get("/getUID", function(req, res, next) {
 settingRoutes.get("/:field/:value", function(req, res, next) {
 	var field = req.params.field;
 	var value = req.params.value;
-	let abc;
 	//settings.setUID(function(err, uid) {
 		//if(!err) {
 	var uid = settings.setUID();
