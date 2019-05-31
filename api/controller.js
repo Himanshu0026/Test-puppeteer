@@ -19,7 +19,7 @@ var getUID = function (req, res, next) {
 };
 
 
-app.use(getUID);
+//app.use(getUID);
 
 router.get("/updateForumPermissions/:forumid/:usergroupID/:field/:value", function(req, res, next) {
   var forumid = req.params.forumid;
