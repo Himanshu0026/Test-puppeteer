@@ -13,6 +13,7 @@ var getUID = function (req, res, next) {
 		if(!err) {
       console.log('Middle ware function');
       uid=result[0].uid;
+      console.log('the uid is ='+uid);
       next();
 		}
 	});
@@ -33,25 +34,20 @@ router.get("/updateForumPermissions/:forumid/:usergroupID/:field/:value", functi
   });
 });
 
-// forumPermissionsRoutes.get("/getPermission/:forumid/:usergroupID", function(req, res, next) {
-//   var forumid = req.params.forumid;
-//   var usergroupID = req.params.usergroupID;
-//   settings.setUID(function(err, uid) {
-//     if(!err) {
-//       uid = uid;
-//       sqlConnection(forumPermissions.getForumPermissionsSQL(uid, forumid, usergroupID), function(err, result) {
-//         if(!err) {
-//           res.status(200).json({
-//             message:"got the permission.",
-//             result:result
-//           });
-//         }
-//       });
-//     }
-//   });
-// });
-//
-// module.exports = forumPermissionsRoutes;
+forumPermissionsRoutes.get("/getPermission/:forumid/:usergroupID", function(req, res, next) {
+  var forumid = req.params.forumid;
+  var usergroupID = req.params.usergroupID;
+  sqlConnection(forumPermissions.getForumPermissionsSQL(uid, forumid, usergroupID), function(err, result) {
+    if(!err) {
+      res.status(200).json({
+        message:"got the permission.",
+        result:result
+      });
+    }
+  });
+});
+
+
 //
 // var sqlConnection = require('../connection.js');
 // var settings = require('./setting.js');
