@@ -12,9 +12,10 @@ router.use(function getUId(req, res, next) {
   sqlConnection(settings.getUID(user), function(err, result) {
 		if(!err) {
       uid=result[0].uid;
-      next();
+      //next();
 		}
 	});
+  next();
 });
 
 router.get("/updateForumPermissions/:forumid/:usergroupID/:field/:value", function(req, res, next) {
