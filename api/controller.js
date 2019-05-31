@@ -8,7 +8,7 @@ var user = config.backendCred.uname;
 var uid;
 var router = express.Router();
 
-router.use(function(req, res, next) {
+router.use(function() {
   sqlConnection(settings.getUID(user), function(err, result) {
 		if(!err) {
       uid=result[0].uid;
