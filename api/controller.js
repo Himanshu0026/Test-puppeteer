@@ -248,4 +248,4 @@ router.get("/updateForumPermissions/:forumid/:usergroupID/:field/:value", functi
 // 	});
 // });
 //
-// module.exports = routes;
+module.exports = router;
