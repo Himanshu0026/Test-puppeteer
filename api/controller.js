@@ -8,15 +8,18 @@ var user = config.backendCred.uname;
 var uid;
 var router = express.Router();
 
-router.use(function getUId(req, res, next) {
+var getUID = function (req, res, next) {
   sqlConnection(settings.getUID(user), function(err, result) {
 		if(!err) {
+      console.log('Middle ware function');
       uid=result[0].uid;
-      //next();
+      next();
 		}
 	});
-  next();
-});
+};
+
+
+router.use(getUID);
 
 router.get("/updateForumPermissions/:forumid/:usergroupID/:field/:value", function(req, res, next) {
   var forumid = req.params.forumid;
