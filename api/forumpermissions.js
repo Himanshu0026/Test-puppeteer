@@ -20,7 +20,7 @@ forumPermissions.addForumPermissionsSQL = function(uid, forumid, usergroupID, fi
 
 forumPermissions.setPermission = function(uid, forumid, usergroupID, field, value, callback){
   request({
-		url: config.apiLocalUrl+'/updateForumPermissions/getPermission/'+forumid+'/'+usergroupID,
+		url: config.apiLocalUrl+'/qaapi/getPermission/'+forumid+'/'+usergroupID,
 		json: true
 	}, function(err, res, body) {
 		if(err) {

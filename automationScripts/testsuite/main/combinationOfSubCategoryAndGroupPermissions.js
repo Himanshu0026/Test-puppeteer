@@ -27,7 +27,7 @@ combinationOfSubCategoryAndGroupPermissions.registerUserTest = function() {
 		//thumpsUpDownTestcases.createCategoryTestCase();
 
 		// method to create a category and its sub category and get their id
-		combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory();
+		//combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory();
 
 		// method to verify with category cat1
 		combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory('General');

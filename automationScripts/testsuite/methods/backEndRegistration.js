@@ -646,7 +646,12 @@ backEndForumRegisterMethod.goToCategoryPermission = function(id) {
 //*************************Method to change the permission of Category of View Category from backend ************************
 backEndForumRegisterMethod.enableDisableCategoryPermissions = function(id, value) {
 	utils.enableorDisableCheckbox(id, value);
-	casper.wait('4000', function() {});
+	casper.wait('2000', function() {
+		var url = 'http://beta21.websitetoolbox.com/tool/members/mb/forums';
+		this.evaluate(function(url) {
+			__utils__.sendAJAX(url, 'POST', null, false);
+		},url);
+	});
 };
 
 backEndForumRegisterMethod.enableDisableDeleteProfilePermissions = function(id, value) {
