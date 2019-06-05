@@ -1,3 +1,7 @@
+var config = require('../config/config.json');
+var text = config.secretKey;
+const fs = require('fs');
+
 const crypto = require('crypto');
 const algorithm = 'aes-256-cbc';
 const key = crypto.randomBytes(32);
@@ -19,6 +23,15 @@ function decrypt(text) {
  return decrypted.toString();
 }
 
-var hw = encrypt("Some serious stuff");
+let data = JSON.stringify(encrypt(text));
+
+fs.writeFile('../lib/tokenData.json', data, (err) => {
+    if (err) throw err;
+    console.log('Data written to file');
+});
+
+console.log('This is after the write call');
+
+var hw = encrypt(text);
 console.log(hw);
 console.log(decrypt(hw));
