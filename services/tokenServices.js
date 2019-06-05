@@ -23,9 +23,9 @@ function decrypt(text) {
  return decrypted.toString();
 }
 
-//let data = JSON.stringify(encrypt(text));
+let data = JSON.stringify(encrypt(text), null,2);
 
-fs.writeFile('../lib/tokenData.json', encrypt(text), (err) => {
+fs.writeFile('../lib/tokenData.json', data, (err) => {
     if (err) throw err;
     console.log('Data written to file');
 });
