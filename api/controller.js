@@ -45,7 +45,7 @@ router.get("/updateForumPermissions/:forumid/:usergroupID/:field/:value?accesTok
   });
 });
 
-router.get("/getPermission/:forumid/:usergroupID?accesToken={token}", function(req, res, next) {
+router.get("/getPermission/:forumid/:usergroupID", function(req, res, next) {
   var forumid = req.params.forumid;
   var usergroupID = req.params.usergroupID;
   sqlConnection(forumPermissions.getForumPermissionsSQL(uid, forumid, usergroupID), function(err, result) {
