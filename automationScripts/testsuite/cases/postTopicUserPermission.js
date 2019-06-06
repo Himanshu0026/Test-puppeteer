@@ -9,7 +9,10 @@ var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var combinationOfSubCategoryAndGroupPermissionsMethod = require('../methods/combinationOfSubCategoryAndGroupPermissions.js');
 //var postTopicUserPermissionMethod = require('../methods/postTopicUserPermission.js');
 var utils = require('../utils.js');
+var tokenServices = require('../../../services/tokenServices');
 var postTopicUserPermissionTestcases = module.exports = {};
+
+var token = tokenServices.encrypt();
 
 // method to create a topic
 postTopicUserPermissionTestcases.createTopic = function(userGroup) {
@@ -31,8 +34,8 @@ postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable = function(userGro
 	}).then(function() {
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
-	}).thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_thread_content/0", function() {
-
+	//}).thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_thread_content/0", function() {
+	}).thenOpen(config.apiLocalUrl+"/qaapi/getPermission/1484336/20237569?accesToken="+token, function() {
 	}).thenOpen(config.url, function() {
 		utils.info('Test case 1a [verify permission message after clicking on any topic]');
 	}).waitForSelector('li.pull-right.user-panel', function() {

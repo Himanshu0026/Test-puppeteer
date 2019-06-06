@@ -5,6 +5,7 @@ var express = require('express');
 var app = express();
 var config = require('../config/config.json');
 var user = config.backendCred.uname;
+var tokenServices = require('../services/tokenServices');
 var uid;
 var router = express.Router();
 
@@ -14,7 +15,17 @@ var getUID = function (req, res, next) {
       console.log('Middle ware function');
       uid=result[0].uid;
       console.log('the uid is ='+uid);
-      next();
+      var accesToken = req.body.accesToken || req.query.accesToken || req.headers['x-access-token'];
+      if(accesToken) {
+        console.log('the value of token is'+accesToken);
+        var token = tokenServices.encrypt();
+        if(accesToken == token){
+          console.log('Api is authorazied');
+          next();
+        }
+      } else {
+        throw err('token not provided');
+      }
 		}
 	});
 };
@@ -22,7 +33,7 @@ var getUID = function (req, res, next) {
 
 router.use(getUID);
 
-router.get("/updateForumPermissions/:forumid/:usergroupID/:field/:value", function(req, res, next) {
+router.get("/updateForumPermissions/:forumid/:usergroupID/:field/:value?accesToken={token}", function(req, res, next) {
   var forumid = req.params.forumid;
   var usergroupID = req.params.usergroupID;
   var field = req.params.field;
@@ -34,7 +45,7 @@ router.get("/updateForumPermissions/:forumid/:usergroupID/:field/:value", functi
   });
 });
 
-router.get("/getPermission/:forumid/:usergroupID", function(req, res, next) {
+router.get("/getPermission/:forumid/:usergroupID?accesToken={token}", function(req, res, next) {
   var forumid = req.params.forumid;
   var usergroupID = req.params.usergroupID;
   sqlConnection(forumPermissions.getForumPermissionsSQL(uid, forumid, usergroupID), function(err, result) {
