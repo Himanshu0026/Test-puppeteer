@@ -8,5 +8,5 @@ tokenServices.encrypt = function () {
   return data;
 };
 
-//var data2 = tokenServices.encrypt();
-//console.log(data2);
+var data2 = tokenServices.encrypt();
+console.log(data2);

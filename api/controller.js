@@ -15,7 +15,7 @@ var getUID = function (req, res, next) {
       console.log('Middle ware function');
       uid=result[0].uid;
       console.log('the uid is ='+uid);
-      var accesToken = req.body.accesToken || req.query.accesToken || req.headers['x-access-token'];
+      var accesToken = req.query.accesToken || req.headers['x-access-token'];
       if(accesToken) {
         console.log('the value of token is'+accesToken);
         var token = tokenServices.encrypt();
