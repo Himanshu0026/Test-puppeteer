@@ -552,11 +552,11 @@ backEndForumRegisterMethod.removeModerator=function() {
 		this.click('a.moderateAction[data-forumid="'+firstLiId+'"]');
 		this.test.assertExists('div#forumModerator'+firstLiId + ' a:last-child');
 		this.click('div#forumModerator'+firstLiId + ' a:last-child');
-	}).waitForSelector('remove_mod_button',function () {
-			this.test.assertExists('remove_mod_button');
-			//this.click('remove_mod_button');
+	}).waitForSelector('.remove_mod_button',function () {
+			this.test.assertExists('.remove_mod_button');
+			//this.click('.remove_mod_button');
 			casper.evaluate(function() {
-				document.querySelector('remove_mod_button').click();
+				document.querySelector('.remove_mod_button').click();
 			});
 	}).then(function() {
 		if(this.exists('a#remove_mod_all')){
