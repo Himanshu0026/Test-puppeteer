@@ -22,12 +22,13 @@ var getUID = function (req, res, next) {
       if(!err) {
         //console.log('Middle ware function');
         uid=result[0].uid;
-        //console.log('the uid is ='+uid);
+        console.log('the uid is ='+uid);
         var accesToken = req.query.accesToken || req.headers['x-access-token'];
         if(accesToken) {
           console.log('the value of token is'+accesToken);
-          tokenServices.encrypt(function(err,data) {
+          tokenServices.encrypt(function(err, data) {
             if(!err) {
+            console.log('inside the middle ware');
               if(accesToken == data){
                 console.log('Api is authorazied');
                 next();
@@ -71,6 +72,7 @@ router.get("/updateForumPermissions/:forumid/:usergroupID/:field/:value", functi
 router.get("/getPermission/:forumid/:usergroupID", function(req, res, next) {
   var forumid = req.params.forumid;
   var usergroupID = req.params.usergroupID;
+  console.log('inside the get permission');
   sqlConnection(forumPermissions.getForumPermissionsSQL(uid, forumid, usergroupID), function(err, result) {
     if(!err) {
       res.status(200).json({
