@@ -36,8 +36,7 @@ var getUID = function (req, res, next) {
 	});
 };
 
-
-//router.use(getUID);
+router.use(getUID);
 
 router.get('/getToken', function(req, res) {
   tokenServices.encrypt(function(err,data) {
