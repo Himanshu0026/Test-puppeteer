@@ -42,10 +42,10 @@ var getUID = function (req, res, next) {
 router.get('/getToken', function(req, res) {
   tokenServices.encrypt(function(err,data) {
     if(!err) {
-        console.log('the data in the getToken url'+data);
-        res.render('token', {
-          token: data
-        });
+      console.log('the data in the getToken url'+data);
+      res.render('token', {
+        token: data
+      });
     }
   });
 });
