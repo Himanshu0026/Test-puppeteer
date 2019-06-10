@@ -9,10 +9,8 @@ var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var combinationOfSubCategoryAndGroupPermissionsMethod = require('../methods/combinationOfSubCategoryAndGroupPermissions.js');
 //var postTopicUserPermissionMethod = require('../methods/postTopicUserPermission.js');
 var utils = require('../utils.js');
-var tokenServices = require('../../../services/tokenServices');
 var postTopicUserPermissionTestcases = module.exports = {};
 
-//var token = tokenServices.encrypt
 var token;
 
 // method to create a topic
