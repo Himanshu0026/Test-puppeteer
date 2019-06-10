@@ -1,5 +1,6 @@
 var sqlConnection = require('../connection.js');
 var settings = require('./setting.js');
+var path = require('path');
 var forumPermissions = require('./forumpermissions.js');
 var express = require('express');
 var app = express();
@@ -8,6 +9,11 @@ var user = config.backendCred.uname;
 var tokenServices = require('../services/tokenServices');
 var uid;
 var router = express.Router();
+
+//Setting views directory and view engine
+app.use(express.static(__dirname + '/public'));
+app.set('views', path.join(__dirname, '/views'));
+app.set('view engine', 'ejs');
 
 var getUID = function (req, res, next) {
   sqlConnection(settings.getUID(user), function(err, result) {
@@ -31,13 +37,15 @@ var getUID = function (req, res, next) {
 };
 
 
-router.use(getUID);
+//router.use(getUID);
 
-router.get('/getToken', function(req, res){
+router.get('/getToken', function(req, res) {
   tokenServices.encrypt(function(err,data) {
     if(!err) {
         console.log('the data in the getToken url'+data);
-        res.send('<p id = "data">Token </p>');
+        res.render('token', {
+          token: data
+        });
     }
   });
 });
