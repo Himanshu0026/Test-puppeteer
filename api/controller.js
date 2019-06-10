@@ -16,24 +16,28 @@ app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 
 var getUID = function (req, res, next) {
-  sqlConnection(settings.getUID(user), function(err, result) {
-		if(!err) {
-      console.log('Middle ware function');
-      uid=result[0].uid;
-      console.log('the uid is ='+uid);
-      var accesToken = req.query.accesToken || req.headers['x-access-token'];
-      if(accesToken) {
-        console.log('the value of token is'+accesToken);
-        var token = tokenServices.encrypt();
-        if(accesToken == token){
-          console.log('Api is authorazied');
-          next();
+  if(req.url!= "http://beta21.websitetoolbox.com:8081/qaapi/getToken") {
+    sqlConnection(settings.getUID(user), function(err, result) {
+      if(!err) {
+        //console.log('Middle ware function');
+        uid=result[0].uid;
+        //console.log('the uid is ='+uid);
+        var accesToken = req.query.accesToken || req.headers['x-access-token'];
+        if(accesToken) {
+          console.log('the value of token is'+accesToken);
+          var token = tokenServices.encrypt();
+          if(accesToken == token){
+            console.log('Api is authorazied');
+            next();
+          }
+        } else {
+          throw err('token not provided');
         }
-      } else {
-        throw err('token not provided');
       }
-		}
-	});
+    });
+  } else {
+    next();
+  }
 };
 
 router.use(getUID);
@@ -41,7 +45,6 @@ router.use(getUID);
 router.get('/getToken', function(req, res) {
   tokenServices.encrypt(function(err,data) {
     if(!err) {
-      console.log('the data in the getToken url'+data);
       res.render('token', {
         token: data
       });
