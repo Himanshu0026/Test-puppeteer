@@ -16,6 +16,7 @@ app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 
 var getUID = function (req, res, next) {
+  console.log('the requested url'+req.url);
   if(req.url!= "http://beta21.websitetoolbox.com:8081/qaapi/getToken") {
     sqlConnection(settings.getUID(user), function(err, result) {
       if(!err) {
