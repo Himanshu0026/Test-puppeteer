@@ -26,11 +26,14 @@ var getUID = function (req, res, next) {
         var accesToken = req.query.accesToken || req.headers['x-access-token'];
         if(accesToken) {
           console.log('the value of token is'+accesToken);
-          var token = tokenServices.encrypt();
-          if(accesToken == token){
-            console.log('Api is authorazied');
-            next();
-          }
+          tokenServices.encrypt(function(err,data) {
+            if(!err) {
+              if(accesToken == data){
+                console.log('Api is authorazied');
+                next();
+              }
+            }
+          });
         } else {
           throw err('token not provided');
         }

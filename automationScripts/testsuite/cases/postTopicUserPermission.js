@@ -12,7 +12,8 @@ var utils = require('../utils.js');
 var tokenServices = require('../../../services/tokenServices');
 var postTopicUserPermissionTestcases = module.exports = {};
 
-var token = tokenServices.encrypt();
+//var token = tokenServices.encrypt
+var token;
 
 // method to create a topic
 postTopicUserPermissionTestcases.createTopic = function(userGroup) {
@@ -35,7 +36,12 @@ postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable = function(userGro
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
 	//}).thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_thread_content/0", function() {
-	}).thenOpen(config.apiLocalUrl+"/qaapi/getPermission/1484336/20237569?accesToken="+token, function() {
+	}).thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
+		token= casper.evaluate(function() {
+			var token = document.querySelector('div.token').getAttribute('id');
+		});
+		utils.info('the token id inside the task'+token);
+	}).thenOpen(config.apiLocalUrl+"/qaapi/getPermission/1486487/20237569?accesToken="+token, function() {
 	}).thenOpen(config.url, function() {
 		utils.info('Test case 1a [verify permission message after clicking on any topic]');
 	}).waitForSelector('li.pull-right.user-panel', function() {
