@@ -33,6 +33,15 @@ var getUID = function (req, res, next) {
 
 router.use(getUID);
 
+router.get('/getToken', function(req, res){
+  tokenServices.encrypt(function(err,data) {
+    if(!err) {
+        console.log('the data in the getToken url'+data);
+        res.send('<p id = "data">Token </p>');
+    }
+  });
+});
+
 router.get("/updateForumPermissions/:forumid/:usergroupID/:field/:value", function(req, res, next) {
   var forumid = req.params.forumid;
   var usergroupID = req.params.usergroupID;
