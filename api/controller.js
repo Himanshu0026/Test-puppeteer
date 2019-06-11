@@ -50,7 +50,7 @@ router.use(getUID);
 router.get('/getToken', function(req, res) {
   tokenServices.encrypt(function(err,data) {
     if(!err) {
-      res.render('token', {
+      res.status(200).json({
         token: data
       });
     }

@@ -1,6 +1,7 @@
 /***These are the function which has been called in postTopicUserPermission.js and also will be used in other js file as per requirement**********/
 
 'use strict.';
+//var utilsss = require('utils');
 var postTopicUserPermissionJSON = require('../../testdata/postTopicUserPermissionData.json');
 var config = require('../../../config/config.json');
 var forumLoginMethod = require('../methods/login.js');
@@ -11,7 +12,7 @@ var combinationOfSubCategoryAndGroupPermissionsMethod = require('../methods/comb
 var utils = require('../utils.js');
 var postTopicUserPermissionTestcases = module.exports = {};
 
-var token;
+var token='';
 
 // method to create a topic
 postTopicUserPermissionTestcases.createTopic = function(userGroup) {
@@ -35,10 +36,13 @@ postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable = function(userGro
 		postTopicUserPermissionTestcases.createTopic(userGroup);
 	//}).thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_thread_content/0", function() {
 	}).thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
-		token= casper.evaluate(function() {
-			var token = document.querySelector('div.token').getAttribute('id');
-		});
+		var json_string = JSON.parse(this.getPageContent());
+		utils.info('the json value in the task'+json_string.token);
+		token = json_string.token;
 		utils.info('the token id inside the task'+token);
+		this.thenOpen(config.apiLocalUrl+"/qaapi/getPermission/1486487/20237569?accesToken="+token, function() {
+
+		});
 	}).thenOpen(config.apiLocalUrl+"/qaapi/getPermission/1486487/20237569?accesToken="+token, function() {
 	}).thenOpen(config.url, function() {
 		utils.info('Test case 1a [verify permission message after clicking on any topic]');
