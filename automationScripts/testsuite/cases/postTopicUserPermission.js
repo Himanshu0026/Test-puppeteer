@@ -1,7 +1,6 @@
 /***These are the function which has been called in postTopicUserPermission.js and also will be used in other js file as per requirement**********/
 
 'use strict.';
-//var utilsss = require('utils');
 var postTopicUserPermissionJSON = require('../../testdata/postTopicUserPermissionData.json');
 var config = require('../../../config/config.json');
 var forumLoginMethod = require('../methods/login.js');
@@ -37,7 +36,6 @@ postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable = function(userGro
 	//}).thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_thread_content/0", function() {
 	}).thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
 		var json_string = JSON.parse(this.getPageContent());
-		utils.info('the json value in the task'+json_string.token);
 		token = json_string.token;
 		utils.info('the token id inside the task'+token);
 		this.thenOpen(config.apiLocalUrl+"/qaapi/getPermission/1486487/20237569?accesToken="+token, function() {
