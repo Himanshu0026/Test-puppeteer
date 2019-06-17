@@ -11,7 +11,7 @@ var combinationOfSubCategoryAndGroupPermissionsMethod = require('../methods/comb
 var utils = require('../utils.js');
 var postTopicUserPermissionTestcases = module.exports = {};
 
-var token='';
+var token;
 
 // method to create a topic
 postTopicUserPermissionTestcases.createTopic = function(userGroup) {
@@ -38,11 +38,12 @@ postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable = function(userGro
 		var json_string = JSON.parse(this.getPageContent());
 		token = json_string.token;
 		utils.info('the token id inside the task'+token);
-		this.thenOpen(config.apiLocalUrl+"/qaapi/getPermission/1486487/20237569?accesToken="+token, function() {
-
+		this.thenOpen(config.apiLocalUrl+"/qaapi/getPermission/1489150/20237569?accesToken="+token, function() {
+			utils.info('the token id inside the this.openUrl'+token);
 		});
-	}).thenOpen(config.apiLocalUrl+"/qaapi/getPermission/1486487/20237569?accesToken="+token, function() {
+	}).thenOpen(config.apiLocalUrl+"/qaapi/getPermission/1489150/20237569?accesToken="+token, function() {
 	}).thenOpen(config.url, function() {
+		utils.info('the token id inside the thenopen.Url'+token);
 		utils.info('Test case 1a [verify permission message after clicking on any topic]');
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('i.icon.icon-menu');
