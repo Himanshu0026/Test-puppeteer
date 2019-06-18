@@ -48,12 +48,13 @@ var getUID = function (req, res, next) {
 
 router.use(getUID);
 
-router.get('/getToken', function(req, res) {
+router.get('/getToken', function(req, res, next) {
   tokenServices.encrypt(function(err,data) {
     if(!err) {
       res.status(200).json({
         token: data
       });
+      //next();
     }
   });
 });
@@ -84,7 +85,7 @@ router.get("/getPermission/:forumid/:usergroupID", function(req, res, next) {
   });
 });
 
-router.get("forum/getID/:title", function(req, res, next) {
+router.get("/forum/getID/:title", function(req, res, next) {
 	var title = req.params.title;
   sqlConnection(forums.getforumID(uid, title), function(err, result) {
     if(!err) {
@@ -96,7 +97,7 @@ router.get("forum/getID/:title", function(req, res, next) {
   });
 });
 
-router.get("forum/add/:title/:description", function(req, res, next) {
+router.get("/forum/add/:title/:description", function(req, res, next) {
 	var title = req.params.title;
 	var description = req.params.description;
   sqlConnection(forums.addForum(uid, title, description), function(err, result) {
@@ -108,7 +109,7 @@ router.get("forum/add/:title/:description", function(req, res, next) {
   });
 });
 
-router.get("forums/delete", function(req, res, next) {
+router.get("/forums/delete", function(req, res, next) {
   sqlConnection(forums.deleteAllForums(uid), function(err, result) {
     if(!err) {
       res.status(200).json({
@@ -118,7 +119,7 @@ router.get("forums/delete", function(req, res, next) {
   });
 });
 
-router.get("forum/delete/:forumid", function(req, res, next) {
+router.get("/forum/delete/:forumid", function(req, res, next) {
 	var forumid = req.params.forumid;
   sqlConnection(forums.deleteForum(uid, forumid), function(err, result) {
     if(!err) {
@@ -129,7 +130,7 @@ router.get("forum/delete/:forumid", function(req, res, next) {
   });
 });
 
-router.get("forum/add/subCategory:title/:description/:parentCategory", function(req, res, next) {
+router.get("/forum/add/subCategory:title/:description/:parentCategory", function(req, res, next) {
 	var title = req.params.title;
 	var description = req.params.description;
 	var parentCategory = req.params.parentCategory;
@@ -157,7 +158,7 @@ router.get("forum/add/subCategory:title/:description/:parentCategory", function(
   });
 });
 
-router.get("settings/:field/:value", function(req, res, next) {
+router.get("/settings/:field/:value", function(req, res, next) {
 	var field = req.params.field;
 	var value = req.params.value;
   sqlConnection(settings.updateSettings(uid,field,value), function(err, result) {
@@ -170,7 +171,7 @@ router.get("settings/:field/:value", function(req, res, next) {
   });
 });
 
-router.get("usergroups/getID/:grouptitle(*)", function(req, res, next) {
+router.get("/usergroups/getID/:grouptitle(*)", function(req, res, next) {
 	var groupTitle = req.params.grouptitle;
   console.log('the uid inside the request'+uid);
   sqlConnection(Usergroups.getUsergroupID(uid,groupTitle), function(err, result) {
@@ -183,7 +184,7 @@ router.get("usergroups/getID/:grouptitle(*)", function(req, res, next) {
   });
 });
 
-router.get("usergroups/updatePermission/:title(*)/:field/:value", function(req, res, next) {
+router.get("/usergroups/updatePermission/:title(*)/:field/:value", function(req, res, next) {
 	var groupTitle = req.params.title;
 	var field = req.params.field;
 	var value = req.params.value;
