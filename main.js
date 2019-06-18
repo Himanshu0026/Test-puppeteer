@@ -5,6 +5,7 @@ var express = require('express');
 var app = express();
 var http = require('http');
 var path = require('path');
+var cors = require('cors');
 var fs = require('fs');
 var sqlConnection = require('./connection.js');
 var routes = require('./api/controller.js');
@@ -29,6 +30,7 @@ executorServices.redisClient = redisClient;
 var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: config.webhook.secret });
 app.use(handler);
+app.use(cors());
 app.use("/qaapi", routes);
 
 gitBranchServices.managePendingCommits(redisClient);
