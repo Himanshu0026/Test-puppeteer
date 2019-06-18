@@ -172,6 +172,7 @@ router.get("settings/:field/:value", function(req, res, next) {
 
 router.get("usergroups/getID/:grouptitle(*)", function(req, res, next) {
 	var groupTitle = req.params.grouptitle;
+  console.log('the uid inside the request'+uid);
   sqlConnection(Usergroups.getUsergroupID(uid,groupTitle), function(err, result) {
     if(!err) {
       res.status(200).json({
