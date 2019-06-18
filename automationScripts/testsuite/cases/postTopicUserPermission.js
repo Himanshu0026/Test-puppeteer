@@ -11,7 +11,16 @@ var combinationOfSubCategoryAndGroupPermissionsMethod = require('../methods/comb
 var utils = require('../utils.js');
 var postTopicUserPermissionTestcases = module.exports = {};
 
-var token;
+var token = '';
+
+postTopicUserPermissionTestcases.getToken = function() {
+	casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
+		var json_string = JSON.parse(this.getPageContent());
+		token = json_string.token;
+		console.log(typeof(token));
+		utils.info('the token id inside the task'+token);
+	});
+};
 
 // method to create a topic
 postTopicUserPermissionTestcases.createTopic = function(userGroup) {
@@ -28,20 +37,13 @@ postTopicUserPermissionTestcases.createTopic = function(userGroup) {
 
 // method to verify permission message after clicking on any topic
 postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable = function(userGroup) {
+	postTopicUserPermissionTestcases.getToken();
 	casper.thenOpen(config.url, function() {
 		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
 	}).then(function() {
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
-	//}).thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_thread_content/0", function() {
-	}).thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
-		var json_string = JSON.parse(this.getPageContent());
-		token = json_string.token;
-		utils.info('the token id inside the task'+token);
-		this.thenOpen(config.apiLocalUrl+"/qaapi/getPermission/1489150/20237569?accesToken="+token, function() {
-			utils.info('the token id inside the this.openUrl'+token);
-		});
-	}).thenOpen(config.apiLocalUrl+"/qaapi/getPermission/1489150/20237569?accesToken="+token, function() {
+	}).thenOpen(config.apiLocalUrl+"/qaapi/usergroups/updatePermission/"+userGroup+"/view_thread_content/0?accesToken="+token, function() {
 	}).thenOpen(config.url, function() {
 		utils.info('the token id inside the thenopen.Url'+token);
 		utils.info('Test case 1a [verify permission message after clicking on any topic]');

@@ -182,7 +182,7 @@ router.get("usergroups/getID/:grouptitle(*)", function(req, res, next) {
   });
 });
 
-router.get("usergroups/updatePermission:title(*)/:field/:value", function(req, res, next) {
+router.get("usergroups/updatePermission/:title(*)/:field/:value", function(req, res, next) {
 	var groupTitle = req.params.title;
 	var field = req.params.field;
 	var value = req.params.value;
