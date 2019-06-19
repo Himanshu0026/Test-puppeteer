@@ -12,6 +12,7 @@ var topicMethod = require('../methods/topic.js');
 var moveTopicAndPostTestcases = module.exports = {};
 var category_Id;
 var subCategory_Id;
+var token;
 
 // 1. Verify move topic from the latest topic page
 moveTopicAndPostTestcases.latestTopicPage = function(userGroup) {
@@ -19,12 +20,23 @@ moveTopicAndPostTestcases.latestTopicPage = function(userGroup) {
 		utils.info('Case 1 [Verify move topic from the latest topic page]');
 		var category = moveTopicAndPostJSON.category;
 		var subCategory = moveTopicAndPostJSON.subCategory;
-
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
+		casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
+			var json_string = JSON.parse(this.getPageContent());
+			token = json_string.token;
+			var cat = category.title;
+			var subcat = subCategory.title;
+			this.thenOpen(config.apiLocalUrl+"/qaapi/forum/getID/"+cat+"?accesToken="+token, function() {
+				var json_string2 = JSON.parse(this.getPageContent());
+				var catId = json_string2.forumid;
+				utils.info('the data inside the forum id'+catId);
+				category_Id = catId;
+			});
+			this.thenOpen(config.apiLocalUrl+"/qaapi/forum/getID/"+subcat+"?accesToken="+token, function() {
+				var json_string2 = JSON.parse(this.getPageContent());
+				var catId = json_string2.forumid;
+				utils.info('the data inside the sub forum id'+catId);
+				subCategory_Id = catId;
+			});
 		});
 	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
@@ -52,15 +64,6 @@ moveTopicAndPostTestcases.latestTopicPage = function(userGroup) {
 moveTopicAndPostTestcases.topicListingPage = function(userGroup) {
 	casper.thenOpen(config.backEndUrl, function() {
 		utils.info('Case 2 [ Verify move topic from the topic listing page[Home Page ]');
-		var category = moveTopicAndPostJSON.category;
-		var subCategory = moveTopicAndPostJSON.subCategory;
-
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
-		});
 	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
 	}).then(function() {
@@ -85,12 +88,6 @@ moveTopicAndPostTestcases.topicListingPageUnderCategory = function(userGroup) {
 	var subCategory = moveTopicAndPostJSON.subCategory;
 	casper.thenOpen(config.backEndUrl, function() {
 		utils.info('Case 3 [ Verify move topic from the topic listing page under category ]');
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
-		});
 	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
   }).waitForSelector('.icon.icon-menu', function() {
@@ -122,16 +119,21 @@ moveTopicAndPostTestcases.topicListingPageUnderCategory = function(userGroup) {
 
 // 4. Verify move topic from the topic listing page under sub category
 moveTopicAndPostTestcases.topicListingPageUnderSubCategory = function(userGroup) {
-	var category = moveTopicAndPostJSON.category;
 	var subCategory = moveTopicAndPostJSON.subCategory;
 	casper.thenOpen(config.backEndUrl, function() {
 		utils.info('Case 4 [ Verify move topic from the topic listing page under sub category ]');
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
-		});
+		// casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
+		// 	var json = JSON.parse(this.getPageContent());
+		// 	var token = json_string.token;
+		// 	var cat = subCategory.title;
+		// 	console.log(typeof(token));
+		// 	this.thenOpen(config.apiLocalUrl+"/qaapi/forum/getID/"+cat+"?accesToken="+token, function() {
+		// 		var json_string2 = JSON.parse(this.getPageContent());
+		// 		var catId = json_string2.forumid;
+		// 		utils.info('the data inside the forum id'+catId);
+		// 		subCategory_Id = catId;
+		// 	});
+		// });
 	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
   }).waitForSelector('.icon.icon-menu', function() {
@@ -167,12 +169,12 @@ moveTopicAndPostTestcases.profilePage = function(userGroup) {
 	var subCategory = moveTopicAndPostJSON.subCategory;
 	casper.thenOpen(config.backEndUrl, function() {
 		utils.info('Case 5 [ Verify move topic from the profile page ]');
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
-		});
+		// combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
+		// 	category_Id = categoryId;
+		// 	subCategory_Id = subCategoryId;
+		// 	if(!err) {
+		// 	}
+		// });
 	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
   }).waitForSelector('.nav.pull-right button.dropdown-toggle span', function() {
