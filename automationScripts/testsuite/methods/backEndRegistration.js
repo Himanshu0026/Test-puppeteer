@@ -647,10 +647,10 @@ backEndForumRegisterMethod.goToCategoryPermission = function(id) {
 backEndForumRegisterMethod.enableDisableCategoryPermissions = function(id, value) {
 	utils.enableorDisableCheckbox(id, value);
 	casper.wait('2000', function() {
-		var url = 'http://beta21.websitetoolbox.com/tool/members/mb/forums';
-		this.evaluate(function(url) {
-			__utils__.sendAJAX(url, 'POST', null, false);
-		},url);
+		// var url = 'http://beta21.websitetoolbox.com/tool/members/mb/forums';
+		// this.evaluate(function(url) {
+		// 	__utils__.sendAJAX(url, 'POST', null, false);
+		// },url);
 	});
 };
 
