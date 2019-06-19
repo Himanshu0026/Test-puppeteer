@@ -22,6 +22,8 @@ moveTopicAndPost.featureTest = function() {
 		// method to create a category and its sub category and get their id
 		combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory();
 
+		moveTopicAndPostTestcases.getForumsId();
+
 		//1. Verify move topic from the latest topic page
 		moveTopicAndPostTestcases.latestTopicPage('Administrators');
 
