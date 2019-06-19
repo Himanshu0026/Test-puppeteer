@@ -21,13 +21,13 @@ combinationOfSubCategoryAndGroupPermissions.registerUserTest = function() {
 	}).then(function() {
 
 		// method to delete all the categories from backend
-		//thumpsUpDownTestcases.deleteAllCategoriesTestCase();
-
-		// method to create a category General
-		//thumpsUpDownTestcases.createCategoryTestCase();
-
-		// method to create a category and its sub category and get their id
-		//combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory();
+		// thumpsUpDownTestcases.deleteAllCategoriesTestCase();
+		//
+		// // method to create a category General
+		// thumpsUpDownTestcases.createCategoryTestCase();
+		//
+		// // method to create a category and its sub category and get their id
+		// combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory();
 
 		// method to verify with category cat1
 		combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory('General');

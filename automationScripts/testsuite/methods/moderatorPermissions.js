@@ -42,8 +42,6 @@ moderatorPermissionsMethod.FillModeratorDetails = function(data, id) {
 	casper.fillSelectors('form[name="posts"]', {
 		'select[name="forum_id"]': id
 	}, false).then(function() {
-		//this.test.assertExists('div.ui-dialog-buttonset button',' Save button Found');
-		//this.click('div.ui-dialog-buttonset button');
 		casper.test.assertExists('button.button.btn-m.btn-blue.pull-right','Save button Found');
 		casper.click('button.button.btn-m.btn-blue.pull-right');
 	}).then(function() {

@@ -15,6 +15,27 @@ var subCategory_Id;
 var other_subCategory_Id;
 var combinationOfSubCategoryAndGroupPermissionsTestcases = module.exports = {};
 
+combinationOfSubCategoryAndGroupPermissionsTestcases.changePermission = function() {
+	var category = combinationOfSubCategoryAndGroupPermissionsJSON.category.title;
+	var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory.title;
+	casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
+		var json_string = JSON.parse(this.getPageContent());
+		token = json_string.token;
+		var cat = category;
+		var subcat = subCategory;
+		this.thenOpen(config.apiLocalUrl+"/qaapi/forum/getID/"+subcat+"?accesToken="+token, function() {
+			var json_string2 = JSON.parse(this.getPageContent());
+			var catId = json_string2.forumid;
+			utils.info('the data inside the forum id'+catId);
+			category_Id = catId;
+			this.thenOpen(config.apiLocalUrl+"/qaapi/updateForumPermissions/"+category_Id+"/20237569/view_forum/0?accesToken="+token, function() {
+				// var json_string2 = JSON.parse(this.getPageContent());
+				// var catId = json_string2.forumid;
+			});
+		});
+	});
+};
+
 // method to create a category cat1 and its sub categories cat1a and cat1b
 combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory = function() {
 	casper.thenOpen(config.backEndUrl, function() {
@@ -75,15 +96,16 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory = functi
 	}).waitForText('hellloooooo!!!!!!!!!',function() {
 		utils.info('Test case 11 [ Method to verify Reply topic button with the sub-category cat1a ]');
 		postEventMemberApprovalMethod.composePost("Replied the post");
-	}).thenOpen(config.backEndUrl, function() {
-		backEndForumRegisterMethod.goToCategoryPage();
-		casper.then(function() {
-			combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategory_Id, function(err, groupId) {
-				if(!err) {
-					backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, false);
-				}
-			});
-		});
+		combinationOfSubCategoryAndGroupPermissionsTestcases.changePermission();
+	// }).thenOpen(config.backEndUrl, function() {
+	// 	backEndForumRegisterMethod.goToCategoryPage();
+	// 	casper.then(function() {
+	// 		combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategory_Id, function(err, groupId) {
+	// 			if(!err) {
+	// 				backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, false);
+	// 			}
+	// 		});
+	// 	});
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');

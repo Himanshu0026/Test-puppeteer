@@ -12,23 +12,3 @@ settings.updateSettings = function(uid,field,value) {
   var sql ='UPDATE settings SET '+field+ '="' +value+ '" WHERE uid = "'+uid+'";';
   return sql;
 };
-
-settings.setUID = function() {
-  request({
-    url: config.apiLocalUrl+'/settings/getUID',
-    json: true
-  }, function(err, res, body) {
-    if(err) {
-      console.log('err : '+err);
-      res.send(err);
-    }
-    if(res.statusCode == 200) {
-      uid = body.UID;
-      console.log('the uid = '+uid);
-      console.log(typeof(uid));
-      return uid;
-    }else {
-      res.send('The uid not found');
-    }
-  });
-};
