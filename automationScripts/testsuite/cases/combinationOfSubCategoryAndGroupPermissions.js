@@ -27,8 +27,8 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.changePermission = function
 			var json_string2 = JSON.parse(this.getPageContent());
 			var catId = json_string2.forumid;
 			utils.info('the data inside the forum id'+catId);
-			category_Id = catId;
-			this.thenOpen(config.apiLocalUrl+"/qaapi/updateForumPermissions/"+category_Id+"/20237569/view_forum/0?accesToken="+token, function() {
+			//category_Id = catId;
+			this.thenOpen(config.apiLocalUrl+"/qaapi/updateForumPermissions/"+catId+"/20237569/view_forum/0?accesToken="+token, function() {
 				// var json_string2 = JSON.parse(this.getPageContent());
 				// var catId = json_string2.forumid;
 			});
