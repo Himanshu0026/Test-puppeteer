@@ -43,7 +43,9 @@ postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable = function(userGro
 	}).then(function() {
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
+		utils.info('the token id before the thenopen.Url'+token);
 	}).thenOpen(config.apiLocalUrl+"/qaapi/usergroups/updatePermission/"+userGroup+"/view_thread_content/0?accesToken="+token, function() {
+		utils.info('the token id after the thenopen.Url'+token);
 	}).thenOpen(config.url, function() {
 		utils.info('the token id inside the thenopen.Url'+token);
 		utils.info('Test case 1a [verify permission message after clicking on any topic]');

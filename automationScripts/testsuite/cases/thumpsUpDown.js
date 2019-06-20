@@ -107,18 +107,27 @@ thumpsUpDownTestcases.createCategoryTestCase = function() {
 
 // method to delete all the categories from backend
 thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
-	casper.thenOpen(config.backEndUrl, function() {
-		backEndForumRegisterMethod.goToCategoryPage();
-	}).waitForSelector('a#addForumButton', function() {
-		var totalCategories = casper.evaluate(function(){
-			var length = document.querySelectorAll('li a.manageAction').length;
-			return length;
+	//postTopicUserPermissionTestcases.getToken = function() {
+		casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
+			var json_string = JSON.parse(this.getPageContent());
+			token = json_string.token;
+			utils.info('the token id inside the task'+token);
+			this.thenOpen(config.apiLocalUrl+"/qaapi/forums/delete?accesToken="+token, function() {
+			});
 		});
-		utils.info("The total number of categories"+totalCategories);
-		for(i = 0; i<totalCategories; i++){
-			casper.then(deleteCategoriesHandler(i));
-		}
-	});
+	//};
+	// casper.thenOpen(config.backEndUrl, function() {
+	// 	backEndForumRegisterMethod.goToCategoryPage();
+	// }).waitForSelector('a#addForumButton', function() {
+	// 	var totalCategories = casper.evaluate(function(){
+	// 		var length = document.querySelectorAll('li a.manageAction').length;
+	// 		return length;
+	// 	});
+	// 	utils.info("The total number of categories"+totalCategories);
+	// 	for(i = 0; i<totalCategories; i++){
+	// 		casper.then(deleteCategoriesHandler(i));
+	// 	}
+	// });
 };
 
 // method to verify the thumbs up and down for guest user(unregister user)
