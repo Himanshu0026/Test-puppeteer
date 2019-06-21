@@ -227,9 +227,10 @@ moveTopicAndPostTestcases.topicListingPageUnderCategoryForRegisteredUserWhenDisa
     casper.evaluate(function(category_Id) {
 	    document.querySelector('ul[id="'+category_Id+'"] a').click();
     },category_Id);
-  }).waitForSelector('#topics_tab', function() {
-    this.click('#topics_tab');
-  }).waitUntilVisible('.topics-list', function() {
+  //}).waitForSelector('#topics_tab', function() {
+    //this.click('#topics_tab');
+  //}).waitUntilVisible('.topics-list', function() {
+	}).wait('2000',function() {
 		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' New Topic on subcategory page Found');
 		this.click('#ajax_subscription_vars a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.categoryTopic);
