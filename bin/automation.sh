@@ -124,14 +124,14 @@ then
   sleep 1
 fi
 
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for PROFILE PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature=profilePage --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for PROFILE PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature=profilePage --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
 
 checkAutomattionStatusToSkip
 
@@ -166,15 +166,6 @@ if [ $AUTOMATION_ALLOW -eq '1' ]
 then
   printf "Executing Automation Script For $1 commitID\nTests executing for FORUM-LISTING PAGE: \n" >> "$AUTOMATION_HOME"/log/automation.txt
   casperjs test ./automationScripts/automation.js --feature=forumListingPage --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
-
-checkAutomattionStatusToSkip
-
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for MOVE TOPIC AND POST: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature="moveTopicAndPost" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
   sleep 1
 fi
 
@@ -254,19 +245,28 @@ checkAutomattionStatusToSkip
 
 if [ $AUTOMATION_ALLOW -eq '1' ]
 then
-  printf "Executing Automation Script For $1 commitID\nTests executing for MODERATOR RERMISSION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature="moderatorPermissions" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+  printf "Executing Automation Script For $1 commitID\nTests executing for MOVE TOPIC AND POST: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+  casperjs test ./automationScripts/automation.js --feature="moveTopicAndPost" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
   sleep 1
 fi
 
-checkAutomattionStatusToSkip
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for MODERATOR RERMISSION: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature="moderatorPermissions" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
 
-if [ $AUTOMATION_ALLOW -eq '1' ]
-then
-  printf "Executing Automation Script For $1 commitID\nTests executing for COMBINATION OF SUBCATEGORY AND GROUP PERMISSIONS-> GENERAL USER: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-  casperjs test ./automationScripts/automation.js --feature="combinationOfSubCategoryAndGroupPermissions registerUserTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-  sleep 1
-fi
+# checkAutomattionStatusToSkip
+#
+# if [ $AUTOMATION_ALLOW -eq '1' ]
+# then
+#   printf "Executing Automation Script For $1 commitID\nTests executing for COMBINATION OF SUBCATEGORY AND GROUP PERMISSIONS-> GENERAL USER: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+#   casperjs test ./automationScripts/automation.js --feature="combinationOfSubCategoryAndGroupPermissions registerUserTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+#   sleep 1
+# fi
 
 # checkAutomattionStatusToSkip
 #

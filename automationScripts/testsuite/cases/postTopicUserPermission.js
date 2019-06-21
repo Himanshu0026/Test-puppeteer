@@ -17,8 +17,12 @@ postTopicUserPermissionTestcases.getToken = function() {
 	casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
 		var json_string = JSON.parse(this.getPageContent());
 		token = json_string.token;
-		console.log(typeof(token));
 		utils.info('the token id inside the task'+token);
+		var thenOpenUrl = function() {
+			var tok = token;
+			return tok;
+		};
+		return thenOpenUrl;
 	});
 };
 
@@ -37,16 +41,19 @@ postTopicUserPermissionTestcases.createTopic = function(userGroup) {
 
 // method to verify permission message after clicking on any topic
 postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable = function(userGroup) {
-	postTopicUserPermissionTestcases.getToken();
+	var get_token_fun = postTopicUserPermissionTestcases.getToken();
 	casper.thenOpen(config.url, function() {
 		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
 	}).then(function() {
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
+		utils.info('the value of closure function before'+get_token_fun());
 		utils.info('the token id before the thenopen.Url'+token);
 	}).thenOpen(config.apiLocalUrl+"/qaapi/usergroups/updatePermission/"+userGroup+"/view_thread_content/0?accesToken="+token, function() {
 		utils.info('the token id after the thenopen.Url'+token);
+		utils.info('the value of closure function after'+get_token_fun());
 	}).thenOpen(config.url, function() {
+		utils.info('the value of closure function after after'+get_token_fun());
 		utils.info('the token id inside the thenopen.Url'+token);
 		utils.info('Test case 1a [verify permission message after clicking on any topic]');
 	}).waitForSelector('li.pull-right.user-panel', function() {
