@@ -51,8 +51,8 @@ router.use(getUID);
 router.get('/getToken', function(req, res, next) {
   tokenServices.encrypt(function(err,data) {
     if(!err) {
-      res.writeHead(200, {'Content-Type': 'application/json'});
-      res.status(200).json({
+      //res.writeHead(200, {'Content-Type': 'application/json'});
+      res.json({
         token: data
       });
       //next();
