@@ -18,8 +18,13 @@ var combinationOfSubCategoryAndGroupPermissionsTestcases = module.exports = {};
 combinationOfSubCategoryAndGroupPermissionsTestcases.changePermission = function() {
 	var category = combinationOfSubCategoryAndGroupPermissionsJSON.category.title;
 	var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory.title;
+	utils.info('11111111111111111111');
 	casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
+		utils.info('######################');
+		utils.info('The page content '+this.getPageContent());
+		utils.info('the type of '+typeof(this.getPageContent()));
 		var json_string = JSON.parse(this.getPageContent());
+
 		token = json_string.token;
 		var cat = category;
 		var subcat = subCategory;

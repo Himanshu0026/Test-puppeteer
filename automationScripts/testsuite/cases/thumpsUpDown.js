@@ -109,6 +109,9 @@ thumpsUpDownTestcases.createCategoryTestCase = function() {
 thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 	//postTopicUserPermissionTestcases.getToken = function() {
 		casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
+			utils.info('######################');
+			utils.info('The page content '+this.getPageContent());
+			utils.info('the type of '+typeof(this.getPageContent()));
 			var json_string = JSON.parse(this.getPageContent());
 			token = json_string.token;
 			utils.info('the token id inside the task'+token);
