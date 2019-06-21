@@ -51,10 +51,10 @@ router.use(getUID);
 router.get('/getToken', function(req, res, next) {
   tokenServices.encrypt(function(err,data) {
     if(!err) {
-      // res.status(200).json({
-      //   token: data
-      // });
-      res.text(data);
+      res.writeHead(200, {'Content-Type': 'application/json'});
+      res.status(200).json({
+        token: data
+      });
       //next();
     }
   });
