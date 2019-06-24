@@ -101,6 +101,7 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory = functi
 	}).waitForText('hellloooooo!!!!!!!!!',function() {
 		utils.info('Test case 11 [ Method to verify Reply topic button with the sub-category cat1a ]');
 		postEventMemberApprovalMethod.composePost("Replied the post");
+		this.clearCache();
 		combinationOfSubCategoryAndGroupPermissionsTestcases.changePermission();
 	// }).thenOpen(config.backEndUrl, function() {
 	// 	backEndForumRegisterMethod.goToCategoryPage();
