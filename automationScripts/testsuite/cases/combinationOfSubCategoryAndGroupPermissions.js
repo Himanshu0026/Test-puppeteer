@@ -21,11 +21,14 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.changePermission = function
 	utils.info('11111111111111111111');
 	casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
 		utils.info('######################');
-		utils.info('The page content '+this.getPageContent());
-		utils.info('the type of '+typeof(this.getPageContent()));
-		var json_string = JSON.parse(this.getPageContent());
+		//utils.info('The page content '+this.getPageContent());
+		//utils.info('the type of '+typeof(this.getPageContent()));
+		//var json_string = JSON.parse(this.getPageContent());
 
-		token = json_string.token;
+		//token = json_string.token;
+		token = casper.evaluate(function() {
+			var data = document.querySelector(".token").getAttribute('id');
+		});
 		var cat = category;
 		var subcat = subCategory;
 		this.thenOpen(config.apiLocalUrl+"/qaapi/forum/getID/"+subcat+"?accesToken="+token, function() {
@@ -101,7 +104,7 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory = functi
 	}).waitForText('hellloooooo!!!!!!!!!',function() {
 		utils.info('Test case 11 [ Method to verify Reply topic button with the sub-category cat1a ]');
 		postEventMemberApprovalMethod.composePost("Replied the post");
-		this.clearCache();
+		//casper.clearCache();
 		combinationOfSubCategoryAndGroupPermissionsTestcases.changePermission();
 	// }).thenOpen(config.backEndUrl, function() {
 	// 	backEndForumRegisterMethod.goToCategoryPage();

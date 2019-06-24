@@ -110,10 +110,13 @@ thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 	//postTopicUserPermissionTestcases.getToken = function() {
 		casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
 			utils.info('######################');
-			utils.info('The page content '+this.getPageContent());
-			utils.info('the type of '+typeof(this.getPageContent()));
-			var json_string = JSON.parse(this.getPageContent());
-			token = json_string.token;
+			// utils.info('The page content '+this.getPageContent());
+			// utils.info('the type of '+typeof(this.getPageContent()));
+			// var json_string = JSON.parse(this.getPageContent());
+			// token = json_string.token;
+			token = casper.evaluate(function() {
+				var data = document.querySelector(".token").getAttribute('id');
+			});
 			utils.info('the token id inside the task'+token);
 			this.thenOpen(config.apiLocalUrl+"/qaapi/forums/delete?accesToken="+token, function() {
 			});
