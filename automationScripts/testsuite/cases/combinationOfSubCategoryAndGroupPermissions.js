@@ -28,6 +28,7 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.changePermission = function
 		//token = json_string.token;
 		token = casper.evaluate(function() {
 			var data = document.querySelector(".token").getAttribute('id');
+			return data;
 		});
 		var cat = category;
 		var subcat = subCategory;

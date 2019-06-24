@@ -116,6 +116,7 @@ thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 			// token = json_string.token;
 			token = casper.evaluate(function() {
 				var data = document.querySelector(".token").getAttribute('id');
+				return data;
 			});
 			utils.info('the token id inside the task'+token);
 			this.thenOpen(config.apiLocalUrl+"/qaapi/forums/delete?accesToken="+token, function() {
