@@ -18,8 +18,12 @@ moveTopicAndPostTestcases.getForumsId = function() {
 	var category = moveTopicAndPostJSON.category;
 	var subCategory = moveTopicAndPostJSON.subCategory;
 	casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
-		var json_string = JSON.parse(this.getPageContent());
-		token = json_string.token;
+		token = casper.evaluate(function() {
+			var data = document.querySelector(".token").getAttribute('id');
+			return data;
+		});
+		//var json_string = JSON.parse(this.getPageContent());
+		//token = json_string.token;
 		var cat = category.title;
 		var subcat = subCategory.title;
 		this.thenOpen(config.apiLocalUrl+"/qaapi/forum/getID/"+cat+"?accesToken="+token, function() {

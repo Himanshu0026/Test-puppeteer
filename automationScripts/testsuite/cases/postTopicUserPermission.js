@@ -13,16 +13,21 @@ var postTopicUserPermissionTestcases = module.exports = {};
 
 var token = '';
 
-postTopicUserPermissionTestcases.getToken = function() {
+postTopicUserPermissionTestcases.getTokenAndSetPermission = function(path) {
 	casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
-		var json_string = JSON.parse(this.getPageContent());
-		token = json_string.token;
-		utils.info('the token id inside the task'+token);
-		var thenOpenUrl = function() {
-			var tok = token;
-			return tok;
-		};
-		return thenOpenUrl;
+		token = casper.evaluate(function() {
+			var data = document.querySelector(".token").getAttribute('id');
+			return data;
+		});
+		this.thenOpen(path+token, function() {});
+		// var json_string = JSON.parse(this.getPageContent());
+		// token = json_string.token;
+		// utils.info('the token id inside the task'+token);
+		// var thenOpenUrl = function() {
+		// 	var tok = token;
+		// 	return tok;
+		// };
+		// return thenOpenUrl;
 	});
 };
 
@@ -41,20 +46,21 @@ postTopicUserPermissionTestcases.createTopic = function(userGroup) {
 
 // method to verify permission message after clicking on any topic
 postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable = function(userGroup) {
-	var get_token_fun = postTopicUserPermissionTestcases.getToken();
+	//var get_token_fun = postTopicUserPermissionTestcases.getToken();
 	casper.thenOpen(config.url, function() {
 		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
 	}).then(function() {
 		// method to create a topic by the registered user(neha)
 		postTopicUserPermissionTestcases.createTopic(userGroup);
-		utils.info('the value of closure function before'+get_token_fun());
-		utils.info('the token id before the thenopen.Url'+token);
-	}).thenOpen(config.apiLocalUrl+"/qaapi/usergroups/updatePermission/"+userGroup+"/view_thread_content/0?accesToken="+token, function() {
-		utils.info('the token id after the thenopen.Url'+token);
-		utils.info('the value of closure function after'+get_token_fun());
+		//utils.info('the value of closure function before'+get_token_fun());
+		//utils.info('the token id before the thenopen.Url'+token);
+	//}).thenOpen(config.apiLocalUrl+"/qaapi/usergroups/updatePermission/"+userGroup+"/view_thread_content/0?accesToken="+token, function() {
+		//utils.info('the token id after the thenopen.Url'+token);
+		//utils.info('the value of closure function after'+get_token_fun());
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/qaapi/usergroups/updatePermission/"+userGroup+"/view_thread_content/0?accesToken=");
 	}).thenOpen(config.url, function() {
-		utils.info('the value of closure function after after'+get_token_fun());
-		utils.info('the token id inside the thenopen.Url'+token);
+		//utils.info('the value of closure function after after'+get_token_fun());
+		//utils.info('the token id inside the thenopen.Url'+token);
 		utils.info('Test case 1a [verify permission message after clicking on any topic]');
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('i.icon.icon-menu');
@@ -110,7 +116,8 @@ postTopicUserPermissionTestcases.verifyClickOnNewTopicFromCategoryListingPageDis
 
 // method to verify content of  a topic
 postTopicUserPermissionTestcases.verifyClickOnAnyTopicEnable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_thread_content/1", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/qaapi/usergroups/updatePermission/"+userGroup+"/view_thread_content/1?accesToken=");
 	}).thenOpen(config.url, function() {
 		utils.info('Test case 2a [verify content of  a topic]');
 	}).waitForSelector('li.pull-right.user-panel', function() {
@@ -187,7 +194,8 @@ postTopicUserPermissionTestcases.verifyClickOnNewTopicEnable = function(userGrou
 
 // method to Disable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend
 postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserDisable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_thread_content/0", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/qaapi/usergroups/updatePermission/"+userGroup+"/view_thread_content/0?accesToken=");
 		utils.info('Test case 3 [Disable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend]');
 	}).thenOpen(config.url, function() {
 		this.click('form[name="posts"] a.topic-title');
@@ -198,7 +206,8 @@ postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserDisabl
 
 // method to Enable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend
 postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserEnable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_thread_content/1", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/qaapi/usergroups/updatePermission/"+userGroup+"/view_thread_content/1?accesToken=");
 		utils.info('Test case 4 [Enable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend]');
 	}).thenOpen(config.url, function() {
 		this.click('form[name="posts"] a.topic-title');
@@ -209,7 +218,8 @@ postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserEnable
 
 // method to Verify View Others's Topic on frontend from category when there is no own topic
 postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategory = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_others_threads/0", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/qaapi/usergroups/updatePermission/"+userGroup+"/view_others_threads/0?accesToken=");
 		utils.info("Test case 6a [Verify View Others's Topic on frontend from category when there is no own topic]");
 	}).thenOpen(config.url, function() {
 		this.click('i.icon.icon-menu');
