@@ -7,7 +7,6 @@ var forumLoginMethod = require('../methods/login.js');
 var topicMethod = require('../methods/topic.js');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var combinationOfSubCategoryAndGroupPermissionsMethod = require('../methods/combinationOfSubCategoryAndGroupPermissions.js');
-//var postTopicUserPermissionMethod = require('../methods/postTopicUserPermission.js');
 var utils = require('../utils.js');
 var postTopicUserPermissionTestcases = module.exports = {};
 
@@ -319,8 +318,8 @@ postTopicUserPermissionTestcases.verifyViewOthersTopicBySearchingTopic = functio
 
 // method to Enable "View Other Topic" for Registered user from group Permission and verify permission on frontend
 postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryEnable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_others_threads/1", function() {
-	}).thenOpen(config.url, function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/view_others_threads/1?accesToken=");
 		utils.info("Test case 8 [Enable View Other Topic for Registered user from group Permission and verify permission on frontend]");
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('i.icon.icon-menu');
@@ -362,7 +361,8 @@ postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryEnable = funct
 
 // method to Disable "View Others' Topic" for un-registered user from group Permission
 postTopicUserPermissionTestcases.verifyViewOthersTopicForUnregisteredUserWhenNoTopicCreatedDisable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_others_threads/0", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/view_others_threads/0?accesToken=");
 		utils.info('Test case 9a [Enable "View Topic Content" for un-registered user from group Permission and Verify permission on Frontend]');
 	}).thenOpen(config.url, function() {
 		this.click('i.icon.icon-menu');
@@ -371,13 +371,15 @@ postTopicUserPermissionTestcases.verifyViewOthersTopicForUnregisteredUserWhenNoT
 	}).waitForSelector('li[id^="forum_"]', function() {
 		this.click('li[id^="forum_"] a');
 	}).waitForText("This category doesn't have any topics yet.", function() {
-	}).thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/view_others_threads/1", function() {
+	}).then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/view_others_threads/1?accesToken=");
 	});
 };
 
 // method to Disable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend
 postTopicUserPermissionTestcases.verifyReplyOwnTopicForRegisterUserDisable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/post_replies/0", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/post_replies/0?accesToken=");
 		utils.info('Test case 10 [Disable Reply Own Topic for Registered user from group Permission and Verify permission on Frontend]');
 	}).thenOpen(config.url, function() {
 		postTopicUserPermissionTestcases.createTopic(userGroup);
@@ -397,7 +399,8 @@ postTopicUserPermissionTestcases.verifyReplyOwnTopicForRegisterUserDisable = fun
 
 // method to Enable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend
 postTopicUserPermissionTestcases.verifyReplyOwnTopicForRegisterUserEnable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/post_replies/1", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/post_replies/1?accesToken=");
 		utils.info('Test case 11 [Enable "Reply Own Topic" for Registered user from group Permission and Verify permission on Frontend]');
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
@@ -437,7 +440,8 @@ postTopicUserPermissionTestcases.verifyReplyOwnTopicForAdminUser = function(user
 
 // method to Disable "Edit Own Post" for Registered user from group Permission and Verify permission on Frontend
 postTopicUserPermissionTestcases.verifyEditOwnPostForRegisteredUserDisable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/edit_posts/0", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/edit_posts/0?accesToken=");
 		utils.info('Test case 13 [Disable Edit Own Post for Registered user from group Permission and Verify permission on Frontend]');
 	}).thenOpen(config.url, function() {
 		combinationOfSubCategoryAndGroupPermissionsMethod.assignLoginDetails(userGroup);
@@ -460,7 +464,8 @@ postTopicUserPermissionTestcases.verifyEditOwnPostForRegisteredUserDisable = fun
 
 // method to Enable "Edit Own Post" for Registered user from group Permission and Verify permission on Frontend
 postTopicUserPermissionTestcases.verifyEditOwnPostForRegisteredUserEnable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/edit_posts/1", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/edit_posts/1?accesToken=");
 		utils.info('Test case 14 [Enable Edit Own Post for Registered user from group Permission and Verify permission on Frontend]');
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
@@ -481,7 +486,8 @@ postTopicUserPermissionTestcases.verifyEditOwnPostForRegisteredUserEnable = func
 
 // method to Disable Delete Own Post for Registered user from group Permission and Verify permission on Frontend
 postTopicUserPermissionTestcases.verifyDeleteOwnPostForRegisteredUserDisable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/delete_posts/0", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/delete_posts/0?accesToken=");
 		utils.info('Test case 15 [Disable Delete Own Post for Registered user from group Permission and Verify permission on Frontend]');
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
@@ -504,7 +510,8 @@ postTopicUserPermissionTestcases.verifyDeleteOwnPostForRegisteredUserDisable = f
 // method to Enable "Delete Own Post" for Registered user from group Permission and Verify permission on Frontend
 postTopicUserPermissionTestcases.verifyDeleteOwnPostForRegisteredUserEnable = function(userGroup) {
 	var topicHref;
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/delete_posts/1", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/delete_posts/1?accesToken=");
 		utils.info('Test case 16 [Enable Delete Own Post for Registered user from group Permission and Verify permission on Frontend]');
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
@@ -530,7 +537,8 @@ postTopicUserPermissionTestcases.verifyDeleteOwnPostForRegisteredUserEnable = fu
 
 // method to Disable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic in the topic list
 postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserDisable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/delete_threads/0", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/delete_threads/0?accesToken=");
 		utils.info('Test case 17 [Disable Delete Own Topic for Registered user from group Permission and Verify delete option against topic in the topic list]');
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
@@ -551,7 +559,8 @@ postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserDisable = 
 // method to Enable "Delete Own Topic" for Registered user from group Permission and Verify delete option against topic in the topic list
 postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredUserEnable = function(userGroup) {
 	var topicHref;
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/delete_threads/1", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/delete_threads/1?accesToken=");
 		utils.info('Test case 18 [Enable Delete Own Topic for Registered user from group Permission and Verify delete option against topic in the topic list]');
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
@@ -674,7 +683,8 @@ postTopicUserPermissionTestcases.verifyDeleteOwnTopicForRegisteredFromDropDownOn
 // method to verify when delete own post is disable and delete own topic enable
 postTopicUserPermissionTestcases.verifyDeleteOwnPostDisableAndTopicEnableForRegisteredUser = function(userGroup) {
 	var topicHref;
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/delete_posts/0", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/delete_posts/0?accesToken=");
 		utils.info('Test case 23 [When delete own post is disable and delete own topic enable and Verify permission on Frontend]');
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
@@ -706,7 +716,8 @@ postTopicUserPermissionTestcases.verifyDeleteOwnPostDisableAndTopicEnableForRegi
 
 // method to verify when delete own post is disable and delete own topic disable
 postTopicUserPermissionTestcases.verifyDeleteOwnPostAndTopicDisableForRegisteredUser = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/delete_threads/0", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/delete_threads/0?accesToken=");
 		utils.info('Test case 24 [When delete own post is disable and delete own topic disable and Verify permission on Frontend]');
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
@@ -734,8 +745,10 @@ postTopicUserPermissionTestcases.verifyDeleteOwnPostAndTopicDisableForRegistered
 
 // method to Disable "Move Own Post" for Registered user from group Permission and Verify Move option against topic in the topic list
 postTopicUserPermissionTestcases.verifyMoveOwnTopicDisable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/move_own_threads/0", function() {
-	}).thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/delete_threads/1", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/delete_threads/1?accesToken=");
+	}).then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/move_own_threads/0?accesToken=");
 		utils.info('Test case 25 [Disable Move Own Post for Registered user from group Permission and Verify Move option against topic in the topic list]');
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
@@ -760,7 +773,8 @@ postTopicUserPermissionTestcases.verifyMoveOwnTopicDisable = function(userGroup)
 
 // method to Move Own Topic shown on User's Profile page For disable setting
 postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageDisable = function(userGroup) {
-	casper.thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/delete_posts/1", function() {
+	casper.then(function() {
+		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/delete_posts/1?accesToken=");
 		utils.info("Test case 28 [Move Own Topic shown on User's Profile page For disable setting]");
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
@@ -779,6 +793,7 @@ postTopicUserPermissionTestcases.verifyMoveOwnTopicFromUsersProfilePageDisable =
 		});
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
-	}).thenOpen(config.apiLocalUrl+"/usergroups/"+userGroup+"/move_own_threads/1", function() {
+	}).then(function() {
+			postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/move_own_threads/1?accesToken=");
 	});
 };
