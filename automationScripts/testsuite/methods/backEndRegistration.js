@@ -417,17 +417,10 @@ backEndForumRegisterMethod.createCategory = function(data) {
 	casper.test.assertExists('a#addForumButton', 'Add category tab found');
 	casper.click('a#addForumButton');
 	casper.waitForSelector('form#edit_forum_form', function() {
-		/*this.sendKeys('input[name="forum_name"]', data.title, {reset:true});
-		this.sendKeys('textarea[name="forum_description"]', data.description, {reset:true});
-		this.test.assertExists('button.button.btn-m.btn-blue', 'Save button found');
-		//this.click('button.button.btn-m.btn-blue');
-		this.evaluate(function() {
-		  document.querySelector('button.button.btn-m.btn-blue').click();
-		});*/
 		this.fillSelectors('form[name=frmOptions]', {
 			'input[name="forum_name"]': data.title,
 			'textarea[name="forum_description"]': data.description
-		}).then(function() {
+		}, false).then(function() {
 			this.evaluate(function() {
 			  document.querySelector('button.button.btn-m.btn-blue').click();
 			});
