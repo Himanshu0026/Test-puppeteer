@@ -17,25 +17,21 @@ var token;
 moveTopicAndPostTestcases.getForumsId = function() {
 	var category = moveTopicAndPostJSON.category;
 	var subCategory = moveTopicAndPostJSON.subCategory;
-	casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
+	casper.thenOpen(config.apiLocalUrl+"/restapi/getToken", function() {
 		token = casper.evaluate(function() {
 			var data = document.querySelector(".token").getAttribute('id');
 			return data;
 		});
-		//var json_string = JSON.parse(this.getPageContent());
-		//token = json_string.token;
 		var cat = category.title;
 		var subcat = subCategory.title;
-		this.thenOpen(config.apiLocalUrl+"/qaapi/forum/getID/"+cat+"?accesToken="+token, function() {
-			var json_string2 = JSON.parse(this.getPageContent());
-			var catId = json_string2.forumid;
-			utils.info('the data inside the forum id'+catId);
+		this.thenOpen(config.apiLocalUrl+"/restapi/forum/getID/"+cat+"?accesToken="+token, function() {
+			var categoryObj = JSON.parse(this.getPageContent());
+			var catId = categoryObj.forumid;
 			category_Id = catId;
 		});
-		this.thenOpen(config.apiLocalUrl+"/qaapi/forum/getID/"+subcat+"?accesToken="+token, function() {
-			var json_string2 = JSON.parse(this.getPageContent());
-			var catId = json_string2.forumid;
-			utils.info('the data inside the sub forum id'+catId);
+		this.thenOpen(config.apiLocalUrl+"/restapi/forum/getID/"+subcat+"?accesToken="+token, function() {
+			var subCategoryObj = JSON.parse(this.getPageContent());
+			var catId = subCategoryObj.forumid;
 			subCategory_Id = catId;
 		});
 	});
@@ -231,9 +227,6 @@ moveTopicAndPostTestcases.topicListingPageUnderCategoryForRegisteredUserWhenDisa
     casper.evaluate(function(category_Id) {
 	    document.querySelector('ul[id="'+category_Id+'"] a').click();
     },category_Id);
-  //}).waitForSelector('#topics_tab', function() {
-    //this.click('#topics_tab');
-  //}).waitUntilVisible('.topics-list', function() {
 	}).wait('2000',function() {
 		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' New Topic on subcategory page Found');
 		this.click('#ajax_subscription_vars a.start-new-topic-btn');

@@ -29,7 +29,7 @@ var getUID = function (req, res, next) {
           console.log('the value of token is'+accesToken);
           tokenServices.encrypt(function(err, data) {
             if(!err) {
-            console.log('inside the middle ware');
+              console.log('inside the middle ware');
               if(accesToken == data){
                 console.log('Api is authorazied');
                 next();
@@ -51,12 +51,9 @@ router.use(getUID);
 router.get('/getToken', function(req, res, next) {
   tokenServices.encrypt(function(err,data) {
     if(!err) {
-      /*res.json({
-        token: data
-      });*/
-      res.render('token',{
-        token : data
-      });
+    res.render('token',{
+      token : data
+    });
     }
   });
 });
@@ -88,7 +85,7 @@ router.get("/getPermission/:forumid/:usergroupID", function(req, res, next) {
 });
 
 router.get("/forum/getID/:title", function(req, res, next) {
-	var title = req.params.title;
+  var title = req.params.title;
   sqlConnection(forums.getforumID(uid, title), function(err, result) {
     if(!err) {
       res.status(200).json({
@@ -100,8 +97,8 @@ router.get("/forum/getID/:title", function(req, res, next) {
 });
 
 router.get("/forum/add/:title/:description", function(req, res, next) {
-	var title = req.params.title;
-	var description = req.params.description;
+  var title = req.params.title;
+  var description = req.params.description;
   sqlConnection(forums.addForum(uid, title, description), function(err, result) {
     if(!err) {
       res.status(200).json({
@@ -122,7 +119,7 @@ router.get("/forums/delete", function(req, res, next) {
 });
 
 router.get("/forum/delete/:forumid", function(req, res, next) {
-	var forumid = req.params.forumid;
+  var forumid = req.params.forumid;
   sqlConnection(forums.deleteForum(uid, forumid), function(err, result) {
     if(!err) {
       res.status(200).json({
@@ -133,10 +130,10 @@ router.get("/forum/delete/:forumid", function(req, res, next) {
 });
 
 router.get("/forum/add/subCategory:title/:description/:parentCategory", function(req, res, next) {
-	var title = req.params.title;
-	var description = req.params.description;
-	var parentCategory = req.params.parentCategory;
-	var parentId;
+  var title = req.params.title;
+  var description = req.params.description;
+  var parentCategory = req.params.parentCategory;
+  var parentId;
   request({
     url: config.apiLocalUrl+'/forums/getID/parentCategory',
     json: true
@@ -161,8 +158,8 @@ router.get("/forum/add/subCategory:title/:description/:parentCategory", function
 });
 
 router.get("/settings/:field/:value", function(req, res, next) {
-	var field = req.params.field;
-	var value = req.params.value;
+  var field = req.params.field;
+  var value = req.params.value;
   sqlConnection(settings.updateSettings(uid,field,value), function(err, result) {
     if(!err) {
       res.status(200).json({
@@ -174,7 +171,7 @@ router.get("/settings/:field/:value", function(req, res, next) {
 });
 
 router.get("/usergroups/getID/:grouptitle(*)", function(req, res, next) {
-	var groupTitle = req.params.grouptitle;
+  var groupTitle = req.params.grouptitle;
   console.log('the uid inside the request'+uid);
   sqlConnection(Usergroups.getUsergroupID(uid,groupTitle), function(err, result) {
     if(!err) {
@@ -187,9 +184,9 @@ router.get("/usergroups/getID/:grouptitle(*)", function(req, res, next) {
 });
 
 router.get("/usergroups/updatePermission/:title(*)/:field/:value", function(req, res, next) {
-	var groupTitle = req.params.title;
-	var field = req.params.field;
-	var value = req.params.value;
+  var groupTitle = req.params.title;
+  var field = req.params.field;
+  var value = req.params.value;
   sqlConnection(Usergroups.updateUsergroupsSQL(uid,field,value,groupTitle), function(err, result) {
     if(!err) {
       res.status(200).json({

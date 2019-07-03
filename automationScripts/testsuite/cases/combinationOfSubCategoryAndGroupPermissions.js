@@ -18,28 +18,17 @@ var combinationOfSubCategoryAndGroupPermissionsTestcases = module.exports = {};
 combinationOfSubCategoryAndGroupPermissionsTestcases.changePermission = function() {
 	var category = combinationOfSubCategoryAndGroupPermissionsJSON.category.title;
 	var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory.title;
-	utils.info('11111111111111111111');
-	casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
-		utils.info('######################');
-		//utils.info('The page content '+this.getPageContent());
-		//utils.info('the type of '+typeof(this.getPageContent()));
-		//var json_string = JSON.parse(this.getPageContent());
-
-		//token = json_string.token;
+	casper.thenOpen(config.apiLocalUrl+"/restapi/getToken", function() {
 		token = casper.evaluate(function() {
 			var data = document.querySelector(".token").getAttribute('id');
 			return data;
 		});
-		var cat = category;
 		var subcat = subCategory;
-		this.thenOpen(config.apiLocalUrl+"/qaapi/forum/getID/"+subcat+"?accesToken="+token, function() {
-			var json_string2 = JSON.parse(this.getPageContent());
-			var catId = json_string2.forumid;
-			utils.info('the data inside the forum id'+catId);
-			//category_Id = catId;
-			this.thenOpen(config.apiLocalUrl+"/qaapi/updateForumPermissions/"+catId+"/20237569/view_forum/0?accesToken="+token, function() {
-				// var json_string2 = JSON.parse(this.getPageContent());
-				// var catId = json_string2.forumid;
+		this.thenOpen(config.apiLocalUrl+"/restapi/forum/getID/"+subcat+"?accesToken="+token, function() {
+			var subCategoryObj = JSON.parse(this.getPageContent());
+			var catId = subCategoryObj.forumid;
+			//to do-> get the usergroup id
+			this.thenOpen(config.apiLocalUrl+"/restapi/updateForumPermissions/"+catId+"/20237569/view_forum/0?accesToken="+token, function() {
 			});
 		});
 	});

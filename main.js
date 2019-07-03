@@ -31,7 +31,7 @@ var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: config.webhook.secret });
 app.use(handler);
 app.use(cors());
-app.use("/qaapi", routes);
+app.use("/restapi", routes);
 
 gitBranchServices.managePendingCommits(redisClient);
 queueServices.getRedisClient(redisClient);

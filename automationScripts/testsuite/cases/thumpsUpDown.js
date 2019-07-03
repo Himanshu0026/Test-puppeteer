@@ -92,34 +92,19 @@ thumpsUpDownTestcases.createCategoryTestCase = function() {
 		utils.info(' * Method to create category and sub category *');
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
-		//backEndForumRegisterMethod.isCategoryExists(thumpsUpDownJSON.category, function(err, isExists) {
-			//if(isExists) {
-				//utils.info(' Category already existed');
-			//} else {
-				//utils.info(' Category not exist');
-				//casper.then(function() {
-					backEndForumRegisterMethod.createCategory(thumpsUpDownJSON.category);
-				//});
-			//}
-		//});
+		backEndForumRegisterMethod.createCategory(thumpsUpDownJSON.category);
 	});
 };
 
 // method to delete all the categories from backend
 thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
 	//postTopicUserPermissionTestcases.getToken = function() {
-		casper.thenOpen(config.apiLocalUrl+"/qaapi/getToken", function() {
-			utils.info('######################');
-			// utils.info('The page content '+this.getPageContent());
-			// utils.info('the type of '+typeof(this.getPageContent()));
-			// var json_string = JSON.parse(this.getPageContent());
-			// token = json_string.token;
+		casper.thenOpen(config.apiLocalUrl+"/restapi/getToken", function() {
 			token = casper.evaluate(function() {
 				var data = document.querySelector(".token").getAttribute('id');
 				return data;
 			});
-			utils.info('the token id inside the task'+token);
-			this.thenOpen(config.apiLocalUrl+"/qaapi/forums/delete?accesToken="+token, function() {
+			this.thenOpen(config.apiLocalUrl+"/restapi/forums/delete?accesToken="+token, function() {
 			});
 		});
 	//};
