@@ -105,10 +105,10 @@ postEventMemberApprovalTestcases.postApprovalByAdmin = function() {
 	}).waitForSelector('form#approveMembers', function() {
 		this.click("a[id^='approvePost'] i");
 	//}).waitForSelectorTextChange('#feed-main > .col-xs-12:nth-child(1) .post-body-content', function() {
-	}).wait('4000',function() {
+	}).wait('2000',function() {
 		this.click("a[id^='postDelete'] i");
 	//}).waitForSelectorTextChange('#feed-main > .col-xs-12:nth-child(1) .post-body-content', function() {
-	}).wait('4000',function() {
+	}).wait('2000',function() {
 		/*this.click("a[id^='postEdit'] i");
 	}).waitForSelector('#message1_ifr', function() {
 		this.test.assertExists('#message1_ifr', 'message1-ifr found So the post is editable');
@@ -117,10 +117,10 @@ postEventMemberApprovalTestcases.postApprovalByAdmin = function() {
 		});
 	}).then(function() {
 		this.click('div.form-group.cleared input[name="save"]');
-	}).wait('4000',function () {
+	}).wait('2000',function () {
 		this.click("a[id^='approvePost'] i");
 	//}).waitForSelectorTextChange('#feed-main > .col-xs-12:nth-child(1) .post-body-content', function() {
-	}).wait('4000',function () {*/
+	}).wait('2000',function () {*/
 		this.evaluate(function() {
 			document.querySelector('div.post-edit.pull-right.dropdown input.entry-checkbox:nth-of-type(1)').click();
 		});
@@ -128,14 +128,14 @@ postEventMemberApprovalTestcases.postApprovalByAdmin = function() {
 		this.test.assertExists('a#approvePending i', 'approve tick on the floating menu');
 		this.click('a#approvePending i');
 	//}).waitForSelectorTextChange('#feed-main > .col-xs-12:nth-child(1) .post-body-content', function() {
-	}).wait('4000',function () {
+	}).wait('2000',function () {
 		this.evaluate(function() {
 			document.querySelector('div.post-edit.pull-right.dropdown input.entry-checkbox:nth-of-type(1)').click();
 		});
 		this.test.assertExists('div#pending-menu', ' Floating menu is appear on bottom of the page');
 		this.test.assertExists('a#decline_pending', ' Delete tick on the floating menu');
 		this.click('a#decline_pending');
-	}).wait('4000',function () {
+	}).wait('2000',function () {
 		this.click('#links-nav i.icon');
 	}).waitForSelector('#latest_topics_show a', function() {
 		this.click('#latest_topics_show a');
@@ -145,10 +145,10 @@ postEventMemberApprovalTestcases.postApprovalByAdmin = function() {
 		this.test.assertTextExists('This post is awaiting approval by a moderator.', 'This post is awaiting approval by a moderator. found on the page');
 		this.test.assertExists('a#approve_request i', 'approve tick found');
 		this.click('a#approve_request i');
-	}).wait('4000',function () {
+	}).wait('2000',function () {
 		this.test.assertExists("a[id^='delete_pending_'] i", 'Delete tick found');
 		this.click("a[id^='delete_pending_'] i");
-	}).wait('4000',function () {
+	}).wait('2000',function () {
 		/*casper.click('#posttoggle_'+postId+' i');
 		casper.mouse.move('#post_list_' +postId);
 		casper.click('a[data-pid="'+postId+'"]');
@@ -159,7 +159,7 @@ postEventMemberApprovalTestcases.postApprovalByAdmin = function() {
 		});
 	}).then(function() {
 		this.click('div.form-group.cleared input[name="save"]');
-	}).wait('4000',function () {*/
+	}).wait('2000',function () {*/
 	}).then(function() {
 		this.click('#links-nav i.icon');
 	}).waitForSelector('#latest_topics_show a', function() {
@@ -175,7 +175,7 @@ postEventMemberApprovalTestcases.postApprovalByAdmin = function() {
 		this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
 		this.test.assertExists('a#approvePending i', 'APPROVE TICK ON THE FLOATING MENU');
 		this.click('a#approvePending i');
-	}).wait('4000',function () {
+	}).wait('2000',function () {
 		this.test.assertTextExists("There's currently nothing that needs your approval.");
 	}).then(function() {
 		this.click('#links-nav i.icon');
@@ -342,23 +342,23 @@ postEventMemberApprovalTestcases.eventApprovalByAdmin = function() {
 		casper.click('li#approvalQueue a');
 	}).waitForSelector('form#approveMembers', function() {
 		this.click("a[id^='approveEvent'] i");
-	}).wait('4000',function() {
+	}).wait('2000',function() {
 		this.click("a[id^='deleteEvent'] i");
-	}).wait('4000',function() {
+	}).wait('2000',function() {
 		this.evaluate(function() {
 			document.querySelector('div.post-edit.pull-right.dropdown input.entry-checkbox:nth-of-type(1)').click();
 		});
 		this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
 		this.test.assertExists('a#approvePending i', 'approve tick on the floating menu');
 		this.click('a#approvePending i');
-	}).wait('4000',function () {
+	}).wait('2000',function () {
 		this.evaluate(function() {
 			document.querySelector('div.post-edit.pull-right.dropdown input.entry-checkbox:nth-of-type(1)').click();
 		});
 		this.test.assertExists('div#pending-menu', ' Floating menu is appear on bottom of the page');
 		this.test.assertExists('a#decline_pending', ' Delete tick on the floating menu');
 		this.click('a#decline_pending');
-	}).wait('4000',function () {
+	}).wait('2000',function () {
 		this.click('#event_title a');
 	}).waitForSelector('.calendar-daydetail', function() {
 		this.test.assertTextExists('This event is awaiting moderator approval.', 'This event is awaiting moderator approval. found on the page');
@@ -379,7 +379,7 @@ postEventMemberApprovalTestcases.eventApprovalByAdmin = function() {
 		this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
 		this.test.assertExists('a#approvePending i', 'APPROVE TICK ON THE FLOATING MENU');
 		this.click('a#approvePending i');
-	}).wait('4000',function () {
+	}).wait('2000',function () {
 		this.test.assertTextExists("There's currently nothing that needs your approval.");
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
@@ -427,14 +427,14 @@ postEventMemberApprovalTestcases.memberApprovalByAdmin = function() {
 		casper.click('li#approvalQueue a');
 	}).waitForSelector('form#approveMembers', function() {
 		this.click("a[id^='approveMember'] i");
-	}).wait('4000',function() {
+	}).wait('2000',function() {
 		this.click("a[id^='deleteMember'] i");
 	}).waitForSelector('#declineBtn', function() {
 		this.test.assertExists('#declineBtn','Decline button found');
 		this.evaluate(function() {
 			document.querySelector('#declineBtn').click();
 		});
-	}).wait('4000',function() {
+	}).wait('2000',function() {
 		this.evaluate(function() {
 			document.querySelector('ul input.entry-checkbox').click();
 		});
@@ -442,7 +442,7 @@ postEventMemberApprovalTestcases.memberApprovalByAdmin = function() {
 		this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
 		this.test.assertExists('a#approvePending i', 'approve tick on the floating menu');
 		this.click('a#approvePending i');
-	}).wait('4000',function () {
+	}).wait('2000',function () {
 		this.evaluate(function() {
 			document.querySelector('ul input.entry-checkbox').click();
 		});
@@ -450,7 +450,7 @@ postEventMemberApprovalTestcases.memberApprovalByAdmin = function() {
 		this.test.assertExists('div#pending-menu', ' Floating menu is appear on bottom of the page');
 		this.test.assertExists('a#decline_pending', ' Delete tick on the floating menu');
 		this.click('a#decline_pending');
-	}).wait('4000',function () {
+	}).wait('2000',function () {
 		this.evaluate(function() {
 			document.querySelector('ul input.entry-checkbox').click();
 		});
@@ -465,7 +465,7 @@ postEventMemberApprovalTestcases.memberApprovalByAdmin = function() {
 		});
 	}).then(function() {
 		this.click('#manageAdditionalUsergroup');
-	}).wait('4000',function () {
+	}).wait('2000',function () {
 	}).reload(function() {
 		this.click('.display_username.username');
 	}).waitForSelector('#showApproveDecline', function() {
