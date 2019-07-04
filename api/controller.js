@@ -149,7 +149,7 @@ router.get("/forum/add/subCategory:title/:description/:parentCategory", function
   //var parentCategory = req.params.parentCategory;
   var parentId;
   request({
-    url: config.apiLocalUrl+'/forums/getID/'+req.params.parentCategory,
+    url: config.apiLocalUrl+'/restapi/forum/getID/'+req.params.parentCategory,
     json: true
   }, function(err, res, body) {
     if(err) {
