@@ -38,7 +38,7 @@ moderatorPermissionsMethod.clickOnAddedModerator = function(id) {
 //Method to Add new moderarator
 moderatorPermissionsMethod.FillModeratorDetails = function(data, id) {
 	casper.sendKeys('input[name="user"]', data, {reset:true});
-	casper.sendKeys('input[name="user"]', casper.page.event.key.Enter, {keepFocus:true} );
+	//casper.sendKeys('input[name="user"]', casper.page.event.key.Enter, {keepFocus:true} );
 	casper.fillSelectors('form[name="posts"]', {
 		'select[name="forum_id"]': id
 	}, false).then(function() {

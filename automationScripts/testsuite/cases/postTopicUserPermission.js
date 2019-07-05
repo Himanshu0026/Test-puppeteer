@@ -321,6 +321,7 @@ postTopicUserPermissionTestcases.verifyViewOthersTopicFromCategoryEnable = funct
 	casper.then(function() {
 		postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/view_others_threads/1?accesToken=");
 		utils.info("Test case 8 [Enable View Other Topic for Registered user from group Permission and verify permission on frontend]");
+	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.click('i.icon.icon-menu');
 		this.test.assertExists('ul#forums_toggle_link li a', 'Category link found in the side menu');
