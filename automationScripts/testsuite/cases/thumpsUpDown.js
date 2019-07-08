@@ -98,28 +98,28 @@ thumpsUpDownTestcases.createCategoryTestCase = function() {
 
 // method to delete all the categories from backend
 thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
-	//postTopicUserPermissionTestcases.getToken = function() {
-		casper.thenOpen(config.apiLocalUrl+"/restapi/getToken", function() {
-			token = casper.evaluate(function() {
-				var data = document.querySelector(".token").getAttribute('id');
-				return data;
-			});
-			this.thenOpen(config.apiLocalUrl+"/restapi/forums/delete?accesToken="+token, function() {
-			});
-		});
-	//};
-	// casper.thenOpen(config.backEndUrl, function() {
-	// 	backEndForumRegisterMethod.goToCategoryPage();
-	// }).waitForSelector('a#addForumButton', function() {
-	// 	var totalCategories = casper.evaluate(function(){
-	// 		var length = document.querySelectorAll('li a.manageAction').length;
-	// 		return length;
+	// //postTopicUserPermissionTestcases.getToken = function() {
+	// 	casper.thenOpen(config.apiLocalUrl+"/restapi/getToken", function() {
+	// 		token = casper.evaluate(function() {
+	// 			var data = document.querySelector(".token").getAttribute('id');
+	// 			return data;
+	// 		});
+	// 		this.thenOpen(config.apiLocalUrl+"/restapi/forums/delete?accesToken="+token, function() {
+	// 		});
 	// 	});
-	// 	utils.info("The total number of categories"+totalCategories);
-	// 	for(i = 0; i<totalCategories; i++){
-	// 		casper.then(deleteCategoriesHandler(i));
-	// 	}
-	// });
+	// //};
+	casper.thenOpen(config.backEndUrl, function() {
+		backEndForumRegisterMethod.goToCategoryPage();
+	}).waitForSelector('a#addForumButton', function() {
+		var totalCategories = casper.evaluate(function(){
+			var length = document.querySelectorAll('li a.manageAction').length;
+			return length;
+		});
+		utils.info("The total number of categories"+totalCategories);
+		for(i = 0; i<totalCategories; i++){
+			casper.then(deleteCategoriesHandler(i));
+		}
+	});
 };
 
 // method to verify the thumbs up and down for guest user(unregister user)
@@ -356,7 +356,7 @@ thumpsUpDownTestcases.clickOnLikersUsernameByModerator = function() {
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
 		var data = thumpsUpDownJSON.otherUser.username;
-		var category = thumpsUpDownJSON.category;
+		var category = thumpsUpDownJSON.moderatorCategory;
 		backEndForumRegisterMethod.addNewModerator(data, category, function(err) {
 			if(!err) {
 				utils.info('Moderator added successfully');
