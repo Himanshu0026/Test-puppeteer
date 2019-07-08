@@ -35,7 +35,7 @@
   "newTopic" : {
     "title" : "New Topic",
     "content" : "hellloooooo!!!!!!!!!",
-    "category" : "General"
+    "category" : "GeneralNew"
   },
 
   "category" : {
@@ -44,7 +44,7 @@
 	},
 
   "moderatorCategory" : {
-		"title" : "General",
+		"title" : "GeneralNew",
 		"description" : "To test other category"
 	},
 
