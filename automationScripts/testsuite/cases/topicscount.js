@@ -33,7 +33,33 @@ topicsCountTests.createCategory = function() {
 
 topicsCountTests.createTopic = function() {
 	casper.thenOpen(config.url, function(){
-		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
+		// phantom.addCookie({
+		// 	userid: '30465757',
+		// 	pw: '8400cc7d309cca7a27b4ddc9c7bab0604f9d0278c9c200',
+		// 	domain: '.beta21.websitetoolbox.com'
+		// });
+		phantom.addCookie({
+		  userid: '30465757',
+		  pw: '8400cc7d309cca7a27b4ddc9c7bab0604f9d0278c9c200',
+		  _fbp:'fb.1.1557744512792.280259385',
+		  _gat:'1',
+		  _ga:'GA1.3.1215423564.1557136584',
+		  _gid:'GA1.3.1758659852.1562561880',
+		  chatroom_logout_token:'',
+		  di492b20Zasdh3V:'2',
+		  forumuserid:'',
+		  hascookies:'1',
+		  lastvisit:'1562738916',
+		  newvisit:'1562740731',
+		  rootReferrer:'topics',
+		  sm_dapi_session:'1',
+		  userfrom:'xxhttp%3A//beta21.websitetoolbox.com/tool/members/mb/forumsxx',
+		  username:'beta21',
+		  wtsession:'3056b0457ccd0aaa0505136b0ccfeb1ef0c3f176e19c32',
+		  domain: '.beta21.websitetoolbox.com'
+		});
+	}).waitWhileVisible('#td_tab_login', function() {
+		//forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).waitForSelector('a[href="/post/printadd"]', function(){
 		casper.evaluate(function() {
 			document.querySelector('a[href="/post/printadd"]').click();
