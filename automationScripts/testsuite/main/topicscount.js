@@ -12,11 +12,11 @@ topicsCount.featureTest = function(){
 		utils.info(" Title of the page :"+this.getTitle());
 		forumLoginMethod.loginToForumBackEnd();
 		// utils.info(phantom.cookies);
-	  //   phantom.cookies.forEach(function (v) {
-	  //       // if (v.name === name) {
+		//   phantom.cookies.forEach(function (v) {
+		//       // if (v.name === name) {
 		// 			//
-	  //       //     ret = v.value;
-	  //       // }
+		//       //     ret = v.value;
+		//       // }
 		// 			utils.info(v.name + "  "+ v.value);
 		//
 		// 			//data printed by the cookie
@@ -26,19 +26,19 @@ topicsCount.featureTest = function(){
 		// 			// undefined_ga  GA1.3.685015053.1562679033
 		// 			// undefinedhascookies  1
 		//
-	  //   });
+		//   });
 	}).then(function(){
-	//create category--
-	//topicsCountTests.createCategory();
-	//Verify by delete multiple topic-selecting by check box
-	//create topic-
-	topicsCountTests.createTopic();
+		//create category--
+		topicsCountTests.createCategory();
+		//Verify by delete multiple topic-selecting by check box
+		//create topic-
+		topicsCountTests.createTopic();
 
-	topicsCountTests.topicsCount();
-	//Verify the Number of Topics for a category
-	topicsCountTests.countTopicsCategorySubCategory ();
-	//combine all forum
-	//Verify with Number of Topics in latest topics page
-	//topicsCountTests.combineallforumTopicCount();
-        });
+		topicsCountTests.topicsCount();
+		//Verify the Number of Topics for a category
+		topicsCountTests.countTopicsCategorySubCategory ();
+		//combine all forum
+		//Verify with Number of Topics in latest topics page
+		//topicsCountTests.combineallforumTopicCount();
+	});
 };

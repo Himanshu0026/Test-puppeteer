@@ -356,7 +356,7 @@ thumpsUpDownTestcases.clickOnLikersUsernameByModerator = function() {
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
 		var data = thumpsUpDownJSON.otherUser.username;
-		var category = thumpsUpDownJSON.moderatorCategory;
+		var category = thumpsUpDownJSON.category;
 		backEndForumRegisterMethod.addNewModerator(data, category, function(err) {
 			if(!err) {
 				utils.info('Moderator added successfully');
