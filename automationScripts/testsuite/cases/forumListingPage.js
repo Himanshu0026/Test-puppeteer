@@ -137,7 +137,7 @@ forumListingPageTest.verifyVariousSubCategoriesFrontEnd = function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('****************************************FORUMLISTING - PAGE********************************************');
 		utils.info('Case 7[Validate sub-category with title field]');
-    this.test.assertExists('div#topics ul li:nth-child(2) a');
+		this.test.assertExists('div#topics ul li:nth-child(2) a');
 		this.click('div#topics ul li:nth-child(2) a');
 	}).waitForText(forumListingPageJSON.subEnableLocked.title, function(){
 		deletePostMethod.getCategoryHrefFrontend(forumListingPageJSON.enableLocked.title);

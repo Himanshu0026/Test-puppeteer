@@ -71,8 +71,8 @@ backArrowTests.readAllPost = function() {
 //Verify with sorting options like latest/new/top by the post listing page under category
 backArrowTests.postListingPage = function() {
   casper.thenOpen(config.url, function(){
-	  utils.info('Case 2[Verify back arrow when user login on post listing page directly]');
-	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
+    utils.info('Case 2[Verify back arrow when user login on post listing page directly]');
+  }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
     this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
     this.evaluate(function() {
       document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
@@ -99,8 +99,8 @@ backArrowTests.postListingPage = function() {
     this.test.assertExists('div#topics div form div div:nth-child(2) ul li:nth-child(3) a', 'top link found on topicListingPage');
     this.click('div#topics div form div div:nth-child(2) ul li:nth-child(3) a');
   }).waitForSelector('div#topics div form div div:nth-child(2) ul li:nth-child(3) a', function(){
-      this.test.assertExists('form[name="posts"] a.topic-title');
-      this.click('form[name="posts"] a.topic-title');
+    this.test.assertExists('form[name="posts"] a.topic-title');
+    this.click('form[name="posts"] a.topic-title');
   }).waitForSelector('a#backArrowPost', function(){
     this.test.assertExists('a#backArrowPost', 'back-arrow found on postlistingPage');
     this.click('a#backArrowPost');
@@ -155,8 +155,8 @@ backArrowTests.startNewtopicPage = function() {
     deletePostMethod.getCategoryHrefFrontend('General');
   }).waitForSelector('span.topic-content h4 a', function(){
     this.evaluate(function() {
-		  document.querySelector('div#ajax_subscription_vars a').click();
-		});
+      document.querySelector('div#ajax_subscription_vars a').click();
+    });
   }).waitForSelector('div.post-body.pull-left', function(){
     this.test.assertExists('button#cancel_post', 'cancel button found on New Topic Page');
     this.click('button#cancel_post');
@@ -244,8 +244,8 @@ backArrowTests.followedContentPage = function() {
     deletePostMethod.getCategoryHrefFrontend(backArrowJSON.backArrowCategory.title);
   }).waitForSelector('a#back_arrow_topic i',function(){
     this.test.assertExists('a#submenu_follow_forum i');
-		this.click('a#submenu_follow_forum i');
-		this.wait(1000, function(){});
+    this.click('a#submenu_follow_forum i');
+    this.wait(1000, function(){});
   }).then(function(){
     this.evaluate(function() {
       document.querySelector('span.pull-right.user-nav-panel li:nth-child(5) a').click();
@@ -306,7 +306,7 @@ backArrowTests.lockcategorySubcategory = function() {
     this.test.assertExists('div.topic-tools.pull-right ul a');
     this.click('div.topic-tools.pull-right ul a');
   }).waitForSelector('div.alert.alert-warning.text-center', function(){
-		this.test.assertSelectorHasText('div.alert.alert-warning.text-center', 'This topic is locked. No new replies will be accepted.');
+    this.test.assertSelectorHasText('div.alert.alert-warning.text-center', 'This topic is locked. No new replies will be accepted.');
     this.test.assertExists('a#backArrowPost i');
     this.click('a#backArrowPost i');
   }).waitForSelector('a#back_arrow_topic i', function(){
@@ -315,8 +315,8 @@ backArrowTests.lockcategorySubcategory = function() {
     deletePostMethod.getCategoryHrefFrontend(backArrowJSON.backArrowCategory.title);
   }).waitForSelector('div#ajax_subscription_vars a', function(){
     this.evaluate(function() {
-		  document.querySelector('div#ajax_subscription_vars a').click();
-		});
+      document.querySelector('div#ajax_subscription_vars a').click();
+    });
   }).then(function(){
     topicMethod.createTopic(topicJSON.ValidCredential);
   }).waitForText(topicJSON.ValidCredential.content, function(){
@@ -330,10 +330,10 @@ backArrowTests.pincategorySubcategory = function() {
   casper.thenOpen(config.url, function(){
     utils.info('Case 10[Verify back arrow with pin option on topic listing page]');
   }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
-		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
-		this.evaluate(function() {
-			document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
-		});
+    this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
+    this.evaluate(function() {
+      document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
+    });
   }).waitForSelector('a[href="#forums"]', function(){
     deletePostMethod.getCategoryHrefFrontend(backArrowJSON.backArrowCategory.title);
   }).waitForSelector('a#subcategories_tab', function(){
@@ -396,10 +396,10 @@ backArrowTests.UnpincategorySubcategory = function() {
     this.test.assertExists('a#unpin');
     this.click('a#unpin');
   }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
-		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
-		this.evaluate(function() {
-			document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
-		});
+    this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
+    this.evaluate(function() {
+      document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
+    });
   }).waitForSelector('a[href="#forums"]', function(){
     deletePostMethod.getCategoryHrefFrontend(backArrowJSON.backArrowCategory.title);
   }).waitForSelector('span.forum-title', function(){
@@ -423,7 +423,7 @@ backArrowTests.UnpincategorySubcategory = function() {
       document.querySelector('input#firstpid').click();
     });
   }).waitForSelector('#deleteposts', function(){
-		this.click('#deleteposts');
+    this.click('#deleteposts');
   }).waitForSelector('a#back_arrow_topic i', function(){
     this.test.assertExists('input[name="id"]', 'checkbox present on undercategory topics');
     this.evaluate(function() {
