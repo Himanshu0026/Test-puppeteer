@@ -298,7 +298,7 @@ fi
 cat "$AUTOMATION_HOME"/log/automation.txt | grep -E 'FAIL|TypeError:|ResourceError:'> "$AUTOMATION_HOME"/log/fail.txt
 cat "$AUTOMATION_HOME"/log/automation.txt | grep -i "tests execut" > "$AUTOMATION_HOME"/log/result.txt
 cat "$AUTOMATION_HOME"/log/result.txt
-cat /var/log/apache2/error.log | grep -v 'duplicate query found\|Duplicate query found\|SELECT\|DBALIAS\|DB Profiler\|Page load\|Warn\|Geoip error\|^$' > "$AUTOMATION_HOME"/log/apacheLog.txt
+cat /var/log/apache2/error.log | grep -v 'duplicate query found\|Duplicate query found\|DBALIAS\|Page load\|Geoip error\|^$' > "$AUTOMATION_HOME"/log/apacheLog.txt
 cp /dev/null /var/log/apache2/error.log
 rm "$AUTOMATION_HOME"/log/result.txt
 exit 0

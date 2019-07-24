@@ -76,11 +76,6 @@ registerMethod.registerMultipleUsers = function(usersCount, callback) {
 		}).then(function() {
 			registerMethod.redirectToLogout();
 		});
-		/*}).waitForSelector('button span.image-wrapper', function() {
-			if(this.exists('button span.image-wrapper')) {
-				forumLoginMethod.logoutFromApp();
-			}
-		});*/
 	}).then(function() {
 		callback(users);
 	});

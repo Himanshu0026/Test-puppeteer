@@ -98,16 +98,6 @@ thumpsUpDownTestcases.createCategoryTestCase = function() {
 
 // method to delete all the categories from backend
 thumpsUpDownTestcases.deleteAllCategoriesTestCase = function() {
-	// //postTopicUserPermissionTestcases.getToken = function() {
-	// 	casper.thenOpen(config.apiLocalUrl+"/restapi/getToken", function() {
-	// 		token = casper.evaluate(function() {
-	// 			var data = document.querySelector(".token").getAttribute('id');
-	// 			return data;
-	// 		});
-	// 		this.thenOpen(config.apiLocalUrl+"/restapi/forums/delete?accesToken="+token, function() {
-	// 		});
-	// 	});
-	// //};
 	casper.thenOpen(config.backEndUrl, function() {
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).waitForSelector('a#addForumButton', function() {
