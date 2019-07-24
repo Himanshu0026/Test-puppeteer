@@ -1,7 +1,6 @@
 var config = require('../../../config/config.json');
 var loginJSON = require('../../testdata/loginData.json');
 var memberDeleteJSON=require('../../testdata/memberdelete.json');
-var deleteTopicScenarioJSON= require('../../testdata/deleteTopicScenario.json');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var forumLoginMethod = require('../methods/login.js');
 var memberDeleteMethod = require('../methods/memberdelete.js');
@@ -10,8 +9,8 @@ var pendingUser='';
 //Verify by register members for member delete-Task
 memberdeleteTests.registermembers=function(){
   casper.thenOpen(config.backEndUrl, function(){
-		utils.info('************************MEMBER DELETE TESTCASES****************************');
-		utils.info('Case 1[Verify by delete one topic -selecting by check box register user]');
+    utils.info('************************MEMBER DELETE TESTCASES****************************');
+    utils.info('Case 1[Verify by delete one topic -selecting by check box register user]');
     this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
       this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
     }).waitForSelector('div#ddUsers a[href="/tool/members/mb/addusers"]', function() {
@@ -98,8 +97,8 @@ memberdeleteTests.verifyDeleteuserGrp=function(){
 //Verify Delete Account Pending Email Users on Account  Profile page Delete own Account Disable
 memberdeleteTests.disabledeleteUsersprofilePage=function(){
   casper.thenOpen(config.backEndUrl, function(){
-	  utils.info('************************MEMBER DELETE TESTCASES****************************');
-		utils.info('Case 4[Verify by delete one topic -selecting by check box register user]');
+    utils.info('************************MEMBER DELETE TESTCASES****************************');
+    utils.info('Case 4[Verify by delete one topic -selecting by check box register user]');
   }).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
     this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
   }).waitForSelector('div#ddUsers a[href="/tool/members/mb/addusers"]', function() {
@@ -150,8 +149,8 @@ memberdeleteTests.disabledeleteUsersprofilePage=function(){
 //Verify Delete Account YES   on  Pending Email Users on Account  Profile  page Delete own Account Enable   with valid password
 memberdeleteTests.enabledeleteUsersprofilePage=function(){
   casper.thenOpen(config.backEndUrl, function(){
-	  utils.info('************************MEMBER DELETE TESTCASES****************************');
-	  utils.info('Case 5[Verify by delete one topic -selecting by check box register user]');
+    utils.info('************************MEMBER DELETE TESTCASES****************************');
+    utils.info('Case 5[Verify by delete one topic -selecting by check box register user]');
   }).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function(){
     this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
     this.click('a[href="/tool/members/mb/usergroup"]');
@@ -160,11 +159,11 @@ memberdeleteTests.enabledeleteUsersprofilePage=function(){
   }).waitForText('Save', function(){
     backEndForumRegisterMethod.editGroupPermissions('Pending Email Verification', 'delete_profile', true);
   }).thenOpen(config.url, function(){
-		this.waitForSelector('ul.nav.pull-right span.caret', function(){
-		  this.click('ul.nav.pull-right span.caret');
-		  this.evaluate(function() {
-			  document.querySelector('a#user-nav-panel-profile').click();
-		  });
+    this.waitForSelector('ul.nav.pull-right span.caret', function(){
+      this.click('ul.nav.pull-right span.caret');
+      this.evaluate(function() {
+        document.querySelector('a#user-nav-panel-profile').click();
+      });
     });
   }).waitForSelector('a#PostsOFUser', function(){
     //case when select delete account no
@@ -179,7 +178,7 @@ memberdeleteTests.enabledeleteUsersprofilePage=function(){
     this.click('a#deleteAccount');
   }).waitForSelector('a#td_tab_login', function(){
     this.thenOpen(config.url, function(){
-    //verify deleted user using logged-In
+      //verify deleted user using logged-In
       forumLoginMethod.loginToApp(pendingUser, pendingUser);
     }).waitForText(memberDeleteJSON.checkedUser.expectedErrorMsg, function(){
       //login from pending another  user, verify on settings page
@@ -231,7 +230,7 @@ memberdeleteTests.deleteAdminmembersPage=function(){
     forumLoginMethod.loginToApp(admin, admin);
   }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
     this.test.assertExists('a#links-nav i');
-		this.click('a#links-nav i');
+    this.click('a#links-nav i');
     this.test.assertExists('li#members_list_show a','members found on members page');
     this.click('li#members_list_show a');
   }).waitForSelector('form#memberListFrm div.panel-heading li', function(){

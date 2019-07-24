@@ -65,3 +65,18 @@ postEventMemberApproval.eventTest = function() {
 
 	});
 };
+
+postEventMemberApproval.memberTest = function() {
+
+	casper.start(config.backEndUrl, function() {
+
+		utils.info(" Title of the page :"+this.getTitle());
+		forumLoginMethod.loginToForumBackEnd();
+
+	}).then(function() {
+
+		// method to approve or delete the event by the admin user
+		postEventMemberApprovalTestcases.memberApprovalByAdmin();
+
+	});
+};

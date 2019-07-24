@@ -6,6 +6,7 @@ var config = require('../../../config/config.json');
 var postEventMemberApprovalMethod = require('../methods/postEventMemberApproval.js');
 var forumLoginMethod = require('../methods/login.js');
 var topicMethod = require('../methods/topic.js');
+var registerMethod = require('../methods/register.js');
 var backEndregisterMethod = require('../methods/backEndRegistration.js');
 var utils = require('../utils.js');
 
@@ -405,5 +406,116 @@ postEventMemberApprovalTestcases.eventApprovalByAdmin = function() {
 			}
 		},tableLength);
 		utils.info('group ='+grpName);
+	});
+};
+
+// method to approve or delete the event by the admin user
+postEventMemberApprovalTestcases.memberApprovalByAdmin = function() {
+	casper.thenOpen(config.apiLocalUrl+"/settings/reqregapp/checked", function() {
+	}).thenOpen(config.url, function() {
+		registerMethod.registerMultipleUsers(9, function(users) {
+			recipients = users;
+		});
+	}).then(function() {
+		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.adminUserLogin.username, postEventMemberApprovalJSON.adminUserLogin.password);
+	}).waitWhileVisible('#td_tab_login', function() {
+	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function() {
+		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'Category link found');
+		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertExists('li#approvalQueue a', 'Approval Queue found');
+		casper.click('li#approvalQueue a');
+	}).waitForSelector('form#approveMembers', function() {
+		this.click("a[id^='approveMember'] i");
+	}).wait('2000',function() {
+		this.click("a[id^='deleteMember'] i");
+	}).waitForSelector('#declineBtn', function() {
+		this.test.assertExists('#declineBtn','Decline button found');
+		this.evaluate(function() {
+			document.querySelector('#declineBtn').click();
+		});
+	}).wait('2000',function() {
+		this.evaluate(function() {
+			document.querySelector('ul input.entry-checkbox').click();
+		});
+	}).then(function() {
+		this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
+		this.test.assertExists('a#approvePending i', 'approve tick on the floating menu');
+		this.click('a#approvePending i');
+	}).wait('2000',function () {
+		this.evaluate(function() {
+			document.querySelector('ul input.entry-checkbox').click();
+		});
+	}).then(function() {
+		this.test.assertExists('div#pending-menu', ' Floating menu is appear on bottom of the page');
+		this.test.assertExists('a#decline_pending', ' Delete tick on the floating menu');
+		this.click('a#decline_pending');
+	}).wait('2000',function () {
+		this.evaluate(function() {
+			document.querySelector('ul input.entry-checkbox').click();
+		});
+	}).then(function() {
+		this.test.assertExists('div#pending-menu', ' Floating menu is appear on bottom of the page');
+		this.test.assertExists('#manage_additional_usergroup_pending i', ' change usergroup icon on the floating menu');
+		this.click('#manage_additional_usergroup_pending i');
+	}).waitUntilVisible('#change_group_body', function() {
+		this.evaluate(function() {
+			document.querySelector('#additional_usergroup input').click();
+			document.querySelector('#overwite_additional_usergroup').click();
+		});
+	}).then(function() {
+		this.click('#manageAdditionalUsergroup');
+	}).wait('2000',function () {
+	}).reload(function() {
+		this.click('.display_username.username');
+	}).waitForSelector('#showApproveDecline', function() {
+		this.test.assertTextExists('This user is pending approval.', 'This user is pending approval.');
+		this.click('.btn.btn-success');
+	}).wait('3000',function () {
+		this.click('.display_username.username');
+	}).waitForSelector('#showApproveDecline', function() {
+		this.test.assertTextExists('This user is pending approval.', 'This user is pending approval.');
+		this.click('#decline_member');
+	}).waitForSelector('#declineBtn', function() {
+		this.test.assertExists('#declineBtn','Decline button found');
+		this.evaluate(function() {
+			document.querySelector('#declineBtn').click();
+		});
+	}).wait('3000',function () {
+		this.evaluate(function() {
+			document.querySelector('input.entry-checkbox').click();
+		});
+	}).then(function() {
+		this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
+		this.test.assertExists('a#approvePending i', 'approve tick on the floating menu');
+		this.click('a#approvePending i');
+	}).waitForText("There's currently nothing that needs your approval.",function () {
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
+	}).then(function() {
+		registerMethod.registerMultipleUsers(2, function(users) {
+			recipients = users;
+		});
+	}).then(function() {
+		forumLoginMethod.loginToApp(postEventMemberApprovalJSON.adminUserLogin.username, postEventMemberApprovalJSON.adminUserLogin.password);
+	}).waitWhileVisible('#td_tab_login', function() {
+	}).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function() {
+		casper.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'Category link found');
+		casper.click('ul.nav.nav-tabs li:nth-child(2) a');
+	}).waitForSelector('li[id^="forum_"]', function() {
+		casper.test.assertExists('li#approvalQueue a', 'Approval Queue found');
+		casper.click('li#approvalQueue a');
+	}).waitForSelector('form#approveMembers', function() {
+		this.evaluate(function() {
+			document.querySelector('input.entry-checkbox').click();
+		});
+	}).then(function() {
+		this.test.assertExists('div#pending-menu', 'floating menu is appear on bottom of the page');
+		this.test.assertExists('a#approvePending i', 'approve tick on the floating menu');
+		this.click('a#approvePending i');
+	}).waitForText("There's currently nothing that needs your approval.",function () {
+	}).then(function() {
+		forumLoginMethod.logoutFromApp();
+	}).thenOpen(config.apiLocalUrl+"/settings/reqregapp/unchecked", function() {
 	});
 };

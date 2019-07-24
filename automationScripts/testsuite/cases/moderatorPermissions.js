@@ -76,7 +76,7 @@ moderatorPermissionsTestcases.addModeratorByScenarioTwo = function() {
 			if(!err) {
         casper.test.assertExists('a.button.addForumModeratorButton', ' New Moderator button found');
         casper.click('a.button.addForumModeratorButton');
-        casper.waitUntilVisible('div#add_mod_dialog form#add_mod_form', function() {
+        casper.waitUntilVisible('#add_mod_dialog', function() {
     			utils.info("Add Moderator form opened");
           var user = moderatorPermissionsJSON.adminUserLogin.username;
           moderatorPermissionsMethod.FillModeratorDetails(user, category_Id);
@@ -137,10 +137,8 @@ moderatorPermissionsTestcases.verifyAddModeratorInTwoDifferentCategoryByScenario
       });
     });
   }).then(function() {
-		this.test.assertExists('div.ui-dialog-buttonset button','Save button Found');
-		this.click('div.ui-dialog-buttonset button');
-		//casper.test.assertExists('button.button.btn-m.btn-blue.pull-right','Save button Found');
-		//casper.click('button.button.btn-m.btn-blue.pull-right');
+		casper.test.assertExists('button.button.btn-m.btn-blue.pull-right','Save button Found');
+		casper.click('button.button.btn-m.btn-blue.pull-right');
 	}).then(function() {
     moderatorPermissionsMethod.waitForLoadingMessage();
     /*this.test.assertExists('#copy_perms');
@@ -179,7 +177,7 @@ moderatorPermissionsTestcases.verifyAddModeratorInTwoDifferentCategoryByScenario
   			if(!err) {
           casper.test.assertExists('a.button.addForumModeratorButton', ' New Moderator button found');
           casper.click('a.button.addForumModeratorButton');
-          casper.waitUntilVisible('div#add_mod_dialog form#add_mod_form', function() {
+          casper.waitUntilVisible('#add_mod_dialog', function() {
       			utils.info("Add Moderator form opened");
             var user = moderatorPermissionsJSON.registeredUserLogin.username;
             moderatorPermissionsMethod.FillModeratorDetails(user, category_Id);
@@ -188,10 +186,8 @@ moderatorPermissionsTestcases.verifyAddModeratorInTwoDifferentCategoryByScenario
       });
     });
   }).then(function() {
-		this.test.assertExists('div.ui-dialog-buttonset button','Save button Found');
-		this.click('div.ui-dialog-buttonset button');
-		//casper.test.assertExists('button.button.btn-m.btn-blue.pull-right','Save button Found');
-		//casper.click('button.button.btn-m.btn-blue.pull-right');
+		casper.test.assertExists('button.button.btn-m.btn-blue.pull-right','Save button Found');
+		casper.click('button.button.btn-m.btn-blue.pull-right');
 	}).then(function() {
     moderatorPermissionsMethod.waitForLoadingMessage();
     /*this.test.assertExists('#copy_perms');

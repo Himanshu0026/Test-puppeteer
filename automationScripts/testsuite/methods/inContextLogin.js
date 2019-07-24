@@ -13,7 +13,7 @@ inContextLoginMethod.startTopicCheckedUncheckedMethod=function(status, casper , 
 		if(isExists) {
 			utils.enableorDisableCheckbox('post_threads', status, casper, function(err) {
 				if(!err)
-					utils.log(' Successfully checked New Topic ','INFO');
+				utils.log(' Successfully checked New Topic ','INFO');
 			});
 			casper.click('button.button.btn-m.btn-blue');
 			wait.waitForVisible('div#tab_wrapper .heading[color="red"]' , casper , function(err , isExists){
@@ -70,7 +70,7 @@ inContextLoginMethod.quoteCheckedUncheckedMethod=function(status , casper , call
 		if(isExists) {
 			utils.enableorDisableCheckbox('display_icons', status , casper, function(err) {
 				if(!err)
-					utils.log(' Successfully checked quote on post icon ','INFO');
+				utils.log(' Successfully checked quote on post icon ','INFO');
 			});
 			casper.click('button.button.btn-m.btn-blue');
 			wait.waitForVisible('div#loading_msg' , casper , function(err , isExists){
@@ -122,7 +122,7 @@ inContextLoginMethod.replyTopicPermissioncheckedUnchecked=function(status , casp
 		if(isExists) {
 			utils.enableorDisableCheckbox('other_post_replies',status, casper, function(err) {
 				if(!err)
-					utils.log(' Successfully unchecked replytopics','INFO');
+				utils.log(' Successfully unchecked replytopics','INFO');
 			});
 			casper.click('button.button.btn-m.btn-blue');
 			wait.waitForVisible('div#tab_wrapper .heading[color="red"]' , casper , function(err , isExists){
@@ -132,7 +132,7 @@ inContextLoginMethod.replyTopicPermissioncheckedUnchecked=function(status , casp
 					casper.test.assertEquals(message , expectedMsg, utils.log(' Same as expected message.', 'INFO'));
 					return callback(null);
 				}
-		  	});
+			});
 		}
 	});
 };
@@ -143,18 +143,18 @@ inContextLoginMethod.viewTopicPermissionCheckedUnchecked=function(status ,casper
 		if(isExists) {
 			utils.enableorDisableCheckbox('view_thread_content',status, casper, function(err) {
 				if(!err)
-					utils.log(' Successfully unchecked view topics permission','INFO');
+				utils.log(' Successfully unchecked view topics permission','INFO');
 			});
 			casper.click('button.button.btn-m.btn-blue');
 			wait.waitForVisible('div#tab_wrapper .heading[color="red"]' , casper , function(err , isExists){
 				if(isExists) {
-						var message = casper.fetchText('div#tab_wrapper .heading[color="red"]');
-						var expectedMsg = 'Your user group settings have been updated.';
-						casper.test.assertEquals(message , expectedMsg, utils.log(' Same as expected message.', 'INFO'));
-						return callback(null);
+					var message = casper.fetchText('div#tab_wrapper .heading[color="red"]');
+					var expectedMsg = 'Your user group settings have been updated.';
+					casper.test.assertEquals(message , expectedMsg, utils.log(' Same as expected message.', 'INFO'));
+					return callback(null);
 				}
-		  });
-		 }
+			});
+		}
 	});
 };
 
@@ -164,7 +164,7 @@ inContextLoginMethod.viewForumCheckedUnchecked=function(status , casper , callba
 		if(isExists) {
 			utils.enableorDisableCheckbox('view_messageboard',status, casper, function(err) {
 				if(!err)
-					utils.log(' Successfully unchecked replytopics','INFO');
+				utils.log(' Successfully unchecked replytopics','INFO');
 			});
 			casper.click('button.button.btn-m.btn-blue');
 			wait.waitForVisible('div#tab_wrapper .heading[color="red"]' , casper , function(err , isExists){
@@ -185,7 +185,7 @@ inContextLoginMethod.viewProfileCheckedUnchecked=function(status ,casper , callb
 		if(isExists) {
 			utils.enableorDisableCheckbox('view_profiles',status, casper, function(err) {
 				if(!err)
-					utils.log(' Successfully unchecked view profile','INFO');
+				utils.log(' Successfully unchecked view profile','INFO');
 			});
 			casper.click('button.button.btn-m.btn-blue');
 			wait.waitForVisible('div#tab_wrapper .heading[color="red"]' , casper , function(err , isExists){
@@ -226,7 +226,7 @@ inContextLoginMethod.viewCalenderCheckedUnchecked=function(status , casper , cal
 		if(isExists) {
 			utils.enableorDisableCheckbox('enable_calendar',status, casper, function(err) {
 				if(!err)
-					utils.log(' Successfully unchecked calendar','INFO');
+				utils.log(' Successfully unchecked calendar','INFO');
 			});
 			casper.click('button.button.btn-m.btn-blue');
 			casper.click('button.button.btn-m.btn-blue');
@@ -247,7 +247,7 @@ inContextLoginMethod.viewReputationCheckedUnchecked=function(status ,casper , ca
 		if(isExists) {
 			utils.enableorDisableCheckbox('reputation',status, casper, function(err) {
 				if(!err)
-					utils.log(' Successfully checked reputation','INFO');
+				utils.log(' Successfully checked reputation','INFO');
 			});
 			casper.click('button.button.btn-m.btn-blue');
 			casper.waitUntilVisible('div#ajax-msg-top', function success() {
@@ -310,7 +310,7 @@ inContextLoginMethod.viewPrivacyPrivate=function(casper , callback){
 					casper.sendKeys('select[name="privacy"] option[value="private"]', 'Private');
 					casper.click('button.button.btn-m.btn-blue');
 					casper.waitUntilVisible('div#ajax-msg-top', function success() {
-					utils.log(casper.fetchText('div#ajax-msg-top'),'INFO');
+						utils.log(casper.fetchText('div#ajax-msg-top'),'INFO');
 						return callback(null);
 					}, function fail() {
 						utils.log('Saved not found', 'ERROR');
@@ -350,7 +350,7 @@ inContextLoginMethod.postEventEnable=function(status ,casper , callback){
 		if(isExists) {
 			utils.enableorDisableCheckbox('post_events',status, casper, function(err) {
 				if(!err)
-					utils.log(' Successfully enable post_events method','INFO');
+				utils.log(' Successfully enable post_events method','INFO');
 			});
 			casper.click('button.button.btn-m.btn-blue');
 			wait.waitForVisible('div#tab_wrapper .heading[color="red"]' , casper , function(err , isExists){
@@ -380,7 +380,7 @@ inContextLoginMethod.viewUserToUserEmailCheckedUnchecked=function(status ,casper
 		if(isExists) {
 			utils.enableorDisableCheckbox('aEMS',status, casper, function(err) {
 				if(!err)
-					utils.log(' Successfully checked user-To-user email','INFO');
+				utils.log(' Successfully checked user-To-user email','INFO');
 			});
 			casper.click('button.button.btn-m.btn-blue');
 			casper.waitUntilVisible('div#ajax-msg-top', function success() {
@@ -399,12 +399,12 @@ inContextLoginMethod.enablePoll=function(status , casper , callback){
 		if(isExists) {
 			utils.enableorDisableCheckbox('enable_polls',status, casper, function(err) {
 				if(!err)
-					utils.log(' Successfully checked poll from backend settings','INFO');
+				utils.log(' Successfully checked poll from backend settings','INFO');
 			});
 			casper.click('button.button.btn-m.btn-blue');
 			casper.waitUntilVisible('div#ajax-msg-top', function success() {
 				utils.log(casper.fetchText('div#ajax-msg-top'),'INFO');
-			return callback(null);
+				return callback(null);
 			}, function fail() {
 				utils.log('Saved not found', 'ERROR');
 			},30000);
@@ -434,7 +434,7 @@ inContextLoginMethod.startTopic = function(value1,value2,value3,data,driver,call
 			},false);
 
 			driver.then(function() {
-			    driver.test.assertExists('form#PostTopic div div:nth-child(1) div ul li:nth-child(2) a', utils.log('form#PostTopic div div:nth-child(1) div ul li:nth-child(2) a selector exists', 'INFO'));
+				driver.test.assertExists('form#PostTopic div div:nth-child(1) div ul li:nth-child(2) a', utils.log('form#PostTopic div div:nth-child(1) div ul li:nth-child(2) a selector exists', 'INFO'));
 				driver.click('form#PostTopic div div:nth-child(1) div ul li:nth-child(2) a');
 				driver.sendKeys('#poll_question','PM of india');
 				driver.sendKeys('#public',true);
@@ -475,7 +475,7 @@ inContextLoginMethod.createPollTopic=function(casper , callback){
 								utils.log(' user logged in successfully' ,'INFO');
 								inContextLoginMethod.startTopic(false,false,false,loginJSON.topicMessage,casper,function(err){
 									if(!err)
-										utils.log(' poll method called successfully' ,'INFO');
+									utils.log(' poll method called successfully' ,'INFO');
 
 								});
 							}
@@ -485,8 +485,8 @@ inContextLoginMethod.createPollTopic=function(casper , callback){
 				casper.then(function(){
 					forumLoginMethod.logoutFromApp(casper, function(err){
 						if (!err)
-							utils.log(' Successfully logout from application', 'INFO');
-							return callback(null);
+						utils.log(' Successfully logout from application', 'INFO');
+						return callback(null);
 					});
 				});
 			}

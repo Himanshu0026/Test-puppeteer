@@ -1,7 +1,6 @@
 'use strict.';
 var loginJSON = require('../../testdata/loginData.json');
 var topicMethod = require('../methods/topic.js');
-var topicJSON = require('../../testdata/topic.json');
 var composeTopicJSON=require('../../testdata/composeTopic.json');
 var profilePageJSON=require('../../testdata/profilePageData.json');
 var forumLoginMethod = require('../methods/login.js');
@@ -12,10 +11,10 @@ profilePageMethod.newUserData="";
 //----------------------------------get post href------------------------------------------------------------------------------
 profilePageMethod.getPostHref= function(data, index){
 	var post= casper.evaluate(function(data, index){
-  		var postId=document.querySelectorAll(data);
-     		var postLength= postId.length;
-    		var postHref=postId[index].getAttribute('href');
-     		return postHref;
+		var postId=document.querySelectorAll(data);
+		var postLength= postId.length;
+		var postHref=postId[index].getAttribute('href');
+		return postHref;
 	},data, index);
 	utils.info(" message :" +post);
 	casper.click('a[href="'+post+'"]');
@@ -69,8 +68,8 @@ profilePageMethod.addTopicPost= function(){
 	}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
 		this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Reply');
 		this.evaluate(function() {
-				document.querySelector('a#sub_post_reply').click();
-			});
+			document.querySelector('a#sub_post_reply').click();
+		});
 		this.waitForSelector('i.mce-ico.mce-i-image', function(){
 			casper.withFrame('message_ifr', function(){
 				casper.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
@@ -119,8 +118,8 @@ profilePageMethod.newaddTopicPost= function(){
 	}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
 		this.test.assertSelectorHasText('a.pull-right.btn.btn-uppercase.btn-primary', 'Reply');
 		this.evaluate(function() {
-				document.querySelector('a#sub_post_reply').click();
-			});
+			document.querySelector('a#sub_post_reply').click();
+		});
 		this.waitForSelector('i.mce-ico.mce-i-image', function(){
 			casper.withFrame('message_ifr', function(){
 				casper.sendKeys('#tinymce', casper.page.event.key.Ctrl,casper.page.event.key.A, {keepFocus: true});
@@ -149,7 +148,7 @@ profilePageMethod.deleteTopics=function() {
 	}).waitForSelector('div.panel-heading span input', function(){
 
 		if (this.exists('div.panel-heading span input')) {
-    			this.test.assertExists('div.panel-heading span input');
+			this.test.assertExists('div.panel-heading span input');
 			this.evaluate(function() {
 				document.querySelector('input[name="allbox"]').click();
 			});

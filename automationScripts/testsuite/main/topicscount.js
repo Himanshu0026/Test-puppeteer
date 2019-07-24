@@ -12,17 +12,17 @@ topicsCount.featureTest = function(){
 		utils.info(" Title of the page :"+this.getTitle());
 		forumLoginMethod.loginToForumBackEnd();
 	}).then(function(){
-	//create category--
-	topicsCountTests.createCategory();
-	//Verify by delete multiple topic-selecting by check box
-	//create topic-
-	topicsCountTests.createTopic();
-	
-	topicsCountTests.topicsCount();
-	//Verify the Number of Topics for a category
-	topicsCountTests.countTopicsCategorySubCategory ();
-	//combine all forum
-	//Verify with Number of Topics in latest topics page
-	//topicsCountTests.combineallforumTopicCount();
-        });
+		//create category--
+		topicsCountTests.createCategory();
+		//Verify by delete multiple topic-selecting by check box
+		//create topic-
+		topicsCountTests.createTopic();
+
+		topicsCountTests.topicsCount();
+		//Verify the Number of Topics for a category
+		topicsCountTests.countTopicsCategorySubCategory ();
+		//combine all forum
+		//Verify with Number of Topics in latest topics page
+		//topicsCountTests.combineallforumTopicCount();
+	});
 };

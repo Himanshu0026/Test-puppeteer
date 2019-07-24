@@ -30,10 +30,10 @@ profilePageTests.profilePageMessageButtonDisable=function(){
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('ul.nav.pull-right span.caret', function(){
-			this.click('ul.nav.pull-right span.caret');
-			this.evaluate(function() {
-				document.querySelector('a#user-nav-panel-profile').click();
-			});
+		this.click('ul.nav.pull-right span.caret');
+		this.evaluate(function() {
+			document.querySelector('a#user-nav-panel-profile').click();
+		});
 		this.waitForSelector('a#PostsOFUser', function(){
 			this.test.assertDoesntExist('a#send_message', 'message button not found on profilePage');
 		});
@@ -230,65 +230,65 @@ profilePageTests.profilePageTopicEditTopicTitle=function() {
 //Likes tab
 //Verify with like the post.
 profilePageTests.profilePageLikesTab=function(){
-	 casper.thenOpen(config.url, function(){
-			utils.info('Case 8[Verify with like the post.]');
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.username );
-		}).waitWhileVisible('#td_tab_login', function() {
-		}).waitForSelector('form[name="posts"] a.topic-title', function(){
-			this.click('form[name="posts"] a.topic-title');
-			this.waitForSelector('div#posts-list', function(){
-				if(this.visible('i.glyphicon.glyphicon-like-alt')){
-					this.click('i.glyphicon.glyphicon-like-alt');
-					this.waitForSelector('a.text-muted.voted-yes', function(){
-						utils.info('Post liked by the user');
-					});
-				}else{
-					utils.error('like thump not visible');
-				}
-			});
+	casper.thenOpen(config.url, function(){
+		utils.info('Case 8[Verify with like the post.]');
+		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.username );
+	}).waitWhileVisible('#td_tab_login', function() {
+	}).waitForSelector('form[name="posts"] a.topic-title', function(){
+		this.click('form[name="posts"] a.topic-title');
+		this.waitForSelector('div#posts-list', function(){
+			if(this.visible('i.glyphicon.glyphicon-like-alt')){
+				this.click('i.glyphicon.glyphicon-like-alt');
+				this.waitForSelector('a.text-muted.voted-yes', function(){
+					utils.info('Post liked by the user');
+				});
+			}else{
+				utils.error('like thump not visible');
+			}
+		});
+	}).then(function(){
+		var index=1;
+		profilePageMethod.getLikeDislikePostIds('a[id^="post_vote_up_"]', index);
+	}).wait(1000, function(){
+		this.test.assertExists('ul.nav.pull-right span.caret');
+		this.evaluate(function() {
+			document.querySelector('a#user-nav-panel-profile').click();
+		});
+	}).waitForSelector('span.feed-filter.top.cleared a:nth-child(3)', function(){
+		this.click('span.feed-filter.top.cleared a:nth-child(3)');
+	}).then(function(){
+		this.test.assertSelectorHasText('a[id^="total_vote_up_count_"]', '1');
+		forumLoginMethod.logoutFromApp();
+		//dislike the topic/post which already liked by the register user---------
+	}).thenOpen(config.url, function(){
+		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.username);
+	}).waitWhileVisible('#td_tab_login', function() {
+	}).waitForSelector('form[name="posts"] a.topic-title', function(){
+		this.click('form[name="posts"] a.topic-title');
+		this.waitForSelector('div#posts-list', function(){
+			if (this.visible('i.glyphicon.glyphicon-dislike-alt')){
+				this.click('i.glyphicon.glyphicon-dislike-alt');
+				this.waitForSelector('a.dislike_post.text-muted.voted-no', function() {
+					utils.info('Post disliked by the user');
+				});
+			} else {
+				utils.error('Dislike thump not visible');
+			}
 		}).then(function(){
-			var index=1;
-			profilePageMethod.getLikeDislikePostIds('a[id^="post_vote_up_"]', index);
-		}).wait(1000, function(){
 			this.test.assertExists('ul.nav.pull-right span.caret');
 			this.evaluate(function() {
 				document.querySelector('a#user-nav-panel-profile').click();
 			});
 		}).waitForSelector('span.feed-filter.top.cleared a:nth-child(3)', function(){
 			this.click('span.feed-filter.top.cleared a:nth-child(3)');
-		}).then(function(){
-			this.test.assertSelectorHasText('a[id^="total_vote_up_count_"]', '1');
-			forumLoginMethod.logoutFromApp();
-		//dislike the topic/post which already liked by the register user---------
-		}).thenOpen(config.url, function(){
-			forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.username);
-		}).waitWhileVisible('#td_tab_login', function() {
-		}).waitForSelector('form[name="posts"] a.topic-title', function(){
-			this.click('form[name="posts"] a.topic-title');
-			this.waitForSelector('div#posts-list', function(){
-				if (this.visible('i.glyphicon.glyphicon-dislike-alt')){
-					this.click('i.glyphicon.glyphicon-dislike-alt');
-					this.waitForSelector('a.dislike_post.text-muted.voted-no', function() {
-						utils.info('Post disliked by the user');
-					});
-				} else {
-					utils.error('Dislike thump not visible');
-				}
-			}).then(function(){
-				this.test.assertExists('ul.nav.pull-right span.caret');
-				this.evaluate(function() {
-					document.querySelector('a#user-nav-panel-profile').click();
-				});
-			}).waitForSelector('span.feed-filter.top.cleared a:nth-child(3)', function(){
-				this.click('span.feed-filter.top.cleared a:nth-child(3)');
 
-			}).wait(1000, function(){});
-				this.test.assertTextDoesntExist(profilePageJSON.editTopic.oldText, 'page doesnt contain hey there topic');
-			}).then(function(){
-				forumLoginMethod.logoutFromApp();
-			});
-		//});
-	};
+		}).wait(1000, function(){});
+		this.test.assertTextDoesntExist(profilePageJSON.editTopic.oldText, 'page doesnt contain hey there topic');
+	}).then(function(){
+		forumLoginMethod.logoutFromApp();
+	});
+	//});
+};
 
 //verify with delete the post that you liked
 profilePageTests.profilePageDeleteLikePost=function(){
@@ -564,7 +564,7 @@ profilePageTests.profilePageDeleteUser= function(){
 		utils.info('Case 17[MemberDelete -> Verify with create topic from this register user and delete it from admin user]');
 	}).waitForSelector('a[href="/post/printadd"]', function(){
 		casper.evaluate(function(){
-		  document.querySelector('a[href="/post/printadd"]').click();
+			document.querySelector('a[href="/post/printadd"]').click();
 		});
 	}).then(function(){
 		topicMethod.createTopic(topicJSON.ValidCredential);
@@ -606,7 +606,7 @@ profilePageTests.profilePageReputationCount=function(){
 		profilePageMethod.newaddTopicPost();
 	}).then(function(){
 		forumLoginMethod.logoutFromApp();
-	//like single post from 3 different users
+		//like single post from 3 different users
 	}).thenOpen(config.url, function(){
 		forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).waitWhileVisible('#td_tab_login', function() {

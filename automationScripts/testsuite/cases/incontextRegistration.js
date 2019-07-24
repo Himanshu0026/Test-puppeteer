@@ -38,13 +38,15 @@ incontextRegistrationTests.doRegistrationFromReplyPostWithCreateAccount = functi
 	}).thenOpen(config.url, function() {
 		this.test.assertExists('#inline_search_box', 'Search bar present');
 		this.waitForSelector('form[name="posts"] a.topic-title', function() {
-		this.click('form[name="posts"] a.topic-title');
-    }).waitForSelector('#posts-list', function() {
-     this.evaluate(function() {
-			 document.querySelector('#sub_post_reply').click();
-     });
-    }).waitUntilVisible('#guest_user', function() {
-      this.click('#guest_user');
+			this.click('form[name="posts"] a.topic-title');
+		}).waitForSelector('#posts-list', function() {
+			this.evaluate(function() {
+				document.querySelector('#sub_post_reply').click();
+			});
+		}).waitUntilVisible('#guestQuickReply span', function() {
+			this.click('#guestQuickReply span');
+		}).waitUntilVisible('#guest_user', function() {
+			this.click('#guest_user');
 		}).waitUntilVisible('#login_register_modal', function() {
 			this.test.assertTextExists('Create Account', 'Create Account appears on the page');
 			this.test.assertTextExists('Log In', 'Log In appears on the page');

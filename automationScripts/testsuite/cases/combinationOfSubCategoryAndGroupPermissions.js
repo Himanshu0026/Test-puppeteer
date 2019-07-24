@@ -15,6 +15,25 @@ var subCategory_Id;
 var other_subCategory_Id;
 var combinationOfSubCategoryAndGroupPermissionsTestcases = module.exports = {};
 
+combinationOfSubCategoryAndGroupPermissionsTestcases.changePermission = function() {
+	var category = combinationOfSubCategoryAndGroupPermissionsJSON.category.title;
+	var subCategory = combinationOfSubCategoryAndGroupPermissionsJSON.subCategory.title;
+	casper.thenOpen(config.apiLocalUrl+"/restapi/getToken", function() {
+		token = casper.evaluate(function() {
+			var data = document.querySelector(".token").getAttribute('id');
+			return data;
+		});
+		var subcat = subCategory;
+		this.thenOpen(config.apiLocalUrl+"/restapi/forum/getID/"+subcat+"?accesToken="+token, function() {
+			var subCategoryObj = JSON.parse(this.getPageContent());
+			var catId = subCategoryObj.forumid;
+			//to do-> get the usergroup id
+			this.thenOpen(config.apiLocalUrl+"/restapi/updateForumPermissions/"+catId+"/20237569/view_forum/0?accesToken="+token, function() {
+			});
+		});
+	});
+};
+
 // method to create a category cat1 and its sub categories cat1a and cat1b
 combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory = function() {
 	casper.thenOpen(config.backEndUrl, function() {
@@ -75,15 +94,17 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.verifyWithCategory = functi
 	}).waitForText('hellloooooo!!!!!!!!!',function() {
 		utils.info('Test case 11 [ Method to verify Reply topic button with the sub-category cat1a ]');
 		postEventMemberApprovalMethod.composePost("Replied the post");
-	}).thenOpen(config.backEndUrl, function() {
-		backEndForumRegisterMethod.goToCategoryPage();
-		casper.then(function() {
-			combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategory_Id, function(err, groupId) {
-				if(!err) {
-					backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, false);
-				}
-			});
-		});
+		//casper.clearCache();
+		combinationOfSubCategoryAndGroupPermissionsTestcases.changePermission();
+	// }).thenOpen(config.backEndUrl, function() {
+	// 	backEndForumRegisterMethod.goToCategoryPage();
+	// 	casper.then(function() {
+	// 		combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, subCategory_Id, function(err, groupId) {
+	// 			if(!err) {
+	// 				backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, false);
+	// 			}
+	// 		});
+	// 	});
 	}).thenOpen(config.url, function() {
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', ' Category link found');

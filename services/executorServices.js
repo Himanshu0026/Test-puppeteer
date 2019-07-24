@@ -45,6 +45,12 @@ executorServices.executeJob = function(commitDetails, callback) {
 							if(err){
 								console.log(err);
 							}else{
+								sqlConnection('UPDATE usergroups SET post_polls=1 WHERE title = "Moderators" AND uid =12;', function(err, result){
+									if(err){
+										console.log(err);
+									}else{
+									}
+								});
 							}
 						});
 					}

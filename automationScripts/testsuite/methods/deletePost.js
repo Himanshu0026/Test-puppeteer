@@ -1,7 +1,5 @@
 var profilePageJSON=require('../../testdata/profilePageData.json');
 var topicJSON = require('../../testdata/topic.json');
-var composeTopicJSON=require('../../testdata/composeTopic.json');
-var deletePostJSON = require('../../testdata/deletePostData.json');
 var loginJSON = require('../../testdata/loginData.json');
 var forumLoginMethod = require('../methods/login.js');
 var topicMethod = require('../methods/topic.js');
@@ -42,8 +40,8 @@ deletePostMethod.getPostId=function(data, index){
 deletePostMethod.deletePostCheckBoxId=function(data, index){
 	var post= casper.evaluate(function(data, index){
 		var postId=document.querySelectorAll(data, index);
-			var postHref=postId[index].getAttribute('id');
-			return postHref;
+		var postHref=postId[index].getAttribute('id');
+		return postHref;
 	},data, index);
 	utils.info("message:" +post);
 	casper.evaluate(function(post) {

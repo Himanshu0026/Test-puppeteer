@@ -5,7 +5,10 @@ var express = require('express');
 var app = express();
 var http = require('http');
 var path = require('path');
+var cors = require('cors');
 var fs = require('fs');
+var sqlConnection = require('./connection.js');
+var routes = require('./api/controller.js');
 var request = require('request');
 var moment = require('moment');
 var config = require('./config/config.json');
@@ -27,6 +30,8 @@ executorServices.redisClient = redisClient;
 var createHandler = require('github-webhook-handler');
 var handler = createHandler({ path: '/webhook', secret: config.webhook.secret });
 app.use(handler);
+app.use(cors());
+app.use("/restapi", routes);
 
 gitBranchServices.managePendingCommits(redisClient);
 queueServices.getRedisClient(redisClient);
@@ -567,4 +572,22 @@ app.post('/automate/*', function(req, res) {
 			res.send('Branch added to the automation queue and will execute just after the completion of current process and you will get the mail in case of failure ');
 		}
 	});
+});
+
+//if we are here then the specified request is not found
+app.use(function(req,res,next) {
+    var err = new Error("Not Found");
+    err.status = 404;
+    next(err);
+});
+
+//all other requests are not implemented.
+app.use(function(err,req, res, next)  {
+   res.status(err.status || 501);
+   res.json({
+       error: {
+           code: err.status || 501,
+           message: err.message
+       }
+   });
 });

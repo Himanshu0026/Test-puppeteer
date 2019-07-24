@@ -401,7 +401,7 @@ case "postEventMemberApproval":
 			case "memberApprovalTest":
 				casper.test.begin(branchName+ ' : ' + commitId + 'Verify post, Event and Member Approval functionality from home page with all valid and invalid scenarios ', function(test) {
 					var postEventMemberApproval = require("./testsuite/main/postEventMemberApproval.js");
-					postEventMemberApproval.eventTest();
+					postEventMemberApproval.memberTest();
 					casper.run(function(){
 						utils.displayError();
 						test.done();
@@ -461,6 +461,17 @@ case "postEventMemberApproval":
 		});
 	break;
 
+	case "postTopicUserPermission" :
+		casper.test.begin(branchName+ ' : ' + commitId + ' Verify Post Topic User Permission functionality from home page with all valid and invalid scenarios ', function(test) {
+			var postTopicUserPermission = require("./testsuite/main/postTopicUserPermission.js");
+			postTopicUserPermission.registeredUserTest();
+			casper.run(function(){
+				utils.displayError();
+				test.done();
+			});
+		});
+	break;
+
 	default:
 		casper.echo("Please select any feature from options given below. For ex: casperjs test automation.js --feature = <option>.\n");
 		casper.echo("Options:");
@@ -490,5 +501,8 @@ case "postEventMemberApproval":
 		casper.echo("topicsPostCount");
 		casper.echo("latestTopic");
 		casper.echo("memberDelete");
+		casper.echo("combinationOfSubCategoryAndGroupPermissions registerUserTest");
+		casper.echo("combinationOfCategoryAndGroupPermissions registerUserTest");
+		casper.echo("postTopicUserPermission registeredUserTest");
 		casper.exit();
 }

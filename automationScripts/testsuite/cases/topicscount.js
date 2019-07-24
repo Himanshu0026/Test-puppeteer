@@ -3,7 +3,6 @@ var loginJSON = require('../../testdata/loginData.json');
 var topicsCountJSON = require('../../testdata/topicscount.json');
 var topicJSON = require('../../testdata/topic.json');
 var topicMethod = require('../methods/topic.js');
-var registerMethod = require('../methods/register.js');
 var backEndForumRegisterMethod = require('../methods/backEndRegistration.js');
 var forumLoginMethod = require('../methods/login.js');
 var deletePostMethod = require('../methods/deletePost.js');
@@ -144,5 +143,3 @@ topicsCountTests.combineallforumTopicCount=function(){
 		this.click('input#firstpid', 'clicked on postlistingpage checkbox');
 	}).waitForText(topicsCountJSON.followedTopicsCount.count);
 };
-
-//

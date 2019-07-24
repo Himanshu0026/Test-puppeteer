@@ -73,10 +73,8 @@ registerMethod.registerMultipleUsers = function(usersCount, callback) {
 			utils.enableorDisableCheckbox('rules_checkbox', true);
 			this.test.assertExists('form[name="PostTopic"] button');
 			this.click('form[name="PostTopic"] button');
-		}).waitForSelector('button span.image-wrapper', function() {
-			if(this.exists('button span.image-wrapper')) {
-				forumLoginMethod.logoutFromApp();
-			}
+		}).then(function() {
+			registerMethod.redirectToLogout();
 		});
 	}).then(function() {
 		callback(users);

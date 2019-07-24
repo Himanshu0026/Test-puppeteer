@@ -12,21 +12,35 @@ var topicMethod = require('../methods/topic.js');
 var moveTopicAndPostTestcases = module.exports = {};
 var category_Id;
 var subCategory_Id;
+var token;
+
+moveTopicAndPostTestcases.getForumsId = function() {
+	var category = moveTopicAndPostJSON.category;
+	var subCategory = moveTopicAndPostJSON.subCategory;
+	casper.thenOpen(config.apiLocalUrl+"/restapi/getToken", function() {
+		token = casper.evaluate(function() {
+			var data = document.querySelector(".token").getAttribute('id');
+			return data;
+		});
+		var cat = category.title;
+		var subcat = subCategory.title;
+		this.thenOpen(config.apiLocalUrl+"/restapi/forum/getID/"+cat+"?accesToken="+token, function() {
+			var categoryObj = JSON.parse(this.getPageContent());
+			var catId = categoryObj.forumid;
+			category_Id = catId;
+		});
+		this.thenOpen(config.apiLocalUrl+"/restapi/forum/getID/"+subcat+"?accesToken="+token, function() {
+			var subCategoryObj = JSON.parse(this.getPageContent());
+			var catId = subCategoryObj.forumid;
+			subCategory_Id = catId;
+		});
+	});
+};
 
 // 1. Verify move topic from the latest topic page
 moveTopicAndPostTestcases.latestTopicPage = function(userGroup) {
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen(config.url, function() {
 		utils.info('Case 1 [Verify move topic from the latest topic page]');
-		var category = moveTopicAndPostJSON.category;
-		var subCategory = moveTopicAndPostJSON.subCategory;
-
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
-		});
-	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
   }).waitForSelector('.icon.icon-menu', function() {
     this.click('.icon.icon-menu');
@@ -50,18 +64,8 @@ moveTopicAndPostTestcases.latestTopicPage = function(userGroup) {
 
 // 2. Verify move topic from the topic listing page[Home Page]
 moveTopicAndPostTestcases.topicListingPage = function(userGroup) {
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen(config.url, function() {
 		utils.info('Case 2 [ Verify move topic from the topic listing page[Home Page ]');
-		var category = moveTopicAndPostJSON.category;
-		var subCategory = moveTopicAndPostJSON.subCategory;
-
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
-		});
-	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
 	}).then(function() {
 		this.test.assertExists('#topics a.start-new-topic-btn', ' New Topic on subcategory page Found');
@@ -83,24 +87,13 @@ moveTopicAndPostTestcases.topicListingPage = function(userGroup) {
 moveTopicAndPostTestcases.topicListingPageUnderCategory = function(userGroup) {
 	var category = moveTopicAndPostJSON.category;
 	var subCategory = moveTopicAndPostJSON.subCategory;
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen(config.url, function() {
 		utils.info('Case 3 [ Verify move topic from the topic listing page under category ]');
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
-		});
-	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
   }).waitForSelector('.icon.icon-menu', function() {
     this.click('.icon.icon-menu');
     this.click('#forums_toggle_link a');
   }).waitForText(category.title, function() {
-    /*this.test.assertSelectorHasText('ul[id="'+category_Id+'"] a', category.title);
-    casper.evaluate(function(category_Id) {
-	    document.querySelector('ul[id="'+category_Id+'"] a').click();
-    },category_Id);*/
     this.click('span.forum-title');
   }).waitForSelector('#topics', function() {
 		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' New Topic on subcategory page Found');
@@ -108,8 +101,6 @@ moveTopicAndPostTestcases.topicListingPageUnderCategory = function(userGroup) {
 		topicMethod.createTopic(moveTopicAndPostJSON.newTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
 		this.click('#backArrowPost');
-	//}).waitUntilVisible('#topics_tab', function() {
-    //this.click('#topics_tab');
   }).waitForSelector('#topics', function() {
     this.test.assertExists('ul li:nth-child(1) span.mod.icons.pull-right input');
     this.click('ul li:nth-child(1) span.mod.icons.pull-right input');
@@ -124,15 +115,8 @@ moveTopicAndPostTestcases.topicListingPageUnderCategory = function(userGroup) {
 moveTopicAndPostTestcases.topicListingPageUnderSubCategory = function(userGroup) {
 	var category = moveTopicAndPostJSON.category;
 	var subCategory = moveTopicAndPostJSON.subCategory;
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen(config.url, function() {
 		utils.info('Case 4 [ Verify move topic from the topic listing page under sub category ]');
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
-		});
-	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
   }).waitForSelector('.icon.icon-menu', function() {
     this.click('.icon.icon-menu');
@@ -142,7 +126,6 @@ moveTopicAndPostTestcases.topicListingPageUnderSubCategory = function(userGroup)
     casper.evaluate(function(category_Id) {
 	    document.querySelector('ul[id="'+category_Id+'"] a').click();
     },category_Id);
-    //this.click('ul[id="'+category_Id+'"] a');
   }).waitForText(subCategory.title, function() {
     this.click('li[id="forum_'+subCategory_Id+'"] a');
   }).waitUntilVisible('.topics-list', function() {
@@ -167,12 +150,6 @@ moveTopicAndPostTestcases.profilePage = function(userGroup) {
 	var subCategory = moveTopicAndPostJSON.subCategory;
 	casper.thenOpen(config.backEndUrl, function() {
 		utils.info('Case 5 [ Verify move topic from the profile page ]');
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
-		});
 	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
   }).waitForSelector('.nav.pull-right button.dropdown-toggle span', function() {
@@ -238,15 +215,8 @@ moveTopicAndPostTestcases.topicListingPageForRegisteredUserWhenDisabled = functi
 moveTopicAndPostTestcases.topicListingPageUnderCategoryForRegisteredUserWhenDisabled = function() {
 	var category = moveTopicAndPostJSON.category;
 	var subCategory = moveTopicAndPostJSON.subCategory;
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen(config.url, function() {
 		utils.info('Case 15 [ Verify move topic from the topic listing page under category (own post for registered user when disable "move topic" permission) ]');
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
-		});
-	}).thenOpen(config.url, function() {
     forumLoginMethod.loginToApp(moveTopicAndPostJSON.registeredUserLogin.username, moveTopicAndPostJSON.registeredUserLogin.password);
 	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('.icon.icon-menu', function() {
@@ -257,10 +227,7 @@ moveTopicAndPostTestcases.topicListingPageUnderCategoryForRegisteredUserWhenDisa
     casper.evaluate(function(category_Id) {
 	    document.querySelector('ul[id="'+category_Id+'"] a').click();
     },category_Id);
-    //this.click('ul[id="'+category_Id+'"] a');
-  }).waitForSelector('#topics_tab', function() {
-    this.click('#topics_tab');
-  }).waitUntilVisible('.topics-list', function() {
+	}).wait('2000',function() {
 		this.test.assertExists('#ajax_subscription_vars a.start-new-topic-btn', ' New Topic on subcategory page Found');
 		this.click('#ajax_subscription_vars a.start-new-topic-btn');
 		topicMethod.createTopic(moveTopicAndPostJSON.categoryTopic);
@@ -282,15 +249,8 @@ moveTopicAndPostTestcases.topicListingPageUnderCategoryForRegisteredUserWhenDisa
 moveTopicAndPostTestcases.topicListingPageUnderSubCategoryForRegisteredUserWhenDisabled = function() {
 	var category = moveTopicAndPostJSON.category;
 	var subCategory = moveTopicAndPostJSON.subCategory;
-	casper.thenOpen(config.backEndUrl, function() {
+	casper.thenOpen(config.url, function() {
 		utils.info('Case 16 [ Verify move topic from the topic listing page under sub category (own post for registered user when disable "move topic" permission) ]');
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
-		});
-	}).thenOpen(config.url, function() {
     forumLoginMethod.loginToApp(moveTopicAndPostJSON.registeredUserLogin.username, moveTopicAndPostJSON.registeredUserLogin.password);
 	}).waitWhileVisible('#td_tab_login', function() {
   }).waitForSelector('.icon.icon-menu', function() {
@@ -377,13 +337,6 @@ moveTopicAndPostTestcases.profilePageNewTopic = function(userGroup) {
 		utils.info('Case 26 [ Verify move post from the profile page into the new topic ]');
 		var category = moveTopicAndPostJSON.category;
 		var subCategory = moveTopicAndPostJSON.subCategory;
-
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
-		});
 	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
 	}).then(function() {
@@ -498,13 +451,6 @@ moveTopicAndPostTestcases.postListingPageNewTopic = function(userGroup) {
 		utils.info('Case 29 [ Verify move post from the post listing page into the new topic ]');
 		var category = moveTopicAndPostJSON.category;
 		var subCategory = moveTopicAndPostJSON.subCategory;
-
-		combinationOfSubCategoryAndGroupPermissionsMethod.goToCategoryPageAndGetIds(category, subCategory, function(err, categoryId, subCategoryId) {
-			category_Id = categoryId;
-			subCategory_Id = subCategoryId;
-			if(!err) {
-			}
-		});
 	}).thenOpen(config.url, function() {
     moveTopicAndPostMethod.assignLoginDetails(userGroup);
 	}).then(function() {

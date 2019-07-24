@@ -19,15 +19,15 @@ composeTopic.featureTest = function(){
 		//Verify postPreview from general user from categoryListingPage
 		composeTopicTests.composeTopicPostPreview(loginJSON.ValidCredential.username, loginJSON.ValidCredential.password);
 		//Verify Compose Topic on topic listing page(if start new topic permission is disabled of one cateogry) (For Register User)
-		composeTopicTests.composeTopicRegisterstartTopicdisablecategory();
+		//composeTopicTests.composeTopicRegisterstartTopicdisablecategory();
 		//Verify with the guest user without selecting any category.
 		//Verify post-Preview for guest user on latestTopicPage, topicListingPage and categoryListingPage
-		composeTopicTests.composeTopicGuestUserPostPreview();
+		//composeTopicTests.composeTopicGuestUserPostPreview();
 		//Verify Compose Topic on topic listing page(if start new topic permission is disabled of one cateogry) (For Guest User)
 		//composeTopicTests.composeTopicGueststartTopicdisblecategory();
 		//Verify backend-setings
-		composeTopicTests.permissionSettings();
+		//composeTopicTests.permissionSettings();
 
-		profilePageMethod.deleteTopics();
+	//	profilePageMethod.deleteTopics();
 	});
 };
