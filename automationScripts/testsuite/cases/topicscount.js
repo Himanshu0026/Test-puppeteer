@@ -48,7 +48,6 @@ topicsCountTests.topicsCount = function() {
 	casper.thenOpen(config.url, function(){
 		utils.info('Case 1[Verify the Number of Topics from the Followed content page ]');
 		utils.info('Case 1[Verify the Number of posts from the Followed content page ]');
-		//forumLoginMethod.loginToApp(loginJSON.validInfo.username, loginJSON.validInfo.password);
 	}).waitForSelector('a[href="/post/printadd"]', function(){
 		this.test.assertExists('ul.nav.pull-right span.caret');
 		this.click('ul.nav.pull-right span.caret');

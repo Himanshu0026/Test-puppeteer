@@ -11,7 +11,7 @@ var forumListingPageTest=module.exports = {};
 //1.Test case for Verify to add the heading on the category(add, edit, removed category haeding)
 forumListingPageTest.headingOnCategory = function(){
 	casper.thenOpen(config.backEndUrl, function(){
-		utils.info('Case 01[Test case for Verify to add the heading on the category]');
+		utils.info('Case 1[Test case for Verify to add the heading on the category]');
 		backEndForumRegisterMethod.goToCategoryPage();
 	}).then(function(){
 		forumListingPageMethod.createCategoryHeading(forumListingPageJSON.categoryHeading.data);
@@ -89,7 +89,7 @@ forumListingPageTest.verifyVariousCategoriesFrontEnd = function(){
 	}).then(function(){
 		this.click('ul#forums_toggle_link a');
 	}).waitForSelector('a[href="#forums"]', function(){
-		utils.info('Case 5[Validate passwordProtected category on forumListingPage frontEnd]');
+		utils.info('Case 6[Validate passwordProtected category on forumListingPage frontEnd]');
 		deletePostMethod.getCategoryHrefFrontend(forumListingPageJSON.enablePassword.title);
 	}).waitForSelector('input[name="pass"]', function(){
 		casper.sendKeys('input[name="pass"]', forumListingPageJSON.enablePassword.passwordprotectvalue);
@@ -137,7 +137,7 @@ forumListingPageTest.verifyVariousSubCategoriesFrontEnd = function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('****************************************FORUMLISTING - PAGE********************************************');
 		utils.info('Case 7[Validate sub-category with title field]');
-		this.test.assertExists('div#topics ul li:nth-child(2) a');
+    this.test.assertExists('div#topics ul li:nth-child(2) a');
 		this.click('div#topics ul li:nth-child(2) a');
 	}).waitForText(forumListingPageJSON.subEnableLocked.title, function(){
 		deletePostMethod.getCategoryHrefFrontend(forumListingPageJSON.enableLocked.title);
@@ -313,12 +313,11 @@ forumListingPageTest.verifyCategoriesDisableOptions = function(){
 	});
 };
 
-
 //Verify all the sub-categories on forum frontend after disable it on backend.
 forumListingPageTest.verifySubCategoriesDisableOptions = function(){
 	casper.thenOpen(config.url, function(){
 		utils.info('****************************************FORUMLISTING - PAGE********************************************');
-		utils.info('Case 13[Disable sub-categories options verified on forum frontEnd]');
+		utils.info('Case 14[Disable sub-categories options verified on forum frontEnd]');
 		this.test.assertExists('div#topics ul li:nth-child(2) a');
 		this.click('div#topics ul li:nth-child(2) a');
 	}).waitForSelector('a[href="#forums"]', function(){
