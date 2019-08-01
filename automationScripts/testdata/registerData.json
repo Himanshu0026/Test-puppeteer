@@ -56,7 +56,7 @@
 		"birthday" : "04/12/1991",
 		"usignature" : "This is my signature 18",
 		"namePrivate" : true,
-		"expectedErrorMsg" : "It looks like you are already signed up as"
+		"expectedErrorMsg" : "It looks like you already signed up "
 	},
 
 	"blankScreen" : {
