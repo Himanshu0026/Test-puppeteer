@@ -46,10 +46,10 @@
 		"content" : "hey there..!!"
 	},
 	"followCategory":{
-		"expectedMsg":"Follow"
+		"expectedMsg":"Follow this category to get notified about new topics and replies"
 	},
 	"unFollowCategory":{
-		"expectedMsg":"Unfollow"
+		"expectedMsg":"Stop getting notified about new topics and replies"
 	},
 	"moderatorLogin" :{
         	"username":"hanimode",
