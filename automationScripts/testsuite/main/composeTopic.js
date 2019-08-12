@@ -26,7 +26,7 @@ composeTopic.featureTest = function(){
 		//Verify Compose Topic on topic listing page(if start new topic permission is disabled of one cateogry) (For Guest User)
 		//composeTopicTests.composeTopicGueststartTopicdisblecategory();
 		//Verify backend-setings
-		//composeTopicTests.permissionSettings();
+		composeTopicTests.permissionSettings();
 
 	//	profilePageMethod.deleteTopics();
 	});

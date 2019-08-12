@@ -70,6 +70,18 @@
   "linked" : false
 },
 
+"generalCategory" : {
+  "title" : "General",
+  "description" : "this is General Categories",
+  "isSubcategorycheckbox" : false,
+	"isSubcategoryvalue" : false,
+  "passwordprotectcheckbox" : false,
+  "passwordprotectvalue" : "",
+  "lock" : false,
+  "invisible" : false,
+  "linked" : false
+},
+
 "withoutTitle" : {
   "title" : "",
   "description" : "this is validCategories without title",

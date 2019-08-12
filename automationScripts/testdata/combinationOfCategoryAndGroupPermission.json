@@ -32,7 +32,7 @@
 	"newTopic" : {
 		"title" : "New Topic",
 		"content" : "hellloooooo!!!!!!!!!",
-		"category" : "General"
+		"category" : "GeneralNew"
 	},
 
 	"adminUserLogin" : {
@@ -60,7 +60,7 @@
 	},
 
 	"otherCategory" : {
-		"title" : "General",
+		"title" : "GeneralNew",
 		"description" : "To test other category"
 	},
 

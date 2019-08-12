@@ -16,7 +16,7 @@ forumListingPage.featureTest = function(){
 		// method to delete all the categories from backend
 		thumpsUpDownTestcases.deleteAllCategoriesTestCase();
 
-		thumpsUpDownTestcases.createCategoryTestCase();
+		forumListingPageTest.createGeneralCategory();
 
 		forumListingPageTest.createVariousCategories();
 

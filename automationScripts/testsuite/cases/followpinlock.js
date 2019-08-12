@@ -18,7 +18,7 @@ followpinlockTest.addModeratorByScenarioOne = function() {
   casper.thenOpen(config.backEndUrl, function() {
     var category_Id;
     utils.info('Test case 1 [Method to Verfiy with Add a moderator for category(cat1) by scenario 1]');
-    var category = thumpsUpDownJSON.category;
+    var category = thumpsUpDownJSON.moderatorCategory;
     moderatorPermissionsMethod.goToCategoryPageAndGetId(category, function(err, categoryId) {
       category_Id = categoryId;
       if(!err) {

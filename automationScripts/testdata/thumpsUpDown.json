@@ -35,10 +35,15 @@
   "newTopic" : {
     "title" : "New Topic",
     "content" : "hellloooooo!!!!!!!!!",
-    "category" : "General"
+    "category" : "GeneralNew"
   },
 
   "category" : {
+		"title" : "GeneralNew",
+		"description" : "To test other category"
+	},
+
+  "moderatorCategory" : {
 		"title" : "General",
 		"description" : "To test other category"
 	},

@@ -76,6 +76,18 @@ casper.on("resource.error", function(resourceError) {
 		utils.error(' Error : ' + msg);
 		casper.capture(resourceScreenshotsPath + '.png');
 		utils.resourceErrors.push(msg);
+	} else if(resourceError.errorCode == 403) {
+		msg = 'ResourceError: ' + resourceError.url + ' failed to load (' + resourceError.errorCode + ')';
+		utils.resourceErrorsCount++;
+		utils.error(' Error : ' + msg);
+		casper.capture(resourceScreenshotsPath + '.png');
+		utils.resourceErrors.push(msg);
+	} else if(resourceError.errorCode == 304) {
+		msg = 'ResourceError: ' + resourceError.url + ' failed to load (' + resourceError.errorCode + ')';
+		utils.resourceErrorsCount++;
+		utils.error(' Error : ' + msg);
+		casper.capture(resourceScreenshotsPath + '.png');
+		utils.resourceErrors.push(msg);
 	}
 });
 
@@ -99,6 +111,14 @@ casper.on("page.error", function(msg, trace) {
 		utils.error(' Error : ' + msg);
 		utils.jsErrors.push(msg);
 	}
+});
+
+casper.on('http.status.404' || 'http.status.403', function(resource) {
+    casper.echo(resource.url + ' is 404 || 403');
+	utils.resourceErrorsCount++;
+	utils.error(' Error : ' + msg);
+	casper.capture(resourceScreenshotsPath + '.png');
+	utils.resourceErrors.push(msg);
 });
 
 //Method To Display JS Errors

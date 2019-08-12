@@ -77,5 +77,11 @@
 
 	"disableVoteOption" :{
 		"Msg":"You don't have permission to vote."
+	},
+
+	"newTopic" : {
+		"title" : "NewTopic",
+		"content" : "hellloooooo!!!",
+		"category" : "General"
 	}
 }

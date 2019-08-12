@@ -785,20 +785,20 @@ deletePostTests.deleteOwnTopicDisablePostEnable=function(){
 		this.click('i.glyphicon.glyphicon-chevron-down');
 		this.test.assertDoesntExist('a[id^="delete_first_post_"]');
 		//Verify with delete own post-selecting by check box post enable topic disable
-		}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
-			var index=1;
-			deletePostMethod.deletePostCheckBoxId('input[name="pid"]', index);
-		}).then(function(){
-			this.click('#deleteposts');
-		}).then(function(){
-			//checked post is present on postlisting page
-			this.thenOpen(config.url, function(){
-				this.test.assertExists('form[name="posts"] a.topic-title');
-				this.click('form[name="posts"] a.topic-title');
-			}).waitForSelector('span#editableSubject', function(){
-				this.test.assertDoesntExist('span#first_coloumn_2', 'post not found on postlisting page');
-				this.wait(2000, function(){});
-			});
+	}).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
+		var index=1;
+		deletePostMethod.deletePostCheckBoxId('input[name="pid"]', index);
+	}).then(function(){
+		this.click('#deleteposts');
+	}).then(function(){
+		//checked post is present on postlisting page
+		this.thenOpen(config.url, function(){
+			this.test.assertExists('form[name="posts"] a.topic-title');
+			this.click('form[name="posts"] a.topic-title');
+		}).waitForSelector('span#editableSubject', function(){
+			this.test.assertDoesntExist('span#first_coloumn_2', 'post not found on postlisting page');
+			this.wait(2000, function(){});
+		});
 		//Verify with delete own post-by drop down of the post
 	}).then(function(){
 		casper.evaluate(function() {
