@@ -9,7 +9,7 @@ utils.newTheme = 0;
 //pass the id of the element in element parameter and for status true or false
 utils.enableorDisableCheckbox = function(element, status) {
 	var checkbox_value = casper.evaluate(function (element) {
-	      return document.getElementById(element).checked;
+		return document.getElementById(element).checked;
 	}, element);
 	if (checkbox_value) {
 		if (checkbox_value != status) {
@@ -27,11 +27,11 @@ utils.enableorDisableCheckbox = function(element, status) {
 };
 
 utils.randomString = function() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    for( var i=0; i < 10; i++ )
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    return text;
+	var text = "";
+	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	for( var i=0; i < 10; i++ )
+	text += possible.charAt(Math.floor(Math.random() * possible.length));
+	return text;
 };
 
 utils.info = function(msg) {
@@ -114,7 +114,7 @@ casper.on("page.error", function(msg, trace) {
 });
 
 casper.on('http.status.404' || 'http.status.403', function(resource) {
-    casper.echo(resource.url + ' is 404 || 403');
+	casper.echo(resource.url + ' is 404 || 403');
 	utils.resourceErrorsCount++;
 	utils.error(' Error : ' + msg);
 	casper.capture(resourceScreenshotsPath + '.png');
