@@ -1,9 +1,9 @@
 {
 	"screenShotsLocation": "../Screenshots/",
 	"failedScreenShotsLocation": "/var/tmp/",
-	"url": "https://beta12.websitetoolbox.com/",
-	"backEndUrl": "https://beta12.websitetoolbox.com/tool/members/login",
-	"apiLocalUrl":"http://beta12.websitetoolbox.com:8081",
+	"url": "https://beta22.websitetoolbox.com/",
+	"backEndUrl": "https://beta22.websitetoolbox.com/tool/members/login",
+	"apiLocalUrl":"http://beta22.websitetoolbox.com:8081",
 
 	"app": {
 		"verbose" : true,
@@ -16,7 +16,7 @@
 	},
 
 	"backendCred" : {
-		"uname" : "beta12",
+		"uname" : "beta22",
   		"upass" : "test",
     	"apiKey" : "4XXhjFbE6fBhmfFwGWkmjgPIN4UKBFDYdSWGcR4q"
 	},
