@@ -9,7 +9,7 @@ utils.newTheme = 0;
 //pass the id of the element in element parameter and for status true or false
 utils.enableorDisableCheckbox = function(element, status) {
 	var checkbox_value = casper.evaluate(function (element) {
-	      return document.getElementById(element).checked;
+		return document.getElementById(element).checked;
 	}, element);
 	if (checkbox_value) {
 		if (checkbox_value != status) {
@@ -27,11 +27,11 @@ utils.enableorDisableCheckbox = function(element, status) {
 };
 
 utils.randomString = function() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    for( var i=0; i < 10; i++ )
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    return text;
+	var text = "";
+	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	for( var i=0; i < 10; i++ )
+	text += possible.charAt(Math.floor(Math.random() * possible.length));
+	return text;
 };
 
 utils.info = function(msg) {
@@ -76,6 +76,18 @@ casper.on("resource.error", function(resourceError) {
 		utils.error(' Error : ' + msg);
 		casper.capture(resourceScreenshotsPath + '.png');
 		utils.resourceErrors.push(msg);
+	} else if(resourceError.errorCode == 403) {
+		msg = 'ResourceError: ' + resourceError.url + ' failed to load (' + resourceError.errorCode + ')';
+		utils.resourceErrorsCount++;
+		utils.error(' Error : ' + msg);
+		casper.capture(resourceScreenshotsPath + '.png');
+		utils.resourceErrors.push(msg);
+	} else if(resourceError.errorCode == 304) {
+		msg = 'ResourceError: ' + resourceError.url + ' failed to load (' + resourceError.errorCode + ')';
+		utils.resourceErrorsCount++;
+		utils.error(' Error : ' + msg);
+		casper.capture(resourceScreenshotsPath + '.png');
+		utils.resourceErrors.push(msg);
 	}
 });
 
@@ -99,6 +111,14 @@ casper.on("page.error", function(msg, trace) {
 		utils.error(' Error : ' + msg);
 		utils.jsErrors.push(msg);
 	}
+});
+
+casper.on('http.status.404' || 'http.status.403', function(resource) {
+	casper.echo(resource.url + ' is 404 || 403');
+	utils.resourceErrorsCount++;
+	utils.error(' Error : ' + msg);
+	casper.capture(resourceScreenshotsPath + '.png');
+	utils.resourceErrors.push(msg);
 });
 
 //Method To Display JS Errors

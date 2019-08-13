@@ -46,7 +46,7 @@ addPollTests.createPollShieldIcon=function(){
 			document.querySelector('a[href="/post/printadd"]').click();
 		});
 	}).then(function(){
-		topicMethod.createTopic(topicJSON.newTopic);
+		topicMethod.createTopic(addPollJSON.newTopic);
 	}).waitForText(topicJSON.newTopic.content, function(){
 		this.test.assertExists('div.topic-tools.pull-right div.dropdown a span','shield icon found on postListingPage');
 		this.click('div.topic-tools.pull-right div.dropdown a span');
@@ -285,7 +285,7 @@ addPollTests.addPollWithOtherUserTopic=function(){
 			document.querySelector('a[href="/post/printadd"]').click();
 		});
 	}).then(function(){
-		topicMethod.createTopic(topicJSON.newTopic);
+		topicMethod.createTopic(addPollJSON.newTopic);
 	}).waitForText(topicJSON.newTopic.content, function(){
 		forumLoginMethod.logoutFromApp();
 	}).thenOpen(config.url, function(){
@@ -536,7 +536,7 @@ addPollTests.disableVotePoll=function(){
 	}).then(function(){
 		this.click('a[href="#topic-details"]');
 	}).then(function(){
-		topicMethod.createTopic(topicJSON.newTopic);
+		topicMethod.createTopic(addPollJSON.newTopic);
 	}).waitForText(addPollJSON.disableVoteOption.Msg);
 };
 

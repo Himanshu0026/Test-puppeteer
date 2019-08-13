@@ -260,7 +260,7 @@ composeTopicTests.permissionSettings=function(){
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('******************************ComposeTopic********************************************');
 		utils.info('Case 7[Verify to set 100 topics per-page]');
-		composeTopicMethod.startTopicPermissionForCategory(true);
+		//composeTopicMethod.startTopicPermissionForCategory(true);
 	}).then(function(){
 		backEndForumRegisterMethod.goToDisplayPage();
 	}).then(function(){

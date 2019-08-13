@@ -33,6 +33,18 @@ forumListingPageTest.headingOnCategory = function(){
 //Verify with create a category as invisible
 //Verify with create a category as linked
 //Verfiy with create a parent category.
+forumListingPageTest.createGeneralCategory = function(){
+	casper.thenOpen(config.backEndUrl, function(){
+		utils.info('Case - to create a general category');
+		utils.info('****************************************FORUMLISTING - PAGE********************************************');
+		backEndForumRegisterMethod.goToCategoryPage();
+	}).then(function(){
+		//create category with title field
+		//already discription added in this category
+		backEndForumRegisterMethod.createCategoryForumListing(forumListingPageJSON.generalCategory);
+	});
+};
+
 forumListingPageTest.createVariousCategories = function(){
 	casper.thenOpen(config.backEndUrl, function(){
 		utils.info('Case 1[Test case for Verify to add the category without title field]');
@@ -43,6 +55,10 @@ forumListingPageTest.createVariousCategories = function(){
 		//already discription added in this category
 		backEndForumRegisterMethod.createCategoryForumListing(forumListingPageJSON.validCategories);
 	}).then(function(){
+		//create category with title field
+		//already discription added in this category
+	// 	backEndForumRegisterMethod.createCategoryForumListing(forumListingPageJSON.generalCategory);
+	// }).then(function(){
 		//add sub-category in category
 		backEndForumRegisterMethod.createCategorySubcategory(forumListingPageJSON.subCategory.title, forumListingPageJSON.subCategory );
 	}).then(function(){

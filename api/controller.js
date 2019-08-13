@@ -127,7 +127,7 @@ router.get("/forum/delete/:forumid", function(req, res, next) {
   });
 });
 
-router.get("/forum/add/subCategory:title/:description/:parentCategory", function(req, res, next) {
+router.get("/forum/add/subCategory/:title/:description/:parentCategory", function(req, res, next) {
   var parentId;
   request({
     url: config.apiLocalUrl+'/restapi/forum/getID/'+req.params.parentCategory,
