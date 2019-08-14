@@ -149,7 +149,7 @@ profilePageTests.profilePageAfterStartTopic=function(){
 				var actualPostCount=casper.fetchText('li:nth-child(1) span.profile-count');
 				actualcount=actualPostCount.trim();
 				//timeout occurs sometime added wait
-				this.wait(1000, function(){});
+				this.wait(2000, function(){});
 			}).reload(function(){
 				this.test.assertEquals(actualcount, profilePageJSON.expectedPostCount.count, 'both the outputs are equals');
 			});
@@ -392,7 +392,7 @@ profilePageTests.profilePagePostCount=function() {
 				var actualPostCount=casper.fetchText('li:nth-child(1) span.profile-count');
 				actualcount=actualPostCount.trim();
 				//timeout occurs sometime added wait
-				this.wait(1000, function(){});
+				this.wait(2000, function(){});
 			}).then(function(){
 				this.test.assertEquals(actualcount, expectedPostCount, 'both the outputs are equals');
 				//timeout occurs sometime added wait.
@@ -421,7 +421,7 @@ profilePageTests.profilePagePostCountAddtopic=function() {
 		var actualPostCount=casper.fetchText('li:nth-child(1) span.profile-count');
 		actualcount=actualPostCount.trim();
 		//timeout occurs sometime added wait
-		this.wait(1000, function(){});
+		this.wait(2000, function(){});
 	}).then(function(){
 		this.test.assertEquals(actualcount, expectedPostCount, 'both the outputs are equals');
 		//timeout occurs sometime added wait
