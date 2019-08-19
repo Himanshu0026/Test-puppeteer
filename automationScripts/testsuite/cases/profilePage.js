@@ -458,6 +458,7 @@ profilePageTests.profilePagePostCountDeletePost=function(){
 			this.click('a#PostsOFUser');
 		}).waitForSelector('div.alert.alert-info.text-center', function(){
 			this.test.assertSelectorHasText('li:nth-child(1) span.profile-count', '0');
+			this.wait(1000, function(){});
 		}).then(function(){
 			forumLoginMethod.logoutFromApp();
 		});
