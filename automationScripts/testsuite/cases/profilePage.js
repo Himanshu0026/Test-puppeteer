@@ -149,8 +149,8 @@ profilePageTests.profilePageAfterStartTopic=function(){
 				var actualPostCount=casper.fetchText('li:nth-child(1) span.profile-count');
 				actualcount=actualPostCount.trim();
 				//timeout occurs sometime added wait
-				this.wait(1000, function(){});
-			}).then(function(){
+				this.wait(2000, function(){});
+			}).reload(function(){
 				this.test.assertEquals(actualcount, profilePageJSON.expectedPostCount.count, 'both the outputs are equals');
 			});
 		});
@@ -249,7 +249,8 @@ profilePageTests.profilePageLikesTab=function(){
 	}).then(function(){
 		var index=1;
 		profilePageMethod.getLikeDislikePostIds('a[id^="post_vote_up_"]', index);
-	}).wait(1000, function(){
+		this.wait(1000, function(){});
+	}).reload(function(){
 		this.test.assertExists('ul.nav.pull-right span.caret');
 		this.evaluate(function() {
 			document.querySelector('a#user-nav-panel-profile').click();
@@ -281,11 +282,12 @@ profilePageTests.profilePageLikesTab=function(){
 			});
 		}).waitForSelector('span.feed-filter.top.cleared a:nth-child(3)', function(){
 			this.click('span.feed-filter.top.cleared a:nth-child(3)');
-
-		}).wait(1000, function(){});
-		this.test.assertTextDoesntExist(profilePageJSON.editTopic.oldText, 'page doesnt contain hey there topic');
-	}).then(function(){
-		forumLoginMethod.logoutFromApp();
+			this.wait(1000, function(){});
+		}).reload(function(){
+			this.test.assertTextDoesntExist(profilePageJSON.editTopic.oldText, 'page doesnt contain hey there topic');
+		}).then(function(){
+			forumLoginMethod.logoutFromApp();
+		});
 	});
 	//});
 };
@@ -321,7 +323,7 @@ profilePageTests.profilePageDeleteLikePost=function(){
 			this.click('a[id^="delete_first_post_"]');
 			this.wait(1000, function(){});
 		});
-	}).then(function(){
+	}).reload(function(){
 		this.test.assertExists('ul.nav.pull-right span.caret');
 		this.evaluate(function() {
 			document.querySelector('a#user-nav-panel-profile').click();
@@ -330,7 +332,7 @@ profilePageTests.profilePageDeleteLikePost=function(){
 		this.click('span.feed-filter.top.cleared a:nth-child(3)');
 	}).then(function(){
 		this.test.assertTextDoesntExist('post reply', 'page doesnt contain post reply post');
-	}).then(function(){
+	}).reload(function(){
 		this.waitForSelector('ul.nav.pull-right span.caret', function(){
 			this.click('ul.nav.pull-right span.caret');
 			this.evaluate(function() {
@@ -390,7 +392,7 @@ profilePageTests.profilePagePostCount=function() {
 				var actualPostCount=casper.fetchText('li:nth-child(1) span.profile-count');
 				actualcount=actualPostCount.trim();
 				//timeout occurs sometime added wait
-				this.wait(1000, function(){});
+				this.wait(2000, function(){});
 			}).then(function(){
 				this.test.assertEquals(actualcount, expectedPostCount, 'both the outputs are equals');
 				//timeout occurs sometime added wait.
@@ -419,7 +421,7 @@ profilePageTests.profilePagePostCountAddtopic=function() {
 		var actualPostCount=casper.fetchText('li:nth-child(1) span.profile-count');
 		actualcount=actualPostCount.trim();
 		//timeout occurs sometime added wait
-		this.wait(1000, function(){});
+		this.wait(2000, function(){});
 	}).then(function(){
 		this.test.assertEquals(actualcount, expectedPostCount, 'both the outputs are equals');
 		//timeout occurs sometime added wait
@@ -456,6 +458,7 @@ profilePageTests.profilePagePostCountDeletePost=function(){
 			this.click('a#PostsOFUser');
 		}).waitForSelector('div.alert.alert-info.text-center', function(){
 			this.test.assertSelectorHasText('li:nth-child(1) span.profile-count', '0');
+			this.wait(1000, function(){});
 		}).then(function(){
 			forumLoginMethod.logoutFromApp();
 		});
