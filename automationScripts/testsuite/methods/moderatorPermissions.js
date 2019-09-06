@@ -55,8 +55,13 @@ moderatorPermissionsMethod.clickOnRemoveButtonModerator=function(id) {
 	casper.then(function() {
 		moderatorPermissionsMethod.clickOnAddedModerator(id);
 	}).then(function() {
-		this.test.assertExists('.remove_mod_button');
-		this.click('.remove_mod_button');
+		try {
+			this.test.assertExists('.remove_mod_button');
+			this.click('.remove_mod_button');
+		}catch (e) {
+			this.test.assertExists('#remove_moderator');
+			this.click('#remove_moderator');
+		}
 	}).wait('2000', function() {
 		utils.info(' Moderator Removed');
 	});
