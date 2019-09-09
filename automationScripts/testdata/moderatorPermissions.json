@@ -7,7 +7,7 @@
 	"newTopic" : {
 		"title" : "New Topic",
 		"content" : "hellloooooo!!!!!!!!!",
-		"category" : "GeneralNew"
+		"category" : "General"
 	},
 
 	"adminUserLogin" : {
@@ -16,8 +16,8 @@
 	},
 
 	"category" : {
-		"title" : "GeneralNew",
-		"description" : "To test GeneralNew category"
+		"title" : "General",
+		"description" : "To test General category"
 	},
 
 	"otherCategory" : {
