@@ -28,7 +28,11 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.changePermission = function
 			var subCategoryObj = JSON.parse(this.getPageContent());
 			var catId = subCategoryObj.forumid;
 			//to do-> get the usergroup id
-			this.thenOpen(config.apiLocalUrl+"/restapi/updateForumPermissions/"+catId+"/20237569/view_forum/0?accesToken="+token, function() {
+			this.thenOpen(config.apiLocalUrl+"/restapi/usergroups/getID/General?accesToken="+token, function() {
+				var usergroupObj = JSON.parse(this.getPageContent());
+				var usergroup = usergroupObj.usergroupID;
+				this.thenOpen(config.apiLocalUrl+"/restapi/updateForumPermissions/"+catId+"/"+usergroup+"/view_forum/0?accesToken="+token, function() {
+				});
 			});
 		});
 	});
