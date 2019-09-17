@@ -62,7 +62,7 @@ privateMessage.featureTest = function() {
 		// method To verify mark as read-unread(check box)(multiple)
 		// method To verify mark as read-unread(check box)(all)
 		// method to verify mark as read(coversation page)
-		privateMessageTestcases.read_unreadCheckbox();
+		//privateMessageTestcases.read_unreadCheckbox();
 
 		// method Move single conversation(inbox to archieve)
 		// method to Move single conversation(archieve to inbox)
@@ -70,7 +70,7 @@ privateMessage.featureTest = function() {
 		// method to move multiple conversation(archieve to inbox)
 		// method to move all coversation(inbox to archieve)
 		// method To verify ignored member (check box)
-		privateMessageTestcases.moveSingleToArchieve();
+		//privateMessageTestcases.moveSingleToArchieve();
 
 		// method To verify ignored member (check box)
 		// method to verify with unignore user
@@ -90,7 +90,7 @@ privateMessage.featureTest = function() {
 		// method To verify leave conversation( single)
 		// method To verify leave conversation (Multiple)
 		// method To verify leave conversation (all)
-		privateMessageTestcases.leaveConversation();
+		//privateMessageTestcases.leaveConversation();
 
 		// method to verify Refresh pm page after sending message
 		privateMessageTestcases.refreshPmPageAfterSendingMessage();
@@ -100,7 +100,7 @@ privateMessage.featureTest = function() {
 		// method Delete coversation from conversation page
 		// method To verify delete all Conversation
 		// method To verify "Go to inbox" link when there are no conversation.
-		privateMessageTestcases.deleteConversation();
+		//privateMessageTestcases.deleteConversation();
 
 	});
 };
