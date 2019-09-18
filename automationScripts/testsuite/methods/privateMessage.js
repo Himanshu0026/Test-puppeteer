@@ -38,12 +38,14 @@ privateMessageMethod.deleteAllPrivateMessage = function() {
 			this.test.assertExists('#messages-menu');
 			this.test.assertExists('a#delete_conversation i');
 			this.click('a#delete_conversation i');
-		}).waitForText('Your inbox is empty', function success() {
+		}).waitForSelector('#pmsg_inbox_listing .text-muted', function success() {
 			utils.info('All messages has been deleted');
 		}, function fail() {
 			privateMessageMethod.deleteAllPrivateMessage();
 		});
   } else {
-		casper.waitForText('Your inbox is empty.');
+		casper.waitForSelector('#pmsg_inbox_listing .text-muted', function() {
+			this.test.assertSelectorHasText('#pmsg_inbox_listing .text-muted span', 'Your inbox is empty');
+		});
 	}
 };

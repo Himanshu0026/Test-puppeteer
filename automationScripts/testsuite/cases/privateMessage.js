@@ -70,12 +70,6 @@ privateMessageTestcases.sendPMByMsgIcon = function() {
 			this.test.assertSelectorHasText('div#ajax-msg-top p', 'Sent');
 		});
 	}).then(function() {
-		/*var content = this.fetchText(this.getPageContent());
-		this.reload(function() {
-			var contentAfterRefresh = this.fetchText(this.getPageContent());
-			this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-		});*/
-	}).then(function() {
 		utils.info('Case 3[To compose a message by scenario 2]');
 		this.test.assertExists('i#private_message_notification');
 		this.click('i#private_message_notification');
@@ -92,11 +86,6 @@ privateMessageTestcases.sendPMByMsgIcon = function() {
 			this.test.assertSelectorHasText('div#ajax-msg-top p', 'Sent');
 		});
 	}).then(function() {
-		/*var content = this.fetchText(this.getPageContent());
-		this.reload(function() {
-			var contentAfterRefresh = this.fetchText(this.getPageContent());
-			this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-		});*/
 	}).waitForSelector('ul.nav.pull-right span.caret', function() {
 		utils.info('Case 3[To compose a message by scenario 3]');
 		this.click('ul.nav.pull-right span.caret');
@@ -111,12 +100,6 @@ privateMessageTestcases.sendPMByMsgIcon = function() {
 		privateMessageMethod.newMessage(pmJSON.newMsgInfo);
 	}).waitUntilVisible('div#ajax-msg-top', function() {
 		this.test.assertSelectorHasText('div#ajax-msg-top p', 'Sent');
-	}).then(function() {
-		/*var content = this.fetchText(this.getPageContent());
-		this.reload(function() {
-			var contentAfterRefresh = this.fetchText(this.getPageContent());
-			this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-		});*/
 	});
 };
 
@@ -134,12 +117,6 @@ privateMessageTestcases.sendPMToInvalidRecipient = function() {
 			privateMessageMethod.newMessage(pmJSON.invalidRecipient);
 		}).waitUntilVisible('div#pm_error_msg', function() {
 			this.test.assertSelectorHasText('div#pm_error_msg', 'The member "gfgh" was not found');
-		}).then(function() {
-			/*var content = this.fetchText(this.getPageContent());
-			this.reload(function() {
-				var contentAfterRefresh = this.fetchText(this.getPageContent());
-				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-			});*/
 		});
 	});
 };
@@ -160,11 +137,6 @@ privateMessageTestcases.sendPMToBlankRecipient = function() {
 		}).waitUntilVisible('div#pm_error_msg', function() {
 			this.test.assertSelectorHasText('div#pm_error_msg', 'Please specify a recipient');
 		}).then(function() {
-			/*var content = this.fetchText(this.getPageContent());
-			this.reload(function() {
-				var contentAfterRefresh = this.fetchText(this.getPageContent());
-				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-			});*/
 		});
 	});
 };
@@ -184,12 +156,6 @@ privateMessageTestcases.sendPMWithBlankSubject = function() {
 			privateMessageMethod.newMessage(pmJSON.blankSubject);
 		}).waitUntilVisible('div#ajax-msg-top', function() {
 			this.test.assertSelectorHasText('div#ajax-msg-top p', 'Sent');
-		}).then(function() {
-			/*var content = this.fetchText(this.getPageContent());
-			this.reload(function() {
-				var contentAfterRefresh = this.fetchText(this.getPageContent());
-				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-			});*/
 		});
 	});
 };
@@ -209,12 +175,6 @@ privateMessageTestcases.sendPMWithBlankMessage = function() {
 			privateMessageMethod.newMessage(pmJSON.blankMessage);
 		}).waitUntilVisible('div#pm_error_msg', function() {
 			this.test.assertSelectorHasText('div#pm_error_msg', 'Please enter your message');
-		}).then(function() {
-			/*var content = this.fetchText(this.getPageContent());
-			this.reload(function() {
-				var contentAfterRefresh = this.fetchText(this.getPageContent());
-				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-			});*/
 		});
 	});
 };
@@ -231,17 +191,8 @@ privateMessageTestcases.sendPMByAutoDropdown = function() {
 			this.click('a.send_new_pmsg');
 		}).waitUntilVisible('#pmsg_dialog_heading', function() {
 			this.test.assertSelectorHasText('#pmsg_dialog_heading', 'New Message');
-			//casper.sendKeys('input[id="tokenfield_typeahead-tokenfield"]', 'sangita');
-			//casper.sendKeys('input[id="tokenfield_typeahead-tokenfield"]', casper.page.event.key.Enter );
 		}).waitUntilVisible('div#ajax-msg-top', function() {
 			this.test.assertSelectorHasText('div#ajax-msg-top p', 'Sent');
-			//forumLoginMethod.logoutFromApp();
-		}).then(function() {
-			/*var content = this.fetchText(this.getPageContent());
-			this.reload(function() {
-				var contentAfterRefresh = this.fetchText(this.getPageContent());
-				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-			});*/
 		});
 	});
 };
@@ -321,7 +272,6 @@ privateMessageTestcases.verifyReplyOption = function() {
 				});
 
 				this.waitUntilVisible('div.message-entry.sent', function() {
-					//this.test.assertSelectorHasText('div.message-entry.sent', 'Reply with message....!!!');
 				});
 			}).then(function() {
 				this.click('div#current_msg_details a.username');
@@ -359,12 +309,6 @@ privateMessageTestcases.verifyOneToOneConversation = function() {
 			privateMessageMethod.newMessage(senderMsgInfo);
 		}).waitUntilVisible('div#ajax-msg-top', function() {
 			this.test.assertSelectorHasText('div#ajax-msg-top p', 'Sent');
-		}).then(function() {
-			/*var content = this.fetchText(this.getPageContent());
-			this.reload(function() {
-				var contentAfterRefresh = this.fetchText(this.getPageContent());
-				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-			});*/
 		}).then(function() {
 			this.click('div#current_msg_details a.username');
 			this.waitForSelector('div#UserProfile', function() {
@@ -431,11 +375,6 @@ privateMessageTestcases.verifyOneToManyConversation = function() {
 		}).waitUntilVisible('div#ajax-msg-top', function() {
 			this.test.assertSelectorHasText('div#ajax-msg-top p', 'Sent');
 		}).then(function() {
-			/*var content = this.fetchText(this.getPageContent());
-			this.reload(function() {
-				var contentAfterRefresh = this.fetchText(this.getPageContent());
-				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-			});*/
 			forumLoginMethod.logoutFromApp();
 		});
 	}).thenOpen(config.url ,function() {
@@ -490,11 +429,6 @@ privateMessageTestcases.verifyOneToManyConversation = function() {
 				this.waitUntilVisible('div.message-entry.sent', function() {
 					this.test.assertSelectorHasText('div.message-entry.sent', 'MessageReplied');
 				}).then(function() {
-					/*var content = this.fetchText(this.getPageContent());
-					this.reload(function() {
-						var contentAfterRefresh = this.fetchText(this.getPageContent());
-						this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-					});*/
 					forumLoginMethod.logoutFromApp();
 				});
 			});
@@ -536,36 +470,6 @@ privateMessageTestcases.verifyOneToManyConversation = function() {
 // method To verify  send PM conversation to 25 recipient at the same time
 privateMessageTestcases.sendPMToMaxAndMoreThanMaxRecipient = function() {
 	var recipients = ['neha', 'hani12', 'haniuser', 'isneha', 'isneha12', 'sangita', 'sangita.digi', 'hsk', 'abc', 'abc1', 'abc2', 'abc3', 'abc4', 'abc5', 'abc6', 'abc7', 'abc8',	'abc9', 'abc10', 'abc11', 'abc12', 'abc13', 'abc14', 'abc15', 'shipra', 'emailUser'];
-	/*var recipients = [];
-	var pmessage = '';
-	casper.thenOpen(config.backEndUrl , function() {
-		utils.info('Case 7[To verify  send PM conversation to 25 recipient at the same time]');
-	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
-		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
-	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
-		this.test.assertSelectorHasText('#ddSettings', 'Security');
-		this.click('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]');
-		backEndregisterMethod.enableDisableEmailAddressVerification(false);
-	}).then(function() {
-		backEndregisterMethod.enableDisableApproveNewRegistrations(false);
-	}).then(function() {
-		backEndregisterMethod.enableDisableHumanVerification(false);
-	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
-		casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/fields"]', function() {
-		this.test.assertSelectorHasText('#ddUsers', 'Profile Fields');
-		this.click('div#ddUsers a[href="/tool/members/mb/fields"]');
-	}).waitForText('Default Profile Fields',function() {
-		var setOptions = {"fullName" : "", "instantMessaging" : "", "birthday" : "", "signature" : "", "avatar" : "",
-		"visiblity_name_registration" : "Yes",
-		"visiblity_imType_registration" : "Yes", "visiblity_dob_registration" : "Yes",
-		"visiblity_signature_registration" : "Yes", "visiblity_avatar_registration" : "Yes"};
-		backEndregisterMethod.changeDefaultRegistrationOptions(setOptions);
-	}).thenOpen(config.url, function() {
-		registerMethod.registerMultipleUsers(26, function(users) {
-			recipients = users;
-		});
-	}).thenOpen(config.url, function() {*/
 	casper.thenOpen(config.url, function() {
 		this.waitForSelector('#inline_search_box', function() {
 			this.test.assertExists('#inline_search_box', 'Search bar present');
@@ -612,17 +516,6 @@ privateMessageTestcases.sendPMToMaxAndMoreThanMaxRecipient = function() {
 			});
 		});
 	});
-	/*}).thenOpen(config.backEndUrl , function() {
-		this.waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
-			casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
-  	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
-			this.test.assertSelectorHasText('#ddUsers', 'Group Permissions');
-			this.click('div#ddUsers a[href="/tool/members/mb/usergroup"]');
-			backEndregisterMethod.viewUsers('General');
-		}).then(function() {
-			backEndregisterMethod.editUserActions('General', 'Delete', recipients.length);
-		});
-	});*/
 };
 
 // method To verify mark as read-unread(check box)(single)
@@ -647,13 +540,11 @@ privateMessageTestcases.read_unreadCheckbox = function() {
 				document.querySelector('ul#pmsg_inbox_listing li:nth-child(2) input').click();
 			});
 		}).waitUntilVisible('#messages-menu', function() {
-			this.test.assertExists('#messages-menu');
 			this.test.assertExists('div#messages-menu a.dropdown-toggle');
 			this.click('div#messages-menu a.dropdown-toggle');
-			this.test.assertExists('li#markunread_msg_btn a');
 			this.test.assertSelectorHasText('li#markunread_msg_btn a', 'Mark as Unread');
 			this.click('li#markunread_msg_btn a');
-		}).waitForText('The conversation has been marked as unread', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'The conversation has been marked as unread');
 			this.test.assertExists('span.badge.blue');
 			this.evaluate(function() {
@@ -666,7 +557,7 @@ privateMessageTestcases.read_unreadCheckbox = function() {
 			this.test.assertExists('li#markread_msg_btn a');
 			this.test.assertSelectorHasText('li#markread_msg_btn a', 'Mark as Read');
 			this.click('li#markread_msg_btn a');
-		}).waitForText('The conversation has been marked as read', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'The conversation has been marked as read.');
 			this.test.assertDoesntExist('span.badge.blue');
 			this.evaluate(function() {
@@ -680,7 +571,7 @@ privateMessageTestcases.read_unreadCheckbox = function() {
 			this.test.assertExists('li#markunread_msg_btn a');
 			this.test.assertSelectorHasText('li#markunread_msg_btn a', 'Mark as Unread');
 			this.click('li#markunread_msg_btn a');
-		}).waitForText('2 conversations have been marked as unread.', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', '2 conversations have been marked as unread.');
 			this.test.assertExists('span.badge.blue');
 			this.evaluate(function() {
@@ -694,7 +585,7 @@ privateMessageTestcases.read_unreadCheckbox = function() {
 			this.test.assertExists('li#markread_msg_btn a');
 			this.test.assertSelectorHasText('li#markread_msg_btn a', 'Mark as Read');
 			this.click('li#markread_msg_btn a');
-		}).waitForText('2 conversations have been marked as read.', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', '2 conversations have been marked as read.');
 			this.test.assertDoesntExist('span.badge.blue');
 			this.evaluate(function() {
@@ -707,7 +598,7 @@ privateMessageTestcases.read_unreadCheckbox = function() {
 			this.test.assertExists('li#markunread_msg_btn a');
 			this.test.assertSelectorHasText('li#markunread_msg_btn a', 'Mark as Unread');
 			this.click('li#markunread_msg_btn a');
-		}).waitForText('conversations have been marked as unread.', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'conversations have been marked as unread.');
 			this.test.assertExists('span.badge.blue');
 			this.evaluate(function() {
@@ -720,7 +611,7 @@ privateMessageTestcases.read_unreadCheckbox = function() {
 			this.test.assertExists('li#markread_msg_btn a');
 			this.test.assertSelectorHasText('li#markread_msg_btn a', 'Mark as Read');
 			this.click('li#markread_msg_btn a');
-		}).waitForText('conversations have been marked as read.', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'conversations have been marked as read.');
 			this.test.assertDoesntExist('span.badge.blue');
 			this.evaluate(function() {
@@ -733,7 +624,7 @@ privateMessageTestcases.read_unreadCheckbox = function() {
 			this.test.assertExists('li#markunread_msg_btn a');
 			this.test.assertSelectorHasText('li#markunread_msg_btn a', 'Mark as Unread');
 			this.click('li#markunread_msg_btn a');
-		}).waitForText('The conversation has been marked as unread', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'The conversation has been marked as unread');
 			this.test.assertExists('span.badge.blue');
 			this.evaluate(function() {
@@ -773,9 +664,7 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			this.test.assertExists('#messages-menu');
 			this.test.assertExists('#move_to_saved_btn i');
 			this.click('#move_to_saved_btn i');
-			//this.test.assertExists('li#move_to_saved_btn a');
-			//this.click('li#move_to_saved_btn a');
-		}).waitForText('The conversation has been archived.', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'The conversation has been archived.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
 			this.click('div.dropdown.open ul.dropdown-menu.left.check-select li:nth-child(2) a');
@@ -787,9 +676,7 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			this.test.assertExists('#messages-menu');
 			this.test.assertExists('#move_to_inbox_btn i');
 			this.click('#move_to_inbox_btn i');
-			//this.test.assertExists('li#move_to_inbox_btn a');
-			//this.click('li#move_to_inbox_btn a');
-		}).waitForText('The conversation has been moved to Inbox.', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'The conversation has been moved to Inbox.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
 			this.click('div.dropdown.open ul.dropdown-menu.left.check-select li:nth-child(1) a');
@@ -802,9 +689,7 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			this.test.assertExists('#messages-menu');
 			this.test.assertExists('#move_to_saved_btn i');
 			this.click('#move_to_saved_btn i');
-			//this.test.assertExists('li#move_to_saved_btn a');
-			//this.click('li#move_to_saved_btn a');
-		}).waitForText('2 conversations have been archived.', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', '2 conversations have been archived.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
 			this.click('div.dropdown.open ul.dropdown-menu.left.check-select li:nth-child(2) a');
@@ -817,9 +702,7 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			this.test.assertExists('#messages-menu');
 			this.test.assertExists('#move_to_inbox_btn i');
 			this.click('#move_to_inbox_btn i');
-			//this.test.assertExists('li#move_to_inbox_btn a');
-			//this.click('li#move_to_inbox_btn a');
-		}).waitForText('2 conversations have been moved to Inbox.', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', '2 conversations have been moved to Inbox.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
 			this.click('div.dropdown.open ul.dropdown-menu.left.check-select li:nth-child(1) a');
@@ -831,9 +714,7 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			this.test.assertExists('#messages-menu');
 			this.test.assertExists('#move_to_saved_btn i');
 			this.click('#move_to_saved_btn i');
-			//this.test.assertExists('li#move_to_saved_btn a');
-			//this.click('li#move_to_saved_btn a');
-		}).waitForText('conversations have been archived.', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'conversations have been archived.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
 			this.click('div.dropdown.open ul.dropdown-menu.left.check-select li:nth-child(2) a');
@@ -845,18 +726,11 @@ privateMessageTestcases.moveSingleToArchieve = function() {
 			this.test.assertExists('#messages-menu');
 			this.test.assertExists('#move_to_inbox_btn i');
 			this.click('#move_to_inbox_btn i');
-			//this.test.assertExists('li#move_to_inbox_btn a');
-			//this.click('li#move_to_inbox_btn a');
-		}).waitForText('conversations have been moved to Inbox.', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'conversations have been moved to Inbox.');
 			this.click('form#pmsg_list a.profile-active.dropdown-toggle span');
 			this.click('div.dropdown.open ul.dropdown-menu.left.check-select li:nth-child(1) a');
 		}).then(function() {
-			/*var content = this.fetchText(this.getPageContent());
-			this.reload(function() {
-				var contentAfterRefresh = this.fetchText(this.getPageContent());
-				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-			});*/
 			forumLoginMethod.logoutFromApp();
 		});
 	});
@@ -912,11 +786,6 @@ privateMessageTestcases.ignore_unIgnoreUser = function() {
 			}).waitUntilVisible('div#ajax-msg-top', function() {
 				this.test.assertSelectorHasText('div#ajax-msg-top p', 'Sent');
 			}).then(function() {
-				/*var content = this.fetchText(this.getPageContent());
-				this.reload(function() {
-					var contentAfterRefresh = this.fetchText(this.getPageContent());
-					this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-				});*/
 				forumLoginMethod.logoutFromApp();
 			});
 		});
@@ -991,11 +860,6 @@ privateMessageTestcases.sendMessageWhoIgnoredYou = function() {
 		}).waitForSelector('div.ignore-list', function() {
 			this.test.assertSelectorDoesntHaveText('div.ignore-list', loginJSON.pmMsgUser.username);
 		}).then(function() {
-			/*var content = this.fetchText(this.getPageContent());
-			this.reload(function() {
-				var contentAfterRefresh = this.fetchText(this.getPageContent());
-				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-			});*/
 			forumLoginMethod.logoutFromApp();
 		});
 	});
@@ -1039,11 +903,6 @@ privateMessageTestcases.verifyMessageIconCountCaseOne = function() {
 				}).waitUntilVisible('div#ajax-msg-top', function() {
 					this.test.assertSelectorHasText('div#ajax-msg-top p', 'Sent');
 				}).then(function() {
-					/*var content = this.fetchText(this.getPageContent());
-					this.reload(function() {
-						var contentAfterRefresh = this.fetchText(this.getPageContent());
-						this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-					});*/
 				});
 			});
 		}).reload(function() {
@@ -1112,11 +971,6 @@ privateMessageTestcases.verifyMessageIconCountCaseTwo = function() {
 		}).waitUntilVisible('div#ajax-msg-top', function() {
 			this.test.assertSelectorHasText('div#ajax-msg-top p', 'Sent');
 		}).then(function() {
-			/*var content = this.fetchText(this.getPageContent());
-			this.reload(function() {
-				var contentAfterRefresh = this.fetchText(this.getPageContent());
-				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-			});*/
 			forumLoginMethod.logoutFromApp();
 		});
 	}).thenOpen(config.url, function() {
@@ -1154,11 +1008,6 @@ privateMessageTestcases.verifyMessageIconCountCaseTwo = function() {
 		}).waitUntilVisible('div#ajax-msg-top', function() {
 			this.test.assertSelectorHasText('div#ajax-msg-top p', 'Sent');
 		}).then(function() {
-			/*var content = this.fetchText(this.getPageContent());
-			this.reload(function() {
-				var contentAfterRefresh = this.fetchText(this.getPageContent());
-				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-			});*/
 			forumLoginMethod.logoutFromApp();
 		});
 	}).thenOpen(config.url , function() {
@@ -1218,7 +1067,7 @@ privateMessageTestcases.leaveConversation = function() {
 			this.test.assertExists('#messages-menu');
 			this.test.assertExists('a#leave_conversation i');
 			this.click('a#leave_conversation i');
-		}).waitForText('You have left the conversation.', function() {
+		}).waitUntilVisible('#ajax-msg-top', function() {
 			this.test.assertSelectorHasText('div#ajax-msg-top', 'You have left the conversation.');
 			var date = this.evaluate(function() {
 				return document.querySelector('time').getAttribute('title');
@@ -1239,7 +1088,7 @@ privateMessageTestcases.leaveConversation = function() {
 			this.test.assertExists('#messages-menu');
 			this.test.assertExists('a#leave_conversation i');
 			this.click('a#leave_conversation i');
-		}).waitForText('You have left the 2 selected conversations.', function() {
+		}).waitUntilVisible('#ajax-msg-top', function() {
 			this.test.assertSelectorHasText('div#ajax-msg-top', 'You have left the 2 selected conversations.');
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -1254,15 +1103,10 @@ privateMessageTestcases.leaveConversation = function() {
 			this.test.assertExists('#messages-menu');
 			this.test.assertExists('a#leave_conversation i');
 			this.click('a#leave_conversation i');
-		}).waitForText('You have left', function() {
+		}).waitUntilVisible('#ajax-msg-top', function() {
 			this.test.assertSelectorHasText('#ajax-msg-top', 'You have left the ');
 			this.test.assertSelectorHasText('#ajax-msg-top', ' selected conversations.');
 		}).then(function() {
-			/*var content = this.fetchText(this.getPageContent());
-			this.reload(function() {
-				var contentAfterRefresh = this.fetchText(this.getPageContent());
-				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-			});*/
 			forumLoginMethod.logoutFromApp();
 		});
 	});
@@ -1297,7 +1141,7 @@ privateMessageTestcases.deleteConversation = function() {
 			this.test.assertExists('#messages-menu');
 			this.test.assertExists('a#delete_conversation i');
 			this.click('a#delete_conversation i');
-		}).waitForText('The conversation has been deleted', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', 'The conversation has been deleted');
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -1313,7 +1157,7 @@ privateMessageTestcases.deleteConversation = function() {
 			this.test.assertExists('#messages-menu');
 			this.test.assertExists('a#delete_conversation i');
 			this.click('a#delete_conversation i');
-		}).waitForText('2 conversations have been deleted', function() {
+		}).waitForSelector('.conversation-list .alert.alert-success', function() {
 			this.test.assertSelectorHasText('div.alert.alert-success.text-center', '2 conversations have been deleted');
 			this.test.assertExists('i#private_message_notification');
 			this.click('i#private_message_notification');
@@ -1347,12 +1191,6 @@ privateMessageTestcases.deleteConversation = function() {
 			this.click('i#private_message_notification');
 		}).waitForText('Go to inbox', function() {
 		}).then(function() {
-			/*var content = this.fetchText(this.getPageContent());
-			this.reload(function() {
-				var contentAfterRefresh = this.fetchText(this.getPageContent());
-				this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-				forumLoginMethod.logoutFromApp();
-			});*/
 		});
 	});
 };
@@ -1383,12 +1221,6 @@ privateMessageTestcases.refreshPmPageAfterSendingMessage = function() {
 	}).reload(function() {
 		this.click('li[id^="pmsg_list_"]:nth-child(3)');
 	}).then(function() {
-		/*var content = this.fetchText(this.getPageContent());
-		this.reload(function() {
-			var contentAfterRefresh = this.fetchText(this.getPageContent());
-			this.test.assert(contentAfterRefresh.indexOf(content) > -1);
-			//forumLoginMethod.logoutFromApp();
-		});*/
 		forumLoginMethod.logoutFromApp();
 	});
 };
