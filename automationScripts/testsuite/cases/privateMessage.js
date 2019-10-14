@@ -172,7 +172,14 @@ privateMessageTestcases.sendPMWithBlankMessage = function() {
 			this.click('a.send_new_pmsg');
 		}).waitUntilVisible('#pmsg_dialog_heading', function() {
 			this.test.assertSelectorHasText('#pmsg_dialog_heading', 'New Message');
-			privateMessageMethod.newMessage(pmJSON.blankMessage);
+			this.sendKeys('input[id="tokenfield_typeahead-tokenfield"]', pmJSON.blankMessage.to, {keepFocus:true});
+			this.sendKeys('input[id="tokenfield_typeahead-tokenfield"]', casper.page.event.key.Enter, {keepFocus:true});
+		}).then(function() {
+			this.sendKeys('input[id="pm_subject"]', pmJSON.blankMessage.subject, {keepFocus:true});
+			//privateMessageMethod.newMessage(pmJSON.blankMessage);
+		}).then(function() {
+			this.test.assertExists('#send_pmsg_button');
+			this.click('#send_pmsg_button');
 		}).waitUntilVisible('div#pm_error_msg', function() {
 			this.test.assertSelectorHasText('div#pm_error_msg', 'Please enter your message');
 		});
@@ -758,12 +765,12 @@ privateMessageTestcases.ignore_unIgnoreUser = function() {
 			this.waitForSelector('div#ignore-box', function() {
 				this.sendKeys('input[id="ignore_user_field-tokenfield"]', loginJSON.pmMsgUser.username, {keepFocus:true});
 				this.sendKeys('input[id="ignore_user_field-tokenfield"]', casper.page.event.key.Enter , {keepFocus: true});
-				this.test.assertSelectorHasText('div#ignore-box input[name="save"]', 'Ignore Users');
+				this.test.assertSelectorHasText('div#ignore-box input[name="save"]', 'Ignore');
 				this.click('div#ignore-box input[name="save"]');
 			});
-		}).waitForSelector('div.ignore-list', function() {
+		}).waitForSelector('.entry-checkbox', function() {
 			this.test.assertSelectorHasText('div.ignore-list', loginJSON.pmMsgUser.username);
-			this.click('input[value="shipra"]');
+			this.click('.entry-checkbox');
 			this.waitUntilVisible('div#ignore-menu', function() {
 				this.click('a#unignoreUser');
 			});
@@ -771,7 +778,7 @@ privateMessageTestcases.ignore_unIgnoreUser = function() {
 			this.test.assertSelectorDoesntHaveText('div.ignore-list', loginJSON.pmMsgUser.username);
 			this.sendKeys('input[id="ignore_user_field-tokenfield"]', loginJSON.pmMsgUser.username, {keepFocus:true});
 			this.sendKeys('input[id="ignore_user_field-tokenfield"]', casper.page.event.key.Enter , {keepFocus: true});
-			this.test.assertSelectorHasText('div#ignore-box input[name="save"]', 'Ignore Users');
+			this.test.assertSelectorHasText('div#ignore-box input[name="save"]', 'Ignore');
 			this.click('div#ignore-box input[name="save"]');
 		}).waitForSelector('div.ignore-list', function() {
 			this.test.assertSelectorHasText('div.ignore-list', loginJSON.pmMsgUser.username);
@@ -853,7 +860,7 @@ privateMessageTestcases.sendMessageWhoIgnoredYou = function() {
 			this.click('a[href="/pm/ignoreuser"]');
 		}).waitForSelector('div.ignore-list', function() {
 			this.test.assertSelectorHasText('div.ignore-list', loginJSON.pmMsgUser.username);
-			this.click('input[value="shipra"]');
+			this.click('.entry-checkbox');
 			this.waitUntilVisible('div#ignore-menu', function() {
 				this.click('a#unignoreUser');
 			});
