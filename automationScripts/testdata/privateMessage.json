@@ -24,7 +24,7 @@
 	},
 
 	"blankMessage" : {
-		"to" : ["sangita"],
+		"to" : "sangita",
 		"subject" : "Black message",
 		"pmessage" : ""
 	},
