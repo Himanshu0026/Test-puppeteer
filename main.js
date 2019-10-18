@@ -490,7 +490,7 @@ handler.on('push', function (event) {
 		var branchName = tempArr[tempArr.length-1];
 		commitDetails.branchName = branchName;
 		commitDetails.priorityNo = '0';
-		queueServices.addNewJob(commitDetails, 'automation', '0');
+		getEslintFile(commitDetails);
 	}else{
 		console.log("commitPayload not found");
 		console.log("Event payload : "+JSON.stringify(event.payload));
@@ -568,7 +568,7 @@ app.post('/automate/*', function(req, res) {
 			commitDetails.committerEmail = body.commit.commit.committer.email;
 			commitDetails.priorityNo = '-10';
 			console.log('initiating automation for ' + commitDetails.branchName + ' branch');
-			queueServices.addNewJob(commitDetails, 'automation', '-10');
+			getEslintFile(commitDetails);
 			res.send('Branch added to the automation queue and will execute just after the completion of current process and you will get the mail in case of failure ');
 		}
 	});
@@ -591,3 +591,35 @@ app.use(function(err,req, res, next)  {
        }
    });
 });
+
+function getEslintFile(commitDetails) {
+	request({
+		url: config.apiURL+'commits/'+commitDetails.commitId+'?access_token='+config.token,
+		headers: { 'user-agent' : 'git-technetium' },
+		json: true
+	}, function(err, response, body) {
+		if(err) {
+			console.log('err : '+err);
+			res.send(err);
+		}
+		if(response.statusCode == 200) {
+			var files = [];
+			body.files.forEach(function(file) {
+				var filename = file.filename;
+				files.push(filename);
+			});
+			files.forEach(function(element, index) {
+					files[index] = 'Website-Toolbox/' + element;
+			});
+			var eslintFile = ['Website-Toolbox/data/js/forum1_global/', 'Website-Toolbox/data/js/wt_global/', 'Website-Toolbox/data/textarea/forum1/editor_tinymce.js', 'Website-Toolbox/data/textarea/editor_tinymce.js', 'Website-Toolbox/data/js/md_framework/main.js', 'Website-Toolbox/data/js/product_new/main.js', 'Website-Toolbox/data/js/embed_global/embed_uncompiled.js'];
+			var eslintFileToRun = [];
+			eslintFileToRun = files.filter(function(file) {
+					return eslintFile.indexOf(file) !== -1 || file.includes("data/js/forum1_global/") || file.includes("data/js/wt_global/");
+			});
+			var fileNames = eslintFileToRun.join(' ');
+			commitDetails.changedFiles = fileNames;
+
+			queueServices.addNewJob(commitDetails, 'automation', '0');
+		}
+	});
+}
