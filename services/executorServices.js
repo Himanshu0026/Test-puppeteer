@@ -167,15 +167,16 @@ executorServices.executeJob = function(commitDetails, callback) {
 									});
 								});
 							} else {
+								var eslint_status = '';
 								if ((commitDetails.changedFiles).length !==0) {
-									executorServices.executeEslint(commitDetails, function(err){
-										if(err)
-										console.error("error occurred while executing eslint: "+err);
-										else
-										console.log("Eslint script executed successfully.");
-										return callback();
+									executorServices.executeEslint(commitDetails, function(err, status){
+										if(!err) {
+											eslint_status = status;
+											console.log("Eslint script executed successfully."+eslint_status);
+											return callback();
+										}
 									});
-								} else {
+								} else if(eslint_status === '' || eslint_status === true) {
 									executorServices.executeAutomation(commitDetails, function(err){
 										if(err)
 										console.error("error occurred while executing automation script: "+err);
@@ -412,7 +413,7 @@ executorServices.executeEslint = function(commitDetails, callback) {
 													//Deleting commit specific log files
 													console.timeEnd('Automation execution time');
 													console.log("Commit specific log files deleted.");
-													return callback();
+													return callback(null, false);
 												});
 											}
 										});
@@ -429,21 +430,13 @@ executorServices.executeEslint = function(commitDetails, callback) {
 									fs.unlinkSync(esErrorFile);
 									console.timeEnd('Automation execution time');
 									console.log("Commit specific log files deleted.");
-									return callback();
+									return callback(null, false);
 								});
 							}
 						});
 					});
 				} else {
-					//Executing automation test script
-					console.log("Executing Automation Script For " + commitDetails.commitId + " CommitID");
-					executorServices.executeAutomation(commitDetails, function(err){
-						if(err)
-						console.error("error occurred while executing automation script: "+err);
-						else
-						console.log("Automation script executed successfully.");
-						return callback();
-					});
+					return callback(null, true);
 				}
 			}
 		});
