@@ -59,10 +59,10 @@ app.get('/branches', function(req, res) {
 	var branches = [];
 	request({
 		url: config.apiURL+'branches?page=1&per_page=200&access_token='+config.token,
-	    	headers: { 'user-agent' : 'git-technetium' },
-	    	json: true
+		headers: { 'user-agent' : 'git-technetium' },
+		json: true
 	}, function(err, response, body) {
-		 if(err) {
+		if(err) {
 			console.log('err : '+err);
 			res.send(err);
 		}
@@ -87,8 +87,8 @@ app.get('/branches', function(req, res) {
 						var updatedDate = updateddate.format('DD/MM/YYYY');
 						request({
 							url: config.apiURL+'commits/'+commitId+'/statuses?access_token='+config.token,
-						    	headers: { 'user-agent' : 'git-technetium' },
-						    	json: true
+							headers: { 'user-agent' : 'git-technetium' },
+							json: true
 						}, function(err, response, body2) {
 							if(err) {
 								console.log('err : '+err);
@@ -130,9 +130,9 @@ app.get('/branches', function(req, res) {
 						//Function to sort branches
 						function compare(a,b) {
 							if (a.date > b.date)
-								return -1;
+							return -1;
 							if (a.date < b.date)
-								return 1;
+							return 1;
 							return 0;
 						}
 
@@ -144,7 +144,7 @@ app.get('/branches', function(req, res) {
 							branches: branches
 						});
 					}
-		  	});
+				});
 			});
 		}
 	});
@@ -155,9 +155,9 @@ app.get('/pulls', function(req, res) {
 	console.log('Getting pull requests');
 	var pullRequests = [];
 	request({
-	url: config.apiURL+'pulls?state=open&sort=updated&direction=desc&page=1&per_page=50&access_token='+config.token,
-	  	headers: { 'user-agent' : 'git-technetium' },
-	  	json: true
+		url: config.apiURL+'pulls?state=open&sort=updated&direction=desc&page=1&per_page=50&access_token='+config.token,
+		headers: { 'user-agent' : 'git-technetium' },
+		json: true
 	}, function(err, response, body) {
 		if(err) {
 			console.log('err : '+err);
@@ -221,12 +221,12 @@ app.get('/pulls', function(req, res) {
 				});
 			}
 		}
-  });
+	});
 });
 
 //Handling unused request
 app.get('/favicon.ico', function(req, res) {
-  res.sendStatus(204);
+	res.sendStatus(204);
 });
 
 app.get('/reviews/*', function(req, res) {
@@ -236,8 +236,8 @@ app.get('/reviews/*', function(req, res) {
 	console.log('pull request number : ' + pullNumber);
 	request({
 		url: config.apiURL+'pulls/'+pullNumber+'/requested_reviewers?access_token='+config.token,
-	    	headers: { 'user-agent' : 'git-technetium' },
-	    	json: true
+		headers: { 'user-agent' : 'git-technetium' },
+		json: true
 	}, function(err, response, body) {
 		if(err) {
 			console.log('err : '+err);
@@ -257,8 +257,8 @@ app.get('/reviews/*', function(req, res) {
 			if(inc >= body.users.length) {
 				request({
 					url: config.apiURL+'pulls/'+pullNumber+'/reviews?access_token='+config.token,
-				    	headers: { 'user-agent' : 'git-technetium' },
-				    	json: true
+					headers: { 'user-agent' : 'git-technetium' },
+					json: true
 				}, function(err, response, body1) {
 					if(err) {
 						console.log('err : '+err);
@@ -376,8 +376,8 @@ app.get('/branches/*', function(req, res) {
 			var commitDate = date.format('DD/MM/YYYY');
 			request({
 				url: config.apiURL+'commits/'+commitId+'/statuses?access_token='+config.token,
-			    	headers: { 'user-agent' : 'git-technetium' },
-			    	json: true
+				headers: { 'user-agent' : 'git-technetium' },
+				json: true
 			}, function(err, response, body1) {
 				if(err) {
 					console.log('err : '+err);
@@ -417,7 +417,7 @@ app.get('/branches/*', function(req, res) {
 				error: ''
 			});
 		}
-  });
+	});
 });
 
 app.post('/backstop/*', function(req, res) {
@@ -500,10 +500,10 @@ handler.on('push', function (event) {
 //Log details on any issue event
 handler.on('issues', function (event) {
 	console.log('Received an issue event for %s action=%s: #%d %s',
-		event.payload.repository.name,
-		event.payload.action,
-		event.payload.issue.number,
-		event.payload.issue.title);
+	event.payload.repository.name,
+	event.payload.action,
+	event.payload.issue.number,
+	event.payload.issue.title);
 	console.log(JSON.stringify(event.payload));
 });
 
@@ -513,13 +513,13 @@ app.get('/pendingBranches', function(req,res) {
 		if(pendingCommits && pendingCommits.length>0){
 			console.log("Found pending commits"+pendingCommits.length+ "........." +pendingCommits);
 			res.render('pendingBranches', {
-        pendingBranches: pendingCommits
-      });
+				pendingBranches: pendingCommits
+			});
 		}else{
 			console.log("No pending commits");
 			res.render('pendingBranches', {
-        pendingBranches: pendingCommits
-      });
+				pendingBranches: pendingCommits
+			});
 		}
 	});
 });
@@ -576,20 +576,20 @@ app.post('/automate/*', function(req, res) {
 
 //if we are here then the specified request is not found
 app.use(function(req,res,next) {
-    var err = new Error("Not Found");
-    err.status = 404;
-    next(err);
+	var err = new Error("Not Found");
+	err.status = 404;
+	next(err);
 });
 
 //all other requests are not implemented.
 app.use(function(err,req, res, next)  {
-   res.status(err.status || 501);
-   res.json({
-       error: {
-           code: err.status || 501,
-           message: err.message
-       }
-   });
+	res.status(err.status || 501);
+	res.json({
+		error: {
+			code: err.status || 501,
+			message: err.message
+		}
+	});
 });
 
 function getEslintFile(commitDetails) {
@@ -609,12 +609,12 @@ function getEslintFile(commitDetails) {
 				files.push(filename);
 			});
 			files.forEach(function(element, index) {
-					files[index] = 'Website-Toolbox/' + element;
+				files[index] = 'Website-Toolbox/' + element;
 			});
 			var eslintFile = ['Website-Toolbox/data/js/forum1_global/', 'Website-Toolbox/data/js/wt_global/', 'Website-Toolbox/data/textarea/forum1/editor_tinymce.js', 'Website-Toolbox/data/textarea/editor_tinymce.js', 'Website-Toolbox/data/js/md_framework/main.js', 'Website-Toolbox/data/js/product_new/main.js', 'Website-Toolbox/data/js/embed_global/embed_uncompiled.js'];
 			var eslintFileToRun = [];
 			eslintFileToRun = files.filter(function(file) {
-					return eslintFile.indexOf(file) !== -1 || file.includes("data/js/forum1_global/") || file.includes("data/js/wt_global/");
+				return eslintFile.indexOf(file) !== -1 || file.includes("data/js/forum1_global/") || file.includes("data/js/wt_global/");
 			});
 			var fileNames = eslintFileToRun.join(' ');
 			commitDetails.changedFiles = fileNames;
