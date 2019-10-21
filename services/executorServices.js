@@ -1,7 +1,6 @@
 //This script is responsible for executing any external script/process.
 'use strict.';
 var shell= require('shelljs');
-
 var fs = require('fs');
 var result;
 var sqlConnection = require('../connection.js');

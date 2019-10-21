@@ -1,5 +1,6 @@
 //This script is responsible for creating job queue and serves each job one by one.
 'use strict.';
+var shell= require('shelljs');
 var executorServices = require('./executorServices.js');
 var globalCurrentRunningBranch = require('./globalVariable.js');
 var redisClient;
@@ -79,7 +80,7 @@ queueServices.getRedisClient = function(redisStorageClient){
 
 queueServices.stopAutomation = function(newBranch) {
 	if (newBranch === globalCurrentRunningBranch.global.getCurrentRunningBranch()) {
-		exec("/etc/automation/bin/stop_phantom.sh" , function(code, stdout, stderr) {
+		shell.exec("/etc/automation/bin/stop_phantom.sh" , function(code, stdout, stderr) {
 			var stopFile = '/etc/automation/log/stop.txt';
 			fs.writeFile(stopFile, 'STOP_PHANTOMJS', function (err) {
 				if (err)
