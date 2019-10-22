@@ -611,10 +611,10 @@ function getEslintFile(commitDetails) {
 			files.forEach(function(element, index) {
 				files[index] = 'Website-Toolbox/' + element;
 			});
-			var eslintFile = ['Website-Toolbox/data/js/forum1_global/', 'Website-Toolbox/data/js/wt_global/', 'Website-Toolbox/data/textarea/forum1/editor_tinymce.js', 'Website-Toolbox/data/textarea/editor_tinymce.js', 'Website-Toolbox/data/js/md_framework/main.js', 'Website-Toolbox/data/js/product_new/main.js', 'Website-Toolbox/data/js/embed_global/embed_uncompiled.js'];
+			var eslintFile = ['Website-Toolbox/data/js/forum1_global/', 'Website-Toolbox/data/js/forum_global/', 'Website-Toolbox/data/js/wt_global/', 'Website-Toolbox/data/textarea/forum1/editor_tinymce.js', 'Website-Toolbox/data/textarea/editor_tinymce.js', 'Website-Toolbox/data/js/md_framework/main.js', 'Website-Toolbox/data/js/product_new/main.js', 'Website-Toolbox/data/js/embed_global/embed_uncompiled.js'];
 			var eslintFileToRun = [];
 			eslintFileToRun = files.filter(function(file) {
-				return eslintFile.indexOf(file) !== -1 || file.includes("data/js/forum1_global/") || file.includes("data/js/wt_global/");
+				return eslintFile.indexOf(file) !== -1 || file.includes("data/js/forum1_global/") || file.includes("data/js/wt_global/") || file.includes("data/js/forum_global/");
 			});
 			var fileNames = eslintFileToRun.join(' ');
 			commitDetails.changedFiles = fileNames;
