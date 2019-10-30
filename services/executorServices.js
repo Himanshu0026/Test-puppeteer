@@ -8,6 +8,7 @@ var mysql = require('mysql');
 var mailServices = require('./mailServices.js');
 var createStatus = require('./createStatus.js');
 var attachmentServices = require('./attachmentServices.js');
+var eslint_status = '';
 var executorServices = module.exports = {};
 
 //It executes job. Take job details as argument, executed the job and initiates mail sending.
@@ -166,24 +167,23 @@ executorServices.executeJob = function(commitDetails, callback) {
 									});
 								});
 							} else {
-								var eslint_status = '';
-								if ((commitDetails.changedFiles).length !==0) {
-									executorServices.executeEslint(commitDetails, function(err, status){
-										if(!err) {
-											eslint_status = status;
-											console.log("Eslint script executed successfully."+eslint_status);
+								//var eslint_status = '';
+								executorServices.checkEslintStatus(commitDetails, function(err){
+									if(!err){
+										console.log('the eslint status after checkEslintStatus method'+eslint_status);
+										if(eslint_status === '' || eslint_status === true) {
+											executorServices.executeAutomation(commitDetails, function(err){
+												if(err)
+												console.error("error occurred while executing automation script: "+err);
+												else
+												console.log("Automation script executed successfully.");
+												return callback();
+											});
+										}else {
 											return callback();
 										}
-									});
-								} else if(eslint_status === '' || eslint_status === true) {
-									executorServices.executeAutomation(commitDetails, function(err){
-										if(err)
-										console.error("error occurred while executing automation script: "+err);
-										else
-										console.log("Automation script executed successfully.");
-										return callback();
-									});
-								}
+									}
+								});
 							}
 						}
 					});
@@ -440,4 +440,18 @@ executorServices.executeEslint = function(commitDetails, callback) {
 			}
 		});
 	});
+};
+
+executorServices.checkEslintStatus = function(commitDetails, callback){
+	if ((commitDetails.changedFiles).length !==0) {
+		executorServices.executeEslint(commitDetails, function(err, status){
+			if(!err) {
+				eslint_status = status;
+				console.log("Eslint script executed successfully."+eslint_status);
+				return callback();
+			}
+		});
+	}else {
+		return callback();
+	}
 };
