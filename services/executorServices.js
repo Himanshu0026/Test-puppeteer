@@ -174,12 +174,15 @@ executorServices.executeJob = function(commitDetails, callback) {
 										if(eslint_status === '' || eslint_status === true) {
 											executorServices.executeAutomation(commitDetails, function(err){
 												if(err)
-												console.error("error occurred while executing automation script: "+err);
-												else
-												console.log("Automation script executed successfully.");
-												return callback();
+													console.error("error occurred while executing automation script: "+err);
+												else{
+													console.log("Automation script executed successfully.");
+													eslint_status = '';
+													return callback();
+												}
 											});
 										}else {
+											eslint_status = '';
 											return callback();
 										}
 									}
