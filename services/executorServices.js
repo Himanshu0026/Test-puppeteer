@@ -168,6 +168,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 								});
 							} else {
 								//var eslint_status = '';
+								console.log('the value of eslint status before checkEslintStatus method'+eslint_status);
 								executorServices.checkEslintStatus(commitDetails, function(err){
 									if(!err){
 										console.log('the eslint status after checkEslintStatus method'+eslint_status);
@@ -446,6 +447,7 @@ executorServices.executeEslint = function(commitDetails, callback) {
 };
 
 executorServices.checkEslintStatus = function(commitDetails, callback){
+	console.log("The modified files on the commit"+commitDetails.changedFiles+" ,the length of commitDetails.changed"+(commitDetails.changedFiles).length);
 	if ((commitDetails.changedFiles).length !==0) {
 		executorServices.executeEslint(commitDetails, function(err, status){
 			if(!err) {
@@ -455,6 +457,7 @@ executorServices.checkEslintStatus = function(commitDetails, callback){
 			}
 		});
 	}else {
+		console.log("Eslint script not executed because no modified file matched with the specified list. The status of eslint ="+eslint_status);
 		return callback();
 	}
 };
