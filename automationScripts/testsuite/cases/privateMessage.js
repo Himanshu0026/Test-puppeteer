@@ -282,6 +282,8 @@ privateMessageTestcases.verifyReplyOption = function() {
 				});
 			}).then(function() {
 				this.click('div#current_msg_details a.username');
+			}).waitForSelector('div.hovercard a.display_username', function() {
+				this.click('div.hovercard a.display_username');
 				this.waitForSelector('div#UserProfile', function() {
 					utils.info('profile page found');
 				});
@@ -318,6 +320,8 @@ privateMessageTestcases.verifyOneToOneConversation = function() {
 			this.test.assertSelectorHasText('div#ajax-msg-top p', 'Sent');
 		}).then(function() {
 			this.click('div#current_msg_details a.username');
+		}).waitForSelector('div.hovercard a.display_username', function() {
+			this.click('div.hovercard a.display_username');
 			this.waitForSelector('div#UserProfile', function() {
 				utils.info('profile page found');
 			});
