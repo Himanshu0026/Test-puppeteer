@@ -339,14 +339,15 @@ editProfilePageTests.shieldIconRegisteruser=function(){
 		utils.info('Case 9[Verify the shield icon for registered user  on edit profile pgae by the admin.]');
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
 	}).waitWhileVisible('#td_tab_login', function() {
-		var userId = casper.evaluate(function(){
-			var userId = document.querySelector('div#topics div div div form div div:nth-child(3) ul li span:nth-child(1) span:nth-child(1) a');
-			var userHref=userId.getAttribute('href');
-			return userHref;
+		var userhref = casper.evaluate(function(){
+			var userhref = document.querySelector('div#topics div div div form div div:nth-child(3) ul li span:nth-child(1) span:nth-child(1) a').getAttribute('href');
+			return userhref;
 		});
-		this.evaluate(function(userId) {
-			document.querySelector('a[href="'+userId+'"]').click();
-		}, userId);
+		this.evaluate(function(userhref) {
+			document.querySelector('a[href="'+userhref+'"]').click();
+		}, userhref);
+	}).waitUntilVisible('div.hovercard a.display_username', function(){
+		this.click('div.hovercard a.display_username');
 	}).waitForSelector('a#anchor_tab_edit i', function(){
 		this.click('a#anchor_tab_edit i');
 	}).waitForSelector('div#userSignature textarea', function(){

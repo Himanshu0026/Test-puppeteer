@@ -577,11 +577,15 @@ profilePageTests.profilePageDeleteUser= function(){
 		forumLoginMethod.loginToApp(loginJSON.adminUser.username, loginJSON.adminUser.password);
 	}).waitWhileVisible('#td_tab_login', function() {
 	}).waitForSelector('form[name="posts"] a.topic-title', function(){
-		var userHref = casper.evaluate(function() {
-			var userId = document.querySelectorAll('div.panel-body.table-responsive ul li:nth-child(1) span.col-md-9 span.image-wrapper a');
-			return userId[0].getAttribute('href');
+		var userhref = casper.evaluate(function(){
+			var userhref = document.querySelector('div.panel-body.table-responsive ul li:nth-child(1) span.col-md-9 span.image-wrapper a').getAttribute('href');
+			return userhref;
 		});
-		this.click('a[href="'+userHref+'"]');
+		this.evaluate(function(userhref) {
+			document.querySelector('a[href="'+userhref+'"]').click();
+		}, userhref);
+	}).waitUntilVisible('div.hovercard a.display_username', function(){
+		this.click('div.hovercard a.display_username');
 	}).waitForSelector('a#PostsOFUser', function(){
 		this.click('a#anchor_tab_edit i');
 	}).waitForSelector('a[aria-controls="Account Settings"]', function(){
