@@ -6,7 +6,7 @@ var mailServices = module.exports = {};
 
 //defining SMTP configuration
 var smtpConfig = {
-	host: 'mail.websitetoolbox.com',
+	host: 'localmail.websitetoolbox.com',
 	port: 587,
 	secure: false, // use SSL
 	tls: {
