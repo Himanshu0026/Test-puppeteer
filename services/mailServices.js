@@ -6,9 +6,12 @@ var mailServices = module.exports = {};
 
 //defining SMTP configuration
 var smtpConfig = {
-    host: 'mail.websitetoolbox.com',
-    port: 587,
-    secure: false // use SSL
+	host: 'mail.websitetoolbox.com',
+	port: 587,
+	secure: false, // use SSL
+	tls: {
+		rejectUnauthorized:false
+	}
 };
 
 // create reusable transporter object using the SMTP configuration
@@ -16,12 +19,12 @@ var transporter = nodemailer.createTransport(smtpConfig);
 
 // send mail with defined transport object
 mailServices.sendMail = function(emailDetails, callback){
-  var txt = '';
-  if (emailDetails.attachments === '') {
-    txt = 'Hello ' + emailDetails.committerName+",\n\n Following is the automation test result: \n"+emailDetails.testResult;
-  } else {
-    txt = 'Hello ' + emailDetails.committerName+",\n\n Following is the automation test result: \n"+emailDetails.testResult+"\n\nPlease find details of the automation test result attached herewith. \n";
-  }
+	var txt = '';
+	if (emailDetails.attachments === '') {
+		txt = 'Hello ' + emailDetails.committerName+",\n\n Following is the automation test result: \n"+emailDetails.testResult;
+	} else {
+		txt = 'Hello ' + emailDetails.committerName+",\n\n Following is the automation test result: \n"+emailDetails.testResult+"\n\nPlease find details of the automation test result attached herewith. \n";
+	}
 
 	// setup e-mail data with unicode symbols
 	var mailOptions = {
