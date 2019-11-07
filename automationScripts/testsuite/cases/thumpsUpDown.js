@@ -398,6 +398,8 @@ thumpsUpDownTestcases.clickOnOwnName = function() {
 				}
 			}
 		});
+	}).waitForSelector('div.hovercard a.display_username', function() {
+		this.click('div.hovercard a.display_username');
 	}).waitForSelector('#memberName', function() {
 		this.test.assertSelectorHasText('#memberName','neha');
 	}).then(function() {
@@ -432,6 +434,8 @@ thumpsUpDownTestcases.verifyReputationTab = function() {
 		this.click('li#members_list_show a');
 	}).waitForSelector('div.panel-body.table-responsive', function() {
 		this.click('div.panel-body.table-responsive a');
+	}).waitForSelector('div.hovercard a.display_username', function() {
+		this.click('div.hovercard a.display_username');
 	}).waitForSelector('#memberName', function() {
 		this.test.assertTextDoesntExist('Reputation', 'Reputation section removed');
 	}).then(function() {
