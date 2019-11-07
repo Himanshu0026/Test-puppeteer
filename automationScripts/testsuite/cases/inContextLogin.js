@@ -183,9 +183,9 @@ inContextLoginTests.doLoginByViewProfileDisable = function() {
 				return userId[0].getAttribute('href');
 			});
 			this.click('a[href="'+userHref+'"]');
-		});//.waitUntilVisible('.alert', function() {
-		// 	this.test.assertTextExists('Please login or');
-		// });
+		}).waitUntilVisible('.alert', function() {
+			this.test.assertTextExists('Please login or');
+		});
 	});
 };
 
@@ -287,16 +287,19 @@ inContextLoginTests.doLoginByEmailButton = function() {
 				var userId = document.querySelectorAll('ul li span.image-wrapper a');
 				return userId[0].getAttribute('href');
 			});
-			// casper.evaluate(function(userHref) {
-			// 	document.querySelector('a[href="'+userHref+'"]').click();
-			// }, userHref);
-			// this.waitForSelector('a#send_email', function() {
-			// 	this.test.assertSelectorHasText('a#send_email', 'Email');
-			// 	this.click('a#send_email');
-			// }).waitUntilVisible('#login_register_modal', function() {
-			// 	this.test.assertTextExists('Create Account', 'Create Account appears on the page');
-			// 	this.test.assertTextExists('Log In', 'Log In appears on the page');
-			// });
+			casper.evaluate(function(userHref) {
+				document.querySelector('a[href="'+userHref+'"]').click();
+			}, userHref);
+			this.waitForSelector('div.hovercard a.display_username', function() {
+				this.click('div.hovercard a.display_username');
+			}).waitForSelector('div#UserProfile', function() {
+			//}).waitForSelector('a#send_email', function() {
+				this.test.assertSelectorHasText('a#send_email', 'Email');
+				this.click('a#send_email');
+			}).waitUntilVisible('#login_register_modal', function() {
+				this.test.assertTextExists('Create Account', 'Create Account appears on the page');
+				this.test.assertTextExists('Log In', 'Log In appears on the page');
+			});
 		});
 	});
 };
