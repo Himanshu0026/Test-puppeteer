@@ -12,3 +12,8 @@ settings.updateSettings = function(uid,field,value) {
   var sql ='UPDATE settings SET '+field+ '="' +value+ '" WHERE uid = "'+uid+'";';
   return sql;
 };
+
+settings.getFieldValue = function(uid,field) {
+  var sql ='SELECT '+field+ ' FROM settings WHERE uid = "'+uid+'";';
+  return sql;
+};

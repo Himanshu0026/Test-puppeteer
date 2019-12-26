@@ -167,6 +167,19 @@ router.get("/settings/:field/:value", function(req, res, next) {
   });
 });
 
+router.get("/settings/:field", function(req, res, next) {
+  sqlConnection(settings.getFieldValue(uid, req.params.field), function(err, result) {
+    if(!err) {
+      res.status(200).json({
+        message:"got the field value.",
+        fieldValue:result[0].uses_forums
+      });
+    } else {
+      res.send(err);
+    }
+  });
+});
+
 router.get("/usergroups/getID/:grouptitle(*)", function(req, res, next) {
   sqlConnection(Usergroups.getUsergroupID(uid, req.params.grouptitle), function(err, result) {
     if(!err) {
