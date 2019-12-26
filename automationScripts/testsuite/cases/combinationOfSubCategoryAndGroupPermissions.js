@@ -45,11 +45,20 @@ combinationOfSubCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategor
 		backEndForumRegisterMethod.goToCategoryPage();
 		casper.then(function() {
 			backEndForumRegisterMethod.createCategory(combinationOfSubCategoryAndGroupPermissionsJSON.category);
-			casper.reload(function() {
-				this.waitForText(combinationOfSubCategoryAndGroupPermissionsJSON.category.title, function() {
-					combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.subCategory);
-				}).then(function() {
-					combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory);
+			casper.wait('2000', function() {
+				casper.reload(function() {
+					this.thenOpen(config.apiLocalUrl+"/restapi/settings/uses_forums?accesToken=e3dac0e84ae3c7f0515ae119a6ef818d", function() {
+						var uses_forumsValueObj = JSON.parse(this.getPageContent());
+						var uses_forumsValue = uses_forumsValueObj.fieldValue;
+						console.log('the value of uses_forum after cat1 category creation'+uses_forumsValue);
+					}).thenOpen(config.backEndUrl, function() {
+						backEndForumRegisterMethod.goToCategoryPage();
+					}).waitForText(combinationOfSubCategoryAndGroupPermissionsJSON.category.title, function() {
+						combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.subCategory);
+					}).then(function() {
+					}).wait('2000', function() {
+						combinationOfSubCategoryAndGroupPermissionsMethod.createSubCategory(combinationOfSubCategoryAndGroupPermissionsJSON.otherSubCategory);
+					});
 				});
 			});
 		});

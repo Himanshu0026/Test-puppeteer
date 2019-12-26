@@ -101,7 +101,22 @@ replyPostTests.quoteEmoji=function() {
       this.wait(1000, function(){
         this.test.assertExists('img.emoji.bbc_img');
       });
-    }).then(function(){
+    });
+  });
+};
+
+replyPostTests.checkErrorMsg=function() {
+  casper.thenOpen(config.url, function(){
+    utils.info('Case 3[verify error msg on post button.]');
+    this.waitForSelector('form[name="posts"] a.topic-title', function(){
+      this.click('form[name="posts"] a.topic-title');
+    }).waitForSelector('a.pull-right.btn.btn-uppercase.btn-primary', function(){
+      this.evaluate(function() {
+        document.querySelector('a#sub_post_reply').click();
+      });
+    }).waitForSelector('i.mce-ico.mce-i-image', function(){
+      this.click('#reply_submit');
+    }).waitUntilVisible('#bootstrap-alert-box-modal div div div:nth-child(2) p', function(){
       forumLoginMethod.logoutFromApp();
     });
   });

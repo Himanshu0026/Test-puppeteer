@@ -18,6 +18,8 @@ replyPost.featureTest = function(){
     replyPostTests.createPagination();
     //verify with the reply with quote button when there are only some emojis are available in the post.
     replyPostTests.quoteEmoji();
+    //verify error msg
+    replyPostTests.checkErrorMsg();
     //setPostPerPage
     replyPostTests.postPerPage('50');
     //delete all topics
