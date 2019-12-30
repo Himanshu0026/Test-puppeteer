@@ -31,14 +31,14 @@ registerTests.registrationBackendSetting = function() {
 	}).then(function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/fields"]', function() {
-	 this.test.assertSelectorHasText('#ddUsers', 'Profile Fields');
-	 this.click('div#ddUsers a[href="/tool/members/mb/fields"]');
- 	}).waitForText('Default Profile Fields',function() {
+		this.test.assertSelectorHasText('#ddUsers', 'Profile Fields');
+		this.click('div#ddUsers a[href="/tool/members/mb/fields"]');
+	}).waitForText('Default Profile Fields',function() {
 		var setOptions = {"fullName" : "", "instantMessaging" : "", "birthday" : "", "signature" : "", "avatar" : "",
-		 "visiblity_name_registration" : "Yes",
-		 "visiblity_imType_registration" : "Yes", "visiblity_dob_registration" : "Yes",
-		 "visiblity_signature_registration" : "Yes", "visiblity_avatar_registration" : "Yes"};
-		 backEndForumRegisterMethod.changeDefaultRegistrationOptions(setOptions);
+		"visiblity_name_registration" : "Yes",
+		"visiblity_imType_registration" : "Yes", "visiblity_dob_registration" : "Yes",
+		"visiblity_signature_registration" : "Yes", "visiblity_avatar_registration" : "Yes"};
+		backEndForumRegisterMethod.changeDefaultRegistrationOptions(setOptions);
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
@@ -101,11 +101,11 @@ registerTests.invalidBirthdayDate = function(data) {
 	}).waitForSelector('form[name="PostTopic"]', function() {
 		var date = casper.evaluate(function() {
 			var today = new Date();
-	    var tomorrow = new Date(today);
-	    tomorrow.setDate(today.getDate()+4);
-	    if(today.getDate() > 28) {
-	         tomorrow.setMonth(today.getMonth()+1);
-	    }
+			var tomorrow = new Date(today);
+			tomorrow.setDate(today.getDate()+4);
+			if(today.getDate() > 28) {
+				tomorrow.setMonth(today.getMonth()+1);
+			}
 			var day = tomorrow.getDate();
 			var month = tomorrow.getMonth()+1;
 			var year = tomorrow.getFullYear();
@@ -119,9 +119,9 @@ registerTests.invalidBirthdayDate = function(data) {
 		registerMethod.registerToApp(data);
 	}).waitUntilVisible('div.panel-body .alert', function(){
 		var text = casper.fetchText('div.panel-body .alert');
-		if(casper.test.assertTextExists('Please provide a valid Birthday.')){
+		try{
 			casper.test.assertTextExists('Please provide a valid Birthday.');
-		}else {
+		}catch (e){
 			casper.test.assertTextExists('Valid years for your Birthday are from 1900 to');
 		}
 	});
@@ -217,7 +217,7 @@ registerTests.registrationForDifferentUserNameFormat = function(data, format) {
 registerTests.registrationForDisabledEmailAndEnableApproveNewRegistration = function() {
 	var randomUser="";
 	casper.thenOpen(config.backEndUrl, function() {
-			utils.info(' Test Case 47 [To verify Registration when Email address verification- Disabled And Approve new registrations- Enable');
+		utils.info(' Test Case 47 [To verify Registration when Email address verification- Disabled And Approve new registrations- Enable');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
@@ -270,7 +270,7 @@ registerTests.registrationForDisabledEmailAndEnableApproveNewRegistration = func
 registerTests.registrationForDisabledEmailAndDisabledApproveNewRegistration = function() {
 	var randomUser="";
 	casper.thenOpen(config.backEndUrl, function() {
-			utils.info(' Test Case 49 [To verify Registration when Email address verification- Disabled And Approve new registrations- Disable');
+		utils.info(' Test Case 49 [To verify Registration when Email address verification- Disabled And Approve new registrations- Disable');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]', function() {
 		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddSettings"]');
 	}).waitForSelector('div#ddSettings a[href="/tool/members/mb/settings?tab=Security"]', function() {
@@ -315,7 +315,7 @@ registerTests.registrationForDisabledEmailAndDisabledApproveNewRegistration = fu
 registerTests.registrationForEnabledEmailAndEnabledApproveNewRegistration = function() {
 	var randomUser="";
 	casper.thenOpen(config.backEndUrl, function() {
-			utils.info(' Test Case 50 [To verify Registration when Email address verification- Enabled And Approve new registrations- Enabled');
+		utils.info(' Test Case 50 [To verify Registration when Email address verification- Enabled And Approve new registrations- Enabled');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
 		casper.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/usergroup"]', function() {
@@ -369,7 +369,7 @@ registerTests.deletePendingApproveUser=function(){
 		utils.info('************************MEMBER DELETE TESTCASES->Pending Approvval User****************************');
 		utils.info('Case 1[Verify by delete one topic -selecting by check box register user]');
 	}).waitForSelector('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]', function() {
-			this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
+		this.click('div#my_account_forum_menu a[data-tooltip-elm="ddUsers"]');
 	}).waitForSelector('div#ddUsers a[href="/tool/members/mb/addusers"]', function() {
 		this.test.assertSelectorHasText('#ddUsers', 'New User');
 		this.click('div#ddUsers a[href="/tool/members/mb/addusers"]');
