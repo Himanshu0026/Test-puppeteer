@@ -381,7 +381,7 @@ editProfilePageTests.invalidBirthday=function(){
 	}).waitForSelector('div#userSignature textarea', function(){
 		this.sendKeys('input#birthDatepicker', editProfilePageJSON.birthdayPicker.date);
 		this.click('button[type="submit"]');
-	}).waitForText('Valid years for your Birthday are from 1900 to', function(){
+	}).waitUntilVisible('div.panel-body .alert', function(){
 		var date = casper.evaluate(function() {
 			var today = new Date();
 			var tomorrow = new Date(today);
