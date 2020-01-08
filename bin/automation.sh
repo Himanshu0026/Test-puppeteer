@@ -259,6 +259,15 @@ then
   sleep 1
 fi
 
+checkAutomattionStatusToSkip
+
+if [ $AUTOMATION_ALLOW -eq '1' ]
+then
+  printf "Executing Automation Script For $1 commitID\nTests executing for COMBINATION OF CATEGORY AND GROUP PERMISSIONS-> GENERAL USER: \n" >> "$AUTOMATION_HOME"/log/automation.txt
+  casperjs test ./automationScripts/automation.js --feature="combinationOfCategoryAndGroupPermissions registerUserTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
+  sleep 1
+fi
+
 # checkAutomattionStatusToSkip
 #
 # if [ $AUTOMATION_ALLOW -eq '1' ]
@@ -268,15 +277,6 @@ fi
 #   sleep 1
 # fi
 
-# checkAutomattionStatusToSkip
-#
-# if [ $AUTOMATION_ALLOW -eq '1' ]
-# then
-#   printf "Executing Automation Script For $1 commitID\nTests executing for COMBINATION OF CATEGORY AND GROUP PERMISSIONS-> GENERAL USER: \n" >> "$AUTOMATION_HOME"/log/automation.txt
-#   casperjs test ./automationScripts/automation.js --feature="combinationOfCategoryAndGroupPermissions registerUserTest" --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
-#   sleep 1
-# fi
-#
 # checkAutomattionStatusToSkip
 
 # if [ $AUTOMATION_ALLOW -eq '1' ]
