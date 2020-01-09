@@ -19,6 +19,28 @@ var other_category_Id;
 
 var combinationOfCategoryAndGroupPermissionsTestcases = module.exports = {};
 
+combinationOfCategoryAndGroupPermissionsTestcases.changePermission = function() {
+	var category = combinationOfCategoryAndGroupPermissionsJSON.category.title;
+	var subCategory = combinationOfCategoryAndGroupPermissionsJSON.subCategory.title;
+		casper.thenOpen(config.apiLocalUrl+"/restapi/getToken", function() {
+			token = casper.evaluate(function() {
+				var data = document.querySelector(".token").getAttribute('id');
+				return data;
+			});
+			var cat = category;
+			this.thenOpen(config.apiLocalUrl+"/restapi/forum/getID/"+cat+"?accesToken="+token, function() {
+				var categoryObj = JSON.parse(this.getPageContent());
+				var catId = categoryObj.forumid;
+				this.thenOpen(config.apiLocalUrl+"/restapi/usergroups/getID/General?accesToken="+token, function() {
+					var usergroupObj = JSON.parse(this.getPageContent());
+					var usergroup = usergroupObj.usergroupID;
+					this.thenOpen(config.apiLocalUrl+"/restapi/updateForumPermissions/"+catId+"/"+usergroup+"/view_forum/0?accesToken="+token, function() {
+					});
+				});
+			});
+	});
+};
+
 // method to create a category cat1 and its sub categories cat2a and cat1b
 combinationOfCategoryAndGroupPermissionsTestcases.createCategoryAndSubCategory = function() {
 	casper.thenOpen(config.backEndUrl, function() {
@@ -61,11 +83,7 @@ combinationOfCategoryAndGroupPermissionsTestcases.verifyWithCategory = function(
 						}
 					});
 				}).then(function() {
-					combinationOfSubCategoryAndGroupPermissionsMethod.goToSubCategoryPermissionAndselectUserGroup(userGroup, category_Id, function(err, groupId) {
-						if(!err) {
-							backEndForumRegisterMethod.enableDisableCategoryPermissions('view_forum_'+groupId, false);
-						}
-					});
+					combinationOfCategoryAndGroupPermissionsTestcases.changePermission();
 				});
 			}
 		});

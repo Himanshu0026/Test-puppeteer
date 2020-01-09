@@ -274,6 +274,7 @@ case "combinationOfSubCategoryAndGroupPermissions":
 				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
 				combinationOfCategoryAndGroupPermissions.registerUserTest(casper, casper.test);
 				casper.run(function(){
+					utils.displayError();
 					test.done();
 				});
 			});
@@ -283,6 +284,7 @@ case "combinationOfSubCategoryAndGroupPermissions":
 				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
 				combinationOfCategoryAndGroupPermissions.pendingUserTest(casper, casper.test);
 				casper.run(function(){
+					utils.displayError();
 					test.done();
 				});
 			});
@@ -292,6 +294,7 @@ case "combinationOfSubCategoryAndGroupPermissions":
 				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
 				combinationOfCategoryAndGroupPermissions.moderatorsUserTest(casper, casper.test);
 				casper.run(function(){
+					utils.displayError();
 					test.done();
 				});
 			});
@@ -301,6 +304,7 @@ case "combinationOfSubCategoryAndGroupPermissions":
 				var combinationOfCategoryAndGroupPermissions = require("./testsuite/main/combinationOfCategoryAndGroupPermission.js");
 				combinationOfCategoryAndGroupPermissions.emailVerificationUserTest(casper, casper.test);
 				casper.run(function(){
+					utils.displayError();
 					test.done();
 				});
 			});
