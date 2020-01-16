@@ -7,6 +7,7 @@ var utils = require('../utils.js');
 var forumLoginMethod = require('../methods/login.js');
 var registerTests = require('../cases/register.js');
 var thumpsUpDownTestcases = require('../cases/thumpsUpDown.js');
+var forumListingPageTest = require('../cases/forumListingPage.js');
 var combinationOfSubCategoryAndGroupPermissionsJSON = require('../../testdata/combinationOfSubCategoryAndGroupPermissionsData.json');
 var combinationOfSubCategoryAndGroupPermissionsTestcases = require('../cases/combinationOfSubCategoryAndGroupPermissions.js');
 var combinationOfSubCategoryAndGroupPermissions = module.exports = {};
@@ -22,6 +23,9 @@ combinationOfSubCategoryAndGroupPermissions.registerUserTest = function() {
 
 		//method to delete all the categories from backend
 		thumpsUpDownTestcases.deleteAllCategoriesTestCase();
+
+		// method to create a category General
+		forumListingPageTest.createGeneralCategory();
 
 		// method to create a category General
 		thumpsUpDownTestcases.createCategoryTestCase();

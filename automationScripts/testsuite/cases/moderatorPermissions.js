@@ -876,8 +876,8 @@ moderatorPermissionsTestcases.verifyEnableMovePostForModeratorCategory = functio
 			var id =  document.querySelector('span[id^="post_message_"]').getAttribute('id');
 			return id;
 		});
-    this.test.assertExists('i.icon.icon-shield', 'Shield icon found');
-		this.click('i.icon.icon-shield');
+    this.test.assertExists('.topic-tools i.icon.icon-shield', 'Shield icon found');
+		this.click('.topic-tools i.icon.icon-shield');
   }).waitUntilVisible('div.dropdown.open ul.dropdown-menu.left', function() {
     this.test.assertExists('i.glyphicon.glyphicon-right-arrow', 'move arrow found');
     this.click('i.glyphicon.glyphicon-right-arrow');
@@ -913,7 +913,7 @@ moderatorPermissionsTestcases.verifyEnableMovePostForOtherCategory = function() 
   }).waitForSelector('div.topics-list', function() {
     casper.click('a[id^="topic_"]');
   }).waitForSelector('#posts-list', function() {
-    casper.test.assertDoesntExist('i.icon.icon-shield', 'Shield icon not found');
+    casper.test.assertDoesntExist('.topic-tools i.icon.icon-shield', 'Shield icon not found');
   }).then(function() {
     forumLoginMethod.logoutFromApp();
   });
@@ -1116,8 +1116,8 @@ moderatorPermissionsTestcases.verifyDisableMovePostForModeratorCategory = functi
   }).waitForSelector('div.topics-list', function() {
     this.click('a[id^="topic_"]');
   }).waitForSelector('#posts-list', function() {
-    this.test.assertExists('i.icon.icon-shield', 'Shield icon found');
-		this.click('i.icon.icon-shield');
+    this.test.assertExists('.topic-tools i.icon.icon-shield', 'Shield icon found');
+		this.click('.topic-tools i.icon.icon-shield');
   }).waitUntilVisible('div.dropdown.open ul.dropdown-menu.left', function() {
     this.test.assertDoesntExist('i.glyphicon.glyphicon-right-arrow', 'move arrow found');
   }).then(function() {
@@ -1146,7 +1146,7 @@ moderatorPermissionsTestcases.verifyDisableMovePostForOtherCategory = function()
   }).waitForSelector('div.topics-list', function() {
     this.click('a[id^="topic_"]');
   }).waitForSelector('#posts-list', function() {
-    this.test.assertDoesntExist('i.icon.icon-shield', 'Shield icon not found');
+    this.test.assertDoesntExist('.topic-tools i.icon.icon-shield', 'Shield icon not found');
   }).then(function() {
     forumLoginMethod.logoutFromApp();
   });
@@ -1302,8 +1302,8 @@ moderatorPermissionsTestcases.verifyEnableLockTopicForModeratorCategory = functi
 			var id =  document.querySelector('span[id^="post_message_"]').getAttribute('id');
 			return id;
 		});
-    this.test.assertExists('i.icon.icon-shield', 'Shield icon found');
-		this.click('i.icon.icon-shield');
+    this.test.assertExists('.topic-tools i.icon.icon-shield', 'Shield icon found');
+		this.click('.topic-tools i.icon.icon-shield');
   }).waitUntilVisible('div.dropdown.open ul.dropdown-menu.left', function() {
     this.test.assertExists('i.glyphicon.glyphicon-lock', 'Lock tab found');
     this.click('i.glyphicon.glyphicon-lock');
@@ -1335,7 +1335,7 @@ moderatorPermissionsTestcases.verifyEnableLockTopicForOtherCategory = function()
   }).waitForSelector('div.topics-list', function() {
     this.click('a[id^="topic_"]');
   }).waitForSelector('#posts-list', function() {
-    this.test.assertDoesntExist('i.icon.icon-shield', 'Shield icon not found');
+    this.test.assertDoesntExist('.topic-tools i.icon.icon-shield', 'Shield icon not found');
   }).then(function() {
     forumLoginMethod.logoutFromApp();
   });
@@ -1370,8 +1370,8 @@ moderatorPermissionsTestcases.verifyDisableLockTopicForModeratorCategory = funct
   }).waitForSelector('div.topics-list', function() {
     this.click('a[id^="topic_"]');
   }).waitForSelector('#posts-list', function() {
-    this.test.assertExists('i.icon.icon-shield', 'Shield icon found');
-		this.click('i.icon.icon-shield');
+    this.test.assertExists('.topic-tools i.icon.icon-shield', 'Shield icon found');
+		this.click('.topic-tools i.icon.icon-shield');
   }).waitUntilVisible('div.dropdown.open ul.dropdown-menu.left', function() {
     this.test.assertDoesntExist('i.glyphicon.glyphicon-lock', 'Lock tab not found');
   }).then(function() {
@@ -1400,7 +1400,7 @@ moderatorPermissionsTestcases.verifyDisableLockTopicForOtherCategory = function(
   }).waitForSelector('div.topics-list', function() {
     this.click('a[id^="topic_"]');
   }).waitForSelector('#posts-list', function() {
-    this.test.assertDoesntExist('i.icon.icon-shield', 'Shield icon not found');
+    this.test.assertDoesntExist('.topic-tools i.icon.icon-shield', 'Shield icon not found');
   }).then(function() {
     forumLoginMethod.logoutFromApp();
   });
@@ -1439,8 +1439,8 @@ moderatorPermissionsTestcases.verifyEnablePinTopicForModeratorCategory = functio
 			var id =  document.querySelector('span[id^="post_message_"]').getAttribute('id');
 			return id;
 		});
-    this.test.assertExists('i.icon.icon-shield', 'Shield icon found');
-		this.click('i.icon.icon-shield');
+    this.test.assertExists('.topic-tools i.icon.icon-shield', 'Shield icon found');
+		this.click('.topic-tools i.icon.icon-shield');
   }).waitUntilVisible('div.dropdown.open ul.dropdown-menu.left', function() {
     this.test.assertExists('i.icon.glyphicon-pushpin', 'pin tab found');
     this.click('i.icon.glyphicon-pushpin');
@@ -1472,7 +1472,7 @@ moderatorPermissionsTestcases.verifyEnablePinTopicForOtherCategory = function() 
   }).waitForSelector('div.topics-list', function() {
     this.click('a[id^="topic_"]');
   }).waitForSelector('#posts-list', function() {
-    this.test.assertDoesntExist('i.icon.icon-shield', 'Shield icon not found');
+    this.test.assertDoesntExist('.topic-tools i.icon.icon-shield', 'Shield icon not found');
   }).then(function() {
     forumLoginMethod.logoutFromApp();
   });
@@ -1543,8 +1543,8 @@ moderatorPermissionsTestcases.verifyDisablePinTopicForModeratorCategory = functi
   }).waitForSelector('div.topics-list', function() {
     this.click('a[id^="topic_"]');
   }).waitForSelector('#posts-list', function() {
-    this.test.assertExists('i.icon.icon-shield', 'Shield icon found');
-		this.click('i.icon.icon-shield');
+    this.test.assertExists('.topic-tools i.icon.icon-shield', 'Shield icon found');
+		this.click('.topic-tools i.icon.icon-shield');
   }).waitUntilVisible('div.dropdown.open ul.dropdown-menu.left', function() {
     this.test.assertDoesntExist('i.icon.glyphicon-pushpin', 'pin tab not found');
   }).then(function() {
@@ -1573,7 +1573,7 @@ moderatorPermissionsTestcases.verifyDisablePinTopicForOtherCategory = function()
   }).waitForSelector('div.topics-list', function() {
     this.click('a[id^="topic_"]');
   }).waitForSelector('#posts-list', function() {
-    this.test.assertDoesntExist('i.icon.icon-shield', 'Shield icon not found');
+    this.test.assertDoesntExist('.topic-tools i.icon.icon-shield', 'Shield icon not found');
   }).then(function() {
     forumLoginMethod.logoutFromApp();
   });
@@ -1645,8 +1645,8 @@ moderatorPermissionsTestcases.verifyEnableAddPollForModeratorCategory = function
 			var id =  document.querySelector('span[id^="post_message_"]').getAttribute('id');
 			return id;
 		});
-    this.test.assertExists('i.icon.icon-shield', 'Shield icon found');
-		this.click('i.icon.icon-shield');
+    this.test.assertExists('.topic-tools i.icon.icon-shield', 'Shield icon found');
+		this.click('.topic-tools i.icon.icon-shield');
   }).waitUntilVisible('div.dropdown.open ul.dropdown-menu.left', function() {
     this.test.assertExists('i.glyphicon.glyphicon-stats', 'Add poll tab found');
     this.click('i.glyphicon.glyphicon-stats');
@@ -1681,7 +1681,7 @@ moderatorPermissionsTestcases.verifyEnableAddPollForOtherCategory = function() {
   }).waitForSelector('div.topics-list', function() {
     this.click('a[id^="topic_"]');
   }).waitForSelector('#posts-list', function() {
-    this.test.assertDoesntExist('i.icon.icon-shield', 'Shield icon not found');
+    this.test.assertDoesntExist('.topic-tools i.icon.icon-shield', 'Shield icon not found');
   }).then(function() {
     forumLoginMethod.logoutFromApp();
   });
@@ -1714,8 +1714,8 @@ moderatorPermissionsTestcases.verifyDisableAddPollForModeratorCategory = functio
   }).waitForSelector('div.topics-list', function() {
     this.click('a[id^="topic_"]');
   }).waitForSelector('#posts-list', function() {
-    this.test.assertExists('i.icon.icon-shield', 'Shield icon found');
-		this.click('i.icon.icon-shield');
+    this.test.assertExists('.topic-tools i.icon.icon-shield', 'Shield icon found');
+		this.click('.topic-tools i.icon.icon-shield');
   }).waitUntilVisible('div.dropdown.open ul.dropdown-menu.left', function() {
       this.test.assertDoesntExist('i.glyphicon.glyphicon-stats', 'Add poll tab not found');
   }).then(function() {

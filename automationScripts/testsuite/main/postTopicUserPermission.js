@@ -103,7 +103,7 @@ postTopicUserPermission.registeredUserTest = function() {
 		postTopicUserPermissionTestcases.verifyViewTopicContentForUnregisteredUserEnable('Not Signed Up / Not Logged In');
 
 		// method to Disable "View Others' Topic" for un-registered user from group Permission
-		postTopicUserPermissionTestcases.verifyViewOthersTopicForUnregisteredUserWhenNoTopicCreatedDisable('Not Signed Up / Not Logged In');
+		//postTopicUserPermissionTestcases.verifyViewOthersTopicForUnregisteredUserWhenNoTopicCreatedDisable('Not Signed Up / Not Logged In');
 
 	});
 };
