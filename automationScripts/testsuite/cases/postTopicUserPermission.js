@@ -54,12 +54,14 @@ postTopicUserPermissionTestcases.verifyClickOnAnyTopicDisable = function(userGro
 	}).waitForText("Sorry! You don't have permission to perform this action.").then(function() {
 		this.click('.back-message-arrow i');
 	}).waitForSelector('.topics-list', function() {
+	}).then(function() {
+			postTopicUserPermissionTestcases.getTokenAndSetPermission(config.apiLocalUrl+"/restapi/usergroups/updatePermission/"+userGroup+"/move_own_threads/1?accesToken=");
 	});
 };
 
 // method to Verify permission message after creating new topic
 postTopicUserPermissionTestcases.verifyClickOnNewTopicDisable = function(userGroup) {
-	casper.then(function() {
+	casper.thenOpen(config.url, function() {
 		utils.info('Test case 1b [Verify permission message after creating new topic]');
 	}).waitForSelector('li.pull-right.user-panel', function() {
 		this.evaluate(function() {

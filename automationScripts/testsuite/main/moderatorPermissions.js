@@ -4,6 +4,7 @@
 var config = require('../../../config/config.json');
 var utils = require('../utils.js');
 var forumLoginMethod = require('../methods/login.js');
+var forumListingPageTest = require('../cases/forumListingPage.js');
 var thumpsUpDownTestcases = require('../cases/thumpsUpDown.js');
 var moderatorPermissionsTestcases = require('../cases/moderatorPermissions.js');
 
@@ -20,6 +21,9 @@ moderatorPermissions.featureTest = function() {
 
 		// method to delete all the categories from backend
 		thumpsUpDownTestcases.deleteAllCategoriesTestCase();
+
+		// method to create a category General
+		forumListingPageTest.createGeneralCategory();
 
 		// method to create a category General
 		thumpsUpDownTestcases.createCategoryTestCase();

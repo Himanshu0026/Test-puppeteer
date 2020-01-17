@@ -17,13 +17,13 @@
 	"newTopic" : {
 		"title" : "New Topic",
 		"content" : "hellloooooo!!!!!!!!!",
-		"category" : "GeneralNew"
+		"category" : "General"
 	},
 
 	"groupName" : "New Custom Group",
 
 	"categoryA" : {
-		"title" : "GeneralNew",
+		"title" : "General",
 		"description" : "To test parent category"
 	},
 

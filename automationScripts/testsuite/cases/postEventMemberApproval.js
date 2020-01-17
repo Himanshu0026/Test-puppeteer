@@ -411,7 +411,8 @@ postEventMemberApprovalTestcases.eventApprovalByAdmin = function() {
 
 // method to approve or delete the event by the admin user
 postEventMemberApprovalTestcases.memberApprovalByAdmin = function() {
-	casper.thenOpen(config.apiLocalUrl+"/settings/reqregapp/checked", function() {
+	casper.thenOpen(config.apiLocalUrl+"/restapi/settings/reqregapp/checked?accesToken=e3dac0e84ae3c7f0515ae119a6ef818d", function() {
+	}).thenOpen(config.apiLocalUrl+"/restapi/settings/confirmemail/unchecked?accesToken=e3dac0e84ae3c7f0515ae119a6ef818d", function() {
 	}).thenOpen(config.url, function() {
 		registerMethod.registerMultipleUsers(9, function(users) {
 			recipients = users;
@@ -468,11 +469,15 @@ postEventMemberApprovalTestcases.memberApprovalByAdmin = function() {
 	}).wait('2000',function () {
 	}).reload(function() {
 		this.click('.display_username.username');
+	}).waitForSelector('div.hovercard a.display_username', function() {
+		this.click('div.hovercard a.display_username');
 	}).waitForSelector('#showApproveDecline', function() {
 		this.test.assertTextExists('This user is pending approval.', 'This user is pending approval.');
 		this.click('.btn.btn-success');
 	}).wait('3000',function () {
 		this.click('.display_username.username');
+	}).waitForSelector('div.hovercard a.display_username', function() {
+		this.click('div.hovercard a.display_username');
 	}).waitForSelector('#showApproveDecline', function() {
 		this.test.assertTextExists('This user is pending approval.', 'This user is pending approval.');
 		this.click('#decline_member');
@@ -516,6 +521,6 @@ postEventMemberApprovalTestcases.memberApprovalByAdmin = function() {
 	}).waitForText("There's currently nothing that needs your approval.",function () {
 	}).then(function() {
 		forumLoginMethod.logoutFromApp();
-	}).thenOpen(config.apiLocalUrl+"/settings/reqregapp/unchecked", function() {
+	}).thenOpen(config.apiLocalUrl+"/restapi/settings/reqregapp/unchecked?accesToken=e3dac0e84ae3c7f0515ae119a6ef818d", function() {
 	});
 };
