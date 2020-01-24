@@ -84,7 +84,7 @@ topicsCountTests.countTopicsCategorySubCategory = function() {
 				document.querySelector('input[name="allbox"]').click();
 			});
 		}).waitForText(topicsCountJSON.followedTopicsCount.count, function(){
-			this.click('a#topics_tab');
+			//this.click('a#topics_tab');
 		}).waitForSelector('span.topic-content h4 a', function(){
 			this.click('input[name="allbox"]');
 		}).waitForText(topicsCountJSON.followedTopicsCount.count, function(){
@@ -93,8 +93,8 @@ topicsCountTests.countTopicsCategorySubCategory = function() {
 			this.click('input#firstpid', 'clicked on postlistingpage checkbox');
 		}).waitForText(topicsCountJSON.followedTopicsCount.count, function(){
 			this.click('a#backArrowPost i', 'clicked on backarrow on postListingPage');
-		}).waitForSelector('a#subcategories_tab', function(){
-			this.click('span.forum-title', 'clicked on subcategory');
+		}).waitForSelector('div[id="forums"] ul li h3 a', function(){
+			this.click('div[id="forums"] ul li h3 a', 'clicked on subcategory');
 		}).waitForSelector('div#ajax_subscription_vars a', function(){
 			this.click('div#ajax_subscription_vars a');
 		}).then(function(){
