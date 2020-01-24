@@ -336,9 +336,9 @@ backArrowTests.pincategorySubcategory = function() {
     });
   }).waitForSelector('a[href="#forums"]', function(){
     deletePostMethod.getCategoryHrefFrontend(backArrowJSON.backArrowCategory.title);
-  }).waitForSelector('a#subcategories_tab', function(){
-    this.test.assertExists('span.forum-title');
-    this.click('span.forum-title');
+  }).waitForSelector('#ajax_subscription_vars a', function(){
+    this.test.assertExists('div[id="forums"] ul li h3 a');
+    this.click('div[id="forums"] ul li h3 a');
   }).waitForSelector('div#ajax_subscription_vars a', function(){
     this.evaluate(function() {
       document.querySelector('div#ajax_subscription_vars a').click();
@@ -359,10 +359,7 @@ backArrowTests.pincategorySubcategory = function() {
     this.test.assertExists('a#back_arrow_topic i');
     this.click('a#back_arrow_topic i');
   }).waitForText(backArrowJSON.backArrowSubCategory.title, function(){
-    //deletePostMethod.getCategoryHrefFrontend(backArrowJSON.backArrowCategory.title);
-  }).waitForSelector('a#topics_tab', function(){
-    //checked under sub-category.
-    this.click('a#topics_tab');
+    //checked under category
   }).waitForSelector('span.topic-content h4 a', function(){
     this.click('span.topic-content h4 a');
   }).waitForSelector('div.dropdown a', function(){
@@ -374,7 +371,7 @@ backArrowTests.pincategorySubcategory = function() {
   }).waitForSelector('a#backArrowPost i', function(){
     this.test.assertExists('a#backArrowPost i');
     this.click('a#backArrowPost i');
-  }).waitForSelector('span.topic-content h4 span.badge.pin', function(){
+  }).waitForSelector('a#back_arrow_topic i', function(){
     this.test.assertExists('a#back_arrow_topic i');
     this.click('a#back_arrow_topic i');
   }).waitForText(backArrowJSON.backArrowCategory.title);
@@ -387,7 +384,6 @@ backArrowTests.UnpincategorySubcategory = function() {
     utils.info('Case 11[Verify back arrow with Unpin option on topic listing page]');
     utils.info('Case 12[Verify back arrow with delete option on topic listing page]');
   }).waitForSelector('a[href="/post/printadd"]', function(){
-    this.test.assertExists('span.badge.pin');
     this.test.assertExists('input[name="id"]');
     this.click('input[name="id"]');
   }).then(function(){
@@ -396,7 +392,6 @@ backArrowTests.UnpincategorySubcategory = function() {
     this.test.assertExists('a#unpin');
     this.click('a#unpin');
   }).waitForSelector('ul.nav.nav-tabs li:nth-child(2) a', function(){
-    this.test.assertExists('ul.nav.nav-tabs li:nth-child(2) a', 'category is present');
     this.evaluate(function() {
       document.querySelector('ul.nav.nav-tabs li:nth-child(2) a').click();
     });
@@ -412,8 +407,6 @@ backArrowTests.UnpincategorySubcategory = function() {
   }).waitForText(backArrowJSON.backArrowCategory.title, function(){
     this.test.assertExists('a#back_arrow_topic i');
     this.click('a#back_arrow_topic i');
-  }).waitForSelector('a#topics_tab', function(){
-    this.click('a#topics_tab');
   }).waitForSelector('span.topic-content h4 a', function(){
     this.click('span.topic-content h4 a');
   }).waitForSelector('a#backArrowPost i', function(){

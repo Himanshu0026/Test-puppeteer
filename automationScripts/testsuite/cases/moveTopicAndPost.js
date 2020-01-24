@@ -233,8 +233,8 @@ moveTopicAndPostTestcases.topicListingPageUnderCategoryForRegisteredUserWhenDisa
 		topicMethod.createTopic(moveTopicAndPostJSON.categoryTopic);
 	}).waitForText('hellloooooo!!!!!!!!!', function() {
 		this.click('#backArrowPost');
-	}).waitUntilVisible('#topics_tab', function() {
-		this.click('#topics_tab');
+	//}).waitUntilVisible('#topics_tab', function() {
+		//this.click('#topics_tab');
 	}).waitForSelector('#topics', function() {
     this.test.assertExists('ul li:nth-child(1) span.mod.icons.pull-right input');
     this.click('ul li:nth-child(1) span.mod.icons.pull-right input');
