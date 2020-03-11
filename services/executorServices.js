@@ -25,7 +25,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 				var testResult = stderr;
 				commitDetails.testResult = testResult;
 				commitDetails.attachments = '';
-				createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
+				//createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
 					mailServices.sendMail(commitDetails, function(err) {
 						if(err)
 						console.error("error occurred while sending email: "+err);
@@ -34,7 +34,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 						console.timeEnd('Automation execution time');
 						return callback();
 					});
-				});
+				//});
 			} else {
 				sqlConnection('UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=1, upload_attachments=1, view_attachments=1, view_thread_content=1, view_others_threads=1, post_replies=1, edit_posts=1, delete_posts=1, delete_threads=1, move_own_threads=1, post_approval=1, upload_attachments=1, upload_avatar=1, view_calendar=1, post_events=1, edit_own_events=1, delete_own_events=1, view_others_events=1, edit_profile=1, delete_profile=1, allow_signature=1, allow_customtitle=1, change_username=1, memberslist_viewable=1, approval_of_events=0, post_polls=1, vote_on_polls=1, view_messageboard=1  WHERE title = "General" AND uid =116;', function(err, result){
 					if(err){
@@ -121,7 +121,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 							if(fileSize !== 0) {
 								commitDetails.apacheLogFile = apacheLogFile;
 								commitDetails.attachments = [];
-								createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
+								//createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
 
 									//Sending Mail To The Committer After Adding Attachments
 									fs.exists(path, function(exists) {
@@ -165,7 +165,7 @@ executorServices.executeJob = function(commitDetails, callback) {
 											});
 										}
 									});
-								});
+								//});
 							} else {
 								//var eslint_status = '';
 								console.log('the value of eslint status before checkEslintStatus method '+eslint_status);
@@ -305,8 +305,8 @@ executorServices.executeAutomation = function(commitDetails, callback) {
 												}
 											];
 
-											createStatus.failure(commitDetails, description, function(status) {
-												console.log('state of failure : '+status);
+											//createStatus.failure(commitDetails, description, function(status) {
+												//console.log('state of failure : '+status);
 												//Sending Mail To The Committer After Adding Attachments
 												fs.exists(path, function(exists) {
 													if(exists) {
@@ -350,14 +350,14 @@ executorServices.executeAutomation = function(commitDetails, callback) {
 														});
 													}
 												});
-											});
+											//});
 										} else {
 											console.log('you are not allowed to set the status of the branch.');
 										}
 									} else {
-										createStatus.success(commitDetails, function(status) {
-											console.log('state of success : '+status);
-										});
+										//createStatus.success(commitDetails, function(status) {
+										//	console.log('state of success : '+status);
+									//	});
 										//Deleting commit specific log files
 										fs.unlinkSync(failLogFile);
 										console.timeEnd('Automation execution time');
@@ -393,7 +393,7 @@ executorServices.executeEslint = function(commitDetails, callback) {
 							path: esErrorFile
 						}
 					];
-					createStatus.failure(commitDetails, 'Failed with eslint errors', function(status) {
+					//createStatus.failure(commitDetails, 'Failed with eslint errors', function(status) {
 
 						//Sending Mail To The Committer After Adding Attachments
 						fs.exists(path, function(exists) {
@@ -437,7 +437,7 @@ executorServices.executeEslint = function(commitDetails, callback) {
 								});
 							}
 						});
-					});
+					//});
 				} else {
 					return callback(null, true);
 				}
