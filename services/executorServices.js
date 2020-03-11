@@ -36,15 +36,15 @@ executorServices.executeJob = function(commitDetails, callback) {
 					});
 				});
 			} else {
-				sqlConnection('UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=1, upload_attachments=1, view_attachments=1, view_thread_content=1, view_others_threads=1, post_replies=1, edit_posts=1, delete_posts=1, delete_threads=1, move_own_threads=1, post_approval=1, upload_attachments=1, upload_avatar=1, view_calendar=1, post_events=1, edit_own_events=1, delete_own_events=1, view_others_events=1, edit_profile=1, delete_profile=1, allow_signature=1, allow_customtitle=1, change_username=1, memberslist_viewable=1, approval_of_events=0, post_polls=1, vote_on_polls=1, view_messageboard=1  WHERE title = "General" AND uid =12;', function(err, result){
+				sqlConnection('UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=1, upload_attachments=1, view_attachments=1, view_thread_content=1, view_others_threads=1, post_replies=1, edit_posts=1, delete_posts=1, delete_threads=1, move_own_threads=1, post_approval=1, upload_attachments=1, upload_avatar=1, view_calendar=1, post_events=1, edit_own_events=1, delete_own_events=1, view_others_events=1, edit_profile=1, delete_profile=1, allow_signature=1, allow_customtitle=1, change_username=1, memberslist_viewable=1, approval_of_events=0, post_polls=1, vote_on_polls=1, view_messageboard=1  WHERE title = "General" AND uid =116;', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
-						sqlConnection('UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=0, view_thread_content=1, view_others_threads=1, post_replies=1, view_calendar=1, post_events=0, view_others_events=1, approval_of_events=1, view_messageboard=1  WHERE title = "Not Signed Up / Not Logged In" AND uid =12;', function(err, result){
+						sqlConnection('UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=0, view_thread_content=1, view_others_threads=1, post_replies=1, view_calendar=1, post_events=0, view_others_events=1, approval_of_events=1, view_messageboard=1  WHERE title = "Not Signed Up / Not Logged In" AND uid =116;', function(err, result){
 							if(err){
 								console.log(err);
 							}else{
-								sqlConnection('UPDATE usergroups SET post_polls=1 WHERE title = "Moderators" AND uid =12;', function(err, result){
+								sqlConnection('UPDATE usergroups SET post_polls=1 WHERE title = "Moderators" AND uid =116;', function(err, result){
 									if(err){
 										console.log(err);
 									}else{
@@ -54,23 +54,23 @@ executorServices.executeJob = function(commitDetails, callback) {
 						});
 					}
 				});
-				sqlConnection('DELETE FROM calendar_permissions WHERE uid="12";', function(err, result){
+				sqlConnection('DELETE FROM calendar_permissions WHERE uid="116";', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 					}
 				});
-				sqlConnection('DELETE FROM calendar_events WHERE uid="12";', function(err, result){
+				sqlConnection('DELETE FROM calendar_events WHERE uid="116";', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 					}
 				});
-				sqlConnection('DELETE FROM forums WHERE uid="12";', function(err, result){
+				sqlConnection('DELETE FROM forums WHERE uid="116";', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
-						sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("12", "General", "General", "1")', function(err, result){
+						sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("116", "General", "General", "1")', function(err, result){
 							if(err){
 								console.log(err);
 							}else{
@@ -78,20 +78,20 @@ executorServices.executeJob = function(commitDetails, callback) {
 						});
 					}
 				});
-				sqlConnection("UPDATE settings SET post_approval=0, allow_emails='checked', threadsperpage =100, repliesperpage=50, enable_calendar='checked', reputation='checked', enable_polls='checked', enable_social_bookmarking='checked', allowpm='checked', reqreg='checked', file_uploading='checked', reqregapp='', confirmemail='checked', new_user_registration='checked'  WHERE uid=12;", function(err, result){
+				sqlConnection("UPDATE settings SET post_approval=0, allow_emails='checked', threadsperpage =100, repliesperpage=50, enable_calendar='checked', reputation='checked', enable_polls='checked', enable_social_bookmarking='checked', allowpm='checked', reqreg='checked', file_uploading='checked', reqregapp='', confirmemail='checked', new_user_registration='checked'  WHERE uid=116;", function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 					}
 				});
-				sqlConnection('SELECT max(posts) AS posts, userid,user FROM members WHERE uid="12" and user="hani";', function(err, result){
+				sqlConnection('SELECT max(posts) AS posts, userid,user FROM members WHERE uid="116" and user="hani";', function(err, result){
 					if(err){
 						console.log(err);
 					}else{
 						var post = result[0].posts;
 						var userid = result[0].userid;
-						var deleteTopPoster = 'DELETE FROM top_posters WHERE uid="12" AND userid="'+userid+'";';
-						var query = 'INSERT INTO top_posters (uid,userid,posts) VALUES ("12",'+userid+','+post+');';
+						var deleteTopPoster = 'DELETE FROM top_posters WHERE uid="116" AND userid="'+userid+'";';
+						var query = 'INSERT INTO top_posters (uid,userid,posts) VALUES ("116",'+userid+','+post+');';
 						sqlConnection(deleteTopPoster, function(err, result){
 							if(err){
 								console.log(err);
