@@ -60,7 +60,7 @@ then
   casperjs test ./automationScripts/automation.js --feature=inContextLogin --branchName=$1 --commitId=$2>> "$AUTOMATION_HOME"/log/automation.txt
   sleep 1
 fi
-
+#
 # checkAutomattionStatusToSkip
 
 # if [ $AUTOMATION_ALLOW -eq '1' ]
