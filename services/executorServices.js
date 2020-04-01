@@ -16,112 +16,112 @@ executorServices.executeJob = function(commitDetails, callback) {
 	var path = '/var/tmp/' + commitDetails.branchName + '/' +commitDetails.commitId;
 	//Executing gitdeploy.sh to update Forum's code for given branch name
 	//if(commitDetails.branchName == "automation"){
-	console.log("Starting execution for commitDetails : "+commitDetails);
-	console.time('Automation execution time');
-	if(commitDetails.branchName) {
-		shell.exec("/home/automation/gitdeploy.sh -p ssh " +commitDetails.branchName, function(code, stdout, stderr) {
-			if (code !== 0) {
-				console.log('Error: gitdeploy.sh failed');
-				var testResult = stderr;
-				commitDetails.testResult = testResult;
-				commitDetails.attachments = '';
-				createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
-					mailServices.sendMail(commitDetails, function(err) {
-						if(err)
-						console.error("error occurred while sending email: "+err);
-						else
-						console.log("Mail sent successfully.");
-						console.timeEnd('Automation execution time');
-						return callback();
+		console.log("Starting execution for commitDetails : "+commitDetails);
+		console.time('Automation execution time');
+		if(commitDetails.branchName) {
+			shell.exec("/home/automation/gitdeploy.sh -p ssh " +commitDetails.branchName, function(code, stdout, stderr) {
+				if (code !== 0) {
+					console.log('Error: gitdeploy.sh failed');
+					var testResult = stderr;
+					commitDetails.testResult = testResult;
+					commitDetails.attachments = '';
+					createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
+						mailServices.sendMail(commitDetails, function(err) {
+							if(err)
+								console.error("error occurred while sending email: "+err);
+							else
+								console.log("Mail sent successfully.");
+							console.timeEnd('Automation execution time');
+							return callback();
+						});
 					});
-				});
-			} else {
-				sqlConnection('UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=1, upload_attachments=1, view_attachments=1, view_thread_content=1, view_others_threads=1, post_replies=1, edit_posts=1, delete_posts=1, delete_threads=1, move_own_threads=1, post_approval=1, upload_attachments=1, upload_avatar=1, view_calendar=1, post_events=1, edit_own_events=1, delete_own_events=1, view_others_events=1, edit_profile=1, delete_profile=1, allow_signature=1, allow_customtitle=1, change_username=1, memberslist_viewable=1, approval_of_events=0, post_polls=1, vote_on_polls=1, view_messageboard=1  WHERE title = "General" AND uid =12;', function(err, result){
-					if(err){
-						console.log(err);
-					}else{
-						sqlConnection('UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=0, view_thread_content=1, view_others_threads=1, post_replies=1, view_calendar=1, post_events=0, view_others_events=1, approval_of_events=1, view_messageboard=1  WHERE title = "Not Signed Up / Not Logged In" AND uid =12;', function(err, result){
-							if(err){
-								console.log(err);
-							}else{
-								sqlConnection('UPDATE usergroups SET post_polls=1 WHERE title = "Moderators" AND uid =12;', function(err, result){
-									if(err){
-										console.log(err);
-									}else{
-									}
-								});
-							}
-						});
-					}
-				});
-				sqlConnection('DELETE FROM calendar_permissions WHERE uid="12";', function(err, result){
-					if(err){
-						console.log(err);
-					}else{
-					}
-				});
-				sqlConnection('DELETE FROM calendar_events WHERE uid="12";', function(err, result){
-					if(err){
-						console.log(err);
-					}else{
-					}
-				});
-				sqlConnection('DELETE FROM forums WHERE uid="12";', function(err, result){
-					if(err){
-						console.log(err);
-					}else{
-						sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("12", "General", "General", "1")', function(err, result){
-							if(err){
-								console.log(err);
-							}else{
-							}
-						});
-					}
-				});
-				sqlConnection("UPDATE settings SET post_approval=0, allow_emails='checked', threadsperpage =100, repliesperpage=50, enable_calendar='checked', reputation='checked', enable_polls='checked', enable_social_bookmarking='checked', allowpm='checked', reqreg='checked', file_uploading='checked', reqregapp='', confirmemail='checked', new_user_registration='checked'  WHERE uid=12;", function(err, result){
-					if(err){
-						console.log(err);
-					}else{
-					}
-				});
-				sqlConnection('SELECT max(posts) AS posts, userid,user FROM members WHERE uid="12" and user="hani";', function(err, result){
-					if(err){
-						console.log(err);
-					}else{
-						var post = result[0].posts;
-						var userid = result[0].userid;
-						var deleteTopPoster = 'DELETE FROM top_posters WHERE uid="12" AND userid="'+userid+'";';
-						var query = 'INSERT INTO top_posters (uid,userid,posts) VALUES ("12",'+userid+','+post+');';
-						sqlConnection(deleteTopPoster, function(err, result){
-							if(err){
-								console.log(err);
-							}else{
-								console.log('the result is'+result);
-								sqlConnection(query, function(err, result){
-									if(err){
-										console.log(err);
-									}else{
+				} else {
+					sqlConnection('UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=1, upload_attachments=1, view_attachments=1, view_thread_content=1, view_others_threads=1, post_replies=1, edit_posts=1, delete_posts=1, delete_threads=1, move_own_threads=1, post_approval=1, upload_attachments=1, upload_avatar=1, view_calendar=1, post_events=1, edit_own_events=1, delete_own_events=1, view_others_events=1, edit_profile=1, delete_profile=1, allow_signature=1, allow_customtitle=1, change_username=1, memberslist_viewable=1, approval_of_events=0, post_polls=1, vote_on_polls=1, view_messageboard=1  WHERE title = "General" AND uid =12;', function(err, result){
+						if(err){
+							console.log(err);
+						}else{
+							sqlConnection('UPDATE usergroups SET view_profiles=1, view_forum=1, post_threads=1, other_post_replies=0, view_thread_content=1, view_others_threads=1, post_replies=1, view_calendar=1, post_events=0, view_others_events=1, approval_of_events=1, view_messageboard=1  WHERE title = "Not Signed Up / Not Logged In" AND uid =12;', function(err, result){
+								if(err){
+									console.log(err);
+								}else{
+									sqlConnection('UPDATE usergroups SET post_polls=1 WHERE title = "Moderators" AND uid =12;', function(err, result){
+										if(err){
+											console.log(err);
+										}else{
+										}
+									});
+								}
+							});
+						}
+					});
+					sqlConnection('DELETE FROM calendar_permissions WHERE uid="12";', function(err, result){
+						if(err){
+							console.log(err);
+						}else{
+						}
+					});
+					sqlConnection('DELETE FROM calendar_events WHERE uid="12";', function(err, result){
+						if(err){
+							console.log(err);
+						}else{
+						}
+					});
+					sqlConnection('DELETE FROM forums WHERE uid="12";', function(err, result){
+						if(err){
+							console.log(err);
+						}else{
+							sqlConnection('INSERT INTO forums (uid, title, description, displayorder) VALUES ("12", "General", "General", "1")', function(err, result){
+								if(err){
+									console.log(err);
+								}else{
+								}
+							});
+						}
+					});
+					sqlConnection("UPDATE settings SET post_approval=0, allow_emails='checked', threadsperpage =100, repliesperpage=50, enable_calendar='checked', reputation='checked', enable_polls='checked', enable_social_bookmarking='checked', allowpm='checked', reqreg='checked', file_uploading='checked', reqregapp='', confirmemail='checked', new_user_registration='checked'  WHERE uid=12;", function(err, result){
+						if(err){
+							console.log(err);
+						}else{
+						}
+					});
+					sqlConnection('SELECT max(posts) AS posts, userid,user FROM members WHERE uid="12" and user="hani";', function(err, result){
+						if(err){
+							console.log(err);
+						}else{
+							var post = result[0].posts;
+							var userid = result[0].userid;
+							var deleteTopPoster = 'DELETE FROM top_posters WHERE uid="12" AND userid="'+userid+'";';
+							var query = 'INSERT INTO top_posters (uid,userid,posts) VALUES ("12",'+userid+','+post+');';
+							sqlConnection(deleteTopPoster, function(err, result){
+								if(err){
+									console.log(err);
+								}else{
+									console.log('the result is'+result);
+									sqlConnection(query, function(err, result){
+										if(err){
+											console.log(err);
+										}else{
 										//console.log(result);
 									}
 								});
-							}
-						});
-					}
-				});
-				shell.exec("/etc/automation/bin/oo_automation.sh " +commitDetails.branchName+ ' ' +commitDetails.commitId, function(code, stdout, stderr) {
-					console.log('Exit code : oo_automation : ', code);
-					console.log('Program output : oo_automation : ', stdout);
-					console.log('Program stderr: oo_automation : ', stderr);
-					var failLogFile = '/etc/automation/log/fail.txt';
-					var apacheLogFile = '/etc/automation/log/apacheLog.txt';
-					fs.stat(failLogFile, function(err, fileStat) {
-						if (fileStat) {
-							var fileSize = fileStat.size;
-							console.log("fail.txt size: "+fileSize);
-							if(fileSize !== 0) {
-								commitDetails.apacheLogFile = apacheLogFile;
-								commitDetails.attachments = [];
-								createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
+								}
+							});
+						}
+					});
+					shell.exec("/etc/automation/bin/oo_automation.sh " +commitDetails.branchName+ ' ' +commitDetails.commitId, function(code, stdout, stderr) {
+						console.log('Exit code : oo_automation : ', code);
+						console.log('Program output : oo_automation : ', stdout);
+						console.log('Program stderr: oo_automation : ', stderr);
+						var failLogFile = '/etc/automation/log/fail.txt';
+						var apacheLogFile = '/etc/automation/log/apacheLog.txt';
+						fs.stat(failLogFile, function(err, fileStat) {
+							if (fileStat) {
+								var fileSize = fileStat.size;
+								console.log("fail.txt size: "+fileSize);
+								if(fileSize !== 0) {
+									commitDetails.apacheLogFile = apacheLogFile;
+									commitDetails.attachments = [];
+									createStatus.failure(commitDetails, 'Failed with perl errors', function(status) {
 
 									//Sending Mail To The Committer After Adding Attachments
 									fs.exists(path, function(exists) {
@@ -131,9 +131,9 @@ executorServices.executeJob = function(commitDetails, callback) {
 												//initiating mail sending to committer
 												mailServices.sendMail(commitDetails, function(err) {
 													if(err)
-													console.error("error occurred while sending email: "+err);
+														console.error("error occurred while sending email: "+err);
 													else
-													console.log("Mail sent successfully.");
+														console.log("Mail sent successfully.");
 													//Deleting Old Directory That Contains Screenshots
 													fs.readdir(path, function (err, data) {
 														if(err) {
@@ -154,9 +154,9 @@ executorServices.executeJob = function(commitDetails, callback) {
 											//initiating mail sending to committer
 											mailServices.sendMail(commitDetails, function(err) {
 												if(err)
-												console.error("error occurred while sending email: "+err);
+													console.error("error occurred while sending email: "+err);
 												else
-												console.log("Mail sent successfully.");
+													console.log("Mail sent successfully.");
 												//Deleting commit specific log files
 												fs.unlinkSync(failLogFile);
 												console.timeEnd('Automation execution time');
@@ -166,20 +166,22 @@ executorServices.executeJob = function(commitDetails, callback) {
 										}
 									});
 								});
-							} else {
+								} else {
 								//var eslint_status = '';
 								console.log('the value of eslint status before checkEslintStatus method '+eslint_status);
 								executorServices.checkEslintStatus(commitDetails, function(err){
 									if(!err){
 										console.log('the eslint status after checkEslintStatus method '+eslint_status);
 										if(eslint_status === '' || eslint_status === true) {
-											executorServices.executeAutomation(commitDetails, function(err){
+											executorServices.executeAutomation(commitDetails, function(err, description){
 												if(err)
-													console.error("error occurred while executing automation script: "+err);
+												console.error("error occurred while executing automation script: "+err);
 												else{
-													console.log("Automation script executed successfully.");
-													eslint_status = '';
-													return callback();
+													executorServices.puppeteer(commitDetails, description, function(err){
+														console.log("puppeteer script executed successfully.");
+														eslint_status = '';
+														return callback();
+													});
 												}
 											});
 										}else {
@@ -191,13 +193,13 @@ executorServices.executeJob = function(commitDetails, callback) {
 							}
 						}
 					});
-				});
-			}
-		});
-	} else {
-		console.timeEnd('Automation execution time');
-		return callback();
-	}
+					});
+				}
+			});
+} else {
+	console.timeEnd('Automation execution time');
+	return callback();
+}
 };
 
 executorServices.executeAutomation = function(commitDetails, callback) {
@@ -295,77 +297,23 @@ executorServices.executeAutomation = function(commitDetails, callback) {
 											//Adding test result with commit details
 											commitDetails.testResult = testResult;
 											commitDetails.apacheLogFile = apacheLogFile;
-											//Addling log files as attachments
-											commitDetails.attachments = [
-												{
-													path: failLogFile
-												},
-												{
-													path: apacheLogFile
+											fs.exists(path, function(exists) {
+												if(exists) {
+													console.timeEnd('Automation execution time');
+													return callback(null, description);
 												}
-											];
-
-											createStatus.failure(commitDetails, description, function(status) {
-												console.log('state of failure : '+status);
-												//Sending Mail To The Committer After Adding Attachments
-												fs.exists(path, function(exists) {
-													if(exists) {
-														attachmentServices.addAttachments(path, commitDetails, function(commitDetails) {
-															console.log('attachments added successfully');
-															//initiating mail sending to committer
-															mailServices.sendMail(commitDetails, function(err) {
-																if(err)
-																console.error("error occurred while sending email: "+err);
-																else
-																console.log("Mail sent successfully.");
-																//Deleting Old Directory That Contains Screenshots
-																fs.readdir(path, function (err, data) {
-																	if(err) {
-																		console.error("Error : "+err);
-																	} else {
-																		//Deleting Old Directory That Contains Screenshots
-																		attachmentServices.deleteFolderRecursive(path, function() {
-																			//Deleting commit specific log files
-																			fs.unlinkSync(failLogFile);
-																			console.timeEnd('Automation execution time');
-																			console.log("Commit specific log files deleted.");
-																			return callback();
-																		});
-																	}
-																});
-															});
-														});
-													} else {
-														//initiating mail sending to committer
-														mailServices.sendMail(commitDetails, function(err) {
-															if(err)
-															console.error("error occurred while sending email: "+err);
-															else
-															console.log("Mail sent successfully.");
-															//Deleting commit specific log files
-															fs.unlinkSync(failLogFile);
-															console.timeEnd('Automation execution time');
-															console.log("Commit specific log files deleted.");
-															return callback();
-														});
-													}
-												});
 											});
 										} else {
 											console.log('you are not allowed to set the status of the branch.');
+											return callback(null , description);
 										}
 									} else {
-										createStatus.success(commitDetails, function(status) {
-											console.log('state of success : '+status);
-										});
-										//Deleting commit specific log files
-										fs.unlinkSync(failLogFile);
 										console.timeEnd('Automation execution time');
-										return callback();
+										return callback(null , description);
 									}
 								} else {
 									console.timeEnd('Automation execution time');
-									return callback();
+									return callback(null, description);
 								}
 							}
 						});
@@ -375,6 +323,7 @@ executorServices.executeAutomation = function(commitDetails, callback) {
 		});
 	});
 };
+
 
 executorServices.executeEslint = function(commitDetails, callback) {
 	var path = '/var/tmp/' + commitDetails.branchName + '/' +commitDetails.commitId;
@@ -389,9 +338,9 @@ executorServices.executeEslint = function(commitDetails, callback) {
 				console.log("esErrorFile.txt size: "+fileSize);
 				if(fileSize !== 0) {
 					commitDetails.attachments = [
-						{
-							path: esErrorFile
-						}
+					{
+						path: esErrorFile
+					}
 					];
 					createStatus.failure(commitDetails, 'Failed with eslint errors', function(status) {
 
@@ -403,9 +352,9 @@ executorServices.executeEslint = function(commitDetails, callback) {
 									//initiating mail sending to committer
 									mailServices.sendMail(commitDetails, function(err) {
 										if(err)
-										console.error("error occurred while sending email: "+err);
+											console.error("error occurred while sending email: "+err);
 										else
-										console.log("Mail sent successfully.");
+											console.log("Mail sent successfully.");
 										//Deleting Old Directory That Contains Screenshots
 										fs.readdir(path, function (err, data) {
 											if(err) {
@@ -426,9 +375,9 @@ executorServices.executeEslint = function(commitDetails, callback) {
 								//initiating mail sending to committer
 								mailServices.sendMail(commitDetails, function(err) {
 									if(err)
-									console.error("error occurred while sending email: "+err);
+										console.error("error occurred while sending email: "+err);
 									else
-									console.log("Mail sent successfully.");
+										console.log("Mail sent successfully.");
 									//Deleting commit specific log files
 									fs.unlinkSync(esErrorFile);
 									console.timeEnd('Automation execution time');
@@ -445,7 +394,6 @@ executorServices.executeEslint = function(commitDetails, callback) {
 		});
 	});
 };
-
 executorServices.checkEslintStatus = function(commitDetails, callback){
 	console.log("The modified files on the commit "+commitDetails.changedFiles+" ,the length of commitDetails.changed ="+(commitDetails.changedFiles).length);
 	if ((commitDetails.changedFiles).length !==0) {
@@ -461,3 +409,145 @@ executorServices.checkEslintStatus = function(commitDetails, callback){
 		return callback();
 	}
 };
+
+executorServices.puppeteer = function(commitDetails, description,  callback) {
+	var str="";
+	shell.exec("/etc/automation/bin/puppeteer.sh " +commitDetails.changedFiles, function(code, stdout, stderr) {
+		console.log('Exit code:', code);
+		console.log('Program output:', stdout);
+		console.log('Program stderr:', stderr);
+		var failLogFile = '/etc/automation/log/fail.txt';
+		var puppeteerErrorFile = '/etc/automation/log/puppeteerErrors.txt';
+		var apacheLogFile = '/etc/automation/log/apacheLog.txt';
+		fs.writeFileSync(puppeteerErrorFile, stderr, 'utf8');
+		fs.readFile(puppeteerErrorFile, function(err, content) {
+			if (err) {
+				console.log('error occurred while reading file');
+			}else{
+				if(content.indexOf('failed') !== -1) {
+					var contentTest = content.toString().split('\n');
+					for (var i = 1; i <= (contentTest.length-1); i++) {
+						var search = contentTest[i].search('>');
+						if (search !== (-1)){
+							str = str +'\n'+ contentTest[i];
+						}
+					}
+				}
+				var testreport=str.replace(/^\s+|\s+$/gm,' ');
+				fs.writeFileSync(puppeteerErrorFile, testreport, 'utf8');
+				fs.stat(failLogFile, function(err, fileStat) {
+					if (fileStat) {
+						var fileSize = fileStat.size;
+						console.log("failLogFile size: "+fileSize);
+						if(fileSize !== 0) {
+							fs.appendFileSync(failLogFile, testreport, 'utf8');
+							//Addling log files as attachments
+							commitDetails.attachments = [
+								{
+									path : failLogFile
+								},
+								{
+									path: apacheLogFile
+								}
+							];
+							executorServices.setStatus(commitDetails, description, function(err){
+								if(!err) {
+									console.log("status set successfully after puppeteer executed.");
+									fs.unlinkSync(failLogFile);
+									return callback();
+								}
+							});
+						}else{
+							fs.stat(puppeteerErrorFile, function(err, fileStat) {
+								if (fileStat) {
+									var fileSize = fileStat.size;
+									console.log("puppeteerErrorFile size: "+fileSize);
+									if(fileSize !== 0) {
+										fs.writeFileSync(failLogFile, testreport, 'utf8');
+										//Addling log files as attachments
+										commitDetails.attachments = [
+											{
+												path : failLogFile
+											},
+											{
+												path: apacheLogFile
+											}
+										];
+										executorServices.setStatus(commitDetails, description, function(err){
+											if(!err) {
+												console.log("automation executed successfully puppeteer task failed");
+												fs.unlinkSync(failLogFile);
+												return callback();
+											}
+										});
+									}else{
+										createStatus.success(commitDetails, function(status) {
+											console.log('state of success : '+status);
+										});
+										//Deleting commit specific log files
+										fs.unlinkSync(failLogFile);
+										fs.unlinkSync(puppeteerErrorFile);
+										console.log('status set on github');
+										return callback();
+									}
+								}
+							});
+						}
+						console.timeEnd('Puppeteer-automation execution time');
+						return callback();
+					}
+				});
+			}
+		});
+	});
+};
+
+executorServices.setStatus = function(commitDetails, description,  callback){
+	var path = '/var/tmp/' + commitDetails.branchName + '/' +commitDetails.commitId;
+	createStatus.failure(commitDetails, description, function(status) {
+		console.log('state of failure : '+status);
+		//Sending Mail To The Committer After Adding Attachments
+		fs.exists(path, function(exists) {
+			if(exists) {
+				attachmentServices.addAttachments(path, commitDetails, function(commitDetails) {
+					console.log('attachments added successfully');
+					//initiating mail sending to committer
+					mailServices.sendMail(commitDetails, function(err) {
+						if(err)
+						console.error("error occurred while sending email: "+err);
+						else
+						console.log("Mail sent successfully.");
+						//Deleting Old Directory That Contains Screenshots
+						fs.readdir(path, function (err, data) {
+							if(err) {
+								console.error("Error : "+err);
+							} else {
+								//Deleting Old Directory That Contains Screenshots
+								attachmentServices.deleteFolderRecursive(path, function() {
+									//Deleting commit specific log files
+									console.timeEnd('Automation execution time');
+									console.log("Commit specific log files deleted.");
+									return callback();
+								});
+							}
+						});
+					});
+				});
+			} else {
+				//initiating mail sending to committer
+				mailServices.sendMail(commitDetails, function(err) {
+					if(err)
+					console.error("error occurred while sending email: "+err);
+					else
+					console.log("Mail sent successfully.");
+					//Deleting commit specific log files
+					fs.unlinkSync(failLogFile);
+					console.timeEnd('Automation execution time');
+					console.log("Commit specific log files deleted.");
+					return callback();
+				});
+			}
+		});
+	});
+};
+

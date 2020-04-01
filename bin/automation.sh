@@ -286,7 +286,7 @@ then
   sleep 1
 fi
 
-# checkAutomattionStatusToSkip
+#checkAutomattionStatusToSkip
 #
 # if [ $AUTOMATION_ALLOW -eq '1' ]
 # then
