@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 const config = require('../config/config.json');
 const browser = require('../puppeteer/browser.js');
+const loginSel = require('./selector/loginSelector.js');
 const profilePage = require('./main/profilePage.js');
 
 describe("setup browser", () => {
