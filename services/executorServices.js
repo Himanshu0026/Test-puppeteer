@@ -173,15 +173,13 @@ executorServices.executeJob = function(commitDetails, callback) {
 									if(!err){
 										console.log('the eslint status after checkEslintStatus method '+eslint_status);
 										if(eslint_status === '' || eslint_status === true) {
-											executorServices.executeAutomation(commitDetails, function(err, description){
+											executorServices.executeAutomation(commitDetails, function(err){
 												if(err)
-												console.error("error occurred while executing automation script: "+err);
+													console.error("error occurred while executing automation script: "+err);
 												else{
-													executorServices.puppeteer(commitDetails, description, function(err){
-														console.log("puppeteer script executed successfully.");
-														eslint_status = '';
-														return callback();
-													});
+													console.log("Automation script executed successfully.");
+													eslint_status = '';
+													return callback();
 												}
 											});
 										}else {
@@ -297,33 +295,86 @@ executorServices.executeAutomation = function(commitDetails, callback) {
 											//Adding test result with commit details
 											commitDetails.testResult = testResult;
 											commitDetails.apacheLogFile = apacheLogFile;
-											fs.exists(path, function(exists) {
-												if(exists) {
-													console.timeEnd('Automation execution time');
-													return callback(null, description);
-												}
+											//Addling log files as attachments
+											commitDetails.attachments = [
+											{
+												path: failLogFile
+											},
+											{
+												path: apacheLogFile
+											}
+											];
+
+											createStatus.failure(commitDetails, description, function(status) {
+												console.log('state of failure : '+status);
+												//Sending Mail To The Committer After Adding Attachments
+												fs.exists(path, function(exists) {
+													if(exists) {
+														attachmentServices.addAttachments(path, commitDetails, function(commitDetails) {
+															console.log('attachments added successfully');
+															//initiating mail sending to committer
+															mailServices.sendMail(commitDetails, function(err) {
+																if(err)
+																	console.error("error occurred while sending email: "+err);
+																else
+																	console.log("Mail sent successfully.");
+																//Deleting Old Directory That Contains Screenshots
+																fs.readdir(path, function (err, data) {
+																	if(err) {
+																		console.error("Error : "+err);
+																	} else {
+																		//Deleting Old Directory That Contains Screenshots
+																		attachmentServices.deleteFolderRecursive(path, function() {
+																			//Deleting commit specific log files
+																			fs.unlinkSync(failLogFile);
+																			console.timeEnd('Automation execution time');
+																			console.log("Commit specific log files deleted.");
+																			return callback();
+																		});
+																	}
+																});
+															});
+														});
+													} else {
+														//initiating mail sending to committer
+														mailServices.sendMail(commitDetails, function(err) {
+															if(err)
+																console.error("error occurred while sending email: "+err);
+															else
+																console.log("Mail sent successfully.");
+															//Deleting commit specific log files
+															fs.unlinkSync(failLogFile);
+															console.timeEnd('Automation execution time');
+															console.log("Commit specific log files deleted.");
+															return callback();
+														});
+													}
+												});
 											});
 										} else {
 											console.log('you are not allowed to set the status of the branch.');
-											return callback(null , description);
 										}
 									} else {
+										createStatus.success(commitDetails, function(status) {
+											console.log('state of success : '+status);
+										});
+										//Deleting commit specific log files
+										fs.unlinkSync(failLogFile);
 										console.timeEnd('Automation execution time');
-										return callback(null , description);
+										return callback();
 									}
 								} else {
 									console.timeEnd('Automation execution time');
-									return callback(null, description);
+									return callback();
 								}
 							}
 						});
-					}
-				}
-			}
-		});
-	});
+}
+}
+}
+});
+});
 };
-
 
 executorServices.executeEslint = function(commitDetails, callback) {
 	var path = '/var/tmp/' + commitDetails.branchName + '/' +commitDetails.commitId;
@@ -394,6 +445,7 @@ executorServices.executeEslint = function(commitDetails, callback) {
 		});
 	});
 };
+
 executorServices.checkEslintStatus = function(commitDetails, callback){
 	console.log("The modified files on the commit "+commitDetails.changedFiles+" ,the length of commitDetails.changed ="+(commitDetails.changedFiles).length);
 	if ((commitDetails.changedFiles).length !==0) {
@@ -409,145 +461,3 @@ executorServices.checkEslintStatus = function(commitDetails, callback){
 		return callback();
 	}
 };
-
-executorServices.puppeteer = function(commitDetails, description,  callback) {
-	var str="";
-	shell.exec("/etc/automation/bin/puppeteer.sh " +commitDetails.changedFiles, function(code, stdout, stderr) {
-		console.log('Exit code:', code);
-		console.log('Program output:', stdout);
-		console.log('Program stderr:', stderr);
-		var failLogFile = '/etc/automation/log/fail.txt';
-		var puppeteerErrorFile = '/etc/automation/log/puppeteerErrors.txt';
-		var apacheLogFile = '/etc/automation/log/apacheLog.txt';
-		fs.writeFileSync(puppeteerErrorFile, stderr, 'utf8');
-		fs.readFile(puppeteerErrorFile, function(err, content) {
-			if (err) {
-				console.log('error occurred while reading file');
-			}else{
-				if(content.indexOf('failed') !== -1) {
-					var contentTest = content.toString().split('\n');
-					for (var i = 1; i <= (contentTest.length-1); i++) {
-						var search = contentTest[i].search('>');
-						if (search !== (-1)){
-							str = str +'\n'+ contentTest[i];
-						}
-					}
-				}
-				var testreport=str.replace(/^\s+|\s+$/gm,' ');
-				fs.writeFileSync(puppeteerErrorFile, testreport, 'utf8');
-				fs.stat(failLogFile, function(err, fileStat) {
-					if (fileStat) {
-						var fileSize = fileStat.size;
-						console.log("failLogFile size: "+fileSize);
-						if(fileSize !== 0) {
-							fs.appendFileSync(failLogFile, testreport, 'utf8');
-							//Addling log files as attachments
-							commitDetails.attachments = [
-								{
-									path : failLogFile
-								},
-								{
-									path: apacheLogFile
-								}
-							];
-							executorServices.setStatus(commitDetails, description, function(err){
-								if(!err) {
-									console.log("status set successfully after puppeteer executed.");
-									fs.unlinkSync(failLogFile);
-									return callback();
-								}
-							});
-						}else{
-							fs.stat(puppeteerErrorFile, function(err, fileStat) {
-								if (fileStat) {
-									var fileSize = fileStat.size;
-									console.log("puppeteerErrorFile size: "+fileSize);
-									if(fileSize !== 0) {
-										fs.writeFileSync(failLogFile, testreport, 'utf8');
-										//Addling log files as attachments
-										commitDetails.attachments = [
-											{
-												path : failLogFile
-											},
-											{
-												path: apacheLogFile
-											}
-										];
-										executorServices.setStatus(commitDetails, description, function(err){
-											if(!err) {
-												console.log("automation executed successfully puppeteer task failed");
-												fs.unlinkSync(failLogFile);
-												return callback();
-											}
-										});
-									}else{
-										createStatus.success(commitDetails, function(status) {
-											console.log('state of success : '+status);
-										});
-										//Deleting commit specific log files
-										fs.unlinkSync(failLogFile);
-										fs.unlinkSync(puppeteerErrorFile);
-										console.log('status set on github');
-										return callback();
-									}
-								}
-							});
-						}
-						console.timeEnd('Puppeteer-automation execution time');
-						return callback();
-					}
-				});
-			}
-		});
-	});
-};
-
-executorServices.setStatus = function(commitDetails, description,  callback){
-	var path = '/var/tmp/' + commitDetails.branchName + '/' +commitDetails.commitId;
-	createStatus.failure(commitDetails, description, function(status) {
-		console.log('state of failure : '+status);
-		//Sending Mail To The Committer After Adding Attachments
-		fs.exists(path, function(exists) {
-			if(exists) {
-				attachmentServices.addAttachments(path, commitDetails, function(commitDetails) {
-					console.log('attachments added successfully');
-					//initiating mail sending to committer
-					mailServices.sendMail(commitDetails, function(err) {
-						if(err)
-						console.error("error occurred while sending email: "+err);
-						else
-						console.log("Mail sent successfully.");
-						//Deleting Old Directory That Contains Screenshots
-						fs.readdir(path, function (err, data) {
-							if(err) {
-								console.error("Error : "+err);
-							} else {
-								//Deleting Old Directory That Contains Screenshots
-								attachmentServices.deleteFolderRecursive(path, function() {
-									//Deleting commit specific log files
-									console.timeEnd('Automation execution time');
-									console.log("Commit specific log files deleted.");
-									return callback();
-								});
-							}
-						});
-					});
-				});
-			} else {
-				//initiating mail sending to committer
-				mailServices.sendMail(commitDetails, function(err) {
-					if(err)
-					console.error("error occurred while sending email: "+err);
-					else
-					console.log("Mail sent successfully.");
-					//Deleting commit specific log files
-					fs.unlinkSync(failLogFile);
-					console.timeEnd('Automation execution time');
-					console.log("Commit specific log files deleted.");
-					return callback();
-				});
-			}
-		});
-	});
-};
-
