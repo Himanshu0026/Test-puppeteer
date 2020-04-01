@@ -1,0 +1,25 @@
+{
+  "generalUser" : {
+  		"username" : "jatin",
+  		"password" : "jatin"
+  	},
+    "adminUser" : {
+    		"username" : "jatinAdmin",
+    		"password" : "jatinadmin"
+  	},
+    "adminUser2" : {
+    		"username" : "jgAdmin",
+    		"password" : "jgadmin"
+  	},
+    "generalUser2" : {
+    		"username" : "jatinuser",
+    		"password" : "jatinuser"
+  	},
+    "strMsg":{
+      "anySub" : "Any Sting Subject...",
+      "anyMsg" : "Any Sting Msg..."
+    },
+    "profilePageStr" : {
+      "profilePage": "profilePage"
+    }
+}

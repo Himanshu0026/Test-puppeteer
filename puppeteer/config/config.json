@@ -1,0 +1,9 @@
+{
+	"url": "https://beta12.websitetoolbox.com/",
+	"backEndUrl": "https://beta12.websitetoolbox.com/tool/members/login",
+	"backendCred" : {
+		"uname" : "beta12",
+		"upass" : "test"
+	}
+
+}
