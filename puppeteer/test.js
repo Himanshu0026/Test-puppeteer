@@ -3,6 +3,7 @@ const config = require('../config/config.json');
 const browser = require('../puppeteer/browser.js');
 const loginSel = require('./selector/loginSelector.js');
 const profilePage = require('./main/profilePage.js');
+const memberTitle = require('./main/memberTitle.js')
 
 describe("setup browser", () => {
   beforeEach(async () => {
@@ -21,6 +22,7 @@ describe("setup browser", () => {
   });
 
   describe("test method called", () => {
-    profilePage.profilePage();
+    // profilePage.profilePage();
+    memberTitle.memberTitle()
   });
 });
