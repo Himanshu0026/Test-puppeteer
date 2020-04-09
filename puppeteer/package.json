@@ -1,0 +1,19 @@
+{
+  "name": "puppeteertesting",
+  "version": "1.0.0",
+  "description": "",
+  "main": "browser.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "expect-puppeteer": "^4.4.0",
+    "jest": "^25.3.0",
+    "puppeteer": "^2.1.1"
+  },
+  "devDependencies": {
+    "jest-puppeteer": "^4.4.0"
+  }
+}
