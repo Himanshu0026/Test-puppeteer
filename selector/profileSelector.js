@@ -1,0 +1,15 @@
+var profileSel = module.exports = {};
+profileSel.newTopic=".container #topics .btn";
+profileSel.title="#postSubject";
+profileSel.memberSince=".pull-left li span time";
+profileSel.lastActive=".profile-menu .profile-count .online";
+profileSel.menu="#links-nav .icon-menu";
+profileSel.members="#members_list_show";
+profileSel.anyUserProfile="#memberListFrm .panel-body > ul > li:first-child .right-side > .display_name > a:first-child";
+profileSel.profileDropDown="#forum_header_fixed .user-panel .dropdown-toggle .mini";
+profileSel.profile="#user-nav-panel-profile";
+profileSel.msgBtnInProfile=".profile-menu #send_message";
+profileSel.postMenu=".post-edit .dropdown-toggle";
+profileSel.emailBtn=".profile-menu #emailMember";
+profileSel.webLink='websitetoolbox.com';
+profileSel.webLink2='forumchitchat.com';
