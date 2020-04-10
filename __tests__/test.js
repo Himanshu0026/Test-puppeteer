@@ -41,7 +41,7 @@ describe(
       await page.type(loginBackendSel.postCount, "0")
       page.click(loginBackendSel.saveTitleButton)
       await page.waitForNavigation();
-      await expect(page).toMatch("Junior")
+      await expect(page).toMatch("Junior",{timeout:2000})
       //edit
       let row = await expect(page).toMatchElement('tr', { text: 'Junior', timeout: 3000 })
       await expect(row).toClick('td:nth-child(4) a:nth-child(1)')
@@ -53,7 +53,7 @@ describe(
       await page.type(loginBackendSel.newTitle, 'Senior')
       page.click(loginBackendSel.saveTitleButton)
       await page.waitForNavigation();
-      await expect(page).toMatch('Senior')
+      await expect(page).toMatch('Senior',{timeout:2000})
       //delete
       row = await expect(page).toMatchElement('tbody > tr', { text: 'Senior', timeout: 3000 })
       await expect(row).toClick('td:nth-child(4) a:nth-child(2)')

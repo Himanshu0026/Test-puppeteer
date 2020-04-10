@@ -1,8 +1,8 @@
 {
   "url": "https://beta18.websitetoolbox.com/",
-  "backEndUrl": "https://beta18.websitetoolbox.com/tool/members/login",
+  "backEndUrl": "https://beta21.websitetoolbox.com/tool/members/login",
   "backendCred": {
-    "uname": "beta18",
+    "uname": "beta21",
     "upass": "test"
   }
 }
