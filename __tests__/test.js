@@ -28,39 +28,33 @@ describe(
       await page.waitForSelector(loginBackendSel.username);
       await page.type(loginBackendSel.username, 'beta18');
       await page.type(loginBackendSel.password, 'test');
-      await page.click(loginBackendSel.login_Submit_Button);
-      await page.waitForSelector(loginBackendSel.login_Toggle_Button)
+      page.click(loginBackendSel.login_Submit_Button);
+      await page.waitForNavigation();
       //User tab open and click on titles
-      await page.waitForSelector(loginBackendSel.user_tab)
       await page.click(loginBackendSel.user_tab)
-      await page.waitForSelector(loginBackendSel.user_tab_title)
-      await page.waitFor(100)
-      await page.click(loginBackendSel.user_tab_title)
+      page.click(loginBackendSel.user_tab_title)
+      await page.waitForNavigation();
       //add
-      await page.waitForSelector(loginBackendSel.addMembertitle_button)
-      await page.click(loginBackendSel.addMembertitle_button)
-      await page.waitFor(1000)
+      page.click(loginBackendSel.addMembertitle_button)
+      await page.waitForNavigation();
       await page.type(loginBackendSel.newTitle, "Junior")
       await page.type(loginBackendSel.postCount, "0")
-      await page.waitFor(1000)
-      await page.click(loginBackendSel.saveTitleButton)
-      await page.waitForSelector('.fullborder.text.memberTitleField')
+      page.click(loginBackendSel.saveTitleButton)
+      await page.waitForNavigation();
       await expect(page).toMatch("Junior")
       //edit
-      await page.waitForSelector('.fullborder.text.memberTitleField')
       let row = await expect(page).toMatchElement('tr', { text: 'Junior', timeout: 3000 })
       await expect(row).toClick('td:nth-child(4) a:nth-child(1)')
-      await page.waitForSelector(loginBackendSel.newTitle)
+      await page.waitForNavigation();
       await page.keyboard.down('Control')
       await page.keyboard.press('KeyA')
       await page.keyboard.up('Control')
       await page.keyboard.press('Backspace')
       await page.type(loginBackendSel.newTitle, 'Senior')
-      await page.waitFor(1000)
-      await page.click(loginBackendSel.saveTitleButton)
+      page.click(loginBackendSel.saveTitleButton)
+      await page.waitForNavigation();
       await expect(page).toMatch('Senior')
       //delete
-      await page.waitForSelector('.fullborder.text.memberTitleField')
       row = await expect(page).toMatchElement('tbody > tr', { text: 'Senior', timeout: 3000 })
       await expect(row).toClick('td:nth-child(4) a:nth-child(2)')
       await expect(page).toMatch('Senior', { visible: false })
